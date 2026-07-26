@@ -1,0 +1,32 @@
+# ThyroidCascadeAgent dependencies
+# Python >= 3.10
+
+# Deep learning
+torch>=2.0
+torchvision
+
+# Image processing
+opencv-python
+Pillow
+
+# Scientific
+numpy
+scipy
+scikit-learn
+pandas
+
+# Radiomics
+SimpleITK
+pyradiomics
+
+# AutoGluon (radiomics judge + classification model)
+autogluon.tabular>=1.0
+
+# LLM
+openai>=1.0
+
+# Config
+pyyaml
+
+# Progress
+tqdm

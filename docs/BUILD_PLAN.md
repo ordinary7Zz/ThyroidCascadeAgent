@@ -332,27 +332,6 @@ git add -A && git commit -m "chore: init repo skeleton"
 
 与原代码差异：原 Seg 的 ImageProcessor 返回 [0,1] float 且内置归一化，原 Cls 的用 PIL 返回 [0,255]。新代码统一为 uint8 [0,255] IO 层 + 模型内部预处理，避免混淆。
 
-**为什么不会改变模型推理输出（正确性证明）：**
-
-两个原模型的 `preprocess` 方法内部都有 dtype 防御检查，无论输入 `[0,1] float` 还是 `uint8 [0,255]`，最终都归到同一条数值流：
-
-```python
-# 分割侧 Segmentation_Agent/models/dino_unet_model.py:177 与
-# 分类侧 Classification_Agent/models/dino_unet_model.py:131 的 preprocess 逻辑一致：
-if image.dtype == np.float32 or image.dtype == np.float64:
-    image = (image * 255).astype(np.uint8)   # float[0,1] → uint8[0,255]
-pil_image = Image.fromarray(image)            # uint8 → PIL
-tensor = self.transform(pil_image)            # PIL → ToTensor(/255) → [0,1] → ImageNet Normalize
-```
-
-| 模型 | 原流程 | 新流程（image_io） | 进网络值 |
-|---|---|---|---|
-| 分割 DINOUNet | load `[0,1]float` → preprocess `×255→uint8` → PIL → ToTensor `/255` → Normalize | load `uint8` → preprocess 跳过 if → PIL → ToTensor `/255` → Normalize | **一致**（省掉 `/255→×255` 往返） |
-| 分类 DINOUNet | load `uint8` → preprocess 跳过 if → PIL → ToTensor `/255` → Normalize | 同左 | **完全一致** |
-| AutoGluonRadiomics | load `uint8` + mask `[0,255]` → 内部 `(mask>0)` 二值化 → SimpleITK | 同左 | **完全一致** |
-
-结论：新方案只是跳过了分割侧"load 时 `/255`、preprocess 又 `×255`"的多余往返，最终进网络的张量值与原实现完全相同。分类侧与 radiomics 侧则零变化。
-
 - [ ] **Step 1.2: `shared/base_datasets_info.py`**
 
 职责：单一来源的数据集元信息 + 设备匹配推断。
@@ -1020,7 +999,16 @@ git add -A && git commit -m "feat: integrate cascade mask source into classifica
 
 6. **device 推断**：`infer_device_match` 的设备列表要从 config 的 `data.device_info` 传入，与 `BASE_DATASETS_INFO` 比对。原代码这段逻辑分散在两处，合并后统一到 `shared/base_datasets_info.py`。
 
-7. **image_io 不二值化 mask 的影响（不影响推理，影响指标计算）**：原分割侧 `load_mask` 自动 `>127→0/1` 二值化，新 `image_io.load_mask` 返回 `[0,255]` 不二值化。这不影响任何模型推理（分割模型 `predict(image)` 不接收 mask；分类 radiomics 模型内部自己 `(mask>0)` 二值化）。但算分割指标（Dice/HD95）时调用方必须显式二值化 GT mask：`gt = image_io.binarize_mask(image_io.load_mask(path))`。原分割侧 `load_mask` 偷偷二值化的行为被移除，二值化职责回归调用方。
+7. **image_io 返回 uint8 [0,255] 不改变模型推理输出（已验证）**：两个原仓库的 `ImageProcessor` 范围约定不同（分割侧 `[0,1] float`，分类侧 `uint8 [0,255]`），但两个 DINO-UNet 模型的 `preprocess` 方法内部都有同一个 dtype 防御检查：
+
+   ```python
+   if image.dtype == np.float32 or image.dtype == np.float64:
+       image = (image * 255).astype(np.uint8)
+   ```
+
+   无论传入 `[0,1] float` 还是 `uint8 [0,255]`，`preprocess` 内部都统一到 `uint8 → PIL → ToTensor(/255) → [0,1] → ImageNet Normalize`。新方案 `image_io.load_image` 返回 `uint8 [0,255]`，跳过 `preprocess` 的 `float→uint8` 转换分支，直接用 uint8，**最终进网络的张量值与原仓库完全一致**。分类侧和 AutoGluonRadiomicsModel 原本就接收 uint8，零变化。
+
+   mask 不二值化也**不影响模型推理**（分割模型 `predict(image)` 不接收 mask；radiomics 模型内部自己 `(mask>0)` 二值化）。唯一影响：算分割指标（Dice/HD95）时，调用方需显式 `image_io.binarize_mask(gt_mask)` 后再算——这比原"load 时偷偷二值化"更清晰，二值化是评估需求而非 IO 职责。
 
 ---
 
