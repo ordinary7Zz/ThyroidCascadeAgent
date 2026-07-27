@@ -78,13 +78,11 @@ class LLMClassificationAgent:
     def _build_system_prompt_single(self) -> str:
         return """你是甲状腺超声多模型预测整合专家，从若干模型输出中选最可信的一项。
 
-【设备】设备决定成像风格；训练数据覆盖输入同款/同品牌者更可信。GE(Logiq E9/S7)与 Hitachi(ARIETTA 等)各系内部风格近；其余品牌有差异。Heterogeneous=多设备混合。输入设备未知则忽略。
+【字段】top_confidence（或 top_confidence_calibrated）为主置信度。entropy 越大越不确定，margin_top2 越大越稳。num_models_same_class 为投票一致性。
 
-【字段】主置信度优先 metadata.classification_uncertainty.top_confidence_calibrated，否则 top_confidence。entropy(越大越不确定)、margin_top2(越大越稳)。consistency_metrics: num_models_same_class、total_models、vote_entropy。
+【决策序】1) 主置信度高 2) training_devices 与输入设备匹配 3) entropy↓ margin↑ 4) dataset_size 大优先 5) 投票一致性高。
 
-【决策序】1)主置信度 2)已知输入设备则设备匹配 3)主置信度差<0.05 比验证集 acc/AUC/F1 4)entropy↓ margin↑ 5)能推断数据集则看 base_dataset_performance，否则 dataset_size 大优先 6)差<0.05 结合投票 7)差<0.02 考虑模型差异。
-
-【mask来源】若 mask_source="segmentation_agent_filtered"，说明 mask 已经过分割 Agent + radiomics 裁判验证，可信度较高；若="external"，mask 未经验证。
+【mask来源】segmentation_agent_filtered = mask 已验证；external = mask 未验证。
 
 【输出】只输出纯JSON（无Markdown/思考/代码块），首尾为{}。字段：selected_model, selected_class, confidence, reasoning。"""
 
@@ -92,11 +90,11 @@ class LLMClassificationAgent:
         tk = self.top_k
         return f"""你是甲状腺超声多模型预测整合专家，选出最值得信任的 {tk} 个模型（按信任度从高到低），用于对各类别概率取平均融合。
 
-【设备】设备决定成像风格；训练数据覆盖输入同款/同品牌者更可信。
-
-【字段】主置信度优先 top_confidence_calibrated，否则 top_confidence。entropy、margin_top2、consistency_metrics。
+【字段】top_confidence（或 top_confidence_calibrated）为主置信度。entropy、margin_top2、num_models_same_class。
 
 【决策序】综合判断哪 {tk} 个模型组合最可信，优先级与单选类似，需考虑组合互补性。
+
+【mask来源】segmentation_agent_filtered = mask 已验证；external = mask 未验证。
 
 【输出】只输出纯JSON（无Markdown/思考），首尾为{{}}。字段：selected_models(长度恰好{tk}的字符串数组), reasoning。不要输出 selected_class 或 confidence。"""
 
@@ -133,12 +131,6 @@ class LLMClassificationAgent:
         for pred in predictions:
             votes_per_class[pred.top_class] = votes_per_class.get(pred.top_class, 0) + 1
 
-        total_models = len(predictions)
-        vote_entropy = 0.0
-        if total_models > 0:
-            probs = [c / total_models for c in votes_per_class.values()]
-            vote_entropy = -sum(p * math.log(p + 1e-12, 2) for p in probs if p > 0)
-
         compact: list[dict[str, Any]] = []
         for pred in predictions:
             pd = pred.to_dict()
@@ -162,43 +154,21 @@ class LLMClassificationAgent:
             cu = meta.get("classification_uncertainty", {}) or {}
             top_conf_cal = cu.get("top_confidence_calibrated")
 
-            on_train = (meta.get("validation_metrics", {}) or {}).get("on_training_dataset", {}) or {}
             ds_info = meta.get("dataset_info", {}) or {}
-            base_perf = meta.get("base_dataset_performance", {}) or {}
             train_devices = meta.get("training_data_devices") or []
 
             compact.append({
                 "model_name": pd.get("model_name"),
                 "top_class": pd.get("top_class"),
                 "top_confidence": pd.get("top_confidence"),
-                "top2_predictions": top2,
+                "class_probabilities": top2,
                 "metadata": {
-                    "classification_uncertainty": {
-                        **({"top_confidence_calibrated": top_conf_cal} if top_conf_cal is not None else {}),
-                        "top_confidence_raw": pd.get("top_confidence"),
-                        "entropy": entropy,
-                        "margin_top2": margin_top2,
-                    },
-                    "consistency_metrics": {
-                        "num_models_same_class": votes_per_class.get(pd.get("top_class"), 0),
-                        "total_models": total_models,
-                        "vote_entropy": vote_entropy,
-                    },
-                    "training_data_devices": train_devices,
-                    "dataset_info": {
-                        "training_dataset": ds_info.get("training_dataset"),
-                        "base_datasets": ds_info.get("base_datasets", []),
-                        "dataset_size": ds_info.get("dataset_size"),
-                    },
-                    "validation_metrics": {
-                        "on_training_dataset": {
-                            "accuracy": on_train.get("accuracy"),
-                            "auc": on_train.get("auc"),
-                            "f1_score": on_train.get("f1_score"),
-                        }
-                    },
-                    "base_dataset_performance": base_perf,
-                    "requires_mask": pd.get("requires_mask", False),
+                    **({"top_confidence_calibrated": top_conf_cal} if top_conf_cal is not None else {}),
+                    "entropy": entropy,
+                    "margin_top2": margin_top2,
+                    "num_models_same_class": votes_per_class.get(pd.get("top_class"), 0),
+                    "training_devices": train_devices,
+                    "dataset_size": ds_info.get("dataset_size"),
                 },
             })
         return compact
@@ -209,8 +179,19 @@ class LLMClassificationAgent:
         mask_source: str = "external",
     ) -> str:
         """构造 LLM 输入 JSON。"""
+        # 计算 vote_entropy 和 total_models（顶层，避免每个模型重复）
+        votes_per_class: dict[str, int] = {}
+        for pred in predictions:
+            votes_per_class[pred.top_class] = votes_per_class.get(pred.top_class, 0) + 1
+        total_models = len(predictions)
+        vote_entropy = 0.0
+        if total_models > 0:
+            probs = [c / total_models for c in votes_per_class.values()]
+            vote_entropy = -sum(p * math.log(p + 1e-12, 2) for p in probs if p > 0)
+
         data = {
-            "num_models": len(predictions),
+            "num_models": total_models,
+            "vote_entropy": round(vote_entropy, 3),
             "mask_source": mask_source,
             "mask_validation": (
                 "此 mask 已经过分割 Agent 的 radiomics 裁判验证，可信度较高"
