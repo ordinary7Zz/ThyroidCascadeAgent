@@ -20,7 +20,7 @@ from typing import Any, Optional
 import cv2
 import numpy as np
 
-from shared.base_datasets_info import BASE_DATASETS_INFO, infer_device_match
+from shared.base_datasets_info import BASE_DATASETS_INFO
 from shared.llm_client import LLMClient
 
 from .base_model import SegModelOutput
@@ -122,7 +122,6 @@ class SegmentationAgent:
         self.quality_evaluator = quality_evaluator or SegmentationQualityEvaluator()
         self.radiomics_judge = radiomics_judge
         self.base_datasets_info = BASE_DATASETS_INFO
-
         cfg = config or {}
         self.ensemble_enabled = cfg.get("ensemble", {}).get("enabled", True)
         self.ensemble_top_k = cfg.get("ensemble", {}).get("top_k", 1)
@@ -178,10 +177,9 @@ mahalanobis_distance 过大（>3）的 mask 可能分割异常。"""
 决策优先级（从高到低）：
 1) 模型间一致性：agreement_with_others 高更可靠；分歧大时倚重 agreement 高且 mean_hd95_to_others 低的候选；
 2) radiomics 裁判（如有）：分类置信度合理、mahalanobis_distance 不过大的 mask 更可信；
-3) 设备匹配：训练设备与输入设备越接近越好；
-4) 形态学：单连通、边界平滑、circularity 0.6-0.9、面积与长宽比合理；
-5) 数据集性能：dice 高、hd95 低、dataset_size 大的模型更优；
-6) 置信度：mean_confidence 较高为次要加分项。
+3) 形态学：单连通、边界平滑、circularity 0.6-0.9、面积与长宽比合理；
+4) 数据集规模：dataset_size 大的模型泛化性更好；
+5) 置信度：mean_confidence 较高为次要加分项。
 
 reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_hd95_mean、radiomics_judge 等）。"""
 
@@ -253,7 +251,6 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             "num_models": len(predictions),
             "input_device_info": input_device_info if input_device_info else "未知 (null)",
             "input_data_info": self._normalize_unknown(input_data_info or {}),
-            "base_datasets_info": self.base_datasets_info,
             "models": [],
         }
 
@@ -271,7 +268,6 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 
             model_info: dict[str, Any] = {
                 "model_name": pred.model_name,
-                "training_devices": meta.get("training_data_devices", []),
                 "mask_statistics": {
                     "area": q["area"],
                     "is_single_component": q["is_single_component"],
@@ -287,27 +283,10 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             if per_disagree and idx < len(per_disagree):
                 model_info["disagreement"] = per_disagree[idx]
 
-            # 设备匹配
-            base_datasets = meta.get("dataset_info", {}).get("base_datasets", [])
-            if base_datasets and input_device_info:
-                dm = infer_device_match(input_device_info, base_datasets)
-                model_info["device_match"] = dm
-
-            # 性能
-            bdp = meta.get("base_dataset_performance", {})
-            if bdp:
-                model_info["base_dataset_performance"] = {
-                    ds: {"dice": round(v.get("dice", 0), 2), "hd95": round(v.get("hd95", 999), 2)}
-                    for ds, v in bdp.items()
-                }
-
-            # 数据集信息
+            # 数据集信息（只保留数据量，减少 token）
             di = meta.get("dataset_info", {})
             if di:
-                model_info["dataset_info"] = {
-                    "base_datasets": di.get("base_datasets", []),
-                    "dataset_size": di.get("dataset_size", 0),
-                }
+                model_info["dataset_size"] = di.get("dataset_size", 0)
 
             # 置信度
             if pred.confidence_map is not None and np.sum(pred.mask) > 0:
