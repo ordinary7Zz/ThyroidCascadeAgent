@@ -21,13 +21,11 @@ from shared.image_io import ImageIO
 from shared.llm_client import LLMClient
 from segmentation import (
     SegModelRegistry,
-    DINOUNetSegmentationModel,
     SegmentationQualityEvaluator,
     SegmentationAgent,
     build_performance_stats,
-    compute_dice,
-    compute_hd95,
 )
+from segmentation.model_factory import build_seg_model
 
 
 def load_config(config_path: str) -> dict:
@@ -37,16 +35,10 @@ def load_config(config_path: str) -> dict:
 
 def build_seg_registry(seg_cfg: dict, device: str = "cuda") -> SegModelRegistry:
     registry = SegModelRegistry()
-    for m in seg_cfg.get("dino_unet", {}).get("models", []):
-        model = DINOUNetSegmentationModel(
-            model_name=m["name"],
-            model_path=m["model_path"],
-            input_size=tuple(m.get("input_size", [224, 224])),
-            threshold=m.get("threshold", 0.5),
-            base_dataset_performance=m.get("base_dataset_performance", {}),
-            dataset_info=m.get("dataset_info", {}),
-            device=device,
-        )
+    for m in seg_cfg.get("models", []):
+        m = dict(m)
+        m["device"] = device
+        model = build_seg_model(m)
         model.load_model()
         registry.register_model(model)
     return registry

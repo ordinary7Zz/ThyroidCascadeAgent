@@ -13,11 +13,13 @@ from typing import Any, Optional
 import numpy as np
 
 from .base_model import BaseClassificationModel, ClsModelOutput
+from .model_factory import register_cls_model
 
 
 BINARY_CLASS_NAMES = ["良性", "恶性"]
 
 
+@register_cls_model("autogluon_radiomics")
 class AutoGluonRadiomicsModel(BaseClassificationModel):
     """pyradiomics 特征 + AutoGluon TabularPredictor 分类。"""
 

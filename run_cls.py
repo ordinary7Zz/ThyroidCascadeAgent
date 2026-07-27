@@ -21,14 +21,13 @@ from shared.image_io import ImageIO
 from shared.llm_client import LLMClient
 from classification import (
     ClsModelRegistry,
-    DINOUNetModel,
-    AutoGluonRadiomicsModel,
     LLMClassificationAgent,
     compute_roc_auc,
     compute_accuracy,
     bootstrap_auc_ci95,
     load_calibration_map,
 )
+from classification.model_factory import build_cls_model
 
 
 def load_config(config_path: str) -> dict:
@@ -44,26 +43,10 @@ def build_cls_registry(cls_cfg: dict, device: str = "cuda") -> ClsModelRegistry:
 
     registry = ClsModelRegistry(calibration_map=cal_map)
 
-    for m in cls_cfg.get("dino_unet", {}).get("models", []):
-        model = DINOUNetModel(
-            model_name=m["name"],
-            model_path=m["model_path"],
-            use_tirads=m.get("use_tirads", False),
-            base_dataset_performance=m.get("base_dataset_performance", {}),
-            dataset_info=m.get("dataset_info", {}),
-            device=device,
-        )
-        model.load_model()
-        registry.register_model(model)
-
-    for m in cls_cfg.get("autogluon", {}).get("models", []):
-        model = AutoGluonRadiomicsModel(
-            model_name=m["name"],
-            model_dir=m["model_dir"],
-            base_dataset_performance=m.get("base_dataset_performance", {}),
-            dataset_info=m.get("dataset_info", {}),
-            device="cpu",
-        )
+    for m in cls_cfg.get("models", []):
+        m = dict(m)
+        m["device"] = "cpu" if m.get("type") == "autogluon_radiomics" else device
+        model = build_cls_model(m)
         model.load_model()
         registry.register_model(model)
 

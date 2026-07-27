@@ -1,5 +1,6 @@
 # ThyroidCascadeAgent 统一配置
 # API key 从环境变量 DASHSCOPE_API_KEY 读取，不在此处硬编码
+# 模型通过 type 字段驱动工厂创建，新增模型只需加 type + 写子类
 
 # ===== 共享段 =====
 shared:
@@ -12,64 +13,82 @@ shared:
 
 # ===== 分割段 =====
 segmentation:
-  dino_unet:
-    models:
-      - name: "all_datasets"
-        model_path: "weights/seg/all_datasets/dino_unet_train_all_datasets_epoch_40.pth"
-        input_size: [224, 224]
-        threshold: 0.5
-        base_dataset_performance:
-          TN3K: {dice: 0.8454, hd95: 11.7064, ece: 0.0208}
-          DDTI: {dice: 0.8427, hd95: 10.6699, ece: 0.0305}
-          ThyroidXL: {dice: 0.8793, hd95: 5.3659, ece: 0.0118}
-          PKTN: {dice: 0.8395, hd95: 9.6710, ece: 0.0162}
-          TN5K: {dice: 0.8297, hd95: 8.5319, ece: 0.0105}
-          CineClip: {dice: 0.9688, hd95: 0.4345, ece: 0.0021}
-        dataset_info:
-          base_datasets: ["TN3K", "ThyroidXL", "PKTN", "DDTI", "TN5K", "CineClip"]
-          dataset_size: 39604
-      - name: "TN3K"
-        model_path: "weights/seg/TN3K/dino_unet_train_TN3K_epoch_50.pth"
-        input_size: [224, 224]
-        threshold: 0.5
-        base_dataset_performance:
-          TN3K: {dice: 0.8190, hd95: 15.7666, ece: 0.0456}
-          DDTI: {dice: 0.7633, hd95: 17.7460, ece: 0.0509}
-          ThyroidXL: {dice: 0.8221, hd95: 8.8452, ece: 0.0145}
-          PKTN: {dice: 0.8020, hd95: 11.5604, ece: 0.0207}
-          TN5K: {dice: 0.7198, hd95: 12.9856, ece: 0.0164}
-          CineClip: {dice: 0.6919, hd95: 20.8006, ece: 0.0352}
-        dataset_info:
-          base_datasets: ["TN3K"]
-          dataset_size: 4633
-      - name: "ThyroidXL"
-        model_path: "weights/seg/ThyroidXL/dino_unet_train_ThyroidXL_epoch_50.pth"
-        input_size: [224, 224]
-        threshold: 0.5
-        base_dataset_performance:
-          TN3K: {dice: 0.7455, hd95: 17.9292, ece: 0.0371}
-          DDTI: {dice: 0.7555, hd95: 19.5382, ece: 0.0560}
-          ThyroidXL: {dice: 0.8745, hd95: 5.6215, ece: 0.0127}
-          PKTN: {dice: 0.7220, hd95: 16.5896, ece: 0.0322}
-          TN5K: {dice: 0.6342, hd95: 18.9264, ece: 0.0298}
-          CineClip: {dice: 0.6707, hd95: 23.2361, ece: 0.0515}
-        dataset_info:
-          base_datasets: ["ThyroidXL"]
-          dataset_size: 9441
-      - name: "TN5K"
-        model_path: "weights/seg/TN5K/dino_unet_train_TN5K_epoch_50.pth"
-        input_size: [224, 224]
-        threshold: 0.5
-        base_dataset_performance:
-          TN3K: {dice: 0.7728, hd95: 16.9869, ece: 0.0360}
-          DDTI: {dice: 0.6072, hd95: 30.3976, ece: 0.0676}
-          ThyroidXL: {dice: 0.7752, hd95: 10.8022, ece: 0.0223}
-          PKTN: {dice: 0.7971, hd95: 12.5326, ece: 0.0241}
-          TN5K: {dice: 0.8253, hd95: 9.1834, ece: 0.0112}
-          CineClip: {dice: 0.6321, hd95: 21.5522, ece: 0.0335}
-        dataset_info:
-          base_datasets: ["TN5K"]
-          dataset_size: 3400
+  models:
+    - type: "dinov3_unet"
+      name: "all_datasets"
+      model_path: "weights/seg/all_datasets/dino_unet_train_all_datasets_epoch_40.pth"
+      input_size: [224, 224]
+      threshold: 0.5
+      base_dataset_performance:
+        TN3K: {dice: 0.8454, hd95: 11.7064, ece: 0.0208}
+        DDTI: {dice: 0.8427, hd95: 10.6699, ece: 0.0305}
+        ThyroidXL: {dice: 0.8793, hd95: 5.3659, ece: 0.0118}
+        PKTN: {dice: 0.8395, hd95: 9.6710, ece: 0.0162}
+        TN5K: {dice: 0.8297, hd95: 8.5319, ece: 0.0105}
+        CineClip: {dice: 0.9688, hd95: 0.4345, ece: 0.0021}
+      dataset_info:
+        base_datasets: ["TN3K", "ThyroidXL", "PKTN", "DDTI", "TN5K", "CineClip"]
+        dataset_size: 39604
+    - type: "dinov3_unet"
+      name: "TN3K"
+      model_path: "weights/seg/TN3K/dino_unet_train_TN3K_epoch_50.pth"
+      input_size: [224, 224]
+      threshold: 0.5
+      base_dataset_performance:
+        TN3K: {dice: 0.8190, hd95: 15.7666, ece: 0.0456}
+        DDTI: {dice: 0.7633, hd95: 17.7460, ece: 0.0509}
+        ThyroidXL: {dice: 0.8221, hd95: 8.8452, ece: 0.0145}
+        PKTN: {dice: 0.8020, hd95: 11.5604, ece: 0.0207}
+        TN5K: {dice: 0.7198, hd95: 12.9856, ece: 0.0164}
+        CineClip: {dice: 0.6919, hd95: 20.8006, ece: 0.0352}
+      dataset_info:
+        base_datasets: ["TN3K"]
+        dataset_size: 4633
+    - type: "dinov3_unet"
+      name: "ThyroidXL"
+      model_path: "weights/seg/ThyroidXL/dino_unet_train_ThyroidXL_epoch_50.pth"
+      input_size: [224, 224]
+      threshold: 0.5
+      base_dataset_performance:
+        TN3K: {dice: 0.7455, hd95: 17.9292, ece: 0.0371}
+        DDTI: {dice: 0.7555, hd95: 19.5382, ece: 0.0560}
+        ThyroidXL: {dice: 0.8745, hd95: 5.6215, ece: 0.0127}
+        PKTN: {dice: 0.7220, hd95: 16.5896, ece: 0.0322}
+        TN5K: {dice: 0.6342, hd95: 18.9264, ece: 0.0298}
+        CineClip: {dice: 0.6707, hd95: 23.2361, ece: 0.0515}
+      dataset_info:
+        base_datasets: ["ThyroidXL"]
+        dataset_size: 9441
+    - type: "dinov3_unet"
+      name: "TN5K"
+      model_path: "weights/seg/TN5K/dino_unet_train_TN5K_epoch_50.pth"
+      input_size: [224, 224]
+      threshold: 0.5
+      base_dataset_performance:
+        TN3K: {dice: 0.7728, hd95: 16.9869, ece: 0.0360}
+        DDTI: {dice: 0.6072, hd95: 30.3976, ece: 0.0676}
+        ThyroidXL: {dice: 0.7752, hd95: 10.8022, ece: 0.0223}
+        PKTN: {dice: 0.7971, hd95: 12.5326, ece: 0.0241}
+        TN5K: {dice: 0.8253, hd95: 9.1834, ece: 0.0112}
+        CineClip: {dice: 0.6321, hd95: 21.5522, ece: 0.0335}
+      dataset_info:
+        base_datasets: ["TN5K"]
+        dataset_size: 3400
+    # 新增分割模型示例（取消注释并配置路径即可启用）：
+    # - type: "transunet"
+    #   name: "transunet_all_datasets"
+    #   model_path: "weights/seg/transunet/all_datasets.pth"
+    #   num_classes: 2
+    #   vit_name: "R50-ViT-B_16"
+    #   base_dataset_performance: {...}
+    #   dataset_info: {...}
+    # - type: "medsegx"
+    #   name: "medsegx_nodule"
+    #   model_path: "weights/seg/medsegx/nodule.pth"
+    #   task_name: "US_ThyroidNodule"
+    #   model_type: "vit_b"
+    #   base_dataset_performance: {...}
+    #   dataset_info: {...}
   agent:
     use_agent_selection: true
     include_disagreement_metrics_in_prompt: true
@@ -81,67 +100,86 @@ segmentation:
 
 # ===== 分类段 =====
 classification:
-  dino_unet:
-    models:
-      - name: "all_datasets"
-        model_path: "weights/cls/all_datasets/dino_unet_train_all_datasets_epoch_40.pth"
-        use_tirads: false
-        base_dataset_performance:
-          DDTI: {accuracy: 0.8298, auc: 0.7533, ece: 0.1601}
-          TN3K: {accuracy: 0.6891, auc: 0.7685, ece: 0.2442}
-          ThyroidXL: {accuracy: 0.8491, auc: 0.9301, ece: 0.1089}
-          TN5K: {accuracy: 0.9132, auc: 0.9545, ece: 0.0626}
-          CineClip: {accuracy: 0.9997, auc: 1.0000, ece: 0.0002}
-        dataset_info:
-          base_datasets: ["TN3K", "ThyroidXL", "TN5K", "CineClip"]
-          dataset_size: 31304
-      - name: "TN3K"
-        model_path: "weights/cls/TN3K/dino_unet_train_multitask_TN3K_epoch_50.pth"
-        use_tirads: false
-        base_dataset_performance:
-          DDTI: {accuracy: 0.8712, auc: 0.4131, ece: 0.1266}
-          TN3K: {accuracy: 0.6823, auc: 0.7656, ece: 0.2856}
-          ThyroidXL: {accuracy: 0.7694, auc: 0.8799, ece: 0.2081}
-          TN5K: {accuracy: 0.7831, auc: 0.8451, ece: 0.1892}
-          CineClip: {accuracy: 0.7301, auc: 0.6598, ece: 0.2488}
-        dataset_info:
-          base_datasets: ["TN3K"]
-          dataset_size: 4633
-      - name: "TN5K"
-        model_path: "weights/cls/TN5K/dino_unet_train_multitask_TN5K_epoch_50.pth"
-        use_tirads: false
-        base_dataset_performance:
-          DDTI: {accuracy: 0.4608, auc: 0.7599, ece: 0.5310}
-          TN3K: {accuracy: 0.7340, auc: 0.8200, ece: 0.2241}
-          ThyroidXL: {accuracy: 0.7275, auc: 0.8996, ece: 0.2593}
-          TN5K: {accuracy: 0.8986, auc: 0.9526, ece: 0.0812}
-          CineClip: {accuracy: 0.7309, auc: 0.7536, ece: 0.2465}
-        dataset_info:
-          base_datasets: ["TN5K"]
-          dataset_size: 3400
-      - name: "ThyroidXL"
-        model_path: "weights/cls/ThyroidXL/dino_unet_train_multitask_ThyroidXL_epoch_50.pth"
-        use_tirads: false
-        base_dataset_performance:
-          DDTI: {accuracy: 0.8452, auc: 0.7093, ece: 0.1469}
-          TN3K: {accuracy: 0.7561, auc: 0.8161, ece: 0.2254}
-          ThyroidXL: {accuracy: 0.8388, auc: 0.9275, ece: 0.1403}
-          TN5K: {accuracy: 0.7435, auc: 0.8503, ece: 0.2334}
-          CineClip: {accuracy: 0.8656, auc: 0.7192, ece: 0.1220}
-        dataset_info:
-          base_datasets: ["ThyroidXL"]
-          dataset_size: 9441
-  autogluon:
-    models:
-      - name: "autogluon_radiomics"
-        model_dir: "weights/cls/autogluon_model"
-        base_dataset_performance:
-          TN3K: {accuracy: 0.6970, auc: 0.7214}
-          ThyroidXL: {accuracy: 0.9186, auc: 0.9726}
-          TN5K: {accuracy: 0.858, auc: 0.8664}
-        dataset_info:
-          base_datasets: ["TN3K", "ThyroidXL", "TN5K"]
-          dataset_size: 15109
+  models:
+    - type: "dinov3_unet_multitask"
+      name: "all_datasets"
+      model_path: "weights/cls/all_datasets/dino_unet_train_all_datasets_epoch_40.pth"
+      use_tirads: false
+      base_dataset_performance:
+        DDTI: {accuracy: 0.8298, auc: 0.7533, ece: 0.1601}
+        TN3K: {accuracy: 0.6891, auc: 0.7685, ece: 0.2442}
+        ThyroidXL: {accuracy: 0.8491, auc: 0.9301, ece: 0.1089}
+        TN5K: {accuracy: 0.9132, auc: 0.9545, ece: 0.0626}
+        CineClip: {accuracy: 0.9997, auc: 1.0000, ece: 0.0002}
+      dataset_info:
+        base_datasets: ["TN3K", "ThyroidXL", "TN5K", "CineClip"]
+        dataset_size: 31304
+    - type: "dinov3_unet_multitask"
+      name: "TN3K"
+      model_path: "weights/cls/TN3K/dino_unet_train_multitask_TN3K_epoch_50.pth"
+      use_tirads: false
+      base_dataset_performance:
+        DDTI: {accuracy: 0.8712, auc: 0.4131, ece: 0.1266}
+        TN3K: {accuracy: 0.6823, auc: 0.7656, ece: 0.2856}
+        ThyroidXL: {accuracy: 0.7694, auc: 0.8799, ece: 0.2081}
+        TN5K: {accuracy: 0.7831, auc: 0.8451, ece: 0.1892}
+        CineClip: {accuracy: 0.7301, auc: 0.6598, ece: 0.2488}
+      dataset_info:
+        base_datasets: ["TN3K"]
+        dataset_size: 4633
+    - type: "dinov3_unet_multitask"
+      name: "TN5K"
+      model_path: "weights/cls/TN5K/dino_unet_train_multitask_TN5K_epoch_50.pth"
+      use_tirads: false
+      base_dataset_performance:
+        DDTI: {accuracy: 0.4608, auc: 0.7599, ece: 0.5310}
+        TN3K: {accuracy: 0.7340, auc: 0.8200, ece: 0.2241}
+        ThyroidXL: {accuracy: 0.7275, auc: 0.8996, ece: 0.2593}
+        TN5K: {accuracy: 0.8986, auc: 0.9526, ece: 0.0812}
+        CineClip: {accuracy: 0.7309, auc: 0.7536, ece: 0.2465}
+      dataset_info:
+        base_datasets: ["TN5K"]
+        dataset_size: 3400
+    - type: "dinov3_unet_multitask"
+      name: "ThyroidXL"
+      model_path: "weights/cls/ThyroidXL/dino_unet_train_multitask_ThyroidXL_epoch_50.pth"
+      use_tirads: false
+      base_dataset_performance:
+        DDTI: {accuracy: 0.8452, auc: 0.7093, ece: 0.1469}
+        TN3K: {accuracy: 0.7561, auc: 0.8161, ece: 0.2254}
+        ThyroidXL: {accuracy: 0.8388, auc: 0.9275, ece: 0.1403}
+        TN5K: {accuracy: 0.7435, auc: 0.8503, ece: 0.2334}
+        CineClip: {accuracy: 0.8656, auc: 0.7192, ece: 0.1220}
+      dataset_info:
+        base_datasets: ["ThyroidXL"]
+        dataset_size: 9441
+    - type: "autogluon_radiomics"
+      name: "autogluon_radiomics"
+      model_dir: "weights/cls/autogluon_model"
+      base_dataset_performance:
+        TN3K: {accuracy: 0.6970, auc: 0.7214}
+        ThyroidXL: {accuracy: 0.9186, auc: 0.9726}
+        TN5K: {accuracy: 0.858, auc: 0.8664}
+      dataset_info:
+        base_datasets: ["TN3K", "ThyroidXL", "TN5K"]
+        dataset_size: 15109
+    # 新增分类模型示例（取消注释并配置路径即可启用）：
+    # - type: "medsiglip"
+    #   name: "medsiglip_binary"
+    #   model_path: "weights/cls/medsiglip/binary.pt"
+    #   pretrained_model_path: "weights/pretrained/medsiglip-448"
+    #   num_classes: 2
+    #   img_size: 448
+    #   base_dataset_performance: {...}
+    #   dataset_info: {...}
+    # - type: "biomedclip"
+    #   name: "biomedclip_binary"
+    #   model_path: "weights/cls/biomedclip/binary.pth"
+    #   pretrained_model_dir: "weights/pretrained/biomedclip/"
+    #   num_classes: 2
+    #   img_size: 224
+    #   base_dataset_performance: {...}
+    #   dataset_info: {...}
   calibration:
     enabled: false
     artifacts_dir: "classification/calibration/artifacts"
@@ -155,7 +193,7 @@ radiomics_judge:
   model_dir: "weights/judge/autogluon_gt_trained"
   top_k_features: 5
   shap_reference_path: "weights/judge/shap_reference.json"
-  trigger_volume_cv: null  # null=总是启用；设数值则仅分歧大时启用
+  trigger_volume_cv: null
 
 # ===== Pipeline 段 =====
 pipeline:

@@ -16,6 +16,7 @@ from .performance_stats import (
     bootstrap_mean_ci95,
     build_performance_stats,
 )
+from .model_factory import build_seg_model, register_seg_model, list_seg_model_types
 
 __all__ = [
     "SegModelOutput",
@@ -34,4 +35,7 @@ __all__ = [
     "extract_ece_scores",
     "bootstrap_mean_ci95",
     "build_performance_stats",
+    "build_seg_model",
+    "register_seg_model",
+    "list_seg_model_types",
 ]

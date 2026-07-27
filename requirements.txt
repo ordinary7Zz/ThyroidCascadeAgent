@@ -1,32 +1,36 @@
 # ThyroidCascadeAgent dependencies
 # Python >= 3.10
 
-# Deep learning
+# ===== 核心（必装）=====
 torch>=2.0
 torchvision
-
-# Image processing
 opencv-python
 Pillow
-
-# Scientific
 numpy
 scipy
+pyyaml
+openai>=1.0
+tqdm
+
+# ===== AutoGluon Radiomics（分类模型 + 裁判）=====
+autogluon.tabular>=1.0
+SimpleITK
+pyradiomics
 scikit-learn
 pandas
 
-# Radiomics
-SimpleITK
-pyradiomics
-
-# AutoGluon (radiomics judge + classification model)
-autogluon.tabular>=1.0
-
-# LLM
-openai>=1.0
-
-# Config
-pyyaml
-
-# Progress
-tqdm
+# ===== 可选：按启用的模型按需安装 =====
+# TransUNet（分割）: 无额外依赖（torch + scipy 即可）
+# UltraFedFM（分割）:
+#   albumentations
+#   segmentation-models-pytorch
+# MedSegX（分割）:
+#   segment-anything
+# MedSAM2（分割）:
+#   sam2
+# MedSigLIP（分类）:
+#   timm
+#   transformers
+# BiomedCLIP（分类）:
+#   open_clip_torch
+#   safetensors

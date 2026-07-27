@@ -23,8 +23,10 @@ from torchvision import transforms
 from shared.model_architectures import DINOv3_S_UNet
 
 from .base_model import BaseSegmentationModel, SegModelOutput
+from .model_factory import register_seg_model
 
 
+@register_seg_model("dinov3_unet")
 class DINOUNetSegmentationModel(BaseSegmentationModel):
     """DINOv3 ViT-S + UNet 分割模型。"""
 

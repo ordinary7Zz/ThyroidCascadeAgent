@@ -19,12 +19,14 @@ from torchvision import transforms
 from shared.model_architectures import DINOv3_S_UNet_MULTITASK
 
 from .base_model import BaseClassificationModel, ClsModelOutput
+from .model_factory import register_cls_model
 
 
 TIRADS_CLASS_NAMES = ["TR1", "TR2", "TR3", "TR4", "TR5"]
 BINARY_CLASS_NAMES = ["良性", "恶性"]
 
 
+@register_cls_model("dinov3_unet_multitask")
 class DINOUNetModel(BaseClassificationModel):
     """DINOv3 ViT-S + UNet 多任务分类模型。"""
 

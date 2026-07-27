@@ -21,17 +21,16 @@ from shared.image_io import ImageIO
 from shared.llm_client import LLMClient
 from segmentation import (
     SegModelRegistry,
-    DINOUNetSegmentationModel,
     SegmentationQualityEvaluator,
     SegmentationAgent,
 )
+from segmentation.model_factory import build_seg_model
 from classification import (
     ClsModelRegistry,
-    DINOUNetModel,
-    AutoGluonRadiomicsModel,
     LLMClassificationAgent,
     load_calibration_map,
 )
+from classification.model_factory import build_cls_model
 from radiomics_judge import RadiomicsJudge
 from pipeline import CascadePipeline
 
@@ -43,16 +42,10 @@ def load_config(config_path: str) -> dict:
 
 def build_seg_registry(seg_cfg: dict, device: str = "cuda") -> SegModelRegistry:
     registry = SegModelRegistry()
-    for m in seg_cfg.get("dino_unet", {}).get("models", []):
-        model = DINOUNetSegmentationModel(
-            model_name=m["name"],
-            model_path=m["model_path"],
-            input_size=tuple(m.get("input_size", [224, 224])),
-            threshold=m.get("threshold", 0.5),
-            base_dataset_performance=m.get("base_dataset_performance", {}),
-            dataset_info=m.get("dataset_info", {}),
-            device=device,
-        )
+    for m in seg_cfg.get("models", []):
+        m = dict(m)
+        m["device"] = device
+        model = build_seg_model(m)
         model.load_model()
         registry.register_model(model)
     return registry
@@ -63,29 +56,12 @@ def build_cls_registry(cls_cfg: dict, device: str = "cuda") -> ClsModelRegistry:
     cal_map = load_calibration_map(cal_cfg.get("artifacts_dir", "")) if cal_cfg.get("enabled") else {}
 
     registry = ClsModelRegistry(calibration_map=cal_map)
-    for m in cls_cfg.get("dino_unet", {}).get("models", []):
-        model = DINOUNetModel(
-            model_name=m["name"],
-            model_path=m["model_path"],
-            use_tirads=m.get("use_tirads", False),
-            base_dataset_performance=m.get("base_dataset_performance", {}),
-            dataset_info=m.get("dataset_info", {}),
-            device=device,
-        )
+    for m in cls_cfg.get("models", []):
+        m = dict(m)
+        m["device"] = "cpu" if m.get("type") == "autogluon_radiomics" else device
+        model = build_cls_model(m)
         model.load_model()
         registry.register_model(model)
-
-    for m in cls_cfg.get("autogluon", {}).get("models", []):
-        model = AutoGluonRadiomicsModel(
-            model_name=m["name"],
-            model_dir=m["model_dir"],
-            base_dataset_performance=m.get("base_dataset_performance", {}),
-            dataset_info=m.get("dataset_info", {}),
-            device="cpu",
-        )
-        model.load_model()
-        registry.register_model(model)
-
     return registry
 
 
