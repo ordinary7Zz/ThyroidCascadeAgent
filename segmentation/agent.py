@@ -131,7 +131,6 @@ class SegmentationAgent:
 
         # 阶段 1 预筛选参数（从 config 读取，可在 config.yaml 中调整）
         pf_cfg = cfg.get("pre_filter", {})
-        self.pf_mahalanobis = pf_cfg.get("mahalanobis_threshold", 3.0)
         self.pf_cosine = pf_cfg.get("cosine_threshold", 0.8)
         self.pf_prob_outlier = pf_cfg.get("prob_outlier_threshold", 0.4)
         self.pf_min_keep = pf_cfg.get("min_keep", 3)
@@ -253,12 +252,14 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
         """
         阶段 1: 基于 radiomics 裁判输出预筛选（Python 规则，不用 LLM）。
 
-        三条规则（阈值在 config segmentation.agent.pre_filter 中配置）：
-        1. 马氏距离过滤: mahalanobis_distance > 阈值 → 异常
-        2. 特征向量离群: 与所有其他模型 cosine similarity < 阈值 → 异常
-        3. 分类置信度离群: malignant_prob 与中位数偏差 > 阈值 → 异常
+        两条规则（阈值在 config segmentation.agent.pre_filter 中配置）：
+        1. 特征向量离群: 与所有其他模型 cosine similarity < 阈值 → 异常
+        2. 分类置信度离群: malignant_prob 与中位数偏差 > 阈值 → 异常
 
-        安全阀: 保留至少 max(min_keep, N//2) 个模型；不足则取消过滤。
+        两条规则都是模型间相对比较，不依赖 GT 训练集分布，
+        直接反映"哪个模型和其他模型不一样"。
+
+        安全阀: 保留至少 max(min_keep, N//2) 个模型；不足则取消全部过滤。
 
         Returns:
             (filtered_predictions, filtered_judge_results, removed_indices)
@@ -275,16 +276,11 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 
         removed: set[int] = set()
 
-        # 规则 1: 马氏距离过滤
-        for i, jr in enumerate(judge_results):
-            if jr and jr.get("valid") and jr.get("mahalanobis_distance", 0) > self.pf_mahalanobis:
-                removed.add(i)
-
-        # 规则 2: 特征向量 cosine similarity 离群检测
+        # 规则 1: 特征向量 cosine similarity 离群检测
         candidates = [
             (i, judge_results[i].get("feature_vector"))
             for i in range(n)
-            if i not in removed and valid_mask[i] and judge_results[i].get("feature_vector") is not None
+            if valid_mask[i] and judge_results[i].get("feature_vector") is not None
         ]
         if len(candidates) >= 4:
             fv_array = np.array([fv for _, fv in candidates], dtype=np.float64)
@@ -299,7 +295,7 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
                 if max_sim < self.pf_cosine:
                     removed.add(orig_idx)
 
-        # 规则 3: malignant_prob 离群检测
+        # 规则 2: malignant_prob 离群检测
         prob_candidates = [
             (i, judge_results[i].get("malignant_prob", 0.5))
             for i in range(n)
@@ -312,18 +308,10 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
                 if abs(p - median_prob) > self.pf_prob_outlier:
                     removed.add(i)
 
-        # 安全阀: 保留数量下限
+        # 安全阀: 保留数量下限，不足则取消全部过滤
         min_keep = max(self.pf_min_keep, n // 2)
-        remaining = n - len(removed)
-        if remaining < min_keep:
-            # 按 mahalanobis_distance 升序保留前 min_keep 个
-            all_idx = list(range(n))
-            all_idx.sort(
-                key=lambda i: judge_results[i].get("mahalanobis_distance", 999)
-                if judge_results[i] and judge_results[i].get("valid")
-                else 999
-            )
-            removed = set(all_idx[min_keep:])
+        if n - len(removed) < min_keep:
+            return predictions, judge_results, []
 
         if not removed:
             return predictions, judge_results, []
