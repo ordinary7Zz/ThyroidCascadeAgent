@@ -6,7 +6,7 @@ CascadePipeline.run_single 实现：
   1. seg_registry.predict_all(image) → 多个分割预测
   2. seg_agent.select_best_mask(image, seg_predictions) → 筛选 + radiomics 裁判
   3. 取筛后 mask → cls_registry.predict_all(image, selected_mask) → 多个分类预测
-  4. cls_agent.select_best_model(image, selected_mask, cls_predictions, mask_source="segmentation_agent_filtered")
+  4. cls_agent.select_best_model(cls_predictions)
   5. 返回 {seg_decision, selected_mask, cls_decision, final_label}
 """
 
@@ -92,7 +92,6 @@ class CascadePipeline:
 
         cls_decision: ClsAgentDecision = self.cls_agent.select_best_model(
             cls_predictions,
-            mask_source="segmentation_agent_filtered",
             input_device_info=input_device_info,
             input_data_info=input_data_info,
         )

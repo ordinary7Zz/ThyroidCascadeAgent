@@ -4,8 +4,6 @@ LLM 驱动的分类 Agent：从多个模型预测中选择最佳结果。
 重写自 Classification_Agent/agent/classification_agent.py。
 关键改动：
   - 用 shared/llm_client.LLMClient 代替内联 OpenAI 调用
-  - 增加 mask_source 参数（pipeline 串联时标注 mask 来源）
-  - ClsAgentDecision 增加 mask_source 字段
   - 修复 __init__ 导出（原代码导出废弃的 GeminiAgent）
   - 保留 unanimous check / top_k soft voting / fallback 逻辑
 """
@@ -38,7 +36,6 @@ class ClsAgentDecision:
     confidence: float
     reasoning: str
     all_predictions: list[dict[str, Any]]
-    mask_source: str = "external"  # "segmentation_agent_filtered" | "external"
     selected_models: Optional[list[str]] = None  # top_k soft voting 时
     method: str = "single"  # "single" | "soft_voting" | "unanimous" | "fallback"
 
@@ -49,7 +46,6 @@ class ClsAgentDecision:
             "confidence": self.confidence,
             "reasoning": self.reasoning,
             "all_predictions": self.all_predictions,
-            "mask_source": self.mask_source,
             "method": self.method,
         }
         if self.selected_models:
@@ -82,8 +78,6 @@ class LLMClassificationAgent:
 
 【决策序】1) 主置信度高 2) training_devices 与输入设备匹配 3) entropy↓ margin↑ 4) dataset_size 大优先 5) 投票一致性高。
 
-【mask来源】segmentation_agent_filtered = mask 已验证；external = mask 未验证。
-
 【输出】只输出纯JSON（无Markdown/思考/代码块），首尾为{}。字段：selected_model, selected_class, confidence, reasoning。"""
 
     def _build_system_prompt_multi(self) -> str:
@@ -93,8 +87,6 @@ class LLMClassificationAgent:
 【字段】top_confidence（或 top_confidence_calibrated）为主置信度。entropy、margin_top2、num_models_same_class。
 
 【决策序】综合判断哪 {tk} 个模型组合最可信，优先级与单选类似，需考虑组合互补性。
-
-【mask来源】segmentation_agent_filtered = mask 已验证；external = mask 未验证。
 
 【输出】只输出纯JSON（无Markdown/思考），首尾为{{}}。字段：selected_models(长度恰好{tk}的字符串数组), reasoning。不要输出 selected_class 或 confidence。"""
 
@@ -176,10 +168,9 @@ class LLMClassificationAgent:
     def format_predictions_json(
         self,
         predictions: list[ClsModelOutput],
-        mask_source: str = "external",
     ) -> str:
         """构造 LLM 输入 JSON。"""
-        # 计算 vote_entropy 和 total_models（顶层，避免每个模型重复）
+        # 计算 vote_entropy（顶层，避免每个模型重复）
         votes_per_class: dict[str, int] = {}
         for pred in predictions:
             votes_per_class[pred.top_class] = votes_per_class.get(pred.top_class, 0) + 1
@@ -192,12 +183,6 @@ class LLMClassificationAgent:
         data = {
             "num_models": total_models,
             "vote_entropy": round(vote_entropy, 3),
-            "mask_source": mask_source,
-            "mask_validation": (
-                "此 mask 已经过分割 Agent 的 radiomics 裁判验证，可信度较高"
-                if mask_source == "segmentation_agent_filtered"
-                else "mask 来自外部，未经验证"
-            ),
             "predictions": self._build_compact_prediction_dicts(predictions),
         }
         return json.dumps(data, ensure_ascii=False)
@@ -258,7 +243,6 @@ class LLMClassificationAgent:
     def select_best_model(
         self,
         predictions: list[ClsModelOutput],
-        mask_source: str = "external",
         input_device_info: Optional[list[str]] = None,
         input_data_info: Optional[dict] = None,
     ) -> ClsAgentDecision:
@@ -267,7 +251,6 @@ class LLMClassificationAgent:
 
         Args:
             predictions: 多个模型的预测结果。
-            mask_source: mask 来源标注（"segmentation_agent_filtered" | "external"）。
             input_device_info: 输入设备信息。
             input_data_info: 输入数据元信息。
         """
@@ -276,16 +259,14 @@ class LLMClassificationAgent:
 
         # 一致时不调 LLM
         if self._predictions_top_class_unanimous(predictions):
-            decision = self._decision_unanimous(predictions)
-            decision.mask_source = mask_source
-            return decision
+            return self._decision_unanimous(predictions)
 
         # 不启用 agent 时直接 soft voting
         if not self.enable_agent:
-            return self._soft_voting_decision(predictions, mask_source)
+            return self._soft_voting_decision(predictions)
 
         # 构造 prompt
-        formatted = self.format_predictions_json(predictions, mask_source)
+        formatted = self.format_predictions_json(predictions)
         device_text = f"输入设备: {', '.join(input_device_info)}" if input_device_info else "输入设备: 未知"
 
         if self.top_k > 1:
@@ -311,20 +292,20 @@ class LLMClassificationAgent:
             decision_data = json.loads(json_text)
         except Exception as e:
             print(f"  ✗ LLM 调用或解析失败: {e}，使用降级选择")
-            return self._fallback_selection(predictions, mask_source)
+            return self._fallback_selection(predictions)
 
         # 解析决策
         try:
             if self.top_k > 1:
-                return self._decision_from_llm_topk(predictions, decision_data, mask_source)
+                return self._decision_from_llm_topk(predictions, decision_data)
             else:
-                return self._decision_from_llm_single(predictions, decision_data, mask_source)
+                return self._decision_from_llm_single(predictions, decision_data)
         except (KeyError, ValueError) as e:
             print(f"  ✗ 决策解析失败: {e}，使用降级选择")
-            return self._fallback_selection(predictions, mask_source)
+            return self._fallback_selection(predictions)
 
     def _decision_from_llm_single(
-        self, predictions, decision_data, mask_source
+        self, predictions, decision_data
     ) -> ClsAgentDecision:
         """LLM 单选模式。"""
         for field in ["selected_model", "selected_class", "confidence", "reasoning"]:
@@ -345,12 +326,11 @@ class LLMClassificationAgent:
             confidence=confidence,
             reasoning=decision_data["reasoning"],
             all_predictions=[p.to_dict() for p in predictions],
-            mask_source=mask_source,
             method="single",
         )
 
     def _decision_from_llm_topk(
-        self, predictions, decision_data, mask_source
+        self, predictions, decision_data
     ) -> ClsAgentDecision:
         """LLM top_k 模式：soft voting。"""
         raw_names = decision_data.get("selected_models")
@@ -368,13 +348,12 @@ class LLMClassificationAgent:
             confidence=float(conf),
             reasoning=str(decision_data.get("reasoning", "")),
             all_predictions=[p.to_dict() for p in predictions],
-            mask_source=mask_source,
             selected_models=[p.model_name for p in subset],
             method="soft_voting",
         )
 
     def _soft_voting_decision(
-        self, predictions: list[ClsModelOutput], mask_source: str
+        self, predictions: list[ClsModelOutput]
     ) -> ClsAgentDecision:
         """不启用 agent 时的 soft voting。"""
         sorted_preds = sorted(predictions, key=lambda p: p.top_confidence, reverse=True)
@@ -389,13 +368,12 @@ class LLMClassificationAgent:
             confidence=float(conf),
             reasoning=f"未启用 agent，按 top_confidence 取前 {k} 个模型 soft voting",
             all_predictions=[p.to_dict() for p in predictions],
-            mask_source=mask_source,
             selected_models=[p.model_name for p in subset],
             method="soft_voting",
         )
 
     def _fallback_selection(
-        self, predictions: list[ClsModelOutput], mask_source: str = "external"
+        self, predictions: list[ClsModelOutput]
     ) -> ClsAgentDecision:
         """降级选择：top_k=1 选最高置信度；top_k>1 soft voting。"""
         if self.top_k <= 1:
@@ -410,7 +388,6 @@ class LLMClassificationAgent:
                 confidence=best.top_confidence,
                 reasoning=reasoning,
                 all_predictions=[p.to_dict() for p in predictions],
-                mask_source=mask_source,
                 method="fallback",
             )
 
@@ -425,7 +402,6 @@ class LLMClassificationAgent:
             confidence=float(conf),
             reasoning=f"降级选择：前 {k} 个模型 soft voting",
             all_predictions=[p.to_dict() for p in predictions],
-            mask_source=mask_source,
             selected_models=[p.model_name for p in subset],
             method="fallback",
         )
@@ -433,7 +409,6 @@ class LLMClassificationAgent:
     def batch_select(
         self,
         batch_predictions: list[list[ClsModelOutput]],
-        mask_source: str = "external",
         input_device_info: Optional[list[str]] = None,
         input_data_info: Optional[dict] = None,
     ) -> list[ClsAgentDecision]:
@@ -441,6 +416,6 @@ class LLMClassificationAgent:
         decisions = []
         for preds in batch_predictions:
             decisions.append(
-                self.select_best_model(preds, mask_source, input_device_info, input_data_info)
+                self.select_best_model(preds, input_device_info, input_data_info)
             )
         return decisions

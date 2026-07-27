@@ -117,7 +117,6 @@ def main():
             predictions = registry.predict_all(image, mask)
             decision = agent.select_best_model(
                 predictions,
-                mask_source="external",
                 input_device_info=device_info,
             )
 

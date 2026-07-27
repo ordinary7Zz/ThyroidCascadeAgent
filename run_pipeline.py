@@ -4,7 +4,7 @@
 
 待做文档任务1+2的完整实现：
   1. 分割 Agent 用 radiomics 裁判评估 pred mask 可信度
-  2. 筛选后的 mask 喂给分类 Agent（mask_source="segmentation_agent_filtered"）
+  2. 筛选后的 mask 喂给分类 Agent
 用法: python run_pipeline.py [--config config/config.yaml]
 """
 
