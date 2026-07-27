@@ -112,6 +112,9 @@ class RadiomicsJudge:
         # 特征摘要
         summary = self._summarizer.summarize(features)
 
+        # 完整特征向量（用于阶段 1 预筛选的特征相似性计算）
+        feature_vector = df.iloc[0].tolist() if self._feature_names else None
+
         return {
             "valid": True,
             "predicted_class": int(malignant_prob > 0.5),
@@ -120,6 +123,7 @@ class RadiomicsJudge:
             "top_features": summary["top_features"],
             "mahalanobis_distance": summary["mahalanobis_distance"],
             "feature_count": summary["feature_count"],
+            "feature_vector": feature_vector,
         }
 
     def judge_batch(

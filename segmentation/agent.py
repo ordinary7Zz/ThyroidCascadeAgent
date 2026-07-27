@@ -238,6 +238,97 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             print(f"  ⚠️ radiomics 裁判失败: {e}")
             return None
 
+    def _pre_filter_by_judge(
+        self,
+        predictions: list[SegModelOutput],
+        judge_results: Optional[list[dict]],
+        mahalanobis_threshold: float = 3.0,
+        cosine_threshold: float = 0.8,
+        prob_outlier_threshold: float = 0.4,
+    ) -> tuple[list[SegModelOutput], Optional[list[dict]], list[int]]:
+        """
+        阶段 1: 基于 radiomics 裁判输出预筛选（Python 规则，不用 LLM）。
+
+        三条规则：
+        1. 马氏距离过滤: mahalanobis_distance > 阈值 → 异常
+        2. 特征向量离群: 与所有其他模型 cosine similarity < 阈值 → 异常
+        3. 分类置信度离群: malignant_prob 与中位数偏差 > 阈值 → 异常
+
+        安全阀: 保留至少 max(3, N//2) 个模型；不足则取消过滤。
+
+        Returns:
+            (filtered_predictions, filtered_judge_results, removed_indices)
+        """
+        n = len(predictions)
+
+        # 安全阀: 模型太少 / 无裁判结果 → 跳过
+        if n <= 3 or not judge_results:
+            return predictions, judge_results, []
+
+        valid_mask = [jr.get("valid", False) if jr else False for jr in judge_results]
+        if not any(valid_mask):
+            return predictions, judge_results, []
+
+        removed: set[int] = set()
+
+        # 规则 1: 马氏距离过滤
+        for i, jr in enumerate(judge_results):
+            if jr and jr.get("valid") and jr.get("mahalanobis_distance", 0) > mahalanobis_threshold:
+                removed.add(i)
+
+        # 规则 2: 特征向量 cosine similarity 离群检测
+        candidates = [
+            (i, judge_results[i].get("feature_vector"))
+            for i in range(n)
+            if i not in removed and valid_mask[i] and judge_results[i].get("feature_vector") is not None
+        ]
+        if len(candidates) >= 4:
+            fv_array = np.array([fv for _, fv in candidates], dtype=np.float64)
+            norms = np.linalg.norm(fv_array, axis=1, keepdims=True)
+            norms[norms == 0] = 1.0
+            normalized = fv_array / norms
+            sim_matrix = normalized @ normalized.T
+
+            for idx_in_list, (orig_idx, _) in enumerate(candidates):
+                others = np.delete(sim_matrix[idx_in_list], idx_in_list)
+                max_sim = float(np.max(others)) if len(others) > 0 else 0.0
+                if max_sim < cosine_threshold:
+                    removed.add(orig_idx)
+
+        # 规则 3: malignant_prob 离群检测
+        prob_candidates = [
+            (i, judge_results[i].get("malignant_prob", 0.5))
+            for i in range(n)
+            if i not in removed and valid_mask[i]
+        ]
+        if len(prob_candidates) >= 5:
+            probs = [p for _, p in prob_candidates]
+            median_prob = float(np.median(probs))
+            for i, p in prob_candidates:
+                if abs(p - median_prob) > prob_outlier_threshold:
+                    removed.add(i)
+
+        # 安全阀: 保留数量下限
+        min_keep = max(3, n // 2)
+        remaining = n - len(removed)
+        if remaining < min_keep:
+            # 按 mahalanobis_distance 升序保留前 min_keep 个
+            all_idx = list(range(n))
+            all_idx.sort(
+                key=lambda i: judge_results[i].get("mahalanobis_distance", 999)
+                if judge_results[i] and judge_results[i].get("valid")
+                else 999
+            )
+            removed = set(all_idx[min_keep:])
+
+        if not removed:
+            return predictions, judge_results, []
+
+        kept = [i for i in range(n) if i not in removed]
+        filtered_preds = [predictions[i] for i in kept]
+        filtered_judge = [judge_results[i] for i in kept] if judge_results else None
+        return filtered_preds, filtered_judge, sorted(removed)
+
     # ========== Prompt 构造 ==========
 
     def format_predictions_for_agent(
@@ -449,6 +540,16 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
         if not predictions:
             raise ValueError("没有预测结果")
 
+        # radiomics 裁判（阶段 1 前置）
+        judge_results = self._run_judge(image, predictions)
+
+        # 阶段 1: 基于 radiomics 裁判预筛选（Python 规则，不用 LLM）
+        predictions, judge_results, removed_indices = self._pre_filter_by_judge(
+            predictions, judge_results
+        )
+        if removed_indices:
+            print(f"  阶段1预筛选: 移除 {len(removed_indices)} 个模型 (索引 {removed_indices})，保留 {len(predictions)} 个")
+
         masks = [p.mask for p in predictions]
         model_names = [p.model_name for p in predictions]
 
@@ -472,9 +573,6 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
                 quality_results.get("agreement_metrics") or {}, len(predictions)
             )
         prefix = ""
-
-        # radiomics 裁判（新增）
-        judge_results = self._run_judge(image, predictions)
 
         # 构造 prompt
         formatted = self.format_predictions_for_agent(
