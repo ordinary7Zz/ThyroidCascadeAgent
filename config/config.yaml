@@ -86,6 +86,11 @@ segmentation:
   agent:
     use_agent_selection: true
     include_disagreement_metrics_in_prompt: true
+    pre_filter:
+      mahalanobis_threshold: 3.0    # 马氏距离过滤阈值（设极大值如 999 可关闭）
+      cosine_threshold: 0.8          # 特征向量 cosine 相似性阈值（设 0 可关闭）
+      prob_outlier_threshold: 0.4    # 分类置信度离群阈值（设 1 可关闭）
+      min_keep: 3                    # 最少保留模型数（安全阀）
     ensemble:
       enabled: true
       top_k: 1

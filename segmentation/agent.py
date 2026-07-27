@@ -129,6 +129,13 @@ class SegmentationAgent:
         self.ensemble_threshold = cfg.get("ensemble", {}).get("threshold", 0.5)
         self.include_disagreement = cfg.get("include_disagreement_metrics_in_prompt", True)
 
+        # 阶段 1 预筛选参数（从 config 读取，可在 config.yaml 中调整）
+        pf_cfg = cfg.get("pre_filter", {})
+        self.pf_mahalanobis = pf_cfg.get("mahalanobis_threshold", 3.0)
+        self.pf_cosine = pf_cfg.get("cosine_threshold", 0.8)
+        self.pf_prob_outlier = pf_cfg.get("prob_outlier_threshold", 0.4)
+        self.pf_min_keep = pf_cfg.get("min_keep", 3)
+
         self.system_prompt = self._generate_system_prompt()
 
     def _generate_system_prompt(self) -> str:
@@ -242,19 +249,16 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
         self,
         predictions: list[SegModelOutput],
         judge_results: Optional[list[dict]],
-        mahalanobis_threshold: float = 3.0,
-        cosine_threshold: float = 0.8,
-        prob_outlier_threshold: float = 0.4,
     ) -> tuple[list[SegModelOutput], Optional[list[dict]], list[int]]:
         """
         阶段 1: 基于 radiomics 裁判输出预筛选（Python 规则，不用 LLM）。
 
-        三条规则：
+        三条规则（阈值在 config segmentation.agent.pre_filter 中配置）：
         1. 马氏距离过滤: mahalanobis_distance > 阈值 → 异常
         2. 特征向量离群: 与所有其他模型 cosine similarity < 阈值 → 异常
         3. 分类置信度离群: malignant_prob 与中位数偏差 > 阈值 → 异常
 
-        安全阀: 保留至少 max(3, N//2) 个模型；不足则取消过滤。
+        安全阀: 保留至少 max(min_keep, N//2) 个模型；不足则取消过滤。
 
         Returns:
             (filtered_predictions, filtered_judge_results, removed_indices)
@@ -273,7 +277,7 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 
         # 规则 1: 马氏距离过滤
         for i, jr in enumerate(judge_results):
-            if jr and jr.get("valid") and jr.get("mahalanobis_distance", 0) > mahalanobis_threshold:
+            if jr and jr.get("valid") and jr.get("mahalanobis_distance", 0) > self.pf_mahalanobis:
                 removed.add(i)
 
         # 规则 2: 特征向量 cosine similarity 离群检测
@@ -292,7 +296,7 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             for idx_in_list, (orig_idx, _) in enumerate(candidates):
                 others = np.delete(sim_matrix[idx_in_list], idx_in_list)
                 max_sim = float(np.max(others)) if len(others) > 0 else 0.0
-                if max_sim < cosine_threshold:
+                if max_sim < self.pf_cosine:
                     removed.add(orig_idx)
 
         # 规则 3: malignant_prob 离群检测
@@ -305,11 +309,11 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             probs = [p for _, p in prob_candidates]
             median_prob = float(np.median(probs))
             for i, p in prob_candidates:
-                if abs(p - median_prob) > prob_outlier_threshold:
+                if abs(p - median_prob) > self.pf_prob_outlier:
                     removed.add(i)
 
         # 安全阀: 保留数量下限
-        min_keep = max(3, n // 2)
+        min_keep = max(self.pf_min_keep, n // 2)
         remaining = n - len(removed)
         if remaining < min_keep:
             # 按 mahalanobis_distance 升序保留前 min_keep 个
