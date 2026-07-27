@@ -1,6 +1,10 @@
 from .base_model import SegModelOutput, BaseSegmentationModel
 from .model_registry import SegModelRegistry
 from .dino_unet_model import DINOUNetSegmentationModel
+from .transunet_model import TransUNetSegmentationModel
+from .ultrafedfm_model import UltraFedFMSegmentationModel
+from .medsegx_model import MedSegXSegmentationModel
+from .medsam2_model import MedSAM2SegmentationModel
 from .quality_evaluator import SegmentationQualityEvaluator
 from .agent import SegmentationAgent, SegAgentDecision
 from .metrics import (
