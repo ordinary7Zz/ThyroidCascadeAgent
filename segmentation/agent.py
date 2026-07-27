@@ -177,9 +177,10 @@ mahalanobis_distance 过大（>3）的 mask 可能分割异常。"""
 决策优先级（从高到低）：
 1) 模型间一致性：agreement_with_others 高更可靠；分歧大时倚重 agreement 高且 mean_hd95_to_others 低的候选；
 2) radiomics 裁判（如有）：分类置信度合理、mahalanobis_distance 不过大的 mask 更可信；
-3) 形态学：单连通、边界平滑、circularity 0.6-0.9、面积与长宽比合理；
-4) 数据集规模：dataset_size 大的模型泛化性更好；
-5) 置信度：mean_confidence 较高为次要加分项。
+3) 设备匹配：training_devices 与输入设备越接近越好；
+4) 形态学：单连通、边界平滑、circularity 0.6-0.9、面积合理；
+5) 数据集规模：dataset_size 大的模型泛化性更好；
+6) 置信度：mean_confidence 较高为次要加分项。
 
 reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_hd95_mean、radiomics_judge 等）。"""
 
@@ -268,15 +269,13 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 
             model_info: dict[str, Any] = {
                 "model_name": pred.model_name,
+                "training_devices": meta.get("training_data_devices", []),
                 "mask_statistics": {
                     "area": q["area"],
-                    "is_single_component": q["is_single_component"],
                     "num_components": q["num_components"],
                     "circularity": round(q["circularity"], 2),
                     "smoothness": round(q["smoothness"], 2),
-                    "compactness": round(q["compactness"], 2),
                     "solidity": round(q["solidity"], 2),
-                    "aspect_ratio": round(q["aspect_ratio"], 2),
                 },
                 "agreement_with_others": round(am.get("average_agreement", [0])[idx], 2) if am.get("average_agreement") else 0.0,
             }
@@ -298,19 +297,17 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
                 model_info["radiomics_judge"] = {
                     "malignant_prob": round(jr["malignant_prob"], 3),
                     "confidence": round(jr["confidence"], 3),
-                    "top_features": jr.get("top_features", [])[:5],
+                    "top_features": jr.get("top_features", [])[:3],
                     "mahalanobis_distance": round(jr.get("mahalanobis_distance", 0), 2),
                 }
 
             data["models"].append(model_info)
 
-        data["overall_agreement"] = round(am.get("overall_agreement", 0), 2)
-
         req: dict[str, Any] = {}
         if group_unc:
-            req["follow_prefix"] = "reasoning 须含 area_cv、pairwise_hd95_mean/std 及所选模型 disagreement 两项。"
+            req["follow_prefix"] = "reasoning 须含 area_cv 及所选模型 disagreement。"
         if self.radiomics_judge is not None and judge_results:
-            req["mention_judge"] = "reasoning 须提及 radiomics_judge 的分类置信度或特征差异。"
+            req["mention_judge"] = "reasoning 须提及 radiomics_judge 分类置信度。"
         if req:
             data["reasoning_requirements"] = req
 
@@ -475,8 +472,6 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
                 quality_results.get("agreement_metrics") or {}, len(predictions)
             )
         prefix = ""
-        if g_val:
-            prefix = self._build_disagreement_prefix(g_val, per_val, predictions)
 
         # radiomics 裁判（新增）
         judge_results = self._run_judge(image, predictions)
