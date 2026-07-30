@@ -82,20 +82,22 @@ class MedSAM2SegmentationModel(BaseSegmentationModel):
         print(f"    ✓ MedSAM2 加载成功")
 
     def _find_config_path(self) -> str:
-        """查找 SAM2 配置文件。"""
+        """查找 SAM2 配置文件。
+
+        build_sam2 内部使用 hydra.compose(config_name=...)，config_name 必须为
+        Hydra 搜索路径（pkg://sam2）下的相对路径，而非 file:// URI 或文件系统绝对路径。
+        """
         if self.infer_root:
-            candidates = [
-                os.path.join(self.infer_root, "sam2", "configs", self.model_cfg),
-                os.path.join(self.infer_root, self.model_cfg),
-            ]
-            for c in candidates:
-                if os.path.isfile(c):
-                    return "file://" + os.path.abspath(c)
-            # fallback
-            return "file://" + os.path.abspath(
-                os.path.join(self.infer_root, "sam2", "configs", self.model_cfg)
-            )
-        return self.model_cfg
+            # 验证文件存在于磁盘上（仅诊断用，不改变返回值格式）
+            disk_path = os.path.join(self.infer_root, "sam2", "configs", self.model_cfg)
+            if not os.path.isfile(disk_path):
+                disk_path = os.path.join(self.infer_root, self.model_cfg)
+            if not os.path.isfile(disk_path):
+                raise FileNotFoundError(
+                    f"SAM2 配置文件未找到: {self.model_cfg} "
+                    f"(搜索: {self.infer_root})"
+                )
+        return f"configs/{self.model_cfg}"
 
     def predict(self, image: np.ndarray) -> SegModelOutput:
         """
