@@ -75,17 +75,26 @@ def main():
     pipe_cfg = config.get("pipeline", {})
     data_cfg = pipe_cfg.get("data", {})
 
+    # 检查是否需要 LLM
+    enable_seg_agent = seg_cfg.get("agent", {}).get("enable_agent", True)
+    enable_cls_agent = cls_cfg.get("agent", {}).get("enable_agent", True)
+    need_llm = enable_seg_agent or enable_cls_agent
+
     # LLM 客户端
-    api_key = os.getenv(llm_cfg["api_key_env"], "")
-    if not api_key:
-        print("⚠️ 警告: API key 未设置（环境变量 %s）" % llm_cfg["api_key_env"])
-    llm_client = LLMClient(
-        api_key=api_key,
-        base_url=llm_cfg["base_url"],
-        model_name=llm_cfg["model_name"],
-        temperature=llm_cfg["temperature"],
-        max_tokens=llm_cfg["max_tokens"],
-    )
+    if need_llm:
+        api_key = os.getenv(llm_cfg["api_key_env"], "")
+        if not api_key:
+            print("⚠️ 警告: API key 未设置（环境变量 %s）" % llm_cfg["api_key_env"])
+        llm_client = LLMClient(
+            api_key=api_key,
+            base_url=llm_cfg["base_url"],
+            model_name=llm_cfg["model_name"],
+            temperature=llm_cfg["temperature"],
+            max_tokens=llm_cfg["max_tokens"],
+        )
+    else:
+        print("✓ 分割和分类 Agent 均已禁用，跳过 LLM 客户端初始化")
+        llm_client = None
 
     # Radiomics 裁判
     judge = None

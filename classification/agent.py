@@ -58,7 +58,7 @@ class LLMClassificationAgent:
 
     def __init__(
         self,
-        llm_client: LLMClient,
+        llm_client: Optional[LLMClient] = None,
         config: Optional[dict] = None,
     ):
         self.llm_client = llm_client

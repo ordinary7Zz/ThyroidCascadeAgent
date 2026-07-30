@@ -58,14 +58,21 @@ def main():
     cls_cfg = config["classification"]
     data_cfg = config.get("pipeline", {}).get("data", {})
 
-    api_key = os.getenv(llm_cfg["api_key_env"], "")
-    llm_client = LLMClient(
-        api_key=api_key,
-        base_url=llm_cfg["base_url"],
-        model_name=llm_cfg["model_name"],
-        temperature=llm_cfg["temperature"],
-        max_tokens=llm_cfg["max_tokens"],
-    )
+    # 检查是否需要 LLM
+    enable_agent = cls_cfg.get("agent", {}).get("enable_agent", True)
+
+    if enable_agent:
+        api_key = os.getenv(llm_cfg["api_key_env"], "")
+        llm_client = LLMClient(
+            api_key=api_key,
+            base_url=llm_cfg["base_url"],
+            model_name=llm_cfg["model_name"],
+            temperature=llm_cfg["temperature"],
+            max_tokens=llm_cfg["max_tokens"],
+        )
+    else:
+        print("✓ 分类 Agent 已禁用，跳过 LLM 客户端初始化")
+        llm_client = None
 
     registry = build_cls_registry(cls_cfg, args.device)
     agent = LLMClassificationAgent(

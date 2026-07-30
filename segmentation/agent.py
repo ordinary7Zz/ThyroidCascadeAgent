@@ -114,14 +114,14 @@ class SegmentationAgent:
 
     def __init__(
         self,
-        llm_client: LLMClient,
+        llm_client: Optional[LLMClient] = None,
         quality_evaluator: Optional[SegmentationQualityEvaluator] = None,
         radiomics_judge=None,
         config: Optional[dict] = None,
     ):
         """
         Args:
-            llm_client: 共享的 LLM 客户端。
+            llm_client: 共享的 LLM 客户端（None 时仅在 enable_agent=False 模式可用）。
             quality_evaluator: 质量评估器（None 时内部创建）。
             radiomics_judge: GT-trained radiomics 裁判（None 时不启用，Phase 7 注入）。
             config: agent 配置（ensemble, disagreement 等）。
@@ -131,6 +131,7 @@ class SegmentationAgent:
         self.radiomics_judge = radiomics_judge
         self.base_datasets_info = BASE_DATASETS_INFO
         cfg = config or {}
+        self.enable_agent = cfg.get("enable_agent", True)
         self.ensemble_enabled = cfg.get("ensemble", {}).get("enabled", True)
         self.ensemble_top_k = cfg.get("ensemble", {}).get("top_k", 1)
         self.ensemble_method = cfg.get("ensemble", {}).get("method", "weighted_average")
@@ -645,6 +646,12 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 2. mahalanobis_distance最小的mask（特征最接近GT训练分布）
 3. 形态学合理性（circularity 0.6-0.9、单连通）
 4. 设备匹配与历史性能"""
+
+        if not self.enable_agent:
+            print(f"  Agent 已禁用，使用静态规则选择")
+            return self._fallback_selection(
+                predictions, gt_mask, quality_results, judge_results, classification_anchor
+            )
 
         try:
             response_text = self.llm_client.chat(system_prompt, user_prompt)
