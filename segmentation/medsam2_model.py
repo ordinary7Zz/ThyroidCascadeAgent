@@ -62,7 +62,7 @@ class MedSAM2SegmentationModel(BaseSegmentationModel):
             sys.path.insert(0, self.infer_root)
 
         try:
-            from sam2.build_sam import build_sam2
+            from sam2.build_sam import build_sam2_video_predictor_npz
         except ImportError as e:
             raise ImportError(
                 f"无法导入 sam2。请确认 infer_root 配置正确: {e}"
@@ -71,7 +71,7 @@ class MedSAM2SegmentationModel(BaseSegmentationModel):
         # 查找配置文件
         cfg_path = self._find_config_path()
 
-        self.model = build_sam2(
+        self.model = build_sam2_video_predictor_npz(
             config_file=cfg_path,
             ckpt_path=self.model_path,
             device=self.device,
