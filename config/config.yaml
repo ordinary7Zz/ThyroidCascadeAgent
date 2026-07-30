@@ -53,7 +53,7 @@ segmentation:
     - type: "medsam2"
       name: "medsam2_thyroid"
       model_path: "../my_Thyroid_Infer/infer_medsam2/checkpoints/Nodule/checkpoint_15.pt"
-      model_cfg: "../my_Thyroid_Infer/infer_medsam2/sam2/configs/sam2.1_hiera_t512.yaml"
+      model_cfg: "sam2.1_hiera_t512.yaml"
       img_size: 1024
       threshold: 0.5
       infer_root: "../my_Thyroid_Infer/infer_medsam2"
