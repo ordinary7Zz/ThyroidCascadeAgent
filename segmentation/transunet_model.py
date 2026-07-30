@@ -64,13 +64,38 @@ class TransUNetSegmentationModel(BaseSegmentationModel):
         # 引入架构定义
         if self.infer_root:
             sys.path.insert(0, self.infer_root)
+
         try:
             from networks.vit_seg_modeling import VisionTransformer as ViT_seg
-            from networks.vit_seg_configs import CONFIGS as CONFIGS_ViT_seg
         except ImportError as e:
             raise ImportError(
-                f"无法导入 TransUNet 架构。请确认 infer_root 配置正确: {e}"
+                f"无法导入 TransUNet 架构 (vit_seg_modeling)。请确认 infer_root 配置正确: {e}"
             )
+
+        # 尝试多种导入方式，兼容不同版本的 TransUNet 代码
+        CONFIGS_ViT_seg = None
+        for import_expr in [
+            ("networks.vit_seg_configs", "CONFIGS"),
+            ("networks.vit_seg_configs", "configs"),
+        ]:
+            try:
+                module_name, attr_name = import_expr
+                module = __import__(module_name, fromlist=[attr_name])
+                CONFIGS_ViT_seg = getattr(module, attr_name)
+                break
+            except (ImportError, AttributeError):
+                continue
+
+        if CONFIGS_ViT_seg is None:
+            # 最后一个尝试：通过 get_config 函数获取单模型配置
+            try:
+                from networks.vit_seg_configs import get_config
+                CONFIGS_ViT_seg = {self.vit_name: get_config(self.vit_name)}
+            except ImportError:
+                raise ImportError(
+                    "无法导入 TransUNet 配置（vit_seg_configs）。"
+                    "请确认该文件中导出了 CONFIGS、configs 或 get_config 之一。"
+                )
 
         config_vit = CONFIGS_ViT_seg[self.vit_name]
         config_vit.n_classes = self.num_classes
