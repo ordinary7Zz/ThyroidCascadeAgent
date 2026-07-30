@@ -59,7 +59,7 @@ class AutoGluonRadiomicsModel(BaseClassificationModel):
 
         from autogluon.tabular import TabularPredictor
 
-        self._predictor = TabularPredictor.load(str(path))
+        self._predictor = TabularPredictor.load(str(path), require_py_version_match=False)
         self.is_loaded = True
 
         # 获取特征名（从训练数据推断）
