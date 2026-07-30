@@ -90,9 +90,11 @@ class MedSAM2SegmentationModel(BaseSegmentationModel):
             ]
             for c in candidates:
                 if os.path.isfile(c):
-                    return "file://" + c
+                    return "file://" + os.path.abspath(c)
             # fallback
-            return "file://" + os.path.join(self.infer_root, "sam2", "configs", self.model_cfg)
+            return "file://" + os.path.abspath(
+                os.path.join(self.infer_root, "sam2", "configs", self.model_cfg)
+            )
         return self.model_cfg
 
     def predict(self, image: np.ndarray) -> SegModelOutput:
