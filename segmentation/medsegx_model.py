@@ -81,16 +81,19 @@ class MedSegXSegmentationModel(BaseSegmentationModel):
                 f"无法导入 MedSegX 架构。请确认 infer_root 配置正确: {e}"
             )
 
-        # SAM 权重路径
+        # SAM 权重路径：sam_checkpoint 可能是目录名或完整文件路径
         sam_model_checkpoint = {
             "vit_b": "sam_vit_b_01ec64.pth",
             "vit_l": "sam_vit_l_0b3195.pth",
             "vit_h": "sam_vit_h_4b8939.pth",
         }
-        sam_ckpt_path = os.path.join(
-            self.sam_checkpoint,
-            sam_model_checkpoint.get(self.sam_model_type, "sam_vit_b_01ec64.pth"),
+        expected_filename = sam_model_checkpoint.get(
+            self.sam_model_type, "sam_vit_b_01ec64.pth"
         )
+        if os.path.isdir(self.sam_checkpoint):
+            sam_ckpt_path = os.path.join(self.sam_checkpoint, expected_filename)
+        else:
+            sam_ckpt_path = self.sam_checkpoint
 
         sam_model = sam_model_registry[self.sam_model_type](
             image_size=self.img_size,
