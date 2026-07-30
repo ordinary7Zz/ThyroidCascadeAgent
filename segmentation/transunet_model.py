@@ -87,14 +87,33 @@ class TransUNetSegmentationModel(BaseSegmentationModel):
                 continue
 
         if CONFIGS_ViT_seg is None:
-            # 最后一个尝试：通过 get_config 函数获取单模型配置
+            # vit_seg_configs.py 没有导出统一的 CONFIGS 或 get_config，
+            # 而是定义了独立的 get_{xxx}_config() 函数。我们在此自行构建映射。
+            vit_name_to_func = {
+                "R50-ViT-B_16": "get_r50_b16_config",
+                "R50-ViT-L_16": "get_r50_l16_config",
+                "ViT-B_16": "get_b16_config",
+                "ViT-B_32": "get_b32_config",
+                "ViT-L_16": "get_l16_config",
+                "ViT-L_32": "get_l32_config",
+                "ViT-H_14": "get_h14_config",
+                "testing": "get_testing",
+            }
+            func_name = vit_name_to_func.get(self.vit_name)
+            if func_name is None:
+                raise KeyError(
+                    f"未知的 vit_name: '{self.vit_name}'，"
+                    f"可选值: {list(vit_name_to_func.keys())}"
+                )
             try:
-                from networks.vit_seg_configs import get_config
-                CONFIGS_ViT_seg = {self.vit_name: get_config(self.vit_name)}
-            except ImportError:
+                get_func = getattr(
+                    __import__("networks.vit_seg_configs", fromlist=[func_name]),
+                    func_name,
+                )
+                CONFIGS_ViT_seg = {self.vit_name: get_func()}
+            except (ImportError, AttributeError) as e:
                 raise ImportError(
-                    "无法导入 TransUNet 配置（vit_seg_configs）。"
-                    "请确认该文件中导出了 CONFIGS、configs 或 get_config 之一。"
+                    f"无法导入 TransUNet 配置函数 {func_name}: {e}"
                 )
 
         config_vit = CONFIGS_ViT_seg[self.vit_name]
