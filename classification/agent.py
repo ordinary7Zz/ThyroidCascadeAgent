@@ -406,6 +406,179 @@ class LLMClassificationAgent:
             method="fallback",
         )
 
+    def resolve_path_b(
+        self,
+        indie_predictions: list["ClsModelOutput"],
+        autogluon_pred: Optional["ClsModelOutput"],
+        seg_decision: Any,
+    ) -> "ClsAgentDecision":
+        """
+        Path B 分类裁决：独立分类模型无共识时的分类决策。
+
+        规则优先级：
+        1. AutoGluon 与独立模型多数派一致 → 直接输出（不调 LLM）
+        2. 不一致但 AutoGluon 高置信(≈conf>0.8) → 信 AutoGluon
+        3. 都不确定 → 调 LLM 裁决
+        4. LLM 失败 → 输出多数派
+        """
+        from collections import Counter
+
+        if not indie_predictions:
+            raise ValueError("没有独立分类模型预测")
+
+        classes = [p.top_class for p in indie_predictions]
+        majority = Counter(classes).most_common(1)[0][0]
+
+        if autogluon_pred is not None:
+            al_class = autogluon_pred.top_class
+            al_conf = autogluon_pred.top_confidence
+
+            # 规则 1: 与多数派一致
+            if al_class == majority:
+                reasoning = (
+                    f"独立模型无共识(多数派={majority})，"
+                    f"AutoGluon 基于筛选 mask 也判断为{majority}(conf={al_conf:.2f})，一致，采纳。"
+                )
+                return ClsAgentDecision(
+                    selected_model="autogluon_majority_agree",
+                    selected_class=al_class,
+                    confidence=float(al_conf),
+                    reasoning=reasoning,
+                    all_predictions=[p.to_dict() for p in indie_predictions],
+                    method="path_b_majority",
+                )
+
+            # 规则 2: 不一致但 AutoGluon 高置信
+            if al_conf > 0.8:
+                reasoning = (
+                    f"独立模型无共识，AutoGluon 基于 ROI 特征分类置信度高"
+                    f"({al_conf:.2f})。独立模型可能在无 mask 条件下判断不确定。"
+                    f"采纳 AutoGluon: {al_class}。"
+                )
+                return ClsAgentDecision(
+                    selected_model="autogluon_strong_signal",
+                    selected_class=al_class,
+                    confidence=float(al_conf),
+                    reasoning=reasoning,
+                    all_predictions=[p.to_dict() for p in indie_predictions],
+                    method="path_b_autogluon",
+                )
+
+        # 规则 3: 调 LLM 裁决
+        if self.enable_agent:
+            try:
+                return self._resolve_path_b_with_llm(
+                    indie_predictions, autogluon_pred, seg_decision
+                )
+            except Exception as e:
+                print(f"  ✗ Path B LLM 裁决失败: {e}")
+
+        # 规则 4: 最终降级 → 多数派
+        return self._decision_majority(indie_predictions, majority)
+
+    @staticmethod
+    def _decision_majority(predictions, majority) -> "ClsAgentDecision":
+        """Path B 最终降级：输出多数派。"""
+        best = max(predictions, key=lambda p: p.top_confidence)
+        return ClsAgentDecision(
+            selected_model="majority_fallback",
+            selected_class=majority,
+            confidence=float(best.top_confidence),
+            reasoning=(
+                f"独立模型无共识(多数派={majority})，AutoGluon也不确定，"
+                f"退回到多数派投票。置信度=low。"
+            ),
+            all_predictions=[p.to_dict() for p in predictions],
+            method="path_b_majority_fallback",
+        )
+
+    def _resolve_path_b_with_llm(
+        self,
+        indie_preds: list["ClsModelOutput"],
+        autogluon_pred: Optional["ClsModelOutput"],
+        seg_decision: Any,
+    ) -> "ClsAgentDecision":
+        """Path B 最困难情况：调 LLM 做最终裁决。
+
+        LLM 收到的信号：
+        - 3 个独立模型各自的预测和置信度
+        - AutoGluon 基于筛选 mask 的分类结果（如有）
+        - 分割 Agent 选择该 mask 的理由
+        """
+        # 独立模型信息
+        indie_info = []
+        for p in indie_preds:
+            pd = p.to_dict()
+            indie_info.append({
+                "model_name": pd.get("model_name"),
+                "top_class": pd.get("top_class"),
+                "top_confidence": pd.get("top_confidence"),
+            })
+
+        # AutoGluon 信息
+        al_info = None
+        if autogluon_pred is not None:
+            al_info = {
+                "top_class": autogluon_pred.top_class,
+                "top_confidence": autogluon_pred.top_confidence,
+            }
+
+        # 分割 Agent reasoning
+        seg_reason = (
+            seg_decision.reasoning
+            if hasattr(seg_decision, "reasoning")
+            else str(seg_decision)
+        )
+        seg_model = (
+            seg_decision.selected_model
+            if hasattr(seg_decision, "selected_model")
+            else "unknown"
+        )
+
+        prompt_data = {
+            "scenario": "独立分类模型无共识，需综合裁决",
+            "independent_models": indie_info,
+            "autogluon_based_on_selected_mask": al_info,
+            "segmentation_decision": {
+                "selected_mask_from": seg_model,
+                "reasoning": seg_reason,
+            },
+            "question": "请综合以上信息，给出最终良恶性判断和置信度(0-1)。",
+        }
+
+        sys_prompt = """你是甲状腺超声诊断专家。独立分类模型对该图像判断不一致，你需要综合所有信号，自己做出最终的良恶性判断。
+
+你将收到：
+1. 独立分类模型预测（3个，无需mask，整图判断）
+2. AutoGluon 基于分割筛选 mask 的 Radiomics 分类（有 ROI 引导）
+3. 分割 Agent 选择该 mask 的推理
+
+Markup:
+- 独立模型置信度普遍低(<0.6) → 整图级特征不明显，ROI 级特征更可信
+- AutoGluon 分类基于 ROI 特征 → 在 mask 靠谱的前提下更细腻
+- 分割 Agent reasoning 解释了为什么选这个 mask
+
+若所有信号都模糊，保守倾向恶性（宁可假阳性不可假阴性），但标注低置信度。
+
+输出纯JSON（无 Markdown/代码块），首尾为{}：
+{"selected_class": "恶性", "confidence": 0.75, "reasoning": "..."}
+reasoning 须引用具体置信度数值。"""
+
+        user_prompt = json.dumps(prompt_data, ensure_ascii=False)
+
+        response_text = self.llm_client.chat(sys_prompt, user_prompt)
+        json_text = self._extract_json_from_text(response_text)
+        decision_data = json.loads(json_text)
+
+        return ClsAgentDecision(
+            selected_model="agent_path_b_llm",
+            selected_class=decision_data["selected_class"],
+            confidence=float(decision_data["confidence"]),
+            reasoning=decision_data["reasoning"],
+            all_predictions=[p.to_dict() for p in indie_preds],
+            method="path_b_llm",
+        )
+
     def batch_select(
         self,
         batch_predictions: list[list[ClsModelOutput]],

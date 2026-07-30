@@ -46,6 +46,8 @@ class SegAgentDecision:
     model_weights: Optional[list[float]] = None
     is_ensemble: bool = False
     judge_scores: Optional[dict[str, Any]] = None  # radiomics 裁判结果
+    classification_anchor: Optional[str] = None  # 分类锚点 (Path A) 或 None (Path B)
+    path: str = "unknown"  # "A" | "B"
 
     def to_dict(self, include_mask: bool = False) -> dict:
         result = {
@@ -75,6 +77,9 @@ class SegAgentDecision:
             result["ece_mean"] = float(np.mean(list(self.ece_metrics.values())))
         if self.judge_scores:
             result["judge_scores"] = self.judge_scores
+        if self.classification_anchor:
+            result["classification_anchor"] = self.classification_anchor
+        result["path"] = self.path
         return result
 
     def to_simplified_dict(self) -> dict:
@@ -98,6 +103,9 @@ class SegAgentDecision:
         if self.ece_metrics:
             result["ece_metrics"] = self.ece_metrics
             result["ece_mean"] = float(np.mean(list(self.ece_metrics.values())))
+        if self.classification_anchor:
+            result["classification_anchor"] = self.classification_anchor
+        result["path"] = self.path
         return result
 
 
@@ -328,6 +336,7 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
         predictions: list[SegModelOutput],
         quality_results: dict,
         judge_results: Optional[list[dict]] = None,
+        classification_anchor: Optional[str] = None,
         input_device_info: Optional[list[str]] = None,
         input_data_info: Optional[dict] = None,
     ) -> str:
@@ -386,11 +395,32 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 
             data["models"].append(model_info)
 
+        # 分类锚点
+        if classification_anchor:
+            data["classification_anchor"] = {
+                "class": classification_anchor,
+                "source": "3个独立分类模型(无mask)一致判断",
+                "usage": "排除Radiomics裁判分类与锚点矛盾的mask"
+            }
+        else:
+            data["classification_anchor"] = {
+                "class": None,
+                "status": "无共识(独立分类模型判断不一致)",
+                "implication": "以Radiomics裁判内部一致性和形态学为主要依据"
+            }
+
         req: dict[str, Any] = {}
         if group_unc:
             req["follow_prefix"] = "reasoning 须含 area_cv 及所选模型 disagreement。"
         if self.radiomics_judge is not None and judge_results:
-            req["mention_judge"] = "reasoning 须提及 radiomics_judge 分类置信度。"
+            if classification_anchor:
+                req["mention_judge"] = "reasoning 须提及 radiomics_judge 分类置信度，并逐模型分析是否与分类锚点吻合。"
+            else:
+                req["mention_judge"] = "reasoning 须提及 radiomics_judge 分类置信度，分析裁判的内部分歧。"
+        if classification_anchor:
+            req["use_anchor"] = "与锚点矛盾的Radiomics分类需在reasoning中明确指出并解释原因。"
+        else:
+            req["no_anchor_strategy"] = "无分类锚点时，优先级：1)裁判一致性 2)mahalanobis 3)形态学 4)历史性能。"
         if req:
             data["reasoning_requirements"] = req
 
@@ -515,6 +545,7 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
         self,
         image: np.ndarray,
         predictions: list[SegModelOutput],
+        classification_anchor: Optional[str] = None,
         gt_mask: Optional[np.ndarray] = None,
         input_device_info: Optional[list[str]] = None,
         input_data_info: Optional[dict] = None,
@@ -525,10 +556,12 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
         Args:
             image: (H, W, 3) RGB uint8 [0,255]。radiomics_judge 需要。
             predictions: 多个模型的预测结果。
+            classification_anchor: 分类锚点 (Path A: "恶性"/"良性"; Path B: None)。
             gt_mask: 可选 GT mask（仅用于评估，不影响选择）。
             input_device_info: 输入设备信息。
             input_data_info: 输入数据元信息。
         """
+        path = "A" if classification_anchor else "B"
         if not predictions:
             raise ValueError("没有预测结果")
 
@@ -568,7 +601,9 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 
         # 构造 prompt
         formatted = self.format_predictions_for_agent(
-            predictions, quality_results, judge_results, input_device_info, input_data_info
+            predictions, quality_results, judge_results,
+            classification_anchor=classification_anchor,
+            input_device_info=input_device_info, input_data_info=input_data_info
         )
 
         device_text = f"\n**输入设备**: {', '.join(input_device_info)}\n" if input_device_info else "\n**输入设备**: 未知\n"
@@ -589,14 +624,37 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 {question}
 只输出纯JSON。格式：{fmt}"""
 
-        # 调用 LLM
+        # 调用 LLM（锚点指令动态追加到 system_prompt）
+        system_prompt = self.system_prompt
+        if classification_anchor:
+            system_prompt += f"""
+
+【分类锚点（关键信号）】
+独立分类模型（3个，无需mask）一致判断该图像为「{classification_anchor}」。
+此锚点用于评估各分割结果的合理性：
+- 与锚点矛盾的Radiomics裁判分类 → 该mask可能覆盖了错误的ROI → 可信度显著降低。
+- 与锚点吻合的mask → 额外加分。
+- 若所有mask的Radiomics分类都与锚点矛盾 → 选mahalanobis最小的mask并解释原因。"""
+        else:
+            system_prompt += """
+
+【无分类锚点】
+独立分类模型对该图像的判断不一致，未能形成共识。
+整图级别特征模糊，分割评估应以以下为主要依据：
+1. Radiomics裁判的内部一致性（不同的分割得到相似的分类方向→更可信）
+2. mahalanobis_distance最小的mask（特征最接近GT训练分布）
+3. 形态学合理性（circularity 0.6-0.9、单连通）
+4. 设备匹配与历史性能"""
+
         try:
-            response_text = self.llm_client.chat(self.system_prompt, user_prompt)
+            response_text = self.llm_client.chat(system_prompt, user_prompt)
             json_text = self._extract_json_from_text(response_text)
             decision_data = json.loads(json_text)
         except Exception as e:
             print(f"  ✗ LLM 调用或解析失败: {e}，使用降级选择")
-            return self._fallback_selection(predictions, gt_mask, quality_results, judge_results)
+            return self._fallback_selection(
+                predictions, gt_mask, quality_results, judge_results, classification_anchor
+            )
 
         # 解析决策
         try:
@@ -609,18 +667,23 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 
             if is_ensemble:
                 return self._handle_ensemble(
-                    decision_data, predictions, quality_results, gt_mask, judge_results, confidence, reasoning
+                    decision_data, predictions, quality_results, gt_mask, judge_results,
+                    confidence, reasoning, classification_anchor
                 )
             else:
                 return self._handle_single(
-                    decision_data, predictions, quality_results, gt_mask, judge_results, confidence, reasoning
+                    decision_data, predictions, quality_results, gt_mask, judge_results,
+                    confidence, reasoning, classification_anchor
                 )
         except (KeyError, ValueError) as e:
             print(f"  ✗ 决策解析失败: {e}，使用降级选择")
-            return self._fallback_selection(predictions, gt_mask, quality_results, judge_results)
+            return self._fallback_selection(
+                predictions, gt_mask, quality_results, judge_results, classification_anchor
+            )
 
     def _handle_single(
-        self, decision_data, predictions, quality_results, gt_mask, judge_results, confidence, reasoning
+        self, decision_data, predictions, quality_results, gt_mask, judge_results,
+        confidence, reasoning, classification_anchor
     ) -> SegAgentDecision:
         name = str(decision_data.get("selected_model", "")).strip()
         idx = self._find_pred_index(predictions, name)
@@ -649,10 +712,13 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             ece_metrics=ece,
             is_ensemble=False,
             judge_scores=jr,
+            classification_anchor=classification_anchor,
+            path="A" if classification_anchor else "B",
         )
 
     def _handle_ensemble(
-        self, decision_data, predictions, quality_results, gt_mask, judge_results, confidence, reasoning
+        self, decision_data, predictions, quality_results, gt_mask, judge_results,
+        confidence, reasoning, classification_anchor
     ) -> SegAgentDecision:
         names = decision_data["selected_models"][: self.ensemble_top_k]
         weights = [float(w) for w in decision_data.get("weights", [])[: len(names)]]
@@ -701,10 +767,12 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             model_weights=weights,
             is_ensemble=True,
             judge_scores=jr,
+            classification_anchor=classification_anchor,
+            path="A" if classification_anchor else "B",
         )
 
     def _fallback_selection(
-        self, predictions, gt_mask, quality_results, judge_results=None
+        self, predictions, gt_mask, quality_results, judge_results=None, classification_anchor=None
     ) -> SegAgentDecision:
         """降级选择：选一致性最高的模型。"""
         agreement = quality_results["agreement_metrics"].get("average_agreement")
@@ -754,6 +822,8 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
                 model_weights=weights,
                 is_ensemble=True,
                 judge_scores=jr,
+                classification_anchor=classification_anchor,
+                path="A" if classification_anchor else "B",
             )
 
         return SegAgentDecision(
@@ -769,6 +839,8 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             ece_metrics=ece,
             is_ensemble=False,
             judge_scores=jr,
+            classification_anchor=classification_anchor,
+            path="A" if classification_anchor else "B",
         )
 
     # ========== 辅助方法 ==========

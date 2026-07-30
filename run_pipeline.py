@@ -28,7 +28,6 @@ from segmentation.model_factory import build_seg_model
 from classification import (
     ClsModelRegistry,
     LLMClassificationAgent,
-    load_calibration_map,
 )
 from classification.model_factory import build_cls_model
 from radiomics_judge import RadiomicsJudge
@@ -52,10 +51,7 @@ def build_seg_registry(seg_cfg: dict, device: str = "cuda") -> SegModelRegistry:
 
 
 def build_cls_registry(cls_cfg: dict, device: str = "cuda") -> ClsModelRegistry:
-    cal_cfg = cls_cfg.get("calibration", {})
-    cal_map = load_calibration_map(cal_cfg.get("artifacts_dir", "")) if cal_cfg.get("enabled") else {}
-
-    registry = ClsModelRegistry(calibration_map=cal_map)
+    registry = ClsModelRegistry()
     for m in cls_cfg.get("models", []):
         m = dict(m)
         m["device"] = "cpu" if m.get("type") == "autogluon_radiomics" else device
@@ -128,7 +124,7 @@ def main():
         seg_registry=seg_registry,
         cls_registry=cls_registry,
         image_io=ImageIO(),
-        config=pipe_cfg.get("output", {}),
+        config=config,
     )
 
     # 运行

@@ -1,8 +1,5 @@
 """
 分类模型注册表。
-
-重写自 Classification_Agent/models/model_registry.py。
-predict_all 对每个模型 validate + predict + calibration，失败跳过。
 """
 
 from __future__ import annotations
@@ -12,15 +9,13 @@ from typing import Optional
 import numpy as np
 
 from .base_model import BaseClassificationModel, ClsModelOutput
-from .calibration.runtime import maybe_apply_calibration_map
 
 
 class ClsModelRegistry:
-    """管理多个分类模型，批量预测 + 校准。"""
+    """管理多个分类模型，批量预测。"""
 
-    def __init__(self, calibration_map: Optional[dict] = None):
+    def __init__(self):
         self.models: dict[str, BaseClassificationModel] = {}
-        self.calibration_map = calibration_map or {}
 
     def register_model(self, model: BaseClassificationModel) -> None:
         if not isinstance(model, BaseClassificationModel):
@@ -58,8 +53,6 @@ class ClsModelRegistry:
             try:
                 model.validate_inputs(image, mask)
                 output = model.predict(image, mask)
-                if self.calibration_map:
-                    output = maybe_apply_calibration_map(output, self.calibration_map)
                 results.append(output)
             except Exception as e:
                 print(f"  ✗ 模型 {model.model_name} 推理失败: {e}")
@@ -70,6 +63,14 @@ class ClsModelRegistry:
 
     def get_model_info(self) -> list[dict]:
         return [m.get_info() for m in self.models.values()]
+
+    def get_independent_models(self) -> list[tuple[str, "BaseClassificationModel"]]:
+        """返回 requires_mask=False 的独立分类模型（用于 Step 1 共识判断）。"""
+        return [(name, m) for name, m in self.models.items() if not m.requires_mask]
+
+    def get_mask_dependent_models(self) -> list[tuple[str, "BaseClassificationModel"]]:
+        """返回 requires_mask=True 的模型（AutoGluon，用于 Step 4）。"""
+        return [(name, m) for name, m in self.models.items() if m.requires_mask]
 
     def __len__(self) -> int:
         return len(self.models)

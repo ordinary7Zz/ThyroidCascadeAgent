@@ -16,49 +16,31 @@ segmentation:
   models:
     - type: "dinov3_unet"
       name: "all_datasets"
-      model_path: "weights/seg/all_datasets/dino_unet_train_all_datasets_epoch_40.pth"
+      model_path: "../my_Thyroid_infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth"
       input_size: [224, 224]
       threshold: 0.5
-      base_dataset_performance:
-        TN3K: {dice: 0.8454, hd95: 11.7064, ece: 0.0208}
-        DDTI: {dice: 0.8427, hd95: 10.6699, ece: 0.0305}
-        ThyroidXL: {dice: 0.8793, hd95: 5.3659, ece: 0.0118}
-        PKTN: {dice: 0.8395, hd95: 9.6710, ece: 0.0162}
-        TN5K: {dice: 0.8297, hd95: 8.5319, ece: 0.0105}
-        CineClip: {dice: 0.9688, hd95: 0.4345, ece: 0.0021}
-      dataset_info:
-        base_datasets: ["TN3K", "ThyroidXL", "PKTN", "DDTI", "TN5K", "CineClip"]
-        dataset_size: 39604
     # ===== TransUNet =====
     - type: "transunet"
       name: "transunet_all_datasets"
-      model_path: "TODO: weights/seg/transunet/all_datasets.pth"
+      model_path: "../my_Thyroid_infer/infer_transunet/checkpoints/Nodule/epoch_49.pth"
       num_classes: 2
       vit_name: "R50-ViT-B_16"
       img_size: 224
       n_skip: 3
       threshold: 0.5
-      infer_root: "TODO: /path/to/infer_transunet"
-      base_dataset_performance: {}      # TODO: 填各数据集 dice/hd95/ece
-      dataset_info:
-        base_datasets: ["TODO"]         # TODO: 填训练数据集
-        dataset_size: 0                 # TODO: 填训练样本数
+      infer_root: "../my_Thyroid_infer/infer_transunet"
     # ===== UltraFedFM =====
     - type: "ultrafedfm"
       name: "ultrafedfm_all_datasets"
-      model_path: "TODO: weights/seg/ultrafedfm/all_datasets.pth"
+      model_path: "../my_Thyroid_infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth"
       img_size: 224
       threshold: 0.5
-      infer_root: "TODO: /path/to/infer_ultrafedfm"
-      base_dataset_performance: {}
-      dataset_info:
-        base_datasets: ["TODO"]
-        dataset_size: 0
+      infer_root: "../my_Thyroid_infer/infer_ultrafedfm"
     # ===== MedSegX (SAM + MoE Adapter) =====
     - type: "medsegx"
       name: "medsegx_thyroid"
-      model_path: "TODO: weights/seg/medsegx/thyroid.pth"
-      sam_checkpoint: "TODO: weights/pretrained/sam_vit_b_01ec64.pth"
+      model_path: "../my_Thyroid_infer/infer_medsegx/checkpoints/Nodule/model_best.pth"
+      sam_checkpoint: "../my_Thyroid_infer/infer_medsegx/pretrained_models/SAM/sam_vit_b_01ec64.pth"
       sam_model_type: "vit_b"
       task_name: "US_ThyroidNodule"
       img_size: 256
@@ -66,25 +48,17 @@ segmentation:
       bottleneck_dim: 16
       embedding_dim: 16
       expert_num: 4
-      infer_root: "TODO: /path/to/infer_medsegx"
-      base_dataset_performance: {}
-      dataset_info:
-        base_datasets: ["TODO"]
-        dataset_size: 0
+      infer_root: "../my_Thyroid_infer/infer_medsegx"
     # ===== MedSAM2 (SAM2 Video Predictor) =====
     - type: "medsam2"
       name: "medsam2_thyroid"
-      model_path: "TODO: weights/seg/medsam2/thyroid.pth"
-      model_cfg: "sam2_hiera_b+.yaml"
+      model_path: "../my_Thyroid_infer/infer_medsam2/checkpoints/Nodule/checkpoint_15.pt"
+      model_cfg: "../my_Thyroid_infer/infer_medsam2/sam2/configs/sam2.1_hiera_t512.yaml"
       img_size: 1024
       threshold: 0.5
-      infer_root: "TODO: /path/to/infer_medsam2"
-      base_dataset_performance: {}
-      dataset_info:
-        base_datasets: ["TODO"]
-        dataset_size: 0
+      infer_root: "../my_Thyroid_infer/infer_medsam2"
   agent:
-    use_agent_selection: true
+    enable_agent: false             # 分割 Agent 是否调 LLM（false 时用静态规则）
     include_disagreement_metrics_in_prompt: true
     pre_filter:
       cosine_threshold: 0.8          # 特征向量 cosine 相似性阈值（设 0 可关闭）
@@ -101,77 +75,48 @@ classification:
   models:
     - type: "dinov3_unet_multitask"
       name: "all_datasets"
-      model_path: "weights/cls/all_datasets/dino_unet_train_all_datasets_epoch_40.pth"
+      model_path: "../my_Thyroid_infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth"
       use_tirads: false
-      base_dataset_performance:
-        DDTI: {accuracy: 0.8298, auc: 0.7533, ece: 0.1601}
-        TN3K: {accuracy: 0.6891, auc: 0.7685, ece: 0.2442}
-        ThyroidXL: {accuracy: 0.8491, auc: 0.9301, ece: 0.1089}
-        TN5K: {accuracy: 0.9132, auc: 0.9545, ece: 0.0626}
-        CineClip: {accuracy: 0.9997, auc: 1.0000, ece: 0.0002}
-      dataset_info:
-        base_datasets: ["TN3K", "ThyroidXL", "TN5K", "CineClip"]
-        dataset_size: 31304
     - type: "autogluon_radiomics"
       name: "autogluon_radiomics"
-      model_dir: "weights/cls/autogluon_model"
-      base_dataset_performance:
-        TN3K: {accuracy: 0.6970, auc: 0.7214}
-        ThyroidXL: {accuracy: 0.9186, auc: 0.9726}
-        TN5K: {accuracy: 0.858, auc: 0.8664}
-      dataset_info:
-        base_datasets: ["TN3K", "ThyroidXL", "TN5K"]
-        dataset_size: 15109
+      model_dir: "../my_Thyroid_infer/infer_autogluon/checkpoints/binary"
     # ===== MedSigLIP (SigLIP ViT 分类) =====
     - type: "medsiglip"
       name: "medsiglip_binary"
-      model_path: "TODO: weights/cls/medsiglip/binary.pt"
-      pretrained_model_path: "TODO: weights/pretrained/medsiglip-448"
+      model_path: "../my_Thyroid_infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt"
+      pretrained_model_path: "../my_Thyroid_infer/infer_medsiglip/pretrained_models/medsiglip-448"
       num_classes: 2
       img_size: 448
       dropout: 0.1
-      base_dataset_performance: {}      # TODO: 填各数据集 accuracy/auc/ece
-      dataset_info:
-        base_datasets: ["TODO"]
-        dataset_size: 0
     # ===== BiomedCLIP (open_clip ViT 分类) =====
     - type: "biomedclip"
       name: "biomedclip_binary"
-      model_path: "TODO: weights/cls/biomedclip/binary.pth"
-      model_dir: "TODO: weights/pretrained/biomedclip/"
+      model_path: "../my_Thyroid_infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth"
+      model_dir: "../my_Thyroid_infer/infer_biomedclip/pretrained_models/biomedclip"
       num_classes: 2
       img_size: 224
       dropout: 0.3
-      base_dataset_performance: {}
-      dataset_info:
-        base_datasets: ["TODO"]
-        dataset_size: 0
-  calibration:
-    enabled: false
-    artifacts_dir: "classification/calibration/artifacts"
   agent:
-    enable_agent: true
+    enable_agent: false
     top_k: 5
+    consensus_min_confidence: 0.6  # Step 1 独立分类模型共识所需的最低置信度
 
 # ===== Radiomics 裁判段 =====
 radiomics_judge:
   enabled: true
-  model_dir: "weights/judge/autogluon_gt_trained"
+  model_dir: "/mnt/wangbd8/workspace/ThyroidAgent/dino_unet_multitask/pyradiomics_train/binary_class/BM/outputs/models/BM_dataset3_gt/BM"
   top_k_features: 5
-  shap_reference_path: "weights/judge/shap_reference.json"
-  trigger_volume_cv: null
 
 # ===== Pipeline 段 =====
 pipeline:
-  seg_output_to_cls_mask: true
   data:
-    image_input: "/path/to/images"
-    gt_mask_dir: null
-    label_file: null
+    image_input: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/sample/images"
+    mask_input: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/sample/masks"               # 仅 run_cls.py 用（外部 mask 目录）
+    gt_mask_dir: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/sample/masks"
+    label_file: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/sample/sample_test_label.json"
     device_info: ["GE Logiq E9", "GE S7"]
     start_index: 0
     max_images: null
   output:
     output_dir: "output/pipeline_run"
-    save_masks: true
-    save_json: true
+    save_masks: false

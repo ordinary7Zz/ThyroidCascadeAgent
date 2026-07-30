@@ -25,7 +25,6 @@ from classification import (
     compute_roc_auc,
     compute_accuracy,
     bootstrap_auc_ci95,
-    load_calibration_map,
 )
 from classification.model_factory import build_cls_model
 
@@ -36,12 +35,7 @@ def load_config(config_path: str) -> dict:
 
 
 def build_cls_registry(cls_cfg: dict, device: str = "cuda") -> ClsModelRegistry:
-    cal_cfg = cls_cfg.get("calibration", {})
-    cal_map = {}
-    if cal_cfg.get("enabled", False):
-        cal_map = load_calibration_map(cal_cfg.get("artifacts_dir", ""))
-
-    registry = ClsModelRegistry(calibration_map=cal_map)
+    registry = ClsModelRegistry()
 
     for m in cls_cfg.get("models", []):
         m = dict(m)
