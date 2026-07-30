@@ -16,31 +16,31 @@ segmentation:
   models:
     - type: "dinov3_unet"
       name: "all_datasets"
-      model_path: "../my_Thyroid_infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth"
+      model_path: "../my_Thyroid_Infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth"
       input_size: [224, 224]
       threshold: 0.5
     # ===== TransUNet =====
     - type: "transunet"
       name: "transunet_all_datasets"
-      model_path: "../my_Thyroid_infer/infer_transunet/checkpoints/Nodule/epoch_49.pth"
+      model_path: "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth"
       num_classes: 2
       vit_name: "R50-ViT-B_16"
       img_size: 224
       n_skip: 3
       threshold: 0.5
-      infer_root: "../my_Thyroid_infer/infer_transunet"
+      infer_root: "../my_Thyroid_Infer/infer_transunet"
     # ===== UltraFedFM =====
     - type: "ultrafedfm"
       name: "ultrafedfm_all_datasets"
-      model_path: "../my_Thyroid_infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth"
+      model_path: "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth"
       img_size: 224
       threshold: 0.5
-      infer_root: "../my_Thyroid_infer/infer_ultrafedfm"
+      infer_root: "../my_Thyroid_Infer/infer_ultrafedfm"
     # ===== MedSegX (SAM + MoE Adapter) =====
     - type: "medsegx"
       name: "medsegx_thyroid"
-      model_path: "../my_Thyroid_infer/infer_medsegx/checkpoints/Nodule/model_best.pth"
-      sam_checkpoint: "../my_Thyroid_infer/infer_medsegx/pretrained_models/SAM/sam_vit_b_01ec64.pth"
+      model_path: "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth"
+      sam_checkpoint: "../my_Thyroid_Infer/infer_medsegx/pretrained_models/SAM/sam_vit_b_01ec64.pth"
       sam_model_type: "vit_b"
       task_name: "US_ThyroidNodule"
       img_size: 256
@@ -48,15 +48,15 @@ segmentation:
       bottleneck_dim: 16
       embedding_dim: 16
       expert_num: 4
-      infer_root: "../my_Thyroid_infer/infer_medsegx"
+      infer_root: "../my_Thyroid_Infer/infer_medsegx"
     # ===== MedSAM2 (SAM2 Video Predictor) =====
     - type: "medsam2"
       name: "medsam2_thyroid"
-      model_path: "../my_Thyroid_infer/infer_medsam2/checkpoints/Nodule/checkpoint_15.pt"
-      model_cfg: "../my_Thyroid_infer/infer_medsam2/sam2/configs/sam2.1_hiera_t512.yaml"
+      model_path: "../my_Thyroid_Infer/infer_medsam2/checkpoints/Nodule/checkpoint_15.pt"
+      model_cfg: "../my_Thyroid_Infer/infer_medsam2/sam2/configs/sam2.1_hiera_t512.yaml"
       img_size: 1024
       threshold: 0.5
-      infer_root: "../my_Thyroid_infer/infer_medsam2"
+      infer_root: "../my_Thyroid_Infer/infer_medsam2"
   agent:
     enable_agent: false             # 分割 Agent 是否调 LLM（false 时用静态规则）
     include_disagreement_metrics_in_prompt: true
@@ -75,24 +75,24 @@ classification:
   models:
     - type: "dinov3_unet_multitask"
       name: "all_datasets"
-      model_path: "../my_Thyroid_infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth"
+      model_path: "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth"
       use_tirads: false
     - type: "autogluon_radiomics"
       name: "autogluon_radiomics"
-      model_dir: "../my_Thyroid_infer/infer_autogluon/checkpoints/binary"
+      model_dir: "../my_Thyroid_Infer/infer_autogluon/checkpoints/binary"
     # ===== MedSigLIP (SigLIP ViT 分类) =====
     - type: "medsiglip"
       name: "medsiglip_binary"
-      model_path: "../my_Thyroid_infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt"
-      pretrained_model_path: "../my_Thyroid_infer/infer_medsiglip/pretrained_models/medsiglip-448"
+      model_path: "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt"
+      pretrained_model_path: "../my_Thyroid_Infer/infer_medsiglip/pretrained_models/medsiglip-448"
       num_classes: 2
       img_size: 448
       dropout: 0.1
     # ===== BiomedCLIP (open_clip ViT 分类) =====
     - type: "biomedclip"
       name: "biomedclip_binary"
-      model_path: "../my_Thyroid_infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth"
-      model_dir: "../my_Thyroid_infer/infer_biomedclip/pretrained_models/biomedclip"
+      model_path: "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth"
+      model_dir: "../my_Thyroid_Infer/infer_biomedclip/pretrained_models/biomedclip"
       num_classes: 2
       img_size: 224
       dropout: 0.3
