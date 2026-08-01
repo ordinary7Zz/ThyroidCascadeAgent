@@ -35,26 +35,32 @@ def compute_hd95(pred_mask: np.ndarray, gt_mask: np.ndarray, percentile: int = 9
     """
     95 百分位 Hausdorff 距离 (越低越好)。
 
-    对边界点计算双向最近距离，取各自 95 百分位的最大值。
+    仅使用边界点计算，避免对大 mask 生成巨大中间数组。
     空 mask 返回 inf。
     """
+    from scipy import ndimage
+    from scipy.spatial.distance import cdist
+
     pred = pred_mask.astype(bool)
     gt = gt_mask.astype(bool)
 
-    pred_pts = np.argwhere(pred)
-    gt_pts = np.argwhere(gt)
+    if not pred.any() or not gt.any():
+        return float("inf")
+
+    # 只取边界点（而非全部前景点），大幅减少计算量
+    pred_boundary = pred & ~ndimage.binary_erosion(pred)
+    gt_boundary = gt & ~ndimage.binary_erosion(gt)
+
+    pred_pts = np.argwhere(pred_boundary)
+    gt_pts = np.argwhere(gt_boundary)
 
     if len(pred_pts) == 0 or len(gt_pts) == 0:
         return float("inf")
 
-    dist_pred_to_gt = np.min(
-        np.sqrt(((pred_pts[:, None, :] - gt_pts[None, :, :]) ** 2).sum(axis=2)),
-        axis=1,
-    )
-    dist_gt_to_pred = np.min(
-        np.sqrt(((gt_pts[:, None, :] - pred_pts[None, :, :]) ** 2).sum(axis=2)),
-        axis=1,
-    )
+    # 用 cdist 代替广播，内存只需 (N, M) 而非 (N, M, 2)
+    dist_matrix = cdist(pred_pts, gt_pts)
+    dist_pred_to_gt = dist_matrix.min(axis=1)
+    dist_gt_to_pred = dist_matrix.min(axis=0)
 
     hd95 = max(
         np.percentile(dist_pred_to_gt, percentile),
