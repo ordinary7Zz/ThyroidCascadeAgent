@@ -271,6 +271,11 @@ class CascadePipeline:
         标签先归一化（良性=0/恶性=1），避免 medsiglip 输出 "0"/"1"
         而其他模型输出 "良性"/"恶性" 导致的字符串不一致误判。
 
+        弱化共识条件：只要归一化后 top_class 一致即视为共识，
+        不再要求 min(confidence) > min_confidence。一致性本身即强信号，
+        低置信一致也直接采纳锚点，避免引入 AutoGluon 仲裁的不确定性。
+        （min_confidence 参数保留以兼容调用，但不再用作门槛。）
+
         Returns:
             (consensus: bool, anchor_class: str | None)
         """
@@ -279,10 +284,7 @@ class CascadePipeline:
         classes = [
             CascadePipeline._label_to_binary(p.top_class) for p in predictions
         ]
-        confs = [p.top_confidence for p in predictions]
-        if (all(c is not None for c in classes)
-                and len(set(classes)) == 1
-                and min(confs) > min_confidence):
+        if all(c is not None for c in classes) and len(set(classes)) == 1:
             return True, ("恶性" if classes[0] == 1 else "良性")
         return False, None
 
