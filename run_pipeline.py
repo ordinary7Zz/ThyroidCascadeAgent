@@ -140,6 +140,7 @@ def main():
         output_dir=pipe_cfg.get("output", {}).get("output_dir", "output/pipeline_run"),
         gt_mask_dir=data_cfg.get("gt_mask_dir"),
         label_file=data_cfg.get("label_file"),
+        label_key=data_cfg.get("label_key", "malignancy"),
         input_device_info=data_cfg.get("device_info"),
         start_index=data_cfg.get("start_index", 0),
         max_images=data_cfg.get("max_images"),

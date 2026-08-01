@@ -114,6 +114,7 @@ pipeline:
     mask_input: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/sample/masks"               # 仅 run_cls.py 用（外部 mask 目录）
     gt_mask_dir: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/sample/masks"
     label_file: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/sample/sample_test_label.json"
+    label_key: "malignancy"  # list 格式标签文件中良恶性字段名
     device_info: ["GE Logiq E9", "GE S7"]
     start_index: 0
     max_images: null

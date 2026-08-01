@@ -452,6 +452,7 @@ class CascadePipeline:
         input_data_info: Optional[dict] = None,
         start_index: int = 0,
         max_images: Optional[int] = None,
+        label_key: str = "malignancy",
     ) -> list[dict[str, Any]]:
         """批量级联推理（按需加载/卸载模型，中间结果落盘）。
 
@@ -476,10 +477,22 @@ class CascadePipeline:
         cls_cache_dir.mkdir(parents=True, exist_ok=True)
 
         # 加载标签
+        # 支持两种格式:
+        #   1. dict: {"0001": 0, "0002": 1, ...}
+        #   2. list[dict]: [{"filename": "0001.jpg", "malignancy": 0, ...}, ...]
+        # label_key 指定 list 格式中标签字段名（如 "malignancy"）
+        # key 统一用不带后缀的文件名（stem）
         labels: dict[str, Any] = {}
         if label_file:
             with open(label_file, "r", encoding="utf-8") as f:
-                labels = json.load(f)
+                raw = json.load(f)
+            if isinstance(raw, dict):
+                labels = {Path(k).stem: v for k, v in raw.items()}
+            elif isinstance(raw, list):
+                for item in raw:
+                    fname = item.get("filename", "")
+                    if fname:
+                        labels[Path(fname).stem] = item.get(label_key)
 
         # 收集图像
         img_dir = Path(image_dir)
@@ -842,8 +855,10 @@ class CascadePipeline:
                 "image_name": img_name,
             }
 
-            if img_name in labels:
-                result["true_label"] = labels[img_name]
+            # 标签匹配：统一用不带后缀的文件名（stem）
+            img_stem = Path(img_name).stem
+            if img_stem in labels:
+                result["true_label"] = labels[img_stem]
 
             results.append(result)
             print(f"  [{idx+1}/{len(img_names)}] {img_name}: {result['final_label']} (conf={result['final_confidence']:.3f})")
