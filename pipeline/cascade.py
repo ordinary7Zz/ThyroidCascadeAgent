@@ -243,9 +243,14 @@ class CascadePipeline:
 
     def _select_mask_static(
         self, image, seg_predictions, anchor_class,
-        gt_mask=None, input_device_info=None, input_data_info=None
+        gt_mask=None, input_device_info=None, input_data_info=None,
+        skip_radiomics=False,
     ) -> "SegAgentDecision":
-        """静态规则选择最佳分割 mask。"""
+        """静态规则选择最佳分割 mask。
+
+        Args:
+            skip_radiomics: 跳过 RadiomicsJudge（省内存，仅用 agreement 选 mask）。
+        """
         from segmentation.agent import SegAgentDecision
 
         pred_map = {p.model_name: p for p in seg_predictions}
@@ -260,7 +265,7 @@ class CascadePipeline:
         )
 
         remaining_names = set(names)
-        if anchor_class:
+        if anchor_class and not skip_radiomics:
             judge_results = self.seg_agent._run_judge(image, preds_list)
             if judge_results:
                 anchor_numeric = 1 if anchor_class == "恶性" else 0
@@ -655,6 +660,7 @@ class CascadePipeline:
                         gt_mask=gt_mask,
                         input_device_info=input_device_info,
                         input_data_info=input_data_info,
+                        skip_radiomics=True,
                     )
 
                 sel_img_names.append(img_name)
