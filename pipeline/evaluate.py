@@ -233,9 +233,9 @@ def evaluate_pipeline(
 
         # 统一标签为 0/1
         true_binary = _label_to_binary(true_label)
-        pred_binary = _label_to_binary(pred_label)
+        pred_binary = _label_to_binary(pred_label) if isinstance(pred_label, str) else pred_label
 
-        if true_binary is not None:
+        if true_binary is not None and pred_binary is not None:
             y_true_list.append(true_binary)
             y_score_list.append(confidence if pred_binary == 1 else 1 - confidence)
             y_pred_list.append(pred_binary)

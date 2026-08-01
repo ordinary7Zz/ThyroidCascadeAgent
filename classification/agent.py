@@ -53,6 +53,58 @@ class ClsAgentDecision:
         return result
 
 
+def _normalize_label(label) -> str:
+    """将分类标签统一为中文「良性」/「恶性」。
+
+    medsiglip 等模型输出 "0"/"1"，其他模型输出 "良性"/"恶性"，
+    统一后再比较，避免字符串不一致导致的误判。
+    """
+    if isinstance(label, (int, float)):
+        return "恶性" if int(label) == 1 else "良性"
+    if isinstance(label, str):
+        if label in ("恶性", "malignant", "M", "1", "1.0"):
+            return "恶性"
+        if label in ("良性", "benign", "B", "0", "0.0"):
+            return "良性"
+    return str(label)
+
+
+def _weighted_soft_vote(predictions, voting_weights=None):
+    """加权软投票：按 voting_weights 对各类概率加权平均。
+
+    标签键统一归一化（良性/benign/0 → 良性侧，恶性/malignant/1 → 恶性侧）。
+    voting_weights: {model_name: weight}，缺失或 None 时等权(1.0)。
+
+    Returns:
+        (selected_class_str, confidence)
+    """
+    voting_weights = voting_weights or {}
+    w_sum = 0.0
+    p_benign = 0.0
+    p_malign = 0.0
+    for p in predictions:
+        w = float(voting_weights.get(p.model_name, 1.0))
+        preds = p.predictions or {}
+        pb = preds.get("良性", preds.get("benign", preds.get("0", preds.get("B", 0.0))))
+        pm = preds.get("恶性", preds.get("malignant", preds.get("1", preds.get("M", 0.0))))
+        try:
+            pb = float(pb)
+            pm = float(pm)
+        except (TypeError, ValueError):
+            pb = 0.0
+            pm = 0.0
+        p_benign += w * pb
+        p_malign += w * pm
+        w_sum += w
+    if w_sum <= 0:
+        w_sum = 1.0
+    p_benign /= w_sum
+    p_malign /= w_sum
+    if p_malign >= p_benign:
+        return "恶性", p_malign
+    return "良性", p_benign
+
+
 class LLMClassificationAgent:
     """LLM 驱动的分类选择 Agent。"""
 
@@ -411,48 +463,46 @@ class LLMClassificationAgent:
         indie_predictions: list["ClsModelOutput"],
         autogluon_pred: Optional["ClsModelOutput"],
         seg_decision: Any,
+        voting_weights: Optional[dict] = None,
     ) -> "ClsAgentDecision":
         """
         Path B 分类裁决：独立分类模型无共识时的分类决策。
 
         规则优先级：
-        1. AutoGluon 与独立模型多数派一致 → 直接输出（不调 LLM）
-        2. 不一致但 AutoGluon 高置信(≈conf>0.8) → 信 AutoGluon
+        1. AutoGluon 与加权软投票一致 → 直接输出（不调 LLM）
+        2. 不一致但 AutoGluon 高置信且软投票置信度低 → 信 AutoGluon
         3. 都不确定 → 调 LLM 裁决
-        4. LLM 失败 → 输出多数派
+        4. LLM 失败 → 输出加权软投票结果
         """
-        from collections import Counter
-
         if not indie_predictions:
             raise ValueError("没有独立分类模型预测")
 
-        classes = [p.top_class for p in indie_predictions]
-        majority = Counter(classes).most_common(1)[0][0]
+        sv_class, sv_conf = _weighted_soft_vote(indie_predictions, voting_weights)
 
         if autogluon_pred is not None:
-            al_class = autogluon_pred.top_class
+            al_class = _normalize_label(autogluon_pred.top_class)
             al_conf = autogluon_pred.top_confidence
 
-            # 规则 1: 与多数派一致
-            if al_class == majority:
+            # 规则 1: 与软投票一致
+            if al_class == sv_class:
                 reasoning = (
-                    f"独立模型无共识(多数派={majority})，"
-                    f"AutoGluon 基于筛选 mask 也判断为{majority}(conf={al_conf:.2f})，一致，采纳。"
+                    f"独立模型无共识，加权软投票={sv_class}({sv_conf:.2f})，"
+                    f"AutoGluon 基于筛选 mask 也判断为{sv_class}(conf={al_conf:.2f})，一致，采纳。"
                 )
                 return ClsAgentDecision(
-                    selected_model="autogluon_majority_agree",
+                    selected_model="autogluon_softvote_agree",
                     selected_class=al_class,
-                    confidence=float(al_conf),
+                    confidence=float(max(al_conf, sv_conf)),
                     reasoning=reasoning,
                     all_predictions=[p.to_dict() for p in indie_predictions],
                     method="path_b_majority",
                 )
 
-            # 规则 2: 不一致但 AutoGluon 高置信
-            if al_conf > 0.8:
+            # 规则 2: 不一致但 AutoGluon 高置信，且软投票置信度低
+            if al_conf > 0.8 and sv_conf < 0.8:
                 reasoning = (
-                    f"独立模型无共识，AutoGluon 基于 ROI 特征分类置信度高"
-                    f"({al_conf:.2f})。独立模型可能在无 mask 条件下判断不确定。"
+                    f"独立模型无共识，加权软投票={sv_class}({sv_conf:.2f})置信度低，"
+                    f"AutoGluon 基于 ROI 特征分类置信度高({al_conf:.2f})。"
                     f"采纳 AutoGluon: {al_class}。"
                 )
                 return ClsAgentDecision(
@@ -473,8 +523,15 @@ class LLMClassificationAgent:
             except Exception as e:
                 print(f"  ✗ Path B LLM 裁决失败: {e}")
 
-        # 规则 4: 最终降级 → 多数派
-        return self._decision_majority(indie_predictions, majority)
+        # 规则 4: 最终降级 → 加权软投票结果
+        return ClsAgentDecision(
+            selected_model="weighted_soft_vote",
+            selected_class=sv_class,
+            confidence=float(sv_conf),
+            reasoning=f"独立模型无共识，加权软投票={sv_class}({sv_conf:.2f})",
+            all_predictions=[p.to_dict() for p in indie_predictions],
+            method="path_b_softvote",
+        )
 
     @staticmethod
     def _decision_majority(predictions, majority) -> "ClsAgentDecision":

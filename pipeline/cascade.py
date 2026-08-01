@@ -207,18 +207,83 @@ class CascadePipeline:
     # ===== Phase 辅助方法 =====
 
     @staticmethod
+    def _label_to_binary(label):
+        """将标签统一转为 0/1（良性=0, 恶性=1）。无法转换返回 None。"""
+        if isinstance(label, (int, float)):
+            return int(label)
+        if isinstance(label, str):
+            if label in ("恶性", "malignant", "M", "1", "1.0"):
+                return 1
+            if label in ("良性", "benign", "B", "0", "0.0"):
+                return 0
+        return None
+
+    @staticmethod
+    def _weighted_soft_vote(predictions, voting_weights=None):
+        """加权软投票：按 voting_weights 对各类概率加权平均。
+
+        标签键统一归一化（良性/benign/0 → 良性侧，恶性/malignant/1 → 恶性侧）。
+        voting_weights: {model_name: weight}，缺失或 None 时等权(1.0)。
+
+        Returns:
+            (selected_class_str, confidence)
+        """
+        voting_weights = voting_weights or {}
+        w_sum = 0.0
+        p_benign = 0.0
+        p_malign = 0.0
+        for p in predictions:
+            w = float(voting_weights.get(p.model_name, 1.0))
+            preds = p.predictions or {}
+            pb = preds.get("良性", preds.get("benign", preds.get("0", preds.get("B", 0.0))))
+            pm = preds.get("恶性", preds.get("malignant", preds.get("1", preds.get("M", 0.0))))
+            try:
+                pb = float(pb)
+                pm = float(pm)
+            except (TypeError, ValueError):
+                pb = 0.0
+                pm = 0.0
+            p_benign += w * pb
+            p_malign += w * pm
+            w_sum += w
+        if w_sum <= 0:
+            w_sum = 1.0
+        p_benign /= w_sum
+        p_malign /= w_sum
+        if p_malign >= p_benign:
+            return "恶性", p_malign
+        return "良性", p_benign
+
+    def _get_voting_weights(self):
+        """从 config 提取独立分类模型的投票权重 {model_name: weight}。"""
+        weights = {}
+        for model_cfg in self.config.get("classification", {}).get("models", []):
+            if model_cfg.get("type") == "autogluon_radiomics":
+                continue  # mask-dependent，不参与独立投票
+            name = model_cfg.get("name", "")
+            weights[name] = float(model_cfg.get("voting_weight", 1.0))
+        return weights
+
+    @staticmethod
     def _check_classification_consensus(predictions, min_confidence=0.6):
         """判断独立分类模型是否有共识。
+
+        标签先归一化（良性=0/恶性=1），避免 medsiglip 输出 "0"/"1"
+        而其他模型输出 "良性"/"恶性" 导致的字符串不一致误判。
 
         Returns:
             (consensus: bool, anchor_class: str | None)
         """
         if len(predictions) < 2:
             return False, None
-        classes = [p.top_class for p in predictions]
+        classes = [
+            CascadePipeline._label_to_binary(p.top_class) for p in predictions
+        ]
         confs = [p.top_confidence for p in predictions]
-        if len(set(classes)) == 1 and min(confs) > min_confidence:
-            return True, classes[0]
+        if (all(c is not None for c in classes)
+                and len(set(classes)) == 1
+                and min(confs) > min_confidence):
+            return True, ("恶性" if classes[0] == 1 else "良性")
         return False, None
 
     @staticmethod
@@ -314,43 +379,50 @@ class CascadePipeline:
 
     @staticmethod
     def _resolve_classification_path_b_static(
-        indie_preds, autogluon_pred
+        indie_preds, autogluon_pred, voting_weights=None
     ) -> "ClsAgentDecision":
-        """Path B 静态分类裁决：多数派 vs AutoGluon 比较。"""
-        classes = [p.top_class for p in indie_preds]
-        majority = Counter(classes).most_common(1)[0][0]
+        """Path B 静态分类裁决：加权软投票为主，AutoGluon 仲裁为辅。
+
+        标签统一归一化（良性=0/恶性=1），避免 "0"/"1" 与 "良性"/"恶性" 误比较。
+        voting_weights: {model_name: weight}，None 或缺失时等权(1.0)。
+        """
+        sv_class, sv_conf = CascadePipeline._weighted_soft_vote(
+            indie_preds, voting_weights
+        )
+        sv_binary = CascadePipeline._label_to_binary(sv_class)
 
         if autogluon_pred is not None:
-            al_class = autogluon_pred.top_class
+            al_class = CascadePipeline._label_to_binary(autogluon_pred.top_class)
             al_conf = autogluon_pred.top_confidence
 
-            if al_class == majority:
+            if al_class == sv_binary:
                 return ClsAgentDecision(
-                    selected_model="autogluon_majority_agree",
-                    selected_class=al_class,
-                    confidence=float(al_conf),
-                    reasoning=f"独立模型多数派={majority}，AutoGluon一致({al_conf:.2f})",
+                    selected_model="autogluon_softvote_agree",
+                    selected_class=sv_class,
+                    confidence=float(max(al_conf, sv_conf)),
+                    reasoning=f"加权软投票={sv_class}({sv_conf:.2f})，AutoGluon一致({al_conf:.2f})，采纳",
                     all_predictions=[p.to_dict() for p in indie_preds],
                     method="path_b_static_majority",
                 )
-            if al_conf > 0.8:
+            # AutoGluon 与软投票不一致，且软投票置信度低时才信 AutoGluon
+            if al_conf > 0.8 and sv_conf < 0.8:
+                al_class_str = "恶性" if al_class == 1 else "良性"
                 return ClsAgentDecision(
                     selected_model="autogluon_strong_signal",
-                    selected_class=al_class,
+                    selected_class=al_class_str,
                     confidence=float(al_conf),
-                    reasoning=f"AutoGluon高置信({al_conf:.2f})，信ROI级特征",
+                    reasoning=f"AutoGluon高置信({al_conf:.2f})且软投票置信度低({sv_conf:.2f})，信ROI级特征",
                     all_predictions=[p.to_dict() for p in indie_preds],
                     method="path_b_static_autogluon",
                 )
 
-        best = max(indie_preds, key=lambda p: p.top_confidence)
         return ClsAgentDecision(
-            selected_model="majority_fallback",
-            selected_class=majority,
-            confidence=float(best.top_confidence),
-            reasoning=f"独立模型无共识(多数派={majority})，退回多数派投票",
+            selected_model="weighted_soft_vote",
+            selected_class=sv_class,
+            confidence=float(sv_conf),
+            reasoning=f"独立模型无共识，加权软投票={sv_class}({sv_conf:.2f})",
             all_predictions=[p.to_dict() for p in indie_preds],
-            method="path_b_static_fallback",
+            method="path_b_static_softvote",
         )
 
     # ===== 主入口 =====
@@ -402,11 +474,12 @@ class CascadePipeline:
             autogluon_pred = self._run_autogluon_classification(image, selected_mask)
             if enable_cls_agent:
                 cls_decision = self.cls_agent.resolve_path_b(
-                    indie_preds, autogluon_pred, seg_decision
+                    indie_preds, autogluon_pred, seg_decision,
+                    voting_weights=self._get_voting_weights()
                 )
             else:
                 cls_decision = self._resolve_classification_path_b_static(
-                    indie_preds, autogluon_pred
+                    indie_preds, autogluon_pred, self._get_voting_weights()
                 )
 
         return {
@@ -432,13 +505,28 @@ class CascadePipeline:
         return preds
 
     def _run_autogluon_classification(self, image, mask):
-        """单图模式：跑 AutoGluon（需 cls_registry 已加载）。"""
-        for name, model in self.cls_registry.get_mask_dependent_models():
-            try:
-                return model.predict(image, mask)
-            except Exception as e:
-                print(f"  ✗ AutoGluon 分类失败 ({name}): {e}")
-        return None
+        """单图模式：用 seg_agent.radiomics_judge 跑 AutoGluon 分类。"""
+        from classification.base_model import ClsModelOutput
+        judge = getattr(self.seg_agent, "radiomics_judge", None)
+        if judge is None:
+            return None
+        try:
+            result = judge.judge(image, mask)
+            if not result.get("valid"):
+                return None
+            mp = float(result["malignant_prob"])
+            predictions = {"良性": 1.0 - mp, "恶性": mp}
+            return ClsModelOutput(
+                model_name="radiomics_judge",
+                predictions=predictions,
+                top_class="恶性" if mp > 0.5 else "良性",
+                top_confidence=float(result["confidence"]),
+                requires_mask=True,
+                metadata={"source": "radiomics_judge"},
+            )
+        except Exception as e:
+            print(f"  ✗ AutoGluon 分类失败: {e}")
+            return None
 
     # ===== 批量推理（5 阶段按需加载）=====
 
@@ -563,17 +651,9 @@ class CascadePipeline:
         print("Phase 2: 依次加载独立分类模型并推理全部图像")
         print(f"{'='*60}")
 
-        mask_dep_cfgs = []
-
         for i, model_cfg in enumerate(cls_model_configs):
             model_cfg = dict(model_cfg)
             model_name = model_cfg.get("name", f"cls_{i}")
-            model_type = model_cfg.get("type", "")
-
-            # mask 依赖模型（如 autogluon_radiomics）跳过，延迟到 Phase 4 按需加载
-            if model_type == "autogluon_radiomics":
-                mask_dep_cfgs.append(model_cfg)
-                continue
 
             cache_path = cls_cache_dir / f"{model_name}.json"
             if cache_path.exists():
@@ -734,20 +814,16 @@ class CascadePipeline:
         if not needs_autogluon_names:
             print("  所有图像均有分类共识，无需 AutoGluon")
             autogluon_results: dict[str, Any] = {}
-        elif not mask_dep_cfgs:
-            print("  ⚠️ 需 AutoGluon 但未配置 mask 依赖模型")
+        elif getattr(self.seg_agent, "radiomics_judge", None) is None:
+            print("  ⚠️ 需 AutoGluon 仲裁但 radiomics_judge 未启用")
             autogluon_results = {}
         elif autogluon_cache_path.exists():
             print(f"  ⏭ {autogluon_cache_path.name} 已存在，跳过")
             with open(autogluon_cache_path, "r", encoding="utf-8") as f:
                 autogluon_results = json.load(f)
         else:
-            # 加载 AutoGluon
-            model_cfg = dict(mask_dep_cfgs[0])
-            model_cfg["device"] = "cpu"
-            model = build_cls_model(model_cfg)
-            model.load_model()
-
+            # 复用 seg_agent.radiomics_judge（与分割阶段同一 AutoGluon 模型）
+            judge = self.seg_agent.radiomics_judge
             autogluon_results = {}
             for idx, img_name in enumerate(needs_autogluon_names):
                 img_path = image_paths[img_names.index(img_name)]
@@ -755,12 +831,30 @@ class CascadePipeline:
                 mask = sel_map[img_name]["mask"]
 
                 try:
-                    pred = model.predict(image, mask=mask)
-                    autogluon_results[img_name] = pred.to_dict()
+                    result = judge.judge(image, mask)
+                    if result.get("valid"):
+                        mp = float(result["malignant_prob"])
+                        autogluon_results[img_name] = {
+                            "model_name": "radiomics_judge",
+                            "predictions": {"良性": 1.0 - mp, "恶性": mp},
+                            "top_class": "恶性" if mp > 0.5 else "良性",
+                            "top_confidence": float(result["confidence"]),
+                            "requires_mask": True,
+                            "metadata": {"source": "radiomics_judge"},
+                        }
+                    else:
+                        autogluon_results[img_name] = {
+                            "model_name": "radiomics_judge",
+                            "predictions": {},
+                            "top_class": "unknown",
+                            "top_confidence": 0.0,
+                            "requires_mask": True,
+                            "metadata": {"error": "invalid mask"},
+                        }
                 except Exception as e:
-                    print(f"  ✗ {model.model_name} 推理 {img_name} 失败: {e}")
+                    print(f"  ✗ radiomics_judge 推理 {img_name} 失败: {e}")
                     autogluon_results[img_name] = {
-                        "model_name": model.model_name,
+                        "model_name": "radiomics_judge",
                         "predictions": {},
                         "top_class": "unknown",
                         "top_confidence": 0.0,
@@ -768,8 +862,7 @@ class CascadePipeline:
                         "metadata": {"error": str(e)},
                     }
 
-            model.unload_model()
-            print(f"  ✓ {model.model_name} 推理完成，已卸载")
+            print(f"  ✓ radiomics_judge 推理完成")
 
             with open(autogluon_cache_path, "w", encoding="utf-8") as f:
                 json.dump(autogluon_results, f, ensure_ascii=False, indent=2)
@@ -836,12 +929,19 @@ class CascadePipeline:
 
                 if enable_cls_agent:
                     cls_decision = self.cls_agent.resolve_path_b(
-                        indie_preds, autogluon_pred, seg_decision
+                        indie_preds, autogluon_pred, seg_decision,
+                        voting_weights=self._get_voting_weights()
                     )
                 else:
                     cls_decision = self._resolve_classification_path_b_static(
-                        indie_preds, autogluon_pred
+                        indie_preds, autogluon_pred, self._get_voting_weights()
                     )
+
+            # 统一标签为 0/1（良性=0, 恶性=1）
+            raw_label = cls_decision.selected_class
+            final_label = self._label_to_binary(raw_label)
+            if final_label is None:
+                final_label = raw_label  # 无法转换时保留原值
 
             result = {
                 "path": "A" if consensus else "B",
@@ -850,7 +950,7 @@ class CascadePipeline:
                 "selected_mask_shape": list(selected_mask.shape),
                 "selected_mask_area": int(np.sum(selected_mask)),
                 "cls_decision": cls_decision.to_dict(),
-                "final_label": cls_decision.selected_class,
+                "final_label": final_label,
                 "final_confidence": cls_decision.confidence,
                 "image_name": img_name,
             }

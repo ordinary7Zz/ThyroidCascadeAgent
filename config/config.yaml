@@ -77,9 +77,7 @@ classification:
       name: "all_datasets"
       model_path: "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth"
       use_tirads: false
-    - type: "autogluon_radiomics"
-      name: "autogluon_radiomics"
-      model_dir: "../my_Thyroid_Infer/infer_autogluon/checkpoints/binary"
+      voting_weight: 0.9123         # 验证集 AUROC（加权软投票权重）
     # ===== MedSigLIP (SigLIP ViT 分类) =====
     - type: "medsiglip"
       name: "medsiglip_binary"
@@ -88,6 +86,7 @@ classification:
       num_classes: 2
       img_size: 448
       dropout: 0.1
+      voting_weight: 0.8988         # 验证集 AUROC
     # ===== BiomedCLIP (open_clip ViT 分类) =====
     - type: "biomedclip"
       name: "biomedclip_binary"
@@ -96,6 +95,7 @@ classification:
       num_classes: 2
       img_size: 224
       dropout: 0.3
+      voting_weight: 0.7926         # 验证集 AUROC
   agent:
     enable_agent: false
     top_k: 5

@@ -80,6 +80,9 @@ class MedSigLIPClassificationModel(BaseClassificationModel):
         self.class_names = checkpoint.get("class_names") or [
             str(i) for i in range(actual_num_classes)
         ]
+        # 统一为中文标签（与其他分类模型一致，方便 LLM Agent 理解）
+        if self.num_classes == 2:
+            self.class_names = ["良性", "恶性"]
 
         # 构建 MedSigLIPClassifier
         import sys
