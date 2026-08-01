@@ -99,6 +99,10 @@ class MedSAM2SegmentationModel(BaseSegmentationModel):
                 )
         return f"configs/{self.model_cfg}"
 
+    # 与 infer_medsam2/infer.py 保持一致
+    IMAGENET_MEAN = torch.tensor([0.485, 0.456, 0.406], dtype=torch.float32).view(3, 1, 1)
+    IMAGENET_STD = torch.tensor([0.229, 0.224, 0.225], dtype=torch.float32).view(3, 1, 1)
+
     def predict(self, image: np.ndarray) -> SegModelOutput:
         """
         分割推理（单帧当"视频"，全图 box prompt）。
@@ -112,7 +116,7 @@ class MedSAM2SegmentationModel(BaseSegmentationModel):
         h_orig, w_orig = image.shape[:2]
         image_size = self.model.image_size
 
-        # 预处理：(H,W,3) uint8 → (3,H,W) float [0,1] → resize
+        # 预处理：(H,W,3) uint8 → (3,H,W) float [0,1] → resize → ImageNet normalize
         img_float = image.astype(np.float32) / 255.0
         img_tensor = torch.from_numpy(img_float).permute(2, 0, 1)  # (3,H,W)
 
@@ -123,6 +127,9 @@ class MedSAM2SegmentationModel(BaseSegmentationModel):
             mode="bilinear",
             align_corners=False,
         ).squeeze(0)  # (3, image_size, image_size)
+
+        # ImageNet 归一化（SAM2 模型期望）
+        img_resized = (img_resized - self.IMAGENET_MEAN) / self.IMAGENET_STD
 
         images = img_resized.unsqueeze(0).to(self.device)  # (1, 3, image_size, image_size)
 
