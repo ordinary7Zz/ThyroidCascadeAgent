@@ -109,11 +109,8 @@ def main():
         except Exception as e:
             print(f"⚠️ Radiomics 裁判加载失败: {e}")
 
-    # 构建组件
-    print("\n加载分割模型...")
-    seg_registry = build_seg_registry(seg_cfg, args.device)
-    print("\n加载分类模型...")
-    cls_registry = build_cls_registry(cls_cfg, args.device)
+    # 构建组件（不再预加载所有模型，由 pipeline 按需加载/卸载）
+    print("\n构建 Pipeline（模型将在推理时按需加载/卸载）...")
 
     seg_agent = SegmentationAgent(
         llm_client=llm_client,
@@ -126,14 +123,15 @@ def main():
         config=cls_cfg.get("agent", {}),
     )
 
-    # 构建 Pipeline
+    # 构建 Pipeline（不预加载模型，由 run_batch 按需加载）
     pipeline = CascadePipeline(
         seg_agent=seg_agent,
         cls_agent=cls_agent,
-        seg_registry=seg_registry,
-        cls_registry=cls_registry,
+        seg_registry=None,
+        cls_registry=None,
         image_io=ImageIO(),
         config=config,
+        device=args.device,
     )
 
     # 运行

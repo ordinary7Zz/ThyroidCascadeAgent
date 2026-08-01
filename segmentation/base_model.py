@@ -70,6 +70,16 @@ class BaseSegmentationModel(ABC):
     def load_model(self) -> None:
         """加载模型权重。必须设置 self.model 和 self.is_loaded=True。"""
 
+    def unload_model(self) -> None:
+        """卸载模型，释放显存。"""
+        if self.model is not None:
+            del self.model
+            self.model = None
+        self.is_loaded = False
+        import torch
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
     @abstractmethod
     def predict(self, image: np.ndarray) -> SegModelOutput:
         """

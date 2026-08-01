@@ -70,6 +70,16 @@ class BaseClassificationModel(ABC):
     def load_model(self) -> None:
         """加载模型权重。"""
 
+    def unload_model(self) -> None:
+        """卸载模型，释放显存。"""
+        if self.model is not None:
+            del self.model
+            self.model = None
+        self.is_loaded = False
+        import torch
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
     @abstractmethod
     def predict(self, image: np.ndarray, mask: Optional[np.ndarray] = None) -> ClsModelOutput:
         """
