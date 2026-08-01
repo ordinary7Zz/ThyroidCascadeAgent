@@ -1,0 +1,205 @@
+{
+  "model_name": "all_datasets",
+  "results": {
+    "0001.jpg": {
+      "model_name": "all_datasets",
+      "predictions": {
+        "良性": 0.000790715217590332,
+        "恶性": 0.9992092847824097
+      },
+      "top_class": "恶性",
+      "top_confidence": 0.9992092847824097,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "all_datasets",
+        "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0002.jpg": {
+      "model_name": "all_datasets",
+      "predictions": {
+        "良性": 0.9988581700017676,
+        "恶性": 0.0011418299982324243
+      },
+      "top_class": "良性",
+      "top_confidence": 0.9988581700017676,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "all_datasets",
+        "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0003.jpg": {
+      "model_name": "all_datasets",
+      "predictions": {
+        "良性": 0.9936229377053678,
+        "恶性": 0.006377062294632196
+      },
+      "top_class": "良性",
+      "top_confidence": 0.9936229377053678,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "all_datasets",
+        "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0004.jpg": {
+      "model_name": "all_datasets",
+      "predictions": {
+        "良性": 0.9787054602056742,
+        "恶性": 0.02129453979432583
+      },
+      "top_class": "良性",
+      "top_confidence": 0.9787054602056742,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "all_datasets",
+        "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0005.jpg": {
+      "model_name": "all_datasets",
+      "predictions": {
+        "良性": 0.9969601351767778,
+        "恶性": 0.0030398648232221603
+      },
+      "top_class": "良性",
+      "top_confidence": 0.9969601351767778,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "all_datasets",
+        "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0378.jpg": {
+      "model_name": "all_datasets",
+      "predictions": {
+        "良性": 0.002493441104888916,
+        "恶性": 0.9975065588951111
+      },
+      "top_class": "恶性",
+      "top_confidence": 0.9975065588951111,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "all_datasets",
+        "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0379.jpg": {
+      "model_name": "all_datasets",
+      "predictions": {
+        "良性": 0.0008133053779602051,
+        "恶性": 0.9991866946220398
+      },
+      "top_class": "恶性",
+      "top_confidence": 0.9991866946220398,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "all_datasets",
+        "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0380.jpg": {
+      "model_name": "all_datasets",
+      "predictions": {
+        "良性": 0.0006836652755737305,
+        "恶性": 0.9993163347244263
+      },
+      "top_class": "恶性",
+      "top_confidence": 0.9993163347244263,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "all_datasets",
+        "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0381.jpg": {
+      "model_name": "all_datasets",
+      "predictions": {
+        "良性": 0.0006878376007080078,
+        "恶性": 0.999312162399292
+      },
+      "top_class": "恶性",
+      "top_confidence": 0.999312162399292,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "all_datasets",
+        "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0382.jpg": {
+      "model_name": "all_datasets",
+      "predictions": {
+        "良性": 0.0007044076919555664,
+        "恶性": 0.9992955923080444
+      },
+      "top_class": "恶性",
+      "top_confidence": 0.9992955923080444,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "all_datasets",
+        "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    }
+  }
+}

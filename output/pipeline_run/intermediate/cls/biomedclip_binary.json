@@ -1,0 +1,205 @@
+{
+  "model_name": "biomedclip_binary",
+  "results": {
+    "0001.jpg": {
+      "model_name": "biomedclip_binary",
+      "predictions": {
+        "良性": 0.3402540683746338,
+        "恶性": 0.659745991230011
+      },
+      "top_class": "恶性",
+      "top_confidence": 0.659745991230011,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "biomedclip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0002.jpg": {
+      "model_name": "biomedclip_binary",
+      "predictions": {
+        "良性": 0.8459317088127136,
+        "恶性": 0.15406830608844757
+      },
+      "top_class": "良性",
+      "top_confidence": 0.8459317088127136,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "biomedclip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0003.jpg": {
+      "model_name": "biomedclip_binary",
+      "predictions": {
+        "良性": 0.6702680587768555,
+        "恶性": 0.32973194122314453
+      },
+      "top_class": "良性",
+      "top_confidence": 0.6702680587768555,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "biomedclip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0004.jpg": {
+      "model_name": "biomedclip_binary",
+      "predictions": {
+        "良性": 0.7842044234275818,
+        "恶性": 0.2157956063747406
+      },
+      "top_class": "良性",
+      "top_confidence": 0.7842044234275818,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "biomedclip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0005.jpg": {
+      "model_name": "biomedclip_binary",
+      "predictions": {
+        "良性": 0.4379393756389618,
+        "恶性": 0.5620605945587158
+      },
+      "top_class": "恶性",
+      "top_confidence": 0.5620605945587158,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "biomedclip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0378.jpg": {
+      "model_name": "biomedclip_binary",
+      "predictions": {
+        "良性": 0.3668767809867859,
+        "恶性": 0.6331232190132141
+      },
+      "top_class": "恶性",
+      "top_confidence": 0.6331232190132141,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "biomedclip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0379.jpg": {
+      "model_name": "biomedclip_binary",
+      "predictions": {
+        "良性": 0.29266518354415894,
+        "恶性": 0.7073348760604858
+      },
+      "top_class": "恶性",
+      "top_confidence": 0.7073348760604858,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "biomedclip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0380.jpg": {
+      "model_name": "biomedclip_binary",
+      "predictions": {
+        "良性": 0.19319961965084076,
+        "恶性": 0.8068003058433533
+      },
+      "top_class": "恶性",
+      "top_confidence": 0.8068003058433533,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "biomedclip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0381.jpg": {
+      "model_name": "biomedclip_binary",
+      "predictions": {
+        "良性": 0.0166003480553627,
+        "恶性": 0.9833996891975403
+      },
+      "top_class": "恶性",
+      "top_confidence": 0.9833996891975403,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "biomedclip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0382.jpg": {
+      "model_name": "biomedclip_binary",
+      "predictions": {
+        "良性": 0.09315165132284164,
+        "恶性": 0.9068483114242554
+      },
+      "top_class": "恶性",
+      "top_confidence": 0.9068483114242554,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "biomedclip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    }
+  }
+}

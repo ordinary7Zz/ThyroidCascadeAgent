@@ -1,0 +1,205 @@
+{
+  "model_name": "medsiglip_binary",
+  "results": {
+    "0001.jpg": {
+      "model_name": "medsiglip_binary",
+      "predictions": {
+        "0": 0.09131790697574615,
+        "1": 0.908682107925415
+      },
+      "top_class": "1",
+      "top_confidence": 0.908682107925415,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "medsiglip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0002.jpg": {
+      "model_name": "medsiglip_binary",
+      "predictions": {
+        "0": 0.8017061948776245,
+        "1": 0.19829383492469788
+      },
+      "top_class": "0",
+      "top_confidence": 0.8017061948776245,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "medsiglip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0003.jpg": {
+      "model_name": "medsiglip_binary",
+      "predictions": {
+        "0": 0.09406861662864685,
+        "1": 0.9059313535690308
+      },
+      "top_class": "1",
+      "top_confidence": 0.9059313535690308,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "medsiglip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0004.jpg": {
+      "model_name": "medsiglip_binary",
+      "predictions": {
+        "0": 0.1801111251115799,
+        "1": 0.8198888897895813
+      },
+      "top_class": "1",
+      "top_confidence": 0.8198888897895813,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "medsiglip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0005.jpg": {
+      "model_name": "medsiglip_binary",
+      "predictions": {
+        "0": 0.05752650648355484,
+        "1": 0.9424735307693481
+      },
+      "top_class": "1",
+      "top_confidence": 0.9424735307693481,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "medsiglip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0378.jpg": {
+      "model_name": "medsiglip_binary",
+      "predictions": {
+        "0": 0.026821184903383255,
+        "1": 0.9731788635253906
+      },
+      "top_class": "1",
+      "top_confidence": 0.9731788635253906,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "medsiglip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0379.jpg": {
+      "model_name": "medsiglip_binary",
+      "predictions": {
+        "0": 0.015720950439572334,
+        "1": 0.9842790961265564
+      },
+      "top_class": "1",
+      "top_confidence": 0.9842790961265564,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "medsiglip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0380.jpg": {
+      "model_name": "medsiglip_binary",
+      "predictions": {
+        "0": 0.0020226624328643084,
+        "1": 0.9979773163795471
+      },
+      "top_class": "1",
+      "top_confidence": 0.9979773163795471,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "medsiglip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0381.jpg": {
+      "model_name": "medsiglip_binary",
+      "predictions": {
+        "0": 0.0032420519273728132,
+        "1": 0.9967579245567322
+      },
+      "top_class": "1",
+      "top_confidence": 0.9967579245567322,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "medsiglip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    },
+    "0382.jpg": {
+      "model_name": "medsiglip_binary",
+      "predictions": {
+        "0": 0.02052927389740944,
+        "1": 0.9794706702232361
+      },
+      "top_class": "1",
+      "top_confidence": 0.9794706702232361,
+      "requires_mask": false,
+      "metadata": {
+        "model_name": "medsiglip_binary",
+        "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+        "use_tirads": false,
+        "requires_mask": false,
+        "device": "cuda",
+        "base_dataset_performance": {},
+        "dataset_info": {},
+        "is_loaded": true
+      }
+    }
+  }
+}

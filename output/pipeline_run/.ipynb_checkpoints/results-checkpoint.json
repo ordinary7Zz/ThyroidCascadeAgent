@@ -1,0 +1,2072 @@
+[
+  {
+    "path": "B",
+    "classification_consensus": false,
+    "seg_decision": {
+      "img_name": "0001.jpg",
+      "consensus": false,
+      "anchor_class": null,
+      "selected_model": "medsam2_thyroid",
+      "confidence": 0.8812324455234799,
+      "reasoning": "静态规则：medsam2_thyroid（average_agreement=0.88）",
+      "path": "B",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "mask_shape": [
+            689,
+            989
+          ],
+          "mask_area": 53267,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9802141189575195
+        },
+        {
+          "model_name": "transunet_all_datasets",
+          "mask_shape": [
+            689,
+            989
+          ],
+          "mask_area": 53683,
+          "metadata": {
+            "model_name": "transunet_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.8989410400390625
+        },
+        {
+          "model_name": "ultrafedfm_all_datasets",
+          "mask_shape": [
+            689,
+            989
+          ],
+          "mask_area": 54770,
+          "metadata": {
+            "model_name": "ultrafedfm_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9876798987388611
+        },
+        {
+          "model_name": "medsegx_thyroid",
+          "mask_shape": [
+            689,
+            989
+          ],
+          "mask_area": 55523,
+          "metadata": {
+            "model_name": "medsegx_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
+            "input_size": [
+              256,
+              256
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9205766320228577
+        },
+        {
+          "model_name": "medsam2_thyroid",
+          "mask_shape": [
+            689,
+            989
+          ],
+          "mask_area": 54485,
+          "metadata": {
+            "model_name": "medsam2_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsam2/checkpoints/Nodule/checkpoint_15.pt",
+            "input_size": [
+              512,
+              512
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.8090335130691528
+        }
+      ]
+    },
+    "selected_mask_shape": [
+      689,
+      989
+    ],
+    "selected_mask_area": 54485,
+    "cls_decision": {
+      "selected_model": "majority_fallback",
+      "selected_class": "恶性",
+      "confidence": 0.9992092847824097,
+      "reasoning": "独立模型无共识(多数派=恶性)，退回多数派投票",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "predictions": {
+            "良性": 0.000790715217590332,
+            "恶性": 0.9992092847824097
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.9992092847824097,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "medsiglip_binary",
+          "predictions": {
+            "0": 0.09131763130426407,
+            "1": 0.9086824059486389
+          },
+          "top_class": "1",
+          "top_confidence": 0.9086824059486389,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "medsiglip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "biomedclip_binary",
+          "predictions": {
+            "良性": 0.3402540683746338,
+            "恶性": 0.659745991230011
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.659745991230011,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "biomedclip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        }
+      ],
+      "method": "path_b_static_fallback"
+    },
+    "final_label": "恶性",
+    "final_confidence": 0.9992092847824097,
+    "image_name": "0001.jpg"
+  },
+  {
+    "path": "B",
+    "classification_consensus": false,
+    "seg_decision": {
+      "img_name": "0002.jpg",
+      "consensus": false,
+      "anchor_class": null,
+      "selected_model": "medsam2_thyroid",
+      "confidence": 0.6189365815340095,
+      "reasoning": "静态规则：medsam2_thyroid（average_agreement=0.62）",
+      "path": "B",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "mask_shape": [
+            334,
+            499
+          ],
+          "mask_area": 25247,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9230346083641052
+        },
+        {
+          "model_name": "transunet_all_datasets",
+          "mask_shape": [
+            334,
+            499
+          ],
+          "mask_area": 35658,
+          "metadata": {
+            "model_name": "transunet_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9190806746482849
+        },
+        {
+          "model_name": "ultrafedfm_all_datasets",
+          "mask_shape": [
+            334,
+            499
+          ],
+          "mask_area": 22276,
+          "metadata": {
+            "model_name": "ultrafedfm_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9860111474990845
+        },
+        {
+          "model_name": "medsegx_thyroid",
+          "mask_shape": [
+            334,
+            499
+          ],
+          "mask_area": 4976,
+          "metadata": {
+            "model_name": "medsegx_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
+            "input_size": [
+              256,
+              256
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.7343063354492188
+        },
+        {
+          "model_name": "medsam2_thyroid",
+          "mask_shape": [
+            334,
+            499
+          ],
+          "mask_area": 29152,
+          "metadata": {
+            "model_name": "medsam2_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsam2/checkpoints/Nodule/checkpoint_15.pt",
+            "input_size": [
+              512,
+              512
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.7279974818229675
+        }
+      ]
+    },
+    "selected_mask_shape": [
+      334,
+      499
+    ],
+    "selected_mask_area": 29152,
+    "cls_decision": {
+      "selected_model": "autogluon_majority_agree",
+      "selected_class": "良性",
+      "confidence": 0.7640806436538696,
+      "reasoning": "独立模型多数派=良性，AutoGluon一致(0.76)",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "predictions": {
+            "良性": 0.9988581700017676,
+            "恶性": 0.0011418299982324243
+          },
+          "top_class": "良性",
+          "top_confidence": 0.9988581700017676,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "medsiglip_binary",
+          "predictions": {
+            "0": 0.8017051219940186,
+            "1": 0.19829489290714264
+          },
+          "top_class": "0",
+          "top_confidence": 0.8017051219940186,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "medsiglip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "biomedclip_binary",
+          "predictions": {
+            "良性": 0.8459317088127136,
+            "恶性": 0.15406830608844757
+          },
+          "top_class": "良性",
+          "top_confidence": 0.8459317088127136,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "biomedclip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        }
+      ],
+      "method": "path_b_static_majority"
+    },
+    "final_label": "良性",
+    "final_confidence": 0.7640806436538696,
+    "image_name": "0002.jpg"
+  },
+  {
+    "path": "B",
+    "classification_consensus": false,
+    "seg_decision": {
+      "img_name": "0003.jpg",
+      "consensus": false,
+      "anchor_class": null,
+      "selected_model": "all_datasets",
+      "confidence": 0.4321672508230828,
+      "reasoning": "静态规则：all_datasets（average_agreement=0.43）",
+      "path": "B",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "mask_shape": [
+            334,
+            496
+          ],
+          "mask_area": 8560,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9108404517173767
+        },
+        {
+          "model_name": "transunet_all_datasets",
+          "mask_shape": [
+            334,
+            496
+          ],
+          "mask_area": 28140,
+          "metadata": {
+            "model_name": "transunet_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.7981040477752686
+        },
+        {
+          "model_name": "ultrafedfm_all_datasets",
+          "mask_shape": [
+            334,
+            496
+          ],
+          "mask_area": 21264,
+          "metadata": {
+            "model_name": "ultrafedfm_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9671317934989929
+        },
+        {
+          "model_name": "medsegx_thyroid",
+          "mask_shape": [
+            334,
+            496
+          ],
+          "mask_area": 5845,
+          "metadata": {
+            "model_name": "medsegx_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
+            "input_size": [
+              256,
+              256
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9412055015563965
+        },
+        {
+          "model_name": "medsam2_thyroid",
+          "mask_shape": [
+            334,
+            496
+          ],
+          "mask_area": 9158,
+          "metadata": {
+            "model_name": "medsam2_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsam2/checkpoints/Nodule/checkpoint_15.pt",
+            "input_size": [
+              512,
+              512
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.5682710409164429
+        }
+      ]
+    },
+    "selected_mask_shape": [
+      334,
+      496
+    ],
+    "selected_mask_area": 8560,
+    "cls_decision": {
+      "selected_model": "autogluon_majority_agree",
+      "selected_class": "良性",
+      "confidence": 0.791533425450325,
+      "reasoning": "独立模型多数派=良性，AutoGluon一致(0.79)",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "predictions": {
+            "良性": 0.9936229377053678,
+            "恶性": 0.006377062294632196
+          },
+          "top_class": "良性",
+          "top_confidence": 0.9936229377053678,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "medsiglip_binary",
+          "predictions": {
+            "0": 0.09406853467226028,
+            "1": 0.9059314131736755
+          },
+          "top_class": "1",
+          "top_confidence": 0.9059314131736755,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "medsiglip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "biomedclip_binary",
+          "predictions": {
+            "良性": 0.6702680587768555,
+            "恶性": 0.32973194122314453
+          },
+          "top_class": "良性",
+          "top_confidence": 0.6702680587768555,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "biomedclip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        }
+      ],
+      "method": "path_b_static_majority"
+    },
+    "final_label": "良性",
+    "final_confidence": 0.791533425450325,
+    "image_name": "0003.jpg"
+  },
+  {
+    "path": "B",
+    "classification_consensus": false,
+    "seg_decision": {
+      "img_name": "0004.jpg",
+      "consensus": false,
+      "anchor_class": null,
+      "selected_model": "transunet_all_datasets",
+      "confidence": 0.7289404287400623,
+      "reasoning": "静态规则：transunet_all_datasets（average_agreement=0.73）",
+      "path": "B",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "mask_shape": [
+            356,
+            402
+          ],
+          "mask_area": 1373,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9676822423934937
+        },
+        {
+          "model_name": "transunet_all_datasets",
+          "mask_shape": [
+            356,
+            402
+          ],
+          "mask_area": 1351,
+          "metadata": {
+            "model_name": "transunet_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.7894445061683655
+        },
+        {
+          "model_name": "ultrafedfm_all_datasets",
+          "mask_shape": [
+            356,
+            402
+          ],
+          "mask_area": 1389,
+          "metadata": {
+            "model_name": "ultrafedfm_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9739078879356384
+        },
+        {
+          "model_name": "medsegx_thyroid",
+          "mask_shape": [
+            356,
+            402
+          ],
+          "mask_area": 3192,
+          "metadata": {
+            "model_name": "medsegx_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
+            "input_size": [
+              256,
+              256
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.8861731290817261
+        },
+        {
+          "model_name": "medsam2_thyroid",
+          "mask_shape": [
+            356,
+            402
+          ],
+          "mask_area": 1129,
+          "metadata": {
+            "model_name": "medsam2_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsam2/checkpoints/Nodule/checkpoint_15.pt",
+            "input_size": [
+              512,
+              512
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.940079927444458
+        }
+      ]
+    },
+    "selected_mask_shape": [
+      356,
+      402
+    ],
+    "selected_mask_area": 1351,
+    "cls_decision": {
+      "selected_model": "autogluon_majority_agree",
+      "selected_class": "良性",
+      "confidence": 0.7577993273735046,
+      "reasoning": "独立模型多数派=良性，AutoGluon一致(0.76)",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "predictions": {
+            "良性": 0.9787054602056742,
+            "恶性": 0.02129453979432583
+          },
+          "top_class": "良性",
+          "top_confidence": 0.9787054602056742,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "medsiglip_binary",
+          "predictions": {
+            "0": 0.18010978400707245,
+            "1": 0.8198902010917664
+          },
+          "top_class": "1",
+          "top_confidence": 0.8198902010917664,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "medsiglip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "biomedclip_binary",
+          "predictions": {
+            "良性": 0.7842044234275818,
+            "恶性": 0.2157956063747406
+          },
+          "top_class": "良性",
+          "top_confidence": 0.7842044234275818,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "biomedclip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        }
+      ],
+      "method": "path_b_static_majority"
+    },
+    "final_label": "良性",
+    "final_confidence": 0.7577993273735046,
+    "image_name": "0004.jpg"
+  },
+  {
+    "path": "B",
+    "classification_consensus": false,
+    "seg_decision": {
+      "img_name": "0005.jpg",
+      "consensus": false,
+      "anchor_class": null,
+      "selected_model": "medsegx_thyroid",
+      "confidence": 0.7259631951646618,
+      "reasoning": "静态规则：medsegx_thyroid（average_agreement=0.73）",
+      "path": "B",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "mask_shape": [
+            472,
+            591
+          ],
+          "mask_area": 26777,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9633446335792542
+        },
+        {
+          "model_name": "transunet_all_datasets",
+          "mask_shape": [
+            472,
+            591
+          ],
+          "mask_area": 18677,
+          "metadata": {
+            "model_name": "transunet_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.7365924119949341
+        },
+        {
+          "model_name": "ultrafedfm_all_datasets",
+          "mask_shape": [
+            472,
+            591
+          ],
+          "mask_area": 25460,
+          "metadata": {
+            "model_name": "ultrafedfm_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9859402775764465
+        },
+        {
+          "model_name": "medsegx_thyroid",
+          "mask_shape": [
+            472,
+            591
+          ],
+          "mask_area": 21948,
+          "metadata": {
+            "model_name": "medsegx_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
+            "input_size": [
+              256,
+              256
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9199948310852051
+        },
+        {
+          "model_name": "medsam2_thyroid",
+          "mask_shape": [
+            472,
+            591
+          ],
+          "mask_area": 24928,
+          "metadata": {
+            "model_name": "medsam2_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsam2/checkpoints/Nodule/checkpoint_15.pt",
+            "input_size": [
+              512,
+              512
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9267710447311401
+        }
+      ]
+    },
+    "selected_mask_shape": [
+      472,
+      591
+    ],
+    "selected_mask_area": 21948,
+    "cls_decision": {
+      "selected_model": "autogluon_majority_agree",
+      "selected_class": "良性",
+      "confidence": 0.8914985358715057,
+      "reasoning": "独立模型多数派=良性，AutoGluon一致(0.89)",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "predictions": {
+            "良性": 0.9969601351767778,
+            "恶性": 0.0030398648232221603
+          },
+          "top_class": "良性",
+          "top_confidence": 0.9969601351767778,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "medsiglip_binary",
+          "predictions": {
+            "0": 0.057526491582393646,
+            "1": 0.9424735307693481
+          },
+          "top_class": "1",
+          "top_confidence": 0.9424735307693481,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "medsiglip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "biomedclip_binary",
+          "predictions": {
+            "良性": 0.4379393756389618,
+            "恶性": 0.5620605945587158
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.5620605945587158,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "biomedclip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        }
+      ],
+      "method": "path_b_static_majority"
+    },
+    "final_label": "良性",
+    "final_confidence": 0.8914985358715057,
+    "image_name": "0005.jpg"
+  },
+  {
+    "path": "B",
+    "classification_consensus": false,
+    "seg_decision": {
+      "img_name": "0378.jpg",
+      "consensus": false,
+      "anchor_class": null,
+      "selected_model": "medsam2_thyroid",
+      "confidence": 0.6999444557052328,
+      "reasoning": "静态规则：medsam2_thyroid（average_agreement=0.70）",
+      "path": "B",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "mask_shape": [
+            309,
+            513
+          ],
+          "mask_area": 1060,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9618379473686218
+        },
+        {
+          "model_name": "transunet_all_datasets",
+          "mask_shape": [
+            309,
+            513
+          ],
+          "mask_area": 2183,
+          "metadata": {
+            "model_name": "transunet_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.7797229886054993
+        },
+        {
+          "model_name": "ultrafedfm_all_datasets",
+          "mask_shape": [
+            309,
+            513
+          ],
+          "mask_area": 1005,
+          "metadata": {
+            "model_name": "ultrafedfm_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9577810168266296
+        },
+        {
+          "model_name": "medsegx_thyroid",
+          "mask_shape": [
+            309,
+            513
+          ],
+          "mask_area": 844,
+          "metadata": {
+            "model_name": "medsegx_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
+            "input_size": [
+              256,
+              256
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9053511023521423
+        },
+        {
+          "model_name": "medsam2_thyroid",
+          "mask_shape": [
+            309,
+            513
+          ],
+          "mask_area": 924,
+          "metadata": {
+            "model_name": "medsam2_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsam2/checkpoints/Nodule/checkpoint_15.pt",
+            "input_size": [
+              512,
+              512
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9530119895935059
+        }
+      ]
+    },
+    "selected_mask_shape": [
+      309,
+      513
+    ],
+    "selected_mask_area": 924,
+    "cls_decision": {
+      "selected_model": "autogluon_strong_signal",
+      "selected_class": "良性",
+      "confidence": 0.8540842682123184,
+      "reasoning": "AutoGluon高置信(0.85)，信ROI级特征",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "predictions": {
+            "良性": 0.002493441104888916,
+            "恶性": 0.9975065588951111
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.9975065588951111,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "medsiglip_binary",
+          "predictions": {
+            "0": 0.026821177452802658,
+            "1": 0.9731788635253906
+          },
+          "top_class": "1",
+          "top_confidence": 0.9731788635253906,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "medsiglip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "biomedclip_binary",
+          "predictions": {
+            "良性": 0.3668767809867859,
+            "恶性": 0.6331232190132141
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.6331232190132141,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "biomedclip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        }
+      ],
+      "method": "path_b_static_autogluon"
+    },
+    "final_label": "良性",
+    "final_confidence": 0.8540842682123184,
+    "image_name": "0378.jpg"
+  },
+  {
+    "path": "B",
+    "classification_consensus": false,
+    "seg_decision": {
+      "img_name": "0379.jpg",
+      "consensus": false,
+      "anchor_class": null,
+      "selected_model": "medsegx_thyroid",
+      "confidence": 0.9157821210347401,
+      "reasoning": "静态规则：medsegx_thyroid（average_agreement=0.92）",
+      "path": "B",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "mask_shape": [
+            372,
+            464
+          ],
+          "mask_area": 39009,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9836911559104919
+        },
+        {
+          "model_name": "transunet_all_datasets",
+          "mask_shape": [
+            372,
+            464
+          ],
+          "mask_area": 41136,
+          "metadata": {
+            "model_name": "transunet_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9202135801315308
+        },
+        {
+          "model_name": "ultrafedfm_all_datasets",
+          "mask_shape": [
+            372,
+            464
+          ],
+          "mask_area": 37186,
+          "metadata": {
+            "model_name": "ultrafedfm_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9900738596916199
+        },
+        {
+          "model_name": "medsegx_thyroid",
+          "mask_shape": [
+            372,
+            464
+          ],
+          "mask_area": 38257,
+          "metadata": {
+            "model_name": "medsegx_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
+            "input_size": [
+              256,
+              256
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9287401437759399
+        },
+        {
+          "model_name": "medsam2_thyroid",
+          "mask_shape": [
+            372,
+            464
+          ],
+          "mask_area": 37707,
+          "metadata": {
+            "model_name": "medsam2_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsam2/checkpoints/Nodule/checkpoint_15.pt",
+            "input_size": [
+              512,
+              512
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.780042827129364
+        }
+      ]
+    },
+    "selected_mask_shape": [
+      372,
+      464
+    ],
+    "selected_mask_area": 38257,
+    "cls_decision": {
+      "selected_model": "majority_fallback",
+      "selected_class": "恶性",
+      "confidence": 0.9991866946220398,
+      "reasoning": "独立模型无共识(多数派=恶性)，退回多数派投票",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "predictions": {
+            "良性": 0.0008133053779602051,
+            "恶性": 0.9991866946220398
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.9991866946220398,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "medsiglip_binary",
+          "predictions": {
+            "0": 0.015720928087830544,
+            "1": 0.9842790961265564
+          },
+          "top_class": "1",
+          "top_confidence": 0.9842790961265564,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "medsiglip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "biomedclip_binary",
+          "predictions": {
+            "良性": 0.29266518354415894,
+            "恶性": 0.7073348760604858
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.7073348760604858,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "biomedclip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        }
+      ],
+      "method": "path_b_static_fallback"
+    },
+    "final_label": "恶性",
+    "final_confidence": 0.9991866946220398,
+    "image_name": "0379.jpg"
+  },
+  {
+    "path": "B",
+    "classification_consensus": false,
+    "seg_decision": {
+      "img_name": "0380.jpg",
+      "consensus": false,
+      "anchor_class": null,
+      "selected_model": "all_datasets",
+      "confidence": 0.7462489158280379,
+      "reasoning": "静态规则：all_datasets（average_agreement=0.75）",
+      "path": "B",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "mask_shape": [
+            378,
+            428
+          ],
+          "mask_area": 10738,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9748250246047974
+        },
+        {
+          "model_name": "transunet_all_datasets",
+          "mask_shape": [
+            378,
+            428
+          ],
+          "mask_area": 13492,
+          "metadata": {
+            "model_name": "transunet_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.911991536617279
+        },
+        {
+          "model_name": "ultrafedfm_all_datasets",
+          "mask_shape": [
+            378,
+            428
+          ],
+          "mask_area": 6675,
+          "metadata": {
+            "model_name": "ultrafedfm_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9842478632926941
+        },
+        {
+          "model_name": "medsegx_thyroid",
+          "mask_shape": [
+            378,
+            428
+          ],
+          "mask_area": 11743,
+          "metadata": {
+            "model_name": "medsegx_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
+            "input_size": [
+              256,
+              256
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9106210470199585
+        },
+        {
+          "model_name": "medsam2_thyroid",
+          "mask_shape": [
+            378,
+            428
+          ],
+          "mask_area": 7957,
+          "metadata": {
+            "model_name": "medsam2_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsam2/checkpoints/Nodule/checkpoint_15.pt",
+            "input_size": [
+              512,
+              512
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.7725760340690613
+        }
+      ]
+    },
+    "selected_mask_shape": [
+      378,
+      428
+    ],
+    "selected_mask_area": 10738,
+    "cls_decision": {
+      "selected_model": "autogluon_strong_signal",
+      "selected_class": "良性",
+      "confidence": 0.8017173558473587,
+      "reasoning": "AutoGluon高置信(0.80)，信ROI级特征",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "predictions": {
+            "良性": 0.0006836652755737305,
+            "恶性": 0.9993163347244263
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.9993163347244263,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "medsiglip_binary",
+          "predictions": {
+            "0": 0.0020226691849529743,
+            "1": 0.9979773163795471
+          },
+          "top_class": "1",
+          "top_confidence": 0.9979773163795471,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "medsiglip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "biomedclip_binary",
+          "predictions": {
+            "良性": 0.19319961965084076,
+            "恶性": 0.8068003058433533
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.8068003058433533,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "biomedclip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        }
+      ],
+      "method": "path_b_static_autogluon"
+    },
+    "final_label": "良性",
+    "final_confidence": 0.8017173558473587,
+    "image_name": "0380.jpg"
+  },
+  {
+    "path": "B",
+    "classification_consensus": false,
+    "seg_decision": {
+      "img_name": "0381.jpg",
+      "consensus": false,
+      "anchor_class": null,
+      "selected_model": "medsam2_thyroid",
+      "confidence": 0.7564326941833883,
+      "reasoning": "静态规则：medsam2_thyroid（average_agreement=0.76）",
+      "path": "B",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "mask_shape": [
+            378,
+            425
+          ],
+          "mask_area": 38504,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9741647243499756
+        },
+        {
+          "model_name": "transunet_all_datasets",
+          "mask_shape": [
+            378,
+            425
+          ],
+          "mask_area": 38572,
+          "metadata": {
+            "model_name": "transunet_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9136255383491516
+        },
+        {
+          "model_name": "ultrafedfm_all_datasets",
+          "mask_shape": [
+            378,
+            425
+          ],
+          "mask_area": 19037,
+          "metadata": {
+            "model_name": "ultrafedfm_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.985115647315979
+        },
+        {
+          "model_name": "medsegx_thyroid",
+          "mask_shape": [
+            378,
+            425
+          ],
+          "mask_area": 30309,
+          "metadata": {
+            "model_name": "medsegx_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
+            "input_size": [
+              256,
+              256
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.8854568004608154
+        },
+        {
+          "model_name": "medsam2_thyroid",
+          "mask_shape": [
+            378,
+            425
+          ],
+          "mask_area": 31552,
+          "metadata": {
+            "model_name": "medsam2_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsam2/checkpoints/Nodule/checkpoint_15.pt",
+            "input_size": [
+              512,
+              512
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.7420260310173035
+        }
+      ]
+    },
+    "selected_mask_shape": [
+      378,
+      425
+    ],
+    "selected_mask_area": 31552,
+    "cls_decision": {
+      "selected_model": "majority_fallback",
+      "selected_class": "恶性",
+      "confidence": 0.999312162399292,
+      "reasoning": "独立模型无共识(多数派=恶性)，退回多数派投票",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "predictions": {
+            "良性": 0.0006878376007080078,
+            "恶性": 0.999312162399292
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.999312162399292,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "medsiglip_binary",
+          "predictions": {
+            "0": 0.003242037957534194,
+            "1": 0.9967579245567322
+          },
+          "top_class": "1",
+          "top_confidence": 0.9967579245567322,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "medsiglip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "biomedclip_binary",
+          "predictions": {
+            "良性": 0.0166003480553627,
+            "恶性": 0.9833996891975403
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.9833996891975403,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "biomedclip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        }
+      ],
+      "method": "path_b_static_fallback"
+    },
+    "final_label": "恶性",
+    "final_confidence": 0.999312162399292,
+    "image_name": "0381.jpg"
+  },
+  {
+    "path": "B",
+    "classification_consensus": false,
+    "seg_decision": {
+      "img_name": "0382.jpg",
+      "consensus": false,
+      "anchor_class": null,
+      "selected_model": "all_datasets",
+      "confidence": 0.8116637991982971,
+      "reasoning": "静态规则：all_datasets（average_agreement=0.81）",
+      "path": "B",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "mask_shape": [
+            585,
+            788
+          ],
+          "mask_area": 16124,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9732828736305237
+        },
+        {
+          "model_name": "transunet_all_datasets",
+          "mask_shape": [
+            585,
+            788
+          ],
+          "mask_area": 13363,
+          "metadata": {
+            "model_name": "transunet_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.8975439071655273
+        },
+        {
+          "model_name": "ultrafedfm_all_datasets",
+          "mask_shape": [
+            585,
+            788
+          ],
+          "mask_area": 14768,
+          "metadata": {
+            "model_name": "ultrafedfm_all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth",
+            "input_size": [
+              224,
+              224
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9849012494087219
+        },
+        {
+          "model_name": "medsegx_thyroid",
+          "mask_shape": [
+            585,
+            788
+          ],
+          "mask_area": 13328,
+          "metadata": {
+            "model_name": "medsegx_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
+            "input_size": [
+              256,
+              256
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.8859562277793884
+        },
+        {
+          "model_name": "medsam2_thyroid",
+          "mask_shape": [
+            585,
+            788
+          ],
+          "mask_area": 16762,
+          "metadata": {
+            "model_name": "medsam2_thyroid",
+            "model_path": "../my_Thyroid_Infer/infer_medsam2/checkpoints/Nodule/checkpoint_15.pt",
+            "input_size": [
+              512,
+              512
+            ],
+            "threshold": 0.5,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          },
+          "has_confidence_map": true,
+          "mean_confidence": 0.9093781113624573
+        }
+      ]
+    },
+    "selected_mask_shape": [
+      585,
+      788
+    ],
+    "selected_mask_area": 16124,
+    "cls_decision": {
+      "selected_model": "autogluon_strong_signal",
+      "selected_class": "良性",
+      "confidence": 0.8014478385448456,
+      "reasoning": "AutoGluon高置信(0.80)，信ROI级特征",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "predictions": {
+            "良性": 0.0007044076919555664,
+            "恶性": 0.9992955923080444
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.9992955923080444,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "medsiglip_binary",
+          "predictions": {
+            "0": 0.02052927017211914,
+            "1": 0.9794707894325256
+          },
+          "top_class": "1",
+          "top_confidence": 0.9794707894325256,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "medsiglip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        },
+        {
+          "model_name": "biomedclip_binary",
+          "predictions": {
+            "良性": 0.09315165132284164,
+            "恶性": 0.9068483114242554
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.9068483114242554,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "biomedclip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true
+          }
+        }
+      ],
+      "method": "path_b_static_autogluon"
+    },
+    "final_label": "良性",
+    "final_confidence": 0.8014478385448456,
+    "image_name": "0382.jpg"
+  }
+]

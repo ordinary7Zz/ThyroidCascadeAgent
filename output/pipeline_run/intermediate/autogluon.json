@@ -1,0 +1,202 @@
+{
+  "0001.jpg": {
+    "model_name": "autogluon_radiomics",
+    "predictions": {
+      "良性": 0.7401971817016602,
+      "恶性": 0.25980281829833984
+    },
+    "top_class": "良性",
+    "top_confidence": 0.7401971817016602,
+    "requires_mask": true,
+    "metadata": {
+      "model_name": "autogluon_radiomics",
+      "model_path": "../my_Thyroid_Infer/infer_autogluon/checkpoints/binary",
+      "use_tirads": false,
+      "requires_mask": true,
+      "device": "cpu",
+      "base_dataset_performance": {},
+      "dataset_info": {},
+      "is_loaded": true
+    }
+  },
+  "0002.jpg": {
+    "model_name": "autogluon_radiomics",
+    "predictions": {
+      "良性": 0.7640806436538696,
+      "恶性": 0.23591935634613037
+    },
+    "top_class": "良性",
+    "top_confidence": 0.7640806436538696,
+    "requires_mask": true,
+    "metadata": {
+      "model_name": "autogluon_radiomics",
+      "model_path": "../my_Thyroid_Infer/infer_autogluon/checkpoints/binary",
+      "use_tirads": false,
+      "requires_mask": true,
+      "device": "cpu",
+      "base_dataset_performance": {},
+      "dataset_info": {},
+      "is_loaded": true
+    }
+  },
+  "0003.jpg": {
+    "model_name": "autogluon_radiomics",
+    "predictions": {
+      "良性": 0.791533425450325,
+      "恶性": 0.208466574549675
+    },
+    "top_class": "良性",
+    "top_confidence": 0.791533425450325,
+    "requires_mask": true,
+    "metadata": {
+      "model_name": "autogluon_radiomics",
+      "model_path": "../my_Thyroid_Infer/infer_autogluon/checkpoints/binary",
+      "use_tirads": false,
+      "requires_mask": true,
+      "device": "cpu",
+      "base_dataset_performance": {},
+      "dataset_info": {},
+      "is_loaded": true
+    }
+  },
+  "0004.jpg": {
+    "model_name": "autogluon_radiomics",
+    "predictions": {
+      "良性": 0.7577993273735046,
+      "恶性": 0.24220067262649536
+    },
+    "top_class": "良性",
+    "top_confidence": 0.7577993273735046,
+    "requires_mask": true,
+    "metadata": {
+      "model_name": "autogluon_radiomics",
+      "model_path": "../my_Thyroid_Infer/infer_autogluon/checkpoints/binary",
+      "use_tirads": false,
+      "requires_mask": true,
+      "device": "cpu",
+      "base_dataset_performance": {},
+      "dataset_info": {},
+      "is_loaded": true
+    }
+  },
+  "0005.jpg": {
+    "model_name": "autogluon_radiomics",
+    "predictions": {
+      "良性": 0.8914985358715057,
+      "恶性": 0.10850146412849426
+    },
+    "top_class": "良性",
+    "top_confidence": 0.8914985358715057,
+    "requires_mask": true,
+    "metadata": {
+      "model_name": "autogluon_radiomics",
+      "model_path": "../my_Thyroid_Infer/infer_autogluon/checkpoints/binary",
+      "use_tirads": false,
+      "requires_mask": true,
+      "device": "cpu",
+      "base_dataset_performance": {},
+      "dataset_info": {},
+      "is_loaded": true
+    }
+  },
+  "0378.jpg": {
+    "model_name": "autogluon_radiomics",
+    "predictions": {
+      "良性": 0.8540842682123184,
+      "恶性": 0.14591573178768158
+    },
+    "top_class": "良性",
+    "top_confidence": 0.8540842682123184,
+    "requires_mask": true,
+    "metadata": {
+      "model_name": "autogluon_radiomics",
+      "model_path": "../my_Thyroid_Infer/infer_autogluon/checkpoints/binary",
+      "use_tirads": false,
+      "requires_mask": true,
+      "device": "cpu",
+      "base_dataset_performance": {},
+      "dataset_info": {},
+      "is_loaded": true
+    }
+  },
+  "0379.jpg": {
+    "model_name": "autogluon_radiomics",
+    "predictions": {
+      "良性": 0.7769021838903427,
+      "恶性": 0.2230978161096573
+    },
+    "top_class": "良性",
+    "top_confidence": 0.7769021838903427,
+    "requires_mask": true,
+    "metadata": {
+      "model_name": "autogluon_radiomics",
+      "model_path": "../my_Thyroid_Infer/infer_autogluon/checkpoints/binary",
+      "use_tirads": false,
+      "requires_mask": true,
+      "device": "cpu",
+      "base_dataset_performance": {},
+      "dataset_info": {},
+      "is_loaded": true
+    }
+  },
+  "0380.jpg": {
+    "model_name": "autogluon_radiomics",
+    "predictions": {
+      "良性": 0.8017173558473587,
+      "恶性": 0.1982826441526413
+    },
+    "top_class": "良性",
+    "top_confidence": 0.8017173558473587,
+    "requires_mask": true,
+    "metadata": {
+      "model_name": "autogluon_radiomics",
+      "model_path": "../my_Thyroid_Infer/infer_autogluon/checkpoints/binary",
+      "use_tirads": false,
+      "requires_mask": true,
+      "device": "cpu",
+      "base_dataset_performance": {},
+      "dataset_info": {},
+      "is_loaded": true
+    }
+  },
+  "0381.jpg": {
+    "model_name": "autogluon_radiomics",
+    "predictions": {
+      "良性": 0.7307751774787903,
+      "恶性": 0.2692248225212097
+    },
+    "top_class": "良性",
+    "top_confidence": 0.7307751774787903,
+    "requires_mask": true,
+    "metadata": {
+      "model_name": "autogluon_radiomics",
+      "model_path": "../my_Thyroid_Infer/infer_autogluon/checkpoints/binary",
+      "use_tirads": false,
+      "requires_mask": true,
+      "device": "cpu",
+      "base_dataset_performance": {},
+      "dataset_info": {},
+      "is_loaded": true
+    }
+  },
+  "0382.jpg": {
+    "model_name": "autogluon_radiomics",
+    "predictions": {
+      "良性": 0.8014478385448456,
+      "恶性": 0.19855216145515442
+    },
+    "top_class": "良性",
+    "top_confidence": 0.8014478385448456,
+    "requires_mask": true,
+    "metadata": {
+      "model_name": "autogluon_radiomics",
+      "model_path": "../my_Thyroid_Infer/infer_autogluon/checkpoints/binary",
+      "use_tirads": false,
+      "requires_mask": true,
+      "device": "cpu",
+      "base_dataset_performance": {},
+      "dataset_info": {},
+      "is_loaded": true
+    }
+  }
+}
