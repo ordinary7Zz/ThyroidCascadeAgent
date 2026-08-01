@@ -259,10 +259,19 @@ class CascadePipeline:
         preds_list = list(seg_predictions)
 
         quality_results = self.seg_agent.quality_evaluator.evaluate_batch(masks, names)
-        agreement_dict = (
+        # average_agreement 是 list（每个模型与其他模型的平均 IoU）
+        avg_agreement_list = (
             quality_results.get("agreement_metrics", {})
-            .get("average_agreement", {})
+            .get("average_agreement", [])
         )
+        # 转成 dict: {model_name: avg_agreement_score}
+        if isinstance(avg_agreement_list, list):
+            agreement_dict = {
+                n: float(avg_agreement_list[i]) if i < len(avg_agreement_list) else 0.0
+                for i, n in enumerate(names)
+            }
+        else:
+            agreement_dict = avg_agreement_list or {}
 
         remaining_names = set(names)
         if anchor_class and not skip_radiomics:
@@ -546,21 +555,20 @@ class CascadePipeline:
         for i, model_cfg in enumerate(cls_model_configs):
             model_cfg = dict(model_cfg)
             model_name = model_cfg.get("name", f"cls_{i}")
-            model_cfg["device"] = "cpu" if model_cfg.get("type") == "autogluon_radiomics" else self.device
-            cache_path = cls_cache_dir / f"{model_name}.json"
+            model_type = model_cfg.get("type", "")
 
-            # 先构建模型判断 requires_mask
-            model = build_cls_model(model_cfg)
-
-            if model.requires_mask:
+            # mask 依赖模型（如 autogluon_radiomics）跳过，延迟到 Phase 4 按需加载
+            if model_type == "autogluon_radiomics":
                 mask_dep_cfgs.append(model_cfg)
-                print(f"  [{i+1}/{len(cls_model_configs)}] ⏭ {model_name} 需 mask，延迟到 Phase 4")
                 continue
 
+            cache_path = cls_cache_dir / f"{model_name}.json"
             if cache_path.exists():
                 print(f"  [{i+1}/{len(cls_model_configs)}] ⏭ {model_name} 已有缓存，跳过")
                 continue
 
+            model_cfg["device"] = self.device
+            model = build_cls_model(model_cfg)
             model.load_model()
 
             cls_outputs = []
