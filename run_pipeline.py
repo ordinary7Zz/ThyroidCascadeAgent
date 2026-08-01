@@ -147,6 +147,10 @@ def main():
 
     print(f"\nPipeline 完成: {len(results)} 张图像")
 
+    # 评估指标
+    from pipeline.evaluate import evaluate_pipeline
+    evaluate_pipeline(results, pipe_cfg.get("output", {}).get("output_dir", "output/pipeline_run"), image_io=ImageIO())
+
 
 if __name__ == "__main__":
     main()
