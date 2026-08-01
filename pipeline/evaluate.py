@@ -247,7 +247,7 @@ def evaluate_pipeline(
         y_score = np.array(y_score_list)
         y_pred = np.array(y_pred_list)
 
-        from sklearn.metrics import accuracy_score, f1_score, sensitivity_score, specificity_score
+        from sklearn.metrics import accuracy_score, f1_score, recall_score
 
         # AUROC
         auc_val, auc_lo, auc_hi = _bootstrap_auc_ci(y_true, y_score)
@@ -259,10 +259,10 @@ def evaluate_pipeline(
         print(f"  AUPRC: {auprc_val:.4f} (95% CI: {auprc_lo:.4f} - {auprc_hi:.4f})")
         metrics["auprc"] = {"mean": auprc_val, "ci_lower": auprc_lo, "ci_upper": auprc_hi}
 
-        # Accuracy / Sensitivity / Specificity
+        # Accuracy / Sensitivity / Specificity / F1
         acc = accuracy_score(y_true, y_pred)
-        sens = sensitivity_score(y_true, y_pred, pos_label=1)
-        spec = specificity_score(y_true, y_pred, pos_label=1)
+        sens = recall_score(y_true, y_pred, pos_label=1)  # sensitivity = recall for positive class
+        spec = recall_score(y_true, y_pred, pos_label=0)  # specificity = recall for negative class
         f1 = f1_score(y_true, y_pred, pos_label=1)
 
         print(f"  Accuracy:    {acc:.4f}")
