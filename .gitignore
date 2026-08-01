@@ -25,6 +25,11 @@ weights/
 *.pt
 *.ckpt
 
+# 例外：允许上传 output/shared_output/ 下的内容
+!output/
+!output/shared_output/
+!output/shared_output/**
+
 # 环境变量与密钥
 .env
 *.key

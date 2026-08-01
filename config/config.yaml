@@ -118,4 +118,4 @@ pipeline:
     start_index: 0
     max_images: null
   output:
-    output_dir: "output/pipeline_run"
+    output_dir: "output/shared_output/pipeline_run"
