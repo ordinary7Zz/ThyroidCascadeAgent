@@ -592,29 +592,9 @@ class CascadePipeline:
             sel_img_names, sel_masks, seg_decisions_serialized = \
                 self._load_selected_masks_npz(selected_masks_path)
         else:
-            # 从缓存加载所有分割结果
-            all_seg_results: dict[str, list] = {name: [] for name in img_names}
-            for model_cfg in seg_model_configs:
-                model_name = model_cfg.get("name", "")
-                cache_path = seg_cache_dir / f"{model_name}.npz"
-                if cache_path.exists():
-                    seg_outputs = self._load_seg_npz(cache_path)
-                    for j, img_name in enumerate(img_names):
-                        if j < len(seg_outputs):
-                            all_seg_results[img_name].append(seg_outputs[j])
+            import gc
 
-            # 从缓存加载所有独立分类结果
-            all_indie_cls: dict[str, list] = {name: [] for name in img_names}
-            for model_cfg in cls_model_configs:
-                model_name = model_cfg.get("name", "")
-                cache_path = cls_cache_dir / f"{model_name}.json"
-                if cache_path.exists():
-                    cls_outputs = self._load_cls_json(cache_path)
-                    for j, img_name in enumerate(img_names):
-                        if j < len(cls_outputs):
-                            all_indie_cls[img_name].append(cls_outputs[j])
-
-            # 逐图像运行分割 Agent
+            # 逐图像：从缓存按需加载 → Agent 决策 → 释放 → 增量保存
             sel_img_names = []
             sel_masks = []
             seg_decisions_serialized = []
@@ -629,14 +609,34 @@ class CascadePipeline:
                     if gt_path.exists():
                         gt_mask = self.image_io.binarize_mask(self.image_io.load_mask(gt_path))
 
+                # 按需加载该图像的分割结果（从 npz 缓存）
+                seg_preds = []
+                for model_cfg in seg_model_configs:
+                    model_name = model_cfg.get("name", "")
+                    cache_path = seg_cache_dir / f"{model_name}.npz"
+                    if cache_path.exists():
+                        all_outputs = self._load_seg_npz(cache_path)
+                        if idx < len(all_outputs):
+                            seg_preds.append(all_outputs[idx])
+                        del all_outputs
+
+                # 按需加载该图像的分类结果（从 json 缓存）
+                indie_preds = []
+                for model_cfg in cls_model_configs:
+                    model_name = model_cfg.get("name", "")
+                    cache_path = cls_cache_dir / f"{model_name}.json"
+                    if cache_path.exists():
+                        all_outputs = self._load_cls_json(cache_path)
+                        if idx < len(all_outputs):
+                            indie_preds.append(all_outputs[idx])
+                        del all_outputs
+
                 # 分类共识
-                indie_preds = all_indie_cls[img_name]
                 consensus, anchor_class = self._check_classification_consensus(
                     indie_preds, min_confidence=consensus_threshold
                 )
 
                 # 分割 Agent
-                seg_preds = all_seg_results[img_name]
                 if not seg_preds:
                     print(f"  ✗ {img_name} 无分割结果，跳过")
                     continue
@@ -670,6 +670,10 @@ class CascadePipeline:
                     "all_predictions": seg_decision.all_predictions,
                 })
                 print(f"  [{idx+1}/{len(img_names)}] {img_name}: {seg_decision.selected_model} (consensus={consensus})")
+
+                # 释放本图内存
+                del image, seg_preds, indie_preds, gt_mask, seg_decision
+                gc.collect()
 
             self._save_selected_masks_npz(
                 selected_masks_path, sel_img_names, sel_masks, seg_decisions_serialized
