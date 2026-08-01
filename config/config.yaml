@@ -119,4 +119,3 @@ pipeline:
     max_images: null
   output:
     output_dir: "output/pipeline_run"
-    save_masks: false
