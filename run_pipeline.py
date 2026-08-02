@@ -150,7 +150,12 @@ def main():
 
     # 评估指标
     from pipeline.evaluate import evaluate_pipeline
-    evaluate_pipeline(results, pipe_cfg.get("output", {}).get("output_dir", "output/pipeline_run"), image_io=ImageIO())
+    evaluate_pipeline(
+        results,
+        pipe_cfg.get("output", {}).get("output_dir", "output/pipeline_run"),
+        image_io=ImageIO(),
+        gt_mask_dir=data_cfg.get("gt_mask_dir"),
+    )
 
 
 if __name__ == "__main__":

@@ -1,0 +1,348 @@
+#!/usr/bin/env python3
+"""
+对比评估：pipeline（agent 链路）vs. 每个独立模型。
+
+从已有中间产物加载：
+  - 分割：intermediate/seg/*.npz（各模型预测）+ intermediate/selected_masks.npz（agent 选的）
+  - 分类：intermediate/cls/*.json（各模型预测）+ results.json（pipeline 最终裁决）
+
+对每个对象计算指标，输出对比表（终端打印 + comparison.json）。
+
+用法:
+  python -m pipeline.compare_models \
+      --output-dir output/pipeline_run \
+      --gt-mask-dir /path/to/TN3K/test/masks \
+      --label-file /path/to/TN3K_test_label.json \
+      --label-key malignancy
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+from typing import Optional
+
+import numpy as np
+
+from shared.image_io import ImageIO
+from segmentation.metrics import compute_dice, compute_hd95
+from pipeline.evaluate import _bootstrap_ci, _bootstrap_auc_ci, _bootstrap_auprc_ci, _label_to_binary
+
+
+# ============== 数据加载 ==============
+
+def load_seg_model_masks(seg_npz_path: Path) -> tuple[list[str], list[np.ndarray], str]:
+    """加载某个分割模型的预测 mask。返回 (image_names, masks, model_name)。"""
+    data = np.load(str(seg_npz_path), allow_pickle=True)
+    img_names = [str(x) for x in data["image_names"]]
+    masks = [np.asarray(m) for m in data["masks"]]
+    # 模型名取文件名（去后缀）
+    model_name = seg_npz_path.stem
+    return img_names, masks, model_name
+
+
+def load_selected_masks(npz_path: Path) -> tuple[list[str], list[np.ndarray]]:
+    """加载 agent 选中的 mask。返回 (image_names, masks)。"""
+    data = np.load(str(npz_path), allow_pickle=True)
+    img_names = [str(x) for x in data["image_names"]]
+    masks = [np.asarray(m) for m in data["selected_masks"]]
+    return img_names, masks
+
+
+def load_cls_model_json(json_path: Path) -> tuple[dict, str]:
+    """加载某个分类模型的预测 json。返回 (img_name->pred_dict, model_name)。
+
+    兼容两种格式：
+      - 标准包装: {"model_name": "...", "results": {img: {...}}}
+      - autogluon 裸格式: {img: {...}, ...}
+    """
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    if isinstance(data, dict) and "results" in data and isinstance(data["results"], dict):
+        return data["results"], data.get("model_name", json_path.stem)
+    # autogluon 裸格式
+    return data, json_path.stem
+
+
+def load_labels(label_file: str, label_key: str = "malignancy") -> dict[str, int]:
+    """加载标签文件，返回 {img_stem: 0/1}。兼容 dict / list 格式。"""
+    with open(label_file, "r", encoding="utf-8") as f:
+        raw = json.load(f)
+    labels: dict[str, int] = {}
+    if isinstance(raw, dict):
+        for k, v in raw.items():
+            b = _label_to_binary(v)
+            if b is not None:
+                labels[Path(k).stem] = b
+    elif isinstance(raw, list):
+        for item in raw:
+            fname = item.get("filename", "")
+            if fname:
+                b = _label_to_binary(item.get(label_key))
+                if b is not None:
+                    labels[Path(fname).stem] = b
+    return labels
+
+
+# ============== 指标计算 ==============
+
+def eval_seg_masks(
+    img_names: list[str],
+    pred_masks: list[np.ndarray],
+    gt_mask_dir: Path,
+    image_io: ImageIO,
+) -> dict:
+    """对一组 pred mask 计算 Dice / HD95（含 95% CI）。"""
+    dice_values: list[float] = []
+    hd95_values: list[float] = []
+    n_matched = 0
+    for img_name, pred in zip(img_names, pred_masks):
+        gt_path = gt_mask_dir / img_name
+        if not gt_path.exists():
+            continue
+        gt_mask = image_io.binarize_mask(image_io.load_mask(gt_path))
+        pred_mask = pred.astype(bool)
+        dice = compute_dice(pred_mask, gt_mask)
+        hd95 = compute_hd95(pred_mask, gt_mask)
+        n_matched += 1
+        if not np.isnan(dice):
+            dice_values.append(dice)
+        if not np.isinf(hd95) and not np.isnan(hd95):
+            hd95_values.append(hd95)
+
+    result = {"n_matched": n_matched, "n_total": len(img_names)}
+    if dice_values:
+        m, lo, hi = _bootstrap_ci(dice_values)
+        result["dice"] = {"mean": m, "ci_lower": lo, "ci_upper": hi}
+    else:
+        result["dice"] = None
+    if hd95_values:
+        m, lo, hi = _bootstrap_ci(hd95_values)
+        result["hd95"] = {"mean": m, "ci_lower": lo, "ci_upper": hi}
+    else:
+        result["hd95"] = None
+    return result
+
+
+def eval_cls_predictions(
+    img_to_pred: dict,
+    labels: dict[str, int],
+) -> dict:
+    """对一组分类预测计算 AUROC / AUPRC / Acc / Sens / Spec / F1。
+
+    img_to_pred: {img_name_or_stem: {predictions: {"良性": p, "恶性": q}, top_class, top_confidence}}
+    labels: {img_stem: 0/1}
+    """
+    y_true: list[int] = []
+    y_score: list[float] = []  # 恶性的概率
+    y_pred: list[int] = []
+
+    for img_name, pred in img_to_pred.items():
+        stem = Path(img_name).stem
+        if stem not in labels:
+            continue
+        true_b = labels[stem]
+        predictions = pred.get("predictions", {})
+        # 优先用 predictions 里的"恶性"概率；否则用 top_confidence 配合 top_class
+        if "恶性" in predictions:
+            score = float(predictions["恶性"])
+        elif "malignant" in predictions:
+            score = float(predictions["malignant"])
+        else:
+            top_class = pred.get("top_class", "")
+            top_conf = float(pred.get("top_confidence", 0.5))
+            top_b = _label_to_binary(top_class)
+            score = top_conf if top_b == 1 else 1 - top_conf
+        pred_b = 1 if score >= 0.5 else 0
+        y_true.append(true_b)
+        y_score.append(score)
+        y_pred.append(pred_b)
+
+    result = {"n_matched": len(y_true)}
+    if len(y_true) < 2 or len(set(y_true)) < 2:
+        result["auroc"] = None
+        result["auprc"] = None
+        result["accuracy"] = None
+        result["sensitivity"] = None
+        result["specificity"] = None
+        result["f1"] = None
+        return result
+
+    y_true_arr = np.array(y_true)
+    y_score_arr = np.array(y_score)
+    y_pred_arr = np.array(y_pred)
+
+    from sklearn.metrics import accuracy_score, f1_score, recall_score
+    auc_val, auc_lo, auc_hi = _bootstrap_auc_ci(y_true_arr, y_score_arr)
+    auprc_val, auprc_lo, auprc_hi = _bootstrap_auprc_ci(y_true_arr, y_score_arr)
+    result["auroc"] = {"mean": auc_val, "ci_lower": auc_lo, "ci_upper": auc_hi}
+    result["auprc"] = {"mean": auprc_val, "ci_lower": auprc_lo, "ci_upper": auprc_hi}
+    result["accuracy"] = float(accuracy_score(y_true_arr, y_pred_arr))
+    result["sensitivity"] = float(recall_score(y_true_arr, y_pred_arr, pos_label=1))
+    result["specificity"] = float(recall_score(y_true_arr, y_pred_arr, pos_label=0))
+    result["f1"] = float(f1_score(y_true_arr, y_pred_arr, pos_label=1))
+    return result
+
+
+# ============== pipeline 最终结果提取 ==============
+
+def extract_pipeline_cls_from_results(results: list[dict]) -> dict:
+    """从 results.json 提取 pipeline 最终分类预测，构造成与其他 cls json 同样的格式。"""
+    out = {}
+    for r in results:
+        img_name = r.get("image_name") or r.get("seg_decision", {}).get("img_name")
+        if not img_name:
+            continue
+        final_label = r.get("final_label")
+        final_conf = float(r.get("final_confidence", 0.5))
+        # 转成 {predictions: {"良性": p, "恶性": q}, top_class, top_confidence}
+        if final_label == "恶性":
+            preds = {"良性": 1 - final_conf, "恶性": final_conf}
+        else:
+            preds = {"良性": final_conf, "恶性": 1 - final_conf}
+        out[img_name] = {
+            "predictions": preds,
+            "top_class": final_label,
+            "top_confidence": final_conf,
+        }
+    return out
+
+
+# ============== 打印 ==============
+
+def _fmt_ci(v: Optional[dict], fmt: str = "{:.4f}") -> str:
+    if v is None:
+        return "  N/A"
+    return f"{fmt.format(v['mean'])} (95% CI {fmt.format(v['ci_lower'])}-{fmt.format(v['ci_upper'])})"
+
+
+def _fmt_scalar(v, fmt: str = "{:.4f}") -> str:
+    return "N/A" if v is None else fmt.format(v)
+
+
+def print_seg_table(rows: list[dict]):
+    print(f"\n{'='*80}")
+    print("分割对比 (Dice ↑ / HD95 ↓)")
+    print(f"{'='*80}")
+    header = f"{'来源':<28} {'Dice':<26} {'HD95':<22} {'N'}"
+    print(header)
+    print("-" * 80)
+    for r in rows:
+        name = r["name"]
+        dice = _fmt_ci(r["metrics"].get("dice"))
+        hd95 = _fmt_ci(r["metrics"].get("hd95"), "{:.2f}")
+        n = r["metrics"].get("n_matched", 0)
+        marker = " ★" if r.get("is_pipeline") else "  "
+        print(f"{name:<28} {dice:<26} {hd95:<22} {n}{marker}")
+    print("  ★ = pipeline/agent")
+
+
+def print_cls_table(rows: list[dict]):
+    print(f"\n{'='*100}")
+    print("分类对比 (AUROC ↑ / AUPRC ↑ / Acc ↑ / Sens / Spec / F1)")
+    print(f"{'='*100}")
+    header = f"{'来源':<28} {'AUROC':<22} {'AUPRC':<22} {'Acc':<7} {'Sens':<7} {'Spec':<7} {'F1':<7} {'N'}"
+    print(header)
+    print("-" * 100)
+    for r in rows:
+        name = r["name"]
+        m = r["metrics"]
+        auc = _fmt_ci(m.get("auroc"))
+        auprc = _fmt_ci(m.get("auprc"))
+        acc = _fmt_scalar(m.get("accuracy"))
+        sens = _fmt_scalar(m.get("sensitivity"))
+        spec = _fmt_scalar(m.get("specificity"))
+        f1 = _fmt_scalar(m.get("f1"))
+        n = m.get("n_matched", 0)
+        marker = " ★" if r.get("is_pipeline") else "  "
+        print(f"{name:<28} {auc:<22} {auprc:<22} {acc:<7} {sens:<7} {spec:<7} {f1:<7} {n}{marker}")
+    print("  ★ = pipeline/agent")
+
+
+# ============== 主流程 ==============
+
+def main():
+    parser = argparse.ArgumentParser(description="对比 pipeline 与各独立模型性能")
+    parser.add_argument("--output-dir", default="output/pipeline_run", help="pipeline 输出目录")
+    parser.add_argument("--gt-mask-dir", required=True, help="GT mask 目录")
+    parser.add_argument("--label-file", required=True, help="标签文件路径")
+    parser.add_argument("--label-key", default="malignancy", help="list 格式标签文件中字段名")
+    args = parser.parse_args()
+
+    output_dir = Path(args.output_dir)
+    inter_dir = output_dir / "intermediate"
+    seg_dir = inter_dir / "seg"
+    cls_dir = inter_dir / "cls"
+    gt_mask_dir = Path(args.gt_mask_dir)
+    image_io = ImageIO()
+
+    # 标签
+    labels = load_labels(args.label_file, args.label_key)
+    print(f"已加载标签: {len(labels)} 条")
+
+    # ============== 分割对比 ==============
+    seg_rows: list[dict] = []
+
+    # 各独立模型
+    if seg_dir.exists():
+        for npz_file in sorted(seg_dir.glob("*.npz")):
+            img_names, masks, model_name = load_seg_model_masks(npz_file)
+            metrics = eval_seg_masks(img_names, masks, gt_mask_dir, image_io)
+            seg_rows.append({"name": model_name, "metrics": metrics, "is_pipeline": False})
+
+    # pipeline agent 选的
+    selected_path = inter_dir / "selected_masks.npz"
+    if selected_path.exists():
+        img_names, masks = load_selected_masks(selected_path)
+        metrics = eval_seg_masks(img_names, masks, gt_mask_dir, image_io)
+        seg_rows.append({"name": "Pipeline (agent selected)", "metrics": metrics, "is_pipeline": True})
+    else:
+        print("⚠️ selected_masks.npz 不存在，pipeline 分割结果将缺失")
+
+    print_seg_table(seg_rows)
+
+    # ============== 分类对比 ==============
+    cls_rows: list[dict] = []
+
+    # 各独立模型
+    if cls_dir.exists():
+        for json_file in sorted(cls_dir.glob("*.json")):
+            img_to_pred, model_name = load_cls_model_json(json_file)
+            metrics = eval_cls_predictions(img_to_pred, labels)
+            cls_rows.append({"name": model_name, "metrics": metrics, "is_pipeline": False})
+
+    # autogluon（在 intermediate 根目录下，不在 cls/ 下）
+    autogluon_path = inter_dir / "autogluon.json"
+    if autogluon_path.exists():
+        img_to_pred, model_name = load_cls_model_json(autogluon_path)
+        metrics = eval_cls_predictions(img_to_pred, labels)
+        cls_rows.append({"name": model_name, "metrics": metrics, "is_pipeline": False})
+
+    # pipeline 最终裁决
+    results_path = output_dir / "results.json"
+    if results_path.exists():
+        with open(results_path, "r", encoding="utf-8") as f:
+            results = json.load(f)
+        pipeline_pred = extract_pipeline_cls_from_results(results)
+        if pipeline_pred:
+            metrics = eval_cls_predictions(pipeline_pred, labels)
+            cls_rows.append({"name": "Pipeline (final)", "metrics": metrics, "is_pipeline": True})
+    else:
+        print("⚠️ results.json 不存在，pipeline 分类结果将缺失")
+
+    print_cls_table(cls_rows)
+
+    # ============== 保存 ==============
+    comparison = {
+        "segmentation": [{"name": r["name"], "is_pipeline": r.get("is_pipeline", False), **r["metrics"]} for r in seg_rows],
+        "classification": [{"name": r["name"], "is_pipeline": r.get("is_pipeline", False), **r["metrics"]} for r in cls_rows],
+    }
+    out_path = output_dir / "comparison.json"
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(comparison, f, ensure_ascii=False, indent=2)
+    print(f"\n对比结果已保存到 {out_path}")
+
+
+if __name__ == "__main__":
+    main()

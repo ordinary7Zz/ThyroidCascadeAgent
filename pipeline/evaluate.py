@@ -136,6 +136,7 @@ def evaluate_pipeline(
     results: list[dict],
     output_dir: str,
     image_io=None,
+    gt_mask_dir: Optional[str] = None,
 ) -> dict:
     """评估 pipeline 结果，打印并保存指标。
 
@@ -143,6 +144,7 @@ def evaluate_pipeline(
         results: run_batch 返回的 results 列表
         output_dir: 输出目录（用于读取 selected_masks.npz）
         image_io: ImageIO 实例（用于加载 GT mask）
+        gt_mask_dir: GT mask 目录，优先使用；未提供时回退到从 config 读取
 
     Returns:
         dict: 评估指标
@@ -184,7 +186,8 @@ def evaluate_pipeline(
 
         # 尝试从 output_dir 的 metadata 获取
         # 如果没有 gt_mask_dir，则跳过
-        gt_mask_dir = _get_gt_mask_dir(output_dir)
+        if gt_mask_dir is None:
+            gt_mask_dir = _get_gt_mask_dir(output_dir)
 
         if gt_mask_dir is None:
             print("⚠️ 未找到 gt_mask_dir 配置，跳过分割评估")
