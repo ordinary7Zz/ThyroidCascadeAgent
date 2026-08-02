@@ -150,12 +150,30 @@ def main():
 
     # 评估指标
     from pipeline.evaluate import evaluate_pipeline
+    output_dir_final = pipe_cfg.get("output", {}).get("output_dir", "output/pipeline_run")
     evaluate_pipeline(
         results,
-        pipe_cfg.get("output", {}).get("output_dir", "output/pipeline_run"),
+        output_dir_final,
         image_io=ImageIO(),
         gt_mask_dir=data_cfg.get("gt_mask_dir"),
     )
+
+    # 对比各独立模型与 pipeline 的性能（需要 gt_mask_dir 和 label_file）
+    label_file = data_cfg.get("label_file")
+    gt_mask_dir = data_cfg.get("gt_mask_dir")
+    if gt_mask_dir and label_file:
+        from pipeline.compare_models import compare_models
+        print(f"\n{'='*60}")
+        print("模型对比评估")
+        print(f"{'='*60}")
+        compare_models(
+            output_dir=output_dir_final,
+            gt_mask_dir=gt_mask_dir,
+            label_file=label_file,
+            label_key=data_cfg.get("label_key", "malignancy"),
+        )
+    else:
+        print("\n⚠️ 缺少 gt_mask_dir 或 label_file，跳过模型对比")
 
 
 if __name__ == "__main__":

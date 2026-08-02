@@ -262,23 +262,35 @@ def print_cls_table(rows: list[dict]):
 
 # ============== 主流程 ==============
 
-def main():
-    parser = argparse.ArgumentParser(description="对比 pipeline 与各独立模型性能")
-    parser.add_argument("--output-dir", default="output/pipeline_run", help="pipeline 输出目录")
-    parser.add_argument("--gt-mask-dir", required=True, help="GT mask 目录")
-    parser.add_argument("--label-file", required=True, help="标签文件路径")
-    parser.add_argument("--label-key", default="malignancy", help="list 格式标签文件中字段名")
-    args = parser.parse_args()
+def compare_models(
+    output_dir: str | Path,
+    gt_mask_dir: str | Path,
+    label_file: str | Path,
+    label_key: str = "malignancy",
+    image_io=None,
+) -> dict:
+    """对比 pipeline 与各独立模型性能。
 
-    output_dir = Path(args.output_dir)
+    Args:
+        output_dir: pipeline 输出目录
+        gt_mask_dir: GT mask 目录
+        label_file: 标签文件路径
+        label_key: list 格式标签文件中字段名
+        image_io: ImageIO 实例（未提供则新建）
+
+    Returns:
+        dict: {"segmentation": [...], "classification": [...]}
+    """
+    output_dir = Path(output_dir)
     inter_dir = output_dir / "intermediate"
     seg_dir = inter_dir / "seg"
     cls_dir = inter_dir / "cls"
-    gt_mask_dir = Path(args.gt_mask_dir)
-    image_io = ImageIO()
+    gt_mask_dir = Path(gt_mask_dir)
+    if image_io is None:
+        image_io = ImageIO()
 
     # 标签
-    labels = load_labels(args.label_file, args.label_key)
+    labels = load_labels(str(label_file), label_key)
     print(f"已加载标签: {len(labels)} 条")
 
     # ============== 分割对比 ==============
@@ -342,6 +354,24 @@ def main():
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(comparison, f, ensure_ascii=False, indent=2)
     print(f"\n对比结果已保存到 {out_path}")
+
+    return comparison
+
+
+def main():
+    parser = argparse.ArgumentParser(description="对比 pipeline 与各独立模型性能")
+    parser.add_argument("--output-dir", default="output/pipeline_run", help="pipeline 输出目录")
+    parser.add_argument("--gt-mask-dir", required=True, help="GT mask 目录")
+    parser.add_argument("--label-file", required=True, help="标签文件路径")
+    parser.add_argument("--label-key", default="malignancy", help="list 格式标签文件中字段名")
+    args = parser.parse_args()
+
+    compare_models(
+        output_dir=args.output_dir,
+        gt_mask_dir=args.gt_mask_dir,
+        label_file=args.label_file,
+        label_key=args.label_key,
+    )
 
 
 if __name__ == "__main__":
