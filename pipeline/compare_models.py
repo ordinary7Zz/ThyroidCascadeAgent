@@ -196,8 +196,10 @@ def extract_pipeline_cls_from_results(results: list[dict]) -> dict:
             continue
         final_label = r.get("final_label")
         final_conf = float(r.get("final_confidence", 0.5))
-        # 转成 {predictions: {"良性": p, "恶性": q}, top_class, top_confidence}
-        if final_label == "恶性":
+        # final_label 可能是 "恶性"/"良性" 字符串，也可能是 1/0 int
+        # 统一转为 binary，1=恶性
+        label_bin = _label_to_binary(final_label)
+        if label_bin == 1:
             preds = {"良性": 1 - final_conf, "恶性": final_conf}
         else:
             preds = {"良性": final_conf, "恶性": 1 - final_conf}
