@@ -113,7 +113,7 @@ pipeline:
     image_input: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN/test/images"
     mask_input: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN5K/test/masks"               # 仅 run_cls.py 用（外部 mask 目录）
     gt_mask_dir: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN5K/test/masks"
-    label_file: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN5K/test/TN3K_test_label.json"
+    label_file: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN5K/test/TN5K_test_label.json"
     label_key: "malignancy"  # list 格式标签文件中良恶性字段名
     device_info: ["GE Logiq E9", "GE S7"]
     start_index: 0
