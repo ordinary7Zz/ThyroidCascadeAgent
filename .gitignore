@@ -18,17 +18,14 @@ env/
 *.swo
 
 # 运行产物
-output/
+output/*
+!output/shared_output/
+!output/shared_output/**
 results/
 weights/
 *.pth
 *.pt
 *.ckpt
-
-# 例外：允许上传 output/shared_output/ 下的内容
-!output/
-!output/shared_output/
-!output/shared_output/**
 
 # 环境变量与密钥
 .env
