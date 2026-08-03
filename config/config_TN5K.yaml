@@ -104,7 +104,7 @@ classification:
 # ===== Radiomics 裁判段 =====
 radiomics_judge:
   enabled: true
-  model_dir: "/mnt/wangbd8/workspace/ThyroidAgent/dino_unet_multitask/pyradiomics_train/binary_class/BM/outputs/models/BM_dataset3_gt/BM"
+  model_dir: "../my_Thyroid_Infer/infer_autogluon/checkpoints/binary"
   top_k_features: 5
 
 # ===== Pipeline 段 =====
