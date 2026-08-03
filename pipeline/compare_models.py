@@ -137,11 +137,13 @@ def eval_seg_masks(
 def eval_cls_predictions(
     img_to_pred: dict,
     labels: dict[str, int],
+    subset_stems: Optional[set[str]] = None,
 ) -> dict:
     """对一组分类预测计算 AUROC / AUPRC / Acc / Sens / Spec / F1。
 
     img_to_pred: {img_name_or_stem: {predictions: {"良性": p, "恶性": q}, top_class, top_confidence}}
     labels: {img_stem: 0/1}
+    subset_stems: 若提供，只在该子集上评估
     """
     y_true: list[int] = []
     y_score: list[float] = []  # 恶性的概率
@@ -150,6 +152,8 @@ def eval_cls_predictions(
     for img_name, pred in img_to_pred.items():
         stem = Path(img_name).stem
         if stem not in labels:
+            continue
+        if subset_stems is not None and stem not in subset_stems:
             continue
         true_b = labels[stem]
         predictions = pred.get("predictions", {})
@@ -325,13 +329,17 @@ def compare_models(
 
     print_seg_table(seg_rows)
 
-    # ============== 分类对比 ==============
+    # ============== 分类对比（全集） ==============
     cls_rows: list[dict] = []
+
+    # 收集所有分类模型预测，供子集对比复用
+    all_cls_preds: dict[str, dict] = {}  # {model_name: img_to_pred}
 
     # 各独立模型
     if cls_dir.exists():
         for json_file in sorted(cls_dir.glob("*.json")):
             img_to_pred, model_name = load_cls_model_json(json_file)
+            all_cls_preds[model_name] = img_to_pred
             metrics = eval_cls_predictions(img_to_pred, labels)
             cls_rows.append({"name": model_name, "metrics": metrics, "is_pipeline": False})
 
@@ -339,6 +347,7 @@ def compare_models(
     autogluon_path = inter_dir / "autogluon.json"
     if autogluon_path.exists():
         img_to_pred, model_name = load_cls_model_json(autogluon_path)
+        all_cls_preds[model_name] = img_to_pred
         metrics = eval_cls_predictions(img_to_pred, labels)
         cls_rows.append({"name": model_name, "metrics": metrics, "is_pipeline": False})
 
@@ -349,6 +358,7 @@ def compare_models(
             results = json.load(f)
         pipeline_pred = extract_pipeline_cls_from_results(results)
         if pipeline_pred:
+            all_cls_preds["Pipeline (final)"] = pipeline_pred
             metrics = eval_cls_predictions(pipeline_pred, labels)
             cls_rows.append({"name": "Pipeline (final)", "metrics": metrics, "is_pipeline": True})
     else:
@@ -356,11 +366,34 @@ def compare_models(
 
     print_cls_table(cls_rows)
 
+    # ============== 分类对比（autogluon 子集：分类模型无共识的难样本） ==============
+    # autogluon 只在无共识的子集上运行，全集指标不可比
+    # 在同一子集上重算各模型，才能判断 autogluon 仲裁是否有价值
+    autogluon_stems: Optional[set[str]] = None
+    if "radiomics_judge" in all_cls_preds:
+        autogluon_stems = {Path(k).stem for k in all_cls_preds["radiomics_judge"].keys()}
+        if autogluon_stems:
+            print(f"\n{'='*100}")
+            print(f"分类对比 - autogluon 子集（无共识难样本 N={len(autogluon_stems)}）")
+            print(f"{'='*100}")
+            subset_rows: list[dict] = []
+            for model_name, img_to_pred in all_cls_preds.items():
+                metrics = eval_cls_predictions(img_to_pred, labels, subset_stems=autogluon_stems)
+                is_pipe = model_name == "Pipeline (final)"
+                subset_rows.append({"name": model_name, "metrics": metrics, "is_pipeline": is_pipe})
+            print_cls_table(subset_rows)
+
     # ============== 保存 ==============
     comparison = {
         "segmentation": [{"name": r["name"], "is_pipeline": r.get("is_pipeline", False), **r["metrics"]} for r in seg_rows],
         "classification": [{"name": r["name"], "is_pipeline": r.get("is_pipeline", False), **r["metrics"]} for r in cls_rows],
     }
+    # autogluon 子集对比
+    if autogluon_stems:
+        comparison["classification_autogluon_subset"] = {
+            "subset_size": len(autogluon_stems),
+            "models": [{"name": r["name"], "is_pipeline": r.get("is_pipeline", False), **r["metrics"]} for r in subset_rows],
+        }
     out_path = output_dir / "comparison.json"
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(comparison, f, ensure_ascii=False, indent=2)
