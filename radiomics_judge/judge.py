@@ -55,7 +55,7 @@ class RadiomicsJudge:
 
         from autogluon.tabular import TabularPredictor
 
-        self._predictor = TabularPredictor.load(str(path))
+        self._predictor = TabularPredictor.load(str(path), require_py_version_match=False)
         try:
             self._feature_names = list(self._predictor.feature_metadata_in.get_features())
         except Exception:
