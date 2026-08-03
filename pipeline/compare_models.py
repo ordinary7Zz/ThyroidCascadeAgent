@@ -97,9 +97,18 @@ def eval_seg_masks(
     dice_values: list[float] = []
     hd95_values: list[float] = []
     n_matched = 0
+
+    # 构造 stem -> gt_path 映射，兼容图像与 mask 后缀不同的情况
+    gt_stem_map: dict[str, Path] = {}
+    if gt_mask_dir.exists():
+        for p in gt_mask_dir.iterdir():
+            if p.is_file():
+                gt_stem_map[p.stem] = p
+
     for img_name, pred in zip(img_names, pred_masks):
-        gt_path = gt_mask_dir / img_name
-        if not gt_path.exists():
+        img_stem = Path(img_name).stem
+        gt_path = gt_stem_map.get(img_stem)
+        if gt_path is None or not gt_path.exists():
             continue
         gt_mask = image_io.binarize_mask(image_io.load_mask(gt_path))
         pred_mask = pred.astype(bool)
