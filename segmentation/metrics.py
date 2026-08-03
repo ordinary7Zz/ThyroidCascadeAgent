@@ -35,38 +35,36 @@ def compute_hd95(pred_mask: np.ndarray, gt_mask: np.ndarray, percentile: int = 9
     """
     95 百分位 Hausdorff 距离 (越低越好)。
 
-    仅使用边界点计算，避免对大 mask 生成巨大中间数组。
-    空 mask 返回 inf。
+    使用 scipy EDT 双向计算表面距离，取 max(p95)。
+    参考 MedPy 标准实现：
+      - 对每个前景像素计算到对方最近表面像素的距离
+      - 双向取 95 百分位的最大值
+
+    边界情况:
+      - pred 或 gt 为空: 返回 inf
+      - 两者都为空: 返回 0.0
     """
-    from scipy import ndimage
-    from scipy.spatial.distance import cdist
+    from scipy.ndimage import distance_transform_edt as _edt
 
-    pred = pred_mask.astype(bool)
-    gt = gt_mask.astype(bool)
+    p = np.asarray(pred_mask).astype(bool)
+    g = np.asarray(gt_mask).astype(bool)
 
-    if not pred.any() or not gt.any():
+    if not p.any() and not g.any():
+        return 0.0
+    if not p.any() or not g.any():
         return float("inf")
 
-    # 只取边界点（而非全部前景点），大幅减少计算量
-    pred_boundary = pred & ~ndimage.binary_erosion(pred)
-    gt_boundary = gt & ~ndimage.binary_erosion(gt)
+    # 单向表面距离: x 前景像素到 y 最近表面像素的距离
+    # _edt(~y) 对 y 的每个背景像素给出到 y 最近前景像素的距离，
+    # 对 y 的前景像素给出 0
+    def _hd95_one_sided(x_bool, y_bool):
+        distances = _edt(~y_bool)
+        indexes = np.nonzero(x_bool)
+        return float(np.percentile(distances[indexes], percentile))
 
-    pred_pts = np.argwhere(pred_boundary)
-    gt_pts = np.argwhere(gt_boundary)
-
-    if len(pred_pts) == 0 or len(gt_pts) == 0:
-        return float("inf")
-
-    # 用 cdist 代替广播，内存只需 (N, M) 而非 (N, M, 2)
-    dist_matrix = cdist(pred_pts, gt_pts)
-    dist_pred_to_gt = dist_matrix.min(axis=1)
-    dist_gt_to_pred = dist_matrix.min(axis=0)
-
-    hd95 = max(
-        np.percentile(dist_pred_to_gt, percentile),
-        np.percentile(dist_gt_to_pred, percentile),
-    )
-    return float(hd95)
+    d1 = _hd95_one_sided(p, g)  # pred -> gt surface
+    d2 = _hd95_one_sided(g, p)  # gt -> pred surface
+    return max(d1, d2)
 
 
 def compute_pairwise_iou(masks: list) -> np.ndarray:

@@ -345,9 +345,11 @@ def compare_models(
 
     # autogluon（在 intermediate 根目录下，不在 cls/ 下）
     autogluon_path = inter_dir / "autogluon.json"
+    autogluon_model_name = None
     if autogluon_path.exists():
         img_to_pred, model_name = load_cls_model_json(autogluon_path)
         all_cls_preds[model_name] = img_to_pred
+        autogluon_model_name = model_name
         metrics = eval_cls_predictions(img_to_pred, labels)
         cls_rows.append({"name": model_name, "metrics": metrics, "is_pipeline": False})
 
@@ -370,8 +372,8 @@ def compare_models(
     # autogluon 只在无共识的子集上运行，全集指标不可比
     # 在同一子集上重算各模型，才能判断 autogluon 仲裁是否有价值
     autogluon_stems: Optional[set[str]] = None
-    if "radiomics_judge" in all_cls_preds:
-        autogluon_stems = {Path(k).stem for k in all_cls_preds["radiomics_judge"].keys()}
+    if autogluon_model_name and autogluon_model_name in all_cls_preds:
+        autogluon_stems = {Path(k).stem for k in all_cls_preds[autogluon_model_name].keys()}
         if autogluon_stems:
             print(f"\n{'='*100}")
             print(f"分类对比 - autogluon 子集（无共识难样本 N={len(autogluon_stems)}）")
