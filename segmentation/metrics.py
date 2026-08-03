@@ -9,6 +9,22 @@ from __future__ import annotations
 import numpy as np
 
 
+# HD95 评估分辨率（统一 resize 后再算，保证不同图像尺寸下结果可比）
+HD95_EVAL_SIZE = (224, 224)
+
+
+def _resize_mask(mask: np.ndarray, target_size: tuple[int, int] = HD95_EVAL_SIZE) -> np.ndarray:
+    """将 mask resize 到目标尺寸（最近邻插值，保持二值性）。"""
+    import cv2
+    if mask.shape[:2] == target_size:
+        return mask
+    return cv2.resize(
+        mask.astype(np.uint8),
+        (target_size[1], target_size[0]),  # cv2 是 (W, H)
+        interpolation=cv2.INTER_NEAREST,
+    )
+
+
 def compute_dice(pred_mask: np.ndarray, gt_mask: np.ndarray) -> float:
     """Dice 系数 (0-1, 越高越好)。两个空 mask 返回 1.0。"""
     pred = pred_mask.astype(bool)
@@ -35,10 +51,8 @@ def compute_hd95(pred_mask: np.ndarray, gt_mask: np.ndarray, percentile: int = 9
     """
     95 百分位 Hausdorff 距离 (越低越好)。
 
+    统一在 224x224 分辨率下计算，避免不同原图尺寸导致 HD95 不可比。
     使用 scipy EDT 双向计算表面距离，取 max(p95)。
-    参考 MedPy 标准实现：
-      - 对每个前景像素计算到对方最近表面像素的距离
-      - 双向取 95 百分位的最大值
 
     边界情况:
       - pred 或 gt 为空: 返回 inf
@@ -46,8 +60,9 @@ def compute_hd95(pred_mask: np.ndarray, gt_mask: np.ndarray, percentile: int = 9
     """
     from scipy.ndimage import distance_transform_edt as _edt
 
-    p = np.asarray(pred_mask).astype(bool)
-    g = np.asarray(gt_mask).astype(bool)
+    # 统一 resize 到 224x224
+    p = _resize_mask(np.asarray(pred_mask), HD95_EVAL_SIZE).astype(bool)
+    g = _resize_mask(np.asarray(gt_mask), HD95_EVAL_SIZE).astype(bool)
 
     if not p.any() and not g.any():
         return 0.0
@@ -55,8 +70,6 @@ def compute_hd95(pred_mask: np.ndarray, gt_mask: np.ndarray, percentile: int = 9
         return float("inf")
 
     # 单向表面距离: x 前景像素到 y 最近表面像素的距离
-    # _edt(~y) 对 y 的每个背景像素给出到 y 最近前景像素的距离，
-    # 对 y 的前景像素给出 0
     def _hd95_one_sided(x_bool, y_bool):
         distances = _edt(~y_bool)
         indexes = np.nonzero(x_bool)
