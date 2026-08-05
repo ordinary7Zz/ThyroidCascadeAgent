@@ -4,7 +4,7 @@
 Phase 1: 依次加载分割模型 → 推理全部图像 → 保存 npz → 卸载
 Phase 2: 依次加载独立分类模型 → 推理全部图像 → 保存 json → 卸载
 Phase 3: 从缓存加载结果 → 分割 Agent 选 mask → 保存 selected_masks.npz
-Phase 4: AutoGluon 加载 → 推理无共识图像 → 保存 json → 卸载
+Phase 4: AutoGluon 加载 → 推理全集图像 → 保存 json → 卸载
 Phase 5: 分类裁决 + 保存 results.json
 
 agent_enabled=true  → Phase 3 调 LLM, Phase 5 可能调 LLM
@@ -554,7 +554,7 @@ class CascadePipeline:
           Phase 1: 依次加载分割模型 → 推理全部图像 → 保存 npz → 卸载
           Phase 2: 依次加载独立分类模型 → 推理全部图像 → 保存 json → 卸载
           Phase 3: 从缓存加载 → 分割 Agent 选择 → 保存 selected_masks.npz
-          Phase 4: AutoGluon 加载 → 推理无共识图像 → 保存 json → 卸载
+          Phase 4: AutoGluon 加载 → 推理全集图像 → 保存 json → 卸载
           Phase 5: 分类裁决 + 保存 results.json
 
         每个 Phase 检查缓存文件是否已存在，存在则跳过（支持断点续跑）。
@@ -804,87 +804,102 @@ class CascadePipeline:
                 "anchor_class": d["anchor_class"],
             }
 
-        # ===== Phase 4: AutoGluon 分类（仅对无共识的图像）=====
+        # ===== Phase 4: AutoGluon 分类（全集推理，便于评估其分类性能）=====
+        # 注：PathA（有共识）图像在 Phase 5 裁决时不会使用 AutoGluon 结果，
+        # 但这里仍对其推理，以便评估 AutoGluon 在全集上的分类性能。
         print(f"\n{'='*60}")
-        print("Phase 4: AutoGluon 分类（基于 all_datasets 分割模型输出）")
+        print("Phase 4: AutoGluon 分类（全集推理，基于 all_datasets 分割模型输出）")
         print(f"{'='*60}")
 
         autogluon_cache_path = inter_dir / "autogluon.json"
 
-        # 确定哪些图像需要 AutoGluon
+        # PathB（无共识）图像：Phase 5 裁决时会使用 AutoGluon 结果
         needs_autogluon_names = [
             name for name in img_names
             if name in sel_map and not sel_map[name]["consensus"]
         ]
+        # 推理范围：所有有分割结果的图像（用于评估 AutoGluon 全集性能）
+        autogluon_target_names = [name for name in img_names if name in sel_map]
 
-        if not needs_autogluon_names:
-            print("  所有图像均有分类共识，无需 AutoGluon")
+        if not autogluon_target_names:
+            print("  无可用图像，跳过 AutoGluon")
             autogluon_results: dict[str, Any] = {}
         elif getattr(self.seg_agent, "radiomics_judge", None) is None:
-            print("  ⚠️ 需 AutoGluon 仲裁但 radiomics_judge 未启用")
+            print("  ⚠️ radiomics_judge 未启用，跳过 AutoGluon")
             autogluon_results = {}
-        elif autogluon_cache_path.exists():
-            print(f"  ⏭ {autogluon_cache_path.name} 已存在，跳过")
-            with open(autogluon_cache_path, "r", encoding="utf-8") as f:
-                autogluon_results = json.load(f)
         else:
-            # 从 all_datasets.npz 加载分割模型输出（而非 agent 选出的 mask）
-            all_datasets_npz = seg_cache_dir / "all_datasets.npz"
-            if not all_datasets_npz.exists():
-                print(f"  ⚠️ {all_datasets_npz.name} 不存在，回退到 selected_mask")
-                all_datasets_masks: dict[str, np.ndarray] = {}
-            else:
-                seg_data = np.load(str(all_datasets_npz), allow_pickle=True)
-                all_datasets_masks = {
-                    str(n): np.asarray(m)
-                    for n, m in zip(seg_data["image_names"], seg_data["masks"])
-                }
-                print(f"  已加载 all_datasets 分割输出: {len(all_datasets_masks)} 张")
+            # 加载已有缓存（若存在），支持断点续跑：仅补全缺失的图像
+            autogluon_results: dict[str, Any] = {}
+            if autogluon_cache_path.exists():
+                with open(autogluon_cache_path, "r", encoding="utf-8") as f:
+                    autogluon_results = json.load(f)
+                print(f"  已加载缓存 {autogluon_cache_path.name}: {len(autogluon_results)} 张")
 
-            # 复用 seg_agent.radiomics_judge（与分割阶段同一 AutoGluon 模型）
-            judge = self.seg_agent.radiomics_judge
-            autogluon_results = {}
-            for idx, img_name in enumerate(needs_autogluon_names):
-                img_path = image_paths[img_names.index(img_name)]
-                image = self.image_io.load_image(img_path)
-                # 优先用 all_datasets 模型的 mask，回退到 selected_mask
-                mask = all_datasets_masks.get(img_name)
-                if mask is None:
-                    mask = sel_map[img_name]["mask"]
+            # 待推理：缓存中缺失的图像（首次运行时为全集）
+            pending_names = [n for n in autogluon_target_names if n not in autogluon_results]
+            if pending_names:
+                # 从 all_datasets.npz 加载分割模型输出（而非 agent 选出的 mask）
+                all_datasets_npz = seg_cache_dir / "all_datasets.npz"
+                if not all_datasets_npz.exists():
+                    print(f"  ⚠️ {all_datasets_npz.name} 不存在，回退到 selected_mask")
+                    all_datasets_masks: dict[str, np.ndarray] = {}
+                else:
+                    seg_data = np.load(str(all_datasets_npz), allow_pickle=True)
+                    all_datasets_masks = {
+                        str(n): np.asarray(m)
+                        for n, m in zip(seg_data["image_names"], seg_data["masks"])
+                    }
+                    print(f"  已加载 all_datasets 分割输出: {len(all_datasets_masks)} 张")
 
-                try:
-                    result = judge.judge(image, mask)
-                    if result.get("valid"):
-                        mp = float(result["malignant_prob"])
-                        autogluon_results[img_name] = {
-                            "model_name": "radiomics_judge",
-                            "predictions": {"良性": 1.0 - mp, "恶性": mp},
-                            "top_class": "恶性" if mp > 0.5 else "良性",
-                            "top_confidence": float(result["confidence"]),
-                            "requires_mask": True,
-                            "metadata": {"source": "radiomics_judge"},
-                        }
-                    else:
+                # 复用 seg_agent.radiomics_judge（与分割阶段同一 AutoGluon 模型）
+                judge = self.seg_agent.radiomics_judge
+                print(
+                    f"  待推理 {len(pending_names)}/{len(autogluon_target_names)} 张"
+                    f"（其中 PathB 无共识 {len(needs_autogluon_names)} 张）"
+                )
+                for idx, img_name in enumerate(pending_names):
+                    img_path = image_paths[img_names.index(img_name)]
+                    image = self.image_io.load_image(img_path)
+                    # 优先用 all_datasets 模型的 mask，回退到 selected_mask
+                    mask = all_datasets_masks.get(img_name)
+                    if mask is None:
+                        mask = sel_map[img_name]["mask"]
+
+                    try:
+                        result = judge.judge(image, mask)
+                        if result.get("valid"):
+                            mp = float(result["malignant_prob"])
+                            autogluon_results[img_name] = {
+                                "model_name": "radiomics_judge",
+                                "predictions": {"良性": 1.0 - mp, "恶性": mp},
+                                "top_class": "恶性" if mp > 0.5 else "良性",
+                                "top_confidence": float(result["confidence"]),
+                                "requires_mask": True,
+                                "metadata": {"source": "radiomics_judge"},
+                            }
+                        else:
+                            autogluon_results[img_name] = {
+                                "model_name": "radiomics_judge",
+                                "predictions": {},
+                                "top_class": "unknown",
+                                "top_confidence": 0.0,
+                                "requires_mask": True,
+                                "metadata": {"error": "invalid mask"},
+                            }
+                    except Exception as e:
+                        print(f"  ✗ radiomics_judge 推理 {img_name} 失败: {e}")
                         autogluon_results[img_name] = {
                             "model_name": "radiomics_judge",
                             "predictions": {},
                             "top_class": "unknown",
                             "top_confidence": 0.0,
                             "requires_mask": True,
-                            "metadata": {"error": "invalid mask"},
+                            "metadata": {"error": str(e)},
                         }
-                except Exception as e:
-                    print(f"  ✗ radiomics_judge 推理 {img_name} 失败: {e}")
-                    autogluon_results[img_name] = {
-                        "model_name": "radiomics_judge",
-                        "predictions": {},
-                        "top_class": "unknown",
-                        "top_confidence": 0.0,
-                        "requires_mask": True,
-                        "metadata": {"error": str(e)},
-                    }
 
-            print(f"  ✓ radiomics_judge 推理完成")
+                print(f"  ✓ radiomics_judge 推理完成: 全集 {len(autogluon_results)} 张")
+            else:
+                print(f"  ⏭ 全部 {len(autogluon_target_names)} 张已有缓存，跳过推理")
 
             with open(autogluon_cache_path, "w", encoding="utf-8") as f:
                 json.dump(autogluon_results, f, ensure_ascii=False, indent=2)

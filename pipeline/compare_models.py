@@ -355,10 +355,11 @@ def compare_models(
 
     # pipeline 最终裁决
     results_path = output_dir / "results.json"
+    pipeline_results: list[dict] = []
     if results_path.exists():
         with open(results_path, "r", encoding="utf-8") as f:
-            results = json.load(f)
-        pipeline_pred = extract_pipeline_cls_from_results(results)
+            pipeline_results = json.load(f)
+        pipeline_pred = extract_pipeline_cls_from_results(pipeline_results)
         if pipeline_pred:
             all_cls_preds["Pipeline (final)"] = pipeline_pred
             metrics = eval_cls_predictions(pipeline_pred, labels)
@@ -368,32 +369,41 @@ def compare_models(
 
     print_cls_table(cls_rows)
 
-    # ============== 分类对比（autogluon 子集：分类模型无共识的难样本） ==============
-    # autogluon 只在无共识的子集上运行，全集指标不可比
-    # 在同一子集上重算各模型，才能判断 autogluon 仲裁是否有价值
-    autogluon_stems: Optional[set[str]] = None
-    if autogluon_model_name and autogluon_model_name in all_cls_preds:
-        autogluon_stems = {Path(k).stem for k in all_cls_preds[autogluon_model_name].keys()}
-        if autogluon_stems:
-            print(f"\n{'='*100}")
-            print(f"分类对比 - autogluon 子集（无共识难样本 N={len(autogluon_stems)}）")
-            print(f"{'='*100}")
-            subset_rows: list[dict] = []
-            for model_name, img_to_pred in all_cls_preds.items():
-                metrics = eval_cls_predictions(img_to_pred, labels, subset_stems=autogluon_stems)
-                is_pipe = model_name == "Pipeline (final)"
-                subset_rows.append({"name": model_name, "metrics": metrics, "is_pipeline": is_pipe})
-            print_cls_table(subset_rows)
+    # ============== 分类对比（PathB 子集：分类模型无共识的难样本） ==============
+    # AutoGluon 现在在全集上推理（便于评估其分类性能），
+    # 但 PathB（无共识）子集才是其真正发挥作用的场景。
+    # 在同一子集上重算各模型，才能判断 AutoGluon 仲裁是否有价值。
+    path_b_stems: Optional[set[str]] = None
+    if pipeline_results:
+        path_b_stems = {
+            Path(r.get("image_name", "")).stem
+            for r in pipeline_results
+            if r.get("path") == "B" and r.get("image_name")
+        }
+    # 兼容回退：若没有 results.json，使用 autogluon.json 的 keys
+    if not path_b_stems and autogluon_model_name and autogluon_model_name in all_cls_preds:
+        path_b_stems = {Path(k).stem for k in all_cls_preds[autogluon_model_name].keys()}
+
+    if path_b_stems:
+        print(f"\n{'='*100}")
+        print(f"分类对比 - PathB 子集（无共识难样本 N={len(path_b_stems)}）")
+        print(f"{'='*100}")
+        subset_rows: list[dict] = []
+        for model_name, img_to_pred in all_cls_preds.items():
+            metrics = eval_cls_predictions(img_to_pred, labels, subset_stems=path_b_stems)
+            is_pipe = model_name == "Pipeline (final)"
+            subset_rows.append({"name": model_name, "metrics": metrics, "is_pipeline": is_pipe})
+        print_cls_table(subset_rows)
 
     # ============== 保存 ==============
     comparison = {
         "segmentation": [{"name": r["name"], "is_pipeline": r.get("is_pipeline", False), **r["metrics"]} for r in seg_rows],
         "classification": [{"name": r["name"], "is_pipeline": r.get("is_pipeline", False), **r["metrics"]} for r in cls_rows],
     }
-    # autogluon 子集对比
-    if autogluon_stems:
-        comparison["classification_autogluon_subset"] = {
-            "subset_size": len(autogluon_stems),
+    # PathB 子集对比
+    if path_b_stems:
+        comparison["classification_path_b_subset"] = {
+            "subset_size": len(path_b_stems),
             "models": [{"name": r["name"], "is_pipeline": r.get("is_pipeline", False), **r["metrics"]} for r in subset_rows],
         }
     out_path = output_dir / "comparison.json"
