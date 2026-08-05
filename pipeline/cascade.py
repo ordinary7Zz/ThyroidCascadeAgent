@@ -383,7 +383,12 @@ class CascadePipeline:
     def _resolve_classification_path_b_static(
         indie_preds, autogluon_pred, voting_weights=None
     ) -> "ClsAgentDecision":
-        """Path B 静态分类裁决：加权软投票为主，AutoGluon 仲裁为辅。
+        """Path B 静态分类裁决：加权软投票为主，AutoGluon 仅作置信度增强。
+
+        策略（基于实验数据调整）：
+          - AutoGluon 与软投票一致 → 采纳软投票，置信度取 max（增强）
+          - AutoGluon 与软投票不一致 → 永远信软投票（AutoGluon 在难样本上
+            AUROC≈0.53，接近随机，不应覆盖图像级分类模型的判断）
 
         标签统一归一化（良性=0/恶性=1），避免 "0"/"1" 与 "良性"/"恶性" 误比较。
         voting_weights: {model_name: weight}，None 或缺失时等权(1.0)。
@@ -398,6 +403,7 @@ class CascadePipeline:
             al_conf = autogluon_pred.top_confidence
 
             if al_class == sv_binary:
+                # AutoGluon 与软投票一致：采纳软投票，增强置信度
                 return ClsAgentDecision(
                     selected_model="autogluon_softvote_agree",
                     selected_class=sv_class,
@@ -406,17 +412,15 @@ class CascadePipeline:
                     all_predictions=[p.to_dict() for p in indie_preds],
                     method="path_b_static_majority",
                 )
-            # AutoGluon 与软投票不一致，且软投票置信度低时才信 AutoGluon
-            if al_conf > 0.8 and sv_conf < 0.8:
-                al_class_str = "恶性" if al_class == 1 else "良性"
-                return ClsAgentDecision(
-                    selected_model="autogluon_strong_signal",
-                    selected_class=al_class_str,
-                    confidence=float(al_conf),
-                    reasoning=f"AutoGluon高置信({al_conf:.2f})且软投票置信度低({sv_conf:.2f})，信ROI级特征",
-                    all_predictions=[p.to_dict() for p in indie_preds],
-                    method="path_b_static_autogluon",
-                )
+            # AutoGluon 与软投票不一致：信软投票（AutoGluon 难样本上判别力不足）
+            return ClsAgentDecision(
+                selected_model="weighted_soft_vote",
+                selected_class=sv_class,
+                confidence=float(sv_conf),
+                reasoning=f"AutoGluon({al_conf:.2f})与软投票({sv_class},{sv_conf:.2f})不一致，信图像级软投票",
+                all_predictions=[p.to_dict() for p in indie_preds],
+                method="path_b_static_softvote",
+            )
 
         return ClsAgentDecision(
             selected_model="weighted_soft_vote",
