@@ -82,6 +82,7 @@ def main():
                 model_dir=judge_cfg["model_dir"],
                 top_k_features=judge_cfg.get("top_k_features", 5),
                 shap_reference_path=judge_cfg.get("shap_reference_path"),
+                radiomics_params=judge_cfg.get("radiomics_params"),
             )
             print("✓ Radiomics 裁判已加载")
         except Exception as e:

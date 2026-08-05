@@ -106,6 +106,7 @@ radiomics_judge:
   enabled: true
   model_dir: "/mnt/wangbd8/workspace/ThyroidAgent/dino_unet_multitask/pyradiomics_train/binary_class/BM/outputs/models/BM_dataset3_gt/BM"
   top_k_features: 5
+  radiomics_params: null  # pyradiomics YAML 路径；null 时用 radiomics_judge/radiomics_2d.yaml（与训练侧一致）
 
 # ===== Pipeline 段 =====
 pipeline:

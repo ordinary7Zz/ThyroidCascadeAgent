@@ -31,16 +31,20 @@ class RadiomicsJudge:
         model_dir: str,
         top_k_features: int = 5,
         shap_reference_path: Optional[str] = None,
+        radiomics_params: Optional[str] = None,
     ):
         """
         Args:
             model_dir: GT-trained AutoGluon TabularPredictor 模型目录。
             top_k_features: 返回的 top 特征数。
             shap_reference_path: SHAP 参考文件路径（特征重要性 + 训练集统计量）。
+            radiomics_params: pyradiomics YAML 参数文件路径。
+                              None 时使用 RadiomicsFeatureExtractor 默认路径
+                              （与 pyradiomics_train/radiomics_2d.yaml 一致的配置）。
         """
         self.model_dir = model_dir
         self._predictor = None
-        self._extractor = RadiomicsFeatureExtractor()
+        self._extractor = RadiomicsFeatureExtractor(params_path=radiomics_params)
         self._summarizer = FeatureSummarizer(top_k_features, shap_reference_path)
         self._feature_names: Optional[list[str]] = None
 
@@ -97,17 +101,29 @@ class RadiomicsJudge:
                     df[col] = 0.0
             df = df.reindex(columns=self._feature_names, fill_value=0.0)
 
-        pred_proba = self._predictor.predict_proba(df)
+        # as_multiclass=True 确保返回所有类别的概率列（与训练侧 infer.py 一致）
+        pred_proba = self._predictor.predict_proba(
+            df, as_pandas=True, as_multiclass=True
+        )
 
         # 获取恶性概率
-        classes = list(pred_proba.columns)
-        if len(classes) == 2:
-            if 1 in classes or "1" in [str(c) for c in classes]:
-                malignant_prob = float(pred_proba.iloc[0].get(1, pred_proba.iloc[0].iloc[1]))
-            else:
-                malignant_prob = float(pred_proba.iloc[0].iloc[1])
+        class_labels = list(self._predictor.class_labels)
+        proba_row = pred_proba.iloc[0]
+
+        if len(class_labels) == 2:
+            # 二分类：找恶性标签（1 / "1" / "malignant" / "M"）
+            malignant_label = None
+            for cl in class_labels:
+                s = str(cl).lower()
+                if s in ("1", "malignant", "m"):
+                    malignant_label = cl
+                    break
+            if malignant_label is None:
+                malignant_label = class_labels[-1]
+            malignant_prob = float(proba_row[malignant_label])
         else:
-            malignant_prob = float(pred_proba.iloc[0].iloc[-1])
+            # 多分类：取最后一个类别（约定为最高风险等级）
+            malignant_prob = float(proba_row[class_labels[-1]])
 
         # 特征摘要
         summary = self._summarizer.summarize(features)
