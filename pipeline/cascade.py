@@ -806,7 +806,7 @@ class CascadePipeline:
 
         # ===== Phase 4: AutoGluon 分类（仅对无共识的图像）=====
         print(f"\n{'='*60}")
-        print("Phase 4: AutoGluon 分类（基于选定 mask）")
+        print("Phase 4: AutoGluon 分类（基于 all_datasets 分割模型输出）")
         print(f"{'='*60}")
 
         autogluon_cache_path = inter_dir / "autogluon.json"
@@ -828,13 +828,29 @@ class CascadePipeline:
             with open(autogluon_cache_path, "r", encoding="utf-8") as f:
                 autogluon_results = json.load(f)
         else:
+            # 从 all_datasets.npz 加载分割模型输出（而非 agent 选出的 mask）
+            all_datasets_npz = seg_cache_dir / "all_datasets.npz"
+            if not all_datasets_npz.exists():
+                print(f"  ⚠️ {all_datasets_npz.name} 不存在，回退到 selected_mask")
+                all_datasets_masks: dict[str, np.ndarray] = {}
+            else:
+                seg_data = np.load(str(all_datasets_npz), allow_pickle=True)
+                all_datasets_masks = {
+                    str(n): np.asarray(m)
+                    for n, m in zip(seg_data["image_names"], seg_data["masks"])
+                }
+                print(f"  已加载 all_datasets 分割输出: {len(all_datasets_masks)} 张")
+
             # 复用 seg_agent.radiomics_judge（与分割阶段同一 AutoGluon 模型）
             judge = self.seg_agent.radiomics_judge
             autogluon_results = {}
             for idx, img_name in enumerate(needs_autogluon_names):
                 img_path = image_paths[img_names.index(img_name)]
                 image = self.image_io.load_image(img_path)
-                mask = sel_map[img_name]["mask"]
+                # 优先用 all_datasets 模型的 mask，回退到 selected_mask
+                mask = all_datasets_masks.get(img_name)
+                if mask is None:
+                    mask = sel_map[img_name]["mask"]
 
                 try:
                     result = judge.judge(image, mask)
