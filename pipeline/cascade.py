@@ -614,12 +614,22 @@ class CascadePipeline:
         enable_cls_agent = cls_agent_cfg.get("enable_agent", True)
         consensus_threshold = cls_agent_cfg.get("consensus_min_confidence", 0.6)
 
+        # 阶段开关：可单独关闭分割或分类
+        run_segmentation = self.config.get("pipeline", {}).get("run_segmentation", True)
+        run_classification = self.config.get("pipeline", {}).get("run_classification", True)
+        if not run_segmentation and not run_classification:
+            print("⚠️ 分割与分类均已关闭，无可执行阶段，返回空结果")
+            return []
+        print(f"阶段开关: run_segmentation={run_segmentation}, run_classification={run_classification}")
+
         # ===== Phase 1: 分割模型（逐个加载 → 推理全部图像 → 保存 npz → 卸载）=====
         print(f"\n{'='*60}")
         print("Phase 1: 依次加载分割模型并推理全部图像")
         print(f"{'='*60}")
 
-        for i, model_cfg in enumerate(seg_model_configs):
+        if not run_segmentation:
+            print("  ⏭ 分割阶段已关闭，跳过 Phase 1")
+        for i, model_cfg in enumerate(seg_model_configs if run_segmentation else []):
             model_cfg = dict(model_cfg)
             model_name = model_cfg.get("name", f"seg_{i}")
             model_cfg["device"] = self.device
@@ -657,7 +667,9 @@ class CascadePipeline:
         print("Phase 2: 依次加载独立分类模型并推理全部图像")
         print(f"{'='*60}")
 
-        for i, model_cfg in enumerate(cls_model_configs):
+        if not run_classification:
+            print("  ⏭ 分类阶段已关闭，跳过 Phase 2")
+        for i, model_cfg in enumerate(cls_model_configs if run_classification else []):
             model_cfg = dict(model_cfg)
             model_name = model_cfg.get("name", f"cls_{i}")
 
@@ -699,7 +711,10 @@ class CascadePipeline:
 
         selected_masks_path = inter_dir / "selected_masks.npz"
 
-        if selected_masks_path.exists():
+        if not run_segmentation:
+            print("  ⏭ 分割阶段已关闭，跳过 Phase 3（mask 选择）")
+            sel_img_names, sel_masks, seg_decisions_serialized = [], [], []
+        elif selected_masks_path.exists():
             print("  ⏭ selected_masks.npz 已存在，跳过 Phase 3")
             sel_img_names, sel_masks, seg_decisions_serialized = \
                 self._load_selected_masks_npz(selected_masks_path)
@@ -821,8 +836,8 @@ class CascadePipeline:
         # 推理范围：所有有分割结果的图像（用于评估 AutoGluon 全集性能）
         autogluon_target_names = [name for name in img_names if name in sel_map]
 
-        if not autogluon_target_names:
-            print("  无可用图像，跳过 AutoGluon")
+        if not autogluon_target_names or not run_classification:
+            print("  无可用图像或分类阶段已关闭，跳过 AutoGluon")
             autogluon_results: dict[str, Any] = {}
         elif getattr(self.seg_agent, "radiomics_judge", None) is None:
             print("  ⚠️ radiomics_judge 未启用，跳过 AutoGluon")
@@ -909,100 +924,140 @@ class CascadePipeline:
         print("Phase 5: 分类裁决 + 保存最终结果")
         print(f"{'='*60}")
 
-        # 从缓存加载独立分类结果（用于裁决）
-        all_indie_cls: dict[str, list] = {name: [] for name in img_names}
-        for model_cfg in cls_model_configs:
-            model_name = model_cfg.get("name", "")
-            cache_path = cls_cache_dir / f"{model_name}.json"
-            if cache_path.exists():
-                cls_outputs = self._load_cls_json(cache_path)
-                for j, img_name in enumerate(img_names):
-                    if j < len(cls_outputs):
-                        all_indie_cls[img_name].append(cls_outputs[j])
-
         results: list[dict[str, Any]] = []
 
-        for idx, img_name in enumerate(img_names):
-            if img_name not in sel_map:
-                results.append({"image_name": img_name, "error": "无分割结果"})
-                continue
+        if not run_classification:
+            # 分类关闭：仅保存分割结果（selected_masks.npz 已在 Phase 3 落盘）
+            print("  ⏭ 分类阶段已关闭，仅保存分割结果")
+            for idx, img_name in enumerate(img_names):
+                if img_name not in sel_map:
+                    results.append({"image_name": img_name, "error": "无分割结果"})
+                    continue
+                sel_info = sel_map[img_name]
+                sel_d = sel_info["decision"]
+                selected_mask = sel_info["mask"]
+                result = {
+                    "path": sel_d.get("path"),
+                    "seg_decision": sel_d,
+                    "selected_mask_shape": list(selected_mask.shape),
+                    "selected_mask_area": int(np.sum(selected_mask)),
+                    "image_name": img_name,
+                }
+                img_stem = Path(img_name).stem
+                if img_stem in labels:
+                    result["true_label"] = labels[img_stem]
+                results.append(result)
+                print(f"  [{idx+1}/{len(img_names)}] {img_name}: seg={sel_d.get('selected_model')}")
+                # 增量保存
+                if (idx + 1) % 10 == 0 or idx == len(img_names) - 1:
+                    self._save_results_json(results, out_path / "results.json")
+        else:
+            # 从缓存加载独立分类结果（用于裁决）
+            all_indie_cls: dict[str, list] = {name: [] for name in img_names}
+            for model_cfg in cls_model_configs:
+                model_name = model_cfg.get("name", "")
+                cache_path = cls_cache_dir / f"{model_name}.json"
+                if cache_path.exists():
+                    cls_outputs = self._load_cls_json(cache_path)
+                    for j, img_name in enumerate(img_names):
+                        if j < len(cls_outputs):
+                            all_indie_cls[img_name].append(cls_outputs[j])
 
-            sel_info = sel_map[img_name]
-            consensus = sel_info["consensus"]
-            anchor_class = sel_info["anchor_class"]
-            seg_decision_dict = sel_info["decision"]
-            selected_mask = sel_info["mask"]
-            indie_preds = all_indie_cls[img_name]
+            for idx, img_name in enumerate(img_names):
+                indie_preds = all_indie_cls[img_name]
+                has_seg = img_name in sel_map
 
-            # 分类裁决
-            if consensus:
-                cls_decision = self._make_anchor_classification_decision(anchor_class, indie_preds)
-            else:
-                # 构造 AutoGluon ClsModelOutput
-                from classification.base_model import ClsModelOutput
-                ag_dict = autogluon_results.get(img_name)
-                autogluon_pred = None
-                if ag_dict:
-                    autogluon_pred = ClsModelOutput(
-                        model_name=ag_dict["model_name"],
-                        predictions=ag_dict["predictions"],
-                        top_class=ag_dict["top_class"],
-                        top_confidence=ag_dict["top_confidence"],
-                        requires_mask=ag_dict["requires_mask"],
-                        metadata=ag_dict.get("metadata", {}),
-                    )
-
-                # 构造 SegAgentDecision（简化版，仅用于 resolve_path_b）
-                from segmentation.agent import SegAgentDecision
-                seg_decision = SegAgentDecision(
-                    selected_model=seg_decision_dict["selected_model"],
-                    selected_mask=selected_mask,
-                    confidence=seg_decision_dict["confidence"],
-                    reasoning=seg_decision_dict["reasoning"],
-                    all_predictions=seg_decision_dict["all_predictions"],
-                    classification_anchor=anchor_class,
-                    path=seg_decision_dict["path"],
-                )
-
-                if enable_cls_agent:
-                    cls_decision = self.cls_agent.resolve_path_b(
-                        indie_preds, autogluon_pred, seg_decision,
-                        voting_weights=self._get_voting_weights()
-                    )
+                if has_seg:
+                    sel_info = sel_map[img_name]
+                    consensus = sel_info["consensus"]
+                    anchor_class = sel_info["anchor_class"]
+                    seg_decision_dict = sel_info["decision"]
+                    selected_mask = sel_info["mask"]
                 else:
-                    cls_decision = self._resolve_classification_path_b_static(
-                        indie_preds, autogluon_pred, self._get_voting_weights()
+                    # 无分割结果（仅分类模式）：从独立分类预测直接算共识
+                    consensus, anchor_class = self._check_classification_consensus(
+                        indie_preds, min_confidence=consensus_threshold
                     )
+                    seg_decision_dict = None
+                    selected_mask = None
 
-            # 统一标签为 0/1（良性=0, 恶性=1）
-            raw_label = cls_decision.selected_class
-            final_label = self._label_to_binary(raw_label)
-            if final_label is None:
-                final_label = raw_label  # 无法转换时保留原值
+                if not indie_preds:
+                    results.append({
+                        "image_name": img_name,
+                        "error": "无分割与分类结果" if not has_seg else "无分类预测",
+                    })
+                    continue
 
-            result = {
-                "path": "A" if consensus else "B",
-                "classification_consensus": consensus,
-                "seg_decision": seg_decision_dict,
-                "selected_mask_shape": list(selected_mask.shape),
-                "selected_mask_area": int(np.sum(selected_mask)),
-                "cls_decision": cls_decision.to_dict(),
-                "final_label": final_label,
-                "final_confidence": cls_decision.confidence,
-                "image_name": img_name,
-            }
+                # 分类裁决
+                if consensus:
+                    cls_decision = self._make_anchor_classification_decision(anchor_class, indie_preds)
+                else:
+                    # 构造 AutoGluon ClsModelOutput（仅在分割开启且有结果时存在）
+                    from classification.base_model import ClsModelOutput
+                    ag_dict = autogluon_results.get(img_name)
+                    autogluon_pred = None
+                    if ag_dict:
+                        autogluon_pred = ClsModelOutput(
+                            model_name=ag_dict["model_name"],
+                            predictions=ag_dict["predictions"],
+                            top_class=ag_dict["top_class"],
+                            top_confidence=ag_dict["top_confidence"],
+                            requires_mask=ag_dict["requires_mask"],
+                            metadata=ag_dict.get("metadata", {}),
+                        )
 
-            # 标签匹配：统一用不带后缀的文件名（stem）
-            img_stem = Path(img_name).stem
-            if img_stem in labels:
-                result["true_label"] = labels[img_stem]
+                    if has_seg and enable_cls_agent:
+                        # 构造 SegAgentDecision（简化版，仅用于 resolve_path_b）
+                        from segmentation.agent import SegAgentDecision
+                        seg_decision = SegAgentDecision(
+                            selected_model=seg_decision_dict["selected_model"],
+                            selected_mask=selected_mask,
+                            confidence=seg_decision_dict["confidence"],
+                            reasoning=seg_decision_dict["reasoning"],
+                            all_predictions=seg_decision_dict["all_predictions"],
+                            classification_anchor=anchor_class,
+                            path=seg_decision_dict["path"],
+                        )
+                        cls_decision = self.cls_agent.resolve_path_b(
+                            indie_preds, autogluon_pred, seg_decision,
+                            voting_weights=self._get_voting_weights()
+                        )
+                    else:
+                        # 无分割或分类 Agent 关闭：静态加权软投票裁决
+                        cls_decision = self._resolve_classification_path_b_static(
+                            indie_preds, autogluon_pred, self._get_voting_weights()
+                        )
 
-            results.append(result)
-            print(f"  [{idx+1}/{len(img_names)}] {img_name}: {result['final_label']} (conf={result['final_confidence']:.3f})")
+                # 统一标签为 0/1（良性=0, 恶性=1）
+                raw_label = cls_decision.selected_class
+                final_label = self._label_to_binary(raw_label)
+                if final_label is None:
+                    final_label = raw_label  # 无法转换时保留原值
 
-            # 增量保存
-            if (idx + 1) % 10 == 0 or idx == len(img_names) - 1:
-                self._save_results_json(results, out_path / "results.json")
+                result = {
+                    "path": "A" if consensus else "B",
+                    "classification_consensus": consensus,
+                    "cls_decision": cls_decision.to_dict(),
+                    "final_label": final_label,
+                    "final_confidence": cls_decision.confidence,
+                    "image_name": img_name,
+                }
+                if has_seg:
+                    result["seg_decision"] = seg_decision_dict
+                    result["selected_mask_shape"] = list(selected_mask.shape)
+                    result["selected_mask_area"] = int(np.sum(selected_mask))
+
+                # 标签匹配：统一用不带后缀的文件名（stem）
+                img_stem = Path(img_name).stem
+                if img_stem in labels:
+                    result["true_label"] = labels[img_stem]
+
+                results.append(result)
+                print(f"  [{idx+1}/{len(img_names)}] {img_name}: {result['final_label']} (conf={result['final_confidence']:.3f})")
+
+                # 增量保存
+                if (idx + 1) % 10 == 0 or idx == len(img_names) - 1:
+                    self._save_results_json(results, out_path / "results.json")
 
         self._save_results_json(results, out_path / "results.json")
         print(f"\n级联推理完成: {len(results)} 张图像")

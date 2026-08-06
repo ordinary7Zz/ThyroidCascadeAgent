@@ -75,9 +75,16 @@ def main():
     pipe_cfg = config.get("pipeline", {})
     data_cfg = pipe_cfg.get("data", {})
 
-    # 检查是否需要 LLM
-    enable_seg_agent = seg_cfg.get("agent", {}).get("enable_agent", True)
-    enable_cls_agent = cls_cfg.get("agent", {}).get("enable_agent", True)
+    # 阶段开关
+    run_segmentation = pipe_cfg.get("run_segmentation", True)
+    run_classification = pipe_cfg.get("run_classification", True)
+    if not run_segmentation and not run_classification:
+        print("⚠️ 分割与分类均已关闭，无可执行阶段，退出")
+        return
+
+    # 检查是否需要 LLM（阶段关闭时对应 Agent 也不需要）
+    enable_seg_agent = run_segmentation and seg_cfg.get("agent", {}).get("enable_agent", True)
+    enable_cls_agent = run_classification and cls_cfg.get("agent", {}).get("enable_agent", True)
     need_llm = enable_seg_agent or enable_cls_agent
 
     # LLM 客户端
@@ -93,12 +100,13 @@ def main():
             max_tokens=llm_cfg["max_tokens"],
         )
     else:
-        print("✓ 分割和分类 Agent 均已禁用，跳过 LLM 客户端初始化")
+        print("✓ 分割和分类 Agent 均已禁用（或对应阶段已关闭），跳过 LLM 客户端初始化")
         llm_client = None
 
-    # Radiomics 裁判
+    # Radiomics 裁判（仅在分割阶段开启且会被用到时加载：seg Agent 或分类阶段）
     judge = None
-    if judge_cfg.get("enabled", False):
+    need_judge = run_segmentation and (enable_seg_agent or run_classification)
+    if judge_cfg.get("enabled", False) and need_judge:
         try:
             judge = RadiomicsJudge(
                 model_dir=judge_cfg["model_dir"],
@@ -159,10 +167,10 @@ def main():
         gt_mask_dir=data_cfg.get("gt_mask_dir"),
     )
 
-    # 对比各独立模型与 pipeline 的性能（需要 gt_mask_dir 和 label_file）
+    # 对比各独立模型与 pipeline 的性能（需要 gt_mask_dir 和 label_file，且分割与分类阶段均开启）
     label_file = data_cfg.get("label_file")
     gt_mask_dir = data_cfg.get("gt_mask_dir")
-    if gt_mask_dir and label_file:
+    if gt_mask_dir and label_file and run_segmentation and run_classification:
         from pipeline.compare_models import compare_models
         print(f"\n{'='*60}")
         print("模型对比评估")
@@ -174,7 +182,7 @@ def main():
             label_key=data_cfg.get("label_key", "malignancy"),
         )
     else:
-        print("\n⚠️ 缺少 gt_mask_dir 或 label_file，跳过模型对比")
+        print("\n⚠️ 缺少 gt_mask_dir/label_file 或分割/分类阶段未全开，跳过模型对比")
 
 
 if __name__ == "__main__":
