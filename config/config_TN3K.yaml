@@ -110,6 +110,12 @@ radiomics_judge:
 
 # ===== Pipeline 段 =====
 pipeline:
+  # 阶段开关：可单独关闭分割或分类
+  #   run_segmentation=true  + run_classification=false → 仅分割
+  #   run_segmentation=false + run_classification=true  → 仅分类（独立分类 + 加权软投票，无 mask/AutoGluon）
+  #   两者均 true → 完整级联（默认）
+  run_segmentation: true
+  run_classification: true
   data:
     image_input: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN3K/test/images"
     mask_input: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN3K/test/masks"               # 仅 run_cls.py 用（外部 mask 目录）
