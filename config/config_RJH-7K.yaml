@@ -119,7 +119,7 @@ pipeline:
   data:
     image_input: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/augtrain_PNG/image"
     mask_input: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/augtrain_PNG/mask"               # 仅 run_cls.py 用（外部 mask 目录）
-    gt_mask_dir: ""
+    gt_mask_dir: "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/augtrain_PNG/mask"
     label_file: ""
     label_key: "malignancy"  # list 格式标签文件中良恶性字段名
     device_info: ["GE Logiq E9", "GE S7"]
