@@ -550,6 +550,7 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
         gt_mask: Optional[np.ndarray] = None,
         input_device_info: Optional[list[str]] = None,
         input_data_info: Optional[dict] = None,
+        judge_results: Optional[list[dict]] = None,
     ) -> SegAgentDecision:
         """
         选择最佳分割 mask。
@@ -561,13 +562,17 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             gt_mask: 可选 GT mask（仅用于评估，不影响选择）。
             input_device_info: 输入设备信息。
             input_data_info: 输入数据元信息。
+            judge_results: 外部预先跑好的 radiomics 裁判结果（与 predictions 等长）。
+                传入则跳过内部 _run_judge，避免与 Phase 4 重复计算。
         """
         path = "A" if classification_anchor else "B"
         if not predictions:
             raise ValueError("没有预测结果")
 
         # radiomics 裁判（阶段 1 前置）
-        judge_results = self._run_judge(image, predictions)
+        # 若外部已传入 judge_results（Phase 3 统一跑过），则不重复计算
+        if judge_results is None:
+            judge_results = self._run_judge(image, predictions)
 
         # 阶段 1: 基于 radiomics 裁判预筛选（Python 规则，不用 LLM）
         predictions, judge_results, removed_indices = self._pre_filter_by_judge(

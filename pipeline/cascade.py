@@ -315,12 +315,14 @@ class CascadePipeline:
     def _select_mask_static(
         self, image, seg_predictions, anchor_class,
         gt_mask=None, input_device_info=None, input_data_info=None,
-        skip_radiomics=False,
+        skip_radiomics=False, judge_results=None,
     ) -> "SegAgentDecision":
         """静态规则选择最佳分割 mask。
 
         Args:
             skip_radiomics: 跳过 RadiomicsJudge（省内存，仅用 agreement 选 mask）。
+            judge_results: 外部预先跑好的 radiomics 裁判结果（与 seg_predictions 等长）。
+                传入则跳过内部 _run_judge，避免与 Phase 4 重复计算。
         """
         from segmentation.agent import SegAgentDecision
 
@@ -346,7 +348,8 @@ class CascadePipeline:
 
         remaining_names = set(names)
         if anchor_class and not skip_radiomics:
-            judge_results = self.seg_agent._run_judge(image, preds_list)
+            if judge_results is None:
+                judge_results = self.seg_agent._run_judge(image, preds_list)
             if judge_results:
                 anchor_numeric = 1 if anchor_class == "恶性" else 0
                 for p in preds_list:
@@ -751,6 +754,16 @@ class CascadePipeline:
                 if cache_path.exists():
                     cls_cache_by_model[model_name] = self._load_cls_json(cache_path)
 
+            # radiomics judge 对象（Phase 3 统一跑一次，结果同时用于 mask 选择
+            # 和填充 autogluon 缓存，避免 Phase 4 对 all_datasets mask 重复计算）
+            judge_obj = getattr(self.seg_agent, "radiomics_judge", None)
+            autogluon_cache_path = inter_dir / "autogluon.json"
+            autogluon_results: dict[str, Any] = {}
+            if judge_obj is not None and autogluon_cache_path.exists():
+                with open(autogluon_cache_path, "r", encoding="utf-8") as f:
+                    autogluon_results = json.load(f)
+                print(f"  已加载 autogluon 缓存: {len(autogluon_results)} 张")
+
             for idx, img_name in enumerate(img_names):
                 img_path = image_paths[idx]
                 image = self.image_io.load_image(img_path)
@@ -787,6 +800,17 @@ class CascadePipeline:
                     print(f"  ✗ {img_name} 无分割结果，跳过")
                     continue
 
+                # 统一跑 radiomics judge（对所有候选 mask，一次完成）
+                # 结果同时用于：1) mask 选择（anchor 过滤 / LLM prompt）2) 填充 autogluon 缓存
+                judge_results = None
+                if judge_obj is not None:
+                    try:
+                        judge_results = judge_obj.judge_batch(
+                            image, [p.mask for p in seg_preds]
+                        )
+                    except Exception as e:
+                        print(f"  ⚠️ {img_name} radiomics judge 失败: {e}")
+
                 if enable_seg_agent:
                     seg_decision = self.seg_agent.select_best_mask(
                         image, seg_preds,
@@ -794,6 +818,7 @@ class CascadePipeline:
                         gt_mask=gt_mask,
                         input_device_info=input_device_info,
                         input_data_info=input_data_info,
+                        judge_results=judge_results,
                     )
                 else:
                     seg_decision = self._select_mask_static(
@@ -801,8 +826,39 @@ class CascadePipeline:
                         gt_mask=gt_mask,
                         input_device_info=input_device_info,
                         input_data_info=input_data_info,
-                        skip_radiomics=True,
+                        skip_radiomics=False,
+                        judge_results=judge_results,
                     )
+
+                # 从 judge_results 提取 all_datasets 的结果，填充 autogluon 缓存
+                # （Phase 4 检测到缓存已存在则跳过，避免对 all_datasets mask 重复计算）
+                if judge_results:
+                    all_ds_idx = next(
+                        (i for i, p in enumerate(seg_preds)
+                         if p.model_name == "all_datasets"),
+                        None,
+                    )
+                    if all_ds_idx is not None and all_ds_idx < len(judge_results):
+                        jr = judge_results[all_ds_idx]
+                        if jr.get("valid"):
+                            mp = float(jr["malignant_prob"])
+                            autogluon_results[img_name] = {
+                                "model_name": "radiomics_judge",
+                                "predictions": {"良性": 1.0 - mp, "恶性": mp},
+                                "top_class": "恶性" if mp > 0.5 else "良性",
+                                "top_confidence": float(jr["confidence"]),
+                                "requires_mask": True,
+                                "metadata": {"source": "radiomics_judge"},
+                            }
+                        elif img_name not in autogluon_results:
+                            autogluon_results[img_name] = {
+                                "model_name": "radiomics_judge",
+                                "predictions": {},
+                                "top_class": "unknown",
+                                "top_confidence": 0.0,
+                                "requires_mask": True,
+                                "metadata": {"error": "invalid mask"},
+                            }
 
                 sel_img_names.append(img_name)
                 sel_masks.append(seg_decision.selected_mask)
@@ -819,7 +875,7 @@ class CascadePipeline:
                 print(f"  [{idx+1}/{len(img_names)}] {img_name}: {seg_decision.selected_model} (consensus={consensus})")
 
                 # 释放本图临时对象（预加载缓存不在此释放）
-                del image, seg_preds, indie_preds, gt_mask, seg_decision
+                del image, seg_preds, indie_preds, gt_mask, seg_decision, judge_results
 
             # 释放预加载缓存（sel_masks 已持有被选中 mask 的引用，不会被回收）
             del seg_cache_by_model, cls_cache_by_model
@@ -829,6 +885,13 @@ class CascadePipeline:
                 selected_masks_path, sel_img_names, sel_masks, seg_decisions_serialized
             )
             print(f"  ✓ 已保存 {selected_masks_path.name}")
+
+            # 保存 autogluon 缓存（Phase 3 已填充 all_datasets 的 judge 结果，
+            # Phase 4 检测到缓存存在则跳过重跑）
+            if judge_obj is not None and autogluon_results:
+                with open(autogluon_cache_path, "w", encoding="utf-8") as f:
+                    json.dump(autogluon_results, f, ensure_ascii=False, indent=2)
+                print(f"  ✓ autogluon 缓存已更新: {len(autogluon_results)} 张（Phase 4 将复用）")
 
         # 构建 img_name → (mask, decision, consensus, anchor) 映射
         sel_map: dict[str, dict] = {}
