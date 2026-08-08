@@ -99,31 +99,35 @@ class CascadePipeline:
         )
 
     @staticmethod
-    def _load_seg_npz(path: Path) -> list[dict[str, Any]]:
-        """加载分割 npz，返回每张图的 SegModelOutput dict。
+    def _load_seg_npz(path: Path, load_confidence: bool = True) -> list:
+        """加载分割 npz，返回每张图的 SegModelOutput。
 
-        Returns:
-            list[dict], 每个 dict 有 keys: model_name, mask, confidence_map, metadata
+        Args:
+            load_confidence: False 时跳过 confidence_map（静态选 mask 不需要，
+                可大幅省内存；medsam2 等全分辨率 float32 conf map 体积是 mask 的 4 倍）。
         """
         from segmentation.base_model import SegModelOutput
 
         data = np.load(str(path), allow_pickle=True)
         image_names = data["image_names"]
         masks = data["masks"]
-        confs = data["confidence_maps"]
         metas = pickle.loads(data["metadata"].item())
         model_names = data["model_names"]
+        confs = data["confidence_maps"] if load_confidence else None
 
         results = []
         for i in range(len(image_names)):
             mask = masks[i]
-            conf = confs[i]
-            # 恢复为 SegModelOutput 对象
-            has_conf = conf.shape != (1, 1)
+            conf_val = None
+            if confs is not None:
+                conf = confs[i]
+                # 恢复为 SegModelOutput 对象
+                has_conf = conf.shape != (1, 1)
+                conf_val = conf.astype(np.float32) if has_conf else None
             results.append(SegModelOutput(
                 model_name=str(model_names[i]),
                 mask=mask.astype(np.uint8),
-                confidence_map=conf.astype(np.float32) if has_conf else None,
+                confidence_map=conf_val,
                 metadata=metas[i],
             ))
         return results
@@ -721,10 +725,31 @@ class CascadePipeline:
         else:
             import gc
 
-            # 逐图像：从缓存按需加载 → Agent 决策 → 释放 → 增量保存
             sel_img_names = []
             sel_masks = []
             seg_decisions_serialized = []
+
+            # 预加载每个模型的缓存「仅一次」，避免逐图重复全量解压 npz。
+            # 旧实现每张图都把每个模型的完整 npz（约 4GB）解压一遍：N 图 × M 模型
+            # 次解压，是 Phase 3 的性能/内存瓶颈（ZJH-8K 上卡死 1.5 天零产出）。
+            # 静态模式（enable_seg_agent=False）下不使用 confidence_map，跳过以省内存。
+            need_seg_conf = enable_seg_agent
+            seg_cache_by_model: dict[str, list] = {}
+            for model_cfg in seg_model_configs:
+                model_name = model_cfg.get("name", "")
+                cache_path = seg_cache_dir / f"{model_name}.npz"
+                if cache_path.exists():
+                    print(f"  预加载分割缓存 {model_name} ...", flush=True)
+                    seg_cache_by_model[model_name] = self._load_seg_npz(
+                        cache_path, load_confidence=need_seg_conf
+                    )
+
+            cls_cache_by_model: dict[str, list] = {}
+            for model_cfg in cls_model_configs:
+                model_name = model_cfg.get("name", "")
+                cache_path = cls_cache_dir / f"{model_name}.json"
+                if cache_path.exists():
+                    cls_cache_by_model[model_name] = self._load_cls_json(cache_path)
 
             for idx, img_name in enumerate(img_names):
                 img_path = image_paths[idx]
@@ -736,27 +761,21 @@ class CascadePipeline:
                     if gt_path.exists():
                         gt_mask = self.image_io.binarize_mask(self.image_io.load_mask(gt_path))
 
-                # 按需加载该图像的分割结果（从 npz 缓存）
+                # 按 idx 取该图像的分割结果（已预加载，O(1) 索引）
                 seg_preds = []
                 for model_cfg in seg_model_configs:
                     model_name = model_cfg.get("name", "")
-                    cache_path = seg_cache_dir / f"{model_name}.npz"
-                    if cache_path.exists():
-                        all_outputs = self._load_seg_npz(cache_path)
-                        if idx < len(all_outputs):
-                            seg_preds.append(all_outputs[idx])
-                        del all_outputs
+                    cache = seg_cache_by_model.get(model_name)
+                    if cache is not None and idx < len(cache):
+                        seg_preds.append(cache[idx])
 
-                # 按需加载该图像的分类结果（从 json 缓存）
+                # 按 idx 取该图像的分类结果（已预加载）
                 indie_preds = []
                 for model_cfg in cls_model_configs:
                     model_name = model_cfg.get("name", "")
-                    cache_path = cls_cache_dir / f"{model_name}.json"
-                    if cache_path.exists():
-                        all_outputs = self._load_cls_json(cache_path)
-                        if idx < len(all_outputs):
-                            indie_preds.append(all_outputs[idx])
-                        del all_outputs
+                    cache = cls_cache_by_model.get(model_name)
+                    if cache is not None and idx < len(cache):
+                        indie_preds.append(cache[idx])
 
                 # 分类共识
                 consensus, anchor_class = self._check_classification_consensus(
@@ -799,9 +818,12 @@ class CascadePipeline:
                 })
                 print(f"  [{idx+1}/{len(img_names)}] {img_name}: {seg_decision.selected_model} (consensus={consensus})")
 
-                # 释放本图内存
+                # 释放本图临时对象（预加载缓存不在此释放）
                 del image, seg_preds, indie_preds, gt_mask, seg_decision
-                gc.collect()
+
+            # 释放预加载缓存（sel_masks 已持有被选中 mask 的引用，不会被回收）
+            del seg_cache_by_model, cls_cache_by_model
+            gc.collect()
 
             self._save_selected_masks_npz(
                 selected_masks_path, sel_img_names, sel_masks, seg_decisions_serialized
