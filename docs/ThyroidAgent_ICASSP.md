@@ -77,7 +77,7 @@ z'_b &= z_b + \tau \left( \log p_{\text{pos}} - \log p_{\text{neg}} \right),
 \end{equation}
 where $y$ is the segmentation target, $\operatorname{AvgPool}_{31}(\cdot)$ emphasizes boundary pixels, $z_b$ is the original logit, $p_{\text{pos}}$/$p_{\text{neg}}$ are empirical class priors, and $\tau$ is the adjustment coefficient. The logit adjustment is a constant offset applied to all samples independent of their label, which is the sigmoid-equivalent of softmax logit adjustment for binary classification.
 
-\subsubsection{GT-Trained Radiomics Judge}
+\subsection{GT-Trained Radiomics Judge}
 \label{sec:radiomics_judge}
 A key component of ThyroidAgent is a \emph{GT-trained radiomics judge}: an AutoGluon tabular classifier trained on radiomics features extracted from ground-truth masks. Unlike mask-guided radiomics descriptors used in prior work solely as classification evidence, this judge serves a dual purpose---it simultaneously assesses segmentation quality and provides an independent malignancy signal for each predicted mask. Given an image $x$ and a mask $M$, we extract a 2D PyRadiomics feature vector $f = \phi(x, M)$ covering shape2D and texture families. Representative formulations include:
 \begin{equation}
