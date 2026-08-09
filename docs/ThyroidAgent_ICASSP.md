@@ -9,6 +9,7 @@
 \usepackage{multirow}
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{makecell}
 \usepackage{adjustbox}
 \usepackage[table,xcdraw]{xcolor}
 
