@@ -6,7 +6,7 @@
   - 分割：intermediate/seg/*.npz（各模型预测）+ intermediate/selected_masks.npz（agent 选的）
   - 分类：intermediate/cls/*.json（各模型预测）+ results.json（pipeline 最终裁决）
 
-对每个对象计算指标，输出对比表（终端打印 + comparison.json）。
+对每个对象计算指标，输出对比表（终端打印 + comparison.json + comparison_report.txt）。
 
 用法:
   python -m pipeline.compare_models \
@@ -224,7 +224,7 @@ def extract_pipeline_cls_from_results(results: list[dict]) -> dict:
     return out
 
 
-# ============== 打印 ==============
+# ============== 打印 / 格式化 ==============
 
 def _fmt_ci(v: Optional[dict], fmt: str = "{:.4f}") -> str:
     if v is None:
@@ -236,30 +236,35 @@ def _fmt_scalar(v, fmt: str = "{:.4f}") -> str:
     return "N/A" if v is None else fmt.format(v)
 
 
-def print_seg_table(rows: list[dict]):
-    print(f"\n{'='*80}")
-    print("分割对比 (Dice ↑ / HD95 ↓)")
-    print(f"{'='*80}")
+def format_seg_table(rows: list[dict]) -> str:
+    """格式化分割对比表，返回完整文本。"""
+    lines = []
+    lines.append(f"\n{'='*80}")
+    lines.append("分割对比 (Dice ↑ / HD95 ↓)")
+    lines.append(f"{'='*80}")
     header = f"{'来源':<28} {'Dice':<26} {'HD95':<22} {'N'}"
-    print(header)
-    print("-" * 80)
+    lines.append(header)
+    lines.append("-" * 80)
     for r in rows:
         name = r["name"]
         dice = _fmt_ci(r["metrics"].get("dice"))
         hd95 = _fmt_ci(r["metrics"].get("hd95"), "{:.2f}")
         n = r["metrics"].get("n_matched", 0)
         marker = " ★" if r.get("is_pipeline") else "  "
-        print(f"{name:<28} {dice:<26} {hd95:<22} {n}{marker}")
-    print("  ★ = pipeline/agent")
+        lines.append(f"{name:<28} {dice:<26} {hd95:<22} {n}{marker}")
+    lines.append("  ★ = pipeline/agent")
+    return "\n".join(lines)
 
 
-def print_cls_table(rows: list[dict]):
-    print(f"\n{'='*100}")
-    print("分类对比 (AUROC ↑ / AUPRC ↑ / Acc ↑ / Sens / Spec / F1)")
-    print(f"{'='*100}")
+def format_cls_table(rows: list[dict]) -> str:
+    """格式化分类对比表，返回完整文本。"""
+    lines = []
+    lines.append(f"\n{'='*100}")
+    lines.append("分类对比 (AUROC ↑ / AUPRC ↑ / Acc ↑ / Sens / Spec / F1)")
+    lines.append(f"{'='*100}")
     header = f"{'来源':<28} {'AUROC':<22} {'AUPRC':<22} {'Acc':<7} {'Sens':<7} {'Spec':<7} {'F1':<7} {'N'}"
-    print(header)
-    print("-" * 100)
+    lines.append(header)
+    lines.append("-" * 100)
     for r in rows:
         name = r["name"]
         m = r["metrics"]
@@ -271,8 +276,9 @@ def print_cls_table(rows: list[dict]):
         f1 = _fmt_scalar(m.get("f1"))
         n = m.get("n_matched", 0)
         marker = " ★" if r.get("is_pipeline") else "  "
-        print(f"{name:<28} {auc:<22} {auprc:<22} {acc:<7} {sens:<7} {spec:<7} {f1:<7} {n}{marker}")
-    print("  ★ = pipeline/agent")
+        lines.append(f"{name:<28} {auc:<22} {auprc:<22} {acc:<7} {sens:<7} {spec:<7} {f1:<7} {n}{marker}")
+    lines.append("  ★ = pipeline/agent")
+    return "\n".join(lines)
 
 
 # ============== 主流程 ==============
@@ -304,9 +310,17 @@ def compare_models(
     if image_io is None:
         image_io = ImageIO()
 
+    # 文本报告收集
+    report_parts: list[str] = []
+    report_parts.append(f"\n{'='*60}")
+    report_parts.append("模型对比评估")
+    report_parts.append(f"{'='*60}")
+
     # 标签
     labels = load_labels(str(label_file), label_key)
-    print(f"已加载标签: {len(labels)} 条")
+    _line = f"已加载标签: {len(labels)} 条"
+    print(_line)
+    report_parts.append(_line)
 
     # ============== 分割对比 ==============
     seg_rows: list[dict] = []
@@ -325,9 +339,13 @@ def compare_models(
         metrics = eval_seg_masks(img_names, masks, gt_mask_dir, image_io)
         seg_rows.append({"name": "Pipeline (agent selected)", "metrics": metrics, "is_pipeline": True})
     else:
-        print("⚠️ selected_masks.npz 不存在，pipeline 分割结果将缺失")
+        _line = "⚠️ selected_masks.npz 不存在，pipeline 分割结果将缺失"
+        print(_line)
+        report_parts.append(_line)
 
-    print_seg_table(seg_rows)
+    _seg_text = format_seg_table(seg_rows)
+    print(_seg_text)
+    report_parts.append(_seg_text)
 
     # ============== 分类对比（全集） ==============
     cls_rows: list[dict] = []
@@ -365,9 +383,13 @@ def compare_models(
             metrics = eval_cls_predictions(pipeline_pred, labels)
             cls_rows.append({"name": "Pipeline (final)", "metrics": metrics, "is_pipeline": True})
     else:
-        print("⚠️ results.json 不存在，pipeline 分类结果将缺失")
+        _line = "⚠️ results.json 不存在，pipeline 分类结果将缺失"
+        print(_line)
+        report_parts.append(_line)
 
-    print_cls_table(cls_rows)
+    _cls_text = format_cls_table(cls_rows)
+    print(_cls_text)
+    report_parts.append(_cls_text)
 
     # ============== 分类对比（PathB 子集：分类模型无共识的难样本） ==============
     # AutoGluon 现在在全集上推理（便于评估其分类性能），
@@ -385,15 +407,21 @@ def compare_models(
         path_b_stems = {Path(k).stem for k in all_cls_preds[autogluon_model_name].keys()}
 
     if path_b_stems:
-        print(f"\n{'='*100}")
-        print(f"分类对比 - PathB 子集（无共识难样本 N={len(path_b_stems)}）")
-        print(f"{'='*100}")
+        _pathb_header = (
+            f"\n{'='*100}\n"
+            f"分类对比 - PathB 子集（无共识难样本 N={len(path_b_stems)}）\n"
+            f"{'='*100}"
+        )
+        print(_pathb_header)
+        report_parts.append(_pathb_header)
         subset_rows: list[dict] = []
         for model_name, img_to_pred in all_cls_preds.items():
             metrics = eval_cls_predictions(img_to_pred, labels, subset_stems=path_b_stems)
             is_pipe = model_name == "Pipeline (final)"
             subset_rows.append({"name": model_name, "metrics": metrics, "is_pipeline": is_pipe})
-        print_cls_table(subset_rows)
+        _subset_text = format_cls_table(subset_rows)
+        print(_subset_text)
+        report_parts.append(_subset_text)
 
     # ============== 保存 ==============
     comparison = {
@@ -409,7 +437,15 @@ def compare_models(
     out_path = output_dir / "comparison.json"
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(comparison, f, ensure_ascii=False, indent=2)
-    print(f"\n对比结果已保存到 {out_path}")
+    _line = f"\n对比结果已保存到 {out_path}"
+    print(_line)
+    report_parts.append(_line)
+
+    # 保存文本报告
+    report_path = output_dir / "comparison_report.txt"
+    with open(report_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(report_parts))
+    print(f"对比报告已保存到 {report_path}")
 
     return comparison
 

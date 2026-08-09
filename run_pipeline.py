@@ -172,9 +172,6 @@ def main():
     gt_mask_dir = data_cfg.get("gt_mask_dir")
     if gt_mask_dir and label_file and run_segmentation and run_classification:
         from pipeline.compare_models import compare_models
-        print(f"\n{'='*60}")
-        print("模型对比评估")
-        print(f"{'='*60}")
         compare_models(
             output_dir=output_dir_final,
             gt_mask_dir=gt_mask_dir,
