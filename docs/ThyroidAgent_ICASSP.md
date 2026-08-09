@@ -28,7 +28,7 @@
 \maketitle
 %
 \begin{abstract}
-We propose ThyroidAgent, an explainable agent-based framework for thyroid nodule ultrasound diagnosis that coordinates segmentation and classification experts through dual-path routing driven by classification consensus and a GT-trained radiomics judge. Unlike static pipelines, ThyroidAgent runs heterogeneous experts in parallel and routes each case through a consensus shortcut or a dispute-resolution path based on whether independent classifiers agree. A radiomics classifier trained on ground-truth masks serves as a dual-purpose judge, evaluating segmentation quality via inter-model feature consistency while providing an independent malignancy signal that is incorporated as an additional weighted voter in the dispute-resolution path. Each routing decision is transparent and grounded in structured evidence, enabling case-level explainability through SHAP-interpretable radiomics features.
+We propose ThyroidAgent, an explainable agent-based framework for thyroid nodule ultrasound diagnosis that coordinates segmentation and classification experts through dual-path routing driven by classification consensus and a GT-trained radiomics judge. Unlike static pipelines, ThyroidAgent runs heterogeneous experts in parallel and routes each case through a consensus shortcut or a dispute-resolution path based on whether independent classifiers agree. A radiomics classifier trained on ground-truth masks serves as a dual-purpose judge, evaluating segmentation quality via inter-model feature consistency while providing an independent malignancy signal that is incorporated as an additional weighted voter in the dispute-resolution path. An LLM arbiter, operating within this radiomics-coupled framework, performs case-level segmentation selection and arbitrates the hardest classification disputes. Each routing decision is transparent and grounded in structured evidence, enabling case-level explainability through SHAP-interpretable radiomics features.
 Experiments on five datasets demonstrate that ThyroidAgent outperforms static baselines, achieving a mean Dice of 86.1\% and mean AUROC of 0.896, confirming more reliable and context-aware clinical deployment.
 \end{abstract}
 %
@@ -48,7 +48,7 @@ Ultrasound, Thyroid Nodule, Segmentation, Malignancy Classification, Cascade Inf
 
 Deep learning has substantially improved thyroid ultrasound analysis in both nodule segmentation~\cite{gong2021multi,dong2024ultrasound,haribabu2025mlrt} and malignancy classification~\cite{gong_acl_2022,sujini2025automated,das2024deep}. However, these tasks are typically developed and evaluated in isolation, leading to fixed pipelines that cannot jointly exploit segmentation-derived structural evidence and classification confidence. Prior attempts at task coupling—such as shared encoders with task-specific heads~\cite{he2023joint,rhanoui2025multi,wu2023multi}, ROI-based feature extraction~\cite{kang2022thyroid}, or thyroid-region priors~\cite{gong2021multi,gong_thyroid_2023}—offer limited cross-task interaction. Radiomics-assisted methods~\cite{park2021combining} and expert-routing medical VLMs~\cite{she2026echovlm,bai2025qwen3,sellergren2025medgemma} each address only part of the challenge: the former lack dynamic mask-quality control, while the latter, including EchoVLM~\cite{she2026echovlm}, build monolithic VLMs rather than case-level cascade coordination over external experts.
 
-We propose \textit{ThyroidAgent}, an explainable agent-based framework that routes each case through a dual-path cascade driven by classification consensus and a GT-trained radiomics judge (Fig.~\ref{fig:ThyroidAgent}). When independent classifiers agree, a consensus shortcut uses their label as an anchor to guide segmentation selection; when they disagree, a dispute-resolution path invokes a radiomics classifier—trained on ground-truth masks—that simultaneously evaluates segmentation quality via inter-model feature consistency and provides an independent malignancy signal. The judge's prediction is then incorporated as an additional weighted voter alongside the independent classifiers, ensuring ROI-level radiomics evidence directly contributes to the final classification. Connected-component analysis (CCA) is available as an optional mask-refinement step for ensemble mode, independent of the routing policy.
+We propose \textit{ThyroidAgent}, an explainable agent-based framework that routes each case through a dual-path cascade driven by classification consensus and a GT-trained radiomics judge (Fig.~\ref{fig:ThyroidAgent}). When independent classifiers agree, a consensus shortcut uses their label as an anchor to guide segmentation selection; when they disagree, a dispute-resolution path invokes a radiomics classifier—trained on ground-truth masks—that simultaneously evaluates segmentation quality via inter-model feature consistency and provides an independent malignancy signal. The judge's prediction is then incorporated as an additional weighted voter alongside the independent classifiers, ensuring ROI-level radiomics evidence directly contributes to the final classification. Motivated by the reasoning capability of LLMs~\cite{dong_survey_2022,bai2025qwen3,sellergren2025medgemma}, we further employ an LLM as a decision module within this radiomics-coupled framework. Unlike prior work that uses LLMs to independently select experts for each task, ThyroidAgent's LLM operates within the bidirectional coupling: classification consensus guides segmentation selection, while the radiomics judge's malignancy prediction feeds back into classification arbitration. The LLM is invoked for segmentation selection and the hardest classification disputes, with rule-based fallbacks ensuring robustness. Connected-component analysis (CCA) is available as an optional mask-refinement step for ensemble mode, independent of the routing policy.
 
 The key contributions are:
 \textbf{1. Explainable dual-path routing.} ThyroidAgent replaces static pipelines with transparent, case-level routing driven by classification consensus, enabling explainable decisions under heterogeneous acquisition conditions.
@@ -58,7 +58,7 @@ The key contributions are:
 \begin{figure}[t]
     \centering
     \includegraphics[width=\columnwidth]{figures/Fig2.pdf}
-    \caption{Detailed workflow of the ThyroidAgent system, showing the cascade inference process with parallel expert inference, classification-consensus-driven path splitting, GT-trained radiomics judging, and weighted-vote-based reconciliation.}
+    \caption{Detailed workflow of the ThyroidAgent system, showing the cascade inference process with parallel expert inference, classification-consensus-driven path splitting, GT-trained radiomics judging, LLM-guided segmentation selection, and rule-based reconciliation with LLM arbitration.}
     \label{fig:WorkFlow}
 \end{figure}
 
@@ -103,19 +103,19 @@ where $A$ denotes the ROI area, $M(x,y) \in \{0,1\}$ is the binary ROI mask at s
 \State consensus $\gets \big[\arg\max_m p_m \text{ all equal}\big]$
 \If{consensus}
   \State $a \gets$ consensus class \Comment{classification anchor}
-  \State $\hat{k} \gets \mathrm{SegSelect}(\{M_k\}, g_\theta, a)$ \Comment{anchor-guided}
+  \State $\hat{k} \gets \mathrm{SegSelect}(\{M_k\}, g_\theta, a)$ \Comment{LLM-guided, anchor-coupled}
   \State $\hat{M} \gets M_{\hat{k}}$; $\hat{y} \gets a$
   \State \Return $\hat{M}, \hat{y}$ \Comment{Path A: shortcut}
 \EndIf
 
 \Statex \textbf{Phase 4: Pre-filter \& mask selection (Path B)}
 \State $\{M_k\} \gets \mathrm{PreFilter}(\{M_k\}, g_\theta)$ \Comment{outlier removal}
-\State $\hat{k} \gets \mathrm{SegSelect}(\{M_k\}, g_\theta, \mathrm{None})$
+\State $\hat{k} \gets \mathrm{SegSelect}(\{M_k\}, g_\theta, \mathrm{None})$ \Comment{LLM-guided}
 \State $\hat{M} \gets M_{\hat{k}}$
 
 \Statex \textbf{Phase 5: Classification reconciliation}
 \State $p_{\mathrm{rad}} \gets g_\theta\big(\phi(x, \hat{M})\big)$ \Comment{AutoGluon on selected mask}
-\State $\hat{y} \gets \arg\max_{y} \big(\textstyle\sum_{m} w_m \, p_m(y) + w_{\mathrm{rad}} \, p_{\mathrm{rad}}(y)\big)$ \Comment{weighted vote}
+\State $\hat{y} \gets \mathrm{Reconcile}(\{p_m\}, p_{\mathrm{rad}}, \hat{M})$ \Comment{rule-based + LLM}
 \State \Return $\hat{M}, \hat{y}$
 \end{algorithmic}
 \end{algorithm}
@@ -141,14 +141,18 @@ where $\tilde{p}$ is the median judge probability. Flagged masks are removed, su
 \hat{k} = \arg\max_{k} a_{\mathrm{agree}}^{(k)},
 \label{eq:segsel}
 \end{equation}
-where $a_{\mathrm{agree}}^{(k)}$ is the average IoU between mask $k$ and all other candidates. If the filter removes all masks, the anchor constraint is relaxed and selection falls back to the full candidate set.
+where $a_{\mathrm{agree}}^{(k)}$ is the average IoU between mask $k$ and all other candidates. If the filter removes all masks, the anchor constraint is relaxed and selection falls back to the full candidate set. In the full system, an LLM replaces the rule-based selector: it receives structured evidence including morphology, inter-model agreement, radiomics judge predictions, and the classification anchor (Path~A only), then outputs the selected mask or an ensemble configuration. The rule-based $\arg\max$ agreement serves as a fallback when the LLM is unavailable.
 
-\textbf{Classification reconciliation.} Given the selected mask $\hat{M}$, the judge produces $p_{\mathrm{rad}} = g_\theta(\phi(x, \hat{M}))$. Rather than treating the judge as a separate arbitration signal, we incorporate it as an additional weighted voter alongside the $M$ independent classifiers:
+\textbf{Classification reconciliation.} Given the selected mask $\hat{M}$, the judge produces $p_{\mathrm{rad}} = g_\theta(\phi(x, \hat{M}))$ with class $\hat{y}_{\mathrm{rad}}$ and confidence $c_{\mathrm{rad}}$, while weighted soft-voting over independent classifiers yields $\hat{y}_{\mathrm{sv}}$ with confidence $c_{\mathrm{sv}}$. The reconciliation policy operates in three tiers:
 \begin{equation}
-\hat{y} = \arg\max_{y} \left( \sum_{m=1}^{M} w_m \, p_m(y) + w_{\mathrm{rad}} \, p_{\mathrm{rad}}(y) \right),
+\hat{y} = \begin{cases}
+\hat{y}_{\mathrm{sv}}, & \text{if } \hat{y}_{\mathrm{sv}} = \hat{y}_{\mathrm{rad}} \\
+\hat{y}_{\mathrm{rad}}, & \text{if } \hat{y}_{\mathrm{sv}} \neq \hat{y}_{\mathrm{rad}} \text{ and } c_{\mathrm{rad}} > 0.8 \text{ and } c_{\mathrm{sv}} < 0.8 \\
+\mathrm{LLMArbitrate}(\cdot), & \text{otherwise}
+\end{cases}
 \label{eq:reconcile}
 \end{equation}
-where $w_m$ are the independent classifier weights (set to their validation AUROC) and $w_{\mathrm{rad}}$ is the judge weight (default $0.5$, reflecting its lower AUROC on hard samples). This design ensures the ROI-level radiomics signal directly contributes to the final decision, making Path~B complementary to Path~A's consensus shortcut.
+When the two signals agree, the soft-voting label is adopted with confidence boosted to $\max(c_{\mathrm{rad}}, c_{\mathrm{sv}})$. When they disagree but the judge is highly confident and soft-voting is uncertain, the judge label is adopted. The LLM is invoked only in the hardest cases where both signals are ambiguous, receiving structured evidence from all experts, the radiomics judge, and the segmentation selection rationale. A rule-based weighted-voting fallback (incorporating $p_{\mathrm{rad}}$ as an additional voter) is used when the LLM is unavailable.
 
 \begin{table}[t]
     \centering
@@ -232,7 +236,7 @@ Fig.~\ref{fig:interpretability_analysis}(a) shows the global SHAP feature import
 
 \section{Conclusion}
 \label{sec:conclusion}
-We proposed ThyroidAgent, an explainable agent-based framework for thyroid ultrasound diagnosis that routes each case through a consensus shortcut or a dispute-resolution path guided by a GT-trained radiomics judge. By coupling classification consensus with segmentation selection and using a GT-trained radiomics classifier as a dual-purpose judge, ThyroidAgent improves robustness, interpretability, and generalization across heterogeneous datasets. The transparent routing logic and SHAP-interpretable radiomics evidence provide case-level explainability for clinical deployment. Future work will explore prospective validation and additional modalities.
+We proposed ThyroidAgent, an explainable agent-based framework for thyroid ultrasound diagnosis that routes each case through a consensus shortcut or a dispute-resolution path guided by a GT-trained radiomics judge. By coupling classification consensus with segmentation selection and using a GT-trained radiomics classifier as a dual-purpose judge, ThyroidAgent improves robustness, interpretability, and generalization across heterogeneous datasets. The transparent routing logic, LLM-guided decisions within the radiomics-coupled framework, and SHAP-interpretable evidence provide case-level explainability for clinical deployment. Future work will explore prospective validation and additional modalities.
 
 % References should be produced using the bibtex program from suitable
 % BiBTeX files (here: strings, refs, manuals). The IEEEbib.bst bibliography
