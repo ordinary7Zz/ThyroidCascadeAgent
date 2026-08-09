@@ -187,13 +187,12 @@ where the LLM integrates structured evidence from all sources, including individ
         & \makecell{75.31 \\ {\tiny [74.19, 76.43]}}
         & \makecell{77.13 \\ {\tiny [75.75, 78.51]}} \\
         \midrule
-        \rowcolor{lightgray}
-        \textbf{ThyroidAgent}
-        & \makecell{\textbf{85.28} \\ {\tiny [84.00, 86.56]}}
-        & \makecell{\textbf{91.46} \\ {\tiny [91.32, 91.60]}}
-        & \makecell{\textbf{87.58} \\ {\tiny [87.14, 88.02]}}
-        & \makecell{82.99 \\ {\tiny [80.89, 85.09]}}
-        & \makecell{\textbf{83.26} \\ {\tiny [81.92, 84.60]}} \\
+        \rowcolor{lightgray}\textbf{ThyroidAgent}
+        & \cellcolor{lightgray}\makecell{\textbf{85.28} \\ {\tiny [84.00, 86.56]}}
+        & \cellcolor{lightgray}\makecell{\textbf{91.46} \\ {\tiny [91.32, 91.60]}}
+        & \cellcolor{lightgray}\makecell{\textbf{87.58} \\ {\tiny [87.14, 88.02]}}
+        & \cellcolor{lightgray}\makecell{82.99 \\ {\tiny [80.89, 85.09]}}
+        & \cellcolor{lightgray}\makecell{\textbf{83.26} \\ {\tiny [81.92, 84.60]}} \\
         \bottomrule
     \end{tabular}
 \end{table}
