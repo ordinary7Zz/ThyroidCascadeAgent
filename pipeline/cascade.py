@@ -259,13 +259,22 @@ class CascadePipeline:
         return "良性", p_benign
 
     def _get_voting_weights(self):
-        """从 config 提取独立分类模型的投票权重 {model_name: weight}。"""
+        """从 config 提取分类模型的投票权重 {model_name: weight}。
+
+        独立分类模型的权重从 classification.models 的 voting_weight 读取。
+        AutoGluon (radiomics_judge) 的权重从 radiomics_judge.voting_weight 读取（默认 0.5），
+        仅在 Path B 裁决时作为第4个投票成员参与。
+        """
         weights = {}
         for model_cfg in self.config.get("classification", {}).get("models", []):
             if model_cfg.get("type") == "autogluon_radiomics":
                 continue  # mask-dependent，不参与独立投票
             name = model_cfg.get("name", "")
             weights[name] = float(model_cfg.get("voting_weight", 1.0))
+        # AutoGluon 的投票权重（Path B 时参与加权软投票）
+        judge_cfg = self.config.get("radiomics_judge", {})
+        if judge_cfg.get("enabled", False):
+            weights["radiomics_judge"] = float(judge_cfg.get("voting_weight", 0.5))
         return weights
 
     @staticmethod
@@ -390,51 +399,46 @@ class CascadePipeline:
     def _resolve_classification_path_b_static(
         indie_preds, autogluon_pred, voting_weights=None
     ) -> "ClsAgentDecision":
-        """Path B 静态分类裁决：加权软投票为主，AutoGluon 仅作置信度增强。
+        """Path B 静态分类裁决：AutoGluon 加入加权软投票。
 
-        策略（基于实验数据调整）：
-          - AutoGluon 与软投票一致 → 采纳软投票，置信度取 max（增强）
-          - AutoGluon 与软投票不一致 → 永远信软投票（AutoGluon 在难样本上
-            AUROC≈0.53，接近随机，不应覆盖图像级分类模型的判断）
+        AutoGluon 基于 ROI radiomics 的分类结果作为第4个投票成员，
+        与3个独立分类模型一起做加权软投票，使 Path B 引入 ROI 级信号，
+        与 Path A（纯独立模型共识）形成互补。
 
-        标签统一归一化（良性=0/恶性=1），避免 "0"/"1" 与 "良性"/"恶性" 误比较。
+        AutoGluon 权重由 config radiomics_judge.voting_weight 控制（默认 0.5），
+        低于独立模型（0.79~0.91），反映其在难样本上较低的 AUROC。
+        若 AutoGluon 无有效预测（predictions 为空），则仅用独立模型软投票。
+
         voting_weights: {model_name: weight}，None 或缺失时等权(1.0)。
         """
+        # 把 AutoGluon 加入投票列表（跳过无有效预测的）
+        all_preds = list(indie_preds)
+        if autogluon_pred is not None and autogluon_pred.predictions:
+            all_preds.append(autogluon_pred)
+
         sv_class, sv_conf = CascadePipeline._weighted_soft_vote(
-            indie_preds, voting_weights
+            all_preds, voting_weights
         )
-        sv_binary = CascadePipeline._label_to_binary(sv_class)
 
-        if autogluon_pred is not None:
-            al_class = CascadePipeline._label_to_binary(autogluon_pred.top_class)
+        if autogluon_pred is not None and autogluon_pred.predictions:
+            al_binary = CascadePipeline._label_to_binary(autogluon_pred.top_class)
+            al_class_str = "恶性" if al_binary == 1 else "良性"
             al_conf = autogluon_pred.top_confidence
-
-            if al_class == sv_binary:
-                # AutoGluon 与软投票一致：采纳软投票，增强置信度
-                return ClsAgentDecision(
-                    selected_model="autogluon_softvote_agree",
-                    selected_class=sv_class,
-                    confidence=float(max(al_conf, sv_conf)),
-                    reasoning=f"加权软投票={sv_class}({sv_conf:.2f})，AutoGluon一致({al_conf:.2f})，采纳",
-                    all_predictions=[p.to_dict() for p in indie_preds],
-                    method="path_b_static_majority",
-                )
-            # AutoGluon 与软投票不一致：信软投票（AutoGluon 难样本上判别力不足）
-            return ClsAgentDecision(
-                selected_model="weighted_soft_vote",
-                selected_class=sv_class,
-                confidence=float(sv_conf),
-                reasoning=f"AutoGluon({al_conf:.2f})与软投票({sv_class},{sv_conf:.2f})不一致，信图像级软投票",
-                all_predictions=[p.to_dict() for p in indie_preds],
-                method="path_b_static_softvote",
+            reasoning = (
+                f"独立模型无共识，AutoGluon(ROI,{al_class_str},{al_conf:.2f})"
+                f"加入加权软投票，结果={sv_class}({sv_conf:.2f})。"
             )
+            selected_model = "weighted_soft_vote_with_autogluon"
+        else:
+            reasoning = f"独立模型无共识，AutoGluon无有效结果，加权软投票={sv_class}({sv_conf:.2f})"
+            selected_model = "weighted_soft_vote"
 
         return ClsAgentDecision(
-            selected_model="weighted_soft_vote",
+            selected_model=selected_model,
             selected_class=sv_class,
             confidence=float(sv_conf),
-            reasoning=f"独立模型无共识，加权软投票={sv_class}({sv_conf:.2f})",
-            all_predictions=[p.to_dict() for p in indie_preds],
+            reasoning=reasoning,
+            all_predictions=[p.to_dict() for p in all_preds],
             method="path_b_static_softvote",
         )
 
