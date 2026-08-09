@@ -17,7 +17,7 @@
 
 % Title.
 % ------
-\title{Dual-Path Cascade Framework with GT-Trained Radiomics Judge for Thyroid Ultrasound Diagnosis}
+\title{Explainable Agent-Based Framework for Thyroid Ultrasound Diagnosis}
 %
 \name{Author(s) Name(s)\thanks{Thanks to XYZ agency for funding.}}
 \address{Author Affiliation(s)}
