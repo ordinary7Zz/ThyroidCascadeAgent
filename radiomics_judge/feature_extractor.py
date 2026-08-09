@@ -12,10 +12,14 @@ GT-trained radiomics 特征提取器。
 
 from __future__ import annotations
 
+import logging
 import os
 from typing import Optional
 
 import numpy as np
+
+# 抑制 pyradiomics 的大量 INFO 日志（Computing firstorder / glcm / ...）
+logging.getLogger("radiomics").setLevel(logging.WARNING)
 
 
 # 默认 YAML 配置路径：与本模块同目录的 radiomics_2d.yaml
