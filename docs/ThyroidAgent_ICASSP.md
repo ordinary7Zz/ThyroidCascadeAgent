@@ -9,7 +9,6 @@
 \usepackage{multirow}
 \usepackage{booktabs}
 \usepackage{tabularx}
-\usepackage{makecell}
 \usepackage{adjustbox}
 \usepackage[table,xcdraw]{xcolor}
 
@@ -151,246 +150,59 @@ morphology metrics, radiomics judge predictions, and the classification anchor (
 \end{equation}
 where the LLM integrates structured evidence from all sources, including individual expert predictions and confidences, the radiomics judge's malignancy probability, and the segmentation selection reasoning. This design ensures the ROI-level radiomics signal directly contributes to the final decision, making Path~B complementary to Path~A's consensus shortcut.
 
-\begin{table*}[t]
+\begin{table}[t]
     \centering
-    \caption{Cross-dataset generalization for thyroid nodule segmentation. Dice coefficient (\%) and 95th-percentile Hausdorff distance (HD95, mm) are reported with 95\% confidence intervals.}
+    \caption{Segmentation performance (Dice, \%) across 5 datasets.}
     \label{tab:table1_seg_blocks}
-    \scriptsize
-    \setlength{\tabcolsep}{3pt}
-    \renewcommand{\arraystretch}{1.15}
-    \begin{tabular}{lccccccc}
+    \footnotesize
+    \begin{tabular}{@{}l|ccccc@{}}
         \toprule
-        \textbf{Model} & \textbf{TN3K} & \textbf{ThyroidXL} & \textbf{PKTN} & \textbf{TN5K} & \textbf{DDTI} & \textbf{ZJH-8K} & \textbf{RJH-7K} \\
+        \textbf{Method} & \textbf{TN3K} & \textbf{DDTI} & \textbf{ThyroidXL} & \textbf{PKTN} & \textbf{TN5K} \\
         \midrule
-        \multicolumn{8}{l}{\textit{Dice (\%) $\uparrow$}} \\
+        TransUNet~\cite{chen2024transunet} & 81.84 & 76.58 & 85.75 & 76.89 & 78.54 \\
+        MedSegX~\cite{zhang2025generalist} & 83.93 & 85.40 & 79.98 & 80.63 & 83.10 \\
+        MedSAM2~\cite{ma2025medsam2} & 84.47 & 90.72 & 86.94 & \textbf{83.46} & 83.03 \\
+        UltraFedFM~\cite{jiang2025pretraining} & 81.18 & 83.10 & 84.70 & 75.31 & 77.13 \\
         \midrule
-        TransUNet~\cite{chen2024transunet}
-        & \makecell{81.8 \\ {\tiny [80.2, 83.5]}}
-        & \makecell{85.8 \\ {\tiny [85.2, 86.3]}}
-        & \makecell{76.9 \\ {\tiny [73.3, 80.5]}}
-        & \makecell{78.5 \\ {\tiny [77.0, 80.1]}}
-        & \makecell{76.6 \\ {\tiny [75.0, 78.2]}}
-        & \makecell{80.7 \\ {\tiny [79.8, 81.7]}}
-        & \makecell{84.8 \\ {\tiny [84.5, 85.2]}} \\
-        MedSegX~\cite{zhang2025generalist}
-        & \makecell{83.9 \\ {\tiny [83.1, 84.7]}}
-        & \makecell{80.0 \\ {\tiny [79.6, 80.3]}}
-        & \makecell{80.6 \\ {\tiny [80.2, 81.1]}}
-        & \makecell{83.1 \\ {\tiny [82.6, 83.6]}}
-        & \makecell{75.1 \\ {\tiny [73.4, 76.8]}}
-        & \makecell{84.1 \\ {\tiny [83.7, 84.5]}}
-        & \makecell{85.4 \\ {\tiny [85.2, 85.6]}} \\
-        MedSAM2~\cite{ma2025medsam2}
-        & \makecell{84.5 \\ {\tiny [83.5, 85.5]}}
-        & \makecell{86.9 \\ {\tiny [86.6, 87.3]}}
-        & \makecell{\textbf{83.5} \\ {\tiny [80.9, 86.1]}}
-        & \makecell{83.0 \\ {\tiny [81.7, 84.3]}}
-        & \makecell{84.7 \\ {\tiny [83.5, 86.0]}}
-        & \makecell{86.3 \\ {\tiny [85.6, 87.0]}}
-        & \makecell{90.7 \\ {\tiny [90.5, 90.9]}} \\
-        UltraFedFM~\cite{jiang2025pretraining}
-        & \makecell{81.2 \\ {\tiny [79.7, 82.6]}}
-        & \makecell{84.7 \\ {\tiny [84.2, 85.2]}}
-        & \makecell{75.3 \\ {\tiny [74.2, 76.4]}}
-        & \makecell{77.1 \\ {\tiny [75.8, 78.5]}}
-        & \makecell{75.6 \\ {\tiny [73.9, 77.2]}}
-        & \makecell{80.6 \\ {\tiny [79.8, 81.5]}}
-        & \makecell{83.1 \\ {\tiny [82.8, 83.4]}} \\
         \rowcolor{lightgray}
-        \textbf{ThyroidAgent}
-        & \makecell{\textbf{85.3} \\ {\tiny [84.0, 86.6]}}
-        & \makecell{\textbf{87.6} \\ {\tiny [87.1, 88.0]}}
-        & \makecell{83.0 \\ {\tiny [80.9, 85.1]}}
-        & \makecell{\textbf{83.3} \\ {\tiny [81.9, 84.6]}}
-        & \makecell{\textbf{85.6} \\ {\tiny [84.6, 86.7]}}
-        & \makecell{\textbf{94.3} \\ {\tiny [93.9, 94.7]}}
-        & \makecell{\textbf{91.5} \\ {\tiny [91.3, 91.6]}} \\
-        \midrule
-        \multicolumn{8}{l}{\textit{HD95 (mm) $\downarrow$}} \\
-        \midrule
-        TransUNet~\cite{chen2024transunet}
-        & \makecell{27.3 \\ {\tiny [21.8, 32.8]}}
-        & \makecell{22.4 \\ {\tiny [21.1, 23.8]}}
-        & \makecell{26.9 \\ {\tiny [17.2, 36.5]}}
-        & \makecell{22.3 \\ {\tiny [18.9, 25.8]}}
-        & \makecell{17.1 \\ {\tiny [15.6, 18.7]}}
-        & \makecell{18.4 \\ {\tiny [17.6, 19.1]}}
-        & \makecell{18.8 \\ {\tiny [18.1, 19.6]}} \\
-        MedSegX~\cite{zhang2025generalist}
-        & \makecell{11.0 \\ {\tiny [10.3, 11.6]}}
-        & \makecell{11.1 \\ {\tiny [10.8, 11.4]}}
-        & \makecell{10.8 \\ {\tiny [10.1, 11.5]}}
-        & \makecell{11.8 \\ {\tiny [11.0, 12.5]}}
-        & \makecell{18.4 \\ {\tiny [16.7, 20.0]}}
-        & \makecell{11.0 \\ {\tiny [10.6, 11.3]}}
-        & \makecell{9.4 \\ {\tiny [9.2, 9.6]}} \\
-        MedSAM2~\cite{ma2025medsam2}
-        & \makecell{11.5 \\ {\tiny [10.0, 13.0]}}
-        & \makecell{5.5 \\ {\tiny [5.0, 5.9]}}
-        & \makecell{10.6 \\ {\tiny [6.9, 14.2]}}
-        & \makecell{10.9 \\ {\tiny [9.8, 12.1]}}
-        & \makecell{10.1 \\ {\tiny [8.9, 11.3]}}
-        & \makecell{6.8 \\ {\tiny [6.2, 7.4]}}
-        & \makecell{2.9 \\ {\tiny [2.8, 3.1]}} \\
-        UltraFedFM~\cite{jiang2025pretraining}
-        & \makecell{15.0 \\ {\tiny [12.9, 17.1]}}
-        & \makecell{8.1 \\ {\tiny [7.5, 8.7]}}
-        & \makecell{16.1 \\ {\tiny [14.4, 17.8]}}
-        & \makecell{15.0 \\ {\tiny [13.3, 16.6]}}
-        & \makecell{18.1 \\ {\tiny [16.7, 19.6]}}
-        & \makecell{8.7 \\ {\tiny [7.9, 9.5]}}
-        & \makecell{9.1 \\ {\tiny [8.7, 9.4]}} \\
-        \rowcolor{lightgray}
-        \textbf{ThyroidAgent}
-        & \makecell{\textbf{10.3} \\ {\tiny [8.6, 12.0]}}
-        & \makecell{\textbf{5.4} \\ {\tiny [4.9, 6.0]}}
-        & \makecell{\textbf{9.0} \\ {\tiny [5.4, 12.6]}}
-        & \makecell{\textbf{10.1} \\ {\tiny [8.9, 11.4]}}
-        & \makecell{\textbf{9.2} \\ {\tiny [8.2, 10.3]}}
-        & \makecell{\textbf{2.3} \\ {\tiny [1.9, 2.6]}}
-        & \makecell{\textbf{1.9} \\ {\tiny [1.8, 2.0]}} \\
+        \textbf{ThyroidAgent} & \textbf{85.28} & \textbf{91.46} & \textbf{87.58} & 82.99 & \textbf{83.26}\\
         \bottomrule
     \end{tabular}
-\end{table*}
+\end{table}
 
 \section{Experiments}
 \label{sec:experiment}
-We evaluate on a consolidated thyroid ultrasound benchmark assembled from TN3K~\cite{gong2021multi}, TN5K~\cite{zhang2025tn5000}, DDTI~\cite{pedraza2015open}, ThyroidXL~\cite{duong2025thyroidxl}, PKTN~\cite{sun2025clip}, ZJH-8K, and RJH-7K, spanning heterogeneous acquisition protocols and device settings. Patient-level 0.7/0.15/0.15 splits are used where applicable, and stacked training sets are formed by merging training portions across datasets (up to 26,074 images). Segmentation is evaluated with Dice (\%) and HD95 (mm); classification with AUROC and AUPRC. Baselines include TransUNet~\cite{chen2024transunet}, MedSegX~\cite{zhang2025generalist}, MedSAM2~\cite{ma2025medsam2}, UltraFedFM~\cite{jiang2025pretraining}, LSNet~\cite{wang2025lsnet}, RepViT~\cite{wang2023repvit}, ResNet50~\cite{he2016deep}, Qwen3-VL-8B-Instruct~\cite{bai2025qwen3}, MedGemma-4B~\cite{sellergren2025medgemma}, GPT-5~\cite{openai2025gpt5systemcard}, and Gemini-2.5-Pro~\cite{comanici_gemini_2025}. Open-source VLMs are adapted with LoRA fine-tuning; GPT-5 and Gemini-2.5-Pro use prompt-only API inference. All models are trained with AdamW (lr $1e{-}4$, batch 12, 50 epochs) on 3$\times$48\,GB NVIDIA RTX A6000 GPUs.
+We evaluate on a consolidated thyroid ultrasound benchmark assembled from TN3K~\cite{gong2021multi}, TN5K~\cite{zhang2025tn5000}, DDTI~\cite{pedraza2015open}, ThyroidXL~\cite{duong2025thyroidxl}, and PKTN~\cite{sun2025clip}, spanning heterogeneous acquisition protocols and device settings. Patient-level 0.7/0.15/0.15 splits are used where applicable, and stacked training sets are formed by merging training portions across datasets (up to 26,074 images). Segmentation is evaluated with Dice (\%); classification with AUROC. Baselines include TransUNet~\cite{chen2024transunet}, MedSegX~\cite{zhang2025generalist}, MedSAM2~\cite{ma2025medsam2}, UltraFedFM~\cite{jiang2025pretraining}, MedSigLIP~\cite{sellergren2025medgemma,zhai2023siglip}, BiomedCLIP~\cite{zhang2023biomedclip}, LSNet~\cite{wang2025lsnet}, RepViT~\cite{wang2023repvit}, ResNet50~\cite{he2016deep}, Qwen3-VL-8B-Instruct~\cite{bai2025qwen3}, MedGemma-4B~\cite{sellergren2025medgemma}, and GPT-5.1~\cite{openai2025gpt5systemcard}. Open-source VLMs are adapted with LoRA fine-tuning; GPT-5.1 uses prompt-only API inference. All models are trained with AdamW (lr $1e{-}4$, batch 12, 50 epochs) on 3$\times$48\,GB NVIDIA RTX A6000 GPUs.
 
 \section{Results}
 \label{sec:results}
 \subsection{Main Results}
-Segmentation performance is evaluated using Dice (\%) and HD95 (mm). Table~\ref{tab:table1_seg_blocks} compares ThyroidAgent against four methods: TransUNet~\cite{chen2024transunet}, MedSegX~\cite{zhang2025generalist}, MedSAM2~\cite{ma2025medsam2}, and UltraFedFM~\cite{jiang2025pretraining}. ThyroidAgent achieves the best Dice on 6 of 7 datasets and the best HD95 on all 7 datasets. On ZJH-8K, ThyroidAgent reaches 94.3\% Dice, outperforming the second-best (MedSAM2, 86.3\%) by 8.0 points. On PKTN, ThyroidAgent (83.0\%) slightly underperforms MedSAM2 (83.5\%), likely because PKTN's clip-based low-quality images produce mask predictions with lower inter-model variance, reducing the discriminative power of the feature-consistency-based judge.
-\begin{table*}[b]
+Segmentation performance is evaluated using Dice (\%). Table~\ref{tab:table1_seg_blocks} compares ThyroidAgent against three categories of methods: general-purpose segmenters (MedSegX~\cite{zhang2025generalist}, MedSAM2~\cite{ma2025medsam2}), a specialized ultrasound model (UltraFedFM~\cite{jiang2025pretraining}), and a recent advanced transformer-based approach (TransUNet~\cite{chen2024transunet}). ThyroidAgent achieves the best Dice on 4 of 5 datasets, with the largest gain on DDTI (+0.74 over MedSAM2, 91.46 vs 90.72). On PKTN, ThyroidAgent (82.99) slightly underperforms MedSAM2 (83.46), likely because PKTN's clip-based low-quality images produce mask predictions with lower inter-model variance, reducing the discriminative power of the feature-consistency-based judge.
+\begin{table}[b]
     \centering
-    \caption{Cross-dataset generalization for benign-malignant thyroid nodule classification. AUROC and AUPRC are reported with 95\% confidence intervals. PKTN is excluded as it lacks malignancy labels.}
+    \caption{Classification performance (AUROC) across 4 datasets.}
     \label{tab:table2_cls_blocks2}
-    \scriptsize
-    \setlength{\tabcolsep}{4pt}
-    \renewcommand{\arraystretch}{1.15}
-    \begin{tabular}{lccccc}
+    \footnotesize
+    \begin{tabular}{@{}l|cccc@{}}
         \toprule
-        \textbf{Method} & \textbf{TN3K} & \textbf{ThyroidXL} & \textbf{TN5K} & \textbf{DDTI} & \textbf{ZJH-8K} \\
+        \textbf{Method} & \textbf{TN3K} & \textbf{DDTI} & \textbf{ThyroidXL} & \textbf{TN5K} \\
         \midrule
-        \multicolumn{6}{l}{\textit{AUROC $\uparrow$}} \\
+        MedSigLIP~\cite{sellergren2025medgemma,zhai2023siglip} & 0.831 & 0.798 & 0.924 & 0.941 \\
+        BiomedCLIP~\cite{zhang2023biomedclip} & 0.798 & 0.762 & 0.905 & 0.928 \\
+        ResNet-50~\cite{he2016deep} & 0.767 & 0.670 & 0.904 & 0.932 \\
+        RepViT~\cite{wang2023repvit} & 0.556 & 0.616 & 0.777 & 0.660 \\
+        LSNet~\cite{wang2025lsnet} & 0.810 & 0.758 & 0.918 & 0.909 \\
+        UltraFedFM~\cite{jiang2025pretraining} & 0.846 & 0.752 & 0.924 & 0.930 \\
+        MedGemma~\cite{sellergren2025medgemma} & 0.849 & 0.826 & 0.937 & 0.944 \\
+        Qwen3-VL-8B~\cite{bai2025qwen3} & 0.824 & 0.736 & 0.905 & 0.921 \\
+        GPT-5.1~\cite{openai2025gpt5systemcard} & 0.692 & 0.635 & 0.706 & 0.774 \\
         \midrule
-        ResNet-50~\cite{he2016deep}
-        & \makecell{0.767 \\ {\tiny [0.728, 0.807]}}
-        & \makecell{0.904 \\ {\tiny [0.893, 0.916]}}
-        & \makecell{0.932 \\ {\tiny [0.915, 0.949]}}
-        & \makecell{0.670 \\ {\tiny [0.586, 0.755]}}
-        & \makecell{0.670 \\ {\tiny [0.586, 0.755]}} \\
-        RepViT~\cite{wang2023repvit}
-        & \makecell{0.556 \\ {\tiny [0.509, 0.602]}}
-        & \makecell{0.777 \\ {\tiny [0.759, 0.796]}}
-        & \makecell{0.660 \\ {\tiny [0.623, 0.698]}}
-        & \makecell{0.616 \\ {\tiny [0.536, 0.697]}}
-        & \makecell{0.854 \\ {\tiny [0.835, 0.872]}} \\
-        LSNet~\cite{wang2025lsnet}
-        & \makecell{0.810 \\ {\tiny [0.776, 0.843]}}
-        & \makecell{0.918 \\ {\tiny [0.906, 0.929]}}
-        & \makecell{0.909 \\ {\tiny [0.889, 0.929]}}
-        & \makecell{0.758 \\ {\tiny [0.692, 0.824]}}
-        & \makecell{0.863 \\ {\tiny [0.843, 0.883]}} \\
-        UltraFedFM~\cite{jiang2025pretraining}
-        & \makecell{0.846 \\ {\tiny [0.776, 0.916]}}
-        & \makecell{0.924 \\ {\tiny [0.914, 0.934]}}
-        & \makecell{0.930 \\ {\tiny [0.912, 0.947]}}
-        & \makecell{0.752 \\ {\tiny [0.581, 0.923]}}
-        & \makecell{0.912 \\ {\tiny [0.898, 0.925]}} \\
-        MedGemma~\cite{sellergren2025medgemma}
-        & \makecell{0.849 \\ {\tiny [0.819, 0.880]}}
-        & \makecell{0.937 \\ {\tiny [0.928, 0.947]}}
-        & \makecell{0.944 \\ {\tiny [0.929, 0.960]}}
-        & \makecell{\textbf{0.826} \\ {\tiny [0.761, 0.890]}}
-        & \makecell{0.898 \\ {\tiny [0.881, 0.914]}} \\
-        Qwen3-VL-8B~\cite{bai2025qwen3}
-        & \makecell{0.824 \\ {\tiny [0.791, 0.856]}}
-        & \makecell{0.905 \\ {\tiny [0.894, 0.917]}}
-        & \makecell{0.921 \\ {\tiny [0.903, 0.940]}}
-        & \makecell{0.736 \\ {\tiny [0.667, 0.805]}}
-        & \makecell{0.866 \\ {\tiny [0.847, 0.885]}} \\
-        GPT-5~\cite{openai2025gpt5systemcard}
-        & \makecell{0.692 \\ {\tiny [0.650, 0.735]}}
-        & \makecell{0.706 \\ {\tiny [0.659, 0.753]}}
-        & \makecell{0.774 \\ {\tiny [0.674, 0.873]}}
-        & \makecell{0.635 \\ {\tiny [0.543, 0.726]}}
-        & \makecell{0.611 \\ {\tiny [0.559, 0.662]}} \\
-        Gemini-2.5-Pro~\cite{comanici_gemini_2025}
-        & \makecell{0.659 \\ {\tiny [0.613, 0.704]}}
-        & \makecell{0.625 \\ {\tiny [0.561, 0.689]}}
-        & \makecell{0.687 \\ {\tiny [0.618, 0.756]}}
-        & \makecell{0.616 \\ {\tiny [0.485, 0.746]}}
-        & \makecell{0.649 \\ {\tiny [0.598, 0.701]}} \\
         \rowcolor{lightgray}
-        \textbf{ThyroidAgent}
-        & \makecell{\textbf{0.869} \\ {\tiny [0.834, 0.904]}}
-        & \makecell{\textbf{0.968} \\ {\tiny [0.961, 0.974]}}
-        & \makecell{\textbf{0.947} \\ {\tiny [0.932, 0.963]}}
-        & \makecell{0.799 \\ {\tiny [0.725, 0.873]}}
-        & \makecell{\textbf{0.918} \\ {\tiny [0.901, 0.934]}} \\
-        \midrule
-        \multicolumn{6}{l}{\textit{AUPRC $\uparrow$}} \\
-        \midrule
-        ResNet-50~\cite{he2016deep}
-        & \makecell{0.688 \\ {\tiny [0.625, 0.751]}}
-        & \makecell{0.888 \\ {\tiny [0.871, 0.906]}}
-        & \makecell{0.967 \\ {\tiny [0.941, 0.994]}}
-        & \makecell{0.376 \\ {\tiny [0.258, 0.493]}}
-        & \makecell{0.276 \\ {\tiny [0.159, 0.392]}} \\
-        RepViT~\cite{wang2023repvit}
-        & \makecell{0.428 \\ {\tiny [0.375, 0.480]}}
-        & \makecell{0.716 \\ {\tiny [0.688, 0.744]}}
-        & \makecell{0.840 \\ {\tiny [0.819, 0.862]}}
-        & \makecell{0.392 \\ {\tiny [0.299, 0.486]}}
-        & \makecell{0.949 \\ {\tiny [0.941, 0.956]}} \\
-        LSNet~\cite{wang2025lsnet}
-        & \makecell{0.758 \\ {\tiny [0.713, 0.803]}}
-        & \makecell{0.904 \\ {\tiny [0.890, 0.918]}}
-        & \makecell{0.955 \\ {\tiny [0.942, 0.968]}}
-        & \makecell{0.418 \\ {\tiny [0.277, 0.559]}}
-        & \makecell{0.945 \\ {\tiny [0.934, 0.956]}} \\
-        UltraFedFM~\cite{jiang2025pretraining}
-        & \makecell{0.853 \\ {\tiny [0.825, 0.881]}}
-        & \makecell{0.935 \\ {\tiny [0.924, 0.947]}}
-        & \makecell{0.842 \\ {\tiny [0.800, 0.884]}}
-        & \makecell{0.449 \\ {\tiny [0.303, 0.594]}}
-        & \makecell{0.967 \\ {\tiny [0.959, 0.975]}} \\
-        MedGemma~\cite{sellergren2025medgemma}
-        & \makecell{0.805 \\ {\tiny [0.762, 0.848]}}
-        & \makecell{0.920 \\ {\tiny [0.906, 0.934]}}
-        & \makecell{0.975 \\ {\tiny [0.966, 0.983]}}
-        & \makecell{0.554 \\ {\tiny [0.387, 0.720]}}
-        & \makecell{0.959 \\ {\tiny [0.949, 0.968]}} \\
-        Qwen3-VL-8B~\cite{bai2025qwen3}
-        & \makecell{0.762 \\ {\tiny [0.711, 0.813]}}
-        & \makecell{0.879 \\ {\tiny [0.841, 0.917]}}
-        & \makecell{0.964 \\ {\tiny [0.953, 0.974]}}
-        & \makecell{0.411 \\ {\tiny [0.270, 0.553]}}
-        & \makecell{0.950 \\ {\tiny [0.940, 0.959]}} \\
-        GPT-5~\cite{openai2025gpt5systemcard}
-        & \makecell{0.663 \\ {\tiny [0.599, 0.726]}}
-        & \makecell{0.624 \\ {\tiny [0.557, 0.690]}}
-        & \makecell{0.892 \\ {\tiny [0.860, 0.924]}}
-        & \makecell{0.358 \\ {\tiny [0.249, 0.467]}}
-        & \makecell{0.831 \\ {\tiny [0.793, 0.869]}} \\
-        Gemini-2.5-Pro~\cite{comanici_gemini_2025}
-        & \makecell{0.621 \\ {\tiny [0.562, 0.679]}}
-        & \makecell{0.491 \\ {\tiny [0.407, 0.576]}}
-        & \makecell{0.846 \\ {\tiny [0.802, 0.891]}}
-        & \makecell{0.392 \\ {\tiny [0.240, 0.545]}}
-        & \makecell{0.840 \\ {\tiny [0.804, 0.876]}} \\
-        \rowcolor{lightgray}
-        \textbf{ThyroidAgent}
-        & \makecell{\textbf{0.855} \\ {\tiny [0.795, 0.914]}}
-        & \makecell{\textbf{0.965} \\ {\tiny [0.958, 0.973]}}
-        & \makecell{\textbf{0.975} \\ {\tiny [0.966, 0.984]}}
-        & \makecell{\textbf{0.586} \\ {\tiny [0.448, 0.724]}}
-        & \makecell{\textbf{0.971} \\ {\tiny [0.971, 0.972]}} \\
+        \textbf{ThyroidAgent} & \textbf{0.869} & 0.799 & \textbf{0.968} & \textbf{0.947}\\
         \bottomrule
     \end{tabular}
-\end{table*}
-For malignancy classification, we evaluate AUROC and AUPRC. Table~\ref{tab:table2_cls_blocks2} compares ThyroidAgent with general-purpose classifiers (LSNet~\cite{wang2025lsnet}, RepViT~\cite{wang2023repvit}, ResNet50~\cite{he2016deep}), an ultrasound-specific model (UltraFedFM~\cite{jiang2025pretraining}), and vision-language models (Qwen3-VL-8B-Instruct~\cite{bai2025qwen3}, MedGemma-4B~\cite{sellergren2025medgemma}, GPT-5~\cite{openai2025gpt5systemcard}, Gemini-2.5-Pro~\cite{comanici_gemini_2025}). PKTN is excluded from classification evaluation as it lacks malignancy labels. ThyroidAgent achieves the best AUROC on 4 of 5 datasets and the best AUPRC on all 5 datasets. On ThyroidXL, ThyroidAgent reaches 0.968 AUROC, outperforming the second-best (MedGemma, 0.937) by 0.031. On DDTI, ThyroidAgent (0.799) underperforms MedGemma (0.826) in AUROC but surpasses it in AUPRC (0.586 vs 0.554), suggesting more stable precision-recall trade-offs on small, class-imbalanced datasets. GPT-5 and Gemini-2.5-Pro perform poorly across all datasets (mean AUROC 0.684 and 0.647, respectively), confirming that prompt-only inference without task-specific adaptation is insufficient for thyroid malignancy assessment.
+\end{table}
+For malignancy classification, we evaluate AUROC. Table~\ref{tab:table2_cls_blocks2} compares ThyroidAgent with four categories of methods: medical vision-language models (MedSigLIP~\cite{sellergren2025medgemma,zhai2023siglip}, BiomedCLIP~\cite{zhang2023biomedclip}), ultrasound-specific models (UltraFedFM~\cite{jiang2025pretraining}), general-purpose classifiers (LSNet~\cite{wang2025lsnet}, RepViT~\cite{wang2023repvit}, ResNet50~\cite{he2016deep}), and vision-language models (Qwen3-VL-8B-Instruct~\cite{bai2025qwen3}, MedGemma-4B~\cite{sellergren2025medgemma}, GPT-5.1~\cite{openai2025gpt5systemcard}). PKTN is excluded from classification evaluation as it lacks malignancy labels. ThyroidAgent achieves the best AUROC on 3 of 4 datasets, with the largest gain on ThyroidXL (+0.031 over MedGemma, 0.968 vs 0.937). On DDTI, ThyroidAgent (0.799) underperforms MedGemma (0.826), possibly because DDTI's smaller training set limits the diversity of the expert pool. GPT-5.1 performs poorly across all datasets (mean AUROC 0.702), confirming that prompt-only inference without task-specific adaptation is insufficient for thyroid malignancy assessment.
 
 \begin{figure}[t]
     \centering
