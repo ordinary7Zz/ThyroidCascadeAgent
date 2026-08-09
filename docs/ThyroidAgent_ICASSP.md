@@ -172,7 +172,7 @@ where the LLM integrates structured evidence from all sources, including individ
 
 \section{Experiments}
 \label{sec:experiment}
-We evaluate on a consolidated thyroid ultrasound benchmark assembled from TN3K~\cite{gong2021multi}, TN5K~\cite{zhang2025tn5000}, DDTI~\cite{pedraza2015open}, ThyroidXL~\cite{duong2025thyroidxl}, and PKTN~\cite{sun2025clip}, spanning heterogeneous acquisition protocols and device settings. Patient-level 0.7/0.15/0.15 splits are used where applicable, and stacked training sets are formed by merging training portions across datasets (up to 26,074 images). Segmentation is evaluated with Dice (\%); classification with AUROC. Baselines include TransUNet~\cite{chen2024transunet}, MedSegX~\cite{zhang2025generalist}, MedSAM2~\cite{ma2025medsam2}, UltraFedFM~\cite{jiang2025pretraining}, MedSigLIP, BiomedCLIP, LSNet~\cite{wang2025lsnet}, RepViT~\cite{wang2023repvit}, ResNet50~\cite{he2016deep}, Qwen3-VL-8B-Instruct~\cite{bai2025qwen3}, MedGemma-4B~\cite{sellergren2025medgemma}, and GPT-5.1~\cite{openai2025gpt5systemcard}. Open-source VLMs are adapted with LoRA fine-tuning; GPT-5.1 uses prompt-only API inference. All models are trained with AdamW (lr $1e{-}4$, batch 12, 50 epochs) on 3$\times$48\,GB NVIDIA RTX A6000 GPUs.
+We evaluate on a consolidated thyroid ultrasound benchmark assembled from TN3K~\cite{gong2021multi}, TN5K~\cite{zhang2025tn5000}, DDTI~\cite{pedraza2015open}, ThyroidXL~\cite{duong2025thyroidxl}, and PKTN~\cite{sun2025clip}, spanning heterogeneous acquisition protocols and device settings. Patient-level 0.7/0.15/0.15 splits are used where applicable, and stacked training sets are formed by merging training portions across datasets (up to 26,074 images). Segmentation is evaluated with Dice (\%); classification with AUROC. Baselines include TransUNet~\cite{chen2024transunet}, MedSegX~\cite{zhang2025generalist}, MedSAM2~\cite{ma2025medsam2}, UltraFedFM~\cite{jiang2025pretraining}, MedSigLIP~\cite{sellergren2025medgemma,zhai2023siglip}, BiomedCLIP~\cite{zhang2023biomedclip}, LSNet~\cite{wang2025lsnet}, RepViT~\cite{wang2023repvit}, ResNet50~\cite{he2016deep}, Qwen3-VL-8B-Instruct~\cite{bai2025qwen3}, MedGemma-4B~\cite{sellergren2025medgemma}, and GPT-5.1~\cite{openai2025gpt5systemcard}. Open-source VLMs are adapted with LoRA fine-tuning; GPT-5.1 uses prompt-only API inference. All models are trained with AdamW (lr $1e{-}4$, batch 12, 50 epochs) on 3$\times$48\,GB NVIDIA RTX A6000 GPUs.
 
 \section{Results}
 \label{sec:results}
@@ -187,8 +187,8 @@ Segmentation performance is evaluated using Dice (\%). Table~\ref{tab:table1_seg
         \toprule
         \textbf{Method} & \textbf{TN3K} & \textbf{DDTI} & \textbf{ThyroidXL} & \textbf{TN5K} \\
         \midrule
-        MedSigLIP & 0.831 & 0.798 & 0.924 & 0.941 \\
-        BiomedCLIP & 0.798 & 0.762 & 0.905 & 0.928 \\
+        MedSigLIP~\cite{sellergren2025medgemma,zhai2023siglip} & 0.831 & 0.798 & 0.924 & 0.941 \\
+        BiomedCLIP~\cite{zhang2023biomedclip} & 0.798 & 0.762 & 0.905 & 0.928 \\
         ResNet-50~\cite{he2016deep} & 0.767 & 0.670 & 0.904 & 0.932 \\
         RepViT~\cite{wang2023repvit} & 0.556 & 0.616 & 0.777 & 0.660 \\
         LSNet~\cite{wang2025lsnet} & 0.810 & 0.758 & 0.918 & 0.909 \\
@@ -202,7 +202,7 @@ Segmentation performance is evaluated using Dice (\%). Table~\ref{tab:table1_seg
         \bottomrule
     \end{tabular}
 \end{table}
-For malignancy classification, we evaluate AUROC. Table~\ref{tab:table2_cls_blocks2} compares ThyroidAgent with four categories of methods: medical vision-language models (MedSigLIP, BiomedCLIP), ultrasound-specific models (UltraFedFM~\cite{jiang2025pretraining}), general-purpose classifiers (LSNet~\cite{wang2025lsnet}, RepViT~\cite{wang2023repvit}, ResNet50~\cite{he2016deep}), and vision-language models (Qwen3-VL-8B-Instruct~\cite{bai2025qwen3}, MedGemma-4B~\cite{sellergren2025medgemma}, GPT-5.1~\cite{openai2025gpt5systemcard}). PKTN is excluded from classification evaluation as it lacks malignancy labels. ThyroidAgent achieves the best AUROC on 3 of 4 datasets, with the largest gain on ThyroidXL (+0.031 over MedGemma, 0.968 vs 0.937). On DDTI, ThyroidAgent (0.799) underperforms MedGemma (0.826), possibly because DDTI's smaller training set limits the diversity of the expert pool. GPT-5.1 performs poorly across all datasets (mean AUROC 0.702), confirming that prompt-only inference without task-specific adaptation is insufficient for thyroid malignancy assessment.
+For malignancy classification, we evaluate AUROC. Table~\ref{tab:table2_cls_blocks2} compares ThyroidAgent with four categories of methods: medical vision-language models (MedSigLIP~\cite{sellergren2025medgemma,zhai2023siglip}, BiomedCLIP~\cite{zhang2023biomedclip}), ultrasound-specific models (UltraFedFM~\cite{jiang2025pretraining}), general-purpose classifiers (LSNet~\cite{wang2025lsnet}, RepViT~\cite{wang2023repvit}, ResNet50~\cite{he2016deep}), and vision-language models (Qwen3-VL-8B-Instruct~\cite{bai2025qwen3}, MedGemma-4B~\cite{sellergren2025medgemma}, GPT-5.1~\cite{openai2025gpt5systemcard}). PKTN is excluded from classification evaluation as it lacks malignancy labels. ThyroidAgent achieves the best AUROC on 3 of 4 datasets, with the largest gain on ThyroidXL (+0.031 over MedGemma, 0.968 vs 0.937). On DDTI, ThyroidAgent (0.799) underperforms MedGemma (0.826), possibly because DDTI's smaller training set limits the diversity of the expert pool. GPT-5.1 performs poorly across all datasets (mean AUROC 0.702), confirming that prompt-only inference without task-specific adaptation is insufficient for thyroid malignancy assessment.
 
 \begin{figure}[t]
     \centering
