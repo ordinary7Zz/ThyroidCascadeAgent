@@ -211,8 +211,8 @@ For malignancy classification, we evaluate AUROC. Table~\ref{tab:table2_cls_bloc
 \begin{figure}[t]
     \centering
     \includegraphics[width=\columnwidth]{figures/Fig3.pdf}
-    \caption{Analysis of dual-path cascade routing.
-    (a) Path A/B distribution and consensus ratio across datasets.
+    \caption{Analysis of agentic aggregation.
+    (a) Cls vote consistency distribution across models.
     (b) Distribution of Seg disagreement scores (Area-CV).
     (c) Cls performance across Seg Dice-score bins.}
     \label{fig:system_analysis}
@@ -227,7 +227,7 @@ Fig.~\ref{fig:system_analysis}(c) further shows that ThyroidAgent outperforms he
 \begin{figure}[t]
     \centering
     \includegraphics[width=\columnwidth]{figures/Fig4.pdf}
-    \caption{Interpretability analysis of the GT-trained radiomics judge: (a) global SHAP feature importance, (b) case-level SHAP waterfall for a malignancy prediction, (c) segmentation mask comparison with judge confidence.}
+    \caption{Interpretability analysis of classification and segmentation evidence.}
     \label{fig:interpretability_analysis}
 \end{figure}
 
