@@ -42,7 +42,7 @@ Ultrasound, Thyroid Nodule, Segmentation, Malignancy Classification, Cascade Inf
 \begin{figure}[t]
     \centering
     \includegraphics[width=\columnwidth]{figures/Fig1.pdf}
-    \caption{Overview of the ThyroidAgent framework. While traditional systems use fixed pipelines, ThyroidAgent routes each case through a consensus shortcut or a dispute-resolution path, guided by a GT-trained radiomics judge that simultaneously assesses segmentation quality and provides an independent malignancy signal.}
+    \caption{Overview of the ThyroidAgent framework. While traditional systems use fixed pipelines, ThyroidAgent routes each case through a consensus shortcut or a dispute-resolution path based on classification consensus, with a GT-trained radiomics judge providing segmentation quality assessment and an independent malignancy signal.}
     \label{fig:ThyroidAgent}
 \end{figure}
 
