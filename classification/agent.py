@@ -468,70 +468,31 @@ class LLMClassificationAgent:
         """
         Path B 分类裁决：独立分类模型无共识时的分类决策。
 
-        规则优先级：
-        1. AutoGluon 与加权软投票一致 → 直接输出（不调 LLM）
-        2. 不一致但 AutoGluon 高置信且软投票置信度低 → 信 AutoGluon
-        3. 都不确定 → 调 LLM 裁决
-        4. LLM 失败 → 输出加权软投票结果
+        将所有分类模型输出（含 AutoGluon）交给 LLM 进行分类决策。
+        LLM 失败时降级到加权软投票（含 AutoGluon）。
         """
         if not indie_predictions:
             raise ValueError("没有独立分类模型预测")
 
-        sv_class, sv_conf = _weighted_soft_vote(indie_predictions, voting_weights)
-
-        if autogluon_pred is not None:
-            al_class = _normalize_label(autogluon_pred.top_class)
-            al_conf = autogluon_pred.top_confidence
-
-            # 规则 1: 与软投票一致
-            if al_class == sv_class:
-                reasoning = (
-                    f"独立模型无共识，加权软投票={sv_class}({sv_conf:.2f})，"
-                    f"AutoGluon 基于筛选 mask 也判断为{sv_class}(conf={al_conf:.2f})，一致，采纳。"
-                )
-                return ClsAgentDecision(
-                    selected_model="autogluon_softvote_agree",
-                    selected_class=al_class,
-                    confidence=float(max(al_conf, sv_conf)),
-                    reasoning=reasoning,
-                    all_predictions=[p.to_dict() for p in indie_predictions],
-                    method="path_b_majority",
-                )
-
-            # 规则 2: 不一致但 AutoGluon 高置信，且软投票置信度低
-            if al_conf > 0.8 and sv_conf < 0.8:
-                reasoning = (
-                    f"独立模型无共识，加权软投票={sv_class}({sv_conf:.2f})置信度低，"
-                    f"AutoGluon 基于 ROI 特征分类置信度高({al_conf:.2f})。"
-                    f"采纳 AutoGluon: {al_class}。"
-                )
-                return ClsAgentDecision(
-                    selected_model="autogluon_strong_signal",
-                    selected_class=al_class,
-                    confidence=float(al_conf),
-                    reasoning=reasoning,
-                    all_predictions=[p.to_dict() for p in indie_predictions],
-                    method="path_b_autogluon",
-                )
-
-        # 规则 3: 调 LLM 裁决
-        if self.enable_agent:
-            try:
-                return self._resolve_path_b_with_llm(
-                    indie_predictions, autogluon_pred, seg_decision
-                )
-            except Exception as e:
-                print(f"  ✗ Path B LLM 裁决失败: {e}")
-
-        # 规则 4: 最终降级 → 加权软投票结果
-        return ClsAgentDecision(
-            selected_model="weighted_soft_vote",
-            selected_class=sv_class,
-            confidence=float(sv_conf),
-            reasoning=f"独立模型无共识，加权软投票={sv_class}({sv_conf:.2f})",
-            all_predictions=[p.to_dict() for p in indie_predictions],
-            method="path_b_softvote",
-        )
+        try:
+            return self._resolve_path_b_with_llm(
+                indie_predictions, autogluon_pred, seg_decision
+            )
+        except Exception as e:
+            print(f"  ✗ Path B LLM 裁决失败: {e}")
+            # 降级到加权软投票（含 AutoGluon）
+            all_preds = list(indie_predictions)
+            if autogluon_pred is not None and autogluon_pred.predictions:
+                all_preds.append(autogluon_pred)
+            sv_class, sv_conf = _weighted_soft_vote(all_preds, voting_weights)
+            return ClsAgentDecision(
+                selected_model="weighted_soft_vote",
+                selected_class=sv_class,
+                confidence=float(sv_conf),
+                reasoning=f"LLM仲裁失败，降级加权软投票={sv_class}({sv_conf:.2f})",
+                all_predictions=[p.to_dict() for p in all_preds],
+                method="path_b_softvote",
+            )
 
     @staticmethod
     def _decision_majority(predictions, majority) -> "ClsAgentDecision":
