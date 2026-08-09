@@ -80,7 +80,6 @@ class RadiomicsJudge:
                 'malignant_prob': float,
                 'confidence': float,          # max(prob, 1-prob)
                 'top_features': [...],        # SHAP top-K
-                'mahalanobis_distance': float,
             }
             空 mask 返回 {'valid': False, 'reason': 'empty mask'}。
         """
@@ -137,7 +136,6 @@ class RadiomicsJudge:
             "malignant_prob": malignant_prob,
             "confidence": float(max(malignant_prob, 1 - malignant_prob)),
             "top_features": summary["top_features"],
-            "mahalanobis_distance": summary["mahalanobis_distance"],
             "feature_count": summary["feature_count"],
             "feature_vector": feature_vector,
         }

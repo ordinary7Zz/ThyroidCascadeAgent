@@ -1,5 +1,5 @@
 """
-特征摘要：SHAP top-K 特征 + 马氏距离。
+特征摘要：SHAP top-K 特征。
 
 将 100+ 维 radiomics 特征压缩为 LLM 可读的摘要，
 控制 prompt token 长度。
@@ -10,8 +10,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Any, Optional
-
-import numpy as np
 
 
 class FeatureSummarizer:
@@ -27,21 +25,15 @@ class FeatureSummarizer:
             top_k: 返回的 top 特征数。
             shap_reference_path: SHAP 参考文件路径（JSON），含：
                 - feature_importance: {feature_name: shap_value}
-                - training_mean: {feature_name: mean}
-                - training_cov: [[...]] 协方差矩阵
-                - feature_order: [feature_name, ...] 协方差矩阵对应的特征顺序
         """
         self.top_k = top_k
         self._shap_importance: Optional[dict[str, float]] = None
-        self._train_mean: Optional[dict[str, float]] = None
-        self._train_cov: Optional[np.ndarray] = None
-        self._cov_feature_order: Optional[list[str]] = None
 
         if shap_reference_path:
             self.load_shap_reference(shap_reference_path)
 
     def load_shap_reference(self, path: str) -> None:
-        """加载 SHAP 特征重要性 + 训练集统计量。"""
+        """加载 SHAP 特征重要性。"""
         p = Path(path)
         if not p.exists():
             print(f"  ⚠️ SHAP 参考文件不存在: {path}")
@@ -55,9 +47,6 @@ class FeatureSummarizer:
             return
 
         self._shap_importance = data.get("feature_importance", {})
-        self._train_mean = data.get("training_mean", {})
-        self._train_cov = np.array(data.get("training_cov", [])) if data.get("training_cov") else None
-        self._cov_feature_order = data.get("feature_order", [])
 
     def summarize(self, features: dict[str, float]) -> dict[str, Any]:
         """
@@ -69,19 +58,16 @@ class FeatureSummarizer:
         Returns:
             {
                 'top_features': [{name, value, shap, direction}, ...],
-                'mahalanobis_distance': float,
                 'feature_count': int,
             }
         """
         if not features:
-            return {"top_features": [], "mahalanobis_distance": 0.0, "feature_count": 0}
+            return {"top_features": [], "feature_count": 0}
 
         top_features = self._get_top_features(features)
-        maha = self._compute_mahalanobis(features)
 
         return {
             "top_features": top_features,
-            "mahalanobis_distance": maha,
             "feature_count": len(features),
         }
 
@@ -109,24 +95,3 @@ class FeatureSummarizer:
                 "direction": direction,
             })
         return result
-
-    def _compute_mahalanobis(self, features: dict[str, float]) -> float:
-        """计算与训练集均值的马氏距离。"""
-        if self._train_mean is None or self._train_cov is None or not self._cov_feature_order:
-            return 0.0
-
-        try:
-            # 构建特征向量（按训练集特征顺序）
-            vec = np.array(
-                [features.get(f, self._train_mean.get(f, 0.0)) for f in self._cov_feature_order]
-            )
-            mean_vec = np.array(
-                [self._train_mean.get(f, 0.0) for f in self._cov_feature_order]
-            )
-
-            diff = vec - mean_vec
-            cov_inv = np.linalg.pinv(self._train_cov)
-            maha_sq = float(diff @ cov_inv @ diff)
-            return round(float(np.sqrt(max(0, maha_sq))), 2)
-        except Exception:
-            return 0.0

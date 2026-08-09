@@ -179,8 +179,7 @@ class SegmentationAgent:
 你还将看到每个分割结果经 GT-trained radiomics 模型的分类判断（radiomics_judge 字段）。
 该裁判用金标准 mask 训练，分类置信度可作为分割质量的间接信号：
 分割越准确，radiomics 特征越接近训练分布，分类置信度越合理。
-若多个模型的 radiomics_judge 分类结果分歧大，说明分割质量差异大，需重点分析。
-mahalanobis_distance 过大（>3）的 mask 可能分割异常。"""
+若多个模型的 radiomics_judge 分类结果分歧大，说明分割质量差异大，需重点分析。"""
 
         return f"""你是一个分割模型选择代理，根据多个模型的掩码质量指标选择最佳结果。
 只输出一个JSON对象，首字符{{末字符}}，无前缀后缀或Markdown。
@@ -191,7 +190,7 @@ mahalanobis_distance 过大（>3）的 mask 可能分割异常。"""
 {judge_block}
 决策优先级（从高到低）：
 1) 模型间一致性：agreement_with_others 高更可靠；分歧大时倚重 agreement 高且 mean_hd95_to_others 低的候选；
-2) radiomics 裁判（如有）：分类置信度合理、mahalanobis_distance 不过大的 mask 更可信；
+2) radiomics 裁判（如有）：分类置信度合理的 mask 更可信；
 3) 设备匹配：training_devices 与输入设备越接近越好；
 4) 形态学：单连通、边界平滑、circularity 0.6-0.9、面积合理；
 5) 数据集规模：dataset_size 大的模型泛化性更好；
@@ -391,7 +390,6 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
                     "malignant_prob": round(jr["malignant_prob"], 3),
                     "confidence": round(jr["confidence"], 3),
                     "top_features": jr.get("top_features", [])[:3],
-                    "mahalanobis_distance": round(jr.get("mahalanobis_distance", 0), 2),
                 }
 
             data["models"].append(model_info)
@@ -421,7 +419,7 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
         if classification_anchor:
             req["use_anchor"] = "与锚点矛盾的Radiomics分类需在reasoning中明确指出并解释原因。"
         else:
-            req["no_anchor_strategy"] = "无分类锚点时，优先级：1)裁判一致性 2)mahalanobis 3)形态学 4)历史性能。"
+            req["no_anchor_strategy"] = "无分类锚点时，优先级：1)裁判一致性 2)形态学 3)历史性能。"
         if req:
             data["reasoning_requirements"] = req
 
@@ -640,7 +638,7 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 此锚点用于评估各分割结果的合理性：
 - 与锚点矛盾的Radiomics裁判分类 → 该mask可能覆盖了错误的ROI → 可信度显著降低。
 - 与锚点吻合的mask → 额外加分。
-- 若所有mask的Radiomics分类都与锚点矛盾 → 选mahalanobis最小的mask并解释原因。"""
+- 若所有mask的Radiomics分类都与锚点矛盾 → 选confidence最高的mask并解释原因。"""
         else:
             system_prompt += """
 
@@ -648,9 +646,8 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 独立分类模型对该图像的判断不一致，未能形成共识。
 整图级别特征模糊，分割评估应以以下为主要依据：
 1. Radiomics裁判的内部一致性（不同的分割得到相似的分类方向→更可信）
-2. mahalanobis_distance最小的mask（特征最接近GT训练分布）
-3. 形态学合理性（circularity 0.6-0.9、单连通）
-4. 设备匹配与历史性能"""
+2. 形态学合理性（circularity 0.6-0.9、单连通）
+3. 设备匹配与历史性能"""
 
         if not self.enable_agent:
             print(f"  Agent 已禁用，使用静态规则选择")
