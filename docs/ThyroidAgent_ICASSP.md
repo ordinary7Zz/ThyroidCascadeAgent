@@ -93,7 +93,7 @@ where $A$ denotes the ROI area, $M(x,y) \in \{0,1\}$ is the binary ROI mask at s
 \label{alg:thyroidagent_inference}
 \begin{algorithmic}[1]
 \Require Image $x$; seg experts $\mathcal{E}_{seg}$; cls experts $\mathcal{E}_{cls}$; radiomics judge $g_\theta$
-\Ensure Final mask $\hat{M}$, label $\hat{y}$, confidence $\hat{p}$
+\Ensure Final mask $\hat{M}$, label $\hat{y}$
 
 \Statex \textbf{Phase 1--2: Parallel expert inference}
 \State $\{M_k\}_{k=1}^{K} \gets \mathrm{RunSeg}(\mathcal{E}_{seg}, x)$
