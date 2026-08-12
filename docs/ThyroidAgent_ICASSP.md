@@ -173,7 +173,7 @@ where the LLM integrates structured evidence from all sources, including individ
         & \makecell{77.13 \\ {\tiny [75.75, 78.51]}} \\
         \midrule
         \textbf{ThyroidAgent}
-        & \makecell{\textbf{85.28} \\ {\tiny [84.00, 86.56]}}
+        & \makecell{\textbf{86.40} \\ {\tiny [85.15, 87.56]}}
         & \makecell{\textbf{91.46} \\ {\tiny [91.32, 91.60]}}
         & \makecell{\textbf{87.58} \\ {\tiny [87.14, 88.02]}}
         & \makecell{82.99 \\ {\tiny [80.89, 85.09]}}
@@ -200,12 +200,12 @@ Segmentation performance is evaluated using Dice (\%). Table~\ref{tab:table1_seg
         \textbf{Method} & \textbf{TN3K} & \textbf{DDTI} & \textbf{ThyroidXL} & \textbf{TN5K} \\
         \midrule
         MedSigLIP~\cite{sellergren2025medgemma,zhai2023siglip}
-        & \makecell{0.831 \\ {\tiny ---}}
+        & \makecell{0.829 \\ {\tiny [0.797, 0.862]}}
         & \makecell{0.798 \\ {\tiny ---}}
         & \makecell{0.924 \\ {\tiny ---}}
         & \makecell{0.941 \\ {\tiny ---}} \\
         BiomedCLIP~\cite{zhang2023biomedclip}
-        & \makecell{0.798 \\ {\tiny ---}}
+        & \makecell{0.754 \\ {\tiny [0.714, 0.790]}}
         & \makecell{0.762 \\ {\tiny ---}}
         & \makecell{0.905 \\ {\tiny ---}}
         & \makecell{0.928 \\ {\tiny ---}} \\
