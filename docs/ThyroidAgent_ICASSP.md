@@ -197,12 +197,10 @@ where the LLM integrates structured evidence from all sources, including individ
     \end{tabular}
 \end{table}
 
-\section{Experiments}
-\label{sec:experiment}
-We evaluate on a consolidated thyroid ultrasound benchmark assembled from TN3K~\cite{gong2021multi}, TN5K~\cite{zhang2025tn5000}, DDTI~\cite{pedraza2015open}, ThyroidXL~\cite{duong2025thyroidxl}, and PKTN~\cite{sun2025clip}, spanning heterogeneous acquisition protocols and device settings. Patient-level 0.7/0.15/0.15 splits are used where applicable, and stacked training sets are formed by merging training portions across datasets (up to 26,074 images). Segmentation is evaluated with Dice (\%); classification with AUROC. Baselines include TransUNet~\cite{chen2024transunet}, MedSegX~\cite{zhang2025generalist}, MedSAM2~\cite{ma2025medsam2}, UltraFedFM~\cite{jiang2025pretraining}, MedSigLIP~\cite{sellergren2025medgemma,zhai2023siglip}, BiomedCLIP~\cite{zhang2023biomedclip}, LSNet~\cite{wang2025lsnet}, RepViT~\cite{wang2023repvit}, ResNet50~\cite{he2016deep}, Qwen3-VL-8B-Instruct~\cite{bai2025qwen3}, MedGemma-4B~\cite{sellergren2025medgemma}, and GPT-5.1~\cite{openai2025gpt5systemcard}. Open-source VLMs are adapted with LoRA fine-tuning; GPT-5.1 uses prompt-only API inference. All models are trained with AdamW (lr $1e{-}4$, batch 12, 50 epochs) on 3$\times$48\,GB NVIDIA RTX A6000 GPUs.
-
 \section{Results}
 \label{sec:results}
+We evaluate on a consolidated thyroid ultrasound benchmark assembled from TN3K~\cite{gong2021multi}, TN5K~\cite{zhang2025tn5000}, DDTI~\cite{pedraza2015open}, ThyroidXL~\cite{duong2025thyroidxl}, and PKTN~\cite{sun2025clip}, spanning heterogeneous acquisition protocols and device settings. Patient-level 0.7/0.15/0.15 splits are used where applicable, and stacked training sets are formed by merging training portions across datasets (up to 26,074 images). Baselines include TransUNet~\cite{chen2024transunet}, MedSegX~\cite{zhang2025generalist}, MedSAM2~\cite{ma2025medsam2}, UltraFedFM~\cite{jiang2025pretraining}, MedSigLIP~\cite{sellergren2025medgemma,zhai2023siglip}, BiomedCLIP~\cite{zhang2023biomedclip}, LSNet~\cite{wang2025lsnet}, RepViT~\cite{wang2023repvit}, ResNet50~\cite{he2016deep}, Qwen3-VL-8B-Instruct~\cite{bai2025qwen3}, MedGemma-4B~\cite{sellergren2025medgemma}, and GPT-5.1~\cite{openai2025gpt5systemcard}. Open-source VLMs are adapted with LoRA fine-tuning; GPT-5.1 uses prompt-only API inference. All models are trained with AdamW (lr $1e{-}4$, batch 12, 50 epochs) on 3$\times$48\,GB NVIDIA RTX A6000 GPUs.
+
 \subsection{Main Results}
 Segmentation performance is evaluated using Dice (\%). Table~\ref{tab:table1_seg_blocks} compares ThyroidAgent against three categories of methods: general-purpose segmenters (MedSegX~\cite{zhang2025generalist}, MedSAM2~\cite{ma2025medsam2}), a specialized ultrasound model (UltraFedFM~\cite{jiang2025pretraining}), and a recent advanced transformer-based approach (TransUNet~\cite{chen2024transunet}). ThyroidAgent achieves the best Dice on 4 of 5 datasets, with the largest gain on DDTI (+0.74 over MedSAM2, 91.46 vs 90.72). On PKTN, ThyroidAgent (82.99) slightly underperforms MedSAM2 (83.46), likely because PKTN's clip-based low-quality images produce mask predictions with lower inter-model variance, reducing the discriminative power of the feature-consistency-based judge.
 \begin{table}[b]
@@ -282,11 +280,9 @@ For malignancy classification, we evaluate AUROC. Table~\ref{tab:table2_cls_bloc
     \label{fig:system_analysis}
 \end{figure}
 
-\subsection{Effectiveness of Dual-Path Cascade Routing}
+\subsection{System Analysis}
 \label{sec:effectiveness}
-The rationale for using dual-path cascade routing is supported by the fact that multi-model outputs are not trivially redundant. Both segmentation and classification experts exhibit non-negligible disagreement across samples, as illustrated by the Area-CV distribution (median = 0.057, 90th percentile = 0.250) in Fig.~\ref{fig:system_analysis}(b) and the vote-consistency pie in Fig.~\ref{fig:system_analysis}(a). This indicates that no single model consistently performs across all images, which motivates the consensus-based path split and radiomics-judge-driven selection.
-
-Fig.~\ref{fig:system_analysis}(c) further shows that ThyroidAgent outperforms heuristics such as selecting the most confident expert or majority voting, especially in the Dice-score range of [0.6, 0.8], where radiomics features improve contour and texture characterization. The performance gap narrows in the [0.8, 1.0] range as segmentation quality improves and expert predictions converge.
+The rationale for using dual-path cascade routing is supported by the fact that multi-model outputs are not trivially redundant. Both segmentation and classification experts exhibit non-negligible disagreement across samples, as illustrated by the Area-CV distribution (median = 0.057, 90th percentile = 0.250) in Fig.~\ref{fig:system_analysis}(b) and the vote-consistency pie in Fig.~\ref{fig:system_analysis}(a). This indicates that no single model consistently performs across all images, which motivates the consensus-based path split and radiomics-judge-driven selection. Fig.~\ref{fig:system_analysis}(c) further shows that ThyroidAgent outperforms heuristics such as selecting the most confident expert or majority voting, especially in the Dice-score range of [0.6, 0.8], where radiomics features improve contour and texture characterization.
 
 \begin{figure}[t]
     \centering
@@ -295,7 +291,6 @@ Fig.~\ref{fig:system_analysis}(c) further shows that ThyroidAgent outperforms he
     \label{fig:interpretability_analysis}
 \end{figure}
 
-\subsection{Interpretability Analysis}
 Fig.~\ref{fig:interpretability_analysis}(a) shows the global SHAP feature importance of the radiomics judge. Shape descriptors dominate the prediction: \emph{Sphericity} and \emph{Elongation} are the top-2 contributors, followed by \emph{Perimeter}, \emph{LRHGLE}, and \emph{SRLGLE}, confirming that malignancy cues are primarily morphological rather than textural. Fig.~\ref{fig:interpretability_analysis}(b) decomposes a single malignant prediction into feature-level contributions, showing how these descriptors collectively shift the base value to the final decision. Fig.~\ref{fig:interpretability_analysis}(c) compares selected masks with ground truth across cases with varying judge confidence, demonstrating that the judge assigns higher confidence to masks whose radiomics features stay consistent with the consensus of plausible predictions.
 
 \section{Conclusion}
