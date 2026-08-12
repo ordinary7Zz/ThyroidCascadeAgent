@@ -188,7 +188,7 @@ We evaluate on a consolidated thyroid ultrasound benchmark assembled from TN3K~\
 
 \subsection{Main Results}
 Segmentation performance is evaluated using Dice (\%). Table~\ref{tab:table1_seg_blocks} compares ThyroidAgent against four segmentation methods. ThyroidAgent achieves the best Dice on 4 of 5 datasets, with the largest gain on DDTI (+0.74 over MedSAM2, 91.46 vs 90.72). On PKTN, ThyroidAgent (82.99) slightly underperforms MedSAM2 (83.46), likely because PKTN's clip-based low-quality images produce mask predictions with lower inter-model variance, reducing the discriminative power of the feature-consistency-based judge.
-\begin{table}[b]
+\begin{table}[t]
     \centering
     \caption{Classification performance (AUROC) across 4 datasets with 95\% confidence intervals.}
     \label{tab:table2_cls_blocks2}
