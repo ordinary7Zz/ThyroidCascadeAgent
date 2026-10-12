@@ -125,5 +125,8 @@ pipeline:
     device_info: ["GE Logiq E9", "GE S7"]
     start_index: 0
     max_images: null
+  log_routing: false
+  routing_log_path: null
+  routing_log_include_prompts: false
   output:
     output_dir: "output/shared_output/pipeline_run"

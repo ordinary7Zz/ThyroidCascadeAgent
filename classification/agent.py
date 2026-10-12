@@ -18,6 +18,12 @@ from typing import Any, Optional
 
 from shared.base_datasets_info import BASE_DATASETS_INFO, infer_device_match
 from shared.llm_client import LLMClient
+from shared.routing_log import (
+    RoutingLogger,
+    cls_disagreement_tier,
+    llm_config_dict,
+    summarize_cls_candidates,
+)
 
 from .base_model import ClsModelOutput
 from .soft_voting import (
@@ -112,16 +118,91 @@ class LLMClassificationAgent:
         self,
         llm_client: Optional[LLMClient] = None,
         config: Optional[dict] = None,
+        routing_logger: Optional[RoutingLogger] = None,
     ):
         self.llm_client = llm_client
         self.base_datasets_info = BASE_DATASETS_INFO
+        self.routing_logger = routing_logger
 
         cfg = config or {}
         self.top_k = max(1, int(cfg.get("top_k", 1)))
         self.enable_agent = cfg.get("enable_agent", True)
+        self.metadata_mode = cfg.get("metadata_mode", "full")
+        self._cls_log_ctx: dict[str, Any] = {}
 
         self.system_prompt_single = self._build_system_prompt_single()
         self.system_prompt_multi = self._build_system_prompt_multi()
+
+    def _emit_cls_routing_log(
+        self,
+        decision: ClsAgentDecision,
+        *,
+        task: str,
+        llm_invoked: bool,
+        method: str,
+        image_name: Optional[str] = None,
+        path: Optional[str] = None,
+        classification_consensus: Optional[bool] = None,
+        predictions: Optional[list] = None,
+        parse_ok: bool = True,
+        error: Optional[str] = None,
+        prompts: Optional[dict] = None,
+        extra: Optional[dict] = None,
+    ) -> None:
+        logger = self.routing_logger
+        if logger is None or not logger.enabled:
+            return
+        preds = predictions or []
+        record: dict[str, Any] = {
+            "image_name": image_name or (self._cls_log_ctx or {}).get("image_name"),
+            "task": task,
+            "path": path,
+            "classification_consensus": classification_consensus,
+            "metadata_mode": self.metadata_mode,
+            "disagreement_tier": cls_disagreement_tier(preds),
+            "llm_invoked": llm_invoked,
+            "method": method,
+            "parse_ok": parse_ok,
+            "error": error,
+            "candidates_summary": summarize_cls_candidates(preds),
+            "selected_model": decision.selected_model,
+            "selected_class": decision.selected_class,
+            "confidence": decision.confidence,
+            "reasoning": decision.reasoning,
+        }
+        record.update(llm_config_dict(self.llm_client))
+        if extra:
+            record.update(extra)
+        if logger.include_prompts and prompts:
+            record["prompts"] = prompts
+        logger.log(record)
+
+    def _finish_cls_decision(
+        self,
+        decision: ClsAgentDecision,
+        **log_kw,
+    ) -> ClsAgentDecision:
+        self._emit_cls_routing_log(decision, **log_kw)
+        return decision
+
+    def log_path_a_decision(
+        self,
+        image_name: str,
+        anchor_class: str,
+        indie_preds: list[ClsModelOutput],
+        decision: ClsAgentDecision,
+    ) -> None:
+        """Path A：分类共识，未调用 LLM（由 cascade Phase 5 调用）。"""
+        self._emit_cls_routing_log(
+            decision,
+            task="cls_path_a",
+            llm_invoked=False,
+            method="classification_consensus",
+            image_name=image_name,
+            path="A",
+            classification_consensus=True,
+            predictions=indie_preds,
+        )
 
     def _build_system_prompt_single(self) -> str:
         return """你是甲状腺超声多模型预测整合专家，从若干模型输出中选最可信的一项。
@@ -297,6 +378,7 @@ class LLMClassificationAgent:
         predictions: list[ClsModelOutput],
         input_device_info: Optional[list[str]] = None,
         input_data_info: Optional[dict] = None,
+        image_name: Optional[str] = None,
     ) -> ClsAgentDecision:
         """
         选择最佳分类结果。
@@ -309,13 +391,33 @@ class LLMClassificationAgent:
         if not predictions:
             raise ValueError("没有预测结果")
 
+        self._cls_log_ctx = {"image_name": image_name, "predictions": predictions}
+
         # 一致时不调 LLM
         if self._predictions_top_class_unanimous(predictions):
-            return self._decision_unanimous(predictions)
+            return self._finish_cls_decision(
+                self._decision_unanimous(predictions),
+                task="cls_standalone",
+                llm_invoked=False,
+                method="unanimous",
+                image_name=image_name,
+                path=None,
+                classification_consensus=True,
+                predictions=predictions,
+            )
 
         # 不启用 agent 时直接 soft voting
         if not self.enable_agent:
-            return self._soft_voting_decision(predictions)
+            return self._finish_cls_decision(
+                self._soft_voting_decision(predictions),
+                task="cls_standalone",
+                llm_invoked=False,
+                method="soft_voting",
+                image_name=image_name,
+                path=None,
+                classification_consensus=False,
+                predictions=predictions,
+            )
 
         # 构造 prompt
         formatted = self.format_predictions_json(predictions)
@@ -337,6 +439,8 @@ class LLMClassificationAgent:
 
 {question}"""
 
+        prompts_bundle = {"system": sys_prompt, "user": user_prompt}
+
         # 调用 LLM
         try:
             response_text = self.llm_client.chat(sys_prompt, user_prompt)
@@ -344,17 +448,49 @@ class LLMClassificationAgent:
             decision_data = json.loads(json_text)
         except Exception as e:
             print(f"  ✗ LLM 调用或解析失败: {e}，使用降级选择")
-            return self._fallback_selection(predictions)
+            return self._finish_cls_decision(
+                self._fallback_selection(predictions),
+                task="cls_standalone",
+                llm_invoked=True,
+                method="llm_fallback",
+                image_name=image_name,
+                classification_consensus=False,
+                predictions=predictions,
+                parse_ok=False,
+                error=str(e),
+                prompts=prompts_bundle,
+            )
 
         # 解析决策
         try:
             if self.top_k > 1:
-                return self._decision_from_llm_topk(predictions, decision_data)
+                decision = self._decision_from_llm_topk(predictions, decision_data)
             else:
-                return self._decision_from_llm_single(predictions, decision_data)
+                decision = self._decision_from_llm_single(predictions, decision_data)
+            return self._finish_cls_decision(
+                decision,
+                task="cls_standalone",
+                llm_invoked=True,
+                method="llm_single" if self.top_k <= 1 else "llm_topk",
+                image_name=image_name,
+                classification_consensus=False,
+                predictions=predictions,
+                prompts=prompts_bundle,
+            )
         except (KeyError, ValueError) as e:
             print(f"  ✗ 决策解析失败: {e}，使用降级选择")
-            return self._fallback_selection(predictions)
+            return self._finish_cls_decision(
+                self._fallback_selection(predictions),
+                task="cls_standalone",
+                llm_invoked=True,
+                method="llm_fallback",
+                image_name=image_name,
+                classification_consensus=False,
+                predictions=predictions,
+                parse_ok=False,
+                error=str(e),
+                prompts=prompts_bundle,
+            )
 
     def _decision_from_llm_single(
         self, predictions, decision_data
@@ -464,6 +600,7 @@ class LLMClassificationAgent:
         autogluon_pred: Optional["ClsModelOutput"],
         seg_decision: Any,
         voting_weights: Optional[dict] = None,
+        image_name: Optional[str] = None,
     ) -> "ClsAgentDecision":
         """
         Path B 分类裁决：独立分类模型无共识时的分类决策。
@@ -474,9 +611,34 @@ class LLMClassificationAgent:
         if not indie_predictions:
             raise ValueError("没有独立分类模型预测")
 
+        if not self.enable_agent:
+            all_preds = list(indie_predictions)
+            if autogluon_pred is not None and autogluon_pred.predictions:
+                all_preds.append(autogluon_pred)
+            sv_class, sv_conf = _weighted_soft_vote(all_preds, voting_weights)
+            decision = ClsAgentDecision(
+                selected_model="weighted_soft_vote",
+                selected_class=sv_class,
+                confidence=float(sv_conf),
+                reasoning=f"分类 Agent 关闭，加权软投票={sv_class}({sv_conf:.2f})",
+                all_predictions=[p.to_dict() for p in all_preds],
+                method="path_b_static_softvote",
+            )
+            return self._finish_cls_decision(
+                decision,
+                task="cls_path_b",
+                llm_invoked=False,
+                method="path_b_static_softvote",
+                image_name=image_name,
+                path="B",
+                classification_consensus=False,
+                predictions=indie_predictions,
+                extra=self._path_b_extra(autogluon_pred, seg_decision),
+            )
+
         try:
             return self._resolve_path_b_with_llm(
-                indie_predictions, autogluon_pred, seg_decision
+                indie_predictions, autogluon_pred, seg_decision, image_name=image_name
             )
         except Exception as e:
             print(f"  ✗ Path B LLM 裁决失败: {e}")
@@ -485,13 +647,26 @@ class LLMClassificationAgent:
             if autogluon_pred is not None and autogluon_pred.predictions:
                 all_preds.append(autogluon_pred)
             sv_class, sv_conf = _weighted_soft_vote(all_preds, voting_weights)
-            return ClsAgentDecision(
+            decision = ClsAgentDecision(
                 selected_model="weighted_soft_vote",
                 selected_class=sv_class,
                 confidence=float(sv_conf),
                 reasoning=f"LLM仲裁失败，降级加权软投票={sv_class}({sv_conf:.2f})",
                 all_predictions=[p.to_dict() for p in all_preds],
                 method="path_b_softvote",
+            )
+            return self._finish_cls_decision(
+                decision,
+                task="cls_path_b",
+                llm_invoked=True,
+                method="path_b_softvote",
+                image_name=image_name,
+                path="B",
+                classification_consensus=False,
+                predictions=indie_predictions,
+                parse_ok=False,
+                error=str(e),
+                extra=self._path_b_extra(autogluon_pred, seg_decision),
             )
 
     @staticmethod
@@ -510,11 +685,34 @@ class LLMClassificationAgent:
             method="path_b_majority_fallback",
         )
 
+    @staticmethod
+    def _path_b_extra(autogluon_pred: Optional["ClsModelOutput"], seg_decision: Any) -> dict:
+        seg_model = (
+            seg_decision.selected_model
+            if hasattr(seg_decision, "selected_model")
+            else None
+        )
+        seg_reason = (
+            seg_decision.reasoning if hasattr(seg_decision, "reasoning") else None
+        )
+        al = None
+        if autogluon_pred is not None:
+            al = {
+                "top_class": autogluon_pred.top_class,
+                "top_confidence": autogluon_pred.top_confidence,
+            }
+        return {
+            "autogluon_summary": al,
+            "segmentation_selected_model": seg_model,
+            "segmentation_reasoning": seg_reason,
+        }
+
     def _resolve_path_b_with_llm(
         self,
         indie_preds: list["ClsModelOutput"],
         autogluon_pred: Optional["ClsModelOutput"],
         seg_decision: Any,
+        image_name: Optional[str] = None,
     ) -> "ClsAgentDecision":
         """Path B 最困难情况：调 LLM 做最终裁决。
 
@@ -583,18 +781,31 @@ Markup:
 reasoning 须引用具体置信度数值。"""
 
         user_prompt = json.dumps(prompt_data, ensure_ascii=False)
+        prompts_bundle = {"system": sys_prompt, "user": user_prompt}
 
         response_text = self.llm_client.chat(sys_prompt, user_prompt)
         json_text = self._extract_json_from_text(response_text)
         decision_data = json.loads(json_text)
 
-        return ClsAgentDecision(
+        decision = ClsAgentDecision(
             selected_model="agent_path_b_llm",
             selected_class=decision_data["selected_class"],
             confidence=float(decision_data["confidence"]),
             reasoning=decision_data["reasoning"],
             all_predictions=[p.to_dict() for p in indie_preds],
             method="path_b_llm",
+        )
+        return self._finish_cls_decision(
+            decision,
+            task="cls_path_b",
+            llm_invoked=True,
+            method="path_b_llm",
+            image_name=image_name,
+            path="B",
+            classification_consensus=False,
+            predictions=indie_preds,
+            prompts=prompts_bundle,
+            extra=self._path_b_extra(autogluon_pred, seg_decision),
         )
 
     def batch_select(

@@ -22,6 +22,13 @@ import numpy as np
 
 from shared.base_datasets_info import BASE_DATASETS_INFO
 from shared.llm_client import LLMClient
+from shared.routing_log import (
+    RoutingLogger,
+    llm_config_dict,
+    seg_disagreement_tier,
+    summarize_judge_results,
+    summarize_seg_candidates,
+)
 
 from .base_model import SegModelOutput
 from .quality_evaluator import SegmentationQualityEvaluator
@@ -118,6 +125,7 @@ class SegmentationAgent:
         quality_evaluator: Optional[SegmentationQualityEvaluator] = None,
         radiomics_judge=None,
         config: Optional[dict] = None,
+        routing_logger: Optional[RoutingLogger] = None,
     ):
         """
         Args:
@@ -143,6 +151,9 @@ class SegmentationAgent:
         self.pf_cosine = pf_cfg.get("cosine_threshold", 0.8)
         self.pf_prob_outlier = pf_cfg.get("prob_outlier_threshold", 0.4)
         self.pf_min_keep = pf_cfg.get("min_keep", 3)
+        self.metadata_mode = cfg.get("metadata_mode", "full")
+        self.routing_logger = routing_logger
+        self._seg_log_ctx: dict[str, Any] = {}
 
         self.system_prompt = self._generate_system_prompt()
 
@@ -538,6 +549,66 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             mask = (labels == largest).astype(np.uint8)
         return mask
 
+    def _emit_seg_routing_log(
+        self,
+        decision: SegAgentDecision,
+        *,
+        llm_invoked: bool,
+        method: str,
+        parse_ok: bool = True,
+        error: Optional[str] = None,
+        prompts: Optional[dict] = None,
+    ) -> None:
+        logger = self.routing_logger
+        if logger is None or not logger.enabled:
+            return
+        ctx = self._seg_log_ctx or {}
+        quality_results = ctx.get("quality_results")
+        predictions = ctx.get("predictions") or []
+        record: dict[str, Any] = {
+            "image_name": ctx.get("image_name"),
+            "task": "seg",
+            "path": decision.path,
+            "classification_anchor": decision.classification_anchor,
+            "classification_consensus": bool(decision.classification_anchor),
+            "metadata_mode": ctx.get("metadata_mode", self.metadata_mode),
+            "disagreement_tier": seg_disagreement_tier(quality_results),
+            "llm_invoked": llm_invoked,
+            "method": method,
+            "parse_ok": parse_ok,
+            "error": error,
+            "candidates_summary": summarize_seg_candidates(predictions, quality_results),
+            "judge_summary": summarize_judge_results(ctx.get("judge_results")),
+            "selected_model": decision.selected_model,
+            "confidence": decision.confidence,
+            "reasoning": decision.reasoning,
+            "is_ensemble": decision.is_ensemble,
+        }
+        record.update(llm_config_dict(self.llm_client))
+        if logger.include_prompts and prompts:
+            record["prompts"] = prompts
+        logger.log(record)
+
+    def _finish_seg_decision(
+        self,
+        decision: SegAgentDecision,
+        *,
+        llm_invoked: bool,
+        method: str,
+        parse_ok: bool = True,
+        error: Optional[str] = None,
+        prompts: Optional[dict] = None,
+    ) -> SegAgentDecision:
+        self._emit_seg_routing_log(
+            decision,
+            llm_invoked=llm_invoked,
+            method=method,
+            parse_ok=parse_ok,
+            error=error,
+            prompts=prompts,
+        )
+        return decision
+
     # ========== 核心选择方法 ==========
 
     def select_best_mask(
@@ -549,6 +620,7 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
         input_device_info: Optional[list[str]] = None,
         input_data_info: Optional[dict] = None,
         judge_results: Optional[list[dict]] = None,
+        image_name: Optional[str] = None,
     ) -> SegAgentDecision:
         """
         选择最佳分割 mask。
@@ -649,10 +721,25 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 2. 形态学合理性（circularity 0.6-0.9、单连通）
 3. 设备匹配与历史性能"""
 
+        prompts_bundle = {"system": system_prompt, "user": user_prompt}
+        self._seg_log_ctx = {
+            "image_name": image_name,
+            "path": path,
+            "classification_anchor": classification_anchor,
+            "predictions": predictions,
+            "quality_results": quality_results,
+            "judge_results": judge_results,
+            "metadata_mode": self.metadata_mode,
+        }
+
         if not self.enable_agent:
             print(f"  Agent 已禁用，使用静态规则选择")
-            return self._fallback_selection(
-                predictions, gt_mask, quality_results, judge_results, classification_anchor
+            return self._finish_seg_decision(
+                self._fallback_selection(
+                    predictions, gt_mask, quality_results, judge_results, classification_anchor
+                ),
+                llm_invoked=False,
+                method="static_fallback",
             )
 
         try:
@@ -661,8 +748,15 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             decision_data = json.loads(json_text)
         except Exception as e:
             print(f"  ✗ LLM 调用或解析失败: {e}，使用降级选择")
-            return self._fallback_selection(
-                predictions, gt_mask, quality_results, judge_results, classification_anchor
+            return self._finish_seg_decision(
+                self._fallback_selection(
+                    predictions, gt_mask, quality_results, judge_results, classification_anchor
+                ),
+                llm_invoked=True,
+                method="llm_fallback",
+                parse_ok=False,
+                error=str(e),
+                prompts=prompts_bundle,
             )
 
         # 解析决策
@@ -675,19 +769,35 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             is_ensemble = "selected_models" in decision_data and self.ensemble_enabled
 
             if is_ensemble:
-                return self._handle_ensemble(
+                return self._finish_seg_decision(
+                    self._handle_ensemble(
+                        decision_data, predictions, quality_results, gt_mask, judge_results,
+                        confidence, reasoning, classification_anchor
+                    ),
+                    llm_invoked=True,
+                    method="llm_ensemble",
+                    prompts=prompts_bundle,
+                )
+            return self._finish_seg_decision(
+                self._handle_single(
                     decision_data, predictions, quality_results, gt_mask, judge_results,
                     confidence, reasoning, classification_anchor
-                )
-            else:
-                return self._handle_single(
-                    decision_data, predictions, quality_results, gt_mask, judge_results,
-                    confidence, reasoning, classification_anchor
-                )
+                ),
+                llm_invoked=True,
+                method="llm_single",
+                prompts=prompts_bundle,
+            )
         except (KeyError, ValueError) as e:
             print(f"  ✗ 决策解析失败: {e}，使用降级选择")
-            return self._fallback_selection(
-                predictions, gt_mask, quality_results, judge_results, classification_anchor
+            return self._finish_seg_decision(
+                self._fallback_selection(
+                    predictions, gt_mask, quality_results, judge_results, classification_anchor
+                ),
+                llm_invoked=True,
+                method="llm_fallback",
+                parse_ok=False,
+                error=str(e),
+                prompts=prompts_bundle,
             )
 
     def _handle_single(

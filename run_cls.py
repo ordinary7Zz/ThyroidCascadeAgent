@@ -19,6 +19,7 @@ import yaml
 
 from shared.image_io import ImageIO
 from shared.llm_client import LLMClient
+from shared.routing_log import build_routing_logger_from_config
 from classification import (
     ClsModelRegistry,
     LLMClassificationAgent,
@@ -75,9 +76,13 @@ def main():
         llm_client = None
 
     registry = build_cls_registry(cls_cfg, args.device)
+    output_dir = Path(config.get("pipeline", {}).get("output", {}).get("output_dir", "output/cls"))
+    routing_logger = build_routing_logger_from_config(config, output_dir)
+
     agent = LLMClassificationAgent(
         llm_client=llm_client,
         config=cls_cfg.get("agent", {}),
+        routing_logger=routing_logger,
     )
 
     image_io = ImageIO()
@@ -100,7 +105,6 @@ def main():
     if max_images:
         images = images[:max_images]
 
-    output_dir = Path(config.get("pipeline", {}).get("output", {}).get("output_dir", "output/cls"))
     output_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"\n分类筛选: {len(images)} 张图像")
@@ -119,6 +123,7 @@ def main():
             decision = agent.select_best_model(
                 predictions,
                 input_device_info=device_info,
+                image_name=img_path.name,
             )
 
             result = decision.to_dict()

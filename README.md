@@ -25,3 +25,11 @@ pipeline/            串联编排（分割筛选 → 分类筛选）
 ## 构建计划
 
 详见 `docs/BUILD_PLAN.md`。
+
+## 返修 B6（路由透明性）
+
+- 配置：`pipeline.log_routing: true` → 输出目录下 `routing_log.jsonl`
+- 规格导出：`python scripts/export_router_spec.py`
+- 5× 稳定性（需 intermediate 缓存 + `enable_agent: true`）：`python run_routing_stability.py --output-dir <pipeline_out>`
+
+详见 `docs/REVISION_B6_PLAN.md`。

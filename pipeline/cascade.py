@@ -474,6 +474,7 @@ class CascadePipeline:
                 gt_mask=gt_mask,
                 input_device_info=input_device_info,
                 input_data_info=input_data_info,
+                image_name=None,
             )
         else:
             seg_decision = self._select_mask_static(
@@ -492,7 +493,8 @@ class CascadePipeline:
             if enable_cls_agent:
                 cls_decision = self.cls_agent.resolve_path_b(
                     indie_preds, autogluon_pred, seg_decision,
-                    voting_weights=self._get_voting_weights()
+                    voting_weights=self._get_voting_weights(),
+                    image_name=None,
                 )
             else:
                 cls_decision = self._resolve_classification_path_b_static(
@@ -823,6 +825,7 @@ class CascadePipeline:
                         input_device_info=input_device_info,
                         input_data_info=input_data_info,
                         judge_results=judge_results,
+                        image_name=img_name,
                     )
                 else:
                     seg_decision = self._select_mask_static(
@@ -832,6 +835,25 @@ class CascadePipeline:
                         input_data_info=input_data_info,
                         skip_radiomics=False,
                         judge_results=judge_results,
+                    )
+                    self.seg_agent._seg_log_ctx = {
+                        "image_name": img_name,
+                        "path": seg_decision.path,
+                        "classification_anchor": anchor_class,
+                        "predictions": seg_preds,
+                        "quality_results": None,
+                        "judge_results": judge_results,
+                        "metadata_mode": self.seg_agent.metadata_mode,
+                    }
+                    quality_results = self.seg_agent.quality_evaluator.evaluate_batch(
+                        [p.mask for p in seg_preds],
+                        [p.model_name for p in seg_preds],
+                    )
+                    self.seg_agent._seg_log_ctx["quality_results"] = quality_results
+                    self.seg_agent._finish_seg_decision(
+                        seg_decision,
+                        llm_invoked=False,
+                        method="cascade_static_mask",
                     )
 
                 # 从 judge_results 提取 all_datasets 的结果，填充 autogluon 缓存
@@ -1080,6 +1102,9 @@ class CascadePipeline:
                 # 分类裁决
                 if consensus:
                     cls_decision = self._make_anchor_classification_decision(anchor_class, indie_preds)
+                    self.cls_agent.log_path_a_decision(
+                        img_name, anchor_class, indie_preds, cls_decision
+                    )
                 else:
                     # 构造 AutoGluon ClsModelOutput（仅在分割开启且有结果时存在）
                     from classification.base_model import ClsModelOutput
@@ -1109,12 +1134,36 @@ class CascadePipeline:
                         )
                         cls_decision = self.cls_agent.resolve_path_b(
                             indie_preds, autogluon_pred, seg_decision,
-                            voting_weights=self._get_voting_weights()
+                            voting_weights=self._get_voting_weights(),
+                            image_name=img_name,
                         )
                     else:
                         # 无分割或分类 Agent 关闭：静态加权软投票裁决
                         cls_decision = self._resolve_classification_path_b_static(
                             indie_preds, autogluon_pred, self._get_voting_weights()
+                        )
+                        log_extra = None
+                        if has_seg and seg_decision_dict:
+                            from segmentation.agent import SegAgentDecision
+                            seg_stub = SegAgentDecision(
+                                selected_model=seg_decision_dict["selected_model"],
+                                selected_mask=selected_mask,
+                                confidence=seg_decision_dict["confidence"],
+                                reasoning=seg_decision_dict["reasoning"],
+                                all_predictions=seg_decision_dict["all_predictions"],
+                                path=seg_decision_dict.get("path", "B"),
+                            )
+                            log_extra = self.cls_agent._path_b_extra(autogluon_pred, seg_stub)
+                        self.cls_agent._emit_cls_routing_log(
+                            cls_decision,
+                            task="cls_path_b",
+                            llm_invoked=False,
+                            method="path_b_static_softvote",
+                            image_name=img_name,
+                            path="B",
+                            classification_consensus=False,
+                            predictions=indie_preds,
+                            extra=log_extra,
                         )
 
                 # 统一标签为 0/1（良性=0, 恶性=1）

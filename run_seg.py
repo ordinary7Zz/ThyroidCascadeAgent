@@ -19,6 +19,7 @@ import yaml
 
 from shared.image_io import ImageIO
 from shared.llm_client import LLMClient
+from shared.routing_log import build_routing_logger_from_config
 from segmentation import (
     SegModelRegistry,
     SegmentationQualityEvaluator,
@@ -91,11 +92,15 @@ def main():
     # 构建组件
     registry = build_seg_registry(seg_cfg, args.device)
     quality_evaluator = SegmentationQualityEvaluator()
+    output_dir = Path(config.get("pipeline", {}).get("output", {}).get("output_dir", "output/seg"))
+    routing_logger = build_routing_logger_from_config(config, output_dir)
+
     agent = SegmentationAgent(
         llm_client=llm_client,
         quality_evaluator=quality_evaluator,
         radiomics_judge=judge,
         config=seg_cfg.get("agent", {}),
+        routing_logger=routing_logger,
     )
 
     image_io = ImageIO()
@@ -112,7 +117,6 @@ def main():
     if max_images:
         images = images[:max_images]
 
-    output_dir = Path(config.get("pipeline", {}).get("output", {}).get("output_dir", "output/seg"))
     output_dir.mkdir(parents=True, exist_ok=True)
     mask_dir = output_dir / "masks"
     mask_dir.mkdir(exist_ok=True)
@@ -136,6 +140,7 @@ def main():
                 image, predictions,
                 gt_mask=gt_mask,
                 input_device_info=device_info,
+                image_name=img_path.name,
             )
 
             image_io.save_mask(decision.selected_mask, str(mask_dir / img_path.name))

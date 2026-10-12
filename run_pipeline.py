@@ -32,6 +32,7 @@ from classification import (
 from classification.model_factory import build_cls_model
 from radiomics_judge import RadiomicsJudge
 from pipeline import CascadePipeline
+from shared.routing_log import build_routing_logger_from_config
 
 
 def load_config(config_path: str) -> dict:
@@ -121,15 +122,22 @@ def main():
     # 构建组件（不再预加载所有模型，由 pipeline 按需加载/卸载）
     print("\n构建 Pipeline（模型将在推理时按需加载/卸载）...")
 
+    output_dir_final = pipe_cfg.get("output", {}).get("output_dir", "output/pipeline_run")
+    routing_logger = build_routing_logger_from_config(config, output_dir_final)
+    if routing_logger.enabled:
+        print(f"✓ 路由审计日志: {routing_logger.path}")
+
     seg_agent = SegmentationAgent(
         llm_client=llm_client,
         quality_evaluator=SegmentationQualityEvaluator(),
         radiomics_judge=judge,
         config=seg_cfg.get("agent", {}),
+        routing_logger=routing_logger,
     )
     cls_agent = LLMClassificationAgent(
         llm_client=llm_client,
         config=cls_cfg.get("agent", {}),
+        routing_logger=routing_logger,
     )
 
     # 构建 Pipeline（不预加载模型，由 run_batch 按需加载）
@@ -146,7 +154,7 @@ def main():
     # 运行
     results = pipeline.run_batch(
         image_dir=data_cfg["image_input"],
-        output_dir=pipe_cfg.get("output", {}).get("output_dir", "output/pipeline_run"),
+        output_dir=output_dir_final,
         gt_mask_dir=data_cfg.get("gt_mask_dir"),
         label_file=data_cfg.get("label_file"),
         label_key=data_cfg.get("label_key", "malignancy"),
@@ -159,7 +167,6 @@ def main():
 
     # 评估指标
     from pipeline.evaluate import evaluate_pipeline
-    output_dir_final = pipe_cfg.get("output", {}).get("output_dir", "output/pipeline_run")
     evaluate_pipeline(
         results,
         output_dir_final,
