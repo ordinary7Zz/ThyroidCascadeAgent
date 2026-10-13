@@ -14,9 +14,11 @@ agent_enabled=false → Phase 3/5 纯规则（不调 LLM）
 from __future__ import annotations
 
 import json
+import os
 import pickle
 import time
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any, Optional
 
@@ -27,6 +29,52 @@ from segmentation.agent import SegmentationAgent, SegAgentDecision
 from segmentation.model_registry import SegModelRegistry
 from classification.agent import LLMClassificationAgent, ClsAgentDecision
 from classification.model_registry import ClsModelRegistry
+from shared.routing_modes import (
+    cls_uses_llm_api,
+    get_cls_routing_mode,
+    get_seg_routing_mode,
+    path_b_includes_autogluon,
+    seg_uses_llm_api,
+)
+from routing.seg_strategies import select_mask_for_mode
+from routing.path_b_cls import resolve_path_b_indie_only
+from routing.oracle import resolve_cls_oracle
+from pipeline.routing_ablation import get_best_single_names
+
+
+def preload_workers_for_config(config: dict) -> int:
+    """Phase 3 等阶段并行读 intermediate 的线程数（与「多策略 batch 并行」无关）。"""
+    pipe = config.get("pipeline", {}) or {}
+    raw = pipe.get("preload_workers")
+    if raw is not None:
+        return max(1, int(raw))
+    return min(8, os.cpu_count() or 4)
+
+
+def phase12_intermediate_complete(
+    seg_cache_dir: Path,
+    cls_cache_dir: Path,
+    seg_model_configs: list,
+    cls_model_configs: list,
+    *,
+    run_segmentation: bool,
+    run_classification: bool,
+) -> tuple[bool, list[str]]:
+    """检查 config 中每个专家是否已有 Phase 1–2 落盘缓存。"""
+    missing: list[str] = []
+    if run_segmentation:
+        for i, model_cfg in enumerate(seg_model_configs):
+            name = model_cfg.get("name", f"seg_{i}")
+            path = seg_cache_dir / f"{name}.npz"
+            if not path.is_file():
+                missing.append(str(path))
+    if run_classification:
+        for i, model_cfg in enumerate(cls_model_configs):
+            name = model_cfg.get("name", f"cls_{i}")
+            path = cls_cache_dir / f"{name}.json"
+            if not path.is_file():
+                missing.append(str(path))
+    return len(missing) == 0, missing
 
 
 class CascadePipeline:
@@ -151,7 +199,7 @@ class CascadePipeline:
             data = json.load(f)
 
         results = []
-        for img_name, pred_dict in data["results"].items():
+        for _img_name, pred_dict in data["results"].items():
             results.append(ClsModelOutput(
                 model_name=pred_dict["model_name"],
                 predictions=pred_dict["predictions"],
@@ -161,6 +209,75 @@ class CascadePipeline:
                 metadata=pred_dict.get("metadata", {}),
             ))
         return results
+
+    def _preload_seg_cls_caches(
+        self,
+        seg_model_configs: list,
+        cls_model_configs: list,
+        seg_cache_dir: Path,
+        cls_cache_dir: Path,
+        *,
+        need_seg_conf: bool,
+    ) -> tuple[dict[str, list], dict[str, list]]:
+        """并行加载 Phase 3 所需的 seg npz / cls json（策略推理仍按图串行）。"""
+        workers = preload_workers_for_config(self.config)
+        seg_cache_by_model: dict[str, list] = {}
+        cls_cache_by_model: dict[str, list] = {}
+
+        seg_jobs: list[tuple[str, Path, bool]] = []
+        for model_cfg in seg_model_configs:
+            model_name = model_cfg.get("name", "")
+            if not model_name:
+                continue
+            path = seg_cache_dir / f"{model_name}.npz"
+            if path.is_file():
+                seg_jobs.append((model_name, path, need_seg_conf))
+
+        cls_jobs: list[tuple[str, Path]] = []
+        for model_cfg in cls_model_configs:
+            model_name = model_cfg.get("name", "")
+            if not model_name:
+                continue
+            path = cls_cache_dir / f"{model_name}.json"
+            if path.is_file():
+                cls_jobs.append((model_name, path))
+
+        n_tasks = len(seg_jobs) + len(cls_jobs)
+        if n_tasks == 0:
+            return seg_cache_by_model, cls_cache_by_model
+        if n_tasks == 1:
+            workers = 1
+
+        print(
+            f"  预加载 intermediate：{len(seg_jobs)} seg + {len(cls_jobs)} cls"
+            f"（workers={min(workers, n_tasks)}）...",
+            flush=True,
+        )
+
+        def _load_seg(job: tuple[str, Path, bool]) -> tuple[str, list]:
+            name, path, need_conf = job
+            return name, self._load_seg_npz(path, load_confidence=need_conf)
+
+        def _load_cls(job: tuple[str, Path]) -> tuple[str, list]:
+            name, path = job
+            return name, self._load_cls_json(path)
+
+        with ThreadPoolExecutor(max_workers=min(workers, n_tasks)) as pool:
+            futs: list[tuple[str, Any]] = []
+            for job in seg_jobs:
+                futs.append(("seg", pool.submit(_load_seg, job)))
+            for job in cls_jobs:
+                futs.append(("cls", pool.submit(_load_cls, job)))
+            pending = {fut: kind for kind, fut in futs}
+            for fut in as_completed(pending):
+                kind = pending[fut]
+                name, rows = fut.result()
+                if kind == "seg":
+                    seg_cache_by_model[name] = rows
+                else:
+                    cls_cache_by_model[name] = rows
+
+        return seg_cache_by_model, cls_cache_by_model
 
     @staticmethod
     def _save_selected_masks_npz(
@@ -560,6 +677,8 @@ class CascadePipeline:
         start_index: int = 0,
         max_images: Optional[int] = None,
         label_key: str = "malignancy",
+        skip_phase1_2: Optional[bool] = None,
+        force_phase3: bool = False,
     ) -> list[dict[str, Any]]:
         """批量级联推理（按需加载/卸载模型，中间结果落盘）。
 
@@ -570,7 +689,10 @@ class CascadePipeline:
           Phase 4: AutoGluon 加载 → 推理全集图像 → 保存 json → 卸载
           Phase 5: 分类裁决 + 保存 results.json
 
-        每个 Phase 检查缓存文件是否已存在，存在则跳过（支持断点续跑）。
+        skip_phase1_2:
+          None（默认）— 若 intermediate 已含全部专家 seg/cls 缓存则跳过整段 Phase 1–2，
+          否则进入 Phase 1–2，并按文件断点续跑（缺哪个专家补哪个）。
+          True — 强制跳过 Phase 1–2；False — 始终进入 Phase 1–2 循环（仍可按文件跳过）。
         """
         from segmentation.model_factory import build_seg_model
         from classification.model_factory import build_cls_model
@@ -623,9 +745,12 @@ class CascadePipeline:
         cls_model_configs = cls_cfg_full.get("models", [])
         seg_agent_cfg = seg_cfg_full.get("agent", {})
         cls_agent_cfg = cls_cfg_full.get("agent", {})
-        enable_seg_agent = seg_agent_cfg.get("enable_agent", True)
-        enable_cls_agent = cls_agent_cfg.get("enable_agent", True)
+        seg_routing_mode = get_seg_routing_mode(self.config)
+        cls_routing_mode = get_cls_routing_mode(self.config)
+        enable_seg_agent = seg_agent_cfg.get("enable_agent", True) and seg_uses_llm_api(seg_routing_mode)
+        enable_cls_agent = cls_agent_cfg.get("enable_agent", True) and cls_uses_llm_api(cls_routing_mode)
         consensus_threshold = cls_agent_cfg.get("consensus_min_confidence", 0.6)
+        best_single_seg, best_single_cls = get_best_single_names(self.config)
 
         # 阶段开关：可单独关闭分割或分类
         run_segmentation = self.config.get("pipeline", {}).get("run_segmentation", True)
@@ -635,14 +760,37 @@ class CascadePipeline:
             return []
         print(f"阶段开关: run_segmentation={run_segmentation}, run_classification={run_classification}")
 
+        skip_phase12_run = False
+        if skip_phase1_2 is True:
+            skip_phase12_run = True
+            print("  ⏭ skip_phase1_2=True，强制跳过 Phase 1–2")
+        elif skip_phase1_2 is False:
+            skip_phase12_run = False
+        else:
+            ready, missing = phase12_intermediate_complete(
+                seg_cache_dir,
+                cls_cache_dir,
+                seg_model_configs,
+                cls_model_configs,
+                run_segmentation=run_segmentation,
+                run_classification=run_classification,
+            )
+            if ready:
+                skip_phase12_run = True
+                print("  ⏭ Phase 1–2 缓存齐全，跳过专家推理（auto）")
+            elif missing:
+                print(f"  Phase 1–2 待补缓存: {len(missing)} 个文件（将按专家断点续跑）")
+
         # ===== Phase 1: 分割模型（逐个加载 → 推理全部图像 → 保存 npz → 卸载）=====
         print(f"\n{'='*60}")
         print("Phase 1: 依次加载分割模型并推理全部图像")
         print(f"{'='*60}")
 
+        if skip_phase12_run:
+            print("  ⏭ 已跳过 Phase 1")
         if not run_segmentation:
             print("  ⏭ 分割阶段已关闭，跳过 Phase 1")
-        for i, model_cfg in enumerate(seg_model_configs if run_segmentation else []):
+        for i, model_cfg in enumerate(seg_model_configs if run_segmentation and not skip_phase12_run else []):
             model_cfg = dict(model_cfg)
             model_name = model_cfg.get("name", f"seg_{i}")
             model_cfg["device"] = self.device
@@ -682,7 +830,9 @@ class CascadePipeline:
 
         if not run_classification:
             print("  ⏭ 分类阶段已关闭，跳过 Phase 2")
-        for i, model_cfg in enumerate(cls_model_configs if run_classification else []):
+        if skip_phase12_run and run_classification:
+            print("  ⏭ 已跳过 Phase 2")
+        for i, model_cfg in enumerate(cls_model_configs if run_classification and not skip_phase12_run else []):
             model_cfg = dict(model_cfg)
             model_name = model_cfg.get("name", f"cls_{i}")
 
@@ -723,6 +873,9 @@ class CascadePipeline:
         print(f"{'='*60}")
 
         selected_masks_path = inter_dir / "selected_masks.npz"
+        if force_phase3 and selected_masks_path.exists():
+            selected_masks_path.unlink()
+            print("  ✓ force_phase3: 已删除 selected_masks.npz，将重跑 Phase 3")
 
         if not run_segmentation:
             print("  ⏭ 分割阶段已关闭，跳过 Phase 3（mask 选择）")
@@ -742,23 +895,14 @@ class CascadePipeline:
             # 旧实现每张图都把每个模型的完整 npz（约 4GB）解压一遍：N 图 × M 模型
             # 次解压，是 Phase 3 的性能/内存瓶颈（ZJH-8K 上卡死 1.5 天零产出）。
             # 静态模式（enable_seg_agent=False）下不使用 confidence_map，跳过以省内存。
-            need_seg_conf = enable_seg_agent
-            seg_cache_by_model: dict[str, list] = {}
-            for model_cfg in seg_model_configs:
-                model_name = model_cfg.get("name", "")
-                cache_path = seg_cache_dir / f"{model_name}.npz"
-                if cache_path.exists():
-                    print(f"  预加载分割缓存 {model_name} ...", flush=True)
-                    seg_cache_by_model[model_name] = self._load_seg_npz(
-                        cache_path, load_confidence=need_seg_conf
-                    )
-
-            cls_cache_by_model: dict[str, list] = {}
-            for model_cfg in cls_model_configs:
-                model_name = model_cfg.get("name", "")
-                cache_path = cls_cache_dir / f"{model_name}.json"
-                if cache_path.exists():
-                    cls_cache_by_model[model_name] = self._load_cls_json(cache_path)
+            need_seg_conf = enable_seg_agent or seg_routing_mode == "max_confidence"
+            seg_cache_by_model, cls_cache_by_model = self._preload_seg_cls_caches(
+                seg_model_configs,
+                cls_model_configs,
+                seg_cache_dir,
+                cls_cache_dir,
+                need_seg_conf=need_seg_conf,
+            )
 
             # radiomics judge 对象（Phase 3 统一跑一次，结果同时用于 mask 选择
             # 和填充 autogluon 缓存，避免 Phase 4 对 all_datasets mask 重复计算）
@@ -817,7 +961,9 @@ class CascadePipeline:
                     except Exception as e:
                         print(f"  ⚠️ {img_name} radiomics judge 失败: {e}")
 
-                if enable_seg_agent:
+                seg_method_used = f"routing_{seg_routing_mode}_seg"
+
+                if seg_routing_mode == "llm" and enable_seg_agent:
                     seg_decision = self.seg_agent.select_best_mask(
                         image, seg_preds,
                         classification_anchor=anchor_class,
@@ -827,7 +973,8 @@ class CascadePipeline:
                         judge_results=judge_results,
                         image_name=img_name,
                     )
-                else:
+                elif seg_routing_mode == "static_rule":
+                    seg_method_used = "routing_static_rule_seg"
                     seg_decision = self._select_mask_static(
                         image, seg_preds, anchor_class,
                         gt_mask=gt_mask,
@@ -853,7 +1000,45 @@ class CascadePipeline:
                     self.seg_agent._finish_seg_decision(
                         seg_decision,
                         llm_invoked=False,
-                        method="cascade_static_mask",
+                        method="routing_static_rule_seg",
+                    )
+                else:
+                    static_fn = None
+                    if seg_routing_mode == "static_rule":
+                        static_fn = lambda: self._select_mask_static(
+                            image, seg_preds, anchor_class,
+                            gt_mask=gt_mask,
+                            input_device_info=input_device_info,
+                            input_data_info=input_data_info,
+                            skip_radiomics=False,
+                            judge_results=judge_results,
+                        )
+                    seg_decision = select_mask_for_mode(
+                        seg_routing_mode,
+                        seg_preds,
+                        anchor_class,
+                        gt_mask=gt_mask,
+                        best_single_model=best_single_seg,
+                        static_selector=static_fn,
+                    )
+                    self.seg_agent._seg_log_ctx = {
+                        "image_name": img_name,
+                        "path": seg_decision.path,
+                        "classification_anchor": anchor_class,
+                        "predictions": seg_preds,
+                        "quality_results": None,
+                        "judge_results": judge_results,
+                        "metadata_mode": self.seg_agent.metadata_mode,
+                    }
+                    quality_results = self.seg_agent.quality_evaluator.evaluate_batch(
+                        [p.mask for p in seg_preds],
+                        [p.model_name for p in seg_preds],
+                    )
+                    self.seg_agent._seg_log_ctx["quality_results"] = quality_results
+                    self.seg_agent._finish_seg_decision(
+                        seg_decision,
+                        llm_invoked=False,
+                        method=f"routing_{seg_routing_mode}_seg",
                     )
 
                 # 从 judge_results 提取 all_datasets 的结果，填充 autogluon 缓存
@@ -896,6 +1081,7 @@ class CascadePipeline:
                     "confidence": seg_decision.confidence,
                     "reasoning": seg_decision.reasoning,
                     "path": seg_decision.path,
+                    "method": seg_method_used,
                     "all_predictions": seg_decision.all_predictions,
                 })
                 print(f"  [{idx+1}/{len(img_names)}] {img_name}: {seg_decision.selected_model} (consensus={consensus})")
@@ -1106,9 +1292,11 @@ class CascadePipeline:
                         img_name, anchor_class, indie_preds, cls_decision
                     )
                 else:
-                    # 构造 AutoGluon ClsModelOutput（仅在分割开启且有结果时存在）
                     from classification.base_model import ClsModelOutput
-                    ag_dict = autogluon_results.get(img_name)
+                    from segmentation.agent import SegAgentDecision
+
+                    use_ag = path_b_includes_autogluon(cls_routing_mode)
+                    ag_dict = autogluon_results.get(img_name) if use_ag else None
                     autogluon_pred = None
                     if ag_dict:
                         autogluon_pred = ClsModelOutput(
@@ -1120,50 +1308,69 @@ class CascadePipeline:
                             metadata=ag_dict.get("metadata", {}),
                         )
 
-                    if has_seg and enable_cls_agent:
-                        # 构造 SegAgentDecision（简化版，仅用于 resolve_path_b）
-                        from segmentation.agent import SegAgentDecision
-                        seg_decision = SegAgentDecision(
+                    seg_stub = None
+                    if has_seg and seg_decision_dict:
+                        seg_stub = SegAgentDecision(
                             selected_model=seg_decision_dict["selected_model"],
                             selected_mask=selected_mask,
                             confidence=seg_decision_dict["confidence"],
                             reasoning=seg_decision_dict["reasoning"],
                             all_predictions=seg_decision_dict["all_predictions"],
                             classification_anchor=anchor_class,
-                            path=seg_decision_dict["path"],
+                            path=seg_decision_dict.get("path", "B"),
                         )
+
+                    if cls_routing_mode == "llm" and enable_cls_agent and has_seg:
                         cls_decision = self.cls_agent.resolve_path_b(
-                            indie_preds, autogluon_pred, seg_decision,
+                            indie_preds, autogluon_pred, seg_stub,
                             voting_weights=self._get_voting_weights(),
                             image_name=img_name,
                         )
-                    else:
-                        # 无分割或分类 Agent 关闭：静态加权软投票裁决
-                        cls_decision = self._resolve_classification_path_b_static(
-                            indie_preds, autogluon_pred, self._get_voting_weights()
-                        )
-                        log_extra = None
-                        if has_seg and seg_decision_dict:
-                            from segmentation.agent import SegAgentDecision
-                            seg_stub = SegAgentDecision(
-                                selected_model=seg_decision_dict["selected_model"],
-                                selected_mask=selected_mask,
-                                confidence=seg_decision_dict["confidence"],
-                                reasoning=seg_decision_dict["reasoning"],
-                                all_predictions=seg_decision_dict["all_predictions"],
-                                path=seg_decision_dict.get("path", "B"),
+                    elif cls_routing_mode == "oracle":
+                        img_stem = Path(img_name).stem
+                        tl = labels.get(img_stem)
+                        if tl is None:
+                            cls_decision = resolve_path_b_indie_only(
+                                "max_confidence",
+                                indie_preds,
+                                best_single_model=best_single_cls,
                             )
-                            log_extra = self.cls_agent._path_b_extra(autogluon_pred, seg_stub)
+                        else:
+                            bin_tl = self._label_to_binary(tl)
+                            if bin_tl is None:
+                                bin_tl = int(tl) if isinstance(tl, (int, float)) else 0
+                            cls_decision = resolve_cls_oracle(indie_preds, bin_tl)
                         self.cls_agent._emit_cls_routing_log(
                             cls_decision,
                             task="cls_path_b",
                             llm_invoked=False,
-                            method="path_b_static_softvote",
+                            method=cls_decision.method,
                             image_name=img_name,
                             path="B",
                             classification_consensus=False,
                             predictions=indie_preds,
-                            extra=log_extra,
+                            extra=self.cls_agent._path_b_extra(None, seg_stub) if seg_stub else None,
+                        )
+                    elif cls_routing_mode == "llm" and not has_seg:
+                        cls_decision = self._resolve_classification_path_b_static(
+                            indie_preds, autogluon_pred, self._get_voting_weights()
+                        )
+                    else:
+                        cls_decision = resolve_path_b_indie_only(
+                            cls_routing_mode,
+                            indie_preds,
+                            best_single_model=best_single_cls,
+                        )
+                        self.cls_agent._emit_cls_routing_log(
+                            cls_decision,
+                            task="cls_path_b",
+                            llm_invoked=False,
+                            method=cls_decision.method,
+                            image_name=img_name,
+                            path="B",
+                            classification_consensus=False,
+                            predictions=indie_preds,
+                            extra=self.cls_agent._path_b_extra(None, seg_stub) if seg_stub else None,
                         )
 
                 # 统一标签为 0/1（良性=0, 恶性=1）

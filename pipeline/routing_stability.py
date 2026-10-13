@@ -201,13 +201,13 @@ def run_stability_from_caches(
                 print(f"      → {dec.selected_model}", flush=True)
                 if gt_mask is not None:
                     dice_vals.append(float(compute_dice(dec.selected_mask, gt_mask)))
-        elif enable_seg_agent and not seg_preds:
-            print("    ⚠️ 无分割缓存，跳过 seg LLM", flush=True)
             row["seg_selection_agreement"] = _agreement_rate(seg_choices)
             row["seg_selected_models"] = seg_choices
             if dice_vals:
                 row["seg_dice_std"] = float(np.std(dice_vals))
                 row["seg_dice_range"] = float(max(dice_vals) - min(dice_vals))
+        elif enable_seg_agent and not seg_preds:
+            print("    ⚠️ 无分割缓存，跳过 seg LLM", flush=True)
 
         if enable_cls_agent and indie_preds and not consensus:
             static_dec = seg_agent._fallback_selection(
@@ -241,11 +241,17 @@ def run_stability_from_caches(
             row["cls_selection_agreement"] = _agreement_rate(cls_choices)
             row["cls_selected_classes"] = cls_choices
 
-        primary = row.get("seg_selection_agreement") or row.get("cls_selection_agreement")
-        row["selection_agreement"] = primary
+        seg_ag = row.get("seg_selection_agreement")
+        cls_ag = row.get("cls_selection_agreement")
+        if seg_ag is not None:
+            row["selection_agreement"] = seg_ag
+        elif cls_ag is not None:
+            row["selection_agreement"] = cls_ag
+        else:
+            row["selection_agreement"] = None
         per_case.append(row)
 
-        agree = row.get("seg_selection_agreement") or row.get("cls_selection_agreement")
+        agree = row.get("selection_agreement")
         elapsed = time.perf_counter() - t_case
         print(
             f"    完成 ({elapsed:.1f}s) selection_agreement={agree}",

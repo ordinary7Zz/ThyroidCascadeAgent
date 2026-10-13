@@ -169,6 +169,7 @@ class SegmentationAgent:
         self.base_datasets_info = BASE_DATASETS_INFO
         cfg = config or {}
         self.enable_agent = cfg.get("enable_agent", True)
+        self.routing_mode = cfg.get("routing_mode")
         self.ensemble_enabled = cfg.get("ensemble", {}).get("enabled", True)
         self.ensemble_top_k = cfg.get("ensemble", {}).get("top_k", 1)
         self.ensemble_method = cfg.get("ensemble", {}).get("method", "weighted_average")

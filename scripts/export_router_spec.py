@@ -9,14 +9,12 @@ from __future__ import annotations
 
 import argparse
 import json
-import sys
 from pathlib import Path
 
-_ROOT = Path(__file__).resolve().parents[1]
-if str(_ROOT) not in sys.path:
-    sys.path.insert(0, str(_ROOT))
-
+import repo_path
 import yaml
+
+_ROOT = repo_path.install()
 
 from segmentation.agent import (
     RADIOMICS_JUDGE_SPEC_PLACEHOLDER,

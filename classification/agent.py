@@ -161,6 +161,7 @@ class LLMClassificationAgent:
         cfg = config or {}
         self.top_k = max(1, int(cfg.get("top_k", 1)))
         self.enable_agent = cfg.get("enable_agent", True)
+        self.routing_mode = cfg.get("routing_mode")
         self.metadata_mode = cfg.get("metadata_mode", "full")
         self._cls_log_ctx: dict[str, Any] = {}
 

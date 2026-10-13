@@ -1,0 +1,83 @@
+{
+  "val_stems": [
+    "0001",
+    "0002",
+    "0003",
+    "0004",
+    "0005",
+    "0378",
+    "0379",
+    "0380",
+    "0381",
+    "0382"
+  ],
+  "best_single_seg": "all_datasets",
+  "best_single_cls": "medsiglip_binary",
+  "seg_val_metrics": {
+    "all_datasets": {
+      "n_matched": 10,
+      "n_total": 10,
+      "dice": {
+        "mean": 0.8519640415378376,
+        "ci_lower": 0.7623046509952477,
+        "ci_upper": 0.9125425258555939
+      },
+      "hd95": {
+        "mean": 12.91420738565335,
+        "ci_lower": 4.668617749996121,
+        "ci_upper": 23.287952325892842
+      }
+    },
+    "transunet_all_datasets": {
+      "n_matched": 10,
+      "n_total": 10,
+      "dice": {
+        "mean": 0.7993076205100811,
+        "ci_lower": 0.7228697986691249,
+        "ci_upper": 0.8662492958342197
+      },
+      "hd95": {
+        "mean": 12.289631482564177,
+        "ci_lower": 7.279127752516414,
+        "ci_upper": 17.739149217292233
+      }
+    }
+  },
+  "cls_val_metrics": {
+    "all_datasets": {
+      "n_matched": 10,
+      "auroc": {
+        "mean": 0.92,
+        "ci_lower": 0.6666666666666666,
+        "ci_upper": 1.0
+      },
+      "auprc": {
+        "mean": 0.9266666666666665,
+        "ci_lower": 0.6666666666666667,
+        "ci_upper": 1.0
+      },
+      "accuracy": 0.9,
+      "sensitivity": 1.0,
+      "specificity": 0.8,
+      "f1": 0.9090909090909091
+    },
+    "medsiglip_binary": {
+      "n_matched": 10,
+      "auroc": {
+        "mean": 1.0,
+        "ci_lower": 1.0,
+        "ci_upper": 1.0
+      },
+      "auprc": {
+        "mean": 1.0,
+        "ci_lower": 0.9999999999999999,
+        "ci_upper": 1.0
+      },
+      "accuracy": 0.6,
+      "sensitivity": 1.0,
+      "specificity": 0.2,
+      "f1": 0.7142857142857143
+    }
+  },
+  "intermediate_dir": "output/sample/pipeline_run/intermediate"
+}

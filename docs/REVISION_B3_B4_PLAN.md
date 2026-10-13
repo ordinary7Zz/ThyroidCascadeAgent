@@ -41,7 +41,7 @@
 
 **与 B5/B6 的先后**（勿与 B3/B4 混为一谈）：
 
-- **B6**（`routing_log.jsonl`、`run_routing_stability.py`）：建议在 B3 **LLM 全量**之前完成。
+- **B6**（`routing_log.jsonl`、`run_routing_stability.py`）：建议在 B3 **LLM 全量**之前完成。**本仓库已实现**（`pipeline.log_routing`、`shared/routing_log.py`、`run_routing_stability.py` 等，见 `docs/REVISION_B6_PLAN.md`）；波次 2 重点是 **B3 策略 7 跑数 + 分层表**，而非再开发 B6。
 - **B5**（`metadata_mode`）：依赖 B3 同一套 cache + 只重跑路由；在 B3 框架稳定后做。
 - **B2**（患者级 cluster bootstrap）：B3 主表最终口径须与 B2 一致；开发期可用 `pipeline/evaluate.py` 的 bootstrap **打通管道**，全表定稿前升级为 **按患者/检查聚类** 的重采样。
 
@@ -165,8 +165,8 @@
 | 波次 | 内容 | 是否调 LLM API | 依赖 |
 |------|------|----------------|------|
 | **0** | 契约 + `config/ablation_b3.yaml`；Phase 1–2 写满 `intermediate/`；`run_routing_ablation.py` 骨架；**策略注册表 smoke test**（每 mode `method` 字段可区分） | 否 | 数据集路径、专家权重 |
-| **1** | **seg**：`compare_models` + 离线 2/3/5/8 + `static_rule`；**cls**：有 cache 时 **Phase 3+5 轻量重跑**（固定 Phase 4），Path B 独立模型-only 分支；**1 个小队列 + sample** | 否 | 波次 0 |
-| **2** | 策略 7；`log_routing`；一致 vs 分歧分层 | 是 | B6 建议已就绪 |
+| **1** | **seg**：`compare_models` + 离线 2/3/5/8 + `static_rule`；**cls**：有 cache 时 **Phase 3+5 轻量重跑**（固定 Phase 4），Path B 独立模型-only 分支；**1 个小队列 + sample**；批量推荐 **`run_b3_batch` → `static_b3_bundle`（单次扫图多 mode）** | 否 | 波次 0 |
+| **2** | 策略 7；`log_routing`；一致 vs 分歧分层 | 是 | B6 **已实现**；需 `run_routing_ablation`（非 static bundle）+ API |
 | **3** | 策略 6；策略 1 全队列 val 选参 | 否（训练轻量） | 波次 2 的 Path B 定义 |
 | **全量** | 所有测试集；配对 bootstrap；`b3_routing_table.csv` + 主文图 | 视策略 | B1/B2 口径冻结后定稿 |
 
@@ -386,22 +386,48 @@ B3/B4 主实验默认 **S4 级联**；`run_cls` 五专家表为 **Supp.**，不�
 
 ## 8. 实施检查清单
 
+### 8.0 当前进度（仓库快照，2026-10-14）
+
+**结论：** B3 **波次 0 + 波次 1（sample）** 工程闭环；**全队列 / 波次 2–3 / B4 定稿** 未做。
+
+| 类别 | 已完成（可复现） | 待办 |
+|------|------------------|------|
+| 脚手架 | `routing_modes`、`run_routing_ablation.py`、`run_b3_batch.py`（默认 **`pipeline/static_b3_bundle.py` 单次扫图**）、`ablation_summary`、Path B **独立模型-only**、Phase 1–2 **auto 跳过** | `b3_paired_bootstrap.json` 配对差分；B2 **cluster** bootstrap |
+| 策略 | 1/2/3/4/5/8 在 sample 上 bundle 出表；`learned`(6)、`llm`(7) 未实现主表跑数 | 波次 2–3 |
+| 数据 | sample `intermediate` + 10 例 bundle → `output/ablation/b3/sample/_summary/b3_routing_table.csv` | 各正式测试集 Phase 1–2；`val_list` + `fit_best_single_expert.py` |
+| B4 | — | 全文 §8 B4 节；汇合点 1/2/3 |
+
+**推荐命令（sample）：** `python scripts/run_b3_batch.py --config config/ablation_b3.yaml --force-phase3`  
+**对拍旧路径：** 加 `--legacy-subprocess`（每策略子进程 `run_routing_ablation`）。
+
+### 8.1 下一步（建议顺序）
+
+1. **冻结地基**：`config/ablation_b3.yaml` 与稿中 S3/S4 专家池逐行对照；每队列写好 `pipeline.ablation.val_list`。  
+2. **铺 intermediate**：`run_pipeline.py`（或批量脚本）对各测试集跑满 Phase 1–2。  
+3. **策略 1**：`python scripts/fit_best_single_expert.py --intermediate <dir>`，写入 `best_single_seg/cls`（勿长期手写 `all_datasets`）。  
+4. **波次 1 全队列**：`run_b3_batch.py` → 各数据集 `b3_routing_table.csv`；分类主表同时报 **全量 + `metrics_path_b_only`**。  
+5. **波次 2**：`routing_mode=llm` 全量 + `log_routing: true` 落盘 + 一致/分歧分层（B6 已就绪；用 `run_routing_ablation` / `run_pipeline`，**不要**用 static bundle）。  
+6. **波次 3**：`learned` 路由 + 与 LLM 配对检验。  
+7. **统计定稿**：B2 cluster bootstrap 重算 B3/B4 表；作图与回复信数字。  
+8. **B4 并行**：`B4_S6_S4_reconciliation.md`、L1 训练/评测；L2←B3 策略 2、L3←B3 策略 7 + S4 校验行。
+
 ### 共享地基
 
 - [ ] **`config/ablation_b3.yaml` 与论文 S3/S4 对照表**（模板：每行 `model_name` | `type` | `checkpoint路径` | 进 Phase1/2 池 | 与稿中表注一致）已签字  
-- [ ] 论文专家池与 `config/ablation_b3.yaml` 一致  
+- [ ] 论文专家池与 `config/ablation_b3.yaml` 一致（当前 sample 为 **2 seg + 2 cls** 缩减池）  
 - [ ] 全测试集 Phase 1–2 完成或可按数据集批量调度  
-- [ ] `run_routing_ablation.py` + `ablation_summary.py` 在 sample 上端到端通过  
-- [ ] **策略注册表 smoke test**（§3.1.1）通过  
-- [ ] 每 mode 写出 `intermediate_manifest.json`  
-- [ ] Bootstrap 口径与 B2 对齐（或文档注明过渡期用 image bootstrap）
+- [x] `run_routing_ablation.py` + `ablation_summary.py` 在 **sample** 上端到端通过（含 **static bundle** 批量）  
+- [x] **策略注册表 smoke test**（§3.1.1）通过（`tests/test_routing_*.py`）  
+- [x] 每 mode 写出 `intermediate_manifest.json`（bundle 各子目录）  
+- [~] Bootstrap 口径与 B2 对齐（**过渡期**：`evaluate.py` 图像级 bootstrap；cluster 待 B2）
 
 ### B3
 
-- [ ] 波次 1：**6 种非 LLM 策略（1–5、规则 4）+ Oracle(8)** 在小队列通过；分割侧可先用 `compare_models` 读 `intermediate/seg` 校验  
-- [ ] 波次 2 LLM + `routing_log.jsonl` + 一致/分歧分层  
-- [ ] 波次 3 学习型路由 + 与 LLM 配对检验  
-- [ ] 全队列 `b3_routing_table.csv` + 主文图稿  
+- [x] 波次 1（**sample**）：**6 种非 LLM（1–5、4）+ Oracle(8)**；`eval_seg_routing_offline` / bundle 与 cascade 分割侧可对照  
+- [~] 波次 1（**全队列**）：同上流程，待 intermediate + val 选参  
+- [ ] 波次 2：策略 **7** LLM + `routing_log.jsonl` + 一致/分歧分层  
+- [ ] 波次 3：策略 **6** `learned` + 与 LLM 配对检验  
+- [~] `b3_routing_table.csv`（**sample 已有** `_summary/b3_routing_table.csv`；全队列 + 主文图稿未做）  
 - [ ] 回复信 R1.2 / R2.8 / R3.1 段落引用具体数字与 CI  
 
 ### B4
@@ -438,3 +464,5 @@ B3/B4 主实验默认 **S4 级联**；`run_cls` 五专家表为 **Supp.**，不�
 | 2026-10-13 | §3.1 / §4.0：级联 Path A/B、锚点、B3 插槽（Phase 3 分割 / Phase 5 Path B 分类）、`run_cls` 分轨；目录与 `selected_masks` 缓存说明 |
 | 2026-10-13 | 缺口修订：R3.1/B2 截止、Phase 4 固定、§6 AutoGluon 三角色、B4 分 task 抄数、`metrics_path_b_only`、`compare_models`、检查清单与 §7.1 路径统一 |
 | 2026-10-13 | **策略–代码注册表**（§3.1.1）；Path B 独立模型-only vs 策略 7；B4 改为 **L1–L3 + S4 校验 + Path B 附录**；契约增 val/manifest/force-phase3；P0 实施顺序与波次/工时调整 |
+| 2026-10-14 | §8 增 **8.0 进度快照 / 8.1 下一步**；波次 1 注明 static bundle；清单勾选 sample 已通项 |
+| 2026-10-14 | 注明 **B6 已实现**；波次 2 依赖改为「LLM 策略 7 跑数 + 日志开关」 |
