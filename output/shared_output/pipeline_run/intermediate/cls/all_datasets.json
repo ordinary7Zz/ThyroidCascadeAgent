@@ -18,7 +18,8 @@
         "device": "cuda",
         "base_dataset_performance": {},
         "dataset_info": {},
-        "is_loaded": true
+        "is_loaded": true,
+        "voting_weight": 0.9123
       }
     },
     "0002.jpg": {
@@ -38,17 +39,18 @@
         "device": "cuda",
         "base_dataset_performance": {},
         "dataset_info": {},
-        "is_loaded": true
+        "is_loaded": true,
+        "voting_weight": 0.9123
       }
     },
     "0003.jpg": {
       "model_name": "all_datasets",
       "predictions": {
-        "良性": 0.9936229377053678,
-        "恶性": 0.006377062294632196
+        "良性": 0.9936229530721903,
+        "恶性": 0.006377046927809715
       },
       "top_class": "良性",
-      "top_confidence": 0.9936229377053678,
+      "top_confidence": 0.9936229530721903,
       "requires_mask": false,
       "metadata": {
         "model_name": "all_datasets",
@@ -58,17 +60,18 @@
         "device": "cuda",
         "base_dataset_performance": {},
         "dataset_info": {},
-        "is_loaded": true
+        "is_loaded": true,
+        "voting_weight": 0.9123
       }
     },
     "0004.jpg": {
       "model_name": "all_datasets",
       "predictions": {
-        "良性": 0.9787054602056742,
-        "恶性": 0.02129453979432583
+        "良性": 0.9787056278437376,
+        "恶性": 0.021294372156262398
       },
       "top_class": "良性",
-      "top_confidence": 0.9787054602056742,
+      "top_confidence": 0.9787056278437376,
       "requires_mask": false,
       "metadata": {
         "model_name": "all_datasets",
@@ -78,17 +81,18 @@
         "device": "cuda",
         "base_dataset_performance": {},
         "dataset_info": {},
-        "is_loaded": true
+        "is_loaded": true,
+        "voting_weight": 0.9123
       }
     },
     "0005.jpg": {
       "model_name": "all_datasets",
       "predictions": {
-        "良性": 0.9969601351767778,
-        "恶性": 0.0030398648232221603
+        "良性": 0.9969601379707456,
+        "恶性": 0.0030398620292544365
       },
       "top_class": "良性",
-      "top_confidence": 0.9969601351767778,
+      "top_confidence": 0.9969601379707456,
       "requires_mask": false,
       "metadata": {
         "model_name": "all_datasets",
@@ -98,7 +102,8 @@
         "device": "cuda",
         "base_dataset_performance": {},
         "dataset_info": {},
-        "is_loaded": true
+        "is_loaded": true,
+        "voting_weight": 0.9123
       }
     },
     "0378.jpg": {
@@ -118,7 +123,8 @@
         "device": "cuda",
         "base_dataset_performance": {},
         "dataset_info": {},
-        "is_loaded": true
+        "is_loaded": true,
+        "voting_weight": 0.9123
       }
     },
     "0379.jpg": {
@@ -138,7 +144,8 @@
         "device": "cuda",
         "base_dataset_performance": {},
         "dataset_info": {},
-        "is_loaded": true
+        "is_loaded": true,
+        "voting_weight": 0.9123
       }
     },
     "0380.jpg": {
@@ -158,7 +165,8 @@
         "device": "cuda",
         "base_dataset_performance": {},
         "dataset_info": {},
-        "is_loaded": true
+        "is_loaded": true,
+        "voting_weight": 0.9123
       }
     },
     "0381.jpg": {
@@ -178,7 +186,8 @@
         "device": "cuda",
         "base_dataset_performance": {},
         "dataset_info": {},
-        "is_loaded": true
+        "is_loaded": true,
+        "voting_weight": 0.9123
       }
     },
     "0382.jpg": {
@@ -198,7 +207,8 @@
         "device": "cuda",
         "base_dataset_performance": {},
         "dataset_info": {},
-        "is_loaded": true
+        "is_loaded": true,
+        "voting_weight": 0.9123
       }
     }
   }

@@ -1,0 +1,257 @@
+{
+  "segmentation": [
+    {
+      "name": "all_datasets",
+      "is_pipeline": false,
+      "n_matched": 10,
+      "n_total": 10,
+      "dice": {
+        "mean": 0.8519609182582617,
+        "ci_lower": 0.7623015596722269,
+        "ci_upper": 0.9125423838604942
+      },
+      "hd95": {
+        "mean": 12.91420738565335,
+        "ci_lower": 4.668617749996121,
+        "ci_upper": 23.287952325892842
+      }
+    },
+    {
+      "name": "medsam2_thyroid",
+      "is_pipeline": false,
+      "n_matched": 10,
+      "n_total": 10,
+      "dice": {
+        "mean": 0.8392961566569423,
+        "ci_lower": 0.7677205515604827,
+        "ci_upper": 0.8973381204452242
+      },
+      "hd95": {
+        "mean": 9.898408329644123,
+        "ci_lower": 4.079346464570799,
+        "ci_upper": 17.415080167146296
+      }
+    },
+    {
+      "name": "medsegx_thyroid",
+      "is_pipeline": false,
+      "n_matched": 10,
+      "n_total": 10,
+      "dice": {
+        "mean": 0.73938321597747,
+        "ci_lower": 0.6035950935135835,
+        "ci_upper": 0.8622849006997767
+      },
+      "hd95": {
+        "mean": 16.492382710926677,
+        "ci_lower": 4.892315232167112,
+        "ci_upper": 32.16733306734734
+      }
+    },
+    {
+      "name": "transunet_all_datasets",
+      "is_pipeline": false,
+      "n_matched": 10,
+      "n_total": 10,
+      "dice": {
+        "mean": 0.7993433703725776,
+        "ci_lower": 0.7229201392315169,
+        "ci_upper": 0.8662722376524868
+      },
+      "hd95": {
+        "mean": 12.271829967028577,
+        "ci_lower": 7.239999013761619,
+        "ci_upper": 17.737210686934198
+      }
+    },
+    {
+      "name": "ultrafedfm_all_datasets",
+      "is_pipeline": false,
+      "n_matched": 10,
+      "n_total": 10,
+      "dice": {
+        "mean": 0.839705887182291,
+        "ci_lower": 0.7908966918283922,
+        "ci_upper": 0.8897927472188553
+      },
+      "hd95": {
+        "mean": 9.396377649150162,
+        "ci_lower": 4.551309911580273,
+        "ci_upper": 15.414471689027172
+      }
+    },
+    {
+      "name": "Pipeline (agent selected)",
+      "is_pipeline": true,
+      "n_matched": 10,
+      "n_total": 10,
+      "dice": {
+        "mean": 0.8022262658445858,
+        "ci_lower": 0.6731711535483794,
+        "ci_upper": 0.9025262737494615
+      },
+      "hd95": {
+        "mean": 11.17512790331937,
+        "ci_lower": 3.4803862810113784,
+        "ci_upper": 20.897388301661184
+      }
+    }
+  ],
+  "classification": [
+    {
+      "name": "all_datasets",
+      "is_pipeline": false,
+      "n_matched": 10,
+      "auroc": {
+        "mean": 0.92,
+        "ci_lower": 0.6666666666666666,
+        "ci_upper": 1.0
+      },
+      "auprc": {
+        "mean": 0.9266666666666665,
+        "ci_lower": 0.6666666666666667,
+        "ci_upper": 1.0
+      },
+      "accuracy": 0.9,
+      "sensitivity": 1.0,
+      "specificity": 0.8,
+      "f1": 0.9090909090909091
+    },
+    {
+      "name": "biomedclip_binary",
+      "is_pipeline": false,
+      "n_matched": 10,
+      "auroc": {
+        "mean": 0.9600000000000001,
+        "ci_lower": 0.775555555555556,
+        "ci_upper": 1.0
+      },
+      "auprc": {
+        "mean": 0.9666666666666666,
+        "ci_lower": 0.7745535714285714,
+        "ci_upper": 1.0
+      },
+      "accuracy": 0.8,
+      "sensitivity": 1.0,
+      "specificity": 0.6,
+      "f1": 0.8333333333333334
+    },
+    {
+      "name": "medsiglip_binary",
+      "is_pipeline": false,
+      "n_matched": 10,
+      "auroc": {
+        "mean": 1.0,
+        "ci_lower": 1.0,
+        "ci_upper": 1.0
+      },
+      "auprc": {
+        "mean": 1.0,
+        "ci_lower": 0.9999999999999999,
+        "ci_upper": 1.0
+      },
+      "accuracy": 0.6,
+      "sensitivity": 1.0,
+      "specificity": 0.2,
+      "f1": 0.7142857142857143
+    },
+    {
+      "name": "autogluon",
+      "is_pipeline": false,
+      "n_matched": 10,
+      "auroc": {
+        "mean": 0.68,
+        "ci_lower": 0.24851190476190502,
+        "ci_upper": 1.0
+      },
+      "auprc": {
+        "mean": 0.7116666666666667,
+        "ci_lower": 0.29166666666666663,
+        "ci_upper": 1.0
+      },
+      "accuracy": 0.5,
+      "sensitivity": 1.0,
+      "specificity": 0.0,
+      "f1": 0.6666666666666666
+    },
+    {
+      "name": "Pipeline (final)",
+      "is_pipeline": true,
+      "n_matched": 10,
+      "auroc": {
+        "mean": 0.92,
+        "ci_lower": 0.6666666666666666,
+        "ci_upper": 1.0
+      },
+      "auprc": {
+        "mean": 0.9266666666666665,
+        "ci_lower": 0.6666666666666667,
+        "ci_upper": 1.0
+      },
+      "accuracy": 0.8,
+      "sensitivity": 1.0,
+      "specificity": 0.6,
+      "f1": 0.8333333333333334
+    }
+  ],
+  "classification_path_b_subset": {
+    "subset_size": 3,
+    "models": [
+      {
+        "name": "all_datasets",
+        "is_pipeline": false,
+        "n_matched": 3,
+        "auroc": null,
+        "auprc": null,
+        "accuracy": null,
+        "sensitivity": null,
+        "specificity": null,
+        "f1": null
+      },
+      {
+        "name": "biomedclip_binary",
+        "is_pipeline": false,
+        "n_matched": 3,
+        "auroc": null,
+        "auprc": null,
+        "accuracy": null,
+        "sensitivity": null,
+        "specificity": null,
+        "f1": null
+      },
+      {
+        "name": "medsiglip_binary",
+        "is_pipeline": false,
+        "n_matched": 3,
+        "auroc": null,
+        "auprc": null,
+        "accuracy": null,
+        "sensitivity": null,
+        "specificity": null,
+        "f1": null
+      },
+      {
+        "name": "autogluon",
+        "is_pipeline": false,
+        "n_matched": 3,
+        "auroc": null,
+        "auprc": null,
+        "accuracy": null,
+        "sensitivity": null,
+        "specificity": null,
+        "f1": null
+      },
+      {
+        "name": "Pipeline (final)",
+        "is_pipeline": true,
+        "n_matched": 3,
+        "auroc": null,
+        "auprc": null,
+        "accuracy": null,
+        "sensitivity": null,
+        "specificity": null,
+        "f1": null
+      }
+    ]
+  }
+}

@@ -1,5 +1,7 @@
 # ThyroidCascadeAgent
 
+conda activate /mnt/wangbd8/workspace/envs/thyroid_infer
+
 甲状腺超声级联推理系统：分割筛选 Agent → 分类筛选 Agent，以 GT-trained radiomics 模型作为分割质量裁判。
 
 ## 架构

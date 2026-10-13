@@ -6,7 +6,7 @@
 # ===== 共享段 =====
 shared:
   agent_llm:
-    api_key_env: "sk-5dcf871f08cb4adb95bc131efa0337a1"
+    api_key_env: "DASHSCOPE_API_KEY"
     base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
     model_name: "qwen3.8-flash"
     temperature: 0.3
@@ -21,15 +21,15 @@ segmentation:
       input_size: [224, 224]
       threshold: 0.5
     # ===== TransUNet =====
-    # - type: "transunet"
-    #   name: "transunet_all_datasets"
-    #   model_path: "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth"
-    #   num_classes: 2
-    #   vit_name: "R50-ViT-B_16"
-    #   img_size: 224
-    #   n_skip: 3
-    #   threshold: 0.5
-    #   infer_root: "../my_Thyroid_Infer/infer_transunet"
+    - type: "transunet"
+      name: "transunet_all_datasets"
+      model_path: "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth"
+      num_classes: 2
+      vit_name: "R50-ViT-B_16"
+      img_size: 224
+      n_skip: 3
+      threshold: 0.5
+      infer_root: "../my_Thyroid_Infer/infer_transunet"
     # ===== UltraFedFM =====
     # - type: "ultrafedfm"
     #   name: "ultrafedfm_all_datasets"
@@ -80,14 +80,14 @@ classification:
       use_tirads: false
       voting_weight: 0.9123         # 验证集 AUROC（加权软投票权重）
     # ===== MedSigLIP (SigLIP ViT 分类) =====
-    # - type: "medsiglip"
-    #   name: "medsiglip_binary"
-    #   model_path: "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt"
-    #   pretrained_model_path: "../my_Thyroid_Infer/infer_medsiglip/pretrained_models/medsiglip-448"
-    #   num_classes: 2
-    #   img_size: 448
-    #   dropout: 0.1
-    #   voting_weight: 0.8988         # 验证集 AUROC
+    - type: "medsiglip"
+      name: "medsiglip_binary"
+      model_path: "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt"
+      pretrained_model_path: "../my_Thyroid_Infer/infer_medsiglip/pretrained_models/medsiglip-448"
+      num_classes: 2
+      img_size: 448
+      dropout: 0.1
+      voting_weight: 0.8988         # 验证集 AUROC
     # ===== BiomedCLIP (open_clip ViT 分类) =====
     # - type: "biomedclip"
     #   name: "biomedclip_binary"
@@ -130,4 +130,4 @@ pipeline:
   routing_log_path: null
   routing_log_include_prompts: false
   output:
-    output_dir: "output/shared_output/pipeline_run"
+    output_dir: "output/sample/pipeline_run"

@@ -1,15 +1,90 @@
 [
   {
-    "path": "B",
-    "classification_consensus": false,
+    "path": "A",
+    "classification_consensus": true,
+    "cls_decision": {
+      "selected_model": "independent_consensus",
+      "selected_class": "恶性",
+      "confidence": 0.9992092847824097,
+      "reasoning": "独立分类模型一致预测为「恶性」(conf=0.66~1.00)，直接采纳。",
+      "all_predictions": [
+        {
+          "model_name": "all_datasets",
+          "predictions": {
+            "良性": 0.000790715217590332,
+            "恶性": 0.9992092847824097
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.9992092847824097,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "all_datasets",
+            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true,
+            "voting_weight": 0.9123
+          }
+        },
+        {
+          "model_name": "medsiglip_binary",
+          "predictions": {
+            "良性": 0.09131790697574615,
+            "恶性": 0.908682107925415
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.908682107925415,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "medsiglip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true,
+            "voting_weight": 0.8988
+          }
+        },
+        {
+          "model_name": "biomedclip_binary",
+          "predictions": {
+            "良性": 0.3402540981769562,
+            "恶性": 0.6597458720207214
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.6597458720207214,
+          "requires_mask": false,
+          "metadata": {
+            "model_name": "biomedclip_binary",
+            "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
+            "use_tirads": false,
+            "requires_mask": false,
+            "device": "cuda",
+            "base_dataset_performance": {},
+            "dataset_info": {},
+            "is_loaded": true,
+            "voting_weight": 0.7926
+          }
+        }
+      ],
+      "method": "classification_consensus"
+    },
+    "final_label": 1,
+    "final_confidence": 0.9992092847824097,
+    "image_name": "0001.jpg",
     "seg_decision": {
       "img_name": "0001.jpg",
-      "consensus": false,
-      "anchor_class": null,
+      "consensus": true,
+      "anchor_class": "恶性",
       "selected_model": "medsam2_thyroid",
-      "confidence": 0.8812324455234799,
-      "reasoning": "静态规则：medsam2_thyroid（average_agreement=0.88）",
-      "path": "B",
+      "confidence": 0.8811936740559989,
+      "reasoning": "静态规则：medsam2_thyroid（average_agreement=0.88），与分类锚点「恶性」吻合",
+      "path": "A",
       "all_predictions": [
         {
           "model_name": "all_datasets",
@@ -31,8 +106,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9802141189575195
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "transunet_all_datasets",
@@ -54,8 +129,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.8989410400390625
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "ultrafedfm_all_datasets",
@@ -63,7 +138,7 @@
             689,
             989
           ],
-          "mask_area": 54770,
+          "mask_area": 54772,
           "metadata": {
             "model_name": "ultrafedfm_all_datasets",
             "model_path": "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth",
@@ -77,8 +152,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9876798987388611
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsegx_thyroid",
@@ -86,7 +161,7 @@
             689,
             989
           ],
-          "mask_area": 55523,
+          "mask_area": 55529,
           "metadata": {
             "model_name": "medsegx_thyroid",
             "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
@@ -100,8 +175,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9205766320228577
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsam2_thyroid",
@@ -123,8 +198,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.8090335130691528
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         }
       ]
     },
@@ -133,20 +208,25 @@
       989
     ],
     "selected_mask_area": 54485,
+    "true_label": 0
+  },
+  {
+    "path": "A",
+    "classification_consensus": true,
     "cls_decision": {
-      "selected_model": "majority_fallback",
-      "selected_class": "恶性",
-      "confidence": 0.9992092847824097,
-      "reasoning": "独立模型无共识(多数派=恶性)，退回多数派投票",
+      "selected_model": "independent_consensus",
+      "selected_class": "良性",
+      "confidence": 0.9988581700017676,
+      "reasoning": "独立分类模型一致预测为「良性」(conf=0.80~1.00)，直接采纳。",
       "all_predictions": [
         {
           "model_name": "all_datasets",
           "predictions": {
-            "良性": 0.000790715217590332,
-            "恶性": 0.9992092847824097
+            "良性": 0.9988581700017676,
+            "恶性": 0.0011418299982324243
           },
-          "top_class": "恶性",
-          "top_confidence": 0.9992092847824097,
+          "top_class": "良性",
+          "top_confidence": 0.9988581700017676,
           "requires_mask": false,
           "metadata": {
             "model_name": "all_datasets",
@@ -156,17 +236,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.9123
           }
         },
         {
           "model_name": "medsiglip_binary",
           "predictions": {
-            "0": 0.09131790697574615,
-            "1": 0.908682107925415
+            "良性": 0.8017061948776245,
+            "恶性": 0.19829383492469788
           },
-          "top_class": "1",
-          "top_confidence": 0.908682107925415,
+          "top_class": "良性",
+          "top_confidence": 0.8017061948776245,
           "requires_mask": false,
           "metadata": {
             "model_name": "medsiglip_binary",
@@ -176,17 +257,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.8988
           }
         },
         {
           "model_name": "biomedclip_binary",
           "predictions": {
-            "良性": 0.3402540981769562,
-            "恶性": 0.6597458720207214
+            "良性": 0.8459315896034241,
+            "恶性": 0.15406836569309235
           },
-          "top_class": "恶性",
-          "top_confidence": 0.6597458720207214,
+          "top_class": "良性",
+          "top_confidence": 0.8459315896034241,
           "requires_mask": false,
           "metadata": {
             "model_name": "biomedclip_binary",
@@ -196,28 +278,24 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.7926
           }
         }
       ],
-      "method": "path_b_static_fallback"
+      "method": "classification_consensus"
     },
-    "final_label": "恶性",
-    "final_confidence": 0.9992092847824097,
-    "image_name": "0001.jpg",
-    "true_label": 0
-  },
-  {
-    "path": "B",
-    "classification_consensus": false,
+    "final_label": 0,
+    "final_confidence": 0.9988581700017676,
+    "image_name": "0002.jpg",
     "seg_decision": {
       "img_name": "0002.jpg",
-      "consensus": false,
-      "anchor_class": null,
-      "selected_model": "medsam2_thyroid",
-      "confidence": 0.6189365815340095,
-      "reasoning": "静态规则：medsam2_thyroid（average_agreement=0.62）",
-      "path": "B",
+      "consensus": true,
+      "anchor_class": "良性",
+      "selected_model": "medsegx_thyroid",
+      "confidence": 0.17647911294422602,
+      "reasoning": "静态规则：medsegx_thyroid（average_agreement=0.18），与分类锚点「良性」吻合",
+      "path": "A",
       "all_predictions": [
         {
           "model_name": "all_datasets",
@@ -225,7 +303,7 @@
             334,
             499
           ],
-          "mask_area": 25247,
+          "mask_area": 25248,
           "metadata": {
             "model_name": "all_datasets",
             "model_path": "../my_Thyroid_Infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth",
@@ -239,8 +317,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9230346083641052
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "transunet_all_datasets",
@@ -248,7 +326,7 @@
             334,
             499
           ],
-          "mask_area": 35658,
+          "mask_area": 35652,
           "metadata": {
             "model_name": "transunet_all_datasets",
             "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
@@ -262,8 +340,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9190806746482849
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "ultrafedfm_all_datasets",
@@ -271,7 +349,7 @@
             334,
             499
           ],
-          "mask_area": 22276,
+          "mask_area": 22277,
           "metadata": {
             "model_name": "ultrafedfm_all_datasets",
             "model_path": "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth",
@@ -285,8 +363,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9860111474990845
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsegx_thyroid",
@@ -294,7 +372,7 @@
             334,
             499
           ],
-          "mask_area": 4976,
+          "mask_area": 4980,
           "metadata": {
             "model_name": "medsegx_thyroid",
             "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
@@ -308,8 +386,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.7343063354492188
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsam2_thyroid",
@@ -331,8 +409,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.7279974818229675
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         }
       ]
     },
@@ -340,21 +418,26 @@
       334,
       499
     ],
-    "selected_mask_area": 29152,
+    "selected_mask_area": 4980,
+    "true_label": 0
+  },
+  {
+    "path": "B",
+    "classification_consensus": false,
     "cls_decision": {
-      "selected_model": "autogluon_majority_agree",
+      "selected_model": "weighted_soft_vote_with_autogluon",
       "selected_class": "良性",
-      "confidence": 0.7640806436538696,
-      "reasoning": "独立模型多数派=良性，AutoGluon一致(0.76)",
+      "confidence": 0.5053166532056319,
+      "reasoning": "独立模型无共识，AutoGluon(ROI,恶性,0.91)加入加权软投票，结果=良性(0.51)。",
       "all_predictions": [
         {
           "model_name": "all_datasets",
           "predictions": {
-            "良性": 0.9988581700017676,
-            "恶性": 0.0011418299982324243
+            "良性": 0.9936229530721903,
+            "恶性": 0.006377046927809715
           },
           "top_class": "良性",
-          "top_confidence": 0.9988581700017676,
+          "top_confidence": 0.9936229530721903,
           "requires_mask": false,
           "metadata": {
             "model_name": "all_datasets",
@@ -364,17 +447,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.9123
           }
         },
         {
           "model_name": "medsiglip_binary",
           "predictions": {
-            "0": 0.8017061948776245,
-            "1": 0.19829383492469788
+            "良性": 0.09406861662864685,
+            "恶性": 0.9059313535690308
           },
-          "top_class": "0",
-          "top_confidence": 0.8017061948776245,
+          "top_class": "恶性",
+          "top_confidence": 0.9059313535690308,
           "requires_mask": false,
           "metadata": {
             "model_name": "medsiglip_binary",
@@ -384,17 +468,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.8988
           }
         },
         {
           "model_name": "biomedclip_binary",
           "predictions": {
-            "良性": 0.8459315896034241,
-            "恶性": 0.15406836569309235
+            "良性": 0.6702682375907898,
+            "恶性": 0.329731822013855
           },
           "top_class": "良性",
-          "top_confidence": 0.8459315896034241,
+          "top_confidence": 0.6702682375907898,
           "requires_mask": false,
           "metadata": {
             "model_name": "biomedclip_binary",
@@ -404,26 +489,35 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.7926
+          }
+        },
+        {
+          "model_name": "radiomics_judge",
+          "predictions": {
+            "良性": 0.09213119745254517,
+            "恶性": 0.9078688025474548
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.9078688025474548,
+          "requires_mask": true,
+          "metadata": {
+            "source": "radiomics_judge"
           }
         }
       ],
-      "method": "path_b_static_majority"
+      "method": "path_b_static_softvote"
     },
-    "final_label": "良性",
-    "final_confidence": 0.7640806436538696,
-    "image_name": "0002.jpg",
-    "true_label": 0
-  },
-  {
-    "path": "B",
-    "classification_consensus": false,
+    "final_label": 0,
+    "final_confidence": 0.5053166532056319,
+    "image_name": "0003.jpg",
     "seg_decision": {
       "img_name": "0003.jpg",
       "consensus": false,
       "anchor_class": null,
       "selected_model": "all_datasets",
-      "confidence": 0.4321672508230828,
+      "confidence": 0.4320908310181306,
       "reasoning": "静态规则：all_datasets（average_agreement=0.43）",
       "path": "B",
       "all_predictions": [
@@ -447,8 +541,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9108404517173767
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "transunet_all_datasets",
@@ -470,8 +564,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.7981040477752686
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "ultrafedfm_all_datasets",
@@ -479,7 +573,7 @@
             334,
             496
           ],
-          "mask_area": 21264,
+          "mask_area": 21262,
           "metadata": {
             "model_name": "ultrafedfm_all_datasets",
             "model_path": "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth",
@@ -493,8 +587,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9671317934989929
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsegx_thyroid",
@@ -502,7 +596,7 @@
             334,
             496
           ],
-          "mask_area": 5845,
+          "mask_area": 5849,
           "metadata": {
             "model_name": "medsegx_thyroid",
             "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
@@ -516,8 +610,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9412055015563965
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsam2_thyroid",
@@ -539,8 +633,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.5682710409164429
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         }
       ]
     },
@@ -549,20 +643,25 @@
       496
     ],
     "selected_mask_area": 8560,
+    "true_label": 0
+  },
+  {
+    "path": "B",
+    "classification_consensus": false,
     "cls_decision": {
-      "selected_model": "autogluon_majority_agree",
+      "selected_model": "weighted_soft_vote_with_autogluon",
       "selected_class": "良性",
-      "confidence": 0.791533425450325,
-      "reasoning": "独立模型多数派=良性，AutoGluon一致(0.79)",
+      "confidence": 0.5735995252387301,
+      "reasoning": "独立模型无共识，AutoGluon(ROI,恶性,0.79)加入加权软投票，结果=良性(0.57)。",
       "all_predictions": [
         {
           "model_name": "all_datasets",
           "predictions": {
-            "良性": 0.9936229377053678,
-            "恶性": 0.006377062294632196
+            "良性": 0.9787056278437376,
+            "恶性": 0.021294372156262398
           },
           "top_class": "良性",
-          "top_confidence": 0.9936229377053678,
+          "top_confidence": 0.9787056278437376,
           "requires_mask": false,
           "metadata": {
             "model_name": "all_datasets",
@@ -572,17 +671,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.9123
           }
         },
         {
           "model_name": "medsiglip_binary",
           "predictions": {
-            "0": 0.09406861662864685,
-            "1": 0.9059313535690308
+            "良性": 0.1801111251115799,
+            "恶性": 0.8198888897895813
           },
-          "top_class": "1",
-          "top_confidence": 0.9059313535690308,
+          "top_class": "恶性",
+          "top_confidence": 0.8198888897895813,
           "requires_mask": false,
           "metadata": {
             "model_name": "medsiglip_binary",
@@ -592,17 +692,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.8988
           }
         },
         {
           "model_name": "biomedclip_binary",
           "predictions": {
-            "良性": 0.6702682375907898,
-            "恶性": 0.329731822013855
+            "良性": 0.7842038869857788,
+            "恶性": 0.2157960683107376
           },
           "top_class": "良性",
-          "top_confidence": 0.6702682375907898,
+          "top_confidence": 0.7842038869857788,
           "requires_mask": false,
           "metadata": {
             "model_name": "biomedclip_binary",
@@ -612,26 +713,35 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.7926
+          }
+        },
+        {
+          "model_name": "radiomics_judge",
+          "predictions": {
+            "良性": 0.2079276442527771,
+            "恶性": 0.7920723557472229
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.7920723557472229,
+          "requires_mask": true,
+          "metadata": {
+            "source": "radiomics_judge"
           }
         }
       ],
-      "method": "path_b_static_majority"
+      "method": "path_b_static_softvote"
     },
-    "final_label": "良性",
-    "final_confidence": 0.791533425450325,
-    "image_name": "0003.jpg",
-    "true_label": 0
-  },
-  {
-    "path": "B",
-    "classification_consensus": false,
+    "final_label": 0,
+    "final_confidence": 0.5735995252387301,
+    "image_name": "0004.jpg",
     "seg_decision": {
       "img_name": "0004.jpg",
       "consensus": false,
       "anchor_class": null,
       "selected_model": "transunet_all_datasets",
-      "confidence": 0.7289404287400623,
+      "confidence": 0.7290731908523693,
       "reasoning": "静态规则：transunet_all_datasets（average_agreement=0.73）",
       "path": "B",
       "all_predictions": [
@@ -655,8 +765,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9676822423934937
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "transunet_all_datasets",
@@ -678,8 +788,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.7894445061683655
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "ultrafedfm_all_datasets",
@@ -701,8 +811,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9739078879356384
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsegx_thyroid",
@@ -710,7 +820,7 @@
             356,
             402
           ],
-          "mask_area": 3192,
+          "mask_area": 3188,
           "metadata": {
             "model_name": "medsegx_thyroid",
             "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
@@ -724,8 +834,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.8861731290817261
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsam2_thyroid",
@@ -747,8 +857,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.940079927444458
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         }
       ]
     },
@@ -757,20 +867,25 @@
       402
     ],
     "selected_mask_area": 1351,
+    "true_label": 0
+  },
+  {
+    "path": "B",
+    "classification_consensus": false,
     "cls_decision": {
-      "selected_model": "autogluon_majority_agree",
-      "selected_class": "良性",
-      "confidence": 0.7577993273735046,
-      "reasoning": "独立模型多数派=良性，AutoGluon一致(0.76)",
+      "selected_model": "weighted_soft_vote_with_autogluon",
+      "selected_class": "恶性",
+      "confidence": 0.5265433286772587,
+      "reasoning": "独立模型无共识，AutoGluon(ROI,恶性,0.68)加入加权软投票，结果=恶性(0.53)。",
       "all_predictions": [
         {
           "model_name": "all_datasets",
           "predictions": {
-            "良性": 0.9787054602056742,
-            "恶性": 0.02129453979432583
+            "良性": 0.9969601379707456,
+            "恶性": 0.0030398620292544365
           },
           "top_class": "良性",
-          "top_confidence": 0.9787054602056742,
+          "top_confidence": 0.9969601379707456,
           "requires_mask": false,
           "metadata": {
             "model_name": "all_datasets",
@@ -780,17 +895,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.9123
           }
         },
         {
           "model_name": "medsiglip_binary",
           "predictions": {
-            "0": 0.1801111251115799,
-            "1": 0.8198888897895813
+            "良性": 0.05752650648355484,
+            "恶性": 0.9424735307693481
           },
-          "top_class": "1",
-          "top_confidence": 0.8198888897895813,
+          "top_class": "恶性",
+          "top_confidence": 0.9424735307693481,
           "requires_mask": false,
           "metadata": {
             "model_name": "medsiglip_binary",
@@ -800,17 +916,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.8988
           }
         },
         {
           "model_name": "biomedclip_binary",
           "predictions": {
-            "良性": 0.7842038869857788,
-            "恶性": 0.2157960683107376
+            "良性": 0.43793985247612,
+            "恶性": 0.5620601177215576
           },
-          "top_class": "良性",
-          "top_confidence": 0.7842038869857788,
+          "top_class": "恶性",
+          "top_confidence": 0.5620601177215576,
           "requires_mask": false,
           "metadata": {
             "model_name": "biomedclip_binary",
@@ -820,26 +937,35 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.7926
+          }
+        },
+        {
+          "model_name": "radiomics_judge",
+          "predictions": {
+            "良性": 0.3222495913505554,
+            "恶性": 0.6777504086494446
+          },
+          "top_class": "恶性",
+          "top_confidence": 0.6777504086494446,
+          "requires_mask": true,
+          "metadata": {
+            "source": "radiomics_judge"
           }
         }
       ],
-      "method": "path_b_static_majority"
+      "method": "path_b_static_softvote"
     },
-    "final_label": "良性",
-    "final_confidence": 0.7577993273735046,
-    "image_name": "0004.jpg",
-    "true_label": 0
-  },
-  {
-    "path": "B",
-    "classification_consensus": false,
+    "final_label": 1,
+    "final_confidence": 0.5265433286772587,
+    "image_name": "0005.jpg",
     "seg_decision": {
       "img_name": "0005.jpg",
       "consensus": false,
       "anchor_class": null,
       "selected_model": "medsegx_thyroid",
-      "confidence": 0.7259631951646618,
+      "confidence": 0.7260214747512653,
       "reasoning": "静态规则：medsegx_thyroid（average_agreement=0.73）",
       "path": "B",
       "all_predictions": [
@@ -863,8 +989,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9633446335792542
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "transunet_all_datasets",
@@ -872,7 +998,7 @@
             472,
             591
           ],
-          "mask_area": 18677,
+          "mask_area": 18683,
           "metadata": {
             "model_name": "transunet_all_datasets",
             "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
@@ -886,8 +1012,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.7365924119949341
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "ultrafedfm_all_datasets",
@@ -909,8 +1035,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9859402775764465
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsegx_thyroid",
@@ -932,8 +1058,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9199948310852051
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsam2_thyroid",
@@ -955,8 +1081,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9267710447311401
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         }
       ]
     },
@@ -965,20 +1091,25 @@
       591
     ],
     "selected_mask_area": 21948,
+    "true_label": 0
+  },
+  {
+    "path": "A",
+    "classification_consensus": true,
     "cls_decision": {
-      "selected_model": "autogluon_majority_agree",
-      "selected_class": "良性",
-      "confidence": 0.8914985358715057,
-      "reasoning": "独立模型多数派=良性，AutoGluon一致(0.89)",
+      "selected_model": "independent_consensus",
+      "selected_class": "恶性",
+      "confidence": 0.9975065588951111,
+      "reasoning": "独立分类模型一致预测为「恶性」(conf=0.63~1.00)，直接采纳。",
       "all_predictions": [
         {
           "model_name": "all_datasets",
           "predictions": {
-            "良性": 0.9969601351767778,
-            "恶性": 0.0030398648232221603
+            "良性": 0.002493441104888916,
+            "恶性": 0.9975065588951111
           },
-          "top_class": "良性",
-          "top_confidence": 0.9969601351767778,
+          "top_class": "恶性",
+          "top_confidence": 0.9975065588951111,
           "requires_mask": false,
           "metadata": {
             "model_name": "all_datasets",
@@ -988,17 +1119,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.9123
           }
         },
         {
           "model_name": "medsiglip_binary",
           "predictions": {
-            "0": 0.05752650648355484,
-            "1": 0.9424735307693481
+            "良性": 0.026821184903383255,
+            "恶性": 0.9731788635253906
           },
-          "top_class": "1",
-          "top_confidence": 0.9424735307693481,
+          "top_class": "恶性",
+          "top_confidence": 0.9731788635253906,
           "requires_mask": false,
           "metadata": {
             "model_name": "medsiglip_binary",
@@ -1008,17 +1140,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.8988
           }
         },
         {
           "model_name": "biomedclip_binary",
           "predictions": {
-            "良性": 0.43793985247612,
-            "恶性": 0.5620601177215576
+            "良性": 0.36687639355659485,
+            "恶性": 0.6331236362457275
           },
           "top_class": "恶性",
-          "top_confidence": 0.5620601177215576,
+          "top_confidence": 0.6331236362457275,
           "requires_mask": false,
           "metadata": {
             "model_name": "biomedclip_binary",
@@ -1028,28 +1161,24 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.7926
           }
         }
       ],
-      "method": "path_b_static_majority"
+      "method": "classification_consensus"
     },
-    "final_label": "良性",
-    "final_confidence": 0.8914985358715057,
-    "image_name": "0005.jpg",
-    "true_label": 0
-  },
-  {
-    "path": "B",
-    "classification_consensus": false,
+    "final_label": 1,
+    "final_confidence": 0.9975065588951111,
+    "image_name": "0378.jpg",
     "seg_decision": {
       "img_name": "0378.jpg",
-      "consensus": false,
-      "anchor_class": null,
+      "consensus": true,
+      "anchor_class": "恶性",
       "selected_model": "medsam2_thyroid",
       "confidence": 0.6999444557052328,
-      "reasoning": "静态规则：medsam2_thyroid（average_agreement=0.70）",
-      "path": "B",
+      "reasoning": "静态规则：medsam2_thyroid（average_agreement=0.70），与分类锚点「恶性」吻合",
+      "path": "A",
       "all_predictions": [
         {
           "model_name": "all_datasets",
@@ -1071,8 +1200,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9618379473686218
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "transunet_all_datasets",
@@ -1094,8 +1223,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.7797229886054993
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "ultrafedfm_all_datasets",
@@ -1117,8 +1246,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9577810168266296
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsegx_thyroid",
@@ -1140,8 +1269,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9053511023521423
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsam2_thyroid",
@@ -1163,8 +1292,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9530119895935059
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         }
       ]
     },
@@ -1173,20 +1302,25 @@
       513
     ],
     "selected_mask_area": 924,
+    "true_label": 1
+  },
+  {
+    "path": "A",
+    "classification_consensus": true,
     "cls_decision": {
-      "selected_model": "autogluon_strong_signal",
-      "selected_class": "良性",
-      "confidence": 0.8540842682123184,
-      "reasoning": "AutoGluon高置信(0.85)，信ROI级特征",
+      "selected_model": "independent_consensus",
+      "selected_class": "恶性",
+      "confidence": 0.9991866946220398,
+      "reasoning": "独立分类模型一致预测为「恶性」(conf=0.71~1.00)，直接采纳。",
       "all_predictions": [
         {
           "model_name": "all_datasets",
           "predictions": {
-            "良性": 0.002493441104888916,
-            "恶性": 0.9975065588951111
+            "良性": 0.0008133053779602051,
+            "恶性": 0.9991866946220398
           },
           "top_class": "恶性",
-          "top_confidence": 0.9975065588951111,
+          "top_confidence": 0.9991866946220398,
           "requires_mask": false,
           "metadata": {
             "model_name": "all_datasets",
@@ -1196,17 +1330,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.9123
           }
         },
         {
           "model_name": "medsiglip_binary",
           "predictions": {
-            "0": 0.026821184903383255,
-            "1": 0.9731788635253906
+            "良性": 0.015720950439572334,
+            "恶性": 0.9842790961265564
           },
-          "top_class": "1",
-          "top_confidence": 0.9731788635253906,
+          "top_class": "恶性",
+          "top_confidence": 0.9842790961265564,
           "requires_mask": false,
           "metadata": {
             "model_name": "medsiglip_binary",
@@ -1216,17 +1351,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.8988
           }
         },
         {
           "model_name": "biomedclip_binary",
           "predictions": {
-            "良性": 0.36687639355659485,
-            "恶性": 0.6331236362457275
+            "良性": 0.29266566038131714,
+            "恶性": 0.7073343396186829
           },
           "top_class": "恶性",
-          "top_confidence": 0.6331236362457275,
+          "top_confidence": 0.7073343396186829,
           "requires_mask": false,
           "metadata": {
             "model_name": "biomedclip_binary",
@@ -1236,28 +1372,24 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.7926
           }
         }
       ],
-      "method": "path_b_static_autogluon"
+      "method": "classification_consensus"
     },
-    "final_label": "良性",
-    "final_confidence": 0.8540842682123184,
-    "image_name": "0378.jpg",
-    "true_label": 1
-  },
-  {
-    "path": "B",
-    "classification_consensus": false,
+    "final_label": 1,
+    "final_confidence": 0.9991866946220398,
+    "image_name": "0379.jpg",
     "seg_decision": {
       "img_name": "0379.jpg",
-      "consensus": false,
-      "anchor_class": null,
+      "consensus": true,
+      "anchor_class": "恶性",
       "selected_model": "medsegx_thyroid",
-      "confidence": 0.9157821210347401,
-      "reasoning": "静态规则：medsegx_thyroid（average_agreement=0.92）",
-      "path": "B",
+      "confidence": 0.9157518619547818,
+      "reasoning": "静态规则：medsegx_thyroid（average_agreement=0.92），与分类锚点「恶性」吻合",
+      "path": "A",
       "all_predictions": [
         {
           "model_name": "all_datasets",
@@ -1279,8 +1411,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9836911559104919
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "transunet_all_datasets",
@@ -1288,7 +1420,7 @@
             372,
             464
           ],
-          "mask_area": 41136,
+          "mask_area": 41122,
           "metadata": {
             "model_name": "transunet_all_datasets",
             "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
@@ -1302,8 +1434,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9202135801315308
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "ultrafedfm_all_datasets",
@@ -1311,7 +1443,7 @@
             372,
             464
           ],
-          "mask_area": 37186,
+          "mask_area": 37185,
           "metadata": {
             "model_name": "ultrafedfm_all_datasets",
             "model_path": "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth",
@@ -1325,8 +1457,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9900738596916199
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsegx_thyroid",
@@ -1334,7 +1466,7 @@
             372,
             464
           ],
-          "mask_area": 38257,
+          "mask_area": 38253,
           "metadata": {
             "model_name": "medsegx_thyroid",
             "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
@@ -1348,8 +1480,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9287401437759399
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsam2_thyroid",
@@ -1371,8 +1503,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.780042827129364
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         }
       ]
     },
@@ -1380,21 +1512,26 @@
       372,
       464
     ],
-    "selected_mask_area": 38257,
+    "selected_mask_area": 38253,
+    "true_label": 1
+  },
+  {
+    "path": "A",
+    "classification_consensus": true,
     "cls_decision": {
-      "selected_model": "majority_fallback",
+      "selected_model": "independent_consensus",
       "selected_class": "恶性",
-      "confidence": 0.9991866946220398,
-      "reasoning": "独立模型无共识(多数派=恶性)，退回多数派投票",
+      "confidence": 0.9993163347244263,
+      "reasoning": "独立分类模型一致预测为「恶性」(conf=0.81~1.00)，直接采纳。",
       "all_predictions": [
         {
           "model_name": "all_datasets",
           "predictions": {
-            "良性": 0.0008133053779602051,
-            "恶性": 0.9991866946220398
+            "良性": 0.0006836652755737305,
+            "恶性": 0.9993163347244263
           },
           "top_class": "恶性",
-          "top_confidence": 0.9991866946220398,
+          "top_confidence": 0.9993163347244263,
           "requires_mask": false,
           "metadata": {
             "model_name": "all_datasets",
@@ -1404,17 +1541,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.9123
           }
         },
         {
           "model_name": "medsiglip_binary",
           "predictions": {
-            "0": 0.015720950439572334,
-            "1": 0.9842790961265564
+            "良性": 0.0020226624328643084,
+            "恶性": 0.9979773163795471
           },
-          "top_class": "1",
-          "top_confidence": 0.9842790961265564,
+          "top_class": "恶性",
+          "top_confidence": 0.9979773163795471,
           "requires_mask": false,
           "metadata": {
             "model_name": "medsiglip_binary",
@@ -1424,17 +1562,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.8988
           }
         },
         {
           "model_name": "biomedclip_binary",
           "predictions": {
-            "良性": 0.29266566038131714,
-            "恶性": 0.7073343396186829
+            "良性": 0.19319970905780792,
+            "恶性": 0.8068002462387085
           },
           "top_class": "恶性",
-          "top_confidence": 0.7073343396186829,
+          "top_confidence": 0.8068002462387085,
           "requires_mask": false,
           "metadata": {
             "model_name": "biomedclip_binary",
@@ -1444,28 +1583,24 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.7926
           }
         }
       ],
-      "method": "path_b_static_fallback"
+      "method": "classification_consensus"
     },
-    "final_label": "恶性",
-    "final_confidence": 0.9991866946220398,
-    "image_name": "0379.jpg",
-    "true_label": 1
-  },
-  {
-    "path": "B",
-    "classification_consensus": false,
+    "final_label": 1,
+    "final_confidence": 0.9993163347244263,
+    "image_name": "0380.jpg",
     "seg_decision": {
       "img_name": "0380.jpg",
-      "consensus": false,
-      "anchor_class": null,
+      "consensus": true,
+      "anchor_class": "恶性",
       "selected_model": "all_datasets",
-      "confidence": 0.7462489158280379,
-      "reasoning": "静态规则：all_datasets（average_agreement=0.75）",
-      "path": "B",
+      "confidence": 0.7461784669205939,
+      "reasoning": "静态规则：all_datasets（average_agreement=0.75），与分类锚点「恶性」吻合",
+      "path": "A",
       "all_predictions": [
         {
           "model_name": "all_datasets",
@@ -1487,8 +1622,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9748250246047974
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "transunet_all_datasets",
@@ -1496,7 +1631,7 @@
             378,
             428
           ],
-          "mask_area": 13492,
+          "mask_area": 13493,
           "metadata": {
             "model_name": "transunet_all_datasets",
             "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
@@ -1510,8 +1645,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.911991536617279
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "ultrafedfm_all_datasets",
@@ -1533,8 +1668,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9842478632926941
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsegx_thyroid",
@@ -1542,7 +1677,7 @@
             378,
             428
           ],
-          "mask_area": 11743,
+          "mask_area": 11746,
           "metadata": {
             "model_name": "medsegx_thyroid",
             "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
@@ -1556,8 +1691,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9106210470199585
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsam2_thyroid",
@@ -1579,8 +1714,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.7725760340690613
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         }
       ]
     },
@@ -1589,20 +1724,25 @@
       428
     ],
     "selected_mask_area": 10738,
+    "true_label": 1
+  },
+  {
+    "path": "A",
+    "classification_consensus": true,
     "cls_decision": {
-      "selected_model": "autogluon_strong_signal",
-      "selected_class": "良性",
-      "confidence": 0.8017173558473587,
-      "reasoning": "AutoGluon高置信(0.80)，信ROI级特征",
+      "selected_model": "independent_consensus",
+      "selected_class": "恶性",
+      "confidence": 0.999312162399292,
+      "reasoning": "独立分类模型一致预测为「恶性」(conf=0.98~1.00)，直接采纳。",
       "all_predictions": [
         {
           "model_name": "all_datasets",
           "predictions": {
-            "良性": 0.0006836652755737305,
-            "恶性": 0.9993163347244263
+            "良性": 0.0006878376007080078,
+            "恶性": 0.999312162399292
           },
           "top_class": "恶性",
-          "top_confidence": 0.9993163347244263,
+          "top_confidence": 0.999312162399292,
           "requires_mask": false,
           "metadata": {
             "model_name": "all_datasets",
@@ -1612,17 +1752,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.9123
           }
         },
         {
           "model_name": "medsiglip_binary",
           "predictions": {
-            "0": 0.0020226624328643084,
-            "1": 0.9979773163795471
+            "良性": 0.0032420519273728132,
+            "恶性": 0.9967579245567322
           },
-          "top_class": "1",
-          "top_confidence": 0.9979773163795471,
+          "top_class": "恶性",
+          "top_confidence": 0.9967579245567322,
           "requires_mask": false,
           "metadata": {
             "model_name": "medsiglip_binary",
@@ -1632,17 +1773,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.8988
           }
         },
         {
           "model_name": "biomedclip_binary",
           "predictions": {
-            "良性": 0.19319970905780792,
-            "恶性": 0.8068002462387085
+            "良性": 0.016600338742136955,
+            "恶性": 0.9833996891975403
           },
           "top_class": "恶性",
-          "top_confidence": 0.8068002462387085,
+          "top_confidence": 0.9833996891975403,
           "requires_mask": false,
           "metadata": {
             "model_name": "biomedclip_binary",
@@ -1652,28 +1794,24 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.7926
           }
         }
       ],
-      "method": "path_b_static_autogluon"
+      "method": "classification_consensus"
     },
-    "final_label": "良性",
-    "final_confidence": 0.8017173558473587,
-    "image_name": "0380.jpg",
-    "true_label": 1
-  },
-  {
-    "path": "B",
-    "classification_consensus": false,
+    "final_label": 1,
+    "final_confidence": 0.999312162399292,
+    "image_name": "0381.jpg",
     "seg_decision": {
       "img_name": "0381.jpg",
-      "consensus": false,
-      "anchor_class": null,
+      "consensus": true,
+      "anchor_class": "恶性",
       "selected_model": "medsam2_thyroid",
-      "confidence": 0.7564326941833883,
-      "reasoning": "静态规则：medsam2_thyroid（average_agreement=0.76）",
-      "path": "B",
+      "confidence": 0.756337232727103,
+      "reasoning": "静态规则：medsam2_thyroid（average_agreement=0.76），与分类锚点「恶性」吻合",
+      "path": "A",
       "all_predictions": [
         {
           "model_name": "all_datasets",
@@ -1681,7 +1819,7 @@
             378,
             425
           ],
-          "mask_area": 38504,
+          "mask_area": 38505,
           "metadata": {
             "model_name": "all_datasets",
             "model_path": "../my_Thyroid_Infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth",
@@ -1695,8 +1833,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9741647243499756
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "transunet_all_datasets",
@@ -1704,7 +1842,7 @@
             378,
             425
           ],
-          "mask_area": 38572,
+          "mask_area": 38568,
           "metadata": {
             "model_name": "transunet_all_datasets",
             "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
@@ -1718,8 +1856,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9136255383491516
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "ultrafedfm_all_datasets",
@@ -1727,7 +1865,7 @@
             378,
             425
           ],
-          "mask_area": 19037,
+          "mask_area": 19035,
           "metadata": {
             "model_name": "ultrafedfm_all_datasets",
             "model_path": "../my_Thyroid_Infer/infer_ultrafedfm/checkpoints/epoch_bestDice.pth",
@@ -1741,8 +1879,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.985115647315979
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsegx_thyroid",
@@ -1750,7 +1888,7 @@
             378,
             425
           ],
-          "mask_area": 30309,
+          "mask_area": 30320,
           "metadata": {
             "model_name": "medsegx_thyroid",
             "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
@@ -1764,8 +1902,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.8854568004608154
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsam2_thyroid",
@@ -1787,8 +1925,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.7420260310173035
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         }
       ]
     },
@@ -1797,20 +1935,25 @@
       425
     ],
     "selected_mask_area": 31552,
+    "true_label": 1
+  },
+  {
+    "path": "A",
+    "classification_consensus": true,
     "cls_decision": {
-      "selected_model": "majority_fallback",
+      "selected_model": "independent_consensus",
       "selected_class": "恶性",
-      "confidence": 0.999312162399292,
-      "reasoning": "独立模型无共识(多数派=恶性)，退回多数派投票",
+      "confidence": 0.9992955923080444,
+      "reasoning": "独立分类模型一致预测为「恶性」(conf=0.91~1.00)，直接采纳。",
       "all_predictions": [
         {
           "model_name": "all_datasets",
           "predictions": {
-            "良性": 0.0006878376007080078,
-            "恶性": 0.999312162399292
+            "良性": 0.0007044076919555664,
+            "恶性": 0.9992955923080444
           },
           "top_class": "恶性",
-          "top_confidence": 0.999312162399292,
+          "top_confidence": 0.9992955923080444,
           "requires_mask": false,
           "metadata": {
             "model_name": "all_datasets",
@@ -1820,17 +1963,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.9123
           }
         },
         {
           "model_name": "medsiglip_binary",
           "predictions": {
-            "0": 0.0032420519273728132,
-            "1": 0.9967579245567322
+            "良性": 0.02052927389740944,
+            "恶性": 0.9794706702232361
           },
-          "top_class": "1",
-          "top_confidence": 0.9967579245567322,
+          "top_class": "恶性",
+          "top_confidence": 0.9794706702232361,
           "requires_mask": false,
           "metadata": {
             "model_name": "medsiglip_binary",
@@ -1840,17 +1984,18 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.8988
           }
         },
         {
           "model_name": "biomedclip_binary",
           "predictions": {
-            "良性": 0.016600338742136955,
-            "恶性": 0.9833996891975403
+            "良性": 0.09315165132284164,
+            "恶性": 0.9068483114242554
           },
           "top_class": "恶性",
-          "top_confidence": 0.9833996891975403,
+          "top_confidence": 0.9068483114242554,
           "requires_mask": false,
           "metadata": {
             "model_name": "biomedclip_binary",
@@ -1860,28 +2005,24 @@
             "device": "cuda",
             "base_dataset_performance": {},
             "dataset_info": {},
-            "is_loaded": true
+            "is_loaded": true,
+            "voting_weight": 0.7926
           }
         }
       ],
-      "method": "path_b_static_fallback"
+      "method": "classification_consensus"
     },
-    "final_label": "恶性",
-    "final_confidence": 0.999312162399292,
-    "image_name": "0381.jpg",
-    "true_label": 1
-  },
-  {
-    "path": "B",
-    "classification_consensus": false,
+    "final_label": 1,
+    "final_confidence": 0.9992955923080444,
+    "image_name": "0382.jpg",
     "seg_decision": {
       "img_name": "0382.jpg",
-      "consensus": false,
-      "anchor_class": null,
+      "consensus": true,
+      "anchor_class": "恶性",
       "selected_model": "all_datasets",
-      "confidence": 0.8116637991982971,
-      "reasoning": "静态规则：all_datasets（average_agreement=0.81）",
-      "path": "B",
+      "confidence": 0.8117618727095055,
+      "reasoning": "静态规则：all_datasets（average_agreement=0.81），与分类锚点「恶性」吻合",
+      "path": "A",
       "all_predictions": [
         {
           "model_name": "all_datasets",
@@ -1903,8 +2044,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9732828736305237
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "transunet_all_datasets",
@@ -1912,7 +2053,7 @@
             585,
             788
           ],
-          "mask_area": 13363,
+          "mask_area": 13354,
           "metadata": {
             "model_name": "transunet_all_datasets",
             "model_path": "../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth",
@@ -1926,8 +2067,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.8975439071655273
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "ultrafedfm_all_datasets",
@@ -1949,8 +2090,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9849012494087219
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsegx_thyroid",
@@ -1958,7 +2099,7 @@
             585,
             788
           ],
-          "mask_area": 13328,
+          "mask_area": 13334,
           "metadata": {
             "model_name": "medsegx_thyroid",
             "model_path": "../my_Thyroid_Infer/infer_medsegx/checkpoints/Nodule/model_best.pth",
@@ -1972,8 +2113,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.8859562277793884
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         },
         {
           "model_name": "medsam2_thyroid",
@@ -1995,8 +2136,8 @@
             "dataset_info": {},
             "is_loaded": true
           },
-          "has_confidence_map": true,
-          "mean_confidence": 0.9093781113624573
+          "has_confidence_map": false,
+          "mean_confidence": 0.0
         }
       ]
     },
@@ -2005,78 +2146,6 @@
       788
     ],
     "selected_mask_area": 16124,
-    "cls_decision": {
-      "selected_model": "autogluon_strong_signal",
-      "selected_class": "良性",
-      "confidence": 0.8014478385448456,
-      "reasoning": "AutoGluon高置信(0.80)，信ROI级特征",
-      "all_predictions": [
-        {
-          "model_name": "all_datasets",
-          "predictions": {
-            "良性": 0.0007044076919555664,
-            "恶性": 0.9992955923080444
-          },
-          "top_class": "恶性",
-          "top_confidence": 0.9992955923080444,
-          "requires_mask": false,
-          "metadata": {
-            "model_name": "all_datasets",
-            "model_path": "../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth",
-            "use_tirads": false,
-            "requires_mask": false,
-            "device": "cuda",
-            "base_dataset_performance": {},
-            "dataset_info": {},
-            "is_loaded": true
-          }
-        },
-        {
-          "model_name": "medsiglip_binary",
-          "predictions": {
-            "0": 0.02052927389740944,
-            "1": 0.9794706702232361
-          },
-          "top_class": "1",
-          "top_confidence": 0.9794706702232361,
-          "requires_mask": false,
-          "metadata": {
-            "model_name": "medsiglip_binary",
-            "model_path": "../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt",
-            "use_tirads": false,
-            "requires_mask": false,
-            "device": "cuda",
-            "base_dataset_performance": {},
-            "dataset_info": {},
-            "is_loaded": true
-          }
-        },
-        {
-          "model_name": "biomedclip_binary",
-          "predictions": {
-            "良性": 0.09315165132284164,
-            "恶性": 0.9068483114242554
-          },
-          "top_class": "恶性",
-          "top_confidence": 0.9068483114242554,
-          "requires_mask": false,
-          "metadata": {
-            "model_name": "biomedclip_binary",
-            "model_path": "../my_Thyroid_Infer/infer_biomedclip/checkpoints/BM_2cls/best_model.pth",
-            "use_tirads": false,
-            "requires_mask": false,
-            "device": "cuda",
-            "base_dataset_performance": {},
-            "dataset_info": {},
-            "is_loaded": true
-          }
-        }
-      ],
-      "method": "path_b_static_autogluon"
-    },
-    "final_label": "良性",
-    "final_confidence": 0.8014478385448456,
-    "image_name": "0382.jpg",
     "true_label": 1
   }
 ]

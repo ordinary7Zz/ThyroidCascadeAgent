@@ -32,6 +32,40 @@ from .soft_voting import (
     resolve_topk_model_outputs,
 )
 
+PATH_B_LLM_SYSTEM_PROMPT = """你是甲状腺超声诊断专家。独立分类模型对该图像判断不一致，你需要综合所有信号，自己做出最终的良恶性判断。
+
+你将收到：
+1. 独立分类模型预测（3个，无需mask，整图判断）
+2. AutoGluon 基于分割筛选 mask 的 Radiomics 分类（有 ROI 引导）
+3. 分割 Agent 选择该 mask 的推理
+
+Markup:
+- 独立模型置信度普遍低(<0.6) → 整图级特征不明显，ROI 级特征更可信
+- AutoGluon 分类基于 ROI 特征 → 在 mask 靠谱的前提下更细腻
+- 分割 Agent reasoning 解释了为什么选这个 mask
+
+若所有信号都模糊，保守倾向恶性（宁可假阳性不可假阴性），但标注低置信度。
+
+输出纯JSON（无 Markdown/代码块），首尾为{}：
+{"selected_class": "恶性", "confidence": 0.75, "reasoning": "..."}
+reasoning 须引用具体置信度数值。"""
+
+PATH_B_USER_PROMPT_EXAMPLE: dict[str, Any] = {
+    "scenario": "独立分类模型无共识，需综合裁决",
+    "independent_models": [
+        {"model_name": "<name>", "top_class": "良性|恶性", "top_confidence": 0.0},
+    ],
+    "autogluon_based_on_selected_mask": {
+        "top_class": "良性|恶性",
+        "top_confidence": 0.0,
+    },
+    "segmentation_decision": {
+        "selected_mask_from": "<seg_model_name>",
+        "reasoning": "<segmentation agent reasoning>",
+    },
+    "question": "请综合以上信息，给出最终良恶性判断和置信度(0-1)。",
+}
+
 
 @dataclass
 class ClsAgentDecision:
@@ -762,23 +796,7 @@ class LLMClassificationAgent:
             "question": "请综合以上信息，给出最终良恶性判断和置信度(0-1)。",
         }
 
-        sys_prompt = """你是甲状腺超声诊断专家。独立分类模型对该图像判断不一致，你需要综合所有信号，自己做出最终的良恶性判断。
-
-你将收到：
-1. 独立分类模型预测（3个，无需mask，整图判断）
-2. AutoGluon 基于分割筛选 mask 的 Radiomics 分类（有 ROI 引导）
-3. 分割 Agent 选择该 mask 的推理
-
-Markup:
-- 独立模型置信度普遍低(<0.6) → 整图级特征不明显，ROI 级特征更可信
-- AutoGluon 分类基于 ROI 特征 → 在 mask 靠谱的前提下更细腻
-- 分割 Agent reasoning 解释了为什么选这个 mask
-
-若所有信号都模糊，保守倾向恶性（宁可假阳性不可假阴性），但标注低置信度。
-
-输出纯JSON（无 Markdown/代码块），首尾为{}：
-{"selected_class": "恶性", "confidence": 0.75, "reasoning": "..."}
-reasoning 须引用具体置信度数值。"""
+        sys_prompt = PATH_B_LLM_SYSTEM_PROMPT
 
         user_prompt = json.dumps(prompt_data, ensure_ascii=False)
         prompts_bundle = {"system": sys_prompt, "user": user_prompt}

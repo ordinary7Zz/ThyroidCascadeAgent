@@ -34,6 +34,35 @@ from .base_model import SegModelOutput
 from .quality_evaluator import SegmentationQualityEvaluator
 from .metrics import compute_dice, compute_hd95, compute_ece
 
+# B6 / Supp.: 运行时追加到分割 system prompt（Path A 有锚点，Path B 无共识）
+SEG_LLM_SYSTEM_APPEND_PATH_A_TEMPLATE = """
+【分类锚点（关键信号）】
+独立分类模型（3个，无需mask）一致判断该图像为「{classification_anchor}」。
+此锚点用于评估各分割结果的合理性：
+- 与锚点矛盾的Radiomics裁判分类 → 该mask可能覆盖了错误的ROI → 可信度显著降低。
+- 与锚点吻合的mask → 额外加分。
+- 若所有mask的Radiomics分类都与锚点矛盾 → 选confidence最高的mask并解释原因。"""
+
+SEG_LLM_SYSTEM_APPEND_PATH_B = """
+【无分类锚点】
+独立分类模型对该图像的判断不一致，未能形成共识。
+整图级别特征模糊，分割评估应以以下为主要依据：
+1. Radiomics裁判的内部一致性（不同的分割得到相似的分类方向→更可信）
+2. 形态学合理性（circularity 0.6-0.9、单连通）
+3. 设备匹配与历史性能"""
+
+
+def seg_llm_system_append(classification_anchor: Optional[str]) -> str:
+    if classification_anchor:
+        return SEG_LLM_SYSTEM_APPEND_PATH_A_TEMPLATE.format(
+            classification_anchor=classification_anchor,
+        )
+    return SEG_LLM_SYSTEM_APPEND_PATH_B
+
+
+# 导出规格时占位，使 base system 含 radiomics judge 说明（与 pipeline 一致）
+RADIOMICS_JUDGE_SPEC_PLACEHOLDER = object()
+
 
 @dataclass
 class SegAgentDecision:
@@ -701,25 +730,7 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 只输出纯JSON。格式：{fmt}"""
 
         # 调用 LLM（锚点指令动态追加到 system_prompt）
-        system_prompt = self.system_prompt
-        if classification_anchor:
-            system_prompt += f"""
-
-【分类锚点（关键信号）】
-独立分类模型（3个，无需mask）一致判断该图像为「{classification_anchor}」。
-此锚点用于评估各分割结果的合理性：
-- 与锚点矛盾的Radiomics裁判分类 → 该mask可能覆盖了错误的ROI → 可信度显著降低。
-- 与锚点吻合的mask → 额外加分。
-- 若所有mask的Radiomics分类都与锚点矛盾 → 选confidence最高的mask并解释原因。"""
-        else:
-            system_prompt += """
-
-【无分类锚点】
-独立分类模型对该图像的判断不一致，未能形成共识。
-整图级别特征模糊，分割评估应以以下为主要依据：
-1. Radiomics裁判的内部一致性（不同的分割得到相似的分类方向→更可信）
-2. 形态学合理性（circularity 0.6-0.9、单连通）
-3. 设备匹配与历史性能"""
+        system_prompt = self.system_prompt + seg_llm_system_append(classification_anchor)
 
         prompts_bundle = {"system": system_prompt, "user": user_prompt}
         self._seg_log_ctx = {
