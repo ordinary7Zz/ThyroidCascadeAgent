@@ -56,7 +56,22 @@ def main():
         print("⚠️ segmentation/classification enable_agent 均为 false，无 LLM 可重复")
         return
 
+    out = Path(args.output_dir)
+    inter = out / "intermediate"
+    print("=" * 60)
+    print("B6 路由稳定性（复用 intermediate 缓存，仅重复 LLM 路由）")
+    print("=" * 60)
+    print(f"  config:      {args.config}")
+    print(f"  output-dir:  {out.resolve()}")
+    print(f"  repeats:     {args.repeats}")
+    print(f"  max-cases:   {args.max_cases if args.max_cases is not None else 'all'}")
+    print(f"  seg LLM:     {enable_seg_agent}")
+    print(f"  cls LLM:     {enable_cls_agent}")
+    print(f"  LLM model:   {llm_cfg.get('model_name')} (T={llm_cfg.get('temperature')})")
+
     api_key = os.getenv(llm_cfg["api_key_env"], "")
+    if not api_key:
+        print(f"⚠️ 警告: 环境变量 {llm_cfg['api_key_env']} 未设置，LLM 调用将失败")
     llm_client = LLMClient(
         api_key=api_key,
         base_url=llm_cfg["base_url"],
@@ -67,15 +82,22 @@ def main():
 
     judge = None
     if judge_cfg.get("enabled", False):
+        print("  加载 Radiomics 裁判...")
         judge = RadiomicsJudge(
             model_dir=judge_cfg["model_dir"],
             top_k_features=judge_cfg.get("top_k_features", 5),
             shap_reference_path=judge_cfg.get("shap_reference_path"),
             radiomics_params=judge_cfg.get("radiomics_params"),
         )
+        print("  ✓ Radiomics 裁判已加载")
+    else:
+        print("  Radiomics 裁判: 未启用")
 
-    out = Path(args.output_dir)
     routing_logger = build_routing_logger_from_config(config, out)
+    if routing_logger.enabled:
+        print(f"  routing_log: {routing_logger.path} (append)")
+    else:
+        print("  routing_log: 关闭 (pipeline.log_routing=false)")
 
     seg_agent = SegmentationAgent(
         llm_client=llm_client,
@@ -97,8 +119,11 @@ def main():
         key=lambda x: x.name,
     )
     img_names = [p.name for p in image_paths]
+    print(f"  图像目录:    {image_dir} ({len(image_paths)} 张)")
+    print(f"  seg 缓存:    {inter / 'seg'}")
+    print(f"  cls 缓存:    {inter / 'cls'}")
+    print("")
 
-    inter = out / "intermediate"
     summary = run_stability_from_caches(
         image_io=ImageIO(),
         seg_agent=seg_agent,
@@ -122,7 +147,12 @@ def main():
         output_path=out / "stability_summary.json",
     )
 
+    print("")
+    print("=" * 60)
+    print("稳定性汇总（不含 per_case）")
+    print("=" * 60)
     print(json_dumps_safe(summary))
+    print(f"\n✓ 已写入 {out / 'stability_summary.json'}")
 
 
 def json_dumps_safe(obj):

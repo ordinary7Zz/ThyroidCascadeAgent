@@ -5,6 +5,7 @@ B6：在复用 intermediate 缓存的前提下，对 LLM 路由重复 N 次并�
 from __future__ import annotations
 
 import json
+import time
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Optional
@@ -88,6 +89,9 @@ def run_stability_from_caches(
         cache_path = seg_cache_dir / f"{model_name}.npz"
         if cache_path.exists():
             seg_cache_by_model[model_name] = load_seg_npz(cache_path, load_confidence=enable_seg_agent)
+            print(f"  ✓ seg 缓存: {cache_path.name}", flush=True)
+        else:
+            print(f"  ✗ seg 缓存缺失: {cache_path}", flush=True)
 
     cls_cache_by_model: dict[str, list] = {}
     for model_cfg in cls_model_configs:
@@ -95,10 +99,33 @@ def run_stability_from_caches(
         cache_path = cls_cache_dir / f"{model_name}.json"
         if cache_path.exists():
             cls_cache_by_model[model_name] = load_cls_json(cache_path)
+            print(f"  ✓ cls 缓存: {cache_path.name}", flush=True)
+        else:
+            print(f"  ✗ cls 缓存缺失: {cache_path}", flush=True)
+
+    n_cases = len(img_names)
+    if n_cases == 0:
+        print("⚠️ 无图像可处理", flush=True)
+        return _summarize_repeats([])
+
+    llm_calls_planned = 0
+    if enable_seg_agent:
+        llm_calls_planned += n_cases * repeats
+    if enable_cls_agent:
+        # 实际 Path B 子集更小，此处为上界估计
+        llm_calls_planned += n_cases * repeats
+    print(
+        f"\n处理 {n_cases} 张图，每张最多 seg×{repeats}"
+        + (f" + cls PathB×{repeats}" if enable_cls_agent else "")
+        + f" 次 LLM（约 ≤{llm_calls_planned} 次）\n",
+        flush=True,
+    )
 
     per_case: list[dict[str, Any]] = []
+    t_batch_start = time.perf_counter()
 
     for idx, img_name in enumerate(img_names):
+        t_case = time.perf_counter()
         img_path = image_paths[idx]
         image = image_io.load_image(img_path)
 
@@ -131,7 +158,8 @@ def run_stability_from_caches(
         if judge_obj is not None and seg_preds:
             try:
                 judge_results = judge_obj.judge_batch(image, [p.mask for p in seg_preds])
-            except Exception:
+            except Exception as e:
+                print(f"    ⚠️ radiomics judge 失败: {e}", flush=True)
                 judge_results = None
 
         quality_results = None
@@ -147,10 +175,19 @@ def run_stability_from_caches(
             "disagreement_tier": tier,
         }
 
+        path_label = "A" if consensus else "B"
+        n_seg = len(seg_preds)
+        print(
+            f"[{idx + 1}/{n_cases}] {img_name} | path={path_label} "
+            f"consensus={consensus} tier={tier} seg_cands={n_seg}",
+            flush=True,
+        )
+
         if enable_seg_agent and seg_preds:
             seg_choices = []
             dice_vals = []
-            for _ in range(repeats):
+            for r in range(repeats):
+                print(f"    seg LLM {r + 1}/{repeats} ...", flush=True)
                 dec = seg_agent.select_best_mask(
                     image,
                     seg_preds,
@@ -161,8 +198,11 @@ def run_stability_from_caches(
                     image_name=img_name,
                 )
                 seg_choices.append(dec.selected_model)
+                print(f"      → {dec.selected_model}", flush=True)
                 if gt_mask is not None:
                     dice_vals.append(float(compute_dice(dec.selected_mask, gt_mask)))
+        elif enable_seg_agent and not seg_preds:
+            print("    ⚠️ 无分割缓存，跳过 seg LLM", flush=True)
             row["seg_selection_agreement"] = _agreement_rate(seg_choices)
             row["seg_selected_models"] = seg_choices
             if dice_vals:
@@ -187,7 +227,8 @@ def run_stability_from_caches(
                     path="B",
                 )
             cls_choices = []
-            for _ in range(repeats):
+            for r in range(repeats):
+                print(f"    cls PathB LLM {r + 1}/{repeats} ...", flush=True)
                 dec = cls_agent.resolve_path_b(
                     indie_preds,
                     None,
@@ -196,6 +237,7 @@ def run_stability_from_caches(
                     image_name=img_name,
                 )
                 cls_choices.append(dec.selected_class)
+                print(f"      → {dec.selected_class}", flush=True)
             row["cls_selection_agreement"] = _agreement_rate(cls_choices)
             row["cls_selected_classes"] = cls_choices
 
@@ -203,14 +245,25 @@ def run_stability_from_caches(
         row["selection_agreement"] = primary
         per_case.append(row)
 
+        agree = row.get("seg_selection_agreement") or row.get("cls_selection_agreement")
+        elapsed = time.perf_counter() - t_case
+        print(
+            f"    完成 ({elapsed:.1f}s) selection_agreement={agree}",
+            flush=True,
+        )
+
     summary = _summarize_repeats(per_case)
     summary["repeats"] = repeats
     summary["enable_seg_agent"] = enable_seg_agent
     summary["enable_cls_agent"] = enable_cls_agent
 
+    total_elapsed = time.perf_counter() - t_batch_start
+    print(f"\n全部 {n_cases} 张处理完毕，耗时 {total_elapsed:.1f}s", flush=True)
+
     if output_path:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(summary, f, ensure_ascii=False, indent=2)
+        print(f"✓ stability_summary → {output_path}", flush=True)
 
     return summary
