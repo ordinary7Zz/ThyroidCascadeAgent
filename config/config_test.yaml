@@ -6,9 +6,9 @@
 # ===== 共享段 =====
 shared:
   agent_llm:
-    api_key_env: "DASHSCOPE_API_KEY"
+    api_key_env: "sk-5dcf871f08cb4adb95bc131efa0337a1"
     base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
-    model_name: "qwen2.5-32b-instruct"
+    model_name: "qwen3.8-flash"
     temperature: 0.3
     max_tokens: 1024
 
@@ -59,7 +59,7 @@ segmentation:
     #   threshold: 0.5
     #   infer_root: "../my_Thyroid_Infer/infer_medsam2"
   agent:
-    enable_agent: false             # 分割 Agent 是否调 LLM（false 时用静态规则）
+    enable_agent: true         # 分割 Agent 是否调 LLM（false 时用静态规则）
     include_disagreement_metrics_in_prompt: true
     pre_filter:
       cosine_threshold: 0.8          # 特征向量 cosine 相似性阈值（设 0 可关闭）
