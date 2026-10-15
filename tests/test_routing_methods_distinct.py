@@ -42,7 +42,7 @@ class RoutingMethodsDistinctTest(unittest.TestCase):
         inter = ROOT / "output/sample/pipeline_run/intermediate"
         if not (inter / "seg").is_dir():
             self.skipTest("无 sample intermediate")
-        gt = ROOT / "config/ablation_b3.yaml"
+        gt = ROOT / "config/b3/sample.yaml"
         if not gt.is_file():
             self.skipTest("无 ablation 配置")
         import yaml

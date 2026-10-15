@@ -33,6 +33,8 @@ from shared.routing_modes import (
     cls_uses_llm_api,
     get_cls_routing_mode,
     get_seg_routing_mode,
+    is_b4_only_cls_mode,
+    normalize_routing_mode,
     path_b_includes_autogluon,
     seg_uses_llm_api,
 )
@@ -98,6 +100,21 @@ class CascadePipeline:
         self.config = config or {}
         self.output_cfg = config.get("pipeline", {}).get("output", {}) if config else {}
         self.device = device
+        self._learned_routers: dict[str, Any] = {}
+
+    def _learned_router(self, task: str):
+        """懒加载 B3 learned 路由器（CPU 推理，不占额外显存）。"""
+        if task not in self._learned_routers:
+            from routing.learned_router import load_learned_router_from_config
+
+            router = load_learned_router_from_config(self.config, task)
+            if router is None:
+                raise ValueError(
+                    f"routing_mode=learned 但无法加载 {task} 路由器；"
+                    "请运行 fit_learned_router.py 或开启 learned_router.params.random_init"
+                )
+            self._learned_routers[task] = router
+        return self._learned_routers[task]
 
     # ===== 缓存读写工具 =====
 
@@ -973,6 +990,29 @@ class CascadePipeline:
                         judge_results=judge_results,
                         image_name=img_name,
                     )
+                elif seg_routing_mode == "learned":
+                    seg_method_used = "routing_learned_seg"
+                    quality_results = self.seg_agent.quality_evaluator.evaluate_batch(
+                        [p.mask for p in seg_preds],
+                        [p.model_name for p in seg_preds],
+                    )
+                    seg_decision = self._learned_router("seg").select_mask(
+                        seg_preds, quality_results, anchor_class
+                    )
+                    self.seg_agent._seg_log_ctx = {
+                        "image_name": img_name,
+                        "path": seg_decision.path,
+                        "classification_anchor": anchor_class,
+                        "predictions": seg_preds,
+                        "quality_results": quality_results,
+                        "judge_results": judge_results,
+                        "metadata_mode": self.seg_agent.metadata_mode,
+                    }
+                    self.seg_agent._finish_seg_decision(
+                        seg_decision,
+                        llm_invoked=False,
+                        method=seg_method_used,
+                    )
                 elif seg_routing_mode == "static_rule":
                     seg_method_used = "routing_static_rule_seg"
                     seg_decision = self._select_mask_static(
@@ -1355,11 +1395,33 @@ class CascadePipeline:
                         cls_decision = self._resolve_classification_path_b_static(
                             indie_preds, autogluon_pred, self._get_voting_weights()
                         )
+                    elif is_b4_only_cls_mode(cls_routing_mode):
+                        cls_decision = self._resolve_classification_path_b_static(
+                            indie_preds, autogluon_pred, self._get_voting_weights()
+                        )
+                        cls_decision.method = "path_b_autogluon_static"
+                        self.cls_agent._emit_cls_routing_log(
+                            cls_decision,
+                            task="cls_path_b",
+                            llm_invoked=False,
+                            method=cls_decision.method,
+                            image_name=img_name,
+                            path="B",
+                            classification_consensus=False,
+                            predictions=indie_preds,
+                            extra=self.cls_agent._path_b_extra(None, seg_stub) if seg_stub else None,
+                        )
                     else:
+                        learned_cls = (
+                            self._learned_router("cls")
+                            if normalize_routing_mode(cls_routing_mode) == "learned"
+                            else None
+                        )
                         cls_decision = resolve_path_b_indie_only(
                             cls_routing_mode,
                             indie_preds,
                             best_single_model=best_single_cls,
+                            learned_router=learned_cls,
                         )
                         self.cls_agent._emit_cls_routing_log(
                             cls_decision,

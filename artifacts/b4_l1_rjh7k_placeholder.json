@@ -1,0 +1,22 @@
+{
+  "note": "L1 占位：正式实验替换为单专家全队列评测 JSON（见 fit / my_Thyroid_Infer）",
+  "dataset_id": "rjh7k",
+  "segmentation": {
+    "dice_mean": null,
+    "dice_ci_lower": null,
+    "dice_ci_upper": null,
+    "hd95_mean": null
+  },
+  "classification": {
+    "n": null,
+    "accuracy": null,
+    "auroc": null,
+    "auroc_ci_lower": null,
+    "auroc_ci_upper": null,
+    "auprc": null
+  },
+  "classification_path_b": {
+    "n": null,
+    "accuracy": null
+  }
+}

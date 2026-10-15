@@ -42,7 +42,7 @@ STATIC_B3_MODES = frozenset({
     "static_rule",
     "max_confidence",
     "oracle",
-})
+})  # 不含 path_b_autogluon（B4 专用）
 
 NON_STATIC = frozenset({"llm", "learned"})
 

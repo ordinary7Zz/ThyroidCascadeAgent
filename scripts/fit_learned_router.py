@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+"""B3 策略 6：在 val 上拟合 learned 路由，或写入随机初始化占位 artifact。"""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+
+import repo_path
+import yaml
+
+ROOT = repo_path.install()
+
+from routing.learned_router import (
+    LearnedRouterParams,
+    artifact_path_for_task,
+    build_router_random,
+    fit_learned_on_val,
+    learned_router_config,
+    model_names_from_config,
+    save_learned_router,
+)
+
+
+def _init_random_artifacts(config: dict) -> dict:
+    lr_cfg = learned_router_config(config)
+    params = LearnedRouterParams.from_dict(lr_cfg.get("params"))
+    params.random_init = True
+    out: dict = {"mode": "random_init"}
+    for task in ("seg", "cls"):
+        names = model_names_from_config(config, task)
+        if not names:
+            continue
+        router = build_router_random(task, names, params)
+        path = artifact_path_for_task(config, task)
+        if path is None:
+            raise ValueError(f"未配置 learned_router.{task}_artifact")
+        save_learned_router(router, path)
+        out[f"{task}_artifact"] = str(path)
+        out[f"{task}_models"] = names
+    return out
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="拟合或初始化 B3 learned 路由器")
+    parser.add_argument("--config", default="config/b3/sample.yaml")
+    parser.add_argument(
+        "--intermediate",
+        default=None,
+        help="含 seg/ cls 的 intermediate（拟合 val 时必填）",
+    )
+    parser.add_argument(
+        "--random-init",
+        action="store_true",
+        help="仅按 config 随机系数写 joblib，不使用 val 标签",
+    )
+    args = parser.parse_args()
+
+    with open(args.config, "r", encoding="utf-8") as f:
+        config = yaml.safe_load(f)
+
+    if args.random_init:
+        payload = _init_random_artifacts(config)
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+        return
+
+    if not args.intermediate:
+        parser.error("拟合 val 须指定 --intermediate；或改用 --random-init")
+
+    data = config.get("pipeline", {}).get("data", {})
+    payload = fit_learned_on_val(
+        config,
+        Path(args.intermediate),
+        gt_mask_dir=Path(data["gt_mask_dir"]),
+        label_file=data["label_file"],
+        label_key=data.get("label_key", "malignancy"),
+    )
+    print(json.dumps(payload, ensure_ascii=False, indent=2))
+
+
+if __name__ == "__main__":
+    main()

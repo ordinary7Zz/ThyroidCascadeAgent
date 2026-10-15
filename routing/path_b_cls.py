@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 from collections import Counter
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any, Optional
 
 from classification.agent import ClsAgentDecision
 from classification.base_model import ClsModelOutput
 from classification.soft_voting import average_class_probabilities, winning_class_from_avg_probs
 from shared.routing_modes import normalize_routing_mode
+
+if TYPE_CHECKING:
+    from routing.learned_router import LearnedExpertRouter
 
 
 def _normalize_top_class(label: Any) -> Optional[int]:
@@ -33,6 +36,7 @@ def resolve_path_b_indie_only(
     indie_predictions: list[ClsModelOutput],
     *,
     best_single_model: Optional[str] = None,
+    learned_router: Optional["LearnedExpertRouter"] = None,
 ) -> ClsAgentDecision:
     """
     B3 策略 1–6、8（分类）：仅使用 Phase 2 独立模型，不并入 AutoGluon。
@@ -133,7 +137,9 @@ def resolve_path_b_indie_only(
         raise ValueError("oracle 分类请使用 routing.oracle.resolve_cls_oracle")
 
     if m == "learned":
-        raise NotImplementedError("learned 路由在波次 3 实现")
+        if learned_router is None:
+            raise ValueError("routing_mode=learned 需要已加载的 LearnedExpertRouter（fit 或 random_init）")
+        return learned_router.resolve_cls(indie_predictions)
 
     if m == "llm":
         raise ValueError("llm Path B 应走 LLMClassificationAgent.resolve_path_b")

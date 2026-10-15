@@ -1,0 +1,9 @@
+{
+  "task": "seg",
+  "model_names": [
+    "all_datasets",
+    "transunet_all_datasets"
+  ],
+  "init_mode": "random",
+  "n_features": 12
+}

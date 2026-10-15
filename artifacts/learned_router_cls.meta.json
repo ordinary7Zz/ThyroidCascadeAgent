@@ -1,0 +1,9 @@
+{
+  "task": "cls",
+  "model_names": [
+    "all_datasets",
+    "medsiglip_binary"
+  ],
+  "init_mode": "random",
+  "n_features": 11
+}

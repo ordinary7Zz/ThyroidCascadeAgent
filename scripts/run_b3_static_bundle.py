@@ -34,7 +34,7 @@ WAVE1_MODES = (
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="B3 静态策略 bundle（单次扫图）")
-    parser.add_argument("--config", default="config/ablation_b3.yaml")
+    parser.add_argument("--config", default="config/b3/sample.yaml")
     parser.add_argument("--shared-intermediate", default=None)
     parser.add_argument("--output-root", default=None)
     parser.add_argument("--modes", default=None)

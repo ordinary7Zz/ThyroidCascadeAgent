@@ -1,0 +1,22 @@
+{
+  "note": "L1 占位：正式实验替换为单专家全队列评测结果（训练可在 my_Thyroid_Infer 等）",
+  "dataset_id": "sample",
+  "segmentation": {
+    "dice_mean": 0.852,
+    "dice_ci_lower": 0.78,
+    "dice_ci_upper": 0.91,
+    "hd95_mean": 12.5
+  },
+  "classification": {
+    "n": 10,
+    "accuracy": 0.85,
+    "auroc": 0.88,
+    "auroc_ci_lower": 0.65,
+    "auroc_ci_upper": 0.98,
+    "auprc": 0.87
+  },
+  "classification_path_b": {
+    "n": 3,
+    "accuracy": 0.67
+  }
+}

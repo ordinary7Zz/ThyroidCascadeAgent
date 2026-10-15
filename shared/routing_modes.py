@@ -15,7 +15,11 @@ ROUTING_MODES = frozenset({
     "learned",
     "llm",
     "oracle",
+    # B4 Path B 附录（不进 B3 八种策略主表）
+    "path_b_autogluon",
 })
+
+B4_ONLY_CLS_MODES = frozenset({"path_b_autogluon"})
 
 PATH_B_INDIE_ONLY_MODES = frozenset({
     "best_single",
@@ -38,13 +42,20 @@ def normalize_routing_mode(mode: Optional[str]) -> Optional[str]:
     return m
 
 
-def validate_routing_mode(mode: str, *, allow_oracle: bool = True) -> str:
+def validate_routing_mode(mode: str, *, allow_oracle: bool = True, allow_b4: bool = True) -> str:
     m = normalize_routing_mode(mode)
     if m is None or m not in ROUTING_MODES:
         raise ValueError(f"未知 routing_mode: {mode}")
     if m == "oracle" and not allow_oracle:
         raise ValueError("oracle 仅允许评测 / ablation 脚本")
+    if m in B4_ONLY_CLS_MODES and not allow_b4:
+        raise ValueError(f"{mode} 仅用于 B4 Path B 附录，不参与 B3 主表")
     return m
+
+
+def is_b4_only_cls_mode(mode: str) -> bool:
+    m = normalize_routing_mode(mode)
+    return m in B4_ONLY_CLS_MODES
 
 
 def get_seg_routing_mode(config: dict) -> str:
@@ -68,8 +79,9 @@ def get_cls_routing_mode(config: dict) -> str:
 
 
 def path_b_includes_autogluon(cls_mode: str) -> bool:
-    """B3 契约：仅 llm（策略 7）在 Path B 使用 AutoGluon。"""
-    return normalize_routing_mode(cls_mode) == "llm"
+    """B3 策略 7（llm）与 B4 附录 B-b（path_b_autogluon）在 Path B 使用 AutoGluon。"""
+    m = normalize_routing_mode(cls_mode)
+    return m == "llm" or m == "path_b_autogluon"
 
 
 def seg_uses_llm_api(seg_mode: str) -> bool:

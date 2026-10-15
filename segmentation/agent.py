@@ -21,7 +21,7 @@ import cv2
 import numpy as np
 
 from shared.base_datasets_info import BASE_DATASETS_INFO
-from shared.llm_client import LLMClient
+from shared.llm_client import BRIEF_ROUTING_REASONING, LLMClient
 from shared.routing_log import (
     RoutingLogger,
     llm_config_dict,
@@ -182,12 +182,15 @@ class SegmentationAgent:
         self.pf_prob_outlier = pf_cfg.get("prob_outlier_threshold", 0.4)
         self.pf_min_keep = pf_cfg.get("min_keep", 3)
         self.metadata_mode = cfg.get("metadata_mode", "full")
+        self.brief_routing_prompt = bool(cfg.get("brief_routing_prompt", False))
         self.routing_logger = routing_logger
         self._seg_log_ctx: dict[str, Any] = {}
 
         self.system_prompt = self._generate_system_prompt()
 
     def _generate_system_prompt(self) -> str:
+        if self.brief_routing_prompt:
+            return self._generate_system_prompt_brief()
         if self.ensemble_enabled and self.ensemble_top_k > 1:
             m3 = ', "模型3名称"' if self.ensemble_top_k >= 3 else ''
             w3 = ', 0.0' if self.ensemble_top_k >= 3 else ''
@@ -238,6 +241,37 @@ class SegmentationAgent:
 6) 置信度：mean_confidence 较高为次要加分项。
 
 reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_hd95_mean、radiomics_judge 等）。"""
+
+    def _generate_system_prompt_brief(self) -> str:
+        if self.ensemble_enabled and self.ensemble_top_k > 1:
+            fmt = (
+                f'{{"selected_models":["m1","m2"], "weights":[0.6,0.4], '
+                f'"confidence":0.9, "reasoning":"{BRIEF_ROUTING_REASONING}"}}'
+            )
+            fields = (
+                f'"selected_models"(长度{self.ensemble_top_k}), "weights"(和1), '
+                f'"confidence"(0-1), "reasoning"(固定为"{BRIEF_ROUTING_REASONING}")'
+            )
+        else:
+            fmt = (
+                f'{{"selected_model":"模型名", "confidence":0.9, '
+                f'"reasoning":"{BRIEF_ROUTING_REASONING}"}}'
+            )
+            fields = (
+                f'"selected_model", "confidence"(0-1), '
+                f'"reasoning"(固定为"{BRIEF_ROUTING_REASONING}")'
+            )
+        return f"""你是分割模型选择代理。根据 user 中 JSON 指标选最佳 mask。
+禁止输出思考过程、Markdown 或任何 JSON 外的文字。第一个字符必须是 {{，最后一个必须是 }}。
+只输出一行 JSON：{fields}。示例：{fmt}
+优先级：agreement_with_others↑；分歧大时 mean_hd95_to_others↓；radiomics_judge 与 classification_anchor 一致者优先；形态学与设备匹配次之。"""
+
+    def _seg_llm_system_append_runtime(self, classification_anchor: Optional[str]) -> str:
+        if self.brief_routing_prompt:
+            if classification_anchor:
+                return f"\n分类锚点：{classification_anchor}。与锚点矛盾的 radiomics_judge 降权。"
+            return "\n无分类锚点。以 radiomics 内部一致性与 agreement 为主。"
+        return seg_llm_system_append(classification_anchor)
 
     # ========== 分歧度量 ==========
 
@@ -427,16 +461,22 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             # radiomics 裁判（新增）
             if judge_results and idx < len(judge_results) and judge_results[idx].get("valid", False):
                 jr = judge_results[idx]
-                model_info["radiomics_judge"] = {
+                rj: dict[str, Any] = {
                     "malignant_prob": round(jr["malignant_prob"], 3),
                     "confidence": round(jr["confidence"], 3),
-                    "top_features": jr.get("top_features", [])[:3],
                 }
+                if not self.brief_routing_prompt:
+                    rj["top_features"] = jr.get("top_features", [])[:3]
+                model_info["radiomics_judge"] = rj
 
             data["models"].append(model_info)
 
         # 分类锚点
-        if classification_anchor:
+        if self.brief_routing_prompt:
+            data["classification_anchor"] = (
+                classification_anchor if classification_anchor else None
+            )
+        elif classification_anchor:
             data["classification_anchor"] = {
                 "class": classification_anchor,
                 "source": "3个独立分类模型(无mask)一致判断",
@@ -449,20 +489,26 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
                 "implication": "以Radiomics裁判内部一致性和形态学为主要依据"
             }
 
-        req: dict[str, Any] = {}
-        if group_unc:
-            req["follow_prefix"] = "reasoning 须含 area_cv 及所选模型 disagreement。"
-        if self.radiomics_judge is not None and judge_results:
+        if not self.brief_routing_prompt:
+            req: dict[str, Any] = {}
+            if group_unc:
+                req["follow_prefix"] = "reasoning 须含 area_cv 及所选模型 disagreement。"
+            if self.radiomics_judge is not None and judge_results:
+                if classification_anchor:
+                    req["mention_judge"] = (
+                        "reasoning 须提及 radiomics_judge 分类置信度，"
+                        "并逐模型分析是否与分类锚点吻合。"
+                    )
+                else:
+                    req["mention_judge"] = (
+                        "reasoning 须提及 radiomics_judge 分类置信度，分析裁判的内部分歧。"
+                    )
             if classification_anchor:
-                req["mention_judge"] = "reasoning 须提及 radiomics_judge 分类置信度，并逐模型分析是否与分类锚点吻合。"
+                req["use_anchor"] = "与锚点矛盾的Radiomics分类需在reasoning中明确指出并解释原因。"
             else:
-                req["mention_judge"] = "reasoning 须提及 radiomics_judge 分类置信度，分析裁判的内部分歧。"
-        if classification_anchor:
-            req["use_anchor"] = "与锚点矛盾的Radiomics分类需在reasoning中明确指出并解释原因。"
-        else:
-            req["no_anchor_strategy"] = "无分类锚点时，优先级：1)裁判一致性 2)形态学 3)历史性能。"
-        if req:
-            data["reasoning_requirements"] = req
+                req["no_anchor_strategy"] = "无分类锚点时，优先级：1)裁判一致性 2)形态学 3)历史性能。"
+            if req:
+                data["reasoning_requirements"] = req
 
         return json.dumps(data, separators=(",", ":"), ensure_ascii=False)
 
@@ -722,16 +768,29 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             question = "哪个模型提供了最佳分割结果？"
             fmt = '{"selected_model": "模型名称", "confidence": 0.95, "reasoning": "..."}'
 
+        if self.brief_routing_prompt:
+            out_hint = (
+                f'只输出一行 JSON，reasoning 必须为 "{BRIEF_ROUTING_REASONING}"。格式：{fmt}'
+            )
+        else:
+            out_hint = (
+                "只输出纯JSON，单行，不要 markdown 代码块。"
+                "reasoning 不超过 60 个中文字符，勿换行。格式："
+                f"{fmt}"
+            )
+
         user_prompt = f"""{prefix}{device_text}{data_text}
 以下是 {len(predictions)} 个分割模型的输出及质量评估：
 
 {formatted}
 
 {question}
-只输出纯JSON。格式：{fmt}"""
+{out_hint}"""
 
         # 调用 LLM（锚点指令动态追加到 system_prompt）
-        system_prompt = self.system_prompt + seg_llm_system_append(classification_anchor)
+        system_prompt = self.system_prompt + self._seg_llm_system_append_runtime(
+            classification_anchor
+        )
 
         prompts_bundle = {"system": system_prompt, "user": user_prompt}
         self._seg_log_ctx = {
@@ -754,12 +813,35 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
                 method="static_fallback",
             )
 
+        from shared.llm_json import loads_routing_json
+
+        parse_error: Optional[str] = None
+        decision_data = None
+        response_text = ""
         try:
             response_text = self.llm_client.chat(system_prompt, user_prompt)
-            json_text = self._extract_json_from_text(response_text)
-            decision_data = json.loads(json_text)
+            decision_data = loads_routing_json(self._extract_json_from_text, response_text)
         except Exception as e:
-            print(f"  ✗ LLM 调用或解析失败: {e}，使用降级选择")
+            parse_error = str(e)
+            if self.brief_routing_prompt:
+                retry_tail = (
+                    f'\n\n【重试】仅输出一行 JSON，reasoning 为 "{BRIEF_ROUTING_REASONING}"，以}}结尾。'
+                )
+            else:
+                retry_tail = (
+                    "\n\n【重试】上次 JSON 不完整。仅输出一行合法 JSON，reasoning≤40字，"
+                    "字段齐全，以}}结尾。"
+                )
+            retry_user = user_prompt + retry_tail
+            try:
+                response_text = self.llm_client.chat(system_prompt, retry_user)
+                decision_data = loads_routing_json(self._extract_json_from_text, response_text)
+                parse_error = None
+            except Exception as e2:
+                parse_error = f"{parse_error}; retry: {e2}"
+
+        if decision_data is None:
+            print(f"  ✗ LLM 调用或解析失败: {parse_error}，使用降级选择")
             return self._finish_seg_decision(
                 self._fallback_selection(
                     predictions, gt_mask, quality_results, judge_results, classification_anchor
@@ -767,16 +849,22 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
                 llm_invoked=True,
                 method="llm_fallback",
                 parse_ok=False,
-                error=str(e),
+                error=parse_error or "unknown",
                 prompts=prompts_bundle,
             )
+
+        if decision_data.pop("_salvaged", False):
+            print("  ⚠️ JSON 已截断，使用 salvage 恢复 selected_model（建议增大 max_tokens）", flush=True)
 
         # 解析决策
         try:
             confidence = max(0.0, min(1.0, float(decision_data["confidence"])))
-            reasoning = str(decision_data["reasoning"]).strip()
+            reasoning = str(decision_data.get("reasoning", "")).strip()
             if not reasoning:
-                raise ValueError("reasoning 为空")
+                if self.brief_routing_prompt:
+                    reasoning = BRIEF_ROUTING_REASONING
+                else:
+                    raise ValueError("reasoning 为空")
 
             is_ensemble = "selected_models" in decision_data and self.ensemble_enabled
 

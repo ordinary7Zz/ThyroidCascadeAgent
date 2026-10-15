@@ -4,7 +4,7 @@ B3 路由消融：在共享 intermediate 上切换 routing_mode，重跑 Phase 3
 
 示例（sample 队列，共享地基 + 静态规则）:
   python scripts/run_routing_ablation.py \\
-    --config config/ablation_b3.yaml \\
+    --config config/b3/sample.yaml \\
     --routing-mode static_rule \\
     --task both \\
     --shared-intermediate output/sample/pipeline_run/intermediate \\
@@ -13,7 +13,7 @@ B3 路由消融：在共享 intermediate 上切换 routing_mode，重跑 Phase 3
 
 批量非 LLM 模式:
   for m in soft_voting majority max_confidence static_rule oracle; do
-    python scripts/run_routing_ablation.py --config config/ablation_b3.yaml \\
+    python scripts/run_routing_ablation.py --config config/b3/sample.yaml \\
       --routing-mode $m --task both \\
       --shared-intermediate output/sample/pipeline_run/intermediate \\
       --output-dir output/ablation/b3/sample/$m --force-phase3
@@ -42,7 +42,7 @@ from radiomics_judge import RadiomicsJudge
 from segmentation.agent import SegmentationAgent
 from segmentation.quality_evaluator import SegmentationQualityEvaluator
 from shared.image_io import ImageIO
-from shared.llm_client import LLMClient
+from shared.llm_client import build_llm_client
 from shared.routing_log import build_routing_logger_from_config
 from shared.routing_modes import get_cls_routing_mode, get_seg_routing_mode
 
@@ -54,7 +54,7 @@ def load_config(path: str) -> dict:
 
 def main():
     parser = argparse.ArgumentParser(description="B3 routing ablation (wave 0–1)")
-    parser.add_argument("--config", default="config/ablation_b3.yaml")
+    parser.add_argument("--config", default="config/b3/sample.yaml")
     parser.add_argument(
         "--routing-mode",
         default=None,
@@ -115,13 +115,7 @@ def main():
 
     if need_llm:
         api_key = os.getenv(llm_cfg["api_key_env"], "")
-        llm_client = LLMClient(
-            api_key=api_key,
-            base_url=llm_cfg["base_url"],
-            model_name=llm_cfg["model_name"],
-            temperature=llm_cfg["temperature"],
-            max_tokens=llm_cfg["max_tokens"],
-        )
+        llm_client = build_llm_client(llm_cfg, api_key)
     else:
         llm_client = None
         print("✓ 非 LLM 模式，跳过 LLM 客户端")

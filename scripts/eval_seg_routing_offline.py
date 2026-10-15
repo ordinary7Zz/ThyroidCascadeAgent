@@ -18,7 +18,7 @@ from pipeline.seg_routing_offline import evaluate_seg_mode_ladder
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", default="config/ablation_b3.yaml")
+    parser.add_argument("--config", default="config/b3/sample.yaml")
     parser.add_argument("--intermediate", required=True)
     parser.add_argument(
         "--modes",

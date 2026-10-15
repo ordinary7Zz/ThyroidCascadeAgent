@@ -8,9 +8,26 @@ API key 通过构造函数参数传入（由 config 从环境变量读取），�
 from __future__ import annotations
 
 import time
-from typing import Optional
+from typing import Any, Optional
 
 from openai import OpenAI, APIError, APITimeoutError, RateLimitError
+
+BRIEF_ROUTING_REASONING = "-"
+
+
+def build_llm_client(llm_cfg: dict, api_key: str) -> "LLMClient":
+    """从 shared.agent_llm 配置构造客户端（含可选 enable_thinking / extra_body）。"""
+    extra_body: dict[str, Any] = dict(llm_cfg.get("extra_body") or {})
+    if llm_cfg.get("enable_thinking") is False:
+        extra_body.setdefault("enable_thinking", False)
+    return LLMClient(
+        api_key=api_key,
+        base_url=llm_cfg["base_url"],
+        model_name=llm_cfg["model_name"],
+        temperature=llm_cfg["temperature"],
+        max_tokens=llm_cfg["max_tokens"],
+        extra_body=extra_body if extra_body else None,
+    )
 
 
 class LLMClient:
@@ -23,10 +40,12 @@ class LLMClient:
         model_name: str = "qwen2.5-32b-instruct",
         temperature: float = 0.3,
         max_tokens: int = 1024,
+        extra_body: Optional[dict[str, Any]] = None,
     ):
         self.model_name = model_name
         self.temperature = temperature
         self.max_tokens = max_tokens
+        self._extra_body = extra_body
         self._client = OpenAI(api_key=api_key, base_url=base_url)
 
     def chat(
@@ -62,13 +81,25 @@ class LLMClient:
         last_error: Optional[Exception] = None
         for attempt in range(max_retries + 1):
             try:
-                response = self._client.chat.completions.create(
-                    model=self.model_name,
-                    messages=messages,
-                    temperature=self.temperature,
-                    max_tokens=self.max_tokens,
-                )
-                return response.choices[0].message.content
+                kwargs: dict[str, Any] = {
+                    "model": self.model_name,
+                    "messages": messages,
+                    "temperature": self.temperature,
+                    "max_tokens": self.max_tokens,
+                }
+                if self._extra_body:
+                    kwargs["extra_body"] = self._extra_body
+                response = self._client.chat.completions.create(**kwargs)
+                choice = response.choices[0]
+                content = choice.message.content or ""
+                finish = getattr(choice, "finish_reason", None)
+                if finish == "length":
+                    print(
+                        f"  ⚠️ LLM 输出因 max_tokens={self.max_tokens} 被截断 "
+                        f"(finish_reason=length)，可增大 shared.agent_llm.max_tokens",
+                        flush=True,
+                    )
+                return content
 
             except (APIError, APITimeoutError, RateLimitError) as e:
                 last_error = e

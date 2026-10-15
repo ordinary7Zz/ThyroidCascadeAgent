@@ -17,7 +17,7 @@ from dataclasses import dataclass, field
 from typing import Any, Optional
 
 from shared.base_datasets_info import BASE_DATASETS_INFO, infer_device_match
-from shared.llm_client import LLMClient
+from shared.llm_client import BRIEF_ROUTING_REASONING, LLMClient
 from shared.routing_log import (
     RoutingLogger,
     cls_disagreement_tier,
@@ -49,6 +49,12 @@ Markup:
 输出纯JSON（无 Markdown/代码块），首尾为{}：
 {"selected_class": "恶性", "confidence": 0.75, "reasoning": "..."}
 reasoning 须引用具体置信度数值。"""
+
+PATH_B_LLM_SYSTEM_PROMPT_BRIEF = f"""甲状腺超声 Path B 裁决：独立分类模型无共识。
+依据 user JSON 中的 independent_models、autogluon_based_on_selected_mask、segmentation_decision。
+禁止思考过程与 Markdown。只输出一行 JSON：
+{{"selected_class":"恶性或良性", "confidence":0.0-1.0, "reasoning":"{BRIEF_ROUTING_REASONING}"}}
+信号均模糊时略倾向恶性但降低 confidence。"""
 
 PATH_B_USER_PROMPT_EXAMPLE: dict[str, Any] = {
     "scenario": "独立分类模型无共识，需综合裁决",
@@ -163,6 +169,7 @@ class LLMClassificationAgent:
         self.enable_agent = cfg.get("enable_agent", True)
         self.routing_mode = cfg.get("routing_mode")
         self.metadata_mode = cfg.get("metadata_mode", "full")
+        self.brief_routing_prompt = bool(cfg.get("brief_routing_prompt", False))
         self._cls_log_ctx: dict[str, Any] = {}
 
         self.system_prompt_single = self._build_system_prompt_single()
@@ -240,6 +247,9 @@ class LLMClassificationAgent:
         )
 
     def _build_system_prompt_single(self) -> str:
+        if self.brief_routing_prompt:
+            return f"""从 user JSON  predictions 中选最可信模型。
+禁止思考/Markdown。只输出一行 JSON：selected_model, selected_class, confidence(0-1), reasoning 固定为 "{BRIEF_ROUTING_REASONING}"。"""
         return """你是甲状腺超声多模型预测整合专家，从若干模型输出中选最可信的一项。
 
 【字段】top_confidence（或 top_confidence_calibrated）为主置信度。entropy 越大越不确定，margin_top2 越大越稳。num_models_same_class 为投票一致性。
@@ -531,9 +541,14 @@ class LLMClassificationAgent:
         self, predictions, decision_data
     ) -> ClsAgentDecision:
         """LLM 单选模式。"""
-        for field in ["selected_model", "selected_class", "confidence", "reasoning"]:
+        for field in ["selected_model", "selected_class", "confidence"]:
             if field not in decision_data:
                 raise ValueError(f"响应缺少 '{field}'")
+        if "reasoning" not in decision_data:
+            if self.brief_routing_prompt:
+                decision_data = {**decision_data, "reasoning": BRIEF_ROUTING_REASONING}
+            else:
+                raise ValueError("响应缺少 'reasoning'")
 
         # 修正 confidence 为实际模型置信度
         conf_map = {p.model_name: p.top_confidence for p in predictions}
@@ -786,18 +801,23 @@ class LLMClassificationAgent:
             else "unknown"
         )
 
+        seg_block: dict[str, Any] = {"selected_mask_from": seg_model}
+        if not self.brief_routing_prompt:
+            seg_block["reasoning"] = seg_reason
+
         prompt_data = {
             "scenario": "独立分类模型无共识，需综合裁决",
             "independent_models": indie_info,
             "autogluon_based_on_selected_mask": al_info,
-            "segmentation_decision": {
-                "selected_mask_from": seg_model,
-                "reasoning": seg_reason,
-            },
+            "segmentation_decision": seg_block,
             "question": "请综合以上信息，给出最终良恶性判断和置信度(0-1)。",
         }
 
-        sys_prompt = PATH_B_LLM_SYSTEM_PROMPT
+        sys_prompt = (
+            PATH_B_LLM_SYSTEM_PROMPT_BRIEF
+            if self.brief_routing_prompt
+            else PATH_B_LLM_SYSTEM_PROMPT
+        )
 
         user_prompt = json.dumps(prompt_data, ensure_ascii=False)
         prompts_bundle = {"system": sys_prompt, "user": user_prompt}
@@ -806,11 +826,15 @@ class LLMClassificationAgent:
         json_text = self._extract_json_from_text(response_text)
         decision_data = json.loads(json_text)
 
+        pb_reasoning = str(decision_data.get("reasoning", "")).strip()
+        if not pb_reasoning and self.brief_routing_prompt:
+            pb_reasoning = BRIEF_ROUTING_REASONING
+
         decision = ClsAgentDecision(
             selected_model="agent_path_b_llm",
             selected_class=decision_data["selected_class"],
             confidence=float(decision_data["confidence"]),
-            reasoning=decision_data["reasoning"],
+            reasoning=pb_reasoning or str(decision_data.get("reasoning", "")),
             all_predictions=[p.to_dict() for p in indie_preds],
             method="path_b_llm",
         )

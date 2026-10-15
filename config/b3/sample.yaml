@@ -1,0 +1,114 @@
+# B3 消融主模板（sample 队列）。其它队列见 config/b3/<cohort>.yaml
+# 用法：scripts/run_routing_ablation.py | run_b3_batch.py --config config/b3/sample.yaml
+# 波次 1：--preset wave1（不含 learned/llm）
+shared:
+  agent_llm:
+    api_key_env: DASHSCOPE_API_KEY
+    base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    model_name: qwen3.8-omni-flash
+    temperature: 0.3
+    max_tokens: 768
+    enable_thinking: false
+segmentation:
+  models:
+  - type: dinov3_unet
+    name: all_datasets
+    model_path: ../my_Thyroid_Infer/infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth
+    input_size:
+    - 224
+    - 224
+    threshold: 0.5
+  - type: transunet
+    name: transunet_all_datasets
+    model_path: ../my_Thyroid_Infer/infer_transunet/checkpoints/Nodule/epoch_49.pth
+    num_classes: 2
+    vit_name: R50-ViT-B_16
+    img_size: 224
+    n_skip: 3
+    threshold: 0.5
+    infer_root: ../my_Thyroid_Infer/infer_transunet
+  agent:
+    enable_agent: false
+    routing_mode: static_rule
+    brief_routing_prompt: true
+    include_disagreement_metrics_in_prompt: true
+    pre_filter:
+      cosine_threshold: 0.8
+      prob_outlier_threshold: 0.4
+      min_keep: 1
+    ensemble:
+      enabled: true
+      top_k: 1
+      method: weighted_average
+      threshold: 0.5
+classification:
+  models:
+  - type: dinov3_unet_multitask
+    name: all_datasets
+    model_path: ../my_Thyroid_Infer/infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth
+    use_tirads: false
+    voting_weight: 0.9123
+  - type: medsiglip
+    name: medsiglip_binary
+    model_path: ../my_Thyroid_Infer/infer_medsiglip/checkpoints/BM_2cls/best_model.pt
+    pretrained_model_path: ../my_Thyroid_Infer/infer_medsiglip/pretrained_models/medsiglip-448
+    num_classes: 2
+    img_size: 448
+    dropout: 0.1
+    voting_weight: 0.8988
+  agent:
+    enable_agent: false
+    routing_mode: soft_voting
+    brief_routing_prompt: true
+    top_k: 5
+    consensus_min_confidence: 0.6
+radiomics_judge:
+  enabled: true
+  model_dir: /mnt/wangbd8/workspace/ThyroidAgent/dino_unet_multitask/pyradiomics_train/binary_class/BM/outputs/models/BM_dataset3_gt/BM
+  top_k_features: 5
+  radiomics_params: null
+pipeline:
+  preload_workers: 4
+  run_segmentation: true
+  run_classification: true
+  ablation:
+    routing_modes:
+    - soft_voting
+    - majority
+    - max_confidence
+    - static_rule
+    - best_single
+    - oracle
+    shared_intermediate: output/sample/pipeline_run/intermediate
+    output_root: output/ablation/b3/sample
+    force_phase3: true
+    summarize: true
+    task: both
+    learned_router:
+      seg_artifact: artifacts/learned_router_seg.joblib
+      cls_artifact: artifacts/learned_router_cls.joblib
+      allow_missing_artifact: true
+      write_random_artifact: false
+      params:
+        C: 0.1
+        max_iter: 200
+        random_state: 42
+        random_init: true
+        random_coef_scale: 0.05
+    best_single_seg: all_datasets
+    best_single_cls: all_datasets
+    val_list: null
+  data:
+    image_input: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/sample/images
+    gt_mask_dir: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/sample/masks
+    label_file: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/sample/sample_test_label.json
+    label_key: malignancy
+    device_info:
+    - GE Logiq E9
+    - GE S7
+    start_index: 0
+    max_images: null
+  log_routing: true
+  routing_log_include_prompts: false
+  output:
+    output_dir: output/ablation/b3/sample/placeholder

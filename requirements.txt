@@ -17,6 +17,7 @@ autogluon.tabular>=1.0
 SimpleITK
 pyradiomics
 scikit-learn
+joblib
 pandas
 
 # ===== 可选：按启用的模型按需安装 =====
