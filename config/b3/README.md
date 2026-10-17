@@ -2,21 +2,31 @@
 
 每个测试队列一个 YAML：`config/b3/<cohort_id>.yaml`。
 
-| 文件 | 队列 | Phase 1–2 参考 |
-|------|------|----------------|
-| `sample.yaml` | 开发集 10 例 | `config/config_test.yaml` |
-| `tn3k.yaml` | TN3K test | `config/config_TN3K.yaml` |
-| `tn5k.yaml` | TN5K test | `config/config_TN5K.yaml` |
-| `thyroidxl.yaml` | ThyroidXL test | `config/config_ThyroidXL.yaml` |
-| `zjh8k.yaml` | ZJH-8K | `config/config_ZJH-8K.yaml` |
-| `rjh7k.yaml` | RJH-7K | `config/config_RJH-7K.yaml` |
-| `ddti.yaml` | DDTI（路径见文件内注释） | `config/config_DDTI.yaml` |
-| `nhc_misd_tus.yaml` | NHC-MISD-TUS（**路径占位，需改**） | 待补 |
+| 文件 | 队列 | B3 task | Phase 1–2 参考 |
+|------|------|---------|----------------|
+| `sample.yaml` | 开发集 10 例 | both | `config/config_test.yaml` |
+| `tn3k.yaml` | TN3K test | both | `config/config_TN3K.yaml` |
+| `tn5k.yaml` | TN5K test | both | `config/config_TN5K.yaml` |
+| `thyroidxl.yaml` | ThyroidXL test | both | `config/config_ThyroidXL.yaml` |
+| `zjh8k.yaml` | ZJH-8K | both | `config/config_ZJH-8K.yaml` |
+| `rjh7k.yaml` | RJH-7K（无 BM 标签） | both | `config/config_RJH-7K.yaml` |
+| `ddti_seg.yaml` | DDTI `all_seg` | **seg** | 独立 `output/DDTI_seg/pipeline_run` |
+| `ddti_cls.yaml` | DDTI_Classification `all/` | **cls** | 独立 `output/DDTI_cls/pipeline_run` |
+| `pktn.yaml` | PKTN test（仅 mask） | **seg** | 独立 `output/PKTN/pipeline_run` |
+| `nhc_misd_tus.yaml` | NHC-MISD-TUS | both | 数据不在本机时可跳过 |
 
-- **模板**：以 `sample.yaml` 为准；其余由 `python scripts/generate_ablation_configs.py` 生成或同步。
-- **专家池**：当前与 sample 同为 2 seg + 2 cls；正式投稿前请与 `config/config_<队列>.yaml` 的 Table S3/S4 池对齐。
-- **波次 1（无 learned/llm）**：`routing_modes` 仅含 6 种静态策略；或 `run_b3_batch.py --preset wave1`。
+- **模板**：`sample.yaml`；同步：`python scripts/generate_ablation_configs.py`
+- **专家池**：`sample.yaml` 模板为 **5 个分割 DINO-UNet**（不含 Cine-Clip）+ **4 个分类 DINO multitask**；各队列 yaml 由模板生成。换池后须重跑 Phase 1–2 写满 `shared_intermediate`。
+- **波次 1**：`run_b3_batch.py --preset wave1` 或 `./scripts/run_b3_wave1_all_cohorts.sh`
 
 ```bash
-python scripts/run_b3_batch.py --config config/b3/zjh8k.yaml --preset wave1 --force-phase3 --summarize
+python scripts/run_b3_batch.py --config config/b3/ddti_seg.yaml --preset wave1 --force-phase3 --summarize --task seg
+python scripts/run_b3_batch.py --config config/b3/ddti_cls.yaml --preset wave1 --force-phase3 --summarize --task cls
+python scripts/run_b3_batch.py --config config/b3/pktn.yaml --preset wave1 --force-phase3 --summarize --task seg
+
+# Phase 1–2 多专家缓存（串行 run_pipeline）：
+./scripts/run_pipeline_all_cohorts.sh --exclude tn3k   # 已在跑可跳过
+
+# B3 波次 1（须先有 shared_intermediate）：
+./scripts/run_b3_wave1_all_cohorts.sh
 ```

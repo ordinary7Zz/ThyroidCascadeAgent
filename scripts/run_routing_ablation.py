@@ -70,6 +70,11 @@ def main():
         help="已有 Phase 1–2 产物的 intermediate 目录（含 seg/ cls）",
     )
     parser.add_argument("--force-phase3", action="store_true")
+    parser.add_argument(
+        "--metadata-mode",
+        default=None,
+        help="B5：full | drop_device | drop_source | drop_both | quality_only",
+    )
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--skip-eval", action="store_true")
     parser.add_argument(
@@ -97,6 +102,7 @@ def main():
         routing_mode=args.routing_mode,
         routing_mode_seg=args.routing_mode_seg,
         routing_mode_cls=args.routing_mode_cls,
+        metadata_mode=args.metadata_mode,
         task=args.task,
         force_phase3=args.force_phase3,
         best_single_artifact=artifact,
@@ -168,6 +174,7 @@ def main():
         label_file=data_cfg.get("label_file"),
         label_key=data_cfg.get("label_key", "malignancy"),
         input_device_info=data_cfg.get("device_info"),
+        input_data_info=data_cfg.get("input_data_info"),
         start_index=data_cfg.get("start_index", 0),
         max_images=data_cfg.get("max_images"),
         force_phase3=args.force_phase3,
@@ -185,6 +192,7 @@ def main():
             gt_mask_dir=data_cfg.get("gt_mask_dir"),
         )
         run_label = seg_mode if seg_mode == cls_mode else f"{seg_mode}__{cls_mode}"
+        meta_mode = seg_cfg.get("agent", {}).get("metadata_mode")
         b3 = build_b3_metrics(
             results,
             metrics,
@@ -192,6 +200,7 @@ def main():
             task=args.task,
             seg_mode=seg_mode,
             cls_mode=cls_mode,
+            metadata_mode=meta_mode,
         )
         save_b3_metrics(output_dir, b3)
         print(f"✓ b3_metrics.json 已写入 {output_dir}")

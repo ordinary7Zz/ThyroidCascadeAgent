@@ -61,6 +61,7 @@ def build_b3_metrics(
     task: str,
     seg_mode: str,
     cls_mode: str,
+    metadata_mode: Optional[str] = None,
 ) -> dict[str, Any]:
     n_consensus = sum(1 for r in results if r.get("path") == "A")
     n_disagreement = sum(1 for r in results if r.get("path") == "B")
@@ -92,6 +93,8 @@ def build_b3_metrics(
         "metrics_path_b_only": cls_pb or {},
         "classification_path_b": cls_pb or {},
     }
+    if metadata_mode:
+        out["metadata_mode"] = metadata_mode
     return out
 
 

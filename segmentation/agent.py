@@ -510,6 +510,9 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             if req:
                 data["reasoning_requirements"] = req
 
+        from shared.metadata_prompt import filter_seg_routing_payload
+
+        data = filter_seg_routing_payload(data, self.metadata_mode)
         return json.dumps(data, separators=(",", ":"), ensure_ascii=False)
 
     @staticmethod
@@ -758,8 +761,12 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
             input_device_info=input_device_info, input_data_info=input_data_info
         )
 
-        device_text = f"\n**输入设备**: {', '.join(input_device_info)}\n" if input_device_info else "\n**输入设备**: 未知\n"
-        data_text = f"\n**输入数据**: {json.dumps(self._normalize_unknown(input_data_info or {}), ensure_ascii=False)}\n"
+        from shared.metadata_prompt import seg_user_prefix_lines
+
+        norm_data = self._normalize_unknown(input_data_info or {})
+        device_text, data_text = seg_user_prefix_lines(
+            self.metadata_mode, input_device_info, norm_data if isinstance(norm_data, dict) else {}
+        )
 
         if self.ensemble_enabled and self.ensemble_top_k > 1:
             question = f"请选择 Top {self.ensemble_top_k} 个最佳模型用于 ensemble。"

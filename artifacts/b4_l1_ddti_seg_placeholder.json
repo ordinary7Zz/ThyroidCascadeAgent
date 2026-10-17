@@ -1,6 +1,6 @@
 {
   "note": "L1 占位：正式实验替换为单专家全队列评测 JSON（见 fit / my_Thyroid_Infer）",
-  "dataset_id": "ddti",
+  "dataset_id": "ddti_seg",
   "segmentation": {
     "dice_mean": null,
     "dice_ci_lower": null,

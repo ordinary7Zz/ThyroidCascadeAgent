@@ -12,9 +12,22 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "config"
 B3_DIR = CONFIG / "b3"
 B4_DIR = CONFIG / "b4"
+B5_DIR = CONFIG / "b5"
 B3_TEMPLATE = B3_DIR / "sample.yaml"
 
+B5_METADATA_MODES = (
+    "full",
+    "drop_device",
+    "drop_source",
+    "drop_both",
+    "quality_only",
+)
+
 # 正式 B3 跑数前：将 segmentation/classification 与 config/config_<cohort>.yaml 全文对齐（Table S3/S4）。
+_DATA = "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test"
+_AUG = "/mnt/wangbd8/workspace/DataSets/ThyroidAgent"
+
+# ablation_task: seg | cls | both；可选 run_segmentation / run_classification 覆盖 pipeline 开关
 COHORTS: dict[str, dict] = {
     "sample": {
         "image_input": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/sample/images",
@@ -47,17 +60,32 @@ COHORTS: dict[str, dict] = {
         "pipeline_run": "output/ZJH-8K/pipeline_run",
     },
     "rjh7k": {
-        "image_input": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/augtrain_PNG/image",
-        "gt_mask_dir": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/augtrain_PNG/mask",
+        "image_input": f"{_AUG}/augtrain_PNG/image",
+        "gt_mask_dir": f"{_AUG}/augtrain_PNG/mask",
         "label_file": "",
         "pipeline_run": "output/RJH-7K/pipeline_run",
+        "ablation_task": "both",
     },
-    "ddti": {
-        # 与 config/config_DDTI.yaml 当前字段一致（仓库内指向 TN5K test，若 DDTI 独立路径请改此处）
-        "image_input": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN5K/test/images",
-        "gt_mask_dir": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN5K/test/masks",
-        "label_file": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN5K/test/TN5K_test_label.json",
-        "pipeline_run": "output/DDTI/pipeline_run",
+    "ddti_seg": {
+        "image_input": f"{_DATA}/DDTI/all_seg/images",
+        "gt_mask_dir": f"{_DATA}/DDTI/all_seg/masks",
+        "label_file": "",
+        "pipeline_run": "output/DDTI_seg/pipeline_run",
+        "ablation_task": "seg",
+    },
+    "ddti_cls": {
+        "image_input": f"{_DATA}/DDTI_Classification/test/images_processed",
+        "gt_mask_dir": f"{_DATA}/DDTI_Classification/test/masks",
+        "label_file": f"{_DATA}/DDTI_Classification/test/DDTI_Classification_test_label.json",
+        "pipeline_run": "output/DDTI_cls/pipeline_run",
+        "ablation_task": "cls",
+    },
+    "pktn": {
+        "image_input": f"{_DATA}/PKTN/test/images",
+        "gt_mask_dir": f"{_DATA}/PKTN/test/masks",
+        "label_file": "",
+        "pipeline_run": "output/PKTN/pipeline_run",
+        "ablation_task": "seg",
     },
     "nhc_misd_tus": {
         "image_input": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/NHC-MISD-TUS/images",
@@ -97,7 +125,43 @@ def build_b3(cohort_id: str, paths: dict) -> dict:
     data.setdefault("device_info", ["GE Logiq E9", "GE S7"])
     data.setdefault("start_index", 0)
     data.setdefault("max_images", None)
-    pipe.setdefault("output", {})["output_dir"] = f"{b3_root}/placeholder"
+    task = paths.get("ablation_task", "both")
+    ab["task"] = task
+    pipe["run_segmentation"] = paths.get(
+        "run_segmentation", task in ("seg", "both")
+    )
+    pipe["run_classification"] = paths.get(
+        "run_classification", task in ("cls", "both")
+    )
+    # run_pipeline.py 写入 intermediate 的目录须与 shared_intermediate 父路径一致
+    pipe.setdefault("output", {})["output_dir"] = paths["pipeline_run"]
+    return cfg
+
+
+def build_b5(cohort_id: str, paths: dict) -> dict:
+    cfg = build_b3(cohort_id, paths)
+    b5_root = f"output/ablation/b5/{cohort_id}"
+    pipe = cfg.setdefault("pipeline", {})
+    ab = pipe.setdefault("ablation", {})
+    ab["output_root"] = b5_root
+    ab["dataset_id"] = cohort_id
+    ab["metadata_modes"] = list(B5_METADATA_MODES)
+    ab["routing_modes"] = ["llm"]
+    ab["force_phase3"] = True
+    data = pipe.setdefault("data", {})
+    data.setdefault(
+        "input_data_info",
+        {"dataset_name": cohort_id, "split": "test"},
+    )
+    seg_agent = cfg.setdefault("segmentation", {}).setdefault("agent", {})
+    cls_agent = cfg.setdefault("classification", {}).setdefault("agent", {})
+    seg_agent["routing_mode"] = "llm"
+    seg_agent["enable_agent"] = True
+    seg_agent["metadata_mode"] = "full"
+    cls_agent["routing_mode"] = "llm"
+    cls_agent["enable_agent"] = True
+    cls_agent["metadata_mode"] = "full"
+    pipe.setdefault("output", {})["output_dir"] = f"{b5_root}/placeholder"
     return cfg
 
 
@@ -163,21 +227,31 @@ def main() -> None:
     b4_header = (
         "# B4 汇总；L3/B-c 需 B3 llm 目录存在后再 build_b4_tables.py。\n"
     )
+    b5_header = (
+        "# B5 元数据消融；须先有 pipeline_run/intermediate。批量: scripts/run_b5_batch.py\n"
+        "# full 可与 B3 llm 复用: run_b5_batch.py --skip-full\n"
+    )
     B3_DIR.mkdir(parents=True, exist_ok=True)
     B4_DIR.mkdir(parents=True, exist_ok=True)
+    B5_DIR.mkdir(parents=True, exist_ok=True)
     for cohort_id, paths in COHORTS.items():
         b3_path = B3_DIR / f"{cohort_id}.yaml"
         b4_path = B4_DIR / f"{cohort_id}.yaml"
+        b5_path = B5_DIR / f"{cohort_id}.yaml"
         b3_doc = build_b3(cohort_id, paths)
         b4_doc = build_b4(cohort_id, paths)
+        b5_doc = build_b5(cohort_id, paths)
         with open(b3_path, "w", encoding="utf-8") as f:
             f.write(header)
             yaml.dump(b3_doc, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
         with open(b4_path, "w", encoding="utf-8") as f:
             f.write(b4_header)
             yaml.dump(b4_doc, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
+        with open(b5_path, "w", encoding="utf-8") as f:
+            f.write(b5_header)
+            yaml.dump(b5_doc, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
         write_l1_placeholder(cohort_id)
-        print(f"wrote {b3_path.name} {b4_path.name}")
+        print(f"wrote {b3_path.name} {b4_path.name} {b5_path.name}")
 
 
 if __name__ == "__main__":

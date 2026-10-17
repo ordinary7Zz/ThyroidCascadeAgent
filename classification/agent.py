@@ -358,11 +358,14 @@ class LLMClassificationAgent:
             probs = [c / total_models for c in votes_per_class.values()]
             vote_entropy = -sum(p * math.log(p + 1e-12, 2) for p in probs if p > 0)
 
+        from shared.metadata_prompt import filter_cls_routing_envelope
+
         data = {
             "num_models": total_models,
             "vote_entropy": round(vote_entropy, 3),
             "predictions": self._build_compact_prediction_dicts(predictions),
         }
+        data = filter_cls_routing_envelope(data, self.metadata_mode)
         return json.dumps(data, ensure_ascii=False)
 
     # ========== JSON 解析 ==========
@@ -466,7 +469,9 @@ class LLMClassificationAgent:
 
         # 构造 prompt
         formatted = self.format_predictions_json(predictions)
-        device_text = f"输入设备: {', '.join(input_device_info)}" if input_device_info else "输入设备: 未知"
+        from shared.metadata_prompt import cls_device_line
+
+        device_line = cls_device_line(self.metadata_mode, input_device_info)
 
         if self.top_k > 1:
             sys_prompt = self.system_prompt_multi
@@ -475,10 +480,10 @@ class LLMClassificationAgent:
             sys_prompt = self.system_prompt_single
             question = "选出最佳结果，严格只回复 JSON。"
 
+        device_block = f"{device_line}\n" if device_line else ""
         user_prompt = f"""{sys_prompt}
 
-{device_text}
-以下为 {len(predictions)} 个模型的预测(JSON)：
+{device_block}以下为 {len(predictions)} 个模型的预测(JSON)：
 
 {formatted}
 

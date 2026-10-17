@@ -12,6 +12,7 @@ from typing import Any, Optional, Union
 
 import yaml
 
+from shared.metadata_prompt import apply_metadata_mode_to_config, normalize_metadata_mode
 from shared.routing_modes import (
     cls_uses_llm_api,
     get_cls_routing_mode,
@@ -215,6 +216,7 @@ def prepare_ablation_run(
     routing_mode: Optional[str] = None,
     routing_mode_seg: Optional[str] = None,
     routing_mode_cls: Optional[str] = None,
+    metadata_mode: Optional[str] = None,
     task: str = "both",
     force_phase3: bool = False,
     best_single_artifact: Optional[Path] = None,
@@ -229,6 +231,11 @@ def prepare_ablation_run(
         routing_mode_cls=routing_mode_cls,
         task=task,
     )
+    if metadata_mode is not None:
+        cfg = apply_metadata_mode_to_config(cfg, metadata_mode)
+    elif cfg.get("segmentation", {}).get("agent", {}).get("metadata_mode"):
+        mode = normalize_metadata_mode(cfg["segmentation"]["agent"]["metadata_mode"])
+        cfg = apply_metadata_mode_to_config(cfg, mode)
     if best_single_artifact and Path(best_single_artifact).is_file():
         from routing.best_single_expert import apply_best_single_artifact, load_best_single_artifact
         apply_best_single_artifact(cfg, load_best_single_artifact(Path(best_single_artifact)))
@@ -243,6 +250,9 @@ def prepare_ablation_run(
 
     seg_mode = get_seg_routing_mode(cfg)
     cls_mode = get_cls_routing_mode(cfg)
+    meta_mode = normalize_metadata_mode(
+        cfg.get("segmentation", {}).get("agent", {}).get("metadata_mode")
+    )
     label = run_label or (
         routing_mode
         if routing_mode and routing_mode_seg is None and routing_mode_cls is None
@@ -253,6 +263,7 @@ def prepare_ablation_run(
         "routing_mode": label,
         "routing_mode_seg": seg_mode,
         "routing_mode_cls": cls_mode,
+        "metadata_mode": meta_mode,
         "task": task,
         "shared_intermediate": str(shared_intermediate) if shared_intermediate else None,
         "force_phase3": force_phase3,

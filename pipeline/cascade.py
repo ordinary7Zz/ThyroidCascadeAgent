@@ -729,6 +729,7 @@ class CascadePipeline:
         # label_key 指定 list 格式中标签字段名（如 "malignancy"）
         # key 统一用不带后缀的文件名（stem）
         labels: dict[str, Any] = {}
+        label_rows: dict[str, dict[str, Any]] = {}
         if label_file:
             with open(label_file, "r", encoding="utf-8") as f:
                 raw = json.load(f)
@@ -738,7 +739,13 @@ class CascadePipeline:
                 for item in raw:
                     fname = item.get("filename", "")
                     if fname:
-                        labels[Path(fname).stem] = item.get(label_key)
+                        stem = Path(fname).stem
+                        labels[stem] = item.get(label_key)
+                        label_rows[stem] = item
+
+        pipe_data_cfg = self.config.get("pipeline", {}).get("data", {})
+        static_data_info = pipe_data_cfg.get("input_data_info")
+        data_info_label_keys = pipe_data_cfg.get("input_data_info_label_keys")
 
         # 收集图像
         img_dir = Path(image_dir)
@@ -931,9 +938,18 @@ class CascadePipeline:
                     autogluon_results = json.load(f)
                 print(f"  已加载 autogluon 缓存: {len(autogluon_results)} 张")
 
+            from shared.metadata_prompt import merge_per_image_input_data_info
+
             for idx, img_name in enumerate(img_names):
                 img_path = image_paths[idx]
                 image = self.image_io.load_image(img_path)
+                img_stem = Path(img_name).stem
+                per_data_info = merge_per_image_input_data_info(
+                    input_data_info if input_data_info is not None else static_data_info,
+                    label_rows.get(img_stem),
+                    label_keys=data_info_label_keys,
+                    label_key=label_key,
+                )
 
                 gt_mask = None
                 if gt_mask_dir:
@@ -986,7 +1002,7 @@ class CascadePipeline:
                         classification_anchor=anchor_class,
                         gt_mask=gt_mask,
                         input_device_info=input_device_info,
-                        input_data_info=input_data_info,
+                        input_data_info=per_data_info,
                         judge_results=judge_results,
                         image_name=img_name,
                     )
@@ -1019,7 +1035,7 @@ class CascadePipeline:
                         image, seg_preds, anchor_class,
                         gt_mask=gt_mask,
                         input_device_info=input_device_info,
-                        input_data_info=input_data_info,
+                        input_data_info=per_data_info,
                         skip_radiomics=False,
                         judge_results=judge_results,
                     )
@@ -1049,7 +1065,7 @@ class CascadePipeline:
                             image, seg_preds, anchor_class,
                             gt_mask=gt_mask,
                             input_device_info=input_device_info,
-                            input_data_info=input_data_info,
+                            input_data_info=per_data_info,
                             skip_radiomics=False,
                             judge_results=judge_results,
                         )

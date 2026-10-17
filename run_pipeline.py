@@ -159,6 +159,7 @@ def main():
         label_file=data_cfg.get("label_file"),
         label_key=data_cfg.get("label_key", "malignancy"),
         input_device_info=data_cfg.get("device_info"),
+        input_data_info=data_cfg.get("input_data_info"),
         start_index=data_cfg.get("start_index", 0),
         max_images=data_cfg.get("max_images"),
     )

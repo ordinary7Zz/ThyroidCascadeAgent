@@ -1,17 +1,17 @@
 # B4 汇总；L3/B-c 需 B3 llm 目录存在后再 build_b4_tables.py。
 pipeline:
   ablation_b4:
-    dataset_id: ddti
-    b3_root: output/ablation/b3/ddti
+    dataset_id: pktn
+    b3_root: output/ablation/b3/pktn
     l2_b3_mode: soft_voting
     l3_b3_mode: llm
     s4_replica_b3_mode: llm
-    l1_metrics: artifacts/b4_l1_ddti_placeholder.json
-    reference_manifest: output/ablation/b3/ddti/soft_voting/intermediate_manifest.json
+    l1_metrics: artifacts/b4_l1_pktn_placeholder.json
+    reference_manifest: output/ablation/b3/pktn/soft_voting/intermediate_manifest.json
     pathb:
       b_a_b3_mode: soft_voting
       b_b_b3_mode: path_b_autogluon
       b_b_metrics_dir: null
       b_c_b3_mode: llm
   output:
-    output_dir: output/ablation/b4/ddti
+    output_dir: output/ablation/b4/pktn
