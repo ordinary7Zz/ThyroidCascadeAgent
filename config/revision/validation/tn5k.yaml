@@ -1,0 +1,97 @@
+# OpenThyroidDB validation（TN5K valid_copy, n=525；稿面 TN5K val=500，差额 25 待数据核对）。
+shared:
+  agent_llm:
+    api_key_env: DASHSCOPE_API_KEY
+    base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    model_name: qwen3.8-omni-flash
+    temperature: 0.3
+    max_tokens: 768
+    enable_thinking: false
+segmentation:
+  models:
+  - type: dinov3_unet
+    name: all_datasets
+    model_path: ../Segmentation_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth
+    input_size: [224, 224]
+    threshold: 0.5
+  - type: dinov3_unet
+    name: TN3K
+    model_path: ../Segmentation_Agent/weights/TN3K/dino_unet_train_TN3K_epoch_50.pth
+    input_size: [224, 224]
+    threshold: 0.5
+  - type: dinov3_unet
+    name: ThyroidXL
+    model_path: ../Segmentation_Agent/weights/ThyroidXL/dino_unet_train_ThyroidXL_epoch_50.pth
+    input_size: [224, 224]
+    threshold: 0.5
+  - type: dinov3_unet
+    name: PKTN_comprehensive
+    model_path: ../Segmentation_Agent/weights/PKTN_comprehensive/dino_unet_train_PKTN_comprehensive_epoch_50.pth
+    input_size: [224, 224]
+    threshold: 0.5
+  - type: dinov3_unet
+    name: TN5K
+    model_path: ../Segmentation_Agent/weights/TN5K/dino_unet_train_TN5K_epoch_50.pth
+    input_size: [224, 224]
+    threshold: 0.5
+  agent:
+    enable_agent: false
+    routing_mode: static_rule
+    brief_routing_prompt: true
+    include_disagreement_metrics_in_prompt: true
+    pre_filter:
+      cosine_threshold: 0.8
+      prob_outlier_threshold: 0.4
+      min_keep: 1
+    ensemble:
+      enabled: true
+      top_k: 1
+      method: weighted_average
+      threshold: 0.5
+classification:
+  models:
+  - type: dinov3_unet_multitask
+    name: all_datasets
+    model_path: ../Classification_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth
+    use_tirads: false
+  - type: dinov3_unet_multitask
+    name: TN3K
+    model_path: ../Classification_Agent/weights/TN3K/dino_unet_train_multitask_TN3K_epoch_50.pth
+    use_tirads: false
+  - type: dinov3_unet_multitask
+    name: TN5K
+    model_path: ../Classification_Agent/weights/TN5K/dino_unet_train_multitask_TN5K_epoch_50.pth
+    use_tirads: false
+  - type: dinov3_unet_multitask
+    name: ThyroidXL
+    model_path: ../Classification_Agent/weights/ThyroidXL/dino_unet_train_multitask_ThyroidXL_epoch_50.pth
+    use_tirads: false
+  agent:
+    enable_agent: false
+    routing_mode: soft_voting
+    brief_routing_prompt: true
+    top_k: 5
+    consensus_min_confidence: 0.6
+radiomics_judge:
+  enabled: true
+  model_dir: ../Classification_Agent/weights/dataset_3/autogluon_model_20260106_215755
+  top_k_features: 5
+  radiomics_params: null
+pipeline:
+  preload_workers: 4
+  run_segmentation: true
+  run_classification: true
+  data:
+    image_input: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN5K/valid_copy/images
+    gt_mask_dir: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN5K/valid_copy/masks
+    label_file: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN5K/valid_copy/TN5K_valid_label.json
+    label_key: malignancy
+    device_info:
+    - GE Logiq E9
+    - GE S7
+    start_index: 0
+    max_images: null
+  log_routing: true
+  routing_log_include_prompts: false
+  output:
+    output_dir: output/validation/_parts/tn5k

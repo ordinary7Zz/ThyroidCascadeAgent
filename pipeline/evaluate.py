@@ -178,6 +178,7 @@ def evaluate_pipeline(
 
         dice_values = []
         hd95_values = []
+        per_image_seg: list[dict] = []
 
         # GT mask 目录需要从外部传入，这里先检查 results 中是否有
         # 实际上 gt_mask_dir 在 run_batch 中使用了，但没存到 results
@@ -215,6 +216,19 @@ def evaluate_pipeline(
                     dice_values.append(dice)
                 if not np.isinf(hd95) and not np.isnan(hd95):
                     hd95_values.append(hd95)
+                per_image_seg.append({
+                    "image_name": img_name,
+                    "stem": img_stem,
+                    "dice": float(dice) if not np.isnan(dice) else None,
+                    "hd95": float(hd95) if not (np.isinf(hd95) or np.isnan(hd95)) else None,
+                })
+
+            if per_image_seg:
+                seg_path = Path(output_dir) / "per_image_seg_metrics.jsonl"
+                with open(seg_path, "w", encoding="utf-8") as f:
+                    for row in per_image_seg:
+                        f.write(json.dumps(row, ensure_ascii=False) + "\n")
+                print(f"  逐图分割指标: {seg_path} ({len(per_image_seg)} 条)")
 
             if dice_values:
                 dice_mean, dice_lo, dice_hi = _bootstrap_ci(dice_values)
@@ -235,6 +249,7 @@ def evaluate_pipeline(
     y_true_list = []
     y_score_list = []
     y_pred_list = []
+    per_image_cls: list[dict] = []
 
     for r in results:
         if "true_label" not in r or "final_label" not in r:
@@ -249,8 +264,27 @@ def evaluate_pipeline(
 
         if true_binary is not None and pred_binary is not None:
             y_true_list.append(true_binary)
-            y_score_list.append(confidence if pred_binary == 1 else 1 - confidence)
+            score = confidence if pred_binary == 1 else 1 - confidence
+            y_score_list.append(score)
             y_pred_list.append(pred_binary)
+            img_name = r.get("image_name", "")
+            per_image_cls.append({
+                "image_name": img_name,
+                "stem": Path(img_name).stem if img_name else "",
+                "center_id": r.get("center_id"),
+                "true_label": true_binary,
+                "pred_label": pred_binary,
+                "score_malignant": float(score),
+                "final_confidence": float(confidence),
+                "flagged_for_review": r.get("flagged_for_review"),
+            })
+
+    if per_image_cls:
+        cls_path = Path(output_dir) / "per_image_cls_metrics.jsonl"
+        with open(cls_path, "w", encoding="utf-8") as f:
+            for row in per_image_cls:
+                f.write(json.dumps(row, ensure_ascii=False) + "\n")
+        print(f"  逐图分类指标: {cls_path} ({len(per_image_cls)} 条)")
 
     if len(y_true_list) < 2 or len(set(y_true_list)) < 2:
         print("⚠️ 无足够有效标签或只有单一类别，跳过分类评估")

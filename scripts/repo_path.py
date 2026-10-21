@@ -12,4 +12,7 @@ def install() -> Path:
     root = str(REPO_ROOT)
     if root not in sys.path:
         sys.path.insert(0, root)
+    from shared.sklearn_warnings import configure_sklearn_pickle_warnings
+
+    configure_sklearn_pickle_warnings()
     return REPO_ROOT

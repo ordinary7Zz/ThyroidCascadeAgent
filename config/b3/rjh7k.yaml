@@ -90,9 +90,12 @@ radiomics_judge:
   top_k_features: 5
   radiomics_params: null
 pipeline:
-  preload_workers: 4
+  preload_workers: 1
+  # RJH 外部分割测试：跳过 Phase 3 专家 Radiomics + 分类 Phase 4/5（见补充材料说明）
+  phase3_expert_judge: false
+  phase3_checkpoint_every: 100
   run_segmentation: true
-  run_classification: true
+  run_classification: false
   ablation:
     routing_modes:
     - soft_voting
@@ -105,7 +108,8 @@ pipeline:
     output_root: output/ablation/b3/rjh7k
     force_phase3: true
     summarize: true
-    task: both
+    # RJH 外测无分类标签；B3 wave1 只评分割路由（bundle 读 ablation.task，非 run_classification）
+    task: seg
     learned_router:
       seg_artifact: artifacts/learned_router_seg.joblib
       cls_artifact: artifacts/learned_router_cls.joblib

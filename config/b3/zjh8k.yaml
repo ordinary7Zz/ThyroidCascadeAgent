@@ -90,7 +90,7 @@ radiomics_judge:
   top_k_features: 5
   radiomics_params: null
 pipeline:
-  preload_workers: 4
+  preload_workers: 1
   run_segmentation: true
   run_classification: true
   ablation:

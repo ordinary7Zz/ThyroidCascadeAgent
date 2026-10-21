@@ -121,9 +121,9 @@ pipeline:
     best_single_cls: all_datasets
     val_list: null
   data:
-    image_input: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/DDTI_Classification/test/images_processed
-    gt_mask_dir: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/DDTI_Classification/test/masks
-    label_file: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/DDTI_Classification/test/DDTI_Classification_test_label.json
+    image_input: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/DDTI_Classification/all/images_processed
+    gt_mask_dir: ''
+    label_file: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/DDTI_Classification/all/DDTI_Classification_test_label.json
     label_key: malignancy
     device_info:
     - GE Logiq E9

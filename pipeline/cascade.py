@@ -42,6 +42,13 @@ from routing.seg_strategies import select_mask_for_mode
 from routing.path_b_cls import resolve_path_b_indie_only
 from routing.oracle import resolve_cls_oracle
 from pipeline.routing_ablation import get_best_single_names
+from shared.center_manifest import load_center_lookup, resolve_center_id
+from shared.phase3_options import (
+    phase3_checkpoint_every,
+    phase3_expert_judge_enabled,
+    validate_phase3_checkpoint,
+)
+from shared.uncertainty_signals import build_uncertainty_block, seg_disagreement_from_masks
 
 
 def preload_workers_for_config(config: dict) -> int:
@@ -115,6 +122,34 @@ class CascadePipeline:
                 )
             self._learned_routers[task] = router
         return self._learned_routers[task]
+
+    def _enrich_result_record(
+        self,
+        result: dict[str, Any],
+        *,
+        img_name: str,
+        indie_preds: list,
+        seg_decision_dict: Optional[dict],
+        consensus: bool,
+        final_confidence: float,
+        llm_used_seg: bool,
+        llm_used_cls: bool,
+        center_lookup: dict[str, str],
+    ) -> None:
+        cid = resolve_center_id(img_name, center_lookup)
+        if cid is not None:
+            result["center_id"] = cid
+        seg_conf = seg_decision_dict.get("confidence") if seg_decision_dict else None
+        seg_ag = (seg_decision_dict or {}).get("seg_agreement")
+        result["uncertainty"] = build_uncertainty_block(
+            indie_preds,
+            seg_ag,
+            final_confidence=final_confidence,
+            seg_confidence=seg_conf,
+            llm_used_seg=llm_used_seg,
+            llm_used_cls=llm_used_cls and not consensus,
+            classification_consensus=consensus,
+        )
 
     # ===== 缓存读写工具 =====
 
@@ -459,7 +494,7 @@ class CascadePipeline:
         self, image, seg_predictions, anchor_class,
         gt_mask=None, input_device_info=None, input_data_info=None,
         skip_radiomics=False, judge_results=None,
-    ) -> "SegAgentDecision":
+    ) -> tuple["SegAgentDecision", dict[str, Any]]:
         """静态规则选择最佳分割 mask。
 
         Args:
@@ -516,7 +551,7 @@ class CascadePipeline:
         if anchor_class:
             reason += f"，与分类锚点「{anchor_class}」吻合"
 
-        return SegAgentDecision(
+        decision = SegAgentDecision(
             selected_model=best_name,
             selected_mask=best_pred.mask,
             confidence=agreement or 0.5,
@@ -528,6 +563,7 @@ class CascadePipeline:
             classification_anchor=anchor_class,
             path="A" if anchor_class else "B",
         )
+        return decision, quality_results
 
     @staticmethod
     def _resolve_classification_path_b_static(
@@ -611,7 +647,7 @@ class CascadePipeline:
                 image_name=None,
             )
         else:
-            seg_decision = self._select_mask_static(
+            seg_decision, _ = self._select_mask_static(
                 image, seg_predictions, anchor_class,
                 gt_mask=gt_mask,
                 input_device_info=input_device_info,
@@ -897,9 +933,14 @@ class CascadePipeline:
         print(f"{'='*60}")
 
         selected_masks_path = inter_dir / "selected_masks.npz"
-        if force_phase3 and selected_masks_path.exists():
-            selected_masks_path.unlink()
-            print("  ✓ force_phase3: 已删除 selected_masks.npz，将重跑 Phase 3")
+        phase3_checkpoint_path = inter_dir / "phase3_checkpoint.npz"
+        phase3_expert_judge = phase3_expert_judge_enabled(self.config)
+        checkpoint_every = phase3_checkpoint_every(self.config)
+        if force_phase3:
+            for p in (selected_masks_path, phase3_checkpoint_path):
+                if p.exists():
+                    p.unlink()
+            print("  ✓ force_phase3: 已清除 Phase 3 落盘缓存，将重跑")
 
         if not run_segmentation:
             print("  ⏭ 分割阶段已关闭，跳过 Phase 3（mask 选择）")
@@ -914,6 +955,31 @@ class CascadePipeline:
             sel_img_names = []
             sel_masks = []
             seg_decisions_serialized = []
+            start_idx = 0
+            if phase3_checkpoint_path.exists():
+                ck_names, ck_masks, ck_decisions = self._load_selected_masks_npz(
+                    phase3_checkpoint_path
+                )
+                if validate_phase3_checkpoint(img_names, ck_names):
+                    sel_img_names = ck_names
+                    sel_masks = ck_masks
+                    seg_decisions_serialized = ck_decisions
+                    start_idx = len(sel_img_names)
+                    print(
+                        f"  ↻ Phase 3 断点续跑: 已完成 {start_idx}/{len(img_names)}",
+                        flush=True,
+                    )
+                else:
+                    print(
+                        "  ⚠️ phase3_checkpoint 与当前图像列表不一致，从头重跑",
+                        flush=True,
+                    )
+
+            if not phase3_expert_judge:
+                print(
+                    "  ⚡ phase3_expert_judge=false：跳过专家 mask 的 Radiomics judge_batch",
+                    flush=True,
+                )
 
             # 预加载每个模型的缓存「仅一次」，避免逐图重复全量解压 npz。
             # 旧实现每张图都把每个模型的完整 npz（约 4GB）解压一遍：N 图 × M 模型
@@ -940,7 +1006,10 @@ class CascadePipeline:
 
             from shared.metadata_prompt import merge_per_image_input_data_info
 
-            for idx, img_name in enumerate(img_names):
+            skip_static_radiomics = not phase3_expert_judge
+
+            for idx in range(start_idx, len(img_names)):
+                img_name = img_names[idx]
                 img_path = image_paths[idx]
                 image = self.image_io.load_image(img_path)
                 img_stem = Path(img_name).stem
@@ -986,7 +1055,7 @@ class CascadePipeline:
                 # 统一跑 radiomics judge（对所有候选 mask，一次完成）
                 # 结果同时用于：1) mask 选择（anchor 过滤 / LLM prompt）2) 填充 autogluon 缓存
                 judge_results = None
-                if judge_obj is not None:
+                if judge_obj is not None and phase3_expert_judge:
                     try:
                         judge_results = judge_obj.judge_batch(
                             image, [p.mask for p in seg_preds]
@@ -1031,12 +1100,12 @@ class CascadePipeline:
                     )
                 elif seg_routing_mode == "static_rule":
                     seg_method_used = "routing_static_rule_seg"
-                    seg_decision = self._select_mask_static(
+                    seg_decision, quality_results = self._select_mask_static(
                         image, seg_preds, anchor_class,
                         gt_mask=gt_mask,
                         input_device_info=input_device_info,
                         input_data_info=per_data_info,
-                        skip_radiomics=False,
+                        skip_radiomics=skip_static_radiomics,
                         judge_results=judge_results,
                     )
                     self.seg_agent._seg_log_ctx = {
@@ -1044,15 +1113,10 @@ class CascadePipeline:
                         "path": seg_decision.path,
                         "classification_anchor": anchor_class,
                         "predictions": seg_preds,
-                        "quality_results": None,
+                        "quality_results": quality_results,
                         "judge_results": judge_results,
                         "metadata_mode": self.seg_agent.metadata_mode,
                     }
-                    quality_results = self.seg_agent.quality_evaluator.evaluate_batch(
-                        [p.mask for p in seg_preds],
-                        [p.model_name for p in seg_preds],
-                    )
-                    self.seg_agent._seg_log_ctx["quality_results"] = quality_results
                     self.seg_agent._finish_seg_decision(
                         seg_decision,
                         llm_invoked=False,
@@ -1066,9 +1130,9 @@ class CascadePipeline:
                             gt_mask=gt_mask,
                             input_device_info=input_device_info,
                             input_data_info=per_data_info,
-                            skip_radiomics=False,
+                            skip_radiomics=skip_static_radiomics,
                             judge_results=judge_results,
-                        )
+                        )[0]
                     seg_decision = select_mask_for_mode(
                         seg_routing_mode,
                         seg_preds,
@@ -1139,8 +1203,24 @@ class CascadePipeline:
                     "path": seg_decision.path,
                     "method": seg_method_used,
                     "all_predictions": seg_decision.all_predictions,
+                    "seg_agreement": seg_disagreement_from_masks([p.mask for p in seg_preds]),
                 })
                 print(f"  [{idx+1}/{len(img_names)}] {img_name}: {seg_decision.selected_model} (consensus={consensus})")
+
+                if checkpoint_every > 0 and (idx + 1) % checkpoint_every == 0:
+                    self._save_selected_masks_npz(
+                        phase3_checkpoint_path,
+                        sel_img_names,
+                        sel_masks,
+                        seg_decisions_serialized,
+                    )
+                    if judge_obj is not None and autogluon_results:
+                        with open(autogluon_cache_path, "w", encoding="utf-8") as f:
+                            json.dump(autogluon_results, f, ensure_ascii=False, indent=2)
+                    print(
+                        f"  💾 Phase 3 checkpoint: {len(sel_img_names)}/{len(img_names)}",
+                        flush=True,
+                    )
 
                 # 释放本图临时对象（预加载缓存不在此释放）
                 del image, seg_preds, indie_preds, gt_mask, seg_decision, judge_results
@@ -1153,6 +1233,8 @@ class CascadePipeline:
                 selected_masks_path, sel_img_names, sel_masks, seg_decisions_serialized
             )
             print(f"  ✓ 已保存 {selected_masks_path.name}")
+            if phase3_checkpoint_path.exists():
+                phase3_checkpoint_path.unlink()
 
             # 保存 autogluon 缓存（Phase 3 已填充 all_datasets 的 judge 结果，
             # Phase 4 检测到缓存存在则跳过重跑）
@@ -1278,6 +1360,12 @@ class CascadePipeline:
         print(f"{'='*60}")
 
         results: list[dict[str, Any]] = []
+        pipe_cfg = self.config.get("pipeline", {}) or {}
+        rev_cfg = pipe_cfg.get("revision") or {}
+        center_manifest = rev_cfg.get("center_manifest") or pipe_cfg.get("data", {}).get(
+            "center_manifest"
+        )
+        center_lookup = load_center_lookup(center_manifest)
 
         if not run_classification:
             # 分类关闭：仅保存分割结果（selected_masks.npz 已在 Phase 3 落盘）
@@ -1299,6 +1387,17 @@ class CascadePipeline:
                 img_stem = Path(img_name).stem
                 if img_stem in labels:
                     result["true_label"] = labels[img_stem]
+                self._enrich_result_record(
+                    result,
+                    img_name=img_name,
+                    indie_preds=[],
+                    seg_decision_dict=sel_d,
+                    consensus=bool(sel_d.get("consensus")),
+                    final_confidence=float(sel_d.get("confidence") or 0.0),
+                    llm_used_seg=enable_seg_agent,
+                    llm_used_cls=False,
+                    center_lookup=center_lookup,
+                )
                 results.append(result)
                 print(f"  [{idx+1}/{len(img_names)}] {img_name}: seg={sel_d.get('selected_model')}")
                 # 增量保存
@@ -1475,6 +1574,17 @@ class CascadePipeline:
                 if img_stem in labels:
                     result["true_label"] = labels[img_stem]
 
+                self._enrich_result_record(
+                    result,
+                    img_name=img_name,
+                    indie_preds=indie_preds,
+                    seg_decision_dict=seg_decision_dict,
+                    consensus=consensus,
+                    final_confidence=float(result["final_confidence"]),
+                    llm_used_seg=enable_seg_agent,
+                    llm_used_cls=enable_cls_agent,
+                    center_lookup=center_lookup,
+                )
                 results.append(result)
                 print(f"  [{idx+1}/{len(img_names)}] {img_name}: {result['final_label']} (conf={result['final_confidence']:.3f})")
 

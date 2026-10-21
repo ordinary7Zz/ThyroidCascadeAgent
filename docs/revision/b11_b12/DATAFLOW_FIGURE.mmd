@@ -1,0 +1,121 @@
+%% ThyroidXAgent supplementary data-flow (B12 + S9 draft)
+%% Export: https://mermaid.live — may need to split into Panel A/B if too wide
+%% Legend: TRAIN=#dbeafe VAL=#ffedd5 TEST=#dcfce7 FORBID=#fecaca SHARED=dashed
+
+flowchart TB
+  classDef train fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+  classDef val fill:#ffedd5,stroke:#ea580c,color:#7c2d12
+  classDef test fill:#dcfce7,stroke:#16a34a,color:#14532d
+  classDef forbid fill:#fecaca,stroke:#dc2626,color:#7f1d1d
+  classDef shared fill:#f3e8ff,stroke:#9333ea,color:#581c87,stroke-dasharray:5 5
+  classDef proc fill:#f8fafc,stroke:#64748b,color:#334155
+  classDef note fill:#fffbeb,stroke:#ca8a04,color:#713f12
+
+  subgraph LEGEND["Legend"]
+    L1[Train / fit]:::train
+    L2[Validation — thresholds & model selection]:::val
+    L3[Test — evaluate only]:::test
+    L4[External — no training]:::forbid
+  end
+
+  subgraph POOLS["A · Image cohorts (Table S1; patient-level [B1])"]
+    direction LR
+    STK["Stacked train\n~18,277 images"]:::train
+    V850["Unified validation\n850 images"]:::val
+    T_TN3K["TN3K test\n614"]:::test
+    T_TN5K["TN5K test\n1,000"]:::test
+    T_TXL["ThyroidXL test\n2,090"]:::test
+    T_DDTI["DDTI test\n637 seg / 349 cls"]:::forbid
+    T_RJH["RJH-7K test\n7,288 seg"]:::forbid
+    T_ZJH["ZJH-8K test\n7,958 img\n(also mal. dev D)"]:::shared
+    T_NHC["NHC-MISD-TUS\n8,721 cases · 35 centres"]:::forbid
+  end
+
+  subgraph IMG_TRAIN["B · Image components — training"]
+    direction TB
+    SEG_TR["Seg expert pool\nDINO-UNet ×5"]:::proc
+    CLS_TR["Cls expert pool\nmultitask UNets"]:::proc
+    AG_TR["AutoGluon radiomics\nGT masks · dataset_3\n17,774 rows"]:::proc
+    STK --> SEG_TR
+    STK --> CLS_TR
+    AG_TR -.->|GT features only| STK
+  end
+
+  subgraph IMG_VAL["B · Fitted on validation 850 only"]
+    direction TB
+    BS["best_single expert pick"]:::val
+    LR["learned_router joblib"]:::val
+    B8["abstention / calibration\nabstention_thresholds.json"]:::val
+    V850 --> BS
+    V850 --> LR
+    V850 --> B8
+  end
+
+  subgraph INFER["B · Inference chain (per test image)"]
+    direction TB
+    P1["Phase 1 Seg experts"]:::proc
+    P2["Phase 2 Cls experts"]:::proc
+    P3["Phase 3 Router → selected_mask\nLLM (S4) or static\nRadiomicsJudge signal"]:::proc
+    P4["Phase 4 PyRadiomics → AutoGluon\nno extra CCA"]:::proc
+    P5["Phase 5 Cls consensus / Path B"]:::proc
+    P1 --> P2 --> P3 --> P4 --> P5
+  end
+
+  SEG_TR --> P1
+  CLS_TR --> P2
+  AG_TR --> P4
+  BS --> P3
+  LR --> P3
+  B8 --> P5
+
+  T_TN3K & T_TN5K & T_TXL & T_DDTI & T_RJH & T_ZJH & T_NHC --> P1
+
+  METRICS["Metrics: Dice/HD95 · AUROC/AUPRC\nMacro mean cls: 0.9001 / 0.8705"]:::note
+  P5 --> METRICS
+
+  subgraph REPORT["C · Report branch (S9)"]
+    direction TB
+    SMU_DEV["SMU-HMC dev\nexcl. 400-patient test"]:::train
+    SMU_TPL["Template library A\n7,147 QC reports"]:::train
+    SMU_TEST["SMU-HMC test\n400 patients · 5,984 img"]:::test
+    KMVE_TR["KMVE train 1,719"]:::train
+    KMVE_VAL["KMVE val 246"]:::val
+    KMVE_TPL["Template library B\n[from train — S9]"]:::train
+    KMVE_TEST["KMVE test 492"]:::test
+    ZJH_TS["ZJH-TS test\n150 reports"]:::forbid
+    TNVID["TNVideo reader study\n148 exams"]:::forbid
+    SMU_DEV --> SMU_TPL
+    KMVE_TR --> KMVE_TPL
+    EVD["Case evidence store"]:::proc
+    REP["BM25 + slots + clauses → Report"]:::proc
+    EVD --> REP
+    SMU_TPL --> REP
+    KMVE_TPL --> REP
+    SMU_TEST --> REP
+    KMVE_TEST --> REP
+    ZJH_TS --> REP
+  end
+
+  P5 -.->|masks · cls · radiomics| EVD
+
+  subgraph MAL["D · Malignant-lesion tasks (B9)"]
+    direction TB
+    ZJH_MAL["ZJH-8K malignant\n4,756 img\n183 val / 20 cases"]:::shared
+    LNM_TR["LNM train pool\nZJH mal. + LymphUs C1 180\n≈4,753 img [B9]"]:::train
+    LNM_TE["LymphUs C2 test\n158"]:::forbid
+    FTC_TE["Dai FTC/PTC test\n200"]:::forbid
+    ZJH_MAL --> LNM_TR
+    LNM_TR --> LNM_HEAD["LNM classifier\n(LLNM-Net path)"]:::proc
+    ZJH_MAL --> FTC_HEAD["FTC/PTC classifier\n(Tiger-Model path)"]:::proc
+    LNM_TE --> LNM_HEAD
+    FTC_TE --> FTC_HEAD
+  end
+
+  T_ZJH -.-> ZJH_MAL
+
+  subgraph THR["Thresholds (fixed hyperparameters — not val-tuned)"]
+    TH1["Seg binarize 0.5 · pre-filter cos 0.8 · outlier 0.4"]:::note
+    TH2["Consensus conf ≥ 0.6 · DINO CC ≥50 px"]:::note
+  end
+  TH1 --> P3
+  TH2 --> P1

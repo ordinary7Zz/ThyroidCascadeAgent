@@ -7,6 +7,14 @@
 > **范围**：ThyroidCascadeAgent 以 **结节分割 + 良恶性分类** 为主；NHC **全腺体**分割（稿面 Table S7–S8、总体 Dice 59.28%）若本仓库无 GT/推理链，在 §3.4 单独标注数据来源，不与结节 pipeline 混为一谈。  
 > **关联文档**：`docs/ThyroidXAgent_返修计划与回复_中文.md`（任务语义与回复草稿）、`docs/REVISION_B5_B6_B8_B11_PLAN.md`（B8 代码概要，本文件展开 B7 并统一验收）、`docs/REVISION_B3_B4_PLAN.md`（NHC 上 B3 跑数与 `intermediate/` 复用）。
 
+### NHC 数据治理（冻结约定，2026-10-17）
+
+**NHC-MISD-TUS 为私有队列：不得将图像或可识别元数据发送至外部 LLM API。** 因此：
+
+- 稿面 Table S9–S12 及 B7/B8 所用的 **NHC 主结果** = **`enable_agent: false`** 的完整 pipeline（分类多为 `soft_voting` / Path B 静态软投票；分割为 `static_rule` 等 **非 LLM** 策略），**不是** B3 策略 `llm` / `config/b5/nhc_misd_tus.yaml` 的 LLM 路由结果。
+- `output/NHC-MISD-TUS/pipeline_run/` 约定为 **Phase 1–2 共享 `intermediate/`**；**主分析用的 `results.json`** 应单独目录并快照配置，见 §2.1。
+- 公开/可外发队列上的 **LLM 路由消融**（B3/B4/B5）与 NHC 主表 **分开报告**；回复 R1.2/R3.1 时在 Methods/Limitations 说明 NHC 评估协议。
+
 ---
 
 ## 1. 任务理解（是否对齐返修清单）
@@ -56,12 +64,25 @@ NHC（及必要时其他测试队列）pipeline 跑完 → results.json + evalua
 |------|--------|------|
 | **G3** NHC 中心清单与元数据（扫描仪、医院、去标识化字段） | Griffin / Prof. Kong | B7 描述表与 meta 回归协变量 |
 | **G3** 或数据侧：`image_name` → `center_id` 映射 | 数据 | B7/B8 按中心汇总；可写在 `labels.json` 扩展字段或独立 `nhc_center_index.csv` |
-| NHC **投稿配置** 的 `pipeline_run`（或 B3 策略 7 / S4 快照） | Baidong | 逐例 `results.json`、mask、分类概率 |
+| NHC **无 LLM** 主结果 `output/revision/nhc_no_llm_primary/results.json` | Baidong | 与 Table S9–S12 同源；见 §2.1 |
 | **验证集** 图像列表（OpenThyroidDB 850 张或 Methods 写明之集合） | Baidong | B8 **仅在此集上**搜阈 / 拟合温度 |
 | **B2** cluster bootstrap（若中心级 AUROC 要 CI） | Baidong | B7 表与稿面 CI 一致；可与 B7 脚本共用患者/检查聚类键 |
 | **F4** 临床安全叙事 | Fei Chen | 消费 B8 的 `abstention_eval.json` 与阈值文件 |
 
 **阻塞**：无 `center_id` 时，B7 只能做队列级、无法填 R2.6 中心表；B8 仍可先做 **全 NHC pooled** 校准与拒答，中心分层延后。
+
+### 2.1 NHC 主结果路径（B7/B8 共同输入）
+
+| 角色 | 推荐路径 | 配置参考 |
+|------|----------|----------|
+| 共享 Phase 1–2 | `output/NHC-MISD-TUS/pipeline_run/intermediate/` | 任意与投稿专家池一致的 `run_pipeline`（仅跑或保留 intermediate） |
+| **B7/B8 主结果（冻结）** | `output/revision/nhc_no_llm_primary/` | `config/b3/nhc_misd_tus.yaml`：`segmentation.agent.enable_agent: false`、`classification.agent.enable_agent: false`；`routing_mode` 与填表时一致（如 `static_rule` + `soft_voting`） |
+| 配置快照 | `output/revision/nhc_no_llm_primary/config_snapshot.yaml` | 从实际 yaml 复制 + 记录 git commit |
+| **禁止**作为主结果 | `output/ablation/b5/nhc_misd_tus/*`（LLM）、B3 的 `llm` / `oracle` 策略目录 | 仅作其他队列的方法实验，或 NHC 上 **未运行** |
+
+对账：冻结后抽查 pooled 结节 Dice 与 **THYB_S_ZJ24 ≈ 45.53%** 等稿面数；一致再跑 B7 meta 回归。
+
+B7 **代码**只依赖 CLI/`revision.nhc_primary_results_dir` 指向的 `results.json`，与是否用 LLM 无关；**科学内容**必须与上表 **无 LLM** 跑数一致。
 
 ---
 
@@ -124,7 +145,7 @@ data/manifests/nhc_center_index.csv       # 或仅路径写在 config（gitignor
         ↓
 ② build_nhc_center_table.py → 描述表草稿
         ↓
-③ 确认 NHC pipeline 结果路径（与 B3/S4 一致配置）
+③ 冻结 `nhc_no_llm_primary/results.json`（§2.1），与稿面 S 表对账
         ↓
 ④ nhc_heterogeneity.py：逐中心结节 Dice / 分类 AUROC（+ B2 聚类 CI 若就绪）
         ↓
@@ -165,30 +186,35 @@ data/manifests/nhc_center_index.csv       # 或仅路径写在 config（gitignor
 
 | 用途 | 数据集 | 禁止 |
 |------|--------|------|
-| 搜拒答阈值、可选温度缩放 | Methods 4.1 的 **validation**（如 stacked 850 张）或单独 `val_list` 文件 | 不可用 NHC 测试集调阈 |
+| 搜拒答阈值、可选温度缩放 | Methods 4.1 的 **validation**（如 stacked 850 张），且 **与 NHC 相同：`enable_agent: false`** 的 pipeline 结果（推荐） | 不可用 NHC 测试集调阈；**不建议**在 val 上用 LLM 定阈、在 NHC 上仅应用（部署假设不一致） |
 | 报告校准 / risk–coverage | 各 **测试** 队列（含 NHC） | 不在测试集上选「最优」阈 |
 
 配置建议：
 
 ```yaml
 pipeline:
+  revision:
+    nhc_primary_results_dir: output/revision/nhc_no_llm_primary
   abstention:
-    val_results: output/validation/pipeline_run/results.json   # 或 val_list + 单独跑 evaluate
+    val_results: output/validation/no_llm_primary/results.json
     rules:
       - name: cls_vote_entropy
         op: gt
         field: vote_entropy
       - name: cls_margin_low
         op: lt
-        field: margin_top2
+        field: margin_top2_min
       - name: seg_pairwise_iou_min
         op: lt
         field: seg_min_pairwise_iou
+      # NHC 无 LLM：下列规则在 NHC 上恒 false，公开队列若用 LLM 可单独 val 配置
       - name: router_uncertain
         op: eq
         field: routing_uncertain_flag
         value: true
+        applies_to: [ddti, zjh8k, ...]   # 可选；NHC 评估时跳过
     combination: any   # any | k_of_n
+    nhc_rule_subset: [cls_vote_entropy, cls_margin_low, seg_pairwise_iou_min]
     target: maximize_auroc_on_retained   # 或固定覆盖率工作点 0.9
 ```
 
@@ -214,9 +240,9 @@ pipeline:
 | 专家分类分歧 | `vote_entropy` ↑ 或 `num_models_same_class` &lt; M/2 | 与 Path A/B 无关，一律从独立模型算 |
 | 置信度边缘 | `margin_top2` &lt; t | 取独立模型概率 top1−top2 的最小值或均值 |
 | 分割分歧 | `seg_min_pairwise_iou` &lt; t1 | 多专家 mask 两两 IoU 最小值 |
-| 路由不确定 | `routing_uncertain_flag` | LLM 输出或解析失败降级策略需在 Methods 说明 |
+| 路由不确定 | `routing_uncertain_flag` | **仅 LLM 路由队列**；NHC 主结果不使用，稿面写「私有队列拒答仅基于专家分歧与校准信号」 |
 
-组合：`any`（默认，与回复「专家分歧 **或** 熵 **或** 路由标志」一致）或 `k_of_n` 做敏感性（可放补充）。
+组合：**NHC** 用 `nhc_rule_subset`（熵 + margin + 分割 IoU，**无** `router_uncertain`）。公开队列可用 `any`（含路由标志）做补充敏感性。
 
 ### 4.5 B8 实施顺序
 
@@ -260,25 +286,50 @@ pipeline:
 ## 6. 复现命令（占位，实现后替换为真实路径）
 
 ```bash
-# B7：中心级指标（示例）
+# 主结果（无 LLM）
+python run_pipeline.py --config config/revision/nhc_no_llm_primary.yaml
+
+# 旧 results 补 uncertainty（不重跑 GPU）
+python scripts/backfill_results_metadata.py \
+  --output-dir output/revision/nhc_no_llm_primary \
+  --config config/revision/nhc_no_llm_primary.yaml \
+  --label-file /path/to/NHC-MISD-TUS/labels.json
+
+# B7：中心汇总 + Dice I²
 python scripts/run_b7_analysis.py \
-  --results output/NHC-MISD-TUS/pipeline_run/results.json \
-  --manifest data/manifests/nhc_center_index.csv \
-  --gt-mask-dir /path/to/NHC-MISD-TUS/masks \
-  --label-file /path/to/NHC-MISD-TUS/labels.json \
+  --output-dir output/revision/nhc_no_llm_primary \
+  --re-evaluate --gt-mask-dir /path/to/NHC-MISD-TUS/masks \
   --out output/b7/nhc
 
-# B8：验证集定阈 + 测试集评估（示例）
-python scripts/run_calibration_abstention.py \
-  --config config/b3/nhc_misd_tus.yaml \
-  --val-results output/validation/pipeline_run/results.json \
-  --test-results output/NHC-MISD-TUS/pipeline_run/results.json \
-  --out output/b8/nhc
+python scripts/build_nhc_center_table.py \
+  --label-file /path/to/NHC-MISD-TUS/labels.json \
+  --g3-csv /path/to/g3_centers.csv --out output/b7/descriptive
+
+# B8：验证集定阈 + NHC 测试
+python scripts/run_calibration_abstention.py --fit \
+  --val-results output/validation/no_llm_primary/results.json \
+  --out output/b8/fit --rule-subset nhc
+python scripts/run_calibration_abstention.py --eval \
+  --test-results output/revision/nhc_no_llm_primary/results.json \
+  --thresholds output/b8/fit/abstention_thresholds.json \
+  --out output/b8/nhc --rule-subset nhc
 ```
 
 ---
 
-## 7. 与返修回复的映射
+## 7. 稿面 / 回复表述（NHC 与 LLM）
+
+建议在 Methods 4.3 与回复 R1.3 中并列说明：
+
+1. **可外发队列**：ThyroidXAgent 含 LLM 路由（路由消融见 Fig./Supp.）；  
+2. **NHC-MISD-TUS**：因数据使用协议 **未调用外部 LLM**；报告 **同一专家池 + 非 LLM 集成/静态路由** 下的分割与分类，中心异质性（B7）与校准/拒答（B8）均基于该协议；  
+3. **拒答规则**：NHC 上仅专家分歧与概率校准相关触发器，与公开队列上含「路由不确定」的敏感性分析区分开（可放 Supp.）。
+
+避免读者将 NHC pooled 性能误读为「LLM 路由后的结果」。
+
+---
+
+## 8. 与返修回复的映射
 
 | 回复要点 | B7 | B8 |
 |----------|----|----|
@@ -292,7 +343,7 @@ python scripts/run_calibration_abstention.py \
 
 ---
 
-## 8. 工作量粗估
+## 9. 工作量粗估
 
 | 任务 | 代码 | 实验/制表 |
 |------|------|-----------|
@@ -303,4 +354,4 @@ python scripts/run_calibration_abstention.py \
 
 ---
 
-*文档版本：2026-10-15；与 `ThyroidXAgent_返修计划与回复_中文.md` B7/B8 及 R1.3 回复草稿对齐。*
+*文档版本：2026-10-17；已纳入 NHC 禁止 LLM 之主结果路径约定（§2.1、§7）。*

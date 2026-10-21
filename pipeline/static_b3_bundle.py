@@ -1,15 +1,17 @@
 """
 B3 静态策略 bundle：单次扫图，对多种 routing_mode 同时产出结果。
 
-共享：预加载 intermediate、逐图 judge_batch、共识 Path A/B。
+共享：预加载 intermediate、逐图 judge_batch（受 pipeline.phase3_expert_judge 控制）、共识 Path A/B。
 每 entry：独立 output 子目录（selected_masks、results、b3_metrics）。
 """
 
 from __future__ import annotations
 
 import json
+import pickle
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 import numpy as np
 
@@ -32,7 +34,109 @@ from routing.seg_strategies import select_mask_for_mode
 from segmentation.agent import SegAgentDecision, SegmentationAgent
 from segmentation.quality_evaluator import SegmentationQualityEvaluator
 from shared.image_io import ImageIO
+from shared.phase3_options import phase3_expert_judge_enabled
 from shared.routing_modes import normalize_routing_mode
+from shared.sklearn_warnings import configure_sklearn_pickle_warnings
+
+
+def _write_bundle_progress(
+    output_root: Path,
+    *,
+    phase: str,
+    index: int,
+    total: int,
+    image_name: str = "",
+) -> None:
+    """写入 output_root/.bundle_progress.json，避免终端被 warning 淹没时无法看 N/total。"""
+    payload = {
+        "phase": phase,
+        "index": index,
+        "total": total,
+        "image_name": image_name,
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    }
+    path = output_root / ".bundle_progress.json"
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def _build_gt_stem_map(gt_mask_dir: Optional[str]) -> dict[str, Path]:
+    if not gt_mask_dir:
+        return {}
+    gt_dir = Path(gt_mask_dir)
+    if not gt_dir.is_dir():
+        return {}
+    return {p.stem: p for p in gt_dir.iterdir() if p.is_file()}
+
+
+def _load_gt_mask_for_image(
+    gt_stem_map: dict[str, Path],
+    img_name: str,
+    image_io: ImageIO,
+) -> Optional[np.ndarray]:
+    gt_path = gt_stem_map.get(Path(img_name).stem)
+    if gt_path is None or not gt_path.is_file():
+        return None
+    return image_io.binarize_mask(image_io.load_mask(gt_path))
+
+
+class _LazySegModelCache:
+    """大队列 B3 bundle：mmap seg npz，按 index 取预测，避免 5×全队列 mask 常驻 RAM。"""
+
+    def __init__(self, path: Path, *, load_confidence: bool) -> None:
+        self._path = path
+        self._load_confidence = load_confidence
+        self._data = np.load(str(path), allow_pickle=True, mmap_mode="r")
+        self._metas = pickle.loads(self._data["metadata"].item())
+        self._n = len(self._data["image_names"])
+
+    def __len__(self) -> int:
+        return self._n
+
+    def __getitem__(self, i: int):
+        from segmentation.base_model import SegModelOutput
+
+        mask = np.asarray(self._data["masks"][i], dtype=np.uint8)
+        conf_val = None
+        if self._load_confidence and "confidence_maps" in self._data:
+            conf = self._data["confidence_maps"][i]
+            has_conf = conf.shape != (1, 1)
+            conf_val = np.asarray(conf, dtype=np.float32) if has_conf else None
+        meta = self._metas[i] if i < len(self._metas) else {}
+        if "model_names" in self._data:
+            model_name = str(self._data["model_names"][i])
+        else:
+            model_name = str(meta.get("model_name", ""))
+        return SegModelOutput(
+            model_name=model_name,
+            mask=mask,
+            confidence_map=conf_val,
+            metadata=meta,
+        )
+
+    def close(self) -> None:
+        self._data.close()
+
+
+SegCacheValue = Union[list, _LazySegModelCache]
+
+
+def _seg_pred_at(cache: SegCacheValue, idx: int):
+    if isinstance(cache, _LazySegModelCache):
+        return cache[idx] if idx < len(cache) else None
+    if idx < len(cache):
+        return cache[idx]
+    return None
+
+
+def _bundle_lazy_seg_threshold(config: dict, n_images: int) -> bool:
+    ab = config.get("pipeline", {}).get("ablation", {}) or {}
+    raw = ab.get("bundle_lazy_seg_min_images", 1500)
+    try:
+        threshold = int(raw)
+    except (TypeError, ValueError):
+        threshold = 1500
+    return n_images >= threshold
+
 
 STATIC_B3_MODES = frozenset({
     "best_single",
@@ -94,18 +198,20 @@ def _pick_seg_decision(
     best_single_seg: Optional[str],
     input_device_info: Optional[list],
     input_data_info: Optional[dict],
+    skip_radiomics: bool = False,
 ) -> SegAgentDecision:
     if seg_mode == "static_rule":
-        return pipeline._select_mask_static(
+        decision, _ = pipeline._select_mask_static(
             image,
             seg_preds,
             anchor_class,
             gt_mask=gt_mask,
             input_device_info=input_device_info,
             input_data_info=input_data_info,
-            skip_radiomics=False,
+            skip_radiomics=skip_radiomics,
             judge_results=judge_results,
         )
+        return decision
     static_fn = None
     return select_mask_for_mode(
         seg_mode,
@@ -215,6 +321,7 @@ def run_static_b3_bundle(
     单次扫图，为每个 AblationRoutingEntry 写入 output_root/<run_id>/。
     返回成功写盘的 run_id 列表。
     """
+    configure_sklearn_pickle_warnings()
     if not entries:
         return []
 
@@ -246,41 +353,98 @@ def run_static_b3_bundle(
     run_segmentation = task in ("seg", "both")
     run_classification = task in ("cls", "both")
 
-    seg_cache_by_model: dict[str, list] = {}
+    seg_cache_by_model: dict[str, SegCacheValue] = {}
     cls_cache_by_model: dict[str, list] = {}
-    if run_segmentation or run_classification:
+    lazy_seg = run_segmentation and _bundle_lazy_seg_threshold(config, len(img_names))
+
+    if run_segmentation and run_classification and not lazy_seg:
         seg_cache_by_model, cls_cache_by_model = pipeline._preload_seg_cls_caches(
-            seg_model_configs if run_segmentation else [],
-            cls_model_configs if run_classification else [],
+            seg_model_configs,
+            cls_model_configs,
             seg_cache_dir,
             cls_cache_dir,
             need_seg_conf=need_seg_conf,
         )
+    else:
+        if run_classification:
+            _, cls_cache_by_model = pipeline._preload_seg_cls_caches(
+                [],
+                cls_model_configs,
+                seg_cache_dir,
+                cls_cache_dir,
+                need_seg_conf=False,
+            )
+        if run_segmentation:
+            if lazy_seg:
+                ab = config.get("pipeline", {}).get("ablation", {}) or {}
+                print(
+                    f"  seg 缓存：mmap 按图读取（阈值 {ab.get('bundle_lazy_seg_min_images', 1500)} 张），"
+                    f"不整包预加载 npz",
+                    flush=True,
+                )
+                for model_cfg in seg_model_configs:
+                    model_name = model_cfg.get("name", "")
+                    if not model_name:
+                        continue
+                    path = seg_cache_dir / f"{model_name}.npz"
+                    if path.is_file():
+                        seg_cache_by_model[model_name] = _LazySegModelCache(
+                            path, load_confidence=need_seg_conf
+                        )
+            else:
+                seg_only, _ = pipeline._preload_seg_cls_caches(
+                    seg_model_configs,
+                    [],
+                    seg_cache_dir,
+                    cls_cache_dir,
+                    need_seg_conf=need_seg_conf,
+                )
+                seg_cache_by_model = seg_only
 
     judge_obj = getattr(pipeline.seg_agent, "radiomics_judge", None)
+    phase3_expert_judge = phase3_expert_judge_enabled(config)
+    skip_static_radiomics = not phase3_expert_judge
+    need_radiomics_judge = (
+        phase3_expert_judge
+        and judge_obj is not None
+        and run_segmentation
+        and "static_rule" in seg_modes
+    )
+    if not phase3_expert_judge:
+        print(
+            "  ⚡ phase3_expert_judge=false：bundle 跳过专家 mask 的 Radiomics judge_batch",
+            flush=True,
+        )
+    elif run_segmentation and "static_rule" not in seg_modes:
+        print(
+            "  ⚡ 本批 seg_modes 无 static_rule：跳过 Radiomics judge_batch（大队列加速）",
+            flush=True,
+        )
     seg_store: dict[str, dict[str, dict]] = {m: {} for m in seg_modes}
     path_store: dict[str, dict] = {}
 
     print(f"\n{'='*60}")
     print(f"B3 static bundle：{len(img_names)} 张图，seg_modes={sorted(seg_modes)} cls_modes={sorted(cls_modes)}")
     print(f"{'='*60}")
+    _write_bundle_progress(
+        output_root, phase="scan", index=0, total=len(img_names), image_name=""
+    )
+
+    gt_stem_map = _build_gt_stem_map(gt_mask_dir)
 
     for idx, img_name in enumerate(img_names):
-        image = pipeline.image_io.load_image(image_paths[idx])
-
-        gt_mask = None
-        if gt_mask_dir:
-            gt_path = Path(gt_mask_dir) / img_name
-            if gt_path.exists():
-                gt_mask = pipeline.image_io.binarize_mask(pipeline.image_io.load_mask(gt_path))
+        gt_mask = _load_gt_mask_for_image(gt_stem_map, img_name, pipeline.image_io)
+        image: Optional[np.ndarray] = None
 
         seg_preds = []
         if run_segmentation:
             for model_cfg in seg_model_configs:
                 model_name = model_cfg.get("name", "")
                 cache = seg_cache_by_model.get(model_name)
-                if cache is not None and idx < len(cache):
-                    seg_preds.append(cache[idx])
+                if cache is not None:
+                    pred = _seg_pred_at(cache, idx)
+                    if pred is not None:
+                        seg_preds.append(pred)
 
         indie_preds = []
         if run_classification:
@@ -304,18 +468,22 @@ def run_static_b3_bundle(
         }
 
         judge_results = None
-        if judge_obj is not None and seg_preds:
+        if need_radiomics_judge and seg_preds:
             try:
+                image = pipeline.image_io.load_image(image_paths[idx])
                 judge_results = judge_obj.judge_batch(image, [p.mask for p in seg_preds])
             except Exception as e:
                 print(f"  ⚠️ {img_name} radiomics judge 失败: {e}")
 
         if run_segmentation and seg_preds:
             for seg_mode in seg_modes:
+                if seg_mode == "static_rule" and image is None:
+                    image = pipeline.image_io.load_image(image_paths[idx])
+                pick_image = image if image is not None else np.zeros((1, 1, 3), dtype=np.uint8)
                 decision = _pick_seg_decision(
                     pipeline,
                     seg_mode,
-                    image=image,
+                    image=pick_image,
                     seg_preds=seg_preds,
                     anchor_class=anchor_class,
                     gt_mask=gt_mask,
@@ -323,6 +491,7 @@ def run_static_b3_bundle(
                     best_single_seg=best_single_seg,
                     input_device_info=input_device_info,
                     input_data_info=input_data_info,
+                    skip_radiomics=skip_static_radiomics,
                 )
                 method = _seg_method_name(seg_mode)
                 seg_store[seg_mode][img_name] = {
@@ -334,8 +503,13 @@ def run_static_b3_bundle(
 
         if (idx + 1) % 10 == 0 or idx == len(img_names) - 1:
             print(f"  bundle 扫图 [{idx + 1}/{len(img_names)}] {img_name}", flush=True)
-
-    del seg_cache_by_model, cls_cache_by_model
+            _write_bundle_progress(
+                output_root,
+                phase="scan",
+                index=idx + 1,
+                total=len(img_names),
+                image_name=img_name,
+            )
 
     completed: list[str] = []
     for entry in entries:
@@ -473,6 +647,9 @@ def run_static_b3_bundle(
         completed.append(entry.run_id)
 
     print(f"\nBundle 完成: {completed}")
+    for cache in seg_cache_by_model.values():
+        if isinstance(cache, _LazySegModelCache):
+            cache.close()
     return completed
 
 

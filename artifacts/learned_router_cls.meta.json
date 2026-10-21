@@ -2,8 +2,10 @@
   "task": "cls",
   "model_names": [
     "all_datasets",
-    "medsiglip_binary"
+    "TN3K",
+    "TN5K",
+    "ThyroidXL"
   ],
   "init_mode": "random",
-  "n_features": 11
+  "n_features": 19
 }

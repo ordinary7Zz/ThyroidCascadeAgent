@@ -1,0 +1,368 @@
+# 返修实验执行命令（Runbook）
+
+按 **任务编号（B1、B2、…）** 分节收录可复制命令与推荐顺序；新任务在文末追加新节即可。各任务 **契约与交付物** 见对应 `docs/REVISION_*_PLAN.md`。
+
+| 节 | 任务 | 计划文档 | 状态 |
+|----|------|----------|------|
+| §1 | 共享地基 | — | 已写 |
+| §2 | B3 路由消融 | `REVISION_B3_B4_PLAN.md` | 已写 |
+| §3 | B4 组件消融 | `REVISION_B3_B4_PLAN.md` | 已写 |
+| §4 | B5 元数据消融 | `REVISION_B5_PLAN.md` | 已写 |
+| §5 | B6 路由器透明性 | `REVISION_B6_PLAN.md` | 已写 |
+| — | B7 / B8 / … | `REVISION_B7_B8_PLAN.md` 等 | 待追加 |
+
+配置目录：`config/b3/`、`config/b4/`、`config/b5/`（后续任务可增 `config/b7/` 等）。
+
+---
+
+## 0. 环境与变量
+
+```bash
+cd /mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent
+
+export DASHSCOPE_API_KEY='…'          # B3 波次 2 / B5 / B6 稳定性需要
+export PYTHON=python3
+export DEVICE=cuda                    # learned 可用 cpu
+# 可选：export REPO_ROOT=$PWD
+```
+
+---
+
+## 1. 共享地基（多任务共用）
+
+### 1.1 LLM 子集（B5 默认路径；B3 仍可用全量 test）
+
+```bash
+bash scripts/build_all_test_for_llm.sh
+# 或：LABEL_KEY=malignancy bash scripts/build_all_test_for_llm.sh
+```
+
+说明见 `scripts/README_test_for_llm.md`。`sample`、`nhc_misd_tus` 未包含在批量脚本中。
+
+### 1.2 Phase 1–2：写满各队列 `shared_intermediate`
+
+与 B3 默认队列一致（不含 NHC）：
+
+```bash
+./scripts/run_pipeline_all_cohorts.sh
+./scripts/run_pipeline_all_cohorts.sh --exclude tn3k          # 已在跑可跳过
+./scripts/run_pipeline_all_cohorts.sh --from ddti_seg --continue-on-error
+```
+
+单队列：
+
+```bash
+python run_pipeline.py --config config/b3/tn3k.yaml --device cuda
+```
+
+日志：`output/_pipeline_batch_logs/`。完成标准见脚本内 `phase12_complete`（`intermediate/seg/*.npz`、`intermediate/cls/*.json` 齐全）。
+
+### 1.3 B3 策略 1：`best_single`（验证集选专家）
+
+```bash
+python scripts/fit_best_single_expert.py \
+  --config config/b3/tn3k.yaml \
+  --intermediate "$(python -c "import yaml; c=yaml.safe_load(open('config/b3/tn3k.yaml')); print(c['pipeline']['ablation']['shared_intermediate'])")" \
+  --out artifacts/best_single_tn3k.json
+```
+
+`run_routing_ablation` 默认会读 `artifacts/best_single.json`；多队列可 `--best-single-artifact` 指定。
+
+### 1.4 默认队列与 ablation task
+
+| `cohort_id` | B3 `task` | 备注 |
+|-------------|-----------|------|
+| `tn3k`, `tn5k`, `thyroidxl`, `zjh8k`, `sample` | `both` | |
+| `rjh7k` | `both`（无 BM 标签时分类指标受限） | |
+| `ddti_seg`, `pktn` | `seg` | 无分类标签，不做 cls 消融 |
+| `ddti_cls` | `cls` | 无 mask，不做 seg 消融 |
+| `nhc_misd_tus` | `both` | 数据/政策按需；B5 计划含 NHC |
+
+B5 同名 yaml 在 `config/b5/`；`rjh7k` / `ddti_*` / `pktn` 的 `run_classification` / `task` 与上表一致。
+
+---
+
+## 2. B3　八种路由策略（波次 0–3）
+
+**输出根目录**（默认）：`output/ablation/b3/<cohort_id>/<routing_mode>/`  
+**汇总表**：`output/ablation/b3/<cohort_id>/_summary/b3_routing_table.csv`（`--summarize` 或 `python -m pipeline.ablation_summary --root …`）  
+**论文/回复用结论表**（波次 1 部分队列）：[`docs/revision/b3/B3_WAVE1_RESULTS.md`](revision/b3/B3_WAVE1_RESULTS.md)
+
+### 2.1 波次 1：六种非 LLM + Oracle（推荐 static bundle）
+
+全队列串行：
+
+```bash
+./scripts/run_b3_wave1_all_cohorts.sh
+./scripts/run_b3_wave1_all_cohorts.sh --exclude tn3k --skip-complete
+./scripts/run_b3_wave1_all_cohorts.sh --include-nhc
+```
+
+单队列：
+
+```bash
+python scripts/run_b3_batch.py \
+  --config config/b3/tn3k.yaml \
+  --preset wave1 \
+  --force-phase3 \
+  --summarize \
+  --task both
+```
+
+仅分割 / 仅分类：
+
+```bash
+python scripts/run_b3_batch.py --config config/b3/ddti_seg.yaml --preset wave1 --force-phase3 --summarize --task seg
+python scripts/run_b3_batch.py --config config/b3/ddti_cls.yaml --preset wave1 --force-phase3 --summarize --task cls
+```
+
+`wave1` 含：`soft_voting`, `majority`, `max_confidence`, `static_rule`, `best_single`, `oracle`。
+
+**大队列（ZJH-8K / RJH-7K）推荐拆两趟**（bundle 仅在含 `static_rule` 时跑 Radiomics judge；显著快于一次 `wave1`）：
+
+```bash
+export PYTHONWARNINGS="ignore::sklearn.exceptions.InconsistentVersionWarning"
+
+# 1) 五策略：无 radiomics judge、不读原图（仅 npz mask）
+python scripts/run_b3_batch.py --config config/b3/zjh8k.yaml \
+  --modes soft_voting,majority,max_confidence,best_single,oracle \
+  --force-phase3 --summarize --device cpu \
+  2>&1 | tee output/ablation/b3/_batch_logs/zjh8k_wave1_fast5.log
+
+# 2) static_rule 单独一趟（含 judge）
+python scripts/run_b3_batch.py --config config/b3/zjh8k.yaml \
+  --modes static_rule --force-phase3 --device cpu \
+  2>&1 | tee output/ablation/b3/_batch_logs/zjh8k_wave1_static_rule.log
+
+python -m pipeline.ablation_summary --root output/ablation/b3/zjh8k
+```
+
+监视：`./scripts/watch_b3_bundle_progress.sh zjh8k 30`（读 `.bundle_progress.json`）。
+
+对拍（每策略单独子进程，较慢）：
+
+```bash
+python scripts/run_b3_batch.py --config config/b3/sample.yaml --preset wave1 --force-phase3 --legacy-subprocess
+```
+
+### 2.2 波次 2：策略 7 `llm`（勿用 static bundle）
+
+须设 `DASHSCOPE_API_KEY`。`run_routing_ablation` 会在 `routing_mode=llm` 时自动 `enable_agent=true`。配置中建议 `pipeline.log_routing: true`（B6 日志）。
+
+```bash
+python scripts/run_routing_ablation.py \
+  --config config/b3/tn3k.yaml \
+  --routing-mode llm \
+  --task both \
+  --shared-intermediate output/TN3K/pipeline_run/intermediate \
+  --output-dir output/ablation/b3/tn3k/llm \
+  --force-phase3 \
+  --device cuda
+```
+
+`shared-intermediate` / `output-dir` 以各 yaml 的 `pipeline.ablation` 为准（勿硬编码路径时可从 config 读取）。
+
+### 2.3 波次 3：策略 6 `learned`
+
+```bash
+# 拟合或随机初始化占位 router
+python scripts/fit_learned_router.py --config config/b3/tn3k.yaml --intermediate <intermediate_dir>
+# 可选：--random-init（无 val 时占位）
+
+python scripts/run_learned_b3.py \
+  --config config/b3/tn3k.yaml \
+  --shared-intermediate <intermediate_dir> \
+  --output-dir output/ablation/b3/tn3k/learned \
+  --force-phase3 \
+  --device cpu
+```
+
+### 2.4 单次消融（任意 mode）
+
+```bash
+python scripts/run_routing_ablation.py \
+  --config config/b3/sample.yaml \
+  --routing-mode static_rule \
+  --task both \
+  --shared-intermediate output/sample/pipeline_run/intermediate \
+  --output-dir output/ablation/b3/sample/static_rule \
+  --force-phase3
+```
+
+异构 seg/cls：
+
+```bash
+python scripts/run_routing_ablation.py \
+  --routing-mode-seg llm \
+  --routing-mode-cls soft_voting \
+  ...
+```
+
+---
+
+## 3. B4　组件消融（L1–L3 + Path B 附录）
+
+**配置**：`config/b4/<cohort>.yaml`（`pipeline.ablation_b4` 指向 B3 的 `soft_voting` / `llm` 等目录）。
+
+### 3.1 L2 / L3
+
+- **L2**：B3 `soft_voting` 的 `results.json` / `b3_metrics.json`（跑完波次 1 即有）。
+- **L3**：B3 `llm` 目录（跑完波次 2）。
+- **L1**：单专家评测结果 JSON → `artifacts/b4_l1_<cohort>_placeholder.json`（正式队列替换为真实 `results_single_expert.json`）。
+
+### 3.2 Path B 附录 B-b（无 LLM，含 AutoGluon）
+
+```bash
+python scripts/run_b4_pathb_appendix.py \
+  --config config/b3/sample.yaml \
+  --shared-intermediate output/sample/pipeline_run/intermediate \
+  --output-dir output/ablation/b4/sample/path_b_autogluon \
+  --seg-mode soft_voting \
+  --force-phase3
+```
+
+与 L3 对齐时 `--seg-mode llm`（使用与 L3 相同的 mask 协议，见脚本注释与 `REVISION_B3_B4_PLAN.md` §5.1.2）。B-a / B-c 分别对应 B3 `soft_voting`（Path B cls）与 B3 `llm`。
+
+### 3.3 汇总主表
+
+```bash
+python scripts/build_b4_tables.py --config config/b4/tn3k.yaml
+# 或：--output-dir output/ablation/b4/tn3k
+```
+
+产物：`b4_component_table.csv`、`b4_pathb_radiomics_table.csv` 等（见 `pipeline/b4_summary.py`）。
+
+### 3.4 S4 校验（可选）
+
+`run_pipeline.py` + 投稿等价配置，输出目录如 `output/ablation/b4/<cohort>/s4_replica/`；应与 L3 **同 manifest、同指标**（见 B4 计划 §5.3）。
+
+---
+
+## 4. B5　路由元数据消融（固定 `llm`，五种 `metadata_mode`）
+
+**配置**：`config/b5/<cohort>.yaml`  
+**输出**：`output/ablation/b5/<cohort>/<metadata_mode>/`
+
+`metadata_mode`：`full` | `drop_device` | `drop_source` | `drop_both` | `quality_only`
+
+```bash
+python scripts/run_b5_batch.py \
+  --config config/b5/tn3k.yaml \
+  --force-phase3 \
+  --skip-full
+```
+
+- `--skip-full`：`full` 复用 B3 `output/ablation/b3/<cohort>/llm`，省 API。
+- 子集 mode：`--modes drop_device quality_only`
+
+**注意**：B5 图像列表为 for_llm 子集时，`shared_intermediate` 须对**同一批图像**跑过 Phase 1–2（或单独 pipeline_run），否则 Phase 3 索引会对不齐。见 `config/b5/README.md`。
+
+### 4.1 汇总与选择偏差
+
+```bash
+python scripts/build_b5_tables.py --root output/ablation/b5
+```
+
+热图 / 互信息（需 `routing_log.jsonl`）：
+
+```bash
+python pipeline/analyze_routing_bias.py \
+  --log output/ablation/b5/tn3k/drop_both/routing_log.jsonl \
+  --labels /path/to/labels.json \
+  --centre-key centre \
+  --out output/ablation/b5/tn3k/drop_both/routing_bias.json \
+  --heatmap output/ablation/b5/tn3k/drop_both/centre_expert_heatmap.png
+```
+
+---
+
+## 5. B6　路由器透明性与稳定性
+
+### 5.1 规格导出（无 GPU）
+
+```bash
+python scripts/export_router_spec.py \
+  --config config/b3/sample.yaml \
+  --out docs/supplementary/router_spec.md
+```
+
+### 5.2 全 pipeline 路由日志
+
+在对应 config 中：
+
+```yaml
+pipeline:
+  log_routing: true
+  routing_log_include_prompts: false   # 样例审计可 true
+```
+
+跑 `run_pipeline.py` 或 `run_routing_ablation.py`（`llm`）后得到 `{output_dir}/routing_log.jsonl`。
+
+### 5.3 5× 稳定性（复用 intermediate，仅重复 LLM 路由）
+
+配置中分割/分类 `agent.enable_agent: true`（或仅用 B3/B5 的 llm 跑数 config）。
+
+```bash
+python run_routing_stability.py \
+  --config config/b3/sample.yaml \
+  --output-dir output/sample/pipeline_run \
+  --repeats 5 \
+  --max-cases 50 \
+  --device cuda
+```
+
+产物：`stability_summary.json`（及可选 per-case jsonl）。分析仅针对 **曾调用 LLM** 的子集；Path A 一致短路不做 5×。
+
+---
+
+## 6. 推荐端到端顺序（单 cohort 示例 `tn3k`）
+
+```bash
+# 1) 地基
+python run_pipeline.py --config config/b3/tn3k.yaml --device cuda
+python scripts/fit_best_single_expert.py --config config/b3/tn3k.yaml --intermediate <yaml.shared_intermediate>
+
+# 2) B3
+python scripts/run_b3_batch.py --config config/b3/tn3k.yaml --preset wave1 --force-phase3 --summarize
+python scripts/run_routing_ablation.py --config config/b3/tn3k.yaml --routing-mode llm \
+  --task both --shared-intermediate <intermediate> --output-dir output/ablation/b3/tn3k/llm --force-phase3
+python scripts/fit_learned_router.py --config config/b3/tn3k.yaml --intermediate <intermediate>
+python scripts/run_learned_b3.py --config config/b3/tn3k.yaml --shared-intermediate <intermediate> \
+  --output-dir output/ablation/b3/tn3k/learned --force-phase3 --device cpu
+
+# 3) B4
+python scripts/run_b4_pathb_appendix.py --config config/b3/tn3k.yaml --shared-intermediate <intermediate> \
+  --output-dir output/ablation/b4/tn3k/path_b_autogluon --seg-mode llm --force-phase3
+python scripts/build_b4_tables.py --config config/b4/tn3k.yaml
+
+# 4) B5（for_llm 路径 + 对齐的 intermediate）
+python scripts/run_b5_batch.py --config config/b5/tn3k.yaml --force-phase3 --skip-full
+python scripts/build_b5_tables.py --root output/ablation/b5
+
+# 5) B6（可与波次 2 同次 llm 跑数一并出 log；稳定性单独跑）
+python scripts/export_router_spec.py --config config/b3/tn3k.yaml
+python run_routing_stability.py --config config/b3/tn3k.yaml --output-dir <pipeline_output_dir> --repeats 5
+```
+
+全队列批量：**§1.2** → **`./scripts/run_b3_wave1_all_cohorts.sh`** → 各 cohort 波次 2/3/B5/B4 按需调度。
+
+---
+
+## 7. 配置同步
+
+从模板重生成 B3/B4/B5 yaml（会覆盖手改路径，慎用）：
+
+```bash
+python scripts/generate_ablation_configs.py
+```
+
+---
+
+## 8. 待追加任务（占位）
+
+- **B7**（中心异质性 / meta）：命令见 `docs/REVISION_B7_B8_PLAN.md`，实现后在此节补全。
+- **B8** 及后续：同上。
+
+---
+
+*路径以各 `config/b3|b4|b5/<cohort>.yaml` 为准；与仓库脚本同步维护本 Runbook。*

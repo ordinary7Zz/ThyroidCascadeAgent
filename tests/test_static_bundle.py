@@ -4,6 +4,7 @@ import importlib.util
 import json
 import unittest
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -16,6 +17,32 @@ def _load(rel: str, name: str):
 
 
 class StaticBundleTest(unittest.TestCase):
+    def test_phase3_expert_judge_skips_bundle_judge_batch(self):
+        from pipeline.static_b3_bundle import _pick_seg_decision
+
+        pipeline = MagicMock()
+        pipeline._select_mask_static.return_value = (MagicMock(selected_mask=None), {})
+        judge = MagicMock()
+        judge.judge_batch = MagicMock()
+        pipeline.seg_agent.radiomics_judge = judge
+
+        _pick_seg_decision(
+            pipeline,
+            "static_rule",
+            image=MagicMock(),
+            seg_preds=[MagicMock(mask=MagicMock())],
+            anchor_class="恶性",
+            gt_mask=None,
+            judge_results=None,
+            best_single_seg=None,
+            input_device_info=None,
+            input_data_info=None,
+            skip_radiomics=True,
+        )
+        pipeline._select_mask_static.assert_called_once()
+        call_kw = pipeline._select_mask_static.call_args.kwargs
+        self.assertTrue(call_kw.get("skip_radiomics"))
+
     def test_static_modes_only(self):
         bundle = _load("pipeline/static_b3_bundle.py", "static_b3_bundle")
         self.assertIn("soft_voting", bundle.STATIC_B3_MODES)

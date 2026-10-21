@@ -15,6 +15,10 @@ import os
 import argparse
 from pathlib import Path
 
+from shared.sklearn_warnings import configure_sklearn_pickle_warnings
+
+configure_sklearn_pickle_warnings()
+
 import yaml
 
 from shared.image_io import ImageIO

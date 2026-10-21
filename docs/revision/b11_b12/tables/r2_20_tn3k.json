@@ -1,0 +1,4809 @@
+{
+  "summary": {
+    "gt_mask_dir": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN3K/test/masks",
+    "selected_masks_npz": "output/TN3K/pipeline_run/intermediate/selected_masks.npz",
+    "n_matched": 614,
+    "mm_per_pixel": 0.1,
+    "max_diameter_mm": 5.0,
+    "n_gt_below_max_diameter_mm": 68,
+    "n_pred_fail_small": 2,
+    "mean_dice_small_gt": 0.7714735294117647,
+    "min_component_px_dino_postprocess": 50,
+    "n_gt_foreground_area_below_min_component_disk": 68,
+    "note": "Radiomics path has no extra CCA; Dice uses selected_masks. d_mm requires --mm-per-pixel (cohort-specific; confirm with B1/clinical spacing)."
+  },
+  "rows": [
+    {
+      "stem": "TN3K_test_0000",
+      "gt_equiv_diameter_px": 72.1,
+      "gt_equiv_diameter_mm": 7.21,
+      "dice": 0.9541,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0001",
+      "gt_equiv_diameter_px": 266.63,
+      "gt_equiv_diameter_mm": 26.663,
+      "dice": 0.9417,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0002",
+      "gt_equiv_diameter_px": 156.37,
+      "gt_equiv_diameter_mm": 15.637,
+      "dice": 0.3786,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0003",
+      "gt_equiv_diameter_px": 161.38,
+      "gt_equiv_diameter_mm": 16.138,
+      "dice": 0.5189,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0004",
+      "gt_equiv_diameter_px": 42.68,
+      "gt_equiv_diameter_mm": 4.268,
+      "dice": 0.9432,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0005",
+      "gt_equiv_diameter_px": 186.05,
+      "gt_equiv_diameter_mm": 18.605,
+      "dice": 0.8365,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0006",
+      "gt_equiv_diameter_px": 155.77,
+      "gt_equiv_diameter_mm": 15.577,
+      "dice": 0.9054,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0007",
+      "gt_equiv_diameter_px": 79.35,
+      "gt_equiv_diameter_mm": 7.935,
+      "dice": 0.9127,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0008",
+      "gt_equiv_diameter_px": 113.91,
+      "gt_equiv_diameter_mm": 11.391,
+      "dice": 0.9189,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0009",
+      "gt_equiv_diameter_px": 362.83,
+      "gt_equiv_diameter_mm": 36.283,
+      "dice": 0.9585,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0010",
+      "gt_equiv_diameter_px": 205.43,
+      "gt_equiv_diameter_mm": 20.543,
+      "dice": 0.9787,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0011",
+      "gt_equiv_diameter_px": 192.21,
+      "gt_equiv_diameter_mm": 19.221,
+      "dice": 0.783,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0012",
+      "gt_equiv_diameter_px": 231.37,
+      "gt_equiv_diameter_mm": 23.137,
+      "dice": 0.932,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0013",
+      "gt_equiv_diameter_px": 133.14,
+      "gt_equiv_diameter_mm": 13.314,
+      "dice": 0.9605,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0014",
+      "gt_equiv_diameter_px": 259.51,
+      "gt_equiv_diameter_mm": 25.951,
+      "dice": 0.9751,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0015",
+      "gt_equiv_diameter_px": 42.43,
+      "gt_equiv_diameter_mm": 4.243,
+      "dice": 0.4534,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0016",
+      "gt_equiv_diameter_px": 48.93,
+      "gt_equiv_diameter_mm": 4.893,
+      "dice": 0.6928,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0017",
+      "gt_equiv_diameter_px": 65.59,
+      "gt_equiv_diameter_mm": 6.559,
+      "dice": 0.8389,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0018",
+      "gt_equiv_diameter_px": 279.27,
+      "gt_equiv_diameter_mm": 27.927,
+      "dice": 0.9782,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0019",
+      "gt_equiv_diameter_px": 159.29,
+      "gt_equiv_diameter_mm": 15.929,
+      "dice": 0.8624,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0020",
+      "gt_equiv_diameter_px": 196.44,
+      "gt_equiv_diameter_mm": 19.644,
+      "dice": 0.807,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0021",
+      "gt_equiv_diameter_px": 481.3,
+      "gt_equiv_diameter_mm": 48.13,
+      "dice": 0.9673,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0022",
+      "gt_equiv_diameter_px": 131.92,
+      "gt_equiv_diameter_mm": 13.192,
+      "dice": 0.9421,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0023",
+      "gt_equiv_diameter_px": 93.03,
+      "gt_equiv_diameter_mm": 9.303,
+      "dice": 0.9251,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0024",
+      "gt_equiv_diameter_px": 208.52,
+      "gt_equiv_diameter_mm": 20.852,
+      "dice": 0.9515,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0025",
+      "gt_equiv_diameter_px": 197.38,
+      "gt_equiv_diameter_mm": 19.738,
+      "dice": 0.9519,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0026",
+      "gt_equiv_diameter_px": 108.97,
+      "gt_equiv_diameter_mm": 10.897,
+      "dice": 0.9404,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0027",
+      "gt_equiv_diameter_px": 83.92,
+      "gt_equiv_diameter_mm": 8.392,
+      "dice": 0.9363,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0028",
+      "gt_equiv_diameter_px": 189.32,
+      "gt_equiv_diameter_mm": 18.932,
+      "dice": 0.9308,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0029",
+      "gt_equiv_diameter_px": 254.9,
+      "gt_equiv_diameter_mm": 25.49,
+      "dice": 0.8605,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0030",
+      "gt_equiv_diameter_px": 37.88,
+      "gt_equiv_diameter_mm": 3.788,
+      "dice": 0.8762,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0031",
+      "gt_equiv_diameter_px": 31.23,
+      "gt_equiv_diameter_mm": 3.123,
+      "dice": 0.8013,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0032",
+      "gt_equiv_diameter_px": 166.28,
+      "gt_equiv_diameter_mm": 16.628,
+      "dice": 0.9352,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0033",
+      "gt_equiv_diameter_px": 73.53,
+      "gt_equiv_diameter_mm": 7.353,
+      "dice": 0.9518,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0034",
+      "gt_equiv_diameter_px": 90.14,
+      "gt_equiv_diameter_mm": 9.014,
+      "dice": 0.9086,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0035",
+      "gt_equiv_diameter_px": 66.73,
+      "gt_equiv_diameter_mm": 6.673,
+      "dice": 0.8514,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0036",
+      "gt_equiv_diameter_px": 64.59,
+      "gt_equiv_diameter_mm": 6.459,
+      "dice": 0.5353,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0037",
+      "gt_equiv_diameter_px": 39.28,
+      "gt_equiv_diameter_mm": 3.928,
+      "dice": 0.2572,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0038",
+      "gt_equiv_diameter_px": 433.8,
+      "gt_equiv_diameter_mm": 43.38,
+      "dice": 0.5536,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0039",
+      "gt_equiv_diameter_px": 57.86,
+      "gt_equiv_diameter_mm": 5.786,
+      "dice": 0.8605,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0040",
+      "gt_equiv_diameter_px": 207.84,
+      "gt_equiv_diameter_mm": 20.784,
+      "dice": 0.8031,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0041",
+      "gt_equiv_diameter_px": 171.1,
+      "gt_equiv_diameter_mm": 17.11,
+      "dice": 0.9329,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0042",
+      "gt_equiv_diameter_px": 332.66,
+      "gt_equiv_diameter_mm": 33.266,
+      "dice": 0.9491,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0043",
+      "gt_equiv_diameter_px": 274.32,
+      "gt_equiv_diameter_mm": 27.432,
+      "dice": 0.9768,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0044",
+      "gt_equiv_diameter_px": 146.11,
+      "gt_equiv_diameter_mm": 14.611,
+      "dice": 0.5883,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0045",
+      "gt_equiv_diameter_px": 130.06,
+      "gt_equiv_diameter_mm": 13.006,
+      "dice": 0.9519,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0046",
+      "gt_equiv_diameter_px": 73.87,
+      "gt_equiv_diameter_mm": 7.387,
+      "dice": 0.9452,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0047",
+      "gt_equiv_diameter_px": 143.17,
+      "gt_equiv_diameter_mm": 14.317,
+      "dice": 0.7369,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0048",
+      "gt_equiv_diameter_px": 95.29,
+      "gt_equiv_diameter_mm": 9.529,
+      "dice": 0.8852,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0049",
+      "gt_equiv_diameter_px": 180.64,
+      "gt_equiv_diameter_mm": 18.064,
+      "dice": 0.7108,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0050",
+      "gt_equiv_diameter_px": 66.98,
+      "gt_equiv_diameter_mm": 6.698,
+      "dice": 0.8989,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0051",
+      "gt_equiv_diameter_px": 129.09,
+      "gt_equiv_diameter_mm": 12.909,
+      "dice": 0.9096,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0052",
+      "gt_equiv_diameter_px": 245.77,
+      "gt_equiv_diameter_mm": 24.577,
+      "dice": 0.9144,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0053",
+      "gt_equiv_diameter_px": 126.65,
+      "gt_equiv_diameter_mm": 12.665,
+      "dice": 0.4871,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0054",
+      "gt_equiv_diameter_px": 367.24,
+      "gt_equiv_diameter_mm": 36.724,
+      "dice": 0.7587,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0055",
+      "gt_equiv_diameter_px": 342.56,
+      "gt_equiv_diameter_mm": 34.256,
+      "dice": 0.955,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0056",
+      "gt_equiv_diameter_px": 227.58,
+      "gt_equiv_diameter_mm": 22.758,
+      "dice": 0.4264,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0057",
+      "gt_equiv_diameter_px": 219.46,
+      "gt_equiv_diameter_mm": 21.946,
+      "dice": 0.9209,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0058",
+      "gt_equiv_diameter_px": 712.97,
+      "gt_equiv_diameter_mm": 71.297,
+      "dice": 0.8973,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0059",
+      "gt_equiv_diameter_px": 192.28,
+      "gt_equiv_diameter_mm": 19.228,
+      "dice": 0.9447,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0060",
+      "gt_equiv_diameter_px": 213.69,
+      "gt_equiv_diameter_mm": 21.369,
+      "dice": 0.9656,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0061",
+      "gt_equiv_diameter_px": 101.82,
+      "gt_equiv_diameter_mm": 10.182,
+      "dice": 0.9389,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0062",
+      "gt_equiv_diameter_px": 563.32,
+      "gt_equiv_diameter_mm": 56.332,
+      "dice": 0.9442,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0063",
+      "gt_equiv_diameter_px": 234.06,
+      "gt_equiv_diameter_mm": 23.406,
+      "dice": 0.9452,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0064",
+      "gt_equiv_diameter_px": 318.73,
+      "gt_equiv_diameter_mm": 31.873,
+      "dice": 0.9177,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0065",
+      "gt_equiv_diameter_px": 225.59,
+      "gt_equiv_diameter_mm": 22.559,
+      "dice": 0.9463,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0066",
+      "gt_equiv_diameter_px": 254.88,
+      "gt_equiv_diameter_mm": 25.488,
+      "dice": 0.9737,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0067",
+      "gt_equiv_diameter_px": 123.74,
+      "gt_equiv_diameter_mm": 12.374,
+      "dice": 0.6568,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0068",
+      "gt_equiv_diameter_px": 260.16,
+      "gt_equiv_diameter_mm": 26.016,
+      "dice": 0.9339,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0069",
+      "gt_equiv_diameter_px": 321.43,
+      "gt_equiv_diameter_mm": 32.143,
+      "dice": 0.9706,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0070",
+      "gt_equiv_diameter_px": 314.75,
+      "gt_equiv_diameter_mm": 31.475,
+      "dice": 0.9507,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0071",
+      "gt_equiv_diameter_px": 301.12,
+      "gt_equiv_diameter_mm": 30.112,
+      "dice": 0.9642,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0072",
+      "gt_equiv_diameter_px": 125.58,
+      "gt_equiv_diameter_mm": 12.558,
+      "dice": 0.8994,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0073",
+      "gt_equiv_diameter_px": 100.5,
+      "gt_equiv_diameter_mm": 10.05,
+      "dice": 0.9357,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0074",
+      "gt_equiv_diameter_px": 59.6,
+      "gt_equiv_diameter_mm": 5.96,
+      "dice": 0.5941,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0075",
+      "gt_equiv_diameter_px": 130.49,
+      "gt_equiv_diameter_mm": 13.049,
+      "dice": 0.9589,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0076",
+      "gt_equiv_diameter_px": 193.36,
+      "gt_equiv_diameter_mm": 19.336,
+      "dice": 0.5323,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0077",
+      "gt_equiv_diameter_px": 84.52,
+      "gt_equiv_diameter_mm": 8.452,
+      "dice": 0.8529,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0078",
+      "gt_equiv_diameter_px": 37.88,
+      "gt_equiv_diameter_mm": 3.788,
+      "dice": 0.9109,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0079",
+      "gt_equiv_diameter_px": 161.85,
+      "gt_equiv_diameter_mm": 16.185,
+      "dice": 0.7728,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0080",
+      "gt_equiv_diameter_px": 249.03,
+      "gt_equiv_diameter_mm": 24.903,
+      "dice": 0.9272,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0081",
+      "gt_equiv_diameter_px": 74.92,
+      "gt_equiv_diameter_mm": 7.492,
+      "dice": 0.749,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0082",
+      "gt_equiv_diameter_px": 98.29,
+      "gt_equiv_diameter_mm": 9.829,
+      "dice": 0.9385,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0083",
+      "gt_equiv_diameter_px": 398.29,
+      "gt_equiv_diameter_mm": 39.829,
+      "dice": 0.9453,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0084",
+      "gt_equiv_diameter_px": 242.13,
+      "gt_equiv_diameter_mm": 24.213,
+      "dice": 0.9638,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0085",
+      "gt_equiv_diameter_px": 78.47,
+      "gt_equiv_diameter_mm": 7.847,
+      "dice": 0.6716,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0086",
+      "gt_equiv_diameter_px": 172.12,
+      "gt_equiv_diameter_mm": 17.212,
+      "dice": 0.9521,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0087",
+      "gt_equiv_diameter_px": 154.29,
+      "gt_equiv_diameter_mm": 15.429,
+      "dice": 0.6778,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0088",
+      "gt_equiv_diameter_px": 108.78,
+      "gt_equiv_diameter_mm": 10.878,
+      "dice": 0.9734,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0089",
+      "gt_equiv_diameter_px": 200.62,
+      "gt_equiv_diameter_mm": 20.062,
+      "dice": 0.9866,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0090",
+      "gt_equiv_diameter_px": 55.78,
+      "gt_equiv_diameter_mm": 5.578,
+      "dice": 0.9019,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0091",
+      "gt_equiv_diameter_px": 36.84,
+      "gt_equiv_diameter_mm": 3.684,
+      "dice": 0.933,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0092",
+      "gt_equiv_diameter_px": 160.94,
+      "gt_equiv_diameter_mm": 16.094,
+      "dice": 0.9429,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0093",
+      "gt_equiv_diameter_px": 119.77,
+      "gt_equiv_diameter_mm": 11.977,
+      "dice": 0.9597,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0094",
+      "gt_equiv_diameter_px": 98.87,
+      "gt_equiv_diameter_mm": 9.887,
+      "dice": 0.8381,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0095",
+      "gt_equiv_diameter_px": 24.93,
+      "gt_equiv_diameter_mm": 2.493,
+      "dice": 0.8167,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0096",
+      "gt_equiv_diameter_px": 276.78,
+      "gt_equiv_diameter_mm": 27.678,
+      "dice": 0.9776,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0097",
+      "gt_equiv_diameter_px": 181.96,
+      "gt_equiv_diameter_mm": 18.196,
+      "dice": 0.9674,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0098",
+      "gt_equiv_diameter_px": 226.5,
+      "gt_equiv_diameter_mm": 22.65,
+      "dice": 0.986,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0099",
+      "gt_equiv_diameter_px": 164.88,
+      "gt_equiv_diameter_mm": 16.488,
+      "dice": 0.9404,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0100",
+      "gt_equiv_diameter_px": 168.36,
+      "gt_equiv_diameter_mm": 16.836,
+      "dice": 0.8186,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0101",
+      "gt_equiv_diameter_px": 48.44,
+      "gt_equiv_diameter_mm": 4.844,
+      "dice": 0.9267,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0102",
+      "gt_equiv_diameter_px": 46.84,
+      "gt_equiv_diameter_mm": 4.684,
+      "dice": 0.818,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0103",
+      "gt_equiv_diameter_px": 432.36,
+      "gt_equiv_diameter_mm": 43.236,
+      "dice": 0.981,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0104",
+      "gt_equiv_diameter_px": 402.82,
+      "gt_equiv_diameter_mm": 40.282,
+      "dice": 0.9377,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0105",
+      "gt_equiv_diameter_px": 129.55,
+      "gt_equiv_diameter_mm": 12.955,
+      "dice": 0.8966,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0106",
+      "gt_equiv_diameter_px": 166.58,
+      "gt_equiv_diameter_mm": 16.658,
+      "dice": 0.8828,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0107",
+      "gt_equiv_diameter_px": 26.84,
+      "gt_equiv_diameter_mm": 2.684,
+      "dice": 0.0,
+      "pred_empty": true
+    },
+    {
+      "stem": "TN3K_test_0108",
+      "gt_equiv_diameter_px": 96.0,
+      "gt_equiv_diameter_mm": 9.6,
+      "dice": 0.8164,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0109",
+      "gt_equiv_diameter_px": 132.65,
+      "gt_equiv_diameter_mm": 13.265,
+      "dice": 0.8696,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0110",
+      "gt_equiv_diameter_px": 249.31,
+      "gt_equiv_diameter_mm": 24.931,
+      "dice": 0.9578,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0111",
+      "gt_equiv_diameter_px": 99.94,
+      "gt_equiv_diameter_mm": 9.994,
+      "dice": 0.9183,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0112",
+      "gt_equiv_diameter_px": 97.2,
+      "gt_equiv_diameter_mm": 9.72,
+      "dice": 0.9716,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0113",
+      "gt_equiv_diameter_px": 318.67,
+      "gt_equiv_diameter_mm": 31.867,
+      "dice": 0.8272,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0114",
+      "gt_equiv_diameter_px": 348.33,
+      "gt_equiv_diameter_mm": 34.833,
+      "dice": 0.9578,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0115",
+      "gt_equiv_diameter_px": 209.93,
+      "gt_equiv_diameter_mm": 20.993,
+      "dice": 0.8344,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0116",
+      "gt_equiv_diameter_px": 232.63,
+      "gt_equiv_diameter_mm": 23.263,
+      "dice": 0.9662,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0117",
+      "gt_equiv_diameter_px": 42.7,
+      "gt_equiv_diameter_mm": 4.27,
+      "dice": 0.8328,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0118",
+      "gt_equiv_diameter_px": 61.76,
+      "gt_equiv_diameter_mm": 6.176,
+      "dice": 0.9467,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0119",
+      "gt_equiv_diameter_px": 127.12,
+      "gt_equiv_diameter_mm": 12.712,
+      "dice": 0.9512,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0120",
+      "gt_equiv_diameter_px": 197.46,
+      "gt_equiv_diameter_mm": 19.746,
+      "dice": 0.9728,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0121",
+      "gt_equiv_diameter_px": 301.4,
+      "gt_equiv_diameter_mm": 30.14,
+      "dice": 0.9447,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0122",
+      "gt_equiv_diameter_px": 128.65,
+      "gt_equiv_diameter_mm": 12.865,
+      "dice": 0.9503,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0123",
+      "gt_equiv_diameter_px": 61.35,
+      "gt_equiv_diameter_mm": 6.135,
+      "dice": 0.9166,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0124",
+      "gt_equiv_diameter_px": 49.82,
+      "gt_equiv_diameter_mm": 4.982,
+      "dice": 0.9167,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0125",
+      "gt_equiv_diameter_px": 215.85,
+      "gt_equiv_diameter_mm": 21.585,
+      "dice": 0.8975,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0126",
+      "gt_equiv_diameter_px": 201.89,
+      "gt_equiv_diameter_mm": 20.189,
+      "dice": 0.9569,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0127",
+      "gt_equiv_diameter_px": 176.98,
+      "gt_equiv_diameter_mm": 17.698,
+      "dice": 0.8956,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0128",
+      "gt_equiv_diameter_px": 70.23,
+      "gt_equiv_diameter_mm": 7.023,
+      "dice": 0.9174,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0129",
+      "gt_equiv_diameter_px": 76.39,
+      "gt_equiv_diameter_mm": 7.639,
+      "dice": 0.9419,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0130",
+      "gt_equiv_diameter_px": 292.28,
+      "gt_equiv_diameter_mm": 29.228,
+      "dice": 0.9639,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0131",
+      "gt_equiv_diameter_px": 455.52,
+      "gt_equiv_diameter_mm": 45.552,
+      "dice": 0.9672,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0132",
+      "gt_equiv_diameter_px": 74.34,
+      "gt_equiv_diameter_mm": 7.434,
+      "dice": 0.6806,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0133",
+      "gt_equiv_diameter_px": 194.54,
+      "gt_equiv_diameter_mm": 19.454,
+      "dice": 0.9568,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0134",
+      "gt_equiv_diameter_px": 90.68,
+      "gt_equiv_diameter_mm": 9.068,
+      "dice": 0.943,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0135",
+      "gt_equiv_diameter_px": 184.91,
+      "gt_equiv_diameter_mm": 18.491,
+      "dice": 0.9557,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0136",
+      "gt_equiv_diameter_px": 64.36,
+      "gt_equiv_diameter_mm": 6.436,
+      "dice": 0.9204,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0137",
+      "gt_equiv_diameter_px": 100.44,
+      "gt_equiv_diameter_mm": 10.044,
+      "dice": 0.9663,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0138",
+      "gt_equiv_diameter_px": 180.77,
+      "gt_equiv_diameter_mm": 18.077,
+      "dice": 0.6879,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0139",
+      "gt_equiv_diameter_px": 122.61,
+      "gt_equiv_diameter_mm": 12.261,
+      "dice": 0.9451,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0140",
+      "gt_equiv_diameter_px": 194.25,
+      "gt_equiv_diameter_mm": 19.425,
+      "dice": 0.956,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0141",
+      "gt_equiv_diameter_px": 278.14,
+      "gt_equiv_diameter_mm": 27.814,
+      "dice": 0.9215,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0142",
+      "gt_equiv_diameter_px": 212.05,
+      "gt_equiv_diameter_mm": 21.205,
+      "dice": 0.9609,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0143",
+      "gt_equiv_diameter_px": 305.5,
+      "gt_equiv_diameter_mm": 30.55,
+      "dice": 0.888,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0144",
+      "gt_equiv_diameter_px": 162.05,
+      "gt_equiv_diameter_mm": 16.205,
+      "dice": 0.9507,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0145",
+      "gt_equiv_diameter_px": 193.72,
+      "gt_equiv_diameter_mm": 19.372,
+      "dice": 0.804,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0146",
+      "gt_equiv_diameter_px": 266.38,
+      "gt_equiv_diameter_mm": 26.638,
+      "dice": 0.9551,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0147",
+      "gt_equiv_diameter_px": 98.58,
+      "gt_equiv_diameter_mm": 9.858,
+      "dice": 0.9571,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0148",
+      "gt_equiv_diameter_px": 499.96,
+      "gt_equiv_diameter_mm": 49.996,
+      "dice": 0.422,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0149",
+      "gt_equiv_diameter_px": 34.85,
+      "gt_equiv_diameter_mm": 3.485,
+      "dice": 0.845,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0150",
+      "gt_equiv_diameter_px": 152.36,
+      "gt_equiv_diameter_mm": 15.236,
+      "dice": 0.902,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0151",
+      "gt_equiv_diameter_px": 167.48,
+      "gt_equiv_diameter_mm": 16.748,
+      "dice": 0.9114,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0152",
+      "gt_equiv_diameter_px": 239.62,
+      "gt_equiv_diameter_mm": 23.962,
+      "dice": 0.9595,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0153",
+      "gt_equiv_diameter_px": 290.26,
+      "gt_equiv_diameter_mm": 29.026,
+      "dice": 0.8815,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0154",
+      "gt_equiv_diameter_px": 131.42,
+      "gt_equiv_diameter_mm": 13.142,
+      "dice": 0.858,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0155",
+      "gt_equiv_diameter_px": 341.18,
+      "gt_equiv_diameter_mm": 34.118,
+      "dice": 0.831,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0156",
+      "gt_equiv_diameter_px": 265.02,
+      "gt_equiv_diameter_mm": 26.502,
+      "dice": 0.8628,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0157",
+      "gt_equiv_diameter_px": 167.3,
+      "gt_equiv_diameter_mm": 16.73,
+      "dice": 0.9175,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0158",
+      "gt_equiv_diameter_px": 274.69,
+      "gt_equiv_diameter_mm": 27.469,
+      "dice": 0.611,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0159",
+      "gt_equiv_diameter_px": 185.83,
+      "gt_equiv_diameter_mm": 18.583,
+      "dice": 0.9584,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0160",
+      "gt_equiv_diameter_px": 145.83,
+      "gt_equiv_diameter_mm": 14.583,
+      "dice": 0.6981,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0161",
+      "gt_equiv_diameter_px": 516.13,
+      "gt_equiv_diameter_mm": 51.613,
+      "dice": 0.8832,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0162",
+      "gt_equiv_diameter_px": 438.04,
+      "gt_equiv_diameter_mm": 43.804,
+      "dice": 0.9182,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0163",
+      "gt_equiv_diameter_px": 317.26,
+      "gt_equiv_diameter_mm": 31.726,
+      "dice": 0.7648,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0164",
+      "gt_equiv_diameter_px": 22.26,
+      "gt_equiv_diameter_mm": 2.226,
+      "dice": 0.7531,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0165",
+      "gt_equiv_diameter_px": 209.85,
+      "gt_equiv_diameter_mm": 20.985,
+      "dice": 0.9688,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0166",
+      "gt_equiv_diameter_px": 139.08,
+      "gt_equiv_diameter_mm": 13.908,
+      "dice": 0.9688,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0167",
+      "gt_equiv_diameter_px": 292.01,
+      "gt_equiv_diameter_mm": 29.201,
+      "dice": 0.8607,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0168",
+      "gt_equiv_diameter_px": 117.91,
+      "gt_equiv_diameter_mm": 11.791,
+      "dice": 0.9362,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0169",
+      "gt_equiv_diameter_px": 260.37,
+      "gt_equiv_diameter_mm": 26.037,
+      "dice": 0.919,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0170",
+      "gt_equiv_diameter_px": 109.06,
+      "gt_equiv_diameter_mm": 10.906,
+      "dice": 0.9569,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0171",
+      "gt_equiv_diameter_px": 234.09,
+      "gt_equiv_diameter_mm": 23.409,
+      "dice": 0.5471,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0172",
+      "gt_equiv_diameter_px": 120.06,
+      "gt_equiv_diameter_mm": 12.006,
+      "dice": 0.7592,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0173",
+      "gt_equiv_diameter_px": 85.05,
+      "gt_equiv_diameter_mm": 8.505,
+      "dice": 0.8039,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0174",
+      "gt_equiv_diameter_px": 35.09,
+      "gt_equiv_diameter_mm": 3.509,
+      "dice": 0.9218,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0175",
+      "gt_equiv_diameter_px": 225.35,
+      "gt_equiv_diameter_mm": 22.535,
+      "dice": 0.745,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0176",
+      "gt_equiv_diameter_px": 67.96,
+      "gt_equiv_diameter_mm": 6.796,
+      "dice": 0.9121,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0177",
+      "gt_equiv_diameter_px": 346.0,
+      "gt_equiv_diameter_mm": 34.6,
+      "dice": 0.7441,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0178",
+      "gt_equiv_diameter_px": 77.92,
+      "gt_equiv_diameter_mm": 7.792,
+      "dice": 0.8059,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0179",
+      "gt_equiv_diameter_px": 280.13,
+      "gt_equiv_diameter_mm": 28.013,
+      "dice": 0.9728,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0180",
+      "gt_equiv_diameter_px": 174.52,
+      "gt_equiv_diameter_mm": 17.452,
+      "dice": 0.8928,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0181",
+      "gt_equiv_diameter_px": 43.26,
+      "gt_equiv_diameter_mm": 4.326,
+      "dice": 0.8716,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0182",
+      "gt_equiv_diameter_px": 120.54,
+      "gt_equiv_diameter_mm": 12.054,
+      "dice": 0.9609,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0183",
+      "gt_equiv_diameter_px": 64.82,
+      "gt_equiv_diameter_mm": 6.482,
+      "dice": 0.5307,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0184",
+      "gt_equiv_diameter_px": 82.29,
+      "gt_equiv_diameter_mm": 8.229,
+      "dice": 0.8989,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0185",
+      "gt_equiv_diameter_px": 248.9,
+      "gt_equiv_diameter_mm": 24.89,
+      "dice": 0.9897,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0186",
+      "gt_equiv_diameter_px": 28.52,
+      "gt_equiv_diameter_mm": 2.852,
+      "dice": 0.6601,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0187",
+      "gt_equiv_diameter_px": 201.41,
+      "gt_equiv_diameter_mm": 20.141,
+      "dice": 0.5498,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0188",
+      "gt_equiv_diameter_px": 210.37,
+      "gt_equiv_diameter_mm": 21.037,
+      "dice": 0.837,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0189",
+      "gt_equiv_diameter_px": 135.41,
+      "gt_equiv_diameter_mm": 13.541,
+      "dice": 0.9263,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0190",
+      "gt_equiv_diameter_px": 249.55,
+      "gt_equiv_diameter_mm": 24.955,
+      "dice": 0.9008,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0191",
+      "gt_equiv_diameter_px": 319.29,
+      "gt_equiv_diameter_mm": 31.929,
+      "dice": 0.8186,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0192",
+      "gt_equiv_diameter_px": 63.69,
+      "gt_equiv_diameter_mm": 6.369,
+      "dice": 0.9258,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0193",
+      "gt_equiv_diameter_px": 118.62,
+      "gt_equiv_diameter_mm": 11.862,
+      "dice": 0.9395,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0194",
+      "gt_equiv_diameter_px": 97.47,
+      "gt_equiv_diameter_mm": 9.747,
+      "dice": 0.5233,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0195",
+      "gt_equiv_diameter_px": 39.69,
+      "gt_equiv_diameter_mm": 3.969,
+      "dice": 0.8834,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0196",
+      "gt_equiv_diameter_px": 83.29,
+      "gt_equiv_diameter_mm": 8.329,
+      "dice": 0.845,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0197",
+      "gt_equiv_diameter_px": 83.1,
+      "gt_equiv_diameter_mm": 8.31,
+      "dice": 0.9459,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0198",
+      "gt_equiv_diameter_px": 34.04,
+      "gt_equiv_diameter_mm": 3.404,
+      "dice": 0.8574,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0199",
+      "gt_equiv_diameter_px": 64.51,
+      "gt_equiv_diameter_mm": 6.451,
+      "dice": 0.5626,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0200",
+      "gt_equiv_diameter_px": 35.13,
+      "gt_equiv_diameter_mm": 3.513,
+      "dice": 0.8837,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0201",
+      "gt_equiv_diameter_px": 141.02,
+      "gt_equiv_diameter_mm": 14.102,
+      "dice": 0.9497,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0202",
+      "gt_equiv_diameter_px": 311.03,
+      "gt_equiv_diameter_mm": 31.103,
+      "dice": 0.9607,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0203",
+      "gt_equiv_diameter_px": 88.34,
+      "gt_equiv_diameter_mm": 8.834,
+      "dice": 0.4984,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0204",
+      "gt_equiv_diameter_px": 60.89,
+      "gt_equiv_diameter_mm": 6.089,
+      "dice": 0.8854,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0205",
+      "gt_equiv_diameter_px": 219.62,
+      "gt_equiv_diameter_mm": 21.962,
+      "dice": 0.9104,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0206",
+      "gt_equiv_diameter_px": 39.19,
+      "gt_equiv_diameter_mm": 3.919,
+      "dice": 0.8887,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0207",
+      "gt_equiv_diameter_px": 86.69,
+      "gt_equiv_diameter_mm": 8.669,
+      "dice": 0.9394,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0208",
+      "gt_equiv_diameter_px": 473.36,
+      "gt_equiv_diameter_mm": 47.336,
+      "dice": 0.8897,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0209",
+      "gt_equiv_diameter_px": 397.83,
+      "gt_equiv_diameter_mm": 39.783,
+      "dice": 0.9522,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0210",
+      "gt_equiv_diameter_px": 393.61,
+      "gt_equiv_diameter_mm": 39.361,
+      "dice": 0.9522,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0211",
+      "gt_equiv_diameter_px": 242.62,
+      "gt_equiv_diameter_mm": 24.262,
+      "dice": 0.9701,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0212",
+      "gt_equiv_diameter_px": 218.49,
+      "gt_equiv_diameter_mm": 21.849,
+      "dice": 0.9778,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0213",
+      "gt_equiv_diameter_px": 139.23,
+      "gt_equiv_diameter_mm": 13.923,
+      "dice": 0.9494,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0214",
+      "gt_equiv_diameter_px": 182.38,
+      "gt_equiv_diameter_mm": 18.238,
+      "dice": 0.951,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0215",
+      "gt_equiv_diameter_px": 149.67,
+      "gt_equiv_diameter_mm": 14.967,
+      "dice": 0.9189,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0216",
+      "gt_equiv_diameter_px": 504.04,
+      "gt_equiv_diameter_mm": 50.404,
+      "dice": 0.7936,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0217",
+      "gt_equiv_diameter_px": 137.85,
+      "gt_equiv_diameter_mm": 13.785,
+      "dice": 0.6136,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0218",
+      "gt_equiv_diameter_px": 243.26,
+      "gt_equiv_diameter_mm": 24.326,
+      "dice": 0.946,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0219",
+      "gt_equiv_diameter_px": 89.28,
+      "gt_equiv_diameter_mm": 8.928,
+      "dice": 0.9102,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0220",
+      "gt_equiv_diameter_px": 90.1,
+      "gt_equiv_diameter_mm": 9.01,
+      "dice": 0.8718,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0221",
+      "gt_equiv_diameter_px": 278.25,
+      "gt_equiv_diameter_mm": 27.825,
+      "dice": 0.87,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0222",
+      "gt_equiv_diameter_px": 194.74,
+      "gt_equiv_diameter_mm": 19.474,
+      "dice": 0.9362,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0223",
+      "gt_equiv_diameter_px": 206.44,
+      "gt_equiv_diameter_mm": 20.644,
+      "dice": 0.9326,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0224",
+      "gt_equiv_diameter_px": 172.05,
+      "gt_equiv_diameter_mm": 17.205,
+      "dice": 0.9244,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0225",
+      "gt_equiv_diameter_px": 160.44,
+      "gt_equiv_diameter_mm": 16.044,
+      "dice": 0.8557,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0226",
+      "gt_equiv_diameter_px": 112.83,
+      "gt_equiv_diameter_mm": 11.283,
+      "dice": 0.912,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0227",
+      "gt_equiv_diameter_px": 310.71,
+      "gt_equiv_diameter_mm": 31.071,
+      "dice": 0.965,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0228",
+      "gt_equiv_diameter_px": 263.58,
+      "gt_equiv_diameter_mm": 26.358,
+      "dice": 0.9416,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0229",
+      "gt_equiv_diameter_px": 100.36,
+      "gt_equiv_diameter_mm": 10.036,
+      "dice": 0.749,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0230",
+      "gt_equiv_diameter_px": 93.14,
+      "gt_equiv_diameter_mm": 9.314,
+      "dice": 0.9045,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0231",
+      "gt_equiv_diameter_px": 106.99,
+      "gt_equiv_diameter_mm": 10.699,
+      "dice": 0.0,
+      "pred_empty": true
+    },
+    {
+      "stem": "TN3K_test_0232",
+      "gt_equiv_diameter_px": 44.4,
+      "gt_equiv_diameter_mm": 4.44,
+      "dice": 0.8831,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0233",
+      "gt_equiv_diameter_px": 199.26,
+      "gt_equiv_diameter_mm": 19.926,
+      "dice": 0.9825,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0234",
+      "gt_equiv_diameter_px": 763.61,
+      "gt_equiv_diameter_mm": 76.361,
+      "dice": 0.8625,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0235",
+      "gt_equiv_diameter_px": 61.37,
+      "gt_equiv_diameter_mm": 6.137,
+      "dice": 0.8235,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0236",
+      "gt_equiv_diameter_px": 143.23,
+      "gt_equiv_diameter_mm": 14.323,
+      "dice": 0.9499,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0237",
+      "gt_equiv_diameter_px": 171.29,
+      "gt_equiv_diameter_mm": 17.129,
+      "dice": 0.8428,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0238",
+      "gt_equiv_diameter_px": 737.55,
+      "gt_equiv_diameter_mm": 73.755,
+      "dice": 0.9036,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0239",
+      "gt_equiv_diameter_px": 666.81,
+      "gt_equiv_diameter_mm": 66.681,
+      "dice": 0.9134,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0240",
+      "gt_equiv_diameter_px": 315.34,
+      "gt_equiv_diameter_mm": 31.534,
+      "dice": 0.958,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0241",
+      "gt_equiv_diameter_px": 200.83,
+      "gt_equiv_diameter_mm": 20.083,
+      "dice": 0.9385,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0242",
+      "gt_equiv_diameter_px": 140.65,
+      "gt_equiv_diameter_mm": 14.065,
+      "dice": 0.7229,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0243",
+      "gt_equiv_diameter_px": 143.57,
+      "gt_equiv_diameter_mm": 14.357,
+      "dice": 0.908,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0244",
+      "gt_equiv_diameter_px": 226.88,
+      "gt_equiv_diameter_mm": 22.688,
+      "dice": 0.9533,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0245",
+      "gt_equiv_diameter_px": 107.49,
+      "gt_equiv_diameter_mm": 10.749,
+      "dice": 0.9689,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0246",
+      "gt_equiv_diameter_px": 228.7,
+      "gt_equiv_diameter_mm": 22.87,
+      "dice": 0.9082,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0247",
+      "gt_equiv_diameter_px": 189.48,
+      "gt_equiv_diameter_mm": 18.948,
+      "dice": 0.9369,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0248",
+      "gt_equiv_diameter_px": 58.38,
+      "gt_equiv_diameter_mm": 5.838,
+      "dice": 0.9263,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0249",
+      "gt_equiv_diameter_px": 109.93,
+      "gt_equiv_diameter_mm": 10.993,
+      "dice": 0.4851,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0250",
+      "gt_equiv_diameter_px": 44.88,
+      "gt_equiv_diameter_mm": 4.488,
+      "dice": 0.8828,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0251",
+      "gt_equiv_diameter_px": 30.26,
+      "gt_equiv_diameter_mm": 3.026,
+      "dice": 0.1663,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0252",
+      "gt_equiv_diameter_px": 172.15,
+      "gt_equiv_diameter_mm": 17.215,
+      "dice": 0.9448,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0253",
+      "gt_equiv_diameter_px": 164.24,
+      "gt_equiv_diameter_mm": 16.424,
+      "dice": 0.9475,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0254",
+      "gt_equiv_diameter_px": 208.04,
+      "gt_equiv_diameter_mm": 20.804,
+      "dice": 0.948,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0255",
+      "gt_equiv_diameter_px": 68.64,
+      "gt_equiv_diameter_mm": 6.864,
+      "dice": 0.9181,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0256",
+      "gt_equiv_diameter_px": 105.3,
+      "gt_equiv_diameter_mm": 10.53,
+      "dice": 0.9341,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0257",
+      "gt_equiv_diameter_px": 120.27,
+      "gt_equiv_diameter_mm": 12.027,
+      "dice": 0.9014,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0258",
+      "gt_equiv_diameter_px": 80.08,
+      "gt_equiv_diameter_mm": 8.008,
+      "dice": 0.825,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0259",
+      "gt_equiv_diameter_px": 206.72,
+      "gt_equiv_diameter_mm": 20.672,
+      "dice": 0.9558,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0260",
+      "gt_equiv_diameter_px": 233.74,
+      "gt_equiv_diameter_mm": 23.374,
+      "dice": 0.8744,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0261",
+      "gt_equiv_diameter_px": 246.15,
+      "gt_equiv_diameter_mm": 24.615,
+      "dice": 0.9645,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0262",
+      "gt_equiv_diameter_px": 396.81,
+      "gt_equiv_diameter_mm": 39.681,
+      "dice": 0.9685,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0263",
+      "gt_equiv_diameter_px": 26.29,
+      "gt_equiv_diameter_mm": 2.629,
+      "dice": 0.8746,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0264",
+      "gt_equiv_diameter_px": 183.18,
+      "gt_equiv_diameter_mm": 18.318,
+      "dice": 0.9596,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0265",
+      "gt_equiv_diameter_px": 163.3,
+      "gt_equiv_diameter_mm": 16.33,
+      "dice": 0.968,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0266",
+      "gt_equiv_diameter_px": 88.81,
+      "gt_equiv_diameter_mm": 8.881,
+      "dice": 0.8718,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0267",
+      "gt_equiv_diameter_px": 70.49,
+      "gt_equiv_diameter_mm": 7.049,
+      "dice": 0.9126,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0268",
+      "gt_equiv_diameter_px": 66.43,
+      "gt_equiv_diameter_mm": 6.643,
+      "dice": 0.9525,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0269",
+      "gt_equiv_diameter_px": 254.67,
+      "gt_equiv_diameter_mm": 25.467,
+      "dice": 0.8952,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0270",
+      "gt_equiv_diameter_px": 132.12,
+      "gt_equiv_diameter_mm": 13.212,
+      "dice": 0.9444,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0271",
+      "gt_equiv_diameter_px": 115.09,
+      "gt_equiv_diameter_mm": 11.509,
+      "dice": 0.7258,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0272",
+      "gt_equiv_diameter_px": 266.79,
+      "gt_equiv_diameter_mm": 26.679,
+      "dice": 0.9309,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0273",
+      "gt_equiv_diameter_px": 488.52,
+      "gt_equiv_diameter_mm": 48.852,
+      "dice": 0.9678,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0274",
+      "gt_equiv_diameter_px": 153.86,
+      "gt_equiv_diameter_mm": 15.386,
+      "dice": 0.9208,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0275",
+      "gt_equiv_diameter_px": 62.82,
+      "gt_equiv_diameter_mm": 6.282,
+      "dice": 0.9388,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0276",
+      "gt_equiv_diameter_px": 22.74,
+      "gt_equiv_diameter_mm": 2.274,
+      "dice": 0.7733,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0277",
+      "gt_equiv_diameter_px": 127.9,
+      "gt_equiv_diameter_mm": 12.79,
+      "dice": 0.9613,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0278",
+      "gt_equiv_diameter_px": 228.72,
+      "gt_equiv_diameter_mm": 22.872,
+      "dice": 0.9248,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0279",
+      "gt_equiv_diameter_px": 143.3,
+      "gt_equiv_diameter_mm": 14.33,
+      "dice": 0.7318,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0280",
+      "gt_equiv_diameter_px": 213.96,
+      "gt_equiv_diameter_mm": 21.396,
+      "dice": 0.9454,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0281",
+      "gt_equiv_diameter_px": 177.94,
+      "gt_equiv_diameter_mm": 17.794,
+      "dice": 0.7289,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0282",
+      "gt_equiv_diameter_px": 155.93,
+      "gt_equiv_diameter_mm": 15.593,
+      "dice": 0.9016,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0283",
+      "gt_equiv_diameter_px": 83.44,
+      "gt_equiv_diameter_mm": 8.344,
+      "dice": 0.8836,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0284",
+      "gt_equiv_diameter_px": 118.25,
+      "gt_equiv_diameter_mm": 11.825,
+      "dice": 0.9629,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0285",
+      "gt_equiv_diameter_px": 70.56,
+      "gt_equiv_diameter_mm": 7.056,
+      "dice": 0.3398,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0286",
+      "gt_equiv_diameter_px": 223.17,
+      "gt_equiv_diameter_mm": 22.317,
+      "dice": 0.9718,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0287",
+      "gt_equiv_diameter_px": 100.74,
+      "gt_equiv_diameter_mm": 10.074,
+      "dice": 0.918,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0288",
+      "gt_equiv_diameter_px": 261.12,
+      "gt_equiv_diameter_mm": 26.112,
+      "dice": 0.9117,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0289",
+      "gt_equiv_diameter_px": 50.06,
+      "gt_equiv_diameter_mm": 5.006,
+      "dice": 0.9432,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0290",
+      "gt_equiv_diameter_px": 198.24,
+      "gt_equiv_diameter_mm": 19.824,
+      "dice": 0.9552,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0291",
+      "gt_equiv_diameter_px": 124.03,
+      "gt_equiv_diameter_mm": 12.403,
+      "dice": 0.8315,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0292",
+      "gt_equiv_diameter_px": 445.11,
+      "gt_equiv_diameter_mm": 44.511,
+      "dice": 0.9403,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0293",
+      "gt_equiv_diameter_px": 123.53,
+      "gt_equiv_diameter_mm": 12.353,
+      "dice": 0.2996,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0294",
+      "gt_equiv_diameter_px": 224.26,
+      "gt_equiv_diameter_mm": 22.426,
+      "dice": 0.6754,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0295",
+      "gt_equiv_diameter_px": 694.87,
+      "gt_equiv_diameter_mm": 69.487,
+      "dice": 0.9811,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0296",
+      "gt_equiv_diameter_px": 95.07,
+      "gt_equiv_diameter_mm": 9.507,
+      "dice": 0.9083,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0297",
+      "gt_equiv_diameter_px": 99.23,
+      "gt_equiv_diameter_mm": 9.923,
+      "dice": 0.8935,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0298",
+      "gt_equiv_diameter_px": 97.15,
+      "gt_equiv_diameter_mm": 9.715,
+      "dice": 0.9208,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0299",
+      "gt_equiv_diameter_px": 553.59,
+      "gt_equiv_diameter_mm": 55.359,
+      "dice": 0.9126,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0300",
+      "gt_equiv_diameter_px": 295.78,
+      "gt_equiv_diameter_mm": 29.578,
+      "dice": 0.7381,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0301",
+      "gt_equiv_diameter_px": 498.61,
+      "gt_equiv_diameter_mm": 49.861,
+      "dice": 0.9625,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0302",
+      "gt_equiv_diameter_px": 319.78,
+      "gt_equiv_diameter_mm": 31.978,
+      "dice": 0.9497,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0303",
+      "gt_equiv_diameter_px": 214.91,
+      "gt_equiv_diameter_mm": 21.491,
+      "dice": 0.8631,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0304",
+      "gt_equiv_diameter_px": 581.63,
+      "gt_equiv_diameter_mm": 58.163,
+      "dice": 0.9622,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0305",
+      "gt_equiv_diameter_px": 55.85,
+      "gt_equiv_diameter_mm": 5.585,
+      "dice": 0.9674,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0306",
+      "gt_equiv_diameter_px": 373.12,
+      "gt_equiv_diameter_mm": 37.312,
+      "dice": 0.9696,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0307",
+      "gt_equiv_diameter_px": 504.25,
+      "gt_equiv_diameter_mm": 50.425,
+      "dice": 0.9694,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0308",
+      "gt_equiv_diameter_px": 287.82,
+      "gt_equiv_diameter_mm": 28.782,
+      "dice": 0.9639,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0309",
+      "gt_equiv_diameter_px": 252.6,
+      "gt_equiv_diameter_mm": 25.26,
+      "dice": 0.973,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0310",
+      "gt_equiv_diameter_px": 66.82,
+      "gt_equiv_diameter_mm": 6.682,
+      "dice": 0.9048,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0311",
+      "gt_equiv_diameter_px": 110.37,
+      "gt_equiv_diameter_mm": 11.037,
+      "dice": 0.8976,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0312",
+      "gt_equiv_diameter_px": 144.35,
+      "gt_equiv_diameter_mm": 14.435,
+      "dice": 0.0,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0313",
+      "gt_equiv_diameter_px": 187.45,
+      "gt_equiv_diameter_mm": 18.745,
+      "dice": 0.972,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0314",
+      "gt_equiv_diameter_px": 230.21,
+      "gt_equiv_diameter_mm": 23.021,
+      "dice": 0.9747,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0315",
+      "gt_equiv_diameter_px": 243.49,
+      "gt_equiv_diameter_mm": 24.349,
+      "dice": 0.9694,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0316",
+      "gt_equiv_diameter_px": 205.15,
+      "gt_equiv_diameter_mm": 20.515,
+      "dice": 0.9313,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0317",
+      "gt_equiv_diameter_px": 119.42,
+      "gt_equiv_diameter_mm": 11.942,
+      "dice": 0.9362,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0318",
+      "gt_equiv_diameter_px": 215.61,
+      "gt_equiv_diameter_mm": 21.561,
+      "dice": 0.9647,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0319",
+      "gt_equiv_diameter_px": 100.86,
+      "gt_equiv_diameter_mm": 10.086,
+      "dice": 0.7806,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0320",
+      "gt_equiv_diameter_px": 65.04,
+      "gt_equiv_diameter_mm": 6.504,
+      "dice": 0.7233,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0321",
+      "gt_equiv_diameter_px": 479.93,
+      "gt_equiv_diameter_mm": 47.993,
+      "dice": 0.9704,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0322",
+      "gt_equiv_diameter_px": 425.86,
+      "gt_equiv_diameter_mm": 42.586,
+      "dice": 0.8295,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0323",
+      "gt_equiv_diameter_px": 471.62,
+      "gt_equiv_diameter_mm": 47.162,
+      "dice": 0.9374,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0324",
+      "gt_equiv_diameter_px": 434.53,
+      "gt_equiv_diameter_mm": 43.453,
+      "dice": 0.9612,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0325",
+      "gt_equiv_diameter_px": 46.67,
+      "gt_equiv_diameter_mm": 4.667,
+      "dice": 0.9118,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0326",
+      "gt_equiv_diameter_px": 61.44,
+      "gt_equiv_diameter_mm": 6.144,
+      "dice": 0.9305,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0327",
+      "gt_equiv_diameter_px": 46.26,
+      "gt_equiv_diameter_mm": 4.626,
+      "dice": 0.9307,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0328",
+      "gt_equiv_diameter_px": 138.94,
+      "gt_equiv_diameter_mm": 13.894,
+      "dice": 0.9324,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0329",
+      "gt_equiv_diameter_px": 615.2,
+      "gt_equiv_diameter_mm": 61.52,
+      "dice": 0.9562,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0330",
+      "gt_equiv_diameter_px": 476.67,
+      "gt_equiv_diameter_mm": 47.667,
+      "dice": 0.9702,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0331",
+      "gt_equiv_diameter_px": 239.42,
+      "gt_equiv_diameter_mm": 23.942,
+      "dice": 0.9508,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0332",
+      "gt_equiv_diameter_px": 206.42,
+      "gt_equiv_diameter_mm": 20.642,
+      "dice": 0.9859,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0333",
+      "gt_equiv_diameter_px": 170.9,
+      "gt_equiv_diameter_mm": 17.09,
+      "dice": 0.905,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0334",
+      "gt_equiv_diameter_px": 175.78,
+      "gt_equiv_diameter_mm": 17.578,
+      "dice": 0.9505,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0335",
+      "gt_equiv_diameter_px": 272.07,
+      "gt_equiv_diameter_mm": 27.207,
+      "dice": 0.9754,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0336",
+      "gt_equiv_diameter_px": 288.55,
+      "gt_equiv_diameter_mm": 28.855,
+      "dice": 0.9693,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0337",
+      "gt_equiv_diameter_px": 29.27,
+      "gt_equiv_diameter_mm": 2.927,
+      "dice": 0.399,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0338",
+      "gt_equiv_diameter_px": 64.62,
+      "gt_equiv_diameter_mm": 6.462,
+      "dice": 0.9708,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0339",
+      "gt_equiv_diameter_px": 212.01,
+      "gt_equiv_diameter_mm": 21.201,
+      "dice": 0.9339,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0340",
+      "gt_equiv_diameter_px": 438.53,
+      "gt_equiv_diameter_mm": 43.853,
+      "dice": 0.9649,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0341",
+      "gt_equiv_diameter_px": 218.47,
+      "gt_equiv_diameter_mm": 21.847,
+      "dice": 0.9606,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0342",
+      "gt_equiv_diameter_px": 90.88,
+      "gt_equiv_diameter_mm": 9.088,
+      "dice": 0.9478,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0343",
+      "gt_equiv_diameter_px": 78.14,
+      "gt_equiv_diameter_mm": 7.814,
+      "dice": 0.781,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0344",
+      "gt_equiv_diameter_px": 208.65,
+      "gt_equiv_diameter_mm": 20.865,
+      "dice": 0.9664,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0345",
+      "gt_equiv_diameter_px": 170.33,
+      "gt_equiv_diameter_mm": 17.033,
+      "dice": 0.9503,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0346",
+      "gt_equiv_diameter_px": 79.49,
+      "gt_equiv_diameter_mm": 7.949,
+      "dice": 0.9179,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0347",
+      "gt_equiv_diameter_px": 49.42,
+      "gt_equiv_diameter_mm": 4.942,
+      "dice": 0.7697,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0348",
+      "gt_equiv_diameter_px": 203.35,
+      "gt_equiv_diameter_mm": 20.335,
+      "dice": 0.6055,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0349",
+      "gt_equiv_diameter_px": 253.78,
+      "gt_equiv_diameter_mm": 25.378,
+      "dice": 0.9514,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0350",
+      "gt_equiv_diameter_px": 317.75,
+      "gt_equiv_diameter_mm": 31.775,
+      "dice": 0.9368,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0351",
+      "gt_equiv_diameter_px": 145.23,
+      "gt_equiv_diameter_mm": 14.523,
+      "dice": 0.9229,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0352",
+      "gt_equiv_diameter_px": 48.11,
+      "gt_equiv_diameter_mm": 4.811,
+      "dice": 0.1938,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0353",
+      "gt_equiv_diameter_px": 76.52,
+      "gt_equiv_diameter_mm": 7.652,
+      "dice": 0.812,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0354",
+      "gt_equiv_diameter_px": 56.5,
+      "gt_equiv_diameter_mm": 5.65,
+      "dice": 0.7066,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0355",
+      "gt_equiv_diameter_px": 159.25,
+      "gt_equiv_diameter_mm": 15.925,
+      "dice": 0.9377,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0356",
+      "gt_equiv_diameter_px": 264.03,
+      "gt_equiv_diameter_mm": 26.403,
+      "dice": 0.9829,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0357",
+      "gt_equiv_diameter_px": 117.32,
+      "gt_equiv_diameter_mm": 11.732,
+      "dice": 0.8708,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0358",
+      "gt_equiv_diameter_px": 116.95,
+      "gt_equiv_diameter_mm": 11.695,
+      "dice": 0.8823,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0359",
+      "gt_equiv_diameter_px": 285.04,
+      "gt_equiv_diameter_mm": 28.504,
+      "dice": 0.9698,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0360",
+      "gt_equiv_diameter_px": 245.64,
+      "gt_equiv_diameter_mm": 24.564,
+      "dice": 0.9266,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0361",
+      "gt_equiv_diameter_px": 263.82,
+      "gt_equiv_diameter_mm": 26.382,
+      "dice": 0.9426,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0362",
+      "gt_equiv_diameter_px": 178.38,
+      "gt_equiv_diameter_mm": 17.838,
+      "dice": 0.9339,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0363",
+      "gt_equiv_diameter_px": 285.17,
+      "gt_equiv_diameter_mm": 28.517,
+      "dice": 0.7808,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0364",
+      "gt_equiv_diameter_px": 219.3,
+      "gt_equiv_diameter_mm": 21.93,
+      "dice": 0.9841,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0365",
+      "gt_equiv_diameter_px": 66.44,
+      "gt_equiv_diameter_mm": 6.644,
+      "dice": 0.8771,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0366",
+      "gt_equiv_diameter_px": 52.64,
+      "gt_equiv_diameter_mm": 5.264,
+      "dice": 0.9319,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0367",
+      "gt_equiv_diameter_px": 230.22,
+      "gt_equiv_diameter_mm": 23.022,
+      "dice": 0.876,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0368",
+      "gt_equiv_diameter_px": 93.42,
+      "gt_equiv_diameter_mm": 9.342,
+      "dice": 0.8705,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0369",
+      "gt_equiv_diameter_px": 62.71,
+      "gt_equiv_diameter_mm": 6.271,
+      "dice": 0.0,
+      "pred_empty": true
+    },
+    {
+      "stem": "TN3K_test_0370",
+      "gt_equiv_diameter_px": 178.43,
+      "gt_equiv_diameter_mm": 17.843,
+      "dice": 0.9285,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0371",
+      "gt_equiv_diameter_px": 151.8,
+      "gt_equiv_diameter_mm": 15.18,
+      "dice": 0.9715,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0372",
+      "gt_equiv_diameter_px": 183.06,
+      "gt_equiv_diameter_mm": 18.306,
+      "dice": 0.9568,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0373",
+      "gt_equiv_diameter_px": 97.92,
+      "gt_equiv_diameter_mm": 9.792,
+      "dice": 0.9076,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0374",
+      "gt_equiv_diameter_px": 158.18,
+      "gt_equiv_diameter_mm": 15.818,
+      "dice": 0.9757,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0375",
+      "gt_equiv_diameter_px": 454.76,
+      "gt_equiv_diameter_mm": 45.476,
+      "dice": 0.9209,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0376",
+      "gt_equiv_diameter_px": 259.84,
+      "gt_equiv_diameter_mm": 25.984,
+      "dice": 0.967,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0377",
+      "gt_equiv_diameter_px": 226.69,
+      "gt_equiv_diameter_mm": 22.669,
+      "dice": 0.9514,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0378",
+      "gt_equiv_diameter_px": 32.65,
+      "gt_equiv_diameter_mm": 3.265,
+      "dice": 0.8461,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0379",
+      "gt_equiv_diameter_px": 207.36,
+      "gt_equiv_diameter_mm": 20.736,
+      "dice": 0.9267,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0380",
+      "gt_equiv_diameter_px": 111.28,
+      "gt_equiv_diameter_mm": 11.128,
+      "dice": 0.9239,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0381",
+      "gt_equiv_diameter_px": 205.24,
+      "gt_equiv_diameter_mm": 20.524,
+      "dice": 0.9394,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0382",
+      "gt_equiv_diameter_px": 119.82,
+      "gt_equiv_diameter_mm": 11.982,
+      "dice": 0.7672,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0383",
+      "gt_equiv_diameter_px": 113.23,
+      "gt_equiv_diameter_mm": 11.323,
+      "dice": 0.9233,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0384",
+      "gt_equiv_diameter_px": 118.21,
+      "gt_equiv_diameter_mm": 11.821,
+      "dice": 0.299,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0385",
+      "gt_equiv_diameter_px": 435.99,
+      "gt_equiv_diameter_mm": 43.599,
+      "dice": 0.8688,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0386",
+      "gt_equiv_diameter_px": 522.78,
+      "gt_equiv_diameter_mm": 52.278,
+      "dice": 0.9779,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0387",
+      "gt_equiv_diameter_px": 81.83,
+      "gt_equiv_diameter_mm": 8.183,
+      "dice": 0.8787,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0388",
+      "gt_equiv_diameter_px": 111.01,
+      "gt_equiv_diameter_mm": 11.101,
+      "dice": 0.9624,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0389",
+      "gt_equiv_diameter_px": 108.71,
+      "gt_equiv_diameter_mm": 10.871,
+      "dice": 0.8722,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0390",
+      "gt_equiv_diameter_px": 83.61,
+      "gt_equiv_diameter_mm": 8.361,
+      "dice": 0.9516,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0391",
+      "gt_equiv_diameter_px": 215.09,
+      "gt_equiv_diameter_mm": 21.509,
+      "dice": 0.6479,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0392",
+      "gt_equiv_diameter_px": 115.14,
+      "gt_equiv_diameter_mm": 11.514,
+      "dice": 0.7157,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0393",
+      "gt_equiv_diameter_px": 122.62,
+      "gt_equiv_diameter_mm": 12.262,
+      "dice": 0.8879,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0394",
+      "gt_equiv_diameter_px": 38.18,
+      "gt_equiv_diameter_mm": 3.818,
+      "dice": 0.8462,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0395",
+      "gt_equiv_diameter_px": 31.78,
+      "gt_equiv_diameter_mm": 3.178,
+      "dice": 0.7442,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0396",
+      "gt_equiv_diameter_px": 129.85,
+      "gt_equiv_diameter_mm": 12.985,
+      "dice": 0.9596,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0397",
+      "gt_equiv_diameter_px": 67.67,
+      "gt_equiv_diameter_mm": 6.767,
+      "dice": 0.8121,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0398",
+      "gt_equiv_diameter_px": 313.65,
+      "gt_equiv_diameter_mm": 31.365,
+      "dice": 0.9175,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0399",
+      "gt_equiv_diameter_px": 54.92,
+      "gt_equiv_diameter_mm": 5.492,
+      "dice": 0.9593,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0400",
+      "gt_equiv_diameter_px": 157.57,
+      "gt_equiv_diameter_mm": 15.757,
+      "dice": 0.9264,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0401",
+      "gt_equiv_diameter_px": 44.7,
+      "gt_equiv_diameter_mm": 4.47,
+      "dice": 0.8738,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0402",
+      "gt_equiv_diameter_px": 111.07,
+      "gt_equiv_diameter_mm": 11.107,
+      "dice": 0.934,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0403",
+      "gt_equiv_diameter_px": 60.8,
+      "gt_equiv_diameter_mm": 6.08,
+      "dice": 0.8622,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0404",
+      "gt_equiv_diameter_px": 42.4,
+      "gt_equiv_diameter_mm": 4.24,
+      "dice": 0.8379,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0405",
+      "gt_equiv_diameter_px": 82.64,
+      "gt_equiv_diameter_mm": 8.264,
+      "dice": 0.9119,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0406",
+      "gt_equiv_diameter_px": 165.04,
+      "gt_equiv_diameter_mm": 16.504,
+      "dice": 0.9325,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0407",
+      "gt_equiv_diameter_px": 111.49,
+      "gt_equiv_diameter_mm": 11.149,
+      "dice": 0.9295,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0408",
+      "gt_equiv_diameter_px": 485.99,
+      "gt_equiv_diameter_mm": 48.599,
+      "dice": 0.5784,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0409",
+      "gt_equiv_diameter_px": 100.53,
+      "gt_equiv_diameter_mm": 10.053,
+      "dice": 0.8943,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0410",
+      "gt_equiv_diameter_px": 55.77,
+      "gt_equiv_diameter_mm": 5.577,
+      "dice": 0.8007,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0411",
+      "gt_equiv_diameter_px": 338.02,
+      "gt_equiv_diameter_mm": 33.802,
+      "dice": 0.8274,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0412",
+      "gt_equiv_diameter_px": 288.24,
+      "gt_equiv_diameter_mm": 28.824,
+      "dice": 0.9703,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0413",
+      "gt_equiv_diameter_px": 141.42,
+      "gt_equiv_diameter_mm": 14.142,
+      "dice": 0.9735,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0414",
+      "gt_equiv_diameter_px": 213.89,
+      "gt_equiv_diameter_mm": 21.389,
+      "dice": 0.9061,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0415",
+      "gt_equiv_diameter_px": 263.29,
+      "gt_equiv_diameter_mm": 26.329,
+      "dice": 0.9472,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0416",
+      "gt_equiv_diameter_px": 102.04,
+      "gt_equiv_diameter_mm": 10.204,
+      "dice": 0.9221,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0417",
+      "gt_equiv_diameter_px": 256.4,
+      "gt_equiv_diameter_mm": 25.64,
+      "dice": 0.9255,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0418",
+      "gt_equiv_diameter_px": 112.2,
+      "gt_equiv_diameter_mm": 11.22,
+      "dice": 0.9077,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0419",
+      "gt_equiv_diameter_px": 57.96,
+      "gt_equiv_diameter_mm": 5.796,
+      "dice": 0.7676,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0420",
+      "gt_equiv_diameter_px": 122.75,
+      "gt_equiv_diameter_mm": 12.275,
+      "dice": 0.6987,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0421",
+      "gt_equiv_diameter_px": 201.63,
+      "gt_equiv_diameter_mm": 20.163,
+      "dice": 0.9078,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0422",
+      "gt_equiv_diameter_px": 197.78,
+      "gt_equiv_diameter_mm": 19.778,
+      "dice": 0.9608,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0423",
+      "gt_equiv_diameter_px": 129.33,
+      "gt_equiv_diameter_mm": 12.933,
+      "dice": 0.9786,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0424",
+      "gt_equiv_diameter_px": 185.25,
+      "gt_equiv_diameter_mm": 18.525,
+      "dice": 0.8306,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0425",
+      "gt_equiv_diameter_px": 318.73,
+      "gt_equiv_diameter_mm": 31.873,
+      "dice": 0.926,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0426",
+      "gt_equiv_diameter_px": 49.71,
+      "gt_equiv_diameter_mm": 4.971,
+      "dice": 0.9458,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0427",
+      "gt_equiv_diameter_px": 249.19,
+      "gt_equiv_diameter_mm": 24.919,
+      "dice": 0.9254,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0428",
+      "gt_equiv_diameter_px": 117.25,
+      "gt_equiv_diameter_mm": 11.725,
+      "dice": 0.8791,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0429",
+      "gt_equiv_diameter_px": 32.47,
+      "gt_equiv_diameter_mm": 3.247,
+      "dice": 0.9477,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0430",
+      "gt_equiv_diameter_px": 144.41,
+      "gt_equiv_diameter_mm": 14.441,
+      "dice": 0.9299,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0431",
+      "gt_equiv_diameter_px": 83.24,
+      "gt_equiv_diameter_mm": 8.324,
+      "dice": 0.9013,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0432",
+      "gt_equiv_diameter_px": 189.77,
+      "gt_equiv_diameter_mm": 18.977,
+      "dice": 0.974,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0433",
+      "gt_equiv_diameter_px": 140.33,
+      "gt_equiv_diameter_mm": 14.033,
+      "dice": 0.9502,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0434",
+      "gt_equiv_diameter_px": 78.44,
+      "gt_equiv_diameter_mm": 7.844,
+      "dice": 0.8814,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0435",
+      "gt_equiv_diameter_px": 94.88,
+      "gt_equiv_diameter_mm": 9.488,
+      "dice": 0.9335,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0436",
+      "gt_equiv_diameter_px": 102.82,
+      "gt_equiv_diameter_mm": 10.282,
+      "dice": 0.9561,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0437",
+      "gt_equiv_diameter_px": 99.85,
+      "gt_equiv_diameter_mm": 9.985,
+      "dice": 0.9348,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0438",
+      "gt_equiv_diameter_px": 54.65,
+      "gt_equiv_diameter_mm": 5.465,
+      "dice": 0.8218,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0439",
+      "gt_equiv_diameter_px": 108.88,
+      "gt_equiv_diameter_mm": 10.888,
+      "dice": 0.9226,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0440",
+      "gt_equiv_diameter_px": 155.24,
+      "gt_equiv_diameter_mm": 15.524,
+      "dice": 0.829,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0441",
+      "gt_equiv_diameter_px": 56.88,
+      "gt_equiv_diameter_mm": 5.688,
+      "dice": 0.9167,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0442",
+      "gt_equiv_diameter_px": 327.15,
+      "gt_equiv_diameter_mm": 32.715,
+      "dice": 0.9247,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0443",
+      "gt_equiv_diameter_px": 544.79,
+      "gt_equiv_diameter_mm": 54.479,
+      "dice": 0.4737,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0444",
+      "gt_equiv_diameter_px": 65.42,
+      "gt_equiv_diameter_mm": 6.542,
+      "dice": 0.8477,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0445",
+      "gt_equiv_diameter_px": 61.16,
+      "gt_equiv_diameter_mm": 6.116,
+      "dice": 0.8821,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0446",
+      "gt_equiv_diameter_px": 58.79,
+      "gt_equiv_diameter_mm": 5.879,
+      "dice": 0.9031,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0447",
+      "gt_equiv_diameter_px": 47.58,
+      "gt_equiv_diameter_mm": 4.758,
+      "dice": 0.9358,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0448",
+      "gt_equiv_diameter_px": 324.48,
+      "gt_equiv_diameter_mm": 32.448,
+      "dice": 0.9502,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0449",
+      "gt_equiv_diameter_px": 204.71,
+      "gt_equiv_diameter_mm": 20.471,
+      "dice": 0.8088,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0450",
+      "gt_equiv_diameter_px": 236.7,
+      "gt_equiv_diameter_mm": 23.67,
+      "dice": 0.6406,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0451",
+      "gt_equiv_diameter_px": 94.74,
+      "gt_equiv_diameter_mm": 9.474,
+      "dice": 0.956,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0452",
+      "gt_equiv_diameter_px": 255.9,
+      "gt_equiv_diameter_mm": 25.59,
+      "dice": 0.9415,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0453",
+      "gt_equiv_diameter_px": 44.99,
+      "gt_equiv_diameter_mm": 4.499,
+      "dice": 0.9095,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0454",
+      "gt_equiv_diameter_px": 32.59,
+      "gt_equiv_diameter_mm": 3.259,
+      "dice": 0.9205,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0455",
+      "gt_equiv_diameter_px": 148.35,
+      "gt_equiv_diameter_mm": 14.835,
+      "dice": 0.937,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0456",
+      "gt_equiv_diameter_px": 36.48,
+      "gt_equiv_diameter_mm": 3.648,
+      "dice": 0.7477,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0457",
+      "gt_equiv_diameter_px": 140.47,
+      "gt_equiv_diameter_mm": 14.047,
+      "dice": 0.9458,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0458",
+      "gt_equiv_diameter_px": 240.13,
+      "gt_equiv_diameter_mm": 24.013,
+      "dice": 0.9482,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0459",
+      "gt_equiv_diameter_px": 73.6,
+      "gt_equiv_diameter_mm": 7.36,
+      "dice": 0.9066,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0460",
+      "gt_equiv_diameter_px": 30.47,
+      "gt_equiv_diameter_mm": 3.047,
+      "dice": 0.9157,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0461",
+      "gt_equiv_diameter_px": 27.08,
+      "gt_equiv_diameter_mm": 2.708,
+      "dice": 0.9353,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0462",
+      "gt_equiv_diameter_px": 100.08,
+      "gt_equiv_diameter_mm": 10.008,
+      "dice": 0.9561,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0463",
+      "gt_equiv_diameter_px": 33.85,
+      "gt_equiv_diameter_mm": 3.385,
+      "dice": 0.555,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0464",
+      "gt_equiv_diameter_px": 46.67,
+      "gt_equiv_diameter_mm": 4.667,
+      "dice": 0.9369,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0465",
+      "gt_equiv_diameter_px": 87.56,
+      "gt_equiv_diameter_mm": 8.756,
+      "dice": 0.9356,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0466",
+      "gt_equiv_diameter_px": 119.06,
+      "gt_equiv_diameter_mm": 11.906,
+      "dice": 0.8914,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0467",
+      "gt_equiv_diameter_px": 39.56,
+      "gt_equiv_diameter_mm": 3.956,
+      "dice": 0.7441,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0468",
+      "gt_equiv_diameter_px": 96.6,
+      "gt_equiv_diameter_mm": 9.66,
+      "dice": 0.585,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0469",
+      "gt_equiv_diameter_px": 260.64,
+      "gt_equiv_diameter_mm": 26.064,
+      "dice": 0.9132,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0470",
+      "gt_equiv_diameter_px": 69.92,
+      "gt_equiv_diameter_mm": 6.992,
+      "dice": 0.9377,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0471",
+      "gt_equiv_diameter_px": 71.7,
+      "gt_equiv_diameter_mm": 7.17,
+      "dice": 0.9519,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0472",
+      "gt_equiv_diameter_px": 112.63,
+      "gt_equiv_diameter_mm": 11.263,
+      "dice": 0.9538,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0473",
+      "gt_equiv_diameter_px": 126.07,
+      "gt_equiv_diameter_mm": 12.607,
+      "dice": 0.9326,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0474",
+      "gt_equiv_diameter_px": 140.79,
+      "gt_equiv_diameter_mm": 14.079,
+      "dice": 0.9385,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0475",
+      "gt_equiv_diameter_px": 46.8,
+      "gt_equiv_diameter_mm": 4.68,
+      "dice": 0.942,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0476",
+      "gt_equiv_diameter_px": 57.57,
+      "gt_equiv_diameter_mm": 5.757,
+      "dice": 0.8639,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0477",
+      "gt_equiv_diameter_px": 52.03,
+      "gt_equiv_diameter_mm": 5.203,
+      "dice": 0.9222,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0478",
+      "gt_equiv_diameter_px": 49.66,
+      "gt_equiv_diameter_mm": 4.966,
+      "dice": 0.8789,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0479",
+      "gt_equiv_diameter_px": 48.82,
+      "gt_equiv_diameter_mm": 4.882,
+      "dice": 0.918,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0480",
+      "gt_equiv_diameter_px": 192.43,
+      "gt_equiv_diameter_mm": 19.243,
+      "dice": 0.8886,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0481",
+      "gt_equiv_diameter_px": 133.96,
+      "gt_equiv_diameter_mm": 13.396,
+      "dice": 0.942,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0482",
+      "gt_equiv_diameter_px": 127.37,
+      "gt_equiv_diameter_mm": 12.737,
+      "dice": 0.9733,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0483",
+      "gt_equiv_diameter_px": 132.58,
+      "gt_equiv_diameter_mm": 13.258,
+      "dice": 0.9271,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0484",
+      "gt_equiv_diameter_px": 67.53,
+      "gt_equiv_diameter_mm": 6.753,
+      "dice": 0.8816,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0485",
+      "gt_equiv_diameter_px": 250.6,
+      "gt_equiv_diameter_mm": 25.06,
+      "dice": 0.8302,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0486",
+      "gt_equiv_diameter_px": 216.1,
+      "gt_equiv_diameter_mm": 21.61,
+      "dice": 0.9662,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0487",
+      "gt_equiv_diameter_px": 148.99,
+      "gt_equiv_diameter_mm": 14.899,
+      "dice": 0.8065,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0488",
+      "gt_equiv_diameter_px": 78.52,
+      "gt_equiv_diameter_mm": 7.852,
+      "dice": 0.9568,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0489",
+      "gt_equiv_diameter_px": 41.96,
+      "gt_equiv_diameter_mm": 4.196,
+      "dice": 0.8463,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0490",
+      "gt_equiv_diameter_px": 157.98,
+      "gt_equiv_diameter_mm": 15.798,
+      "dice": 0.9248,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0491",
+      "gt_equiv_diameter_px": 67.65,
+      "gt_equiv_diameter_mm": 6.765,
+      "dice": 0.9151,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0492",
+      "gt_equiv_diameter_px": 47.51,
+      "gt_equiv_diameter_mm": 4.751,
+      "dice": 0.8596,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0493",
+      "gt_equiv_diameter_px": 80.07,
+      "gt_equiv_diameter_mm": 8.007,
+      "dice": 0.9509,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0494",
+      "gt_equiv_diameter_px": 137.88,
+      "gt_equiv_diameter_mm": 13.788,
+      "dice": 0.8989,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0495",
+      "gt_equiv_diameter_px": 374.18,
+      "gt_equiv_diameter_mm": 37.418,
+      "dice": 0.9401,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0496",
+      "gt_equiv_diameter_px": 200.01,
+      "gt_equiv_diameter_mm": 20.001,
+      "dice": 0.8336,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0497",
+      "gt_equiv_diameter_px": 287.57,
+      "gt_equiv_diameter_mm": 28.757,
+      "dice": 0.8694,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0498",
+      "gt_equiv_diameter_px": 91.25,
+      "gt_equiv_diameter_mm": 9.125,
+      "dice": 0.9351,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0499",
+      "gt_equiv_diameter_px": 112.56,
+      "gt_equiv_diameter_mm": 11.256,
+      "dice": 0.9423,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0500",
+      "gt_equiv_diameter_px": 67.78,
+      "gt_equiv_diameter_mm": 6.778,
+      "dice": 0.9074,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0501",
+      "gt_equiv_diameter_px": 148.97,
+      "gt_equiv_diameter_mm": 14.897,
+      "dice": 0.9355,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0502",
+      "gt_equiv_diameter_px": 63.02,
+      "gt_equiv_diameter_mm": 6.302,
+      "dice": 0.8294,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0503",
+      "gt_equiv_diameter_px": 117.9,
+      "gt_equiv_diameter_mm": 11.79,
+      "dice": 0.3486,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0504",
+      "gt_equiv_diameter_px": 84.49,
+      "gt_equiv_diameter_mm": 8.449,
+      "dice": 0.9177,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0505",
+      "gt_equiv_diameter_px": 234.35,
+      "gt_equiv_diameter_mm": 23.435,
+      "dice": 0.8476,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0506",
+      "gt_equiv_diameter_px": 182.83,
+      "gt_equiv_diameter_mm": 18.283,
+      "dice": 0.9747,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0507",
+      "gt_equiv_diameter_px": 80.17,
+      "gt_equiv_diameter_mm": 8.017,
+      "dice": 0.9543,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0508",
+      "gt_equiv_diameter_px": 128.56,
+      "gt_equiv_diameter_mm": 12.856,
+      "dice": 0.8954,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0509",
+      "gt_equiv_diameter_px": 129.78,
+      "gt_equiv_diameter_mm": 12.978,
+      "dice": 0.9142,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0510",
+      "gt_equiv_diameter_px": 57.51,
+      "gt_equiv_diameter_mm": 5.751,
+      "dice": 0.935,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0511",
+      "gt_equiv_diameter_px": 72.55,
+      "gt_equiv_diameter_mm": 7.255,
+      "dice": 0.9642,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0512",
+      "gt_equiv_diameter_px": 81.06,
+      "gt_equiv_diameter_mm": 8.106,
+      "dice": 0.9079,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0513",
+      "gt_equiv_diameter_px": 64.65,
+      "gt_equiv_diameter_mm": 6.465,
+      "dice": 0.3492,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0514",
+      "gt_equiv_diameter_px": 160.25,
+      "gt_equiv_diameter_mm": 16.025,
+      "dice": 0.6763,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0515",
+      "gt_equiv_diameter_px": 124.79,
+      "gt_equiv_diameter_mm": 12.479,
+      "dice": 0.9163,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0516",
+      "gt_equiv_diameter_px": 74.4,
+      "gt_equiv_diameter_mm": 7.44,
+      "dice": 0.8493,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0517",
+      "gt_equiv_diameter_px": 62.52,
+      "gt_equiv_diameter_mm": 6.252,
+      "dice": 0.9538,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0518",
+      "gt_equiv_diameter_px": 105.72,
+      "gt_equiv_diameter_mm": 10.572,
+      "dice": 0.9256,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0519",
+      "gt_equiv_diameter_px": 75.26,
+      "gt_equiv_diameter_mm": 7.526,
+      "dice": 0.9637,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0520",
+      "gt_equiv_diameter_px": 44.32,
+      "gt_equiv_diameter_mm": 4.432,
+      "dice": 0.7492,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0521",
+      "gt_equiv_diameter_px": 54.65,
+      "gt_equiv_diameter_mm": 5.465,
+      "dice": 0.9425,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0522",
+      "gt_equiv_diameter_px": 63.38,
+      "gt_equiv_diameter_mm": 6.338,
+      "dice": 0.9341,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0523",
+      "gt_equiv_diameter_px": 84.4,
+      "gt_equiv_diameter_mm": 8.44,
+      "dice": 0.9563,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0524",
+      "gt_equiv_diameter_px": 98.49,
+      "gt_equiv_diameter_mm": 9.849,
+      "dice": 0.8204,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0525",
+      "gt_equiv_diameter_px": 107.23,
+      "gt_equiv_diameter_mm": 10.723,
+      "dice": 0.4766,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0526",
+      "gt_equiv_diameter_px": 134.72,
+      "gt_equiv_diameter_mm": 13.472,
+      "dice": 0.9422,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0527",
+      "gt_equiv_diameter_px": 33.42,
+      "gt_equiv_diameter_mm": 3.342,
+      "dice": 0.2709,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0528",
+      "gt_equiv_diameter_px": 94.66,
+      "gt_equiv_diameter_mm": 9.466,
+      "dice": 0.8496,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0529",
+      "gt_equiv_diameter_px": 386.85,
+      "gt_equiv_diameter_mm": 38.685,
+      "dice": 0.8853,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0530",
+      "gt_equiv_diameter_px": 160.8,
+      "gt_equiv_diameter_mm": 16.08,
+      "dice": 0.9643,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0531",
+      "gt_equiv_diameter_px": 193.63,
+      "gt_equiv_diameter_mm": 19.363,
+      "dice": 0.9668,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0532",
+      "gt_equiv_diameter_px": 107.92,
+      "gt_equiv_diameter_mm": 10.792,
+      "dice": 0.8427,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0533",
+      "gt_equiv_diameter_px": 95.14,
+      "gt_equiv_diameter_mm": 9.514,
+      "dice": 0.8517,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0534",
+      "gt_equiv_diameter_px": 139.87,
+      "gt_equiv_diameter_mm": 13.987,
+      "dice": 0.9733,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0535",
+      "gt_equiv_diameter_px": 79.16,
+      "gt_equiv_diameter_mm": 7.916,
+      "dice": 0.8953,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0536",
+      "gt_equiv_diameter_px": 107.39,
+      "gt_equiv_diameter_mm": 10.739,
+      "dice": 0.9185,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0537",
+      "gt_equiv_diameter_px": 115.44,
+      "gt_equiv_diameter_mm": 11.544,
+      "dice": 0.9407,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0538",
+      "gt_equiv_diameter_px": 77.64,
+      "gt_equiv_diameter_mm": 7.764,
+      "dice": 0.9545,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0539",
+      "gt_equiv_diameter_px": 121.85,
+      "gt_equiv_diameter_mm": 12.185,
+      "dice": 0.9088,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0540",
+      "gt_equiv_diameter_px": 305.09,
+      "gt_equiv_diameter_mm": 30.509,
+      "dice": 0.953,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0541",
+      "gt_equiv_diameter_px": 89.36,
+      "gt_equiv_diameter_mm": 8.936,
+      "dice": 0.8648,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0542",
+      "gt_equiv_diameter_px": 48.94,
+      "gt_equiv_diameter_mm": 4.894,
+      "dice": 0.856,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0543",
+      "gt_equiv_diameter_px": 47.75,
+      "gt_equiv_diameter_mm": 4.775,
+      "dice": 0.7961,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0544",
+      "gt_equiv_diameter_px": 111.08,
+      "gt_equiv_diameter_mm": 11.108,
+      "dice": 0.6468,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0545",
+      "gt_equiv_diameter_px": 80.67,
+      "gt_equiv_diameter_mm": 8.067,
+      "dice": 0.8546,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0546",
+      "gt_equiv_diameter_px": 91.48,
+      "gt_equiv_diameter_mm": 9.148,
+      "dice": 0.8841,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0547",
+      "gt_equiv_diameter_px": 237.51,
+      "gt_equiv_diameter_mm": 23.751,
+      "dice": 0.939,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0548",
+      "gt_equiv_diameter_px": 151.09,
+      "gt_equiv_diameter_mm": 15.109,
+      "dice": 0.9089,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0549",
+      "gt_equiv_diameter_px": 60.23,
+      "gt_equiv_diameter_mm": 6.023,
+      "dice": 0.455,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0550",
+      "gt_equiv_diameter_px": 38.86,
+      "gt_equiv_diameter_mm": 3.886,
+      "dice": 0.7337,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0551",
+      "gt_equiv_diameter_px": 118.52,
+      "gt_equiv_diameter_mm": 11.852,
+      "dice": 0.8806,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0552",
+      "gt_equiv_diameter_px": 67.53,
+      "gt_equiv_diameter_mm": 6.753,
+      "dice": 0.9201,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0553",
+      "gt_equiv_diameter_px": 100.01,
+      "gt_equiv_diameter_mm": 10.001,
+      "dice": 0.9368,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0554",
+      "gt_equiv_diameter_px": 30.34,
+      "gt_equiv_diameter_mm": 3.034,
+      "dice": 0.9267,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0555",
+      "gt_equiv_diameter_px": 94.66,
+      "gt_equiv_diameter_mm": 9.466,
+      "dice": 0.7671,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0556",
+      "gt_equiv_diameter_px": 43.2,
+      "gt_equiv_diameter_mm": 4.32,
+      "dice": 0.9354,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0557",
+      "gt_equiv_diameter_px": 84.85,
+      "gt_equiv_diameter_mm": 8.485,
+      "dice": 0.4503,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0558",
+      "gt_equiv_diameter_px": 167.33,
+      "gt_equiv_diameter_mm": 16.733,
+      "dice": 0.9305,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0559",
+      "gt_equiv_diameter_px": 141.28,
+      "gt_equiv_diameter_mm": 14.128,
+      "dice": 0.9242,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0560",
+      "gt_equiv_diameter_px": 89.13,
+      "gt_equiv_diameter_mm": 8.913,
+      "dice": 0.8987,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0561",
+      "gt_equiv_diameter_px": 440.43,
+      "gt_equiv_diameter_mm": 44.043,
+      "dice": 0.9275,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0562",
+      "gt_equiv_diameter_px": 389.72,
+      "gt_equiv_diameter_mm": 38.972,
+      "dice": 0.9422,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0563",
+      "gt_equiv_diameter_px": 112.82,
+      "gt_equiv_diameter_mm": 11.282,
+      "dice": 0.8962,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0564",
+      "gt_equiv_diameter_px": 159.04,
+      "gt_equiv_diameter_mm": 15.904,
+      "dice": 0.8663,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0565",
+      "gt_equiv_diameter_px": 48.1,
+      "gt_equiv_diameter_mm": 4.81,
+      "dice": 0.9026,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0566",
+      "gt_equiv_diameter_px": 121.5,
+      "gt_equiv_diameter_mm": 12.15,
+      "dice": 0.879,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0567",
+      "gt_equiv_diameter_px": 200.44,
+      "gt_equiv_diameter_mm": 20.044,
+      "dice": 0.8675,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0568",
+      "gt_equiv_diameter_px": 63.6,
+      "gt_equiv_diameter_mm": 6.36,
+      "dice": 0.9147,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0569",
+      "gt_equiv_diameter_px": 102.69,
+      "gt_equiv_diameter_mm": 10.269,
+      "dice": 0.9652,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0570",
+      "gt_equiv_diameter_px": 98.1,
+      "gt_equiv_diameter_mm": 9.81,
+      "dice": 0.8957,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0571",
+      "gt_equiv_diameter_px": 188.36,
+      "gt_equiv_diameter_mm": 18.836,
+      "dice": 0.9615,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0572",
+      "gt_equiv_diameter_px": 57.14,
+      "gt_equiv_diameter_mm": 5.714,
+      "dice": 0.8988,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0573",
+      "gt_equiv_diameter_px": 287.99,
+      "gt_equiv_diameter_mm": 28.799,
+      "dice": 0.9732,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0574",
+      "gt_equiv_diameter_px": 343.82,
+      "gt_equiv_diameter_mm": 34.382,
+      "dice": 0.9656,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0575",
+      "gt_equiv_diameter_px": 376.25,
+      "gt_equiv_diameter_mm": 37.625,
+      "dice": 0.9591,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0576",
+      "gt_equiv_diameter_px": 71.74,
+      "gt_equiv_diameter_mm": 7.174,
+      "dice": 0.8521,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0577",
+      "gt_equiv_diameter_px": 205.56,
+      "gt_equiv_diameter_mm": 20.556,
+      "dice": 0.922,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0578",
+      "gt_equiv_diameter_px": 126.97,
+      "gt_equiv_diameter_mm": 12.697,
+      "dice": 0.749,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0579",
+      "gt_equiv_diameter_px": 91.77,
+      "gt_equiv_diameter_mm": 9.177,
+      "dice": 0.893,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0580",
+      "gt_equiv_diameter_px": 43.04,
+      "gt_equiv_diameter_mm": 4.304,
+      "dice": 0.9212,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0581",
+      "gt_equiv_diameter_px": 35.31,
+      "gt_equiv_diameter_mm": 3.531,
+      "dice": 0.7562,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0582",
+      "gt_equiv_diameter_px": 190.8,
+      "gt_equiv_diameter_mm": 19.08,
+      "dice": 0.8482,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0583",
+      "gt_equiv_diameter_px": 132.74,
+      "gt_equiv_diameter_mm": 13.274,
+      "dice": 0.5807,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0584",
+      "gt_equiv_diameter_px": 113.14,
+      "gt_equiv_diameter_mm": 11.314,
+      "dice": 0.9475,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0585",
+      "gt_equiv_diameter_px": 50.9,
+      "gt_equiv_diameter_mm": 5.09,
+      "dice": 0.9137,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0586",
+      "gt_equiv_diameter_px": 46.21,
+      "gt_equiv_diameter_mm": 4.621,
+      "dice": 0.0,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0587",
+      "gt_equiv_diameter_px": 72.78,
+      "gt_equiv_diameter_mm": 7.278,
+      "dice": 0.9136,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0588",
+      "gt_equiv_diameter_px": 154.01,
+      "gt_equiv_diameter_mm": 15.401,
+      "dice": 0.8802,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0589",
+      "gt_equiv_diameter_px": 96.33,
+      "gt_equiv_diameter_mm": 9.633,
+      "dice": 0.8242,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0590",
+      "gt_equiv_diameter_px": 71.13,
+      "gt_equiv_diameter_mm": 7.113,
+      "dice": 0.9338,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0591",
+      "gt_equiv_diameter_px": 180.56,
+      "gt_equiv_diameter_mm": 18.056,
+      "dice": 0.942,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0592",
+      "gt_equiv_diameter_px": 229.62,
+      "gt_equiv_diameter_mm": 22.962,
+      "dice": 0.9217,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0593",
+      "gt_equiv_diameter_px": 188.61,
+      "gt_equiv_diameter_mm": 18.861,
+      "dice": 0.6289,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0594",
+      "gt_equiv_diameter_px": 112.59,
+      "gt_equiv_diameter_mm": 11.259,
+      "dice": 0.0,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0595",
+      "gt_equiv_diameter_px": 89.36,
+      "gt_equiv_diameter_mm": 8.936,
+      "dice": 0.8328,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0596",
+      "gt_equiv_diameter_px": 92.87,
+      "gt_equiv_diameter_mm": 9.287,
+      "dice": 0.9245,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0597",
+      "gt_equiv_diameter_px": 113.27,
+      "gt_equiv_diameter_mm": 11.327,
+      "dice": 0.9003,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0598",
+      "gt_equiv_diameter_px": 48.68,
+      "gt_equiv_diameter_mm": 4.868,
+      "dice": 0.8825,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0599",
+      "gt_equiv_diameter_px": 196.24,
+      "gt_equiv_diameter_mm": 19.624,
+      "dice": 0.9665,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0600",
+      "gt_equiv_diameter_px": 120.76,
+      "gt_equiv_diameter_mm": 12.076,
+      "dice": 0.8926,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0601",
+      "gt_equiv_diameter_px": 105.13,
+      "gt_equiv_diameter_mm": 10.513,
+      "dice": 0.9088,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0602",
+      "gt_equiv_diameter_px": 148.65,
+      "gt_equiv_diameter_mm": 14.865,
+      "dice": 0.9154,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0603",
+      "gt_equiv_diameter_px": 39.38,
+      "gt_equiv_diameter_mm": 3.938,
+      "dice": 0.847,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0604",
+      "gt_equiv_diameter_px": 235.94,
+      "gt_equiv_diameter_mm": 23.594,
+      "dice": 0.9108,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0605",
+      "gt_equiv_diameter_px": 139.26,
+      "gt_equiv_diameter_mm": 13.926,
+      "dice": 0.8402,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0606",
+      "gt_equiv_diameter_px": 40.02,
+      "gt_equiv_diameter_mm": 4.002,
+      "dice": 0.2669,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0607",
+      "gt_equiv_diameter_px": 95.16,
+      "gt_equiv_diameter_mm": 9.516,
+      "dice": 0.8701,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0608",
+      "gt_equiv_diameter_px": 90.86,
+      "gt_equiv_diameter_mm": 9.086,
+      "dice": 0.888,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0609",
+      "gt_equiv_diameter_px": 264.73,
+      "gt_equiv_diameter_mm": 26.473,
+      "dice": 0.9279,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0610",
+      "gt_equiv_diameter_px": 62.42,
+      "gt_equiv_diameter_mm": 6.242,
+      "dice": 0.9232,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0611",
+      "gt_equiv_diameter_px": 139.75,
+      "gt_equiv_diameter_mm": 13.975,
+      "dice": 0.9501,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0612",
+      "gt_equiv_diameter_px": 110.41,
+      "gt_equiv_diameter_mm": 11.041,
+      "dice": 0.9155,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0613",
+      "gt_equiv_diameter_px": 81.45,
+      "gt_equiv_diameter_mm": 8.145,
+      "dice": 0.8858,
+      "pred_empty": false
+    }
+  ],
+  "small_subset": [
+    {
+      "stem": "TN3K_test_0004",
+      "gt_equiv_diameter_px": 42.68,
+      "gt_equiv_diameter_mm": 4.268,
+      "dice": 0.9432,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0015",
+      "gt_equiv_diameter_px": 42.43,
+      "gt_equiv_diameter_mm": 4.243,
+      "dice": 0.4534,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0016",
+      "gt_equiv_diameter_px": 48.93,
+      "gt_equiv_diameter_mm": 4.893,
+      "dice": 0.6928,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0030",
+      "gt_equiv_diameter_px": 37.88,
+      "gt_equiv_diameter_mm": 3.788,
+      "dice": 0.8762,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0031",
+      "gt_equiv_diameter_px": 31.23,
+      "gt_equiv_diameter_mm": 3.123,
+      "dice": 0.8013,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0037",
+      "gt_equiv_diameter_px": 39.28,
+      "gt_equiv_diameter_mm": 3.928,
+      "dice": 0.2572,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0078",
+      "gt_equiv_diameter_px": 37.88,
+      "gt_equiv_diameter_mm": 3.788,
+      "dice": 0.9109,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0091",
+      "gt_equiv_diameter_px": 36.84,
+      "gt_equiv_diameter_mm": 3.684,
+      "dice": 0.933,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0095",
+      "gt_equiv_diameter_px": 24.93,
+      "gt_equiv_diameter_mm": 2.493,
+      "dice": 0.8167,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0101",
+      "gt_equiv_diameter_px": 48.44,
+      "gt_equiv_diameter_mm": 4.844,
+      "dice": 0.9267,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0102",
+      "gt_equiv_diameter_px": 46.84,
+      "gt_equiv_diameter_mm": 4.684,
+      "dice": 0.818,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0107",
+      "gt_equiv_diameter_px": 26.84,
+      "gt_equiv_diameter_mm": 2.684,
+      "dice": 0.0,
+      "pred_empty": true
+    },
+    {
+      "stem": "TN3K_test_0117",
+      "gt_equiv_diameter_px": 42.7,
+      "gt_equiv_diameter_mm": 4.27,
+      "dice": 0.8328,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0124",
+      "gt_equiv_diameter_px": 49.82,
+      "gt_equiv_diameter_mm": 4.982,
+      "dice": 0.9167,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0149",
+      "gt_equiv_diameter_px": 34.85,
+      "gt_equiv_diameter_mm": 3.485,
+      "dice": 0.845,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0164",
+      "gt_equiv_diameter_px": 22.26,
+      "gt_equiv_diameter_mm": 2.226,
+      "dice": 0.7531,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0174",
+      "gt_equiv_diameter_px": 35.09,
+      "gt_equiv_diameter_mm": 3.509,
+      "dice": 0.9218,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0181",
+      "gt_equiv_diameter_px": 43.26,
+      "gt_equiv_diameter_mm": 4.326,
+      "dice": 0.8716,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0186",
+      "gt_equiv_diameter_px": 28.52,
+      "gt_equiv_diameter_mm": 2.852,
+      "dice": 0.6601,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0195",
+      "gt_equiv_diameter_px": 39.69,
+      "gt_equiv_diameter_mm": 3.969,
+      "dice": 0.8834,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0198",
+      "gt_equiv_diameter_px": 34.04,
+      "gt_equiv_diameter_mm": 3.404,
+      "dice": 0.8574,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0200",
+      "gt_equiv_diameter_px": 35.13,
+      "gt_equiv_diameter_mm": 3.513,
+      "dice": 0.8837,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0206",
+      "gt_equiv_diameter_px": 39.19,
+      "gt_equiv_diameter_mm": 3.919,
+      "dice": 0.8887,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0232",
+      "gt_equiv_diameter_px": 44.4,
+      "gt_equiv_diameter_mm": 4.44,
+      "dice": 0.8831,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0250",
+      "gt_equiv_diameter_px": 44.88,
+      "gt_equiv_diameter_mm": 4.488,
+      "dice": 0.8828,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0251",
+      "gt_equiv_diameter_px": 30.26,
+      "gt_equiv_diameter_mm": 3.026,
+      "dice": 0.1663,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0263",
+      "gt_equiv_diameter_px": 26.29,
+      "gt_equiv_diameter_mm": 2.629,
+      "dice": 0.8746,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0276",
+      "gt_equiv_diameter_px": 22.74,
+      "gt_equiv_diameter_mm": 2.274,
+      "dice": 0.7733,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0325",
+      "gt_equiv_diameter_px": 46.67,
+      "gt_equiv_diameter_mm": 4.667,
+      "dice": 0.9118,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0327",
+      "gt_equiv_diameter_px": 46.26,
+      "gt_equiv_diameter_mm": 4.626,
+      "dice": 0.9307,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0337",
+      "gt_equiv_diameter_px": 29.27,
+      "gt_equiv_diameter_mm": 2.927,
+      "dice": 0.399,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0347",
+      "gt_equiv_diameter_px": 49.42,
+      "gt_equiv_diameter_mm": 4.942,
+      "dice": 0.7697,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0352",
+      "gt_equiv_diameter_px": 48.11,
+      "gt_equiv_diameter_mm": 4.811,
+      "dice": 0.1938,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0378",
+      "gt_equiv_diameter_px": 32.65,
+      "gt_equiv_diameter_mm": 3.265,
+      "dice": 0.8461,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0394",
+      "gt_equiv_diameter_px": 38.18,
+      "gt_equiv_diameter_mm": 3.818,
+      "dice": 0.8462,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0395",
+      "gt_equiv_diameter_px": 31.78,
+      "gt_equiv_diameter_mm": 3.178,
+      "dice": 0.7442,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0401",
+      "gt_equiv_diameter_px": 44.7,
+      "gt_equiv_diameter_mm": 4.47,
+      "dice": 0.8738,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0404",
+      "gt_equiv_diameter_px": 42.4,
+      "gt_equiv_diameter_mm": 4.24,
+      "dice": 0.8379,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0426",
+      "gt_equiv_diameter_px": 49.71,
+      "gt_equiv_diameter_mm": 4.971,
+      "dice": 0.9458,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0429",
+      "gt_equiv_diameter_px": 32.47,
+      "gt_equiv_diameter_mm": 3.247,
+      "dice": 0.9477,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0447",
+      "gt_equiv_diameter_px": 47.58,
+      "gt_equiv_diameter_mm": 4.758,
+      "dice": 0.9358,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0453",
+      "gt_equiv_diameter_px": 44.99,
+      "gt_equiv_diameter_mm": 4.499,
+      "dice": 0.9095,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0454",
+      "gt_equiv_diameter_px": 32.59,
+      "gt_equiv_diameter_mm": 3.259,
+      "dice": 0.9205,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0456",
+      "gt_equiv_diameter_px": 36.48,
+      "gt_equiv_diameter_mm": 3.648,
+      "dice": 0.7477,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0460",
+      "gt_equiv_diameter_px": 30.47,
+      "gt_equiv_diameter_mm": 3.047,
+      "dice": 0.9157,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0461",
+      "gt_equiv_diameter_px": 27.08,
+      "gt_equiv_diameter_mm": 2.708,
+      "dice": 0.9353,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0463",
+      "gt_equiv_diameter_px": 33.85,
+      "gt_equiv_diameter_mm": 3.385,
+      "dice": 0.555,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0464",
+      "gt_equiv_diameter_px": 46.67,
+      "gt_equiv_diameter_mm": 4.667,
+      "dice": 0.9369,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0467",
+      "gt_equiv_diameter_px": 39.56,
+      "gt_equiv_diameter_mm": 3.956,
+      "dice": 0.7441,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0475",
+      "gt_equiv_diameter_px": 46.8,
+      "gt_equiv_diameter_mm": 4.68,
+      "dice": 0.942,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0478",
+      "gt_equiv_diameter_px": 49.66,
+      "gt_equiv_diameter_mm": 4.966,
+      "dice": 0.8789,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0479",
+      "gt_equiv_diameter_px": 48.82,
+      "gt_equiv_diameter_mm": 4.882,
+      "dice": 0.918,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0489",
+      "gt_equiv_diameter_px": 41.96,
+      "gt_equiv_diameter_mm": 4.196,
+      "dice": 0.8463,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0492",
+      "gt_equiv_diameter_px": 47.51,
+      "gt_equiv_diameter_mm": 4.751,
+      "dice": 0.8596,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0520",
+      "gt_equiv_diameter_px": 44.32,
+      "gt_equiv_diameter_mm": 4.432,
+      "dice": 0.7492,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0527",
+      "gt_equiv_diameter_px": 33.42,
+      "gt_equiv_diameter_mm": 3.342,
+      "dice": 0.2709,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0542",
+      "gt_equiv_diameter_px": 48.94,
+      "gt_equiv_diameter_mm": 4.894,
+      "dice": 0.856,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0543",
+      "gt_equiv_diameter_px": 47.75,
+      "gt_equiv_diameter_mm": 4.775,
+      "dice": 0.7961,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0550",
+      "gt_equiv_diameter_px": 38.86,
+      "gt_equiv_diameter_mm": 3.886,
+      "dice": 0.7337,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0554",
+      "gt_equiv_diameter_px": 30.34,
+      "gt_equiv_diameter_mm": 3.034,
+      "dice": 0.9267,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0556",
+      "gt_equiv_diameter_px": 43.2,
+      "gt_equiv_diameter_mm": 4.32,
+      "dice": 0.9354,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0565",
+      "gt_equiv_diameter_px": 48.1,
+      "gt_equiv_diameter_mm": 4.81,
+      "dice": 0.9026,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0580",
+      "gt_equiv_diameter_px": 43.04,
+      "gt_equiv_diameter_mm": 4.304,
+      "dice": 0.9212,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0581",
+      "gt_equiv_diameter_px": 35.31,
+      "gt_equiv_diameter_mm": 3.531,
+      "dice": 0.7562,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0586",
+      "gt_equiv_diameter_px": 46.21,
+      "gt_equiv_diameter_mm": 4.621,
+      "dice": 0.0,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0598",
+      "gt_equiv_diameter_px": 48.68,
+      "gt_equiv_diameter_mm": 4.868,
+      "dice": 0.8825,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0603",
+      "gt_equiv_diameter_px": 39.38,
+      "gt_equiv_diameter_mm": 3.938,
+      "dice": 0.847,
+      "pred_empty": false
+    },
+    {
+      "stem": "TN3K_test_0606",
+      "gt_equiv_diameter_px": 40.02,
+      "gt_equiv_diameter_mm": 4.002,
+      "dice": 0.2669,
+      "pred_empty": false
+    }
+  ],
+  "small_failures": [
+    {
+      "stem": "TN3K_test_0107",
+      "gt_equiv_diameter_px": 26.84,
+      "gt_equiv_diameter_mm": 2.684,
+      "dice": 0.0,
+      "pred_empty": true
+    },
+    {
+      "stem": "TN3K_test_0586",
+      "gt_equiv_diameter_px": 46.21,
+      "gt_equiv_diameter_mm": 4.621,
+      "dice": 0.0,
+      "pred_empty": false
+    }
+  ]
+}

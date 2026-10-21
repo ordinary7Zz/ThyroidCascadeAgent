@@ -2,8 +2,11 @@
   "task": "seg",
   "model_names": [
     "all_datasets",
-    "transunet_all_datasets"
+    "TN3K",
+    "ThyroidXL",
+    "PKTN_comprehensive",
+    "TN5K"
   ],
   "init_mode": "random",
-  "n_features": 12
+  "n_features": 27
 }

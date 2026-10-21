@@ -74,9 +74,9 @@ COHORTS: dict[str, dict] = {
         "ablation_task": "seg",
     },
     "ddti_cls": {
-        "image_input": f"{_DATA}/DDTI_Classification/test/images_processed",
-        "gt_mask_dir": f"{_DATA}/DDTI_Classification/test/masks",
-        "label_file": f"{_DATA}/DDTI_Classification/test/DDTI_Classification_test_label.json",
+        "image_input": f"{_DATA}/DDTI_Classification/all/images_processed",
+        "gt_mask_dir": "",
+        "label_file": f"{_DATA}/DDTI_Classification/all/DDTI_Classification_test_label.json",
         "pipeline_run": "output/DDTI_cls/pipeline_run",
         "ablation_task": "cls",
     },
