@@ -1,0 +1,56 @@
+# B2 各队列任务范围（与 config/b3/README.md、稿内 S3/S4 一致）
+# classification: 良恶性分类 + cluster-bootstrap AUROC/AUPRC
+# segmentation: Dice/HD95 + cluster-bootstrap（需 selected_masks.npz + gt_mask_dir）
+
+data_root: /mnt/wangbd8/workspace/DataSets/ThyroidAgent
+
+cohorts:
+  - name: thyroidxl
+    tasks: [classification, segmentation]
+    results: output/ThyroidXL/pipeline_run/results.json
+    pipeline_dir: output/ThyroidXL/pipeline_run
+    gt_mask_dir: train_val_test/ThyroidXL/test/masks
+    cluster_map: docs/revision/b2/cluster_maps/thyroidxl_test.json
+    patient_level: true
+
+  - name: zjh8k
+    tasks: [classification, segmentation]
+    results: output/ZJH-8K/pipeline_run/results.json
+    pipeline_dir: output/ZJH-8K/pipeline_run
+    gt_mask_dir: train_val_test/ZJH-8K/masks
+    cluster_map: docs/revision/b2/cluster_maps/zjh8k.json
+    patient_level: true
+
+  - name: tn3k
+    tasks: [classification, segmentation]
+    results: output/TN3K/pipeline_run/results.json
+    pipeline_dir: output/TN3K/pipeline_run
+    gt_mask_dir: train_val_test/TN3K/test/masks
+
+  - name: tn5k
+    tasks: [classification, segmentation]
+    results: output/TN5K/pipeline_run/results.json
+    pipeline_dir: output/TN5K/pipeline_run
+    gt_mask_dir: train_val_test/TN5K/test/masks
+
+  - name: ddti_cls
+    tasks: [classification]
+    results: output/DDTI_cls/pipeline_run/results.json
+
+  - name: ddti_seg
+    tasks: [segmentation]
+    results: output/DDTI_seg/pipeline_run/results.json
+    pipeline_dir: output/DDTI_seg/pipeline_run
+    gt_mask_dir: train_val_test/DDTI/all_seg/masks
+
+  - name: rjh7k
+    tasks: [segmentation]
+    results: output/RJH-7K/pipeline_run/results.json
+    pipeline_dir: output/RJH-7K/pipeline_run
+    gt_mask_dir: augtrain_PNG/mask
+
+  - name: pktn
+    tasks: [segmentation]
+    results: output/PKTN/pipeline_run/results.json
+    pipeline_dir: output/PKTN/pipeline_run
+    gt_mask_dir: train_val_test/PKTN/test/masks

@@ -3,12 +3,16 @@
 
 from __future__ import annotations
 
+import repo_path
+
+repo_path.install()
+
 import json
 from pathlib import Path
 
 import yaml
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = repo_path.find_repo_root()
 CONFIG = ROOT / "config"
 B3_DIR = CONFIG / "b3"
 B4_DIR = CONFIG / "b4"
@@ -228,7 +232,7 @@ def main() -> None:
         "# B4 汇总；L3/B-c 需 B3 llm 目录存在后再 build_b4_tables.py。\n"
     )
     b5_header = (
-        "# B5 元数据消融；须先有 pipeline_run/intermediate。批量: scripts/run_b5_batch.py\n"
+        "# B5 元数据消融；须先有 pipeline_run/intermediate。批量: scripts/revision/b5/run_b5_batch.py\n"
         "# full 可与 B3 llm 复用: run_b5_batch.py --skip-full\n"
     )
     B3_DIR.mkdir(parents=True, exist_ok=True)
@@ -256,3 +260,8 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+import importlib.util
+from pathlib import Path
+
+

@@ -927,6 +927,10 @@ class CascadePipeline:
             self._save_cls_json(cache_path, img_names, cls_outputs)
             print(f"  [{i+1}/{len(cls_model_configs)}] ✓ {model.model_name} 推理完成，已保存 {cache_path.name}，已卸载")
 
+        if self.config.get("pipeline", {}).get("stop_after_phase2", False):
+            print("  ⏭ stop_after_phase2=True，跳过 Phase 3–5（仅保留 intermediate 供 B3 等）")
+            return []
+
         # ===== Phase 3: 分类共识 + 分割 Agent（从缓存加载，CPU 运行）=====
         print(f"\n{'='*60}")
         print("Phase 3: 分类共识判断 + 分割 Agent 选择")
@@ -1008,6 +1012,14 @@ class CascadePipeline:
 
             skip_static_radiomics = not phase3_expert_judge
 
+            gt_stem_map: dict[str, Path] = {}
+            if gt_mask_dir:
+                gt_dir = Path(gt_mask_dir)
+                if gt_dir.is_dir():
+                    gt_stem_map = {
+                        p.stem: p for p in gt_dir.iterdir() if p.is_file()
+                    }
+
             for idx in range(start_idx, len(img_names)):
                 img_name = img_names[idx]
                 img_path = image_paths[idx]
@@ -1021,10 +1033,12 @@ class CascadePipeline:
                 )
 
                 gt_mask = None
-                if gt_mask_dir:
-                    gt_path = Path(gt_mask_dir) / img_name
-                    if gt_path.exists():
-                        gt_mask = self.image_io.binarize_mask(self.image_io.load_mask(gt_path))
+                if gt_stem_map:
+                    gt_path = gt_stem_map.get(img_stem)
+                    if gt_path is not None and gt_path.is_file():
+                        gt_mask = self.image_io.binarize_mask(
+                            self.image_io.load_mask(gt_path)
+                        )
 
                 # 按 idx 取该图像的分割结果（已预加载，O(1) 索引）
                 seg_preds = []

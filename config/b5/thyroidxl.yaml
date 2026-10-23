@@ -1,4 +1,4 @@
-# B5 元数据消融；须先有 pipeline_run/intermediate。批量: scripts/run_b5_batch.py
+# B5 元数据消融；须先有 pipeline_run/intermediate。批量: scripts/revision/b5/run_b5_batch.py
 # full 可与 B3 llm 复用: run_b5_batch.py --skip-full
 shared:
   agent_llm:

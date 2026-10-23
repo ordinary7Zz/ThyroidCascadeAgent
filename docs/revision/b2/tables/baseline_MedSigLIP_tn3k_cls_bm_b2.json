@@ -1,0 +1,31 @@
+{
+  "source": "b2_exports",
+  "export_dir": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/MedSigLIP/tn3k_cls_bm",
+  "model_id": "MedSigLIP",
+  "cohort_id": "tn3k_cls_bm",
+  "manifest": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/MedSigLIP/tn3k_cls_bm/manifest.json",
+  "predictions": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/MedSigLIP/tn3k_cls_bm/predictions.jsonl",
+  "n_records": 614,
+  "cluster_map": null,
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "classification": {
+    "task": "classification",
+    "n_images": 614,
+    "n_clusters": 614,
+    "image_level_cluster_bootstrap": {
+      "auroc": {
+        "mean": 0.8292922159447583,
+        "ci_lower": 0.7968074298080831,
+        "ci_upper": 0.8617964356189506
+      },
+      "auprc": {
+        "mean": 0.7403210989669629,
+        "ci_lower": 0.6788187368364003,
+        "ci_upper": 0.7968257190980851
+      }
+    }
+  }
+}

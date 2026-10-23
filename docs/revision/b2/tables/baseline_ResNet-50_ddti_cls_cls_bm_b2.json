@@ -1,0 +1,31 @@
+{
+  "source": "b2_exports",
+  "export_dir": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/ResNet-50/ddti_cls_cls_bm",
+  "model_id": "ResNet-50",
+  "cohort_id": "ddti_cls_cls_bm",
+  "manifest": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/ResNet-50/ddti_cls_cls_bm/manifest.json",
+  "predictions": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/ResNet-50/ddti_cls_cls_bm/predictions.jsonl",
+  "n_records": 349,
+  "cluster_map": null,
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "classification": {
+    "task": "classification",
+    "n_images": 349,
+    "n_clusters": 349,
+    "image_level_cluster_bootstrap": {
+      "auroc": {
+        "mean": 0.615533625730994,
+        "ci_lower": 0.5333895322927763,
+        "ci_upper": 0.6982130213927676
+      },
+      "auprc": {
+        "mean": 0.23123469101442617,
+        "ci_lower": 0.14228079090952422,
+        "ci_upper": 0.3585828435724594
+      }
+    }
+  }
+}

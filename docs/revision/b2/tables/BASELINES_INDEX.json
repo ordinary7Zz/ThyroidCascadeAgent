@@ -1,0 +1,350 @@
+[
+  {
+    "model_id": "BiomedCLIP",
+    "cohort_id": "ddti_cls_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_BiomedCLIP_ddti_cls_cls_bm_b2.json",
+    "n_records": 349
+  },
+  {
+    "model_id": "BiomedCLIP",
+    "cohort_id": "thyroidxl_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_BiomedCLIP_thyroidxl_cls_bm_b2.json",
+    "n_records": 2090
+  },
+  {
+    "model_id": "BiomedCLIP",
+    "cohort_id": "tn3k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_BiomedCLIP_tn3k_cls_bm_b2.json",
+    "n_records": 614
+  },
+  {
+    "model_id": "BiomedCLIP",
+    "cohort_id": "tn5k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_BiomedCLIP_tn5k_cls_bm_b2.json",
+    "n_records": 1000
+  },
+  {
+    "model_id": "BiomedCLIP",
+    "cohort_id": "zjh8k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_BiomedCLIP_zjh8k_cls_bm_b2.json",
+    "n_records": 7958
+  },
+  {
+    "model_id": "LSNet",
+    "cohort_id": "ddti_cls_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_LSNet_ddti_cls_cls_bm_b2.json",
+    "n_records": 349
+  },
+  {
+    "model_id": "LSNet",
+    "cohort_id": "thyroidxl_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_LSNet_thyroidxl_cls_bm_b2.json",
+    "n_records": 2090
+  },
+  {
+    "model_id": "LSNet",
+    "cohort_id": "tn3k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_LSNet_tn3k_cls_bm_b2.json",
+    "n_records": 614
+  },
+  {
+    "model_id": "LSNet",
+    "cohort_id": "tn5k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_LSNet_tn5k_cls_bm_b2.json",
+    "n_records": 1000
+  },
+  {
+    "model_id": "LSNet",
+    "cohort_id": "zjh8k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_LSNet_zjh8k_cls_bm_b2.json",
+    "n_records": 7958
+  },
+  {
+    "model_id": "MedSAM2",
+    "cohort_id": "ddti_seg_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSAM2_ddti_seg_seg_nodule_b2.json",
+    "n_records": 637
+  },
+  {
+    "model_id": "MedSAM2",
+    "cohort_id": "pktn_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSAM2_pktn_seg_nodule_b2.json",
+    "n_records": 150
+  },
+  {
+    "model_id": "MedSAM2",
+    "cohort_id": "rjh7k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSAM2_rjh7k_seg_nodule_b2.json",
+    "n_records": 7288
+  },
+  {
+    "model_id": "MedSAM2",
+    "cohort_id": "thyroidxl_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSAM2_thyroidxl_seg_nodule_b2.json",
+    "n_records": 2090
+  },
+  {
+    "model_id": "MedSAM2",
+    "cohort_id": "tn3k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSAM2_tn3k_seg_nodule_b2.json",
+    "n_records": 614
+  },
+  {
+    "model_id": "MedSAM2",
+    "cohort_id": "tn5k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSAM2_tn5k_seg_nodule_b2.json",
+    "n_records": 1000
+  },
+  {
+    "model_id": "MedSAM2",
+    "cohort_id": "zjh8k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSAM2_zjh8k_seg_nodule_b2.json",
+    "n_records": 7958
+  },
+  {
+    "model_id": "MedSegX",
+    "cohort_id": "ddti_seg_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSegX_ddti_seg_seg_nodule_b2.json",
+    "n_records": 637
+  },
+  {
+    "model_id": "MedSegX",
+    "cohort_id": "pktn_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSegX_pktn_seg_nodule_b2.json",
+    "n_records": 150
+  },
+  {
+    "model_id": "MedSegX",
+    "cohort_id": "rjh7k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSegX_rjh7k_seg_nodule_b2.json",
+    "n_records": 7288
+  },
+  {
+    "model_id": "MedSegX",
+    "cohort_id": "thyroidxl_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSegX_thyroidxl_seg_nodule_b2.json",
+    "n_records": 2090
+  },
+  {
+    "model_id": "MedSegX",
+    "cohort_id": "tn3k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSegX_tn3k_seg_nodule_b2.json",
+    "n_records": 614
+  },
+  {
+    "model_id": "MedSegX",
+    "cohort_id": "tn5k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSegX_tn5k_seg_nodule_b2.json",
+    "n_records": 1000
+  },
+  {
+    "model_id": "MedSegX",
+    "cohort_id": "zjh8k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSegX_zjh8k_seg_nodule_b2.json",
+    "n_records": 7958
+  },
+  {
+    "model_id": "MedSigLIP",
+    "cohort_id": "ddti_cls_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSigLIP_ddti_cls_cls_bm_b2.json",
+    "n_records": 349
+  },
+  {
+    "model_id": "MedSigLIP",
+    "cohort_id": "thyroidxl_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSigLIP_thyroidxl_cls_bm_b2.json",
+    "n_records": 2090
+  },
+  {
+    "model_id": "MedSigLIP",
+    "cohort_id": "tn3k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSigLIP_tn3k_cls_bm_b2.json",
+    "n_records": 614
+  },
+  {
+    "model_id": "MedSigLIP",
+    "cohort_id": "tn5k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSigLIP_tn5k_cls_bm_b2.json",
+    "n_records": 1000
+  },
+  {
+    "model_id": "MedSigLIP",
+    "cohort_id": "zjh8k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSigLIP_zjh8k_cls_bm_b2.json",
+    "n_records": 7958
+  },
+  {
+    "model_id": "RepViT",
+    "cohort_id": "ddti_cls_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_RepViT_ddti_cls_cls_bm_b2.json",
+    "n_records": 349
+  },
+  {
+    "model_id": "RepViT",
+    "cohort_id": "thyroidxl_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_RepViT_thyroidxl_cls_bm_b2.json",
+    "n_records": 2090
+  },
+  {
+    "model_id": "RepViT",
+    "cohort_id": "tn3k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_RepViT_tn3k_cls_bm_b2.json",
+    "n_records": 614
+  },
+  {
+    "model_id": "RepViT",
+    "cohort_id": "tn5k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_RepViT_tn5k_cls_bm_b2.json",
+    "n_records": 1000
+  },
+  {
+    "model_id": "RepViT",
+    "cohort_id": "zjh8k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_RepViT_zjh8k_cls_bm_b2.json",
+    "n_records": 7958
+  },
+  {
+    "model_id": "ResNet-50",
+    "cohort_id": "ddti_cls_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_ResNet-50_ddti_cls_cls_bm_b2.json",
+    "n_records": 349
+  },
+  {
+    "model_id": "ResNet-50",
+    "cohort_id": "thyroidxl_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_ResNet-50_thyroidxl_cls_bm_b2.json",
+    "n_records": 2090
+  },
+  {
+    "model_id": "ResNet-50",
+    "cohort_id": "tn3k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_ResNet-50_tn3k_cls_bm_b2.json",
+    "n_records": 614
+  },
+  {
+    "model_id": "ResNet-50",
+    "cohort_id": "tn5k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_ResNet-50_tn5k_cls_bm_b2.json",
+    "n_records": 1000
+  },
+  {
+    "model_id": "ResNet-50",
+    "cohort_id": "zjh8k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_ResNet-50_zjh8k_cls_bm_b2.json",
+    "n_records": 7958
+  },
+  {
+    "model_id": "TransUNet",
+    "cohort_id": "ddti_seg_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_TransUNet_ddti_seg_seg_nodule_b2.json",
+    "n_records": 637
+  },
+  {
+    "model_id": "TransUNet",
+    "cohort_id": "pktn_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_TransUNet_pktn_seg_nodule_b2.json",
+    "n_records": 150
+  },
+  {
+    "model_id": "TransUNet",
+    "cohort_id": "rjh7k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_TransUNet_rjh7k_seg_nodule_b2.json",
+    "n_records": 7288
+  },
+  {
+    "model_id": "TransUNet",
+    "cohort_id": "thyroidxl_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_TransUNet_thyroidxl_seg_nodule_b2.json",
+    "n_records": 2090
+  },
+  {
+    "model_id": "TransUNet",
+    "cohort_id": "tn3k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_TransUNet_tn3k_seg_nodule_b2.json",
+    "n_records": 614
+  },
+  {
+    "model_id": "TransUNet",
+    "cohort_id": "tn5k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_TransUNet_tn5k_seg_nodule_b2.json",
+    "n_records": 1000
+  },
+  {
+    "model_id": "TransUNet",
+    "cohort_id": "zjh8k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_TransUNet_zjh8k_seg_nodule_b2.json",
+    "n_records": 7958
+  },
+  {
+    "model_id": "UltraFedFM",
+    "cohort_id": "ddti_cls_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_UltraFedFM_ddti_cls_cls_bm_b2.json",
+    "n_records": 349
+  },
+  {
+    "model_id": "UltraFedFM",
+    "cohort_id": "ddti_seg_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_UltraFedFM_ddti_seg_seg_nodule_b2.json",
+    "n_records": 637
+  },
+  {
+    "model_id": "UltraFedFM",
+    "cohort_id": "pktn_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_UltraFedFM_pktn_seg_nodule_b2.json",
+    "n_records": 150
+  },
+  {
+    "model_id": "UltraFedFM",
+    "cohort_id": "rjh7k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_UltraFedFM_rjh7k_seg_nodule_b2.json",
+    "n_records": 7288
+  },
+  {
+    "model_id": "UltraFedFM",
+    "cohort_id": "thyroidxl_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_UltraFedFM_thyroidxl_cls_bm_b2.json",
+    "n_records": 2090
+  },
+  {
+    "model_id": "UltraFedFM",
+    "cohort_id": "thyroidxl_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_UltraFedFM_thyroidxl_seg_nodule_b2.json",
+    "n_records": 2090
+  },
+  {
+    "model_id": "UltraFedFM",
+    "cohort_id": "tn3k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_UltraFedFM_tn3k_cls_bm_b2.json",
+    "n_records": 614
+  },
+  {
+    "model_id": "UltraFedFM",
+    "cohort_id": "tn3k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_UltraFedFM_tn3k_seg_nodule_b2.json",
+    "n_records": 614
+  },
+  {
+    "model_id": "UltraFedFM",
+    "cohort_id": "tn5k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_UltraFedFM_tn5k_cls_bm_b2.json",
+    "n_records": 1000
+  },
+  {
+    "model_id": "UltraFedFM",
+    "cohort_id": "tn5k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_UltraFedFM_tn5k_seg_nodule_b2.json",
+    "n_records": 1000
+  },
+  {
+    "model_id": "UltraFedFM",
+    "cohort_id": "zjh8k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_UltraFedFM_zjh8k_cls_bm_b2.json",
+    "n_records": 7958
+  },
+  {
+    "model_id": "UltraFedFM",
+    "cohort_id": "zjh8k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_UltraFedFM_zjh8k_seg_nodule_b2.json",
+    "n_records": 7958
+  }
+]

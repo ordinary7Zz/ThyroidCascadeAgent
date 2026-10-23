@@ -29,7 +29,7 @@
 ### 2.1 规格公开（可复现）
 
 - 补充材料：**`docs/supplementary/router_spec.md`**（完整 prompt 模板、模型名、解码参数、输出 JSON 字段）。
-- 可由 `python scripts/export_router_spec.py` 从当前 config 再导出（改模型后重导一次即可）。
+- 可由 `python scripts/revision/b6/export_router_spec.py` 从当前 config 再导出（改模型后重导一次即可）。
 
 ### 2.2 5× 路由稳定性（本文件 §3 数字）
 

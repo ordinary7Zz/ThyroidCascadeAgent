@@ -1,0 +1,76 @@
+{
+  "stacks": {
+    "dataset_3_train_images": 15109,
+    "dataset_4_train_images": 23409
+  },
+  "tests": {
+    "TN3K_test": 614,
+    "TN5K_test": 1000,
+    "ThyroidXL_test": 2090,
+    "ZJH-8K_images": 7958,
+    "DDTI_test": 191,
+    "PKTN_test": 150
+  },
+  "overlap": {
+    "TN3K_test": {
+      "dataset_3_train_images": {
+        "count": 0,
+        "samples": []
+      },
+      "dataset_4_train_images": {
+        "count": 0,
+        "samples": []
+      }
+    },
+    "TN5K_test": {
+      "dataset_3_train_images": {
+        "count": 0,
+        "samples": []
+      },
+      "dataset_4_train_images": {
+        "count": 0,
+        "samples": []
+      }
+    },
+    "ThyroidXL_test": {
+      "dataset_3_train_images": {
+        "count": 0,
+        "samples": []
+      },
+      "dataset_4_train_images": {
+        "count": 0,
+        "samples": []
+      }
+    },
+    "ZJH-8K_images": {
+      "dataset_3_train_images": {
+        "count": 0,
+        "samples": []
+      },
+      "dataset_4_train_images": {
+        "count": 0,
+        "samples": []
+      }
+    },
+    "DDTI_test": {
+      "dataset_3_train_images": {
+        "count": 0,
+        "samples": []
+      },
+      "dataset_4_train_images": {
+        "count": 0,
+        "samples": []
+      }
+    },
+    "PKTN_test": {
+      "dataset_3_train_images": {
+        "count": 0,
+        "samples": []
+      },
+      "dataset_4_train_images": {
+        "count": 0,
+        "samples": []
+      }
+    }
+  }
+}

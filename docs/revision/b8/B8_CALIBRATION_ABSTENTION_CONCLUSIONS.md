@@ -22,14 +22,14 @@
 
 ```bash
 export PYTHON=/mnt/wangbd8/workspace/envs/thyroid_infer/bin/python
-./scripts/run_openthyroid_validation_b8.sh          # 或 --skip-pipeline
-./scripts/run_b8_all_cohorts.sh
+./scripts/revision/b8/run_openthyroid_validation_b8.sh          # 或 --skip-pipeline
+./scripts/revision/b8/run_b8_all_cohorts.sh
 ```
 
 烟雾版仅作对照：
 
 ```bash
-./scripts/run_b8_smoke_test_as_val.sh
+./scripts/revision/b8/run_b8_smoke_test_as_val.sh
 ```
 
 ---
@@ -105,7 +105,7 @@ export PYTHON=/mnt/wangbd8/workspace/envs/thyroid_infer/bin/python
 | 用途 | 路径 |
 |------|------|
 | 计划 | `docs/REVISION_B7_B8_PLAN.md` |
-| 烟雾脚本 | `scripts/run_b8_smoke_test_as_val.sh` |
-| Validation 一键 | `scripts/run_openthyroid_validation_b8.sh` |
-| 测试队列批量 eval | `scripts/run_b8_all_cohorts.sh` |
-| 代码 | `pipeline/calibration.py`、`pipeline/abstention.py`、`scripts/run_calibration_abstention.py` |
+| 烟雾脚本 | `scripts/revision/b8/run_b8_smoke_test_as_val.sh` |
+| Validation 一键 | `scripts/revision/b8/run_openthyroid_validation_b8.sh` |
+| 测试队列批量 eval | `scripts/revision/b8/run_b8_all_cohorts.sh` |
+| 代码 | `pipeline/calibration.py`、`pipeline/abstention.py`、`scripts/revision/b8/run_calibration_abstention.py` |

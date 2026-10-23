@@ -1,0 +1,37 @@
+{
+  "results": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/TN3K/pipeline_run/results.json",
+  "cluster_map": null,
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "classification": {
+    "task": "classification",
+    "n_images": 614,
+    "n_clusters": 614,
+    "image_level_cluster_bootstrap": {
+      "auroc": {
+        "mean": 0.8311306160882433,
+        "ci_lower": 0.7983222688622391,
+        "ci_upper": 0.8624264360294028
+      },
+      "auprc": {
+        "mean": 0.7401064509384321,
+        "ci_lower": 0.6747271701406435,
+        "ci_upper": 0.7962252189063935
+      }
+    }
+  },
+  "segmentation": {
+    "task": "segmentation",
+    "n_images": 614,
+    "n_clusters": 614,
+    "image_level_cluster_bootstrap": {
+      "dice": {
+        "mean": 0.8640142024121998,
+        "ci_lower": 0.8514750627533673,
+        "ci_upper": 0.8756230729790083
+      }
+    }
+  }
+}

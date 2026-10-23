@@ -1,0 +1,25 @@
+{
+  "results": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/DDTI_cls/pipeline_run/results.json",
+  "cluster_map": null,
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "classification": {
+    "task": "classification",
+    "n_images": 349,
+    "n_clusters": 349,
+    "image_level_cluster_bootstrap": {
+      "auroc": {
+        "mean": 0.7537280701754385,
+        "ci_lower": 0.6706926433679025,
+        "ci_upper": 0.8318619017914792
+      },
+      "auprc": {
+        "mean": 0.34697511263716474,
+        "ci_lower": 0.23891790290924245,
+        "ci_upper": 0.5049088894840819
+      }
+    }
+  }
+}

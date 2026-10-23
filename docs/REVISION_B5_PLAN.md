@@ -104,7 +104,7 @@ LLM 输入由三部分组成：**user 前缀行**（设备/数据）、**JSON `f
 config/b5/<cohort>.yaml
         │
         ▼
-scripts/run_b5_batch.py  ──►  scripts/run_routing_ablation.py  (+ --metadata-mode)
+scripts/revision/b5/run_b5_batch.py  ──►  scripts/run_routing_ablation.py  (+ --metadata-mode)
         │                              │
         │                              ├── link_shared_intermediate (同 B3)
         │                              ├── routing_mode=llm (两侧)
@@ -117,7 +117,7 @@ output/ablation/b5/<cohort>/<metadata_mode>/
         ├── routing_log.jsonl
         └── intermediate_manifest.json
 
-scripts/build_b5_tables.py  ──►  artifacts/b5_summary.csv / .json
+scripts/revision/b5/build_b5_tables.py  ──►  artifacts/b5_summary.csv / .json
 pipeline/analyze_routing_bias.py  ──►  figures/b5_centre_expert_heatmap.png + mi.json
 ```
 
@@ -131,9 +131,9 @@ pipeline/analyze_routing_bias.py  ──►  figures/b5_centre_expert_heatmap.pn
 | P0 | `pipeline/routing_ablation.py` | `apply_metadata_mode_to_config`；`prepare_ablation_run` 接受 `metadata_mode` |
 | P0 | `scripts/run_routing_ablation.py` | CLI `--metadata-mode`；metrics 写入 `metadata_mode` |
 | P1 | `scripts/generate_ablation_configs.py` | 生成 `config/b5/<cohort>.yaml`（`output_root: output/ablation/b5/...`，固定 llm） |
-| P1 | `scripts/run_b5_batch.py` | 8 队列 × 5 mode；可选 `--skip-full`（复用 B3 `llm`） |
+| P1 | `scripts/revision/b5/run_b5_batch.py` | 8 队列 × 5 mode；可选 `--skip-full`（复用 B3 `llm`） |
 | P1 | `pipeline/analyze_routing_bias.py` | 热图 + 互信息 |
-| P1 | `scripts/build_b5_tables.py` | 宽表 + Δ 列 |
+| P1 | `scripts/revision/b5/build_b5_tables.py` | 宽表 + Δ 列 |
 | P2 | `pipeline/ablation_metrics.py` | `build_b5_metrics` 或在 `build_b3_metrics` 增加 `metadata_mode` 字段 |
 | P2 | `tests/test_metadata_prompt.py` | 五种 mode 快照测试 |
 | P2 | `docs/supplementary/router_spec.md` | 增补「元数据消融」字段表（可脚本导出） |
@@ -172,10 +172,10 @@ python scripts/run_routing_ablation.py \
 ### 6.3 批量
 
 ```bash
-python scripts/run_b5_batch.py --config config/b5/sample.yaml
+python scripts/revision/b5/run_b5_batch.py --config config/b5/sample.yaml
 # 或全队列：
 for c in sample tn3k tn5k thyroidxl zjh8k rjh7k ddti nhc_misd_tus; do
-  python scripts/run_b5_batch.py --config config/b5/$c.yaml
+  python scripts/revision/b5/run_b5_batch.py --config config/b5/$c.yaml
 done
 ```
 
@@ -187,7 +187,7 @@ done
 ### 6.4 汇总与分析
 
 ```bash
-python scripts/build_b5_tables.py --root output/ablation/b5
+python scripts/revision/b5/build_b5_tables.py --root output/ablation/b5
 python pipeline/analyze_routing_bias.py \
   --log output/ablation/b5/nhc_misd_tus/full/routing_log.jsonl \
   --labels <NHC labels 路径> \
@@ -309,9 +309,9 @@ pipeline:
 | 字段过滤 | `shared/metadata_prompt.py` | 已实现 |
 | Agent 接入 | `segmentation/agent.py`, `classification/agent.py` | 已实现 |
 | CLI | `scripts/run_routing_ablation.py --metadata-mode` | 已实现 |
-| 批量 | `scripts/run_b5_batch.py` | 已实现 |
+| 批量 | `scripts/revision/b5/run_b5_batch.py` | 已实现 |
 | 配置 | `config/b5/*.yaml`（`generate_ablation_configs.py`） | 已实现 |
-| 汇总 | `scripts/build_b5_tables.py` | 已实现 |
+| 汇总 | `scripts/revision/b5/build_b5_tables.py` | 已实现 |
 | 偏倚分析 | `pipeline/analyze_routing_bias.py` | 已实现（热图需 matplotlib） |
 | 单测 | `tests/test_metadata_prompt.py` | 已实现 |
 | Path B LLM prompt | `resolve_path_b` 裁决 JSON | **未**做 metadata 消融（主文路由在 Phase 3 seg + Path B 前独立分类路由） |

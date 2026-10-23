@@ -1,0 +1,31 @@
+{
+  "source": "b2_exports",
+  "export_dir": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/BiomedCLIP/ddti_cls_cls_bm",
+  "model_id": "BiomedCLIP",
+  "cohort_id": "ddti_cls_cls_bm",
+  "manifest": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/BiomedCLIP/ddti_cls_cls_bm/manifest.json",
+  "predictions": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/BiomedCLIP/ddti_cls_cls_bm/predictions.jsonl",
+  "n_records": 349,
+  "cluster_map": null,
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "classification": {
+    "task": "classification",
+    "n_images": 349,
+    "n_clusters": 349,
+    "image_level_cluster_bootstrap": {
+      "auroc": {
+        "mean": 0.6440058479532164,
+        "ci_lower": 0.5691105365839347,
+        "ci_upper": 0.7252935426516588
+      },
+      "auprc": {
+        "mean": 0.24517455151665607,
+        "ci_lower": 0.16003777668538244,
+        "ci_upper": 0.36477954000282303
+      }
+    }
+  }
+}

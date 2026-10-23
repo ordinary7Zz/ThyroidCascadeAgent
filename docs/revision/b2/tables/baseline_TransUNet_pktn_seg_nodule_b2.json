@@ -1,0 +1,26 @@
+{
+  "source": "b2_exports",
+  "export_dir": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/TransUNet/pktn_seg_nodule",
+  "model_id": "TransUNet",
+  "cohort_id": "pktn_seg_nodule",
+  "manifest": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/TransUNet/pktn_seg_nodule/manifest.json",
+  "predictions": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/TransUNet/pktn_seg_nodule/predictions.jsonl",
+  "n_records": 150,
+  "cluster_map": null,
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "segmentation": {
+    "task": "segmentation",
+    "n_images": 150,
+    "n_clusters": 150,
+    "image_level_cluster_bootstrap": {
+      "dice": {
+        "mean": 0.7270873333333333,
+        "ci_lower": 0.6880579333333333,
+        "ci_upper": 0.7642098166666667
+      }
+    }
+  }
+}

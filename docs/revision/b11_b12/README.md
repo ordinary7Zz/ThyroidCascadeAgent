@@ -47,12 +47,19 @@
 | TN3K | `tables/r2_20_tn3k.json` | 本地 pipeline `output/TN3K/pipeline_run` |
 | ZJH-8K | `tables/r2_20_zjh8k.json` | 本地 pipeline `output/ZJH-8K/pipeline_run` |
 
-**毫米径**：定稿前需与 **B1/像素间距** 对齐后重跑 `scripts/analyze_r2_20_small_nodules.py`；主结果若用不同 routing config，需对 **同一 config 的 selected_masks** 重跑。
+**毫米径**：定稿前需与 **B1/像素间距** 对齐后重跑 `scripts/revision/b11/analyze_r2_20_small_nodules.py`；主结果若用不同 routing config，需对 **同一 config 的 selected_masks** 重跑。
 
-生成命令：
+**批量（推荐）**：
 
 ```bash
-python scripts/analyze_r2_20_small_nodules.py \
+./scripts/revision/b11/run_r2_20_small_nodules_all.sh
+# MM_PER_PIXEL=0.1 可改；汇总表 tables/R2_20_SUMMARY.md 自动生成
+```
+
+单队列命令：
+
+```bash
+python scripts/revision/b11/analyze_r2_20_small_nodules.py \
   --gt-mask-dir /path/to/test/masks \
   --selected-npz output/<COHORT>/pipeline_run/intermediate/selected_masks.npz \
   --mm-per-pixel 0.1 \

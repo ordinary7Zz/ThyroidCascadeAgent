@@ -9,8 +9,10 @@ shared/              共享层（IO、数据集信息、LLM 客户端、网络�
 segmentation/        分割层（多模型预测 + 形态学评估 + LLM 选择）
 classification/      分类层（多模型预测 + 校准 + soft voting + LLM 选择）
 radiomics_judge/     GT-trained radiomics 裁判（评估 pred mask 可信度）
-pipeline/            串联编排（分割筛选 → 分类筛选）
+pipeline/            串联编排（分割筛选 → 分类筛选）；模块索引见 pipeline/README.md
 ```
+
+级联地基 CLI：**`scripts/README.md`**。返修脚本：**`scripts/README_REVISION.md`**（命令见 **`docs/RUN_REVISION_COMMANDS.md`**）。
 
 ## 入口
 
@@ -29,7 +31,7 @@ pipeline/            串联编排（分割筛选 → 分类筛选）
 ## 返修 B6（路由透明性）
 
 - 配置：`pipeline.log_routing: true` → 输出目录下 `routing_log.jsonl`
-- 规格导出：`python scripts/export_router_spec.py`
+- 规格导出：`python scripts/revision/b6/export_router_spec.py`
 - 5× 稳定性（需 intermediate 缓存 + `enable_agent: true`）：`python run_routing_stability.py --output-dir <pipeline_out>`
 
 详见 `docs/REVISION_B6_PLAN.md`。
@@ -42,12 +44,12 @@ pipeline/            串联编排（分割筛选 → 分类筛选）
 ```bash
 conda activate /mnt/wangbd8/workspace/envs/thyroid_infer
 # 方式 A：在 config/b3/<cohort>.yaml 的 pipeline.ablation 里配置 routing_modes 后：
-python scripts/run_b3_batch.py --config config/b3/<cohort>.yaml
+python scripts/revision/b3/run_b3_batch.py --config config/b3/<cohort>.yaml
 # 默认 static bundle：一次扫图输出 config 中全部静态策略（见 pipeline/static_b3_bundle.py）
 # 旧行为（每策略子进程）：--legacy-subprocess
 
 # 方式 B：命令行覆盖
-python scripts/run_b3_batch.py \
+python scripts/revision/b3/run_b3_batch.py \
   --config config/b3/<cohort>.yaml \
   --shared-intermediate output/sample/pipeline_run/intermediate \
   --output-root output/ablation/b3/sample \
@@ -83,12 +85,12 @@ python scripts/run_routing_ablation.py \
 4. （可选）val 上选 best_single 专家：
 
 ```bash
-python scripts/fit_best_single_expert.py \
+python scripts/revision/b3/fit_best_single_expert.py \
   --config config/b3/<cohort>.yaml \
   --intermediate output/sample/pipeline_run/intermediate
 ```
 
-5. 离线分割梯子（不调 cascade）：`python scripts/eval_seg_routing_offline.py --intermediate output/sample/pipeline_run/intermediate`
+5. 离线分割梯子（不调 cascade）：`python scripts/revision/b3/eval_seg_routing_offline.py --intermediate output/sample/pipeline_run/intermediate`
 
 6. 汇总（若未用 `--summarize`）：
 

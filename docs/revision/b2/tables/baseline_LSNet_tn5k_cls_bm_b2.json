@@ -1,0 +1,31 @@
+{
+  "source": "b2_exports",
+  "export_dir": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/LSNet/tn5k_cls_bm",
+  "model_id": "LSNet",
+  "cohort_id": "tn5k_cls_bm",
+  "manifest": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/LSNet/tn5k_cls_bm/manifest.json",
+  "predictions": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/LSNet/tn5k_cls_bm/predictions.jsonl",
+  "n_records": 1000,
+  "cluster_map": null,
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "classification": {
+    "task": "classification",
+    "n_images": 1000,
+    "n_clusters": 1000,
+    "image_level_cluster_bootstrap": {
+      "auroc": {
+        "mean": 0.9090872105736908,
+        "ci_lower": 0.8861702118505075,
+        "ci_upper": 0.9289465975235344
+      },
+      "auprc": {
+        "mean": 0.9551496997206561,
+        "ci_lower": 0.937820285445519,
+        "ci_upper": 0.9702595085861367
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "source": "b2_exports",
+  "export_dir": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/UltraFedFM/ddti_seg_seg_nodule",
+  "model_id": "UltraFedFM",
+  "cohort_id": "ddti_seg_seg_nodule",
+  "manifest": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/UltraFedFM/ddti_seg_seg_nodule/manifest.json",
+  "predictions": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/UltraFedFM/ddti_seg_seg_nodule/predictions.jsonl",
+  "n_records": 637,
+  "cluster_map": null,
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "segmentation": {
+    "task": "segmentation",
+    "n_images": 637,
+    "n_clusters": 637,
+    "image_level_cluster_bootstrap": {
+      "dice": {
+        "mean": 0.7556995290423862,
+        "ci_lower": 0.7383141405023548,
+        "ci_upper": 0.7714420054945055
+      }
+    }
+  }
+}

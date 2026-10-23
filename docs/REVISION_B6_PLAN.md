@@ -116,7 +116,7 @@ classification:
 - 读 `pipeline.log_routing`，创建 `RoutingLogger(output_dir / "routing_log.jsonl")`  
 - 构造 Agent 时传入 `routing_logger`
 
-### G. 新建 `run_routing_stability.py`（或 `scripts/run_routing_stability.py`）
+### G. 新建仓库根目录 `run_routing_stability.py`（非 `scripts/` 下）
 
 **输入**
 
@@ -141,7 +141,7 @@ classification:
 | Metric variance | 5 次 Dice 或 0/1 正确的 std / range |
 | Fleiss κ | 可选，多类别选择时 |
 
-### H. 新建 `scripts/export_router_spec.py`（可选，与 A① 二选一）
+### H. 新建 `scripts/revision/b6/export_router_spec.py`（可选，与 A① 二选一）
 
 - 导出 `SegmentationAgent.system_prompt`、分类 single/multi/Path B 的 prompt 模板  
 - 写入 `docs/supplementary/router_spec.md`：模型名、temperature、max_tokens、JSON 字段说明  
@@ -247,7 +247,7 @@ classification:
 | `pipeline/cascade.py` | Phase 3/5 传参；Path A / 静态 mask / 静态 Path B 日志 |
 | `run_pipeline.py` / `run_seg.py` / `run_cls.py` | `pipeline.log_routing` |
 | `run_routing_stability.py` + `pipeline/routing_stability.py` | 5× 重复与 `stability_summary.json` |
-| `scripts/export_router_spec.py` | 导出 Supp. prompt 规格 |
+| `scripts/revision/b6/export_router_spec.py` | 导出 Supp. prompt 规格 |
 
 配置：`pipeline.log_routing: true` 开启 `routing_log.jsonl`。
 

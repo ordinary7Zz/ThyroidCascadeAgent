@@ -1,0 +1,49 @@
+{
+  "source": "b2_exports",
+  "export_dir": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/LSNet/zjh8k_cls_bm",
+  "model_id": "LSNet",
+  "cohort_id": "zjh8k_cls_bm",
+  "manifest": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/LSNet/zjh8k_cls_bm/manifest.json",
+  "predictions": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/LSNet/zjh8k_cls_bm/predictions.jsonl",
+  "n_records": 6966,
+  "cluster_map": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/cluster_maps/zjh8k.json",
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "exclusion": {
+    "exclude_images": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b1/tables/zjh_excl_train_dhash0_manifest.json",
+    "n_listed": 992,
+    "criterion": "image_name in exclude list (sensitivity analysis)"
+  },
+  "classification": {
+    "task": "classification",
+    "n_images": 6966,
+    "n_clusters": 1078,
+    "image_level_cluster_bootstrap": {
+      "auroc": {
+        "mean": 0.8371605749560938,
+        "ci_lower": 0.816277970436733,
+        "ci_upper": 0.8562975697771465
+      },
+      "auprc": {
+        "mean": 0.864938100109848,
+        "ci_lower": 0.8407465194298733,
+        "ci_upper": 0.8874009092668262
+      }
+    },
+    "patient_level": {
+      "n_patients": 1078,
+      "auroc": {
+        "mean": 0.9031298242569514,
+        "ci_lower": 0.8827596146673962,
+        "ci_upper": 0.9209337846328349
+      },
+      "auprc": {
+        "mean": 0.9281568201203017,
+        "ci_lower": 0.9073014487136406,
+        "ci_upper": 0.9459612964170091
+      }
+    }
+  }
+}

@@ -90,10 +90,14 @@ radiomics_judge:
   top_k_features: 5
   radiomics_params: null
 pipeline:
+  # 大队列整包预加载时 workers>1 会并行解压多个 ~4GB npz，峰值内存易触发 OOM（exit 137）
   preload_workers: 1
   run_segmentation: true
   run_classification: true
   ablation:
+    # 7958 张 ≥1500：默认 lazy mmap 按图读 seg npz（省内存，~40G cgroup 可跑）。
+    # 勿设 bundle_lazy_seg_min_images: 99999（整包预加载需 ~96G+ 内存）。
+    # shared_intermediate 在 NFS；~40G cgroup 推荐 scripts/revision/b3/zjh/run_b3_zjh8k_chunks.sh（切分 intermediate 后按 chunk 跑）。
     routing_modes:
     - soft_voting
     - majority

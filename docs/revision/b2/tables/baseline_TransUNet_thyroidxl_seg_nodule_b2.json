@@ -1,0 +1,34 @@
+{
+  "source": "b2_exports",
+  "export_dir": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/TransUNet/thyroidxl_seg_nodule",
+  "model_id": "TransUNet",
+  "cohort_id": "thyroidxl_seg_nodule",
+  "manifest": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/TransUNet/thyroidxl_seg_nodule/manifest.json",
+  "predictions": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/TransUNet/thyroidxl_seg_nodule/predictions.jsonl",
+  "n_records": 2090,
+  "cluster_map": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/cluster_maps/thyroidxl_test.json",
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "segmentation": {
+    "task": "segmentation",
+    "n_images": 2090,
+    "n_clusters": 739,
+    "image_level_cluster_bootstrap": {
+      "dice": {
+        "mean": 0.8283371291866028,
+        "ci_lower": 0.8182999409341397,
+        "ci_upper": 0.8371651110674565
+      }
+    },
+    "patient_level": {
+      "n_patients": 739,
+      "dice": {
+        "mean": 0.825605398060442,
+        "ci_lower": 0.8164016976770411,
+        "ci_upper": 0.8344245360002256
+      }
+    }
+  }
+}

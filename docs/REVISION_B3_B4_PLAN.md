@@ -397,14 +397,14 @@ B3/B4 主实验默认 **S4 级联**；`run_cls` 五专家表为 **Supp.**，不�
 | 数据 | sample `intermediate` + 10 例 bundle → `output/ablation/b3/sample/_summary/b3_routing_table.csv` | 各正式测试集 Phase 1–2；`val_list` + `fit_best_single_expert.py` |
 | B4 | — | 全文 §8 B4 节；汇合点 1/2/3 |
 
-**推荐命令（sample）：** `python scripts/run_b3_batch.py --config config/ablation_b3.yaml --force-phase3`  
+**推荐命令（sample）：** `python scripts/revision/b3/run_b3_batch.py --config config/ablation_b3.yaml --force-phase3`  
 **对拍旧路径：** 加 `--legacy-subprocess`（每策略子进程 `run_routing_ablation`）。
 
 ### 8.1 下一步（建议顺序）
 
 1. **冻结地基**：`config/ablation_b3.yaml` 与稿中 S3/S4 专家池逐行对照；每队列写好 `pipeline.ablation.val_list`。  
 2. **铺 intermediate**：`run_pipeline.py`（或批量脚本）对各测试集跑满 Phase 1–2。  
-3. **策略 1**：`python scripts/fit_best_single_expert.py --intermediate <dir>`，写入 `best_single_seg/cls`（勿长期手写 `all_datasets`）。  
+3. **策略 1**：`python scripts/revision/b3/fit_best_single_expert.py --intermediate <dir>`，写入 `best_single_seg/cls`（勿长期手写 `all_datasets`）。  
 4. **波次 1 全队列**：`run_b3_batch.py` → 各数据集 `b3_routing_table.csv`；分类主表同时报 **全量 + `metrics_path_b_only`**。  
 5. **波次 2**：`routing_mode=llm` 全量 + `log_routing: true` 落盘 + 一致/分歧分层（B6 已就绪；用 `run_routing_ablation` / `run_pipeline`，**不要**用 static bundle）。  
 6. **波次 3**：`learned` 路由 + 与 LLM 配对检验。  

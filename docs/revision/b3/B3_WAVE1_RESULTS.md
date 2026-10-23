@@ -170,7 +170,7 @@
 
 ```bash
 # 单队列（示例 TN3K）
-python scripts/run_b3_batch.py \
+python scripts/revision/b3/run_b3_batch.py \
   --config config/b3/tn3k.yaml \
   --preset wave1 --force-phase3 --summarize
 

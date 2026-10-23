@@ -1,17 +1,10 @@
-# B6 路由稳定性（5× LLM 重复）；复用 sample Phase 1–2 intermediate。
-# 用法:
-#   export DASHSCOPE_API_KEY=...
-#   python run_routing_stability.py \
-#     --config config/b6/sample_stability.yaml \
-#     --output-dir output/sample/pipeline_run \
-#     --repeats 5 --max-cases 10 --device cuda
-#
-# 勿用于 B3 波次 1 static bundle（见 config/b3/sample.yaml）。
+# B6 开发用小样本（全量 sample，非 for_llm）。各队列 LLM 子集见 config/b6/<cohort>.yaml。
+# 用法见 config/b6/README.md
 shared:
   agent_llm:
     api_key_env: DASHSCOPE_API_KEY
     base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
-    model_name: qwen3.7-flash
+    model_name: qwen3.8-27b
     temperature: 0.3
     max_tokens: 768
     enable_thinking: false

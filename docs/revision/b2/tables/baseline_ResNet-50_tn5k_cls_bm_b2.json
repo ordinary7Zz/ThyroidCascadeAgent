@@ -1,0 +1,31 @@
+{
+  "source": "b2_exports",
+  "export_dir": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/ResNet-50/tn5k_cls_bm",
+  "model_id": "ResNet-50",
+  "cohort_id": "tn5k_cls_bm",
+  "manifest": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/ResNet-50/tn5k_cls_bm/manifest.json",
+  "predictions": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/ResNet-50/tn5k_cls_bm/predictions.jsonl",
+  "n_records": 1000,
+  "cluster_map": null,
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "classification": {
+    "task": "classification",
+    "n_images": 1000,
+    "n_clusters": 1000,
+    "image_level_cluster_bootstrap": {
+      "auroc": {
+        "mean": 0.9321040078519519,
+        "ci_lower": 0.9131667415791546,
+        "ci_upper": 0.9479430732190965
+      },
+      "auprc": {
+        "mean": 0.9677473708090221,
+        "ci_lower": 0.9544038465683352,
+        "ci_upper": 0.9792875333125298
+      }
+    }
+  }
+}

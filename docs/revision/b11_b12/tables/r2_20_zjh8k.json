@@ -1,7 +1,7 @@
 {
   "summary": {
     "gt_mask_dir": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/ZJH-8K/masks",
-    "selected_masks_npz": "output/ZJH-8K/pipeline_run/intermediate/selected_masks.npz",
+    "selected_masks_npz": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/ZJH-8K/pipeline_run/intermediate/selected_masks.npz",
     "n_matched": 7958,
     "mm_per_pixel": 0.1,
     "max_diameter_mm": 5.0,

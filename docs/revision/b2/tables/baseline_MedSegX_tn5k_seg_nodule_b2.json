@@ -1,0 +1,26 @@
+{
+  "source": "b2_exports",
+  "export_dir": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/MedSegX/tn5k_seg_nodule",
+  "model_id": "MedSegX",
+  "cohort_id": "tn5k_seg_nodule",
+  "manifest": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/MedSegX/tn5k_seg_nodule/manifest.json",
+  "predictions": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/MedSegX/tn5k_seg_nodule/predictions.jsonl",
+  "n_records": 1000,
+  "cluster_map": null,
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "segmentation": {
+    "task": "segmentation",
+    "n_images": 1000,
+    "n_clusters": 1000,
+    "image_level_cluster_bootstrap": {
+      "dice": {
+        "mean": 0.7526484,
+        "ci_lower": 0.7361261025,
+        "ci_upper": 0.7687914724999999
+      }
+    }
+  }
+}

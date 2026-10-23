@@ -97,6 +97,7 @@ pipeline:
   run_segmentation: true
   run_classification: false
   ablation:
+    # 大队列默认 lazy；整包预加载需高 memory limit（见 scripts/revision/b3/zjh/check_b3_host_capacity.py）
     routing_modes:
     - soft_voting
     - majority

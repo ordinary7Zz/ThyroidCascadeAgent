@@ -1,0 +1,20 @@
+{
+  "results": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/RJH-7K/pipeline_run/results.json",
+  "cluster_map": null,
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "segmentation": {
+    "task": "segmentation",
+    "n_images": 7288,
+    "n_clusters": 7288,
+    "image_level_cluster_bootstrap": {
+      "dice": {
+        "mean": 0.9020078698990015,
+        "ci_lower": 0.899685164570044,
+        "ci_upper": 0.9042485848727213
+      }
+    }
+  }
+}

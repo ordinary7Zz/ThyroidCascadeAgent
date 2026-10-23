@@ -17,16 +17,16 @@
 
 - **模板**：`sample.yaml`；同步：`python scripts/generate_ablation_configs.py`
 - **专家池**：`sample.yaml` 模板为 **5 个分割 DINO-UNet**（不含 Cine-Clip）+ **4 个分类 DINO multitask**；各队列 yaml 由模板生成。换池后须重跑 Phase 1–2 写满 `shared_intermediate`。
-- **波次 1**：`run_b3_batch.py --preset wave1` 或 `./scripts/run_b3_wave1_all_cohorts.sh`
+- **波次 1**：`run_b3_batch.py --preset wave1` 或 `./scripts/revision/b3/run_b3_wave1_all_cohorts.sh`
 
 ```bash
-python scripts/run_b3_batch.py --config config/b3/ddti_seg.yaml --preset wave1 --force-phase3 --summarize --task seg
-python scripts/run_b3_batch.py --config config/b3/ddti_cls.yaml --preset wave1 --force-phase3 --summarize --task cls
-python scripts/run_b3_batch.py --config config/b3/pktn.yaml --preset wave1 --force-phase3 --summarize --task seg
+python scripts/revision/b3/run_b3_batch.py --config config/b3/ddti_seg.yaml --preset wave1 --force-phase3 --summarize --task seg
+python scripts/revision/b3/run_b3_batch.py --config config/b3/ddti_cls.yaml --preset wave1 --force-phase3 --summarize --task cls
+python scripts/revision/b3/run_b3_batch.py --config config/b3/pktn.yaml --preset wave1 --force-phase3 --summarize --task seg
 
 # Phase 1–2 多专家缓存（串行 run_pipeline）：
 ./scripts/run_pipeline_all_cohorts.sh --exclude tn3k   # 已在跑可跳过
 
 # B3 波次 1（须先有 shared_intermediate）：
-./scripts/run_b3_wave1_all_cohorts.sh
+./scripts/revision/b3/run_b3_wave1_all_cohorts.sh
 ```

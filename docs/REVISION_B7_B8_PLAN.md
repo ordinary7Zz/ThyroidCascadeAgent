@@ -123,10 +123,10 @@ data/manifests/nhc_center_index.csv       # 或仅路径写在 config（gitignor
 
 | 模块 / 脚本 | 职责 |
 |-------------|------|
-| `scripts/build_nhc_center_table.py` | 读 manifest + G3 CSV → 补充表「描述」部分 |
+| `scripts/revision/b7/build_nhc_center_table.py` | 读 manifest + G3 CSV → 补充表「描述」部分 |
 | `pipeline/nhc_heterogeneity.py` | 读 `results.json` + GT → **逐图 Dice**；按中心聚合 mean/median；宏平均 |
 | `pipeline/meta_regression.py` | 图像级或中心级因变量；混合效应 / 标准 meta-reg（实现选用 `statsmodels` 或 `rpy2`，文档写明） |
-| `scripts/run_b7_analysis.py` | CLI：指定 `output-dir`、`manifest`、`task=seg|cls|both` → `output/b7/center_metrics.json`、LaTeX/CSV |
+| `scripts/revision/b7/run_b7_analysis.py` | CLI：指定 `output-dir`、`manifest`、`task=seg|cls|both` → `output/b7/center_metrics.json`、LaTeX/CSV |
 | `scripts/plot_b7_figures.py` | 中心森林图、协变量散点、ZJ24 子集直方图（可选） |
 
 **质量协变量（与回复草稿一致）**：分辨率、对比度、ROI 占图比例——可在 `shared/image_io` 或脚本内对灰度图批量计算，写入 `per_image_covariates.parquet` 供回归。
@@ -228,7 +228,7 @@ pipeline:
 | 校准 | **新建** `pipeline/calibration.py` | 分类：ECE、Brier、reliability bins；`y_score` 用 `final_confidence` 与恶性方向一致化 |
 | 拒答 | **新建** `pipeline/abstention.py` | 验证集 grid/分位搜阈 → `abstention_thresholds.json`；测试集应用 → risk–coverage |
 | 分割 ECE | `pipeline/calibration.py` | 可选：对选中 mask 的概率图 + GT（需 Phase 1 存 prob map 或仅用分类 ECE 作主文） |
-| CLI | **新建** `scripts/run_calibration_abstention.py` | 读 config + `results.json` → `figures/` + JSON |
+| CLI | **新建** `scripts/revision/b8/run_calibration_abstention.py` | 读 config + `results.json` → `figures/` + JSON |
 | 测试 | `tests/test_abstention.py`, `tests/test_calibration.py` | 合成 20 例验证搜阈逻辑 |
 
 **复用**：`segmentation/metrics.compute_ece`；`classification/agent.format_predictions_json` 内已有 `vote_entropy` 计算逻辑，应 **提取为共享函数** 供 Phase 5 写入 `results.json`（避免仅存在于 prompt JSON）。
@@ -290,26 +290,26 @@ pipeline:
 python run_pipeline.py --config config/revision/nhc_no_llm_primary.yaml
 
 # 旧 results 补 uncertainty（不重跑 GPU）
-python scripts/backfill_results_metadata.py \
+python scripts/revision/b8/backfill_results_metadata.py \
   --output-dir output/revision/nhc_no_llm_primary \
   --config config/revision/nhc_no_llm_primary.yaml \
   --label-file /path/to/NHC-MISD-TUS/labels.json
 
 # B7：中心汇总 + Dice I²
-python scripts/run_b7_analysis.py \
+python scripts/revision/b7/run_b7_analysis.py \
   --output-dir output/revision/nhc_no_llm_primary \
   --re-evaluate --gt-mask-dir /path/to/NHC-MISD-TUS/masks \
   --out output/b7/nhc
 
-python scripts/build_nhc_center_table.py \
+python scripts/revision/b7/build_nhc_center_table.py \
   --label-file /path/to/NHC-MISD-TUS/labels.json \
   --g3-csv /path/to/g3_centers.csv --out output/b7/descriptive
 
 # B8：验证集定阈 + NHC 测试
-python scripts/run_calibration_abstention.py --fit \
+python scripts/revision/b8/run_calibration_abstention.py --fit \
   --val-results output/validation/no_llm_primary/results.json \
   --out output/b8/fit --rule-subset nhc
-python scripts/run_calibration_abstention.py --eval \
+python scripts/revision/b8/run_calibration_abstention.py --eval \
   --test-results output/revision/nhc_no_llm_primary/results.json \
   --thresholds output/b8/fit/abstention_thresholds.json \
   --out output/b8/nhc --rule-subset nhc

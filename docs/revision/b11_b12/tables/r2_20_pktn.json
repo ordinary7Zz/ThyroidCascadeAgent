@@ -1,0 +1,1183 @@
+{
+  "summary": {
+    "gt_mask_dir": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/PKTN/test/masks",
+    "selected_masks_npz": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/PKTN/pipeline_run/intermediate/selected_masks.npz",
+    "n_matched": 150,
+    "mm_per_pixel": 0.1,
+    "max_diameter_mm": 5.0,
+    "n_gt_below_max_diameter_mm": 15,
+    "n_pred_fail_small": 1,
+    "mean_dice_small_gt": 0.7408733333333334,
+    "min_component_px_dino_postprocess": 50,
+    "n_gt_foreground_area_below_min_component_disk": 15,
+    "note": "Radiomics path has no extra CCA; Dice uses selected_masks. d_mm requires --mm-per-pixel (cohort-specific; confirm with B1/clinical spacing)."
+  },
+  "rows": [
+    {
+      "stem": "PKTN_train_Img_1001",
+      "gt_equiv_diameter_px": 276.84,
+      "gt_equiv_diameter_mm": 27.684,
+      "dice": 0.8244,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_1002",
+      "gt_equiv_diameter_px": 173.39,
+      "gt_equiv_diameter_mm": 17.339,
+      "dice": 0.9397,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_101",
+      "gt_equiv_diameter_px": 104.98,
+      "gt_equiv_diameter_mm": 10.498,
+      "dice": 0.9337,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_105",
+      "gt_equiv_diameter_px": 95.61,
+      "gt_equiv_diameter_mm": 9.561,
+      "dice": 0.8925,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_113",
+      "gt_equiv_diameter_px": 147.53,
+      "gt_equiv_diameter_mm": 14.753,
+      "dice": 0.7263,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_116",
+      "gt_equiv_diameter_px": 185.46,
+      "gt_equiv_diameter_mm": 18.546,
+      "dice": 0.9068,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_135",
+      "gt_equiv_diameter_px": 149.12,
+      "gt_equiv_diameter_mm": 14.912,
+      "dice": 0.9258,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_145",
+      "gt_equiv_diameter_px": 27.48,
+      "gt_equiv_diameter_mm": 2.748,
+      "dice": 0.7019,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_161",
+      "gt_equiv_diameter_px": 119.06,
+      "gt_equiv_diameter_mm": 11.906,
+      "dice": 0.7914,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_166",
+      "gt_equiv_diameter_px": 232.59,
+      "gt_equiv_diameter_mm": 23.259,
+      "dice": 0.942,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_17",
+      "gt_equiv_diameter_px": 93.82,
+      "gt_equiv_diameter_mm": 9.382,
+      "dice": 0.9186,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_173",
+      "gt_equiv_diameter_px": 44.31,
+      "gt_equiv_diameter_mm": 4.431,
+      "dice": 0.8099,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_198",
+      "gt_equiv_diameter_px": 282.09,
+      "gt_equiv_diameter_mm": 28.209,
+      "dice": 0.9489,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_2",
+      "gt_equiv_diameter_px": 263.74,
+      "gt_equiv_diameter_mm": 26.374,
+      "dice": 0.6284,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_206",
+      "gt_equiv_diameter_px": 131.68,
+      "gt_equiv_diameter_mm": 13.168,
+      "dice": 0.9247,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_212",
+      "gt_equiv_diameter_px": 265.31,
+      "gt_equiv_diameter_mm": 26.531,
+      "dice": 0.9147,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_214",
+      "gt_equiv_diameter_px": 52.91,
+      "gt_equiv_diameter_mm": 5.291,
+      "dice": 0.7817,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_22",
+      "gt_equiv_diameter_px": 213.04,
+      "gt_equiv_diameter_mm": 21.304,
+      "dice": 0.712,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_222",
+      "gt_equiv_diameter_px": 144.89,
+      "gt_equiv_diameter_mm": 14.489,
+      "dice": 0.8858,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_223",
+      "gt_equiv_diameter_px": 240.97,
+      "gt_equiv_diameter_mm": 24.097,
+      "dice": 0.9597,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_231",
+      "gt_equiv_diameter_px": 121.44,
+      "gt_equiv_diameter_mm": 12.144,
+      "dice": 0.7641,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_245",
+      "gt_equiv_diameter_px": 67.14,
+      "gt_equiv_diameter_mm": 6.714,
+      "dice": 0.911,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_246",
+      "gt_equiv_diameter_px": 96.71,
+      "gt_equiv_diameter_mm": 9.671,
+      "dice": 0.9463,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_250",
+      "gt_equiv_diameter_px": 233.55,
+      "gt_equiv_diameter_mm": 23.355,
+      "dice": 0.9434,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_252",
+      "gt_equiv_diameter_px": 38.79,
+      "gt_equiv_diameter_mm": 3.879,
+      "dice": 0.7362,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_262",
+      "gt_equiv_diameter_px": 33.09,
+      "gt_equiv_diameter_mm": 3.309,
+      "dice": 0.8132,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_264",
+      "gt_equiv_diameter_px": 56.75,
+      "gt_equiv_diameter_mm": 5.675,
+      "dice": 0.8324,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_270",
+      "gt_equiv_diameter_px": 200.52,
+      "gt_equiv_diameter_mm": 20.052,
+      "dice": 0.9423,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_271",
+      "gt_equiv_diameter_px": 286.37,
+      "gt_equiv_diameter_mm": 28.637,
+      "dice": 0.9657,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_280",
+      "gt_equiv_diameter_px": 302.09,
+      "gt_equiv_diameter_mm": 30.209,
+      "dice": 0.9554,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_297",
+      "gt_equiv_diameter_px": 39.43,
+      "gt_equiv_diameter_mm": 3.943,
+      "dice": 0.659,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_3",
+      "gt_equiv_diameter_px": 334.2,
+      "gt_equiv_diameter_mm": 33.42,
+      "dice": 0.8748,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_302",
+      "gt_equiv_diameter_px": 97.48,
+      "gt_equiv_diameter_mm": 9.748,
+      "dice": 0.8086,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_305",
+      "gt_equiv_diameter_px": 150.9,
+      "gt_equiv_diameter_mm": 15.09,
+      "dice": 0.9198,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_314",
+      "gt_equiv_diameter_px": 108.33,
+      "gt_equiv_diameter_mm": 10.833,
+      "dice": 0.7176,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_320",
+      "gt_equiv_diameter_px": 99.2,
+      "gt_equiv_diameter_mm": 9.92,
+      "dice": 0.6388,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_328",
+      "gt_equiv_diameter_px": 328.09,
+      "gt_equiv_diameter_mm": 32.809,
+      "dice": 0.9549,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_335",
+      "gt_equiv_diameter_px": 321.44,
+      "gt_equiv_diameter_mm": 32.144,
+      "dice": 0.7401,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_345",
+      "gt_equiv_diameter_px": 41.78,
+      "gt_equiv_diameter_mm": 4.178,
+      "dice": 0.8452,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_349",
+      "gt_equiv_diameter_px": 365.6,
+      "gt_equiv_diameter_mm": 36.56,
+      "dice": 0.9557,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_355",
+      "gt_equiv_diameter_px": 66.72,
+      "gt_equiv_diameter_mm": 6.672,
+      "dice": 0.8117,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_359",
+      "gt_equiv_diameter_px": 207.54,
+      "gt_equiv_diameter_mm": 20.754,
+      "dice": 0.9205,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_363",
+      "gt_equiv_diameter_px": 439.62,
+      "gt_equiv_diameter_mm": 43.962,
+      "dice": 0.973,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_367",
+      "gt_equiv_diameter_px": 71.76,
+      "gt_equiv_diameter_mm": 7.176,
+      "dice": 0.8907,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_372",
+      "gt_equiv_diameter_px": 137.26,
+      "gt_equiv_diameter_mm": 13.726,
+      "dice": 0.9281,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_38",
+      "gt_equiv_diameter_px": 188.71,
+      "gt_equiv_diameter_mm": 18.871,
+      "dice": 0.537,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_392",
+      "gt_equiv_diameter_px": 118.18,
+      "gt_equiv_diameter_mm": 11.818,
+      "dice": 0.701,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_396",
+      "gt_equiv_diameter_px": 308.95,
+      "gt_equiv_diameter_mm": 30.895,
+      "dice": 0.921,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_413",
+      "gt_equiv_diameter_px": 52.9,
+      "gt_equiv_diameter_mm": 5.29,
+      "dice": 0.7636,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_418",
+      "gt_equiv_diameter_px": 77.76,
+      "gt_equiv_diameter_mm": 7.776,
+      "dice": 0.8279,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_438",
+      "gt_equiv_diameter_px": 61.25,
+      "gt_equiv_diameter_mm": 6.125,
+      "dice": 0.7262,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_451",
+      "gt_equiv_diameter_px": 36.74,
+      "gt_equiv_diameter_mm": 3.674,
+      "dice": 0.7818,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_458",
+      "gt_equiv_diameter_px": 98.78,
+      "gt_equiv_diameter_mm": 9.878,
+      "dice": 0.7857,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_459",
+      "gt_equiv_diameter_px": 88.72,
+      "gt_equiv_diameter_mm": 8.872,
+      "dice": 0.8844,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_461",
+      "gt_equiv_diameter_px": 112.49,
+      "gt_equiv_diameter_mm": 11.249,
+      "dice": 0.8846,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_468",
+      "gt_equiv_diameter_px": 189.31,
+      "gt_equiv_diameter_mm": 18.931,
+      "dice": 0.9245,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_470",
+      "gt_equiv_diameter_px": 97.49,
+      "gt_equiv_diameter_mm": 9.749,
+      "dice": 0.8269,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_472",
+      "gt_equiv_diameter_px": 127.96,
+      "gt_equiv_diameter_mm": 12.796,
+      "dice": 0.8991,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_478",
+      "gt_equiv_diameter_px": 50.91,
+      "gt_equiv_diameter_mm": 5.091,
+      "dice": 0.8327,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_479",
+      "gt_equiv_diameter_px": 43.47,
+      "gt_equiv_diameter_mm": 4.347,
+      "dice": 0.8513,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_48",
+      "gt_equiv_diameter_px": 172.36,
+      "gt_equiv_diameter_mm": 17.236,
+      "dice": 0.911,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_480",
+      "gt_equiv_diameter_px": 50.26,
+      "gt_equiv_diameter_mm": 5.026,
+      "dice": 0.8839,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_481",
+      "gt_equiv_diameter_px": 47.12,
+      "gt_equiv_diameter_mm": 4.712,
+      "dice": 0.0216,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_483",
+      "gt_equiv_diameter_px": 126.98,
+      "gt_equiv_diameter_mm": 12.698,
+      "dice": 0.9296,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_488",
+      "gt_equiv_diameter_px": 121.08,
+      "gt_equiv_diameter_mm": 12.108,
+      "dice": 0.936,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_491",
+      "gt_equiv_diameter_px": 56.95,
+      "gt_equiv_diameter_mm": 5.695,
+      "dice": 0.8759,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_495",
+      "gt_equiv_diameter_px": 60.28,
+      "gt_equiv_diameter_mm": 6.028,
+      "dice": 0.8029,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_507",
+      "gt_equiv_diameter_px": 72.53,
+      "gt_equiv_diameter_mm": 7.253,
+      "dice": 0.1506,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_510",
+      "gt_equiv_diameter_px": 52.19,
+      "gt_equiv_diameter_mm": 5.219,
+      "dice": 0.8217,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_515",
+      "gt_equiv_diameter_px": 90.36,
+      "gt_equiv_diameter_mm": 9.036,
+      "dice": 0.8753,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_516",
+      "gt_equiv_diameter_px": 98.55,
+      "gt_equiv_diameter_mm": 9.855,
+      "dice": 0.8541,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_520",
+      "gt_equiv_diameter_px": 43.8,
+      "gt_equiv_diameter_mm": 4.38,
+      "dice": 0.8527,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_530",
+      "gt_equiv_diameter_px": 58.09,
+      "gt_equiv_diameter_mm": 5.809,
+      "dice": 0.8719,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_536",
+      "gt_equiv_diameter_px": 95.7,
+      "gt_equiv_diameter_mm": 9.57,
+      "dice": 0.8336,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_538",
+      "gt_equiv_diameter_px": 33.49,
+      "gt_equiv_diameter_mm": 3.349,
+      "dice": 0.8307,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_547",
+      "gt_equiv_diameter_px": 96.14,
+      "gt_equiv_diameter_mm": 9.614,
+      "dice": 0.8882,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_548",
+      "gt_equiv_diameter_px": 136.3,
+      "gt_equiv_diameter_mm": 13.63,
+      "dice": 0.9187,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_566",
+      "gt_equiv_diameter_px": 75.01,
+      "gt_equiv_diameter_mm": 7.501,
+      "dice": 0.8807,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_568",
+      "gt_equiv_diameter_px": 76.98,
+      "gt_equiv_diameter_mm": 7.698,
+      "dice": 0.8179,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_571",
+      "gt_equiv_diameter_px": 50.17,
+      "gt_equiv_diameter_mm": 5.017,
+      "dice": 0.7852,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_573",
+      "gt_equiv_diameter_px": 86.46,
+      "gt_equiv_diameter_mm": 8.646,
+      "dice": 0.8593,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_574",
+      "gt_equiv_diameter_px": 169.83,
+      "gt_equiv_diameter_mm": 16.983,
+      "dice": 0.8985,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_575",
+      "gt_equiv_diameter_px": 165.16,
+      "gt_equiv_diameter_mm": 16.516,
+      "dice": 0.8963,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_580",
+      "gt_equiv_diameter_px": 43.96,
+      "gt_equiv_diameter_mm": 4.396,
+      "dice": 0.8391,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_586",
+      "gt_equiv_diameter_px": 86.74,
+      "gt_equiv_diameter_mm": 8.674,
+      "dice": 0.8868,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_60",
+      "gt_equiv_diameter_px": 183.37,
+      "gt_equiv_diameter_mm": 18.337,
+      "dice": 0.8659,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_600",
+      "gt_equiv_diameter_px": 106.02,
+      "gt_equiv_diameter_mm": 10.602,
+      "dice": 0.8326,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_603",
+      "gt_equiv_diameter_px": 62.06,
+      "gt_equiv_diameter_mm": 6.206,
+      "dice": 0.8104,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_611",
+      "gt_equiv_diameter_px": 65.11,
+      "gt_equiv_diameter_mm": 6.511,
+      "dice": 0.8701,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_613",
+      "gt_equiv_diameter_px": 119.62,
+      "gt_equiv_diameter_mm": 11.962,
+      "dice": 0.9002,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_62",
+      "gt_equiv_diameter_px": 63.71,
+      "gt_equiv_diameter_mm": 6.371,
+      "dice": 0.9129,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_623",
+      "gt_equiv_diameter_px": 192.28,
+      "gt_equiv_diameter_mm": 19.228,
+      "dice": 0.9153,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_624",
+      "gt_equiv_diameter_px": 73.29,
+      "gt_equiv_diameter_mm": 7.329,
+      "dice": 0.9211,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_625",
+      "gt_equiv_diameter_px": 70.42,
+      "gt_equiv_diameter_mm": 7.042,
+      "dice": 0.8766,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_630",
+      "gt_equiv_diameter_px": 107.27,
+      "gt_equiv_diameter_mm": 10.727,
+      "dice": 0.8787,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_635",
+      "gt_equiv_diameter_px": 87.84,
+      "gt_equiv_diameter_mm": 8.784,
+      "dice": 0.8286,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_641",
+      "gt_equiv_diameter_px": 143.97,
+      "gt_equiv_diameter_mm": 14.397,
+      "dice": 0.9243,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_647",
+      "gt_equiv_diameter_px": 105.44,
+      "gt_equiv_diameter_mm": 10.544,
+      "dice": 0.8816,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_651",
+      "gt_equiv_diameter_px": 153.67,
+      "gt_equiv_diameter_mm": 15.367,
+      "dice": 0.5845,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_654",
+      "gt_equiv_diameter_px": 58.06,
+      "gt_equiv_diameter_mm": 5.806,
+      "dice": 0.8641,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_659",
+      "gt_equiv_diameter_px": 73.01,
+      "gt_equiv_diameter_mm": 7.301,
+      "dice": 0.8889,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_66",
+      "gt_equiv_diameter_px": 61.38,
+      "gt_equiv_diameter_mm": 6.138,
+      "dice": 0.8448,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_663",
+      "gt_equiv_diameter_px": 53.97,
+      "gt_equiv_diameter_mm": 5.397,
+      "dice": 0.7419,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_667",
+      "gt_equiv_diameter_px": 171.75,
+      "gt_equiv_diameter_mm": 17.175,
+      "dice": 0.7554,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_688",
+      "gt_equiv_diameter_px": 84.6,
+      "gt_equiv_diameter_mm": 8.46,
+      "dice": 0.9454,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_69",
+      "gt_equiv_diameter_px": 88.29,
+      "gt_equiv_diameter_mm": 8.829,
+      "dice": 0.8451,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_696",
+      "gt_equiv_diameter_px": 135.46,
+      "gt_equiv_diameter_mm": 13.546,
+      "dice": 0.8634,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_718",
+      "gt_equiv_diameter_px": 181.75,
+      "gt_equiv_diameter_mm": 18.175,
+      "dice": 0.8933,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_723",
+      "gt_equiv_diameter_px": 380.81,
+      "gt_equiv_diameter_mm": 38.081,
+      "dice": 0.9482,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_732",
+      "gt_equiv_diameter_px": 274.15,
+      "gt_equiv_diameter_mm": 27.415,
+      "dice": 0.9147,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_735",
+      "gt_equiv_diameter_px": 75.29,
+      "gt_equiv_diameter_mm": 7.529,
+      "dice": 0.874,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_741",
+      "gt_equiv_diameter_px": 156.8,
+      "gt_equiv_diameter_mm": 15.68,
+      "dice": 0.9448,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_750",
+      "gt_equiv_diameter_px": 194.09,
+      "gt_equiv_diameter_mm": 19.409,
+      "dice": 0.9383,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_755",
+      "gt_equiv_diameter_px": 172.36,
+      "gt_equiv_diameter_mm": 17.236,
+      "dice": 0.7821,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_765",
+      "gt_equiv_diameter_px": 79.21,
+      "gt_equiv_diameter_mm": 7.921,
+      "dice": 0.8564,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_773",
+      "gt_equiv_diameter_px": 119.11,
+      "gt_equiv_diameter_mm": 11.911,
+      "dice": 0.9455,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_780",
+      "gt_equiv_diameter_px": 162.09,
+      "gt_equiv_diameter_mm": 16.209,
+      "dice": 0.9402,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_791",
+      "gt_equiv_diameter_px": 69.19,
+      "gt_equiv_diameter_mm": 6.919,
+      "dice": 0.8934,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_793",
+      "gt_equiv_diameter_px": 55.39,
+      "gt_equiv_diameter_mm": 5.539,
+      "dice": 0.7791,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_794",
+      "gt_equiv_diameter_px": 52.79,
+      "gt_equiv_diameter_mm": 5.279,
+      "dice": 0.5956,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_800",
+      "gt_equiv_diameter_px": 87.94,
+      "gt_equiv_diameter_mm": 8.794,
+      "dice": 0.851,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_811",
+      "gt_equiv_diameter_px": 148.57,
+      "gt_equiv_diameter_mm": 14.857,
+      "dice": 0.899,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_813",
+      "gt_equiv_diameter_px": 155.84,
+      "gt_equiv_diameter_mm": 15.584,
+      "dice": 0.883,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_814",
+      "gt_equiv_diameter_px": 100.75,
+      "gt_equiv_diameter_mm": 10.075,
+      "dice": 0.9166,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_824",
+      "gt_equiv_diameter_px": 73.73,
+      "gt_equiv_diameter_mm": 7.373,
+      "dice": 0.9373,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_825",
+      "gt_equiv_diameter_px": 264.46,
+      "gt_equiv_diameter_mm": 26.446,
+      "dice": 0.9099,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_828",
+      "gt_equiv_diameter_px": 119.28,
+      "gt_equiv_diameter_mm": 11.928,
+      "dice": 0.5496,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_833",
+      "gt_equiv_diameter_px": 65.25,
+      "gt_equiv_diameter_mm": 6.525,
+      "dice": 0.8733,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_835",
+      "gt_equiv_diameter_px": 47.18,
+      "gt_equiv_diameter_mm": 4.718,
+      "dice": 0.8771,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_849",
+      "gt_equiv_diameter_px": 76.12,
+      "gt_equiv_diameter_mm": 7.612,
+      "dice": 0.842,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_862",
+      "gt_equiv_diameter_px": 46.35,
+      "gt_equiv_diameter_mm": 4.635,
+      "dice": 0.8458,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_885",
+      "gt_equiv_diameter_px": 100.22,
+      "gt_equiv_diameter_mm": 10.022,
+      "dice": 0.8877,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_887",
+      "gt_equiv_diameter_px": 75.66,
+      "gt_equiv_diameter_mm": 7.566,
+      "dice": 0.8658,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_888",
+      "gt_equiv_diameter_px": 85.79,
+      "gt_equiv_diameter_mm": 8.579,
+      "dice": 0.8042,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_901",
+      "gt_equiv_diameter_px": 110.68,
+      "gt_equiv_diameter_mm": 11.068,
+      "dice": 0.8963,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_902",
+      "gt_equiv_diameter_px": 107.19,
+      "gt_equiv_diameter_mm": 10.719,
+      "dice": 0.8043,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_91",
+      "gt_equiv_diameter_px": 153.45,
+      "gt_equiv_diameter_mm": 15.345,
+      "dice": 0.8976,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_910",
+      "gt_equiv_diameter_px": 229.02,
+      "gt_equiv_diameter_mm": 22.902,
+      "dice": 0.888,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_926",
+      "gt_equiv_diameter_px": 46.52,
+      "gt_equiv_diameter_mm": 4.652,
+      "dice": 0.6476,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_928",
+      "gt_equiv_diameter_px": 256.58,
+      "gt_equiv_diameter_mm": 25.658,
+      "dice": 0.8608,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_932",
+      "gt_equiv_diameter_px": 147.71,
+      "gt_equiv_diameter_mm": 14.771,
+      "dice": 0.945,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_936",
+      "gt_equiv_diameter_px": 365.59,
+      "gt_equiv_diameter_mm": 36.559,
+      "dice": 0.6584,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_94",
+      "gt_equiv_diameter_px": 52.3,
+      "gt_equiv_diameter_mm": 5.23,
+      "dice": 0.7397,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_963",
+      "gt_equiv_diameter_px": 123.9,
+      "gt_equiv_diameter_mm": 12.39,
+      "dice": 0.53,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_964",
+      "gt_equiv_diameter_px": 69.55,
+      "gt_equiv_diameter_mm": 6.955,
+      "dice": 0.8996,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_966",
+      "gt_equiv_diameter_px": 87.87,
+      "gt_equiv_diameter_mm": 8.787,
+      "dice": 0.8769,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_968",
+      "gt_equiv_diameter_px": 114.3,
+      "gt_equiv_diameter_mm": 11.43,
+      "dice": 0.5612,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_977",
+      "gt_equiv_diameter_px": 69.93,
+      "gt_equiv_diameter_mm": 6.993,
+      "dice": 0.8841,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_982",
+      "gt_equiv_diameter_px": 306.52,
+      "gt_equiv_diameter_mm": 30.652,
+      "dice": 0.9606,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_995",
+      "gt_equiv_diameter_px": 67.09,
+      "gt_equiv_diameter_mm": 6.709,
+      "dice": 0.8325,
+      "pred_empty": false
+    }
+  ],
+  "small_subset": [
+    {
+      "stem": "PKTN_train_Img_145",
+      "gt_equiv_diameter_px": 27.48,
+      "gt_equiv_diameter_mm": 2.748,
+      "dice": 0.7019,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_173",
+      "gt_equiv_diameter_px": 44.31,
+      "gt_equiv_diameter_mm": 4.431,
+      "dice": 0.8099,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_252",
+      "gt_equiv_diameter_px": 38.79,
+      "gt_equiv_diameter_mm": 3.879,
+      "dice": 0.7362,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_262",
+      "gt_equiv_diameter_px": 33.09,
+      "gt_equiv_diameter_mm": 3.309,
+      "dice": 0.8132,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_297",
+      "gt_equiv_diameter_px": 39.43,
+      "gt_equiv_diameter_mm": 3.943,
+      "dice": 0.659,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_345",
+      "gt_equiv_diameter_px": 41.78,
+      "gt_equiv_diameter_mm": 4.178,
+      "dice": 0.8452,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_451",
+      "gt_equiv_diameter_px": 36.74,
+      "gt_equiv_diameter_mm": 3.674,
+      "dice": 0.7818,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_479",
+      "gt_equiv_diameter_px": 43.47,
+      "gt_equiv_diameter_mm": 4.347,
+      "dice": 0.8513,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_481",
+      "gt_equiv_diameter_px": 47.12,
+      "gt_equiv_diameter_mm": 4.712,
+      "dice": 0.0216,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_520",
+      "gt_equiv_diameter_px": 43.8,
+      "gt_equiv_diameter_mm": 4.38,
+      "dice": 0.8527,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_538",
+      "gt_equiv_diameter_px": 33.49,
+      "gt_equiv_diameter_mm": 3.349,
+      "dice": 0.8307,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_580",
+      "gt_equiv_diameter_px": 43.96,
+      "gt_equiv_diameter_mm": 4.396,
+      "dice": 0.8391,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_835",
+      "gt_equiv_diameter_px": 47.18,
+      "gt_equiv_diameter_mm": 4.718,
+      "dice": 0.8771,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_862",
+      "gt_equiv_diameter_px": 46.35,
+      "gt_equiv_diameter_mm": 4.635,
+      "dice": 0.8458,
+      "pred_empty": false
+    },
+    {
+      "stem": "PKTN_train_Img_926",
+      "gt_equiv_diameter_px": 46.52,
+      "gt_equiv_diameter_mm": 4.652,
+      "dice": 0.6476,
+      "pred_empty": false
+    }
+  ],
+  "small_failures": [
+    {
+      "stem": "PKTN_train_Img_481",
+      "gt_equiv_diameter_px": 47.12,
+      "gt_equiv_diameter_mm": 4.712,
+      "dice": 0.0216,
+      "pred_empty": false
+    }
+  ]
+}

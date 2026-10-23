@@ -1,0 +1,31 @@
+{
+  "source": "b2_exports",
+  "export_dir": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/RepViT/tn3k_cls_bm",
+  "model_id": "RepViT",
+  "cohort_id": "tn3k_cls_bm",
+  "manifest": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/RepViT/tn3k_cls_bm/manifest.json",
+  "predictions": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/RepViT/tn3k_cls_bm/predictions.jsonl",
+  "n_records": 614,
+  "cluster_map": null,
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "classification": {
+    "task": "classification",
+    "n_images": 614,
+    "n_clusters": 614,
+    "image_level_cluster_bootstrap": {
+      "auroc": {
+        "mean": 0.8297686306160883,
+        "ci_lower": 0.7968647723152145,
+        "ci_upper": 0.8598280893388888
+      },
+      "auprc": {
+        "mean": 0.7517550882369815,
+        "ci_lower": 0.6946151154925493,
+        "ci_upper": 0.8054566669081016
+      }
+    }
+  }
+}

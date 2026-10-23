@@ -2,8 +2,20 @@
 # 为 LLM 路由实验批量构建 test_for_llm 子集（n=250；源样本数 <=250 则整集复制）。
 # DDTI 分两套：分割 all_seg（无 label）、分类 DDTI_Classification/all（images_processed，无 mask）。
 set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+_find_revision_repo_root() {
+  local d="$SCRIPT_DIR"
+  while [[ -n "$d" && "$d" != "/" ]]; do
+    if [[ -f "$d/run_pipeline.py" ]]; then
+      printf '%s\n' "$d"
+      return 0
+    fi
+    d="$(dirname "$d")"
+  done
+  return 1
+}
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT="${REPO_ROOT:-$(_find_revision_repo_root)}"
 PY="${PYTHON:-python3}"
 N=250
 SEED=42

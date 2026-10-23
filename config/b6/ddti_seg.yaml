@@ -1,0 +1,144 @@
+# B6 路由稳定性（5× LLM 重复）；数据为 test_for_llm 子集（非全量 test）。
+# 构建子集: bash scripts/build_all_test_for_llm.sh
+# 用法:
+#   export DASHSCOPE_API_KEY=...
+#   python run_pipeline.py --config config/b6/ddti_seg.yaml --device cuda
+#   python run_routing_stability.py \
+#     --config config/b6/ddti_seg.yaml \
+#     --output-dir output/b6/ddti_seg/pipeline_run \
+#     --repeats 5 --device cuda
+#
+# 结构对齐 config/b6/sample_stability.yaml；勿用于 B3 波次 1 static bundle。
+shared:
+  agent_llm:
+    api_key_env: DASHSCOPE_API_KEY
+    base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    model_name: qwen3.8-27b
+    temperature: 0.3
+    max_tokens: 768
+    enable_thinking: false
+segmentation:
+  models:
+  - type: dinov3_unet
+    name: all_datasets
+    model_path: ../Segmentation_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth
+    input_size:
+    - 224
+    - 224
+    threshold: 0.5
+  - type: dinov3_unet
+    name: TN3K
+    model_path: ../Segmentation_Agent/weights/TN3K/dino_unet_train_TN3K_epoch_50.pth
+    input_size:
+    - 224
+    - 224
+    threshold: 0.5
+  - type: dinov3_unet
+    name: ThyroidXL
+    model_path: ../Segmentation_Agent/weights/ThyroidXL/dino_unet_train_ThyroidXL_epoch_50.pth
+    input_size:
+    - 224
+    - 224
+    threshold: 0.5
+  - type: dinov3_unet
+    name: PKTN_comprehensive
+    model_path: ../Segmentation_Agent/weights/PKTN_comprehensive/dino_unet_train_PKTN_comprehensive_epoch_50.pth
+    input_size:
+    - 224
+    - 224
+    threshold: 0.5
+  - type: dinov3_unet
+    name: TN5K
+    model_path: ../Segmentation_Agent/weights/TN5K/dino_unet_train_TN5K_epoch_50.pth
+    input_size:
+    - 224
+    - 224
+    threshold: 0.5
+  agent:
+    enable_agent: true
+    routing_mode: llm
+    brief_routing_prompt: true
+    include_disagreement_metrics_in_prompt: true
+    pre_filter:
+      cosine_threshold: 0.8
+      prob_outlier_threshold: 0.4
+      min_keep: 1
+    ensemble:
+      enabled: true
+      top_k: 1
+      method: weighted_average
+      threshold: 0.5
+classification:
+  models:
+  - type: dinov3_unet_multitask
+    name: all_datasets
+    model_path: ../Classification_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth
+    use_tirads: false
+  - type: dinov3_unet_multitask
+    name: TN3K
+    model_path: ../Classification_Agent/weights/TN3K/dino_unet_train_multitask_TN3K_epoch_50.pth
+    use_tirads: false
+  - type: dinov3_unet_multitask
+    name: TN5K
+    model_path: ../Classification_Agent/weights/TN5K/dino_unet_train_multitask_TN5K_epoch_50.pth
+    use_tirads: false
+  - type: dinov3_unet_multitask
+    name: ThyroidXL
+    model_path: ../Classification_Agent/weights/ThyroidXL/dino_unet_train_multitask_ThyroidXL_epoch_50.pth
+    use_tirads: false
+  agent:
+    enable_agent: true
+    routing_mode: llm
+    brief_routing_prompt: true
+    top_k: 5
+    consensus_min_confidence: 0.6
+radiomics_judge:
+  enabled: true
+  model_dir: ../Classification_Agent/weights/dataset_3/autogluon_model_20260106_215755
+  top_k_features: 5
+  radiomics_params: null
+pipeline:
+  preload_workers: 4
+  run_segmentation: true
+  run_classification: false
+  ablation:
+    routing_modes:
+    - soft_voting
+    - majority
+    - max_confidence
+    - static_rule
+    - best_single
+    - oracle
+    shared_intermediate: output/b6/ddti_seg/pipeline_run/intermediate
+    output_root: output/ablation/b6/ddti_seg
+    force_phase3: true
+    summarize: true
+    task: seg
+    learned_router:
+      seg_artifact: artifacts/learned_router_seg.joblib
+      cls_artifact: artifacts/learned_router_cls.joblib
+      allow_missing_artifact: true
+      write_random_artifact: false
+      params:
+        C: 0.1
+        max_iter: 200
+        random_state: 42
+        random_init: true
+        random_coef_scale: 0.05
+    best_single_seg: all_datasets
+    best_single_cls: all_datasets
+    val_list: null
+  data:
+    image_input: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/DDTI/all_seg_for_llm_malignancy/images
+    gt_mask_dir: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/DDTI/all_seg_for_llm_malignancy/masks
+    label_file: ''
+    label_key: malignancy
+    device_info:
+    - GE Logiq E9
+    - GE S7
+    start_index: 0
+    max_images: null
+  log_routing: true
+  routing_log_include_prompts: false
+  output:
+    output_dir: output/b6/ddti_seg/pipeline_run

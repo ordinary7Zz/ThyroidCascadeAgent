@@ -3,15 +3,19 @@
 
 from __future__ import annotations
 
+
+import importlib.util
+from pathlib import Path
+
 import argparse
 import os
 import sys
 
 import yaml
 
-from repo_path import install
+import repo_path
 
-install()
+repo_path.install()
 
 from openai import OpenAIError
 
@@ -72,3 +76,8 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+
+import importlib.util
+from pathlib import Path
+
+

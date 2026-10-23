@@ -36,16 +36,16 @@
 
 ---
 
-## 3. 模型与训练配置（ResNet18）
+## 3. 模型与训练配置（Tiger-Model）
 
 | 项目 | B9 五折 CV | 单次 + FangDai 外测 |
 |------|------------|---------------------|
+| 模型 | **Tiger-Model**（稿内 FTC/PTC 专家基线；仓库 `Tiger-Model/new_code/`) | 同左 |
 | 脚本 | `run_b9_paper_cv.sh` | `run_ftcptc_paper_pipeline.sh` |
 | 优化 | `lr=1e-5`，`batch=8`，`epochs=50` | 同左 |
 | 划分 / 选模 | `n_splits=5`，`seed=42`，患者分层 | val **V** 最大 → epoch **11** |
 | OOF / 阈值 | 末轮 epoch 049 + OOF Youden ≈ **0.978** | val 183 Youden → **0.0447** |
 | CI | bootstrap 1000，95%，`seed=42` | 同左 |
-| 预训练 | `pretrained/resnet18-f37072fd.pth`（以训练日志为准） | 同左 |
 
 ---
 
@@ -105,7 +105,7 @@ Manifest 病例 ID 过粗，导出中患者级 AUROC **不可解释**；**外测
 
 1. **ZJH 4756 图**上患者分层 **5 折 CV**：OOF **患者级 AUROC 0.46**（95% CI **0.40–0.53**）；图像级 **0.47**（0.45–0.50）。  
 2. **FangDai 199 图**外测（ZJH train/val 训练、val 定阈）：**图像级 AUROC 0.65**（0.58–0.72）。  
-3. 同一数据包上 **CV 与外测表现不一致**（外测优于 OOF 排序），需结合选模协议（OOF 末 epoch vs 外测 valid-best epoch）、类别不平衡与是否全程 ImageNet 预训练作讨论（§8）。  
+3. 同一数据包上 **CV 与外测表现不一致**（外测优于 OOF 排序），需结合选模协议（OOF 末 epoch vs 外测 valid-best epoch）、类别不平衡与 Tiger-Model 训练配置作讨论（§8）。  
 4. 外测 *n*=**199**。
 
 ---
@@ -137,8 +137,8 @@ SKIP_DATA=1 CUDA_VISIBLE_DEVICES=0 PACK="$PACK" \
 |---|------|
 | 1 | B9 OOF 使用各折 **最后一 epoch**，非 valid 最优权重。 |
 | 2 | OOF Youden 阈值极高，分类指标（Prec/Recall/F1）在 OOF 上接近退化；主报 **AUROC + CI**。 |
-| 3 | 若部分折训练曾随机初始化 ImageNet，需对照日志后决定是否重跑。 |
+| 3 | 若部分折训练配置与稿内 Tiger-Model 不一致，需对照 `Tiger-Model` 训练日志后决定是否重跑。 |
 
 ---
 
-*文档版本：v2.0 · B9 + 外测均已有 `cv_summary` / metrics 文件支撑*
+*文档版本：v2.1 · FTC/PTC 模型表述统一为 Tiger-Model；B9 + 外测均已有 `cv_summary` / metrics 文件支撑*

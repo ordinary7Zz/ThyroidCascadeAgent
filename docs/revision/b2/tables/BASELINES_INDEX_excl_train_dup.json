@@ -1,0 +1,62 @@
+[
+  {
+    "model_id": "BiomedCLIP",
+    "cohort_id": "zjh8k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_BiomedCLIP_zjh8k_cls_bm_b2_excl_train_dup.json",
+    "n_records": 6966
+  },
+  {
+    "model_id": "LSNet",
+    "cohort_id": "zjh8k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_LSNet_zjh8k_cls_bm_b2_excl_train_dup.json",
+    "n_records": 6966
+  },
+  {
+    "model_id": "MedSAM2",
+    "cohort_id": "zjh8k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSAM2_zjh8k_seg_nodule_b2_excl_train_dup.json",
+    "n_records": 6966
+  },
+  {
+    "model_id": "MedSegX",
+    "cohort_id": "zjh8k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSegX_zjh8k_seg_nodule_b2_excl_train_dup.json",
+    "n_records": 6966
+  },
+  {
+    "model_id": "MedSigLIP",
+    "cohort_id": "zjh8k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_MedSigLIP_zjh8k_cls_bm_b2_excl_train_dup.json",
+    "n_records": 6966
+  },
+  {
+    "model_id": "RepViT",
+    "cohort_id": "zjh8k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_RepViT_zjh8k_cls_bm_b2_excl_train_dup.json",
+    "n_records": 6966
+  },
+  {
+    "model_id": "ResNet-50",
+    "cohort_id": "zjh8k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_ResNet-50_zjh8k_cls_bm_b2_excl_train_dup.json",
+    "n_records": 6966
+  },
+  {
+    "model_id": "TransUNet",
+    "cohort_id": "zjh8k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_TransUNet_zjh8k_seg_nodule_b2_excl_train_dup.json",
+    "n_records": 6966
+  },
+  {
+    "model_id": "UltraFedFM",
+    "cohort_id": "zjh8k_cls_bm",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_UltraFedFM_zjh8k_cls_bm_b2_excl_train_dup.json",
+    "n_records": 6966
+  },
+  {
+    "model_id": "UltraFedFM",
+    "cohort_id": "zjh8k_seg_nodule",
+    "output": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/tables/baseline_UltraFedFM_zjh8k_seg_nodule_b2_excl_train_dup.json",
+    "n_records": 6966
+  }
+]

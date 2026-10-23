@@ -13,7 +13,7 @@
 - **Path B 附录**：`pathb.b_a` / `b_b` / `b_c` 对应 B3 子目录名。
 
 ```bash
-python scripts/build_b4_tables.py --config config/b4/zjh8k.yaml
+python scripts/revision/b4/build_b4_tables.py --config config/b4/zjh8k.yaml
 ```
 
 重新生成全部 B4（及 B3 数据段）：`python scripts/generate_ablation_configs.py`

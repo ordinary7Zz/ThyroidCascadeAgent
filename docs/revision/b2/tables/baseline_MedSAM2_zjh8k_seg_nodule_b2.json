@@ -1,0 +1,34 @@
+{
+  "source": "b2_exports",
+  "export_dir": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/MedSAM2/zjh8k_seg_nodule",
+  "model_id": "MedSAM2",
+  "cohort_id": "zjh8k_seg_nodule",
+  "manifest": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/MedSAM2/zjh8k_seg_nodule/manifest.json",
+  "predictions": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/MedSAM2/zjh8k_seg_nodule/predictions.jsonl",
+  "n_records": 7958,
+  "cluster_map": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/cluster_maps/zjh8k.json",
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "segmentation": {
+    "task": "segmentation",
+    "n_images": 7958,
+    "n_clusters": 1146,
+    "image_level_cluster_bootstrap": {
+      "dice": {
+        "mean": 0.8281123146519226,
+        "ci_lower": 0.8198556457616631,
+        "ci_upper": 0.8358875074141533
+      }
+    },
+    "patient_level": {
+      "n_patients": 1146,
+      "dice": {
+        "mean": 0.8304384164418361,
+        "ci_lower": 0.8224611312014004,
+        "ci_upper": 0.8386658277353563
+      }
+    }
+  }
+}

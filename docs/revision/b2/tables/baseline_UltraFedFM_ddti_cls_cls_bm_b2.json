@@ -1,0 +1,31 @@
+{
+  "source": "b2_exports",
+  "export_dir": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/UltraFedFM/ddti_cls_cls_bm",
+  "model_id": "UltraFedFM",
+  "cohort_id": "ddti_cls_cls_bm",
+  "manifest": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/UltraFedFM/ddti_cls_cls_bm/manifest.json",
+  "predictions": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/UltraFedFM/ddti_cls_cls_bm/predictions.jsonl",
+  "n_records": 349,
+  "cluster_map": null,
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "classification": {
+    "task": "classification",
+    "n_images": 349,
+    "n_clusters": 349,
+    "image_level_cluster_bootstrap": {
+      "auroc": {
+        "mean": 0.7819444444444444,
+        "ci_lower": 0.7094971443683417,
+        "ci_upper": 0.8532796372912652
+      },
+      "auprc": {
+        "mean": 0.3938489598405769,
+        "ci_lower": 0.2750016251570732,
+        "ci_upper": 0.5560961644611906
+      }
+    }
+  }
+}

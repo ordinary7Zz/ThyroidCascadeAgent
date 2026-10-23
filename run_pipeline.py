@@ -170,6 +170,10 @@ def main():
 
     print(f"\nPipeline 完成: {len(results)} 张图像")
 
+    if pipe_cfg.get("stop_after_phase2", False):
+        print("✓ stop_after_phase2：跳过 evaluate / compare_models")
+        return
+
     # 评估指标
     from pipeline.evaluate import evaluate_pipeline
     evaluate_pipeline(

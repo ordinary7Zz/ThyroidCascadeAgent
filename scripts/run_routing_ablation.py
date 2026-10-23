@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""
-B3 路由消融：在共享 intermediate 上切换 routing_mode，重跑 Phase 3–5（波次 0–1）。
+"""B3 路由消融：在共享 intermediate 上切换 routing_mode，重跑 Phase 3–5（波次 0–1）。
+
+与 ``run_pipeline.py`` 同级能力，但面向消融目录约定；实现依赖 ``pipeline/``，不反向被 cascade 引用。
 
 示例（sample 队列，共享地基 + 静态规则）:
   python scripts/run_routing_ablation.py \\
@@ -10,17 +11,10 @@ B3 路由消融：在共享 intermediate 上切换 routing_mode，重跑 Phase 3
     --shared-intermediate output/sample/pipeline_run/intermediate \\
     --output-dir output/ablation/b3/sample/static_rule \\
     --force-phase3
-
-批量非 LLM 模式:
-  for m in soft_voting majority max_confidence static_rule oracle; do
-    python scripts/run_routing_ablation.py --config config/b3/sample.yaml \\
-      --routing-mode $m --task both \\
-      --shared-intermediate output/sample/pipeline_run/intermediate \\
-      --output-dir output/ablation/b3/sample/$m --force-phase3
-  done
 """
 
 from __future__ import annotations
+
 
 import argparse
 import os

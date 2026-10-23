@@ -6,9 +6,9 @@
 - **未建 for_llm 子集**：`sample.yaml`、`nhc_misd_tus.yaml` 仍指向全量测试路径。
 
 ```bash
-python scripts/run_b5_batch.py --config config/b5/tn3k.yaml --force-phase3 --skip-full
+python scripts/revision/b5/run_b5_batch.py --config config/b5/tn3k.yaml --force-phase3 --skip-full
 ```
 
-- 汇总：`python scripts/build_b5_tables.py --root output/ablation/b5`
+- 汇总：`python scripts/revision/b5/build_b5_tables.py --root output/ablation/b5`
 
 `metadata_mode`：`full` | `drop_device` | `drop_source` | `drop_both` | `quality_only`

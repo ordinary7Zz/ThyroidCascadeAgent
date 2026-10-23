@@ -1,22 +1,14 @@
 #!/usr/bin/env python3
-"""
-从测试集根目录分层随机抽样，复制到与 test 同级的 test_for_llm_<label_key>/（或 <split>_for_llm_<label_key>）。
+"""构建 test_for_llm_<label_key> 等 LLM/消融用小子集（分层抽样或整集复制）。
 
-有分类标签：当源样本数 > --n 时，按 --label-key 分层随机抽 n 张并保持类别比例。
-源样本数 <= --n：不抽样，全部复制到目标目录。
-无分类标签：源样本数 > n 时简单随机抽 n；否则全部复制。
-
-image 与 mask 按 stem 匹配；mask 扩展名可与 image 不同。
-仅分类（无 mask）：只复制图像与裁剪后的 label JSON。
-
-用法:
-  python scripts/build_test_for_llm.py --src .../TN3K/test --n 250
-  python scripts/build_test_for_llm.py --src .../DDTI/all_seg --images-dir images --n 250
-  python scripts/build_test_for_llm.py --src .../DDTI_Classification/all \\
-    --images-dir images_processed --no-masks --label-file DDTI_Classification_test_label.json --n 250
+用法: python scripts/build_test_for_llm.py --src .../TN3K/test --n 250
 """
 
 from __future__ import annotations
+
+import repo_path
+
+repo_path.install()
 
 import argparse
 import json
