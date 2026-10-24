@@ -24,7 +24,7 @@ from shared.routing_log import build_routing_logger_from_config
 from segmentation import SegmentationQualityEvaluator, SegmentationAgent
 from classification import LLMClassificationAgent
 from pipeline.cascade import CascadePipeline
-from pipeline.routing_stability import run_stability_from_caches
+from pipeline.revision.b6.routing_stability import run_stability_from_caches
 from radiomics_judge import RadiomicsJudge
 
 

@@ -34,8 +34,8 @@ import yaml
 
 ROOT = repo_path.install()
 
-from pipeline.routing_ablation import get_ablation_batch_settings, parse_ablation_routing_entry
-from pipeline.static_b3_bundle import (
+from pipeline.revision.b3.routing_ablation import get_ablation_batch_settings, parse_ablation_routing_entry
+from pipeline.revision.b3.static_b3_bundle import (
     build_pipeline_for_bundle,
     collect_image_paths,
     load_labels,
@@ -133,7 +133,7 @@ def main() -> None:
         sum_cmd = [
             sys.executable,
             "-m",
-            "pipeline.ablation_summary",
+            "pipeline.revision.b3.ablation_summary",
             "--root",
             str(out_root),
         ]

@@ -1,6 +1,6 @@
 # ThyroidCascadeAgent — LLM router specification (B6)
 
-_Generated from config: `config/config.yaml`_
+_Generated from config: `config/b6/tn3k.yaml`_
 
 ## Shared decoding (`shared.agent_llm`)
 
@@ -8,9 +8,9 @@ _Generated from config: `config/config.yaml`_
 |-------|-------|
 | API key | environment variable `DASHSCOPE_API_KEY` |
 | base_url | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
-| model_name | `qwen2.5-32b-instruct` |
+| model_name | `qwen3.8-27b` |
 | temperature | `0.3` |
-| max_tokens | `1024` |
+| max_tokens | `768` |
 
 Full config excerpt:
 
@@ -18,9 +18,10 @@ Full config excerpt:
 {
   "api_key_env": "DASHSCOPE_API_KEY",
   "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-  "model_name": "qwen2.5-32b-instruct",
+  "model_name": "qwen3.8-27b",
   "temperature": 0.3,
-  "max_tokens": 1024
+  "max_tokens": 768,
+  "enable_thinking": false
 }
 ```
 
@@ -28,7 +29,7 @@ Full config excerpt:
 
 ## 1. Segmentation router (`SegmentationAgent`, Phase 3)
 
-- `enable_agent`: `False`
+- `enable_agent`: `True`
 - `include_disagreement_metrics_in_prompt`: `True`
 - `metadata_mode`: `full`
 - `ensemble`: `{'enabled': True, 'top_k': 1, 'method': 'weighted_average', 'threshold': 0.5}`
@@ -40,32 +41,10 @@ Used when `radiomics_judge` is injected in pipeline (judge block included below)
 If judge is disabled at runtime, omit the radiomics paragraph in the actual call.
 
 ```
-你是一个分割模型选择代理，根据多个模型的掩码质量指标选择最佳结果。
-只输出一个JSON对象，首字符{末字符}，无前缀后缀或Markdown。
-
-输出格式：返回JSON: "selected_model", "confidence"(0-1), "reasoning"(3-4句中文含数值, 约120-180字)。
-示例：{"selected_model": "模型名称", "confidence": 0.95, "reasoning": "选择理由"}
-
-当输入含 group_uncertainty 与 disagreement 时：
-- group_uncertainty.area_cv：面积离散度，越大共识越差；
-- pairwise_hd95_mean/std：边界差异整体水平与波动；
-- disagreement.mean_hd95_to_others：该模型与其余模型边界平均 HD95；
-- disagreement.area_rel_to_group：面积相对群体均值的偏差。
-分歧大时优先选 agreement 高且 mean_hd95_to_others 低的模型。
-
-你还将看到每个分割结果经 GT-trained radiomics 模型的分类判断（radiomics_judge 字段）。
-该裁判用金标准 mask 训练，分类置信度可作为分割质量的间接信号：
-分割越准确，radiomics 特征越接近训练分布，分类置信度越合理。
-若多个模型的 radiomics_judge 分类结果分歧大，说明分割质量差异大，需重点分析。
-决策优先级（从高到低）：
-1) 模型间一致性：agreement_with_others 高更可靠；分歧大时倚重 agreement 高且 mean_hd95_to_others 低的候选；
-2) radiomics 裁判（如有）：分类置信度合理的 mask 更可信；
-3) 设备匹配：training_devices 与输入设备越接近越好；
-4) 形态学：单连通、边界平滑、circularity 0.6-0.9、面积合理；
-5) 数据集规模：dataset_size 大的模型泛化性更好；
-6) 置信度：mean_confidence 较高为次要加分项。
-
-reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_hd95_mean、radiomics_judge 等）。
+你是分割模型选择代理。根据 user 中 JSON 指标选最佳 mask。
+禁止输出思考过程、Markdown 或任何 JSON 外的文字。第一个字符必须是 {，最后一个必须是 }。
+只输出一行 JSON："selected_model", "confidence"(0-1), "reasoning"(固定为"-")。示例：{"selected_model":"模型名", "confidence":0.9, "reasoning":"-"}
+优先级：agreement_with_others↑；分歧大时 mean_hd95_to_others↓；radiomics_judge 与 classification_anchor 一致者优先；形态学与设备匹配次之。
 ```
 
 ### 1.1b System prompt — base without radiomics judge block
@@ -73,28 +52,10 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 _Only if `radiomics_judge` is not loaded:_
 
 ```
-你是一个分割模型选择代理，根据多个模型的掩码质量指标选择最佳结果。
-只输出一个JSON对象，首字符{末字符}，无前缀后缀或Markdown。
-
-输出格式：返回JSON: "selected_model", "confidence"(0-1), "reasoning"(3-4句中文含数值, 约120-180字)。
-示例：{"selected_model": "模型名称", "confidence": 0.95, "reasoning": "选择理由"}
-
-当输入含 group_uncertainty 与 disagreement 时：
-- group_uncertainty.area_cv：面积离散度，越大共识越差；
-- pairwise_hd95_mean/std：边界差异整体水平与波动；
-- disagreement.mean_hd95_to_others：该模型与其余模型边界平均 HD95；
-- disagreement.area_rel_to_group：面积相对群体均值的偏差。
-分歧大时优先选 agreement 高且 mean_hd95_to_others 低的模型。
-
-决策优先级（从高到低）：
-1) 模型间一致性：agreement_with_others 高更可靠；分歧大时倚重 agreement 高且 mean_hd95_to_others 低的候选；
-2) radiomics 裁判（如有）：分类置信度合理的 mask 更可信；
-3) 设备匹配：training_devices 与输入设备越接近越好；
-4) 形态学：单连通、边界平滑、circularity 0.6-0.9、面积合理；
-5) 数据集规模：dataset_size 大的模型泛化性更好；
-6) 置信度：mean_confidence 较高为次要加分项。
-
-reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_hd95_mean、radiomics_judge 等）。
+你是分割模型选择代理。根据 user 中 JSON 指标选最佳 mask。
+禁止输出思考过程、Markdown 或任何 JSON 外的文字。第一个字符必须是 {，最后一个必须是 }。
+只输出一行 JSON："selected_model", "confidence"(0-1), "reasoning"(固定为"-")。示例：{"selected_model":"模型名", "confidence":0.9, "reasoning":"-"}
+优先级：agreement_with_others↑；分歧大时 mean_hd95_to_others↓；radiomics_judge 与 classification_anchor 一致者优先；形态学与设备匹配次之。
 ```
 
 ### 1.2 System prompt — append Path A (classification consensus)
@@ -158,20 +119,15 @@ Example anchor shown as `恶性`:
 
 ## 2. Classification — standalone (`run_cls.py` / unanimous bypass)
 
-- `enable_agent`: `False`
+- `enable_agent`: `True`
 - `top_k`: `5`
 - Unanimous top class across models → **no LLM** (`method: unanimous`).
 
 ### 2.1 System prompt — single selection (`top_k == 1`)
 
 ```
-你是甲状腺超声多模型预测整合专家，从若干模型输出中选最可信的一项。
-
-【字段】top_confidence（或 top_confidence_calibrated）为主置信度。entropy 越大越不确定，margin_top2 越大越稳。num_models_same_class 为投票一致性。
-
-【决策序】1) 主置信度高 2) training_devices 与输入设备匹配 3) entropy↓ margin↑ 4) dataset_size 大优先 5) 投票一致性高。
-
-【输出】只输出纯JSON（无Markdown/思考/代码块），首尾为{}。字段：selected_model, selected_class, confidence, reasoning。
+从 user JSON  predictions 中选最可信模型。
+禁止思考/Markdown。只输出一行 JSON：selected_model, selected_class, confidence(0-1), reasoning 固定为 "-"。
 ```
 
 ### 2.2 System prompt — top-k fusion (`top_k > 1`)
@@ -209,7 +165,7 @@ Example anchor shown as `恶性`:
 ## 3. Classification — Path B (`resolve_path_b`, Phase 5, no consensus)
 
 - Invoked when `classification_consensus == false` and `enable_agent: true`.
-- Current config `enable_agent`: `False`
+- Current config `enable_agent`: `True`
 
 ### 3.1 System prompt
 

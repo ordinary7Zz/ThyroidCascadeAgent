@@ -111,23 +111,37 @@ if [[ "${SKIP_PIPELINE}" != true ]]; then
 fi
 
 echo ""
-echo "======== 合并 validation results ========"
-"${PY}" scripts/revision/b8/merge_validation_results.py --out-dir "${VAL_OUT}"
+echo "======== backfill uncertainty（各 _parts，有 intermediate）========"
+for cohort in tn3k tn5k thyroidxl pktn; do
+  cfg="${CFG_MAP[$cohort]:-}"
+  part_out="${ROOT}/output/validation/_parts/${cohort}"
+  if [[ ! -f "${part_out}/results.json" ]]; then
+    echo ">>> 跳过 backfill ${cohort}: 无 ${part_out}/results.json" >&2
+    failures+=("${cohort}:no_part_results")
+    [[ "${CONTINUE_ON_ERROR}" == true ]] && continue || exit 1
+  fi
+  if [[ ! -d "${part_out}/intermediate" ]]; then
+    echo ">>> 跳过 backfill ${cohort}: 无 intermediate/" >&2
+    failures+=("${cohort}:no_part_intermediate")
+    [[ "${CONTINUE_ON_ERROR}" == true ]] && continue || exit 1
+  fi
+  set +e
+  "${PY}" scripts/revision/b8/backfill_results_metadata.py \
+    --output-dir "${part_out}" \
+    --config "${cfg}"
+  rc=$?
+  set -e
+  if [[ "${rc}" -ne 0 ]]; then
+    echo ">>> backfill 失败 ${cohort} (exit ${rc})" >&2
+    failures+=("${cohort}:part_backfill_${rc}")
+    [[ "${CONTINUE_ON_ERROR}" == true ]] && continue || exit "${rc}"
+  fi
+done
 
 echo ""
-echo "======== backfill uncertainty ========"
-set +e
-"${PY}" scripts/revision/b8/backfill_results_metadata.py \
-  --output-dir "${VAL_OUT}" \
-  --config "${NHC_CFG}" \
-  --label-file "${VAL_OUT}/labels_merged.json"
-rc=$?
-set -e
-if [[ "${rc}" -ne 0 ]]; then
-  echo ">>> backfill 失败 (exit ${rc})" >&2
-  failures+=("validation:backfill_${rc}")
-  [[ "${CONTINUE_ON_ERROR}" == true ]] || exit "${rc}"
-fi
+echo "======== 合并 validation results ========"
+"${PY}" scripts/revision/b8/merge_validation_results.py --out-dir "${VAL_OUT}"
+# 勿对合并目录 backfill：no_llm_primary 无 intermediate，会清空分类不确定度。
 
 echo ""
 echo "======== B8 fit（验证集定阈）========"
@@ -146,7 +160,7 @@ echo "  thresholds:         ${FIT_OUT}/abstention_thresholds.json"
 if [[ "${WITH_COHORT_EVAL}" == true ]]; then
   echo ""
   echo "======== 各测试队列 B8 eval ========"
-  "${ROOT}/scripts/revision/b8/run_b8_all_cohorts.sh" --skip-backfill \
+  "${ROOT}/scripts/revision/b8/run_b8_all_cohorts.sh" \
     ${CONTINUE_ON_ERROR:+--continue-on-error}
 fi
 

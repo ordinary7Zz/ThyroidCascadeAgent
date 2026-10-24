@@ -2,7 +2,7 @@
 仅读 intermediate 的分割路由评测（波次 1：不调 LLM / 不跑 cascade）。
 
 适用于 soft_voting / majority / max_confidence / best_single / oracle。
-static_rule 依赖 radiomics judge，请用 run_routing_ablation + cascade。
+static_rule（B3 默认 agreement-only）请用 static_b3_bundle / cascade；含 radiomics 时设 static_rule_use_radiomics_judge。
 """
 
 from __future__ import annotations

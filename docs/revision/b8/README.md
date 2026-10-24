@@ -6,3 +6,11 @@
 | `docs/REVISION_B7_B8_PLAN.md` | 任务契约与交付物 |
 
 **定稿时**：跑 `run_openthyroid_validation_b8.sh` + `run_b8_all_cohorts.sh`，从 `output/b8/fit/` 与 `output/b8/cohorts/` 更新结论文档中的数字即可；方法与 §2、§5 模板通常不变。
+
+**Risk–coverage 图**（读 `cohorts/*/abstention_eval.json`）：
+
+```bash
+export PYTHON=/mnt/wangbd8/workspace/envs/thyroid_infer/bin/python
+python scripts/revision/b8/plot_risk_coverage.py --mark-operating-point --combined
+# 输出：output/b8/figures/risk_coverage_<cohort>.png、risk_coverage_panels.png
+```

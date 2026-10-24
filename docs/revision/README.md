@@ -1,5 +1,7 @@
 # 返修文档索引（`docs/revision/`）
 
+**本页**：各 `b*/` 写稿入口一行索引。**接近定稿优先级与更新规则**见 [`暂定的修改和回复计划/README.md`](./暂定的修改和回复计划/README.md)（只改该页表格一行 + 路径列表，勿在本页为单包扩写长文）。
+
 ## 暂定的修改和回复计划（中文）
 
 目录：**[`暂定的修改和回复计划/`](./暂定的修改和回复计划/README.md)**
@@ -21,7 +23,7 @@
 | `b2/conclusions/` | `B2_结论与回复素材.md` |
 | `b3/` | `REVIEWER_RESPONSE_SNIPPETS_B3.md` |
 | `b6/` | `REVIEWER_RESPONSE_SNIPPETS_B6.md`（试点） |
-| `b9/` | `B9_回复素材_仅基于两篇实验结论.md` |
+| `b9/` | `B9_ThyroidXAgent_修改与回复计划.md` |
 | `b10/` | `B10_基线训练协议总结.md` |
 | `b11_b12/` | `REVIEWER_SNIPPETS_ZH.md` |
 | `b8/` | 仅烟雾版，**不可入稿** |

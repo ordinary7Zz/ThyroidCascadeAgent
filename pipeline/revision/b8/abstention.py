@@ -9,7 +9,7 @@ from typing import Any, Callable, Optional
 
 import numpy as np
 
-from pipeline.calibration import malignant_probability
+from pipeline.revision.b8.calibration import malignant_probability
 from pipeline.evaluate import _label_to_binary
 
 # NHC 无 LLM：默认规则子集

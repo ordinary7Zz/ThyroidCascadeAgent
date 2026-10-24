@@ -94,6 +94,8 @@ pipeline:
   run_segmentation: true
   run_classification: true
   ablation:
+    # B3 策略 4 static_rule：默认 agreement-only；完整 radiomics 级联见 true
+    static_rule_use_radiomics_judge: false
     routing_modes:
     - soft_voting
     - majority

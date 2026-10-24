@@ -97,7 +97,9 @@ pipeline:
   run_segmentation: true
   run_classification: false
   ablation:
-    # 大队列默认 lazy；整包预加载需高 memory limit（见 scripts/revision/b3/zjh/check_b3_host_capacity.py）
+    # 7288 张 ≥1500：默认 lazy mmap（NFS 极慢）。~40G cgroup 推荐：
+    #   scripts/revision/b3/rjh/run_rjh7k_reinfer_chunks.sh → run_b3_rjh7k_chunks.sh
+    # 大队列整包预加载见 scripts/revision/b3/zjh/check_b3_host_capacity.py
     routing_modes:
     - soft_voting
     - majority

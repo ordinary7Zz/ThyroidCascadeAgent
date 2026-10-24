@@ -12,7 +12,7 @@
 | 层级 | 位置 | 作用 |
 |------|------|------|
 | **产品入口** | 仓库根 `run_pipeline.py`、`run_seg.py`、`run_cls.py`、`run_routing_stability.py` | 直接 `import pipeline` / `shared` / `segmentation` / `classification` |
-| **可复用库** | [`pipeline/`](../pipeline/README.md) | 级联、评估、B3/B8 等逻辑；**不** `import scripts` |
+| **可复用库** | [`pipeline/`](../pipeline/README.md)（核心）；[`pipeline/revision/`](../pipeline/revision/README.md)（B3–B8） | 返修 import：`pipeline.revision.b8.*` 等 |
 | **地基 CLI** | [`scripts/README.md`](README.md) | for_llm、批量 `run_pipeline`、`run_routing_ablation`、生成 `config/b3` |
 | **返修批处理** | `scripts/revision/**` | B1–B11 制表、审计、批量消融 |
 
@@ -32,6 +32,7 @@
 | **B3** | 波次 1 全队列 | `bash scripts/revision/b3/run_b3_wave1_all_cohorts.sh` |
 | **B3** | 单队列 / 多 mode | `python scripts/revision/b3/run_b3_batch.py --config config/b3/tn3k.yaml …` |
 | **B3** | ZJH 大队列（防 OOM） | `bash scripts/revision/b3/zjh/run_b3_zjh8k.sh` 或 chunk 版 `run_b3_zjh8k_chunks.sh` |
+| **B3** | RJH 大队列（chunk 重推 + B3） | `run_rjh7k_reinfer_chunks.sh` → `run_b3_rjh7k_chunks.sh`（`scripts/revision/b3/rjh/`） |
 | **B4** | 组件表 | `python scripts/revision/b4/build_b4_tables.py` |
 | **B5** | 元数据消融 | `python scripts/revision/b5/run_b5_batch.py --config config/b5/tn3k.yaml` |
 | **B6** | 导出 router 规格 | `python scripts/revision/b6/export_router_spec.py` |
@@ -81,6 +82,8 @@
 | `split_b3_intermediate_chunks.py` | 切 intermediate chunk |
 | `run_b3_zjh8k_chunks.sh` | 按 chunk 跑 B3 + merge |
 | `run_zjh8k_reinfer_chunks.sh` | ZJH 按 chunk 重推 Phase 1–2 |
+| `rjh/run_rjh7k_reinfer_chunks.sh` | RJH 按 chunk 重推 Phase 1–2（仅 seg） |
+| `rjh/run_b3_rjh7k_chunks.sh` | RJH 按 chunk 跑 B3 + merge（`--task seg`） |
 | `merge_b3_chunk_outputs.py` | 合并 chunk 输出 |
 | `check_b3_host_capacity.py` | 节点内存/GPU/intermediate 检查 |
 | `watch_b3_bundle_progress.sh` | 监视 bundle 进度 |
@@ -153,7 +156,7 @@
 | 组合 | 说明 |
 |------|------|
 | `pipeline/evaluate.py` vs `run_b2_cluster_metrics.py` | 图像级 CI vs **簇级** CI |
-| `pipeline/backfill_uncertainty.py` vs `backfill_results_metadata.py` | 库 vs CLI |
+| `pipeline/revision/b8/backfill_uncertainty.py` vs `backfill_results_metadata.py` | 库 vs CLI |
 | `run_b3_zjh8k.sh` + `*_chunks.sh` + `run_zjh8k_reinfer_chunks.sh` | 同一 B3·ZJH 目标的 **OOM 运维变体** |
 
 ---

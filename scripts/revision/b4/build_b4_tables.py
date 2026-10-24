@@ -32,7 +32,7 @@ import yaml
 
 ROOT = repo_path.install()
 
-from pipeline.b4_summary import summarize_b4
+from pipeline.revision.b4.b4_summary import summarize_b4
 
 
 def main() -> None:

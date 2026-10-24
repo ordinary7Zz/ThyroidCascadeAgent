@@ -32,8 +32,8 @@ import repo_path
 repo_path.install()
 
 from pipeline.evaluate import evaluate_pipeline
-from pipeline.meta_regression import heterogeneity_i2_tau2
-from pipeline.nhc_heterogeneity import (
+from pipeline.revision.b7.meta_regression import heterogeneity_i2_tau2
+from pipeline.revision.b7.nhc_heterogeneity import (
     _load_jsonl,
     dice_values_by_center,
     load_center_metrics_from_output_dir,

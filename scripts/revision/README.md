@@ -13,6 +13,7 @@
 revision/
 ├── b1/ … b11/       # 与返修工作包一一对应
 ├── b3/zjh/          # ZJH-8K 大队列 B3 运维（chunk / OOM）
+├── b3/rjh/          # RJH-7K 大队列 B3 运维（chunk 重推 + B3）
 ├── _path_setup.py
 ├── _repo_root.sh
 └── README.md

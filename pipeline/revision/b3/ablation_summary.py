@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from pipeline.intermediate_manifest import manifests_match
+from pipeline.revision.b3.intermediate_manifest import manifests_match
 
 
 def load_metrics_files(root: Path) -> list[dict]:

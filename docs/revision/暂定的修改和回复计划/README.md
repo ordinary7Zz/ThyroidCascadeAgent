@@ -4,9 +4,24 @@
 > 数值与占位项可在定稿前替换；不替代 `docs/ThyroidXAgent_返修计划与回复_中文.md` 中的逐条回复全文。  
 > **写稿约定**：拟改内容只记在 **`MANUSCRIPT_REVISION_PLAN_*`**（尤其 §8）；**不提前改** `docs/ThyroidXAgent.md`，统稿时一次性合并。
 
+## 本 README 的作用与更新规则
+
+**作用**：只维护一张 **「哪些 B 包已接近定稿、优先统稿」** 的快照表（下表 + 文末「接近定稿包」路径列表）。**不写**实验细节、不改稿、不替代同目录下的 `MANUSCRIPT_*` / `REVIEWER_*` / `B_DELIVERABLES_*` 或各 `docs/revision/b*/` 结论文档。
+
+**新增或上调一个「接近定稿」任务时，只改这几处（勿扩写新章节）**：
+
+| 步骤 | 改什么 |
+|------|--------|
+| 1 | 在下表 **追加一行**（顺序按团队统稿优先级；五列与现有行一致） |
+| 2 | 文末 **「接近定稿包」** 列表补上 `../bN/`（若尚未出现） |
+| 3 | 同步 [`B_DELIVERABLES_CHECKLIST_ZH.md`](./B_DELIVERABLES_CHECKLIST_ZH.md) 该包状态 |
+| 4 | 细节写入 `../bN/` 结论文档，并在 `MANUSCRIPT_REVISION_PLAN_ZH.md` / `REVIEWER_RESPONSE_PLAN_ZH.md` 维护对应小节 |
+
+**不要**：为单个 B 包在本 README 里另开二级标题、长表格或实验状态说明；`docs/revision/README.md` 的 `bN/` 行也只保留 **一个**写稿入口文件名。若某包在 `MANUSCRIPT_*` 已有固定 §（如 B10→§10、B6→§11），可在下表后 **一句**补充「B*N* → §*」；其余包统一写「见 checklist」。
+
 ## 接近定稿的工作包（当前优先统稿）
 
-下列四包 **实验/审计与结论文档已基本齐**，剩余以 **写入 `ThyroidXAgent.md`、Supp. 制表、回复信摘段** 为主（非新训练）。**先后顺序**为团队定稿习惯：先 B11/B12，再 B1/B2。
+下列工作包 **实验/审计与结论文档已基本齐**（**B6** 以 **TN3K `test_for_llm`** 为主队列；`sample` 仅作早期试点对照），剩余以 **写入 `ThyroidXAgent.md`、Supp. 制表、回复信摘段** 为主（非新训练）。**先后顺序**为团队定稿习惯：先 B11/B12，再 B1/B2。
 
 | 顺序 | 包 | 审稿/稿面侧重 | 仓库入口 | 统稿前常见小项 |
 |:---:|---|---------------|----------|----------------|
@@ -15,8 +30,11 @@
 | 3 | **B1** | R1.1、R2.2、R2.4、R3.3；数据边界与 **dHash** 近重复 | `../b1/B1_结论与回复素材.md`；`../b1/tables/` | 可选 F6 患者数；spot check；ZJH excl. Supp. 入稿 |
 | 4 | **B2** | R1.1、R2.2、R2.14（CI 部分）；**S3/S4** cluster CI、患者级 | `../b2/conclusions/B2_结论与回复素材.md`；`../b2/tables/` | 刷 Supp. 表；**不含 NHC**；DDTI_cls **n=349** |
 | 5 | **B10** | **R2.14**；Supp. 基线协议表；S3/S4 表注 | `../b10/B10_结论与回复素材.md`；`../b10/tables/baseline_training_protocol.md` | 定 **S[X]**；Methods 4.3 入稿；§6.2 核对 |
+| 6 | **B6** | **R2.9**；路由器透明性；**5×** 稳定性与 `routing_log` | `../b6/B6_ROUTING_STABILITY_CONCLUSIONS.md`；`docs/supplementary/router_spec.md`；`output/b6/tn3k/pipeline_run/`（250 例 + `stability_summary.json` *n*=10） | `export_router_spec.py`（`config/b6/tn3k.yaml`）重导规格；Supp. 稳定性表 + log 样例入稿；§11 / B6 专项 / snippets **已换 TN3K 数** |
+| 7 | **B9** | **R2.10–12**；**S5** ThyroidXAgent 灰底；§2.4 / Fig.3 | `../b9/B9_ThyroidXAgent_修改与回复计划.md`；专家行 `B9_LNM_*` / `B9_FTCPTC_*` | 五折 OOF 可占位；AG/路由/C2·FangDai 外测待补 |
+| 8 | **B8** | **R1.3**（校准 + 送复核）；Supp. ECE/Brier、可靠性图、risk–coverage | `../b8/`；`output/b8/fit/`、`cohorts/`、`figures/` | 结论文档与 Supp. 表入稿；**不含 NHC**；无 BM 三队列不写稿 |
 
-**修改/回复计划中的对应位置**：B11/B12 → `MANUSCRIPT_REVISION_PLAN_ZH.md` **§8–§9**；B1/B2 → **§2.1、§3、§4、§6** 与 `REVIEWER_RESPONSE_PLAN_ZH.md` **B1+B2 专项**；**B10** → 同文件 **§10** 与回复计划 **B10 专项（R2.14）**。其余 **B3–B9** 见 [`B_DELIVERABLES_CHECKLIST_ZH.md`](./B_DELIVERABLES_CHECKLIST_ZH.md)。
+**修改/回复计划中的对应位置**：B11/B12 → `MANUSCRIPT_REVISION_PLAN_ZH.md` **§8–§9**；B1/B2 → **§2.1、§3、§4、§6** 与 `REVIEWER_RESPONSE_PLAN_ZH.md` **B1+B2 专项**；**B10** → **§10** 与 **B10 专项（R2.14）**；**B6** → **§11** 与 **B6 专项（R2.9）**；**B8** → **§12** 与 **B8 专项（R1.3 校准/拒答）**。其余 **B3–B5、B7、B9** 见 [`B_DELIVERABLES_CHECKLIST_ZH.md`](./B_DELIVERABLES_CHECKLIST_ZH.md)。
 
 ## 范围（重要）
 
@@ -42,5 +60,5 @@
 
 - 稿件：`../../ThyroidXAgent.md`
 - 审稿 PDF：`../../Nature Communications Reviews.pdf`
-- 接近定稿四包：`../b11_b12/`、`../b1/`、`../b2/conclusions/`
-- 其余包：`../b3/` … `../b10/` 等（见 `../README.md`）
+- 接近定稿包：`../b11_b12/`、`../b1/`、`../b2/conclusions/`、`../b10/`、`../b6/`（TN3K：`config/b6/tn3k.yaml`、`output/b6/tn3k/pipeline_run/`）、`../b8/`（`output/b8/fit/`、`output/b8/cohorts/`、`output/b8/figures/`）、`../b9/`
+- 其余包：`../b3/` … `../b7/` 等（见 `../README.md`）

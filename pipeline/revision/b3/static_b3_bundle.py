@@ -16,17 +16,17 @@ from typing import Any, Optional, Union
 import numpy as np
 
 from classification.agent import LLMClassificationAgent
-from pipeline.ablation_metrics import build_b3_metrics, save_b3_metrics
+from pipeline.revision.b3.ablation_metrics import build_b3_metrics, save_b3_metrics
 from pipeline.cascade import CascadePipeline
 from pipeline.evaluate import evaluate_pipeline
-from pipeline.intermediate_manifest import write_intermediate_manifest
-from pipeline.routing_ablation import (
+from pipeline.revision.b3.intermediate_manifest import write_intermediate_manifest
+from routing.best_single_expert import get_best_single_names
+from pipeline.revision.b3.routing_ablation import (
     AblationRoutingEntry,
     clear_phase3_cache,
-    get_best_single_names,
     link_shared_intermediate,
 )
-from pipeline.routing_methods import write_routing_methods_report
+from pipeline.revision.b3.routing_methods import write_routing_methods_report
 from radiomics_judge import RadiomicsJudge
 from routing.oracle import resolve_cls_oracle
 from routing.path_b_cls import resolve_path_b_indie_only

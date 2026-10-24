@@ -32,6 +32,7 @@
 | **分类（全量）** | Phase 5 终裁 `final_label` 对全测试集的 **AUROC、AUPRC**（Path A 为共识短路，Path B 为路由裁决）。 |
 | **分类（Path B 仅）** | 仅 **独立分类模型 top_class 不一致** 的子集（`n_path_b`）；Path B 上 **不含 AutoGluon**（波次 1 静态策略，与策略 7 / S4 不同）。 |
 | **Oracle** | 用 GT 事后选最优专家，**仅作上界**，不可部署。 |
+| **策略 4 `static_rule`** | B3 主表：`_select_mask_static` 在 **skip radiomics** 下按 **inter-expert agreement** 选 mask（rule-based）；与 `max_confidence` 不同。2026-10 前已跑队列若含 radiomics 版 static_rule，**仅该列建议重跑**。 |
 
 ---
 

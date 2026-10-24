@@ -120,24 +120,19 @@ python scripts/revision/b3/run_b3_batch.py --config config/b3/ddti_cls.yaml --pr
 
 `wave1` 含：`soft_voting`, `majority`, `max_confidence`, `static_rule`, `best_single`, `oracle`。
 
-**大队列（ZJH-8K / RJH-7K）推荐拆两趟**（bundle 仅在含 `static_rule` 时跑 Radiomics judge；显著快于一次 `wave1`）：
+**大队列（ZJH-8K / RJH-7K）**：`static_rule` 默认 **inter-expert agreement**（无 radiomics judge），与 fast5 同属 npz 轻量扫图。可一次 `--preset wave1`，或仍拆两趟仅为 **内存/断点** 方便：
 
 ```bash
-export PYTHONWARNINGS="ignore::sklearn.exceptions.InconsistentVersionWarning"
-
-# 1) 五策略：无 radiomics judge、不读原图（仅 npz mask）
+# 一次波次 1（推荐，static_rule 不再单独拖慢）
 python scripts/revision/b3/run_b3_batch.py --config config/b3/zjh8k.yaml \
-  --modes soft_voting,majority,max_confidence,best_single,oracle \
-  --force-phase3 --summarize --device cpu \
-  2>&1 | tee output/ablation/b3/_batch_logs/zjh8k_wave1_fast5.log
+  --preset wave1 --force-phase3 --summarize --device cpu \
+  2>&1 | tee output/ablation/b3/_batch_logs/zjh8k_wave1.log
 
-# 2) static_rule 单独一趟（含 judge）
-python scripts/revision/b3/run_b3_batch.py --config config/b3/zjh8k.yaml \
-  --modes static_rule --force-phase3 --device cpu \
-  2>&1 | tee output/ablation/b3/_batch_logs/zjh8k_wave1_static_rule.log
-
-python -m pipeline.ablation_summary --root output/ablation/b3/zjh8k
+# 或拆两趟（可选）
+# --modes soft_voting,majority,max_confidence,best_single,oracle,static_rule
 ```
+
+完整静态级联（含 Radiomics 裁判）仅在做对照时开启：`pipeline.ablation.static_rule_use_radiomics_judge: true`。
 
 监视：`./scripts/revision/b3/zjh/watch_b3_bundle_progress.sh zjh8k 30`（读 `.bundle_progress.json`）。
 

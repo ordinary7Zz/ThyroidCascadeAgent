@@ -30,7 +30,7 @@ import repo_path
 
 repo_path.install()
 
-from pipeline.backfill_uncertainty import backfill_results_metadata
+from pipeline.revision.b8.backfill_uncertainty import backfill_results_metadata
 from shared.revision_paths import NHC_PRIMARY_OUTPUT_DIR, NHC_REVISION_CONFIG, load_pipeline_data_paths
 
 

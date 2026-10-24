@@ -108,4 +108,4 @@ export PYTHON=/mnt/wangbd8/workspace/envs/thyroid_infer/bin/python
 | 烟雾脚本 | `scripts/revision/b8/run_b8_smoke_test_as_val.sh` |
 | Validation 一键 | `scripts/revision/b8/run_openthyroid_validation_b8.sh` |
 | 测试队列批量 eval | `scripts/revision/b8/run_b8_all_cohorts.sh` |
-| 代码 | `pipeline/calibration.py`、`pipeline/abstention.py`、`scripts/revision/b8/run_calibration_abstention.py` |
+| 代码 | `pipeline/revision/b8/calibration.py`、`abstention.py`、`scripts/revision/b8/run_calibration_abstention.py` |

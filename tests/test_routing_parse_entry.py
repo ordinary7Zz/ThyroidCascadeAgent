@@ -2,7 +2,7 @@
 
 import unittest
 
-from pipeline.routing_ablation import parse_ablation_routing_entry
+from pipeline.revision.b3.routing_ablation import parse_ablation_routing_entry
 
 
 class ParseRoutingEntryTest(unittest.TestCase):

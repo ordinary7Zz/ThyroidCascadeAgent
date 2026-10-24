@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 from typing import Any, Optional
 
-from pipeline.b4_summary import load_b3_metrics, _metric_block
+from pipeline.revision.b4.b4_summary import load_b3_metrics, _metric_block
 
 
 def _pathb_row(

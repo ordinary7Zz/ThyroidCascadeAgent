@@ -18,7 +18,7 @@ def _load(rel: str, name: str):
 
 class StaticBundleTest(unittest.TestCase):
     def test_phase3_expert_judge_skips_bundle_judge_batch(self):
-        from pipeline.static_b3_bundle import _pick_seg_decision
+        from pipeline.revision.b3.static_b3_bundle import _pick_seg_decision
 
         pipeline = MagicMock()
         pipeline._select_mask_static.return_value = (MagicMock(selected_mask=None), {})
@@ -57,8 +57,8 @@ class StaticBundleTest(unittest.TestCase):
 
         with open(ROOT / "config/b3/sample.yaml", "r", encoding="utf-8") as f:
             cfg = yaml.safe_load(f)
-        from pipeline.routing_ablation import parse_ablation_routing_entry
-        from pipeline.static_b3_bundle import (
+        from pipeline.revision.b3.routing_ablation import parse_ablation_routing_entry
+        from pipeline.revision.b3.static_b3_bundle import (
             build_pipeline_for_bundle,
             collect_image_paths,
             load_labels,

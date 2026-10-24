@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 from typing import Any, Optional
 
-from pipeline.intermediate_manifest import manifests_match
+from pipeline.revision.b3.intermediate_manifest import manifests_match
 
 
 def _load_json(path: Path) -> dict:
@@ -275,7 +275,7 @@ def write_component_csv(rows: list[dict], path: Path) -> None:
 
 
 def summarize_b4(cfg: dict, output_dir: Path) -> dict:
-    from pipeline.b4_pathb_summary import build_pathb_table, write_pathb_csv
+    from pipeline.revision.b4.b4_pathb_summary import build_pathb_table, write_pathb_csv
 
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)

@@ -1,7 +1,18 @@
 #!/usr/bin/env python3
+"""合并各 chunk 的 B3 输出到单一 output_root（按 image 全队列排序）。
+
+  python scripts/revision/b3/zjh/merge_b3_chunk_outputs.py \\
+    --chunks output/ablation/b3/zjh8k_chunks \\
+    --dest output/ablation/b3/zjh8k \\
+    --modes soft_voting,majority,max_confidence,best_single,oracle,static_rule
+
+合并后可在 --dest 上运行 pipeline.revision.b3.ablation_summary。
 """
+from __future__ import annotations
+
 import importlib.util
 from pathlib import Path
+
 
 def __revision_bootstrap() -> None:
     p = Path(__file__).resolve()
@@ -15,27 +26,8 @@ def __revision_bootstrap() -> None:
             return
     raise RuntimeError(f"revision _path_setup.py not found above {__file__}")
 
+
 __revision_bootstrap()
-
-import importlib.util
-from pathlib import Path
-
-合并各 chunk 的 B3 输出到单一 output_root（按 image 全队列排序）。
-
-  python scripts/revision/b3/zjh/merge_b3_chunk_outputs.py \\
-    --chunks output/ablation/b3/zjh8k_chunks \\
-    --dest output/ablation/b3/zjh8k \\
-    --modes soft_voting,majority,max_confidence,best_single,oracle,static_rule
-
-合并后可在 --dest 上运行 pipeline.ablation_summary。
-"""
-
-from __future__ import annotations
-
-import importlib.util
-from pathlib import Path
-
-
 
 import argparse
 import json
@@ -132,7 +124,7 @@ def main() -> int:
         cmd = [
             sys.executable,
             "-m",
-            "pipeline.ablation_summary",
+            "pipeline.revision.b3.ablation_summary",
             "--root",
             str(dest),
         ]

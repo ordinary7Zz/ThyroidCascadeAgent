@@ -121,6 +121,7 @@ def build_b3(cohort_id: str, paths: dict) -> dict:
         "best_single",
         "oracle",
     ]
+    ab.setdefault("static_rule_use_radiomics_judge", False)
     data = pipe.setdefault("data", {})
     data["image_input"] = paths["image_input"]
     data["gt_mask_dir"] = paths["gt_mask_dir"]

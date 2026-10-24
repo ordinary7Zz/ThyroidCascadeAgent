@@ -197,17 +197,6 @@ def get_ablation_batch_settings(config: dict) -> dict:
     }
 
 
-def get_best_single_names(config: dict) -> tuple[Optional[str], Optional[str]]:
-    ab = config.get("pipeline", {}).get("ablation", {}) or {}
-    seg = ab.get("best_single_seg")
-    cls = ab.get("best_single_cls")
-    if not seg:
-        seg = config.get("segmentation", {}).get("agent", {}).get("best_single", {}).get("seg_model")
-    if not cls:
-        cls = config.get("classification", {}).get("agent", {}).get("best_single", {}).get("cls_model")
-    return seg, cls
-
-
 def prepare_ablation_run(
     config: dict,
     output_dir: Path,

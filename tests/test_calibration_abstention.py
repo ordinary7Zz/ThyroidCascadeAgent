@@ -1,5 +1,5 @@
-from pipeline.abstention import apply_abstention, fit_thresholds_quantile, flag_for_review
-from pipeline.calibration import brier_score, expected_calibration_error
+from pipeline.revision.b8.abstention import apply_abstention, fit_thresholds_quantile, flag_for_review
+from pipeline.revision.b8.calibration import brier_score, expected_calibration_error
 import numpy as np
 
 

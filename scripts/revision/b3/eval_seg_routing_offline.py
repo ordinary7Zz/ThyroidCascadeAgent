@@ -32,8 +32,8 @@ import yaml
 
 ROOT = repo_path.install()
 
-from pipeline.routing_ablation import get_best_single_names
-from pipeline.seg_routing_offline import evaluate_seg_mode_ladder
+from routing.best_single_expert import get_best_single_names
+from pipeline.revision.b3.seg_routing_offline import evaluate_seg_mode_ladder
 
 
 def main():

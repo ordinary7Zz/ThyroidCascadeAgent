@@ -27,11 +27,11 @@ ROOT = repo_path.install()
 
 from classification.agent import LLMClassificationAgent
 from pipeline import CascadePipeline
-from pipeline.ablation_metrics import build_b3_metrics, save_b3_metrics
+from pipeline.revision.b3.ablation_metrics import build_b3_metrics, save_b3_metrics
 from pipeline.evaluate import evaluate_pipeline
-from pipeline.intermediate_manifest import write_intermediate_manifest
-from pipeline.routing_ablation import prepare_ablation_run
-from pipeline.routing_methods import write_routing_methods_report
+from pipeline.revision.b3.intermediate_manifest import write_intermediate_manifest
+from pipeline.revision.b3.routing_ablation import prepare_ablation_run
+from pipeline.revision.b3.routing_methods import write_routing_methods_report
 from radiomics_judge import RadiomicsJudge
 from segmentation.agent import SegmentationAgent
 from segmentation.quality_evaluator import SegmentationQualityEvaluator

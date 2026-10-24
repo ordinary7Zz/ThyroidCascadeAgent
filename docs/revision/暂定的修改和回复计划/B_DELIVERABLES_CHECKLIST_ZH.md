@@ -17,9 +17,9 @@
 | B3 | 🟡 | 🟡 | 🟡 | ✅ | ✅ | R1.2, R2.8, R3.1 | pipeline 多策略输出 |
 | B4 | ⬜ | ⬜ | ⬜ | 🟡 | ⬜ | R2.8 | 单专家训练+评测 |
 | B5 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | R3.2 | LLM×5 metadata 跑数 |
-| B6 | ⬜ | ⬜ | 🟡 | ✅ | ⬜ | R2.9 | `routing_log.jsonl` |
+| B6 | ⬜ | ⬜ | 🟡 | ✅ | 🟡 | R2.9 | sample 已闭环；TN3K 5× 待跑；§11 / B6 专项 |
 | B7 | ⬜ | ⬜ | ⬜ | 🟡 | ⬜ | R1.3, R2.6 | 🔒 G3 中心元数据 |
-| B8 | ⬜ | ⬜ | ⬜ | ✅ | 🟡 | R1.3 | 阈值 JSON → F4；⬜ 定稿 |
+| B8 | ⬜ | 🟡 | 🟡 | ✅ | 🟡 | R1.3 | **接近定稿**；q=0.95；五 BM 队列；不含 NHC |
 | B9 | ⬜ | ⬜ | ✅ | ✅ | ✅ | R2.10–12 | B9 实验包/表 |
 | B10 | ⬜ | ⬜ | ✅ | ✅ | 🟡 | R2.14 | **接近定稿**；统稿入稿 |
 | B11 | ⬜ | ⬜ | 🟡 | ✅ | 🟡 | R2.20–21 | `reproducibility_radiomics.md` |
@@ -99,11 +99,11 @@
 
 | 类别 | 必交付项 | 稿内位置 | 仓库入口 | 状态 |
 |------|----------|----------|----------|------|
-| **补材料** | 完整 prompt、模型名/版本、解码参数、JSON schema | Supp. Methods 或 Supp. Note | `../b6/REVIEWER_RESPONSE_SNIPPETS_B6.md` | 🟡 |
-| **补表** | 每例 **5×** 路由一致率；按候选质量分层波动 | Supp. | `B6_ROUTING_STABILITY_CONCLUSIONS.md` | 🟡 n=10 |
-| **数据** | ≥10 条结构化 **routing log** 样例 | Supp. 或 GitHub | B6 计划 | ⬜ |
+| **补材料** | 完整 prompt、模型名/版本、解码参数、JSON schema | Supp. Methods 或 Supp. Note | `docs/supplementary/router_spec.md` | ✅（TN3K 可重导） |
+| **补表** | 每例 **5×** 路由一致率；按候选质量分层波动 | Supp. | `../b6/B6_ROUTING_STABILITY_CONCLUSIONS.md`；`output/sample/.../stability_summary.json` | 🟡 sample *n*=10；TN3K 换数 |
+| **数据** | ≥10 条结构化 **routing log** 样例 | Supp. 或 GitHub | `output/sample/pipeline_run/routing_log.jsonl` | ✅ |
 | **图** | 可选（一致率条形图） | Supp. | — | ⬜ |
-| **回** | R2.9 | 回复信 | B6 snippets | 🟡 |
+| **回** | R2.9 | 回复信 | `../b6/REVIEWER_RESPONSE_SNIPPETS_B6.md`；`REVIEWER_RESPONSE_PLAN_ZH.md` B6 专项 | 🟡 可起草；统稿入信 |
 
 ---
 
@@ -123,13 +123,13 @@
 
 | 类别 | 必交付项 | 稿内位置 | 仓库入口 | 状态 |
 |------|----------|----------|----------|------|
-| **补图** | 可靠性图；**风险–覆盖率**曲线 | Supp. Fig. | `../b8/`（**勿用 smoke 数字**） | ⬜ |
-| **补表** | ECE、Brier；各队列/中心 **送复核比例** | Supp. | 定稿 `output/b8/fit/` | ⬜ |
-| **文** | 触发规则；阈值 **仅验证集** 拟合 | Methods 4.x | B8 计划 | 🟡 草稿 |
-| **非稿面** | `abstention_thresholds.json` 供 **F4** 临床叙事 | — | F4 | ⬜ |
-| **回** | R1.3（概率校准/拒答）；R1.6 临床句 mainly F4 | 回复信 | — | ⬜ |
+| **补图** | 可靠性图；**风险–覆盖率**曲线 | Supp. Fig. | `output/b8/fit/reliability_val.png`；`cohorts/*/reliability_test.png`；`output/b8/figures/` | 🟡 PNG 已齐；Supp. 编号待入稿 |
+| **补表** | ECE、Brier；五 BM 队列 **送复核比例** | Supp. | `output/b8/fit/` + `cohorts/*/`（**不含** RJH/DDTI_seg/PKTN） | 🟡 JSON 已齐；制表待做 |
+| **文** | 触发规则；**validation 95 分位** 定阈 | Methods 4.x | `MANUSCRIPT` **§12**；`REVISION_B7_B8_PLAN.md` | 🟡 计划已写；入 LaTeX 待统稿 |
+| **非稿面** | `abstention_thresholds.json` 供 **F4** | — | `output/b8/fit/abstention_thresholds.json` | ✅ |
+| **回** | R1.3（校准/拒答）；R1.6 临床句 mainly F4 | 回复信 | `REVIEWER_RESPONSE_PLAN` **B8 专项** | 🟡 可起草；B7 NHC 段另补 |
 
-**验收**：`B8_CALIBRATION_ABSTENTION_CONCLUSIONS.md` 标为烟雾的数值 **零句进稿**。
+**验收**：**勿用** `smoke_test_as_val`；结论文档刷新 q95 后 **零句 smoke 进稿**。
 
 ---
 
@@ -137,11 +137,12 @@
 
 | 类别 | 必交付项 | 稿内位置 | 仓库入口 | 状态 |
 |------|----------|----------|----------|------|
-| **改表** | **Supp. Table S5** 与正文 Fig.3 数字一致 | S5；Fig.3 轴标签 | `../b9/B9_回复素材_仅基于两篇实验结论.md` | 🟡 对齐稿面 |
-| **文** | 5 折患者级 CV；4753/4936；增强与 AutoGluon；C2 外测 | Methods 4.x；Results §2.4 | `B9_LNM_*`；`B9_FTCPTC_*` | ✅ LNM / 🟡 FTC |
+| **改表** | **Supp. Table S5** ThyroidXAgent 灰底行（OOF；定稿换全栈数） | S5；Fig.3 轴标签 | `../b9/B9_ThyroidXAgent_修改与回复计划.md` §2 | 🟡 数已有 / 外测 TBD |
+| **文** | 5 折患者级 CV；4753/882、4756/722；簇定义；DINO+AG+路由 | Methods 4.x；Results §2.4 | 同上 §3；`B9_ThyroidXAgent_补充实验计划.md` | 🟡 AG/路由进行中 |
 | **文** | FVPTC≠FTC；探索性/域迁移限定 | Results + Limitations | `../b9/需要确认.md` | 🟡 |
 | **图** | 一般不新画（沿用稿内 Fig.3） | Fig.3 标签修正 | A7 清单 | 🟡 |
-| **回** | R2.11（可完整）；R2.10、R2.12（部分） | 回复信 | B9 回复素材 | ✅ / 🟡 |
+| **回** | R2.11（主）；R2.10、R2.12（部分） | 回复信 | `B9_ThyroidXAgent_修改与回复计划.md` §4 | 🟡 |
+| **专家行** | LLNM / Tiger S5 非灰底 | S5 | `B9_LNM_*`；`B9_FTCPTC_*`；`B9_回复素材_*` | ✅ |
 | **协作** | 真 FTC 重训 | — | 🔒 **F7** | ⬜ |
 
 ---

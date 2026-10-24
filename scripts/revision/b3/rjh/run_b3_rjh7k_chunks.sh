@@ -1,18 +1,12 @@
 #!/usr/bin/env bash
-# ZJH-8K B3：按 chunk 小 intermediate 跑（~40G cgroup，共享 NFS，无需本机盘）。
+# RJH-7K B3：按 chunk 小 intermediate 跑（~40G cgroup，task=seg）。
 #
-# 1) 一次性切分（若尚未有 intermediate_chunks）:
-#    python scripts/revision/b3/zjh/split_b3_intermediate_chunks.py \\
-#      --source output/ZJH-8K/pipeline_run/intermediate \\
-#      --dest output/ZJH-8K/pipeline_run/intermediate_chunks \\
-#      --chunk-size 1000
+# 推荐流程：先 run_rjh7k_reinfer_chunks.sh，再本脚本（默认读 output/RJH-7K/b3_reinfer）。
 #
-# 2) 本脚本：逐 chunk 跑 fast5，再逐 chunk 跑 static_rule，最后 merge。
-#
-#   CHUNK_SIZE=1000 ./scripts/revision/b3/zjh/run_b3_zjh8k_chunks.sh
-#   CHUNK_ONLY=03 ./scripts/revision/b3/zjh/run_b3_zjh8k_chunks.sh   # 只跑 chunk_03
-#   SKIP_SPLIT=1 ./scripts/revision/b3/zjh/run_b3_zjh8k_chunks.sh
-#   B3_CHUNK_ROOT=output/ZJH-8K/b3_reinfer SKIP_SPLIT=1 ./scripts/revision/b3/zjh/run_b3_zjh8k_chunks.sh  # 重推后
+#   ./scripts/revision/b3/rjh/run_b3_rjh7k_chunks.sh
+#   CHUNK_ONLY=03 ./scripts/revision/b3/rjh/run_b3_rjh7k_chunks.sh
+#   FAST5_ONLY=1 ./scripts/revision/b3/rjh/run_b3_rjh7k_chunks.sh
+#   B3_CHUNK_ROOT=output/RJH-7K/b3_reinfer ./scripts/revision/b3/rjh/run_b3_rjh7k_chunks.sh
 
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -28,20 +22,19 @@ _find_revision_repo_root() {
   return 1
 }
 
-ROOT="${REPO_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+ROOT="${REPO_ROOT:-$(_find_revision_repo_root)}"
 PY="${PYTHON:-/mnt/wangbd8/workspace/envs/thyroid_infer/bin/python}"
 DEVICE="${DEVICE:-cpu}"
 CHUNK_SIZE="${CHUNK_SIZE:-1000}"
-SKIP_SPLIT="${SKIP_SPLIT:-0}"
+SKIP_SPLIT="${SKIP_SPLIT:-1}"
 CHUNK_ONLY="${CHUNK_ONLY:-}"
 FAST5_ONLY="${FAST5_ONLY:-0}"
 STATIC_RULE_ONLY="${STATIC_RULE_ONLY:-0}"
 
-SRC_INTER="${ROOT}/output/ZJH-8K/pipeline_run/intermediate"
-CHUNK_INTER="${B3_CHUNK_ROOT:-${ROOT}/output/ZJH-8K/pipeline_run/intermediate_chunks}"
-OUT_CHUNKS="${ROOT}/output/ablation/b3/zjh8k_chunks"
-OUT_FINAL="${ROOT}/output/ablation/b3/zjh8k"
-CFG="${ROOT}/config/b3/zjh8k.yaml"
+CHUNK_INTER="${B3_CHUNK_ROOT:-${ROOT}/output/RJH-7K/b3_reinfer}"
+OUT_CHUNKS="${ROOT}/output/ablation/b3/rjh7k_chunks"
+OUT_FINAL="${ROOT}/output/ablation/b3/rjh7k"
+CFG="${ROOT}/config/b3/rjh7k.yaml"
 LOG_DIR="${ROOT}/output/ablation/b3/_batch_logs"
 
 FAST5_MODES="soft_voting,majority,max_confidence,best_single,oracle"
@@ -55,17 +48,22 @@ export PYTHONUNBUFFERED=1
 cd "${ROOT}"
 mkdir -p "${LOG_DIR}" "${OUT_CHUNKS}"
 
-if [[ "${SKIP_SPLIT}" != "1" && ! -d "${CHUNK_INTER}/chunk_00/seg" && ! -d "${CHUNK_INTER}/chunk_00/intermediate/seg" ]]; then
-  echo ">>> 切分 intermediate → ${CHUNK_INTER}"
-  "${PY}" scripts/revision/b3/zjh/split_b3_intermediate_chunks.py \
-    --source "${SRC_INTER}" \
-    --dest "${CHUNK_INTER}" \
-    --chunk-size "${CHUNK_SIZE}"
+if [[ "${SKIP_SPLIT}" != "1" ]]; then
+  SRC_INTER="${ROOT}/output/RJH-7K/pipeline_run/intermediate"
+  if [[ ! -d "${CHUNK_INTER}/chunk_00/seg" && ! -d "${CHUNK_INTER}/chunk_00/intermediate/seg" ]]; then
+    echo ">>> 切分 intermediate → ${CHUNK_INTER}" >&2
+    echo "    （RJH 不推荐 NFS 切 npz；请用 run_rjh7k_reinfer_chunks.sh）" >&2
+    "${PY}" scripts/revision/b3/zjh/split_b3_intermediate_chunks.py \
+      --source "${SRC_INTER}" \
+      --dest "${CHUNK_INTER}" \
+      --chunk-size "${CHUNK_SIZE}"
+  fi
 fi
 
 mapfile -t CHUNK_DIRS < <(ls -d "${CHUNK_INTER}"/chunk_* 2>/dev/null | sort)
 if [[ ${#CHUNK_DIRS[@]} -eq 0 ]]; then
   echo "无 chunk 目录: ${CHUNK_INTER}" >&2
+  echo "请先: DEVICE=cuda ./scripts/revision/b3/rjh/run_rjh7k_reinfer_chunks.sh" >&2
   exit 1
 fi
 
@@ -101,7 +99,7 @@ run_one_chunk() {
   local shared
   shared="$(_chunk_shared_dir "${chunk_dir}")"
 
-  local log="${LOG_DIR}/zjh8k_${base}_${label}_$(date +%Y%m%d_%H%M%S).log"
+  local log="${LOG_DIR}/rjh7k_${base}_${label}_$(date +%Y%m%d_%H%M%S).log"
   echo ""
   echo "======== ${base} start_index=${start} n=${count} ${label} ========"
   echo "  shared: ${shared}"
@@ -119,6 +117,7 @@ run_one_chunk() {
     --start-index "${start}" \
     --max-images "${count}" \
     --modes "${modes}" \
+    --task seg \
     --force-phase3 \
     --device "${DEVICE}" \
     "${sum_args[@]}" \

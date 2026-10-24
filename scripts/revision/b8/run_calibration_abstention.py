@@ -31,7 +31,7 @@ import repo_path
 
 repo_path.install()
 
-from pipeline.abstention import (
+from pipeline.revision.b8.abstention import (
     apply_abstention,
     fit_thresholds_quantile,
     load_thresholds,
@@ -39,9 +39,9 @@ from pipeline.abstention import (
     save_thresholds,
     summarize_abstention_by_group,
 )
-from pipeline.calibration import calibration_from_results
+from pipeline.revision.b8.calibration import calibration_from_results
 from pipeline.evaluate import _label_to_binary
-from pipeline.plot_calibration import plot_reliability_diagram
+from pipeline.revision.b8.plot_calibration import plot_reliability_diagram
 from shared.revision_paths import (
     B8_FIT_OUT,
     B8_NHC_EVAL_OUT,

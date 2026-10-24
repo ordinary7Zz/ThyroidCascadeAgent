@@ -1,26 +1,7 @@
 #!/usr/bin/env python3
-"""
-import importlib.util
-from pathlib import Path
+from __future__ import annotations
 
-def __revision_bootstrap() -> None:
-    p = Path(__file__).resolve()
-    for d in [p.parent, *p.parents]:
-        if d.name == "revision" and (d / "_path_setup.py").is_file():
-            spec = importlib.util.spec_from_file_location("_rev_path_setup", d / "_path_setup.py")
-            mod = importlib.util.module_from_spec(spec)
-            assert spec.loader is not None
-            spec.loader.exec_module(mod)
-            mod.bootstrap(__file__)
-            return
-    raise RuntimeError(f"revision _path_setup.py not found above {__file__}")
-
-__revision_bootstrap()
-
-import importlib.util
-from pathlib import Path
-
-一次性跑多个 B3 路由组合（波次 0–1），可选末尾汇总 CSV。
+"""一次性跑多个 B3 路由组合（波次 0–1），可选末尾汇总 CSV。
 
 mode 列表优先级：--modes > config pipeline.ablation.routing_modes > --preset
 
@@ -35,13 +16,24 @@ CLI --modes 支持 ``seg:cls`` 简写，如 ``static_rule:soft_voting``。
 
 可选 ``--jobs N``：整策略多子进程并行（占 GPU，一般不必开）。
 """
-
-from __future__ import annotations
-
 import importlib.util
 from pathlib import Path
 
 
+def __revision_bootstrap() -> None:
+    p = Path(__file__).resolve()
+    for d in [p.parent, *p.parents]:
+        if d.name == "revision" and (d / "_path_setup.py").is_file():
+            spec = importlib.util.spec_from_file_location("_rev_path_setup", d / "_path_setup.py")
+            mod = importlib.util.module_from_spec(spec)
+            assert spec.loader is not None
+            spec.loader.exec_module(mod)
+            mod.bootstrap(__file__)
+            return
+    raise RuntimeError(f"revision _path_setup.py not found above {__file__}")
+
+
+__revision_bootstrap()
 
 import argparse
 import os
@@ -55,7 +47,7 @@ import yaml
 
 ROOT = repo_path.install()
 
-from pipeline.routing_ablation import (
+from pipeline.revision.b3.routing_ablation import (
     AblationRoutingEntry,
     get_ablation_batch_settings,
     parse_ablation_routing_entry,
@@ -244,7 +236,7 @@ def main():
             for e in entries:
                 print(f"  - {e.run_id} (seg={e.seg}, cls={e.cls})")
             return
-        from pipeline.static_b3_bundle import (
+        from pipeline.revision.b3.static_b3_bundle import (
             build_pipeline_for_bundle,
             collect_image_paths,
             load_labels,
@@ -280,7 +272,7 @@ def main():
             sum_cmd = [
                 sys.executable,
                 "-m",
-                "pipeline.ablation_summary",
+                "pipeline.revision.b3.ablation_summary",
                 "--root",
                 str(out_root),
             ]
@@ -340,7 +332,7 @@ def main():
         sum_cmd = [
             sys.executable,
             "-m",
-            "pipeline.ablation_summary",
+            "pipeline.revision.b3.ablation_summary",
             "--root",
             str(out_root),
         ]

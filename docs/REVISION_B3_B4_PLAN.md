@@ -99,7 +99,7 @@
 | 1 | `best_single` | val 选定一名专家，test 固定取其 mask | val 选定一名独立模型，test 固定 `top_class` |
 | 2 | `soft_voting` / `average` | 离线掩膜/概率平均 → 写入 `selected_masks.npz` | **仅 3 个独立模型**概率平均，**不含 AutoGluon** |
 | 3 | `majority` | 像素级多数投票 | 独立模型类别多数票，**不含 AutoGluon** |
-| 4 | `static_rule` | **`CascadePipeline._select_mask_static`**（batch 非 LLM 默认；**不是** `SegmentationAgent._fallback_selection`） | 与策略 2 同级的静态组合规则，或单独 `path_b_static_rule`；**不含 AutoGluon** |
+| 4 | `static_rule` | **`_select_mask_static`（B3 默认 agreement-only，无 radiomics）**；完整裁判级联见 `ablation.static_rule_use_radiomics_judge: true` | Path B 静态决策序；**不含 AutoGluon** |
 | 5 | `max_confidence` | 取 `mean_confidence` 最高专家的 mask | 取 `top_confidence` 最高独立模型，**不含 AutoGluon** |
 | 6 | `learned` | 全图特征路由（分割无 Path 子集） | **仅在 Path B 子集**训练/推理，触发与 LLM 一致；**不含 AutoGluon** |
 | 7 | `llm` | `SegmentationAgent.select_best_mask`（含 Phase 3 `radiomics_judge` 注入 prompt，与 S4 一致） | `LLMClassificationAgent.resolve_path_b`（**含** Phase 4 AutoGluon 与分割 reasoning） |
@@ -148,7 +148,7 @@
 | 1 | 验证集最优单专家 | `routing_mode: best_single` + `routing/best_single_expert.py`（val 选参，见 §3 验证集划分） |
 | 2 | 概率/掩膜平均 | `routing_mode: soft_voting`；seg 离线平均；cls Path B **独立模型-only**（§3.1.1） |
 | 3 | 多数投票 | `routing_mode: majority`；seg 像素票；cls Path B 独立模型-only |
-| 4 | 静态规则（生产默认） | `routing_mode: static_rule` → **`CascadePipeline._select_mask_static`**；cls Path B 静态规则分支，**不含 AutoGluon** |
+| 4 | 规则路由（rule-based） | `static_rule` → inter-expert **agreement** 选 mask（默认无 radiomics）；可选见 `static_rule_use_radiomics_judge` |
 | 5 | 置信度路由 | `routing_mode: max_confidence`；与策略 4 **不同代码路径** |
 | 6 | 非 LLM 学习型路由 | `routing_mode: learned`；特征与 `routing_log` / prompt 对齐；cls **仅 Path B** |
 | 7 | LLM 路由 | `routing_mode: llm`（`enable_agent=true`）；完整 S4 Path B（**含 AutoGluon**）。复用 `intermediate/`，不重跑 Phase 1–2 |
