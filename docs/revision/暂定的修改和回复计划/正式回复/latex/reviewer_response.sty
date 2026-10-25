@@ -51,6 +51,44 @@
 \newcommand{\SupportingLabel}{Supporting tables and figures}
 \newcommand{\ResponseTableNoteLabel}{Note.}
 
+% Response-letter table/figure IDs (register in generated/response_asset_registry.tex)
+\newcommand{\ResponseTableName}{Table}
+\newcommand{\ResponseTablesName}{Tables}
+\newcommand{\ResponseFigureName}{Figure}
+\newcommand{\ResponseFiguresName}{Figures}
+\newcommand{\responsecontinuedsuffix}{(continued)}
+
+\makeatletter
+\newcommand{\responsetableregister}[2]{%
+  \expandafter\gdef\csname rtab@#1\endcsname{#2}%
+}
+\newcommand{\responsetablesetcontinued}[1]{%
+  \expandafter\gdef\csname rtab@cont@#1\endcsname{1}%
+}
+\newcommand{\responsefigureregister}[2]{%
+  \expandafter\gdef\csname rfig@#1\endcsname{#2}%
+}
+\newcommand{\responsetableref}[1]{%
+  \ResponseTableName~\csname rtab@#1\endcsname
+  \@ifundefined{rtab@cont@#1}{}{\responsecontinuedsuffix}%
+}
+\newcommand{\responsetablerefrange}[2]{%
+  \ResponseTablesName~\csname rtab@#1\endcsname--\csname rtab@#2\endcsname
+}
+\newcommand{\responsetabletitle}[2]{%
+  \ResponseTableName~\csname rtab@#1\endcsname. #2%
+}
+\newcommand{\responsefigureref}[1]{%
+  \ResponseFigureName~\csname rfig@#1\endcsname
+}
+\newcommand{\responsefigurerefrange}[2]{%
+  \ResponseFiguresName~\csname rfig@#1\endcsname--\csname rfig@#2\endcsname
+}
+\newcommand{\responsefiguretitle}[2]{%
+  \ResponseFigureName~\csname rfig@#1\endcsname. #2%
+}
+\makeatother
+
 \newcommand{\ManuscriptTitle}{ThyroidXAgent}
 \newcommand{\ManuscriptJournal}{Nature Communications major revision}
 
@@ -69,8 +107,7 @@
   \textit{\ManuscriptTitle}, and for your constructive comments.
   We respond to each comment below.
   The reviewers' comments are shown in \textit{black italics} and our responses in \textcolor{ResponseBlue}{blue}.
-  Tables and figures cited in the responses are reproduced at the end of this letter.
-  \textcolor{ResponsePendingRed}{Red [PENDING: \ldots] markers flag text, numbers, or figures still to be finalized before submission.}\par
+  Tables and figures cited in the responses are reproduced at the end of this letter.\par
   \vspace{0.75em}
 }
 
@@ -79,8 +116,7 @@
   \noindent 感谢您对稿件 \textit{\ManuscriptTitle}（\ManuscriptJournal）的认真审阅与建设性意见。
   下文逐条回复。
   审稿意见以\textbf{黑色斜体}呈现，作者回复以\textcolor{ResponseBlue}{蓝色}呈现；
-  回复中引用的表、图均复现于信末。
-  \textcolor{ResponsePendingRed}{红色 [待补充：…] 为定稿前占位，正式提交前将删除或替换。}\par
+  回复中引用的表、图均复现于信末。\par
   \vspace{0.75em}
 }
 
@@ -120,13 +156,13 @@
 \newcommand{\responseappendix}{%
   \clearpage
   \section*{Supporting Tables and Figures}%
-  \noindent\footnotesize New supplementary-style tables and figures cited in the point-by-point responses above (labels \textbf{R1--R15}, \textbf{Figures R1--R2}). Entries aligned with revised Supplementary Tables S3--S5 retain the manuscript table numbers.\par\vspace{0.5em}%
+  \noindent\footnotesize New supplementary-style tables and figures cited in the point-by-point responses above (labels \textbf{R1--R14}, \textbf{Figures R1--R2}). Tables and figures use response-letter labels \textbf{R1--R14} and \textbf{Figures R1--R2} only.\par\vspace{0.5em}%
 }
 
 \newcommand{\responseappendixzh}{%
   \clearpage
   \section*{支撑表图（Supporting Tables and Figures）}%
-  \noindent\footnotesize 下文复现回复中引用的表、图（编号 \textbf{R1--R15}、\textbf{图 R1--R2}）；与修订稿 Supplementary Tables S3--S5 对齐者保留原表号。\par\vspace{0.5em}%
+  \noindent\footnotesize 下文复现回复中引用的表、图（编号 \textbf{R1--R14}、\textbf{图 R1--R2}）；表图编号仅使用本信 \textbf{R1--R14}、\textbf{图 R1--R2}，不复用稿件补充表序号。\par\vspace{0.5em}%
 }
 
 % Flush pending floats before prose appendices (A1/A2 prompts)

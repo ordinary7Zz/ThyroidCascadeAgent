@@ -11,7 +11,7 @@ REPLACEMENTS = [
         "Tables and figures cited in the point-by-point responses above. Labels \\textbf{R1--R13} and \\textbf{Figures R1--R2} match in-text cross-references. Entries aligned with revised Supplementary Tables S3--S5 retain the original table numbers.",
     ),
     ("\\reviewersection{Table R1. dHash 跨基础队列近重复筛查（Hamming ≤ 5）}", "\\reviewersection{Table R1. dHash cross-cohort near-duplicate screening (Hamming $\\leq$ 5)}"),
-    ("TN3K（官方 train+val+test）", "TN3K (official train+val+test)"),
+    ("TN3K（train+val+test）", "TN3K (train+val+test)"),
     ("TN3K（test）", "TN3K (test)"),
     ("方法 &", "Method &"),
     ("Note: \\textbf{Dice} 为 \\textbf{\\%}（↑），\\textbf{HD95} 为 \\textbf{mm}（↓）；数值为点估计 \\textbf{±} 95\\% CI 半宽（cluster bootstrap，1000 次，seed=42，图像级）。",
