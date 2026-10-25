@@ -9,6 +9,8 @@
 \RequirePackage{graphicx}
 \graphicspath{{../figures/}}
 \RequirePackage{booktabs}
+\RequirePackage{colortbl}
+\definecolor{ResponseTableGray}{gray}{0.92}
 \RequirePackage{tabularx}
 \RequirePackage{longtable}
 \RequirePackage{array}
@@ -21,9 +23,21 @@
 \RequirePackage{enumitem}
 \RequirePackage{hyperref}
 \RequirePackage{fancyvrb}
+\RequirePackage{fvextra}
 \RequirePackage{adjustbox}
+\RequirePackage{float}
+\RequirePackage{placeins}
 
 \definecolor{ResponseBlue}{RGB}{0,63,136}
+\definecolor{ResponsePendingRed}{RGB}{180,0,0}
+
+% Internal draft placeholders (remove or replace before journal submission)
+\newcommand{\rpending}[1]{%
+  {\color{ResponsePendingRed}\normalfont[PENDING: #1]}%
+}
+\newcommand{\rpendingzh}[1]{%
+  {\color{ResponsePendingRed}\normalfont[待补充：#1]}%
+}
 
 \hypersetup{colorlinks=true,linkcolor=ResponseBlue!80!black,urlcolor=ResponseBlue!80!black,citecolor=ResponseBlue!80!black}
 
@@ -55,7 +69,8 @@
   \textit{\ManuscriptTitle}, and for your constructive comments.
   We respond to each comment below.
   The reviewers' comments are shown in \textit{black italics} and our responses in \textcolor{ResponseBlue}{blue}.
-  Tables and figures cited in the responses are reproduced at the end of this letter.\par
+  Tables and figures cited in the responses are reproduced at the end of this letter.
+  \textcolor{ResponsePendingRed}{Red [PENDING: \ldots] markers flag text, numbers, or figures still to be finalized before submission.}\par
   \vspace{0.75em}
 }
 
@@ -64,7 +79,8 @@
   \noindent 感谢您对稿件 \textit{\ManuscriptTitle}（\ManuscriptJournal）的认真审阅与建设性意见。
   下文逐条回复。
   审稿意见以\textbf{黑色斜体}呈现，作者回复以\textcolor{ResponseBlue}{蓝色}呈现；
-  回复中引用的表、图均复现于信末。\par
+  回复中引用的表、图均复现于信末。
+  \textcolor{ResponsePendingRed}{红色 [待补充：…] 为定稿前占位，正式提交前将删除或替换。}\par
   \vspace{0.75em}
 }
 
@@ -104,17 +120,30 @@
 \newcommand{\responseappendix}{%
   \clearpage
   \section*{Supporting Tables and Figures}%
-  \noindent\footnotesize New supplementary-style tables and figures cited in the point-by-point responses above (labels \textbf{R1--R13}, \textbf{Figures R1--R2}). Entries aligned with revised Supplementary Tables S3--S5 retain the manuscript table numbers.\par\vspace{0.5em}%
+  \noindent\footnotesize New supplementary-style tables and figures cited in the point-by-point responses above (labels \textbf{R1--R15}, \textbf{Figures R1--R2}). Entries aligned with revised Supplementary Tables S3--S5 retain the manuscript table numbers.\par\vspace{0.5em}%
 }
 
 \newcommand{\responseappendixzh}{%
   \clearpage
   \section*{支撑表图（Supporting Tables and Figures）}%
-  \noindent\footnotesize 下文复现回复中引用的表、图（编号 \textbf{R1--R13}、\textbf{图 R1--R2}）；与修订稿 Supplementary Tables S3--S5 对齐者保留原表号。\par\vspace{0.5em}%
+  \noindent\footnotesize 下文复现回复中引用的表、图（编号 \textbf{R1--R15}、\textbf{图 R1--R2}）；与修订稿 Supplementary Tables S3--S5 对齐者保留原表号。\par\vspace{0.5em}%
 }
 
+% Flush pending floats before prose appendices (A1/A2 prompts)
+\newcommand{\responseproseappendixstart}{%
+  \clearpage
+  \FloatBarrier
+}
+
+% Match supplementary tables in the manuscript (ThyroidXAgent.md / tab:seg_performance, tab:cls_performance)
+\newcommand{\responsetablemanuscriptsetup}{%
+  \setlength{\tabcolsep}{5.5pt}%
+  \renewcommand{\arraystretch}{1.08}%
+}
+\newcommand{\responserowagent}{\rowcolor{ResponseTableGray}}
+
 \newenvironment{responsetable}{%
-  \begin{table}[htbp]
+  \begin{table}[H]
   \centering
   \footnotesize
   \setlength{\tabcolsep}{4pt}
@@ -123,11 +152,49 @@
   \end{table}
 }
 
+% Multi-page ablation tables (longtable + repeated header; not a float)
+\newenvironment{responsepaginatedtable}{%
+  \par\medskip
+  \footnotesize
+  \setlength{\tabcolsep}{3.5pt}
+  \renewcommand{\arraystretch}{1.12}
+  \setlength{\LTpre}{0.4em}
+  \setlength{\LTpost}{0.6em}
+  \setlength{\LTcapwidth}{\textwidth}
+}{%
+  \par\medskip
+}
+
+\newenvironment{manuscriptresponsetable}{%
+  \begin{table}[H]
+  \centering
+  \footnotesize
+  \responsetablemanuscriptsetup
+}{%
+  \end{table}
+}
+
 \newenvironment{responsefigure}{%
-  \begin{figure}[htbp]
+  \begin{figure}[H]
   \centering
 }{%
   \end{figure}
+}
+
+% Non-floating table inside prose appendices (avoids interruption by deferred floats)
+\newenvironment{responseinlinetable}{%
+  \par\vspace{0.35em}%
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.15}
+}{%
+  \par\vspace{0.5em}%
+}
+
+\newcommand{\responseinlinetablecaption}[1]{%
+  \par\vspace{0.15em}%
+  {\small\bfseries #1\par}%
+  \vspace{0.35em}%
 }
 
 \newcommand{\responsetablenote}[1]{%
@@ -145,6 +212,9 @@
   frame=single,%
   rulecolor=\color{black!25},%
   framesep=6pt,%
+  breaklines=true,%
+  breakanywhere=true,%
+  tabsize=2,%
   commandchars=\\\{\}%
 }
 
