@@ -1,19 +1,29 @@
 # Supplementary Table S[X] — Baseline training and inference protocol
 
-Supervised rows match **Table S3/S4** exports (`b2_exports`, 2026-10-21). External test cohorts are not used for development finetuning.
+Supervised rows match **Table S3/S4** exports (`b2_exports`, 2026-10-21). External test cohorts are not used for development fine-tuning.
 
-| model | task | protocol | upstream_pretraining | thyroid_development_set | checkpoint_for_tables | inference_input |
-| --- | --- | --- | --- | --- | --- | --- |
-| BiomedCLIP | classification | full_finetune_on_stacked_dev | OpenCLIP BiomedCLIP + dataset_3_cls head finetune | OpenThyroid stacked cls development: dataset_3 (TN3K + ThyroidXL + TN5K); train_val_test/Superimposed_multitask/dataset_3_cls/train (ResNet-50 / DINO multitask: dataset_3 with JSON, same image count) | ./infer_biomedclip/checkpoints/BM_2cls/best_model.pth | US image (image_only) |
-| LSNet | classification | full_finetune_on_stacked_dev | ImageNet-pretrained LSNet | OpenThyroid stacked cls development: dataset_3 (TN3K + ThyroidXL + TN5K); train_val_test/Superimposed_multitask/dataset_3_cls/train (ResNet-50 / DINO multitask: dataset_3 with JSON, same image count) | ./infer_lsnet/checkpoints/checkpoint_best.pth | US image (image_only) |
-| MedSAM2 | segmentation | full_finetune_on_stacked_dev | SAM2.1 Hiera pretrained | OpenThyroid stacked seg development: dataset_4 (TN3K + ThyroidXL + PKTN + TN5K); train under train_val_test/Superimposed_experiment/dataset_4/train | ./infer_medsam2/checkpoints/Nodule/checkpoint_15.pt | US image + GT box/mask for expert (gt_mask) |
-| MedSegX | segmentation | full_finetune_on_stacked_dev | SAM ViT-B + MedSegX thyroid adapter | OpenThyroid stacked seg development: dataset_4 (TN3K + ThyroidXL + PKTN + TN5K); train under train_val_test/Superimposed_experiment/dataset_4/train | ./infer_medsegx/checkpoints/Nodule/model_best.pth | US image + GT box/mask for expert (gt_mask) |
-| MedSigLIP | classification | full_finetune_on_stacked_dev | Google MedSigLIP + partial finetune on dataset_3_cls | OpenThyroid stacked cls development: dataset_3 (TN3K + ThyroidXL + TN5K); train_val_test/Superimposed_multitask/dataset_3_cls/train (ResNet-50 / DINO multitask: dataset_3 with JSON, same image count) | ./infer_medsiglip/checkpoints/BM_2cls/best_model.pt | US image (image_only) |
-| RepViT | classification | full_finetune_on_stacked_dev | ImageNet-pretrained RepViT | OpenThyroid stacked cls development: dataset_3 (TN3K + ThyroidXL + TN5K); train_val_test/Superimposed_multitask/dataset_3_cls/train (ResNet-50 / DINO multitask: dataset_3 with JSON, same image count) | ./infer_repvit/checkpoints/BM/repvit_m1_0_224_0.025_0.001_0.25/checkpoint_best.pth | US image (image_only) |
-| ResNet-50 | classification | full_finetune_on_stacked_dev | ImageNet ResNet-50 + dataset_3 finetune | OpenThyroid stacked cls development: dataset_3 (TN3K + ThyroidXL + TN5K); train_val_test/Superimposed_multitask/dataset_3_cls/train (ResNet-50 / DINO multitask: dataset_3 with JSON, same image count) | ./infer_resnet50/checkpoints/resnet50_thyroid_cls_epoch_50.pth | US image (image_only) |
-| TransUNet | segmentation | full_finetune_on_stacked_dev | ImageNet-21k ViT-B/16 (TransUNet default) | OpenThyroid stacked seg development: dataset_4 (TN3K + ThyroidXL + PKTN + TN5K); train under train_val_test/Superimposed_experiment/dataset_4/train | ./infer_transunet/checkpoints/Nodule/epoch_49.pth | US image + GT box/mask for expert (gt_mask) |
-| UltraFedFM | classification | full_finetune_on_stacked_dev | ViT backbone pretrained + dataset_3_cls finetune | OpenThyroid stacked cls development: dataset_3 (TN3K + ThyroidXL + TN5K); train_val_test/Superimposed_multitask/dataset_3_cls/train (ResNet-50 / DINO multitask: dataset_3 with JSON, same image count) | ./infer_ultrafedfm/checkpoints/BM_2cls/checkpoint-best_acc.pth | US image (image_only) |
-| UltraFedFM | segmentation | full_finetune_on_stacked_dev | MAE / federated FM pretrained + dataset_4 finetune | OpenThyroid stacked seg development: dataset_4 (TN3K + ThyroidXL + PKTN + TN5K); train under train_val_test/Superimposed_experiment/dataset_4/train | ./infer_ultrafedfm/checkpoints/Nodule/epoch_bestDice.pth | US image + GT box/mask for expert (gt_mask) |
-| ThyroidXAgent (segmentation router) | segmentation | full_finetune | DINOv3-UNet on ImageNet-scale backbone | OpenThyroid stacked seg development: dataset_4 (TN3K + ThyroidXL + PKTN + TN5K); train under train_val_test/Superimposed_experiment/dataset_4/train; full merge also uses Superimposed_experiment/dataset_4/images | Segmentation_Agent / dino_unet dataset_4 weights (see config) | US image → routed expert mask |
-| ThyroidXAgent (classification router) | classification | full_finetune | DINOv3 multitask (GAMTL) backbone | OpenThyroid stacked cls development: dataset_3 (TN3K + ThyroidXL + TN5K); train_val_test/Superimposed_multitask/dataset_3_cls/train (ResNet-50 / DINO multitask: dataset_3 with JSON, same image count) | infer_dinov3_unet_multitask / Classification_Agent weights | Routed mask + image (pipeline config) |
-| GPT-5 / Gemini / MedGemma / Qwen3-VL (if in S4) | classification | zero_shot_or_api | Vendor / public VLM weights (not thyroid E2E train) | None (not finetuned on dataset_3) | API or frozen checkpoint per vllms scripts | image ± text prompt (fixed) |
+**Table notes**
+
+1. **dataset_3 (classification development):** stacked training split from TN3K + ThyroidXL + TN5K (`train_val_test/Superimposed_multitask/dataset_3_cls/train`; image count matches multitask `dataset_3` JSON).
+2. **dataset_4 (segmentation development):** stacked training split from TN3K + ThyroidXL + PKTN + TN5K (`train_val_test/Superimposed_experiment/dataset_4/train`).
+3. **Supervised protocol (default):** full fine-tuning on the indicated stacked development set from publicly available upstream weights; best validation checkpoint used for all external tests in Tables S3/S4 (checkpoint paths are recorded in the analysis manifest, not shown here).
+4. **Segmentation baselines at test:** image plus GT box/mask prompt (`gt_mask` protocol), consistent with Table S3.
+5. **Classification baselines at test:** image-level input only.
+6. **ThyroidXAgent:** same stacked development data as supervised baselines for full-stack Table S3/S4 results; progressive stacking ablations (Table S6) reported separately.
+7. **Vision–language models:** no thyroid end-to-end training on dataset_3; vendor or public weights; API or frozen inference with fixed prompts.
+
+| Model | Task | Development set | Upstream pretraining | Test-time inference |
+| --- | --- | --- | --- | --- |
+| BiomedCLIP | Classification | dataset_3 | OpenCLIP BiomedCLIP; head fine-tuned on dataset_3_cls | US image only |
+| LSNet | Classification | dataset_3 | ImageNet-pretrained LSNet | US image only |
+| MedSAM2 | Segmentation | dataset_4 | SAM 2.1 Hiera | US image + GT box/mask (`gt_mask`) |
+| MedSegX | Segmentation | dataset_4 | SAM ViT-B + MedSegX thyroid adapter | US image + GT box/mask (`gt_mask`) |
+| MedSigLIP | Classification | dataset_3 | Google MedSigLIP; partial fine-tune on dataset_3_cls | US image only |
+| RepViT | Classification | dataset_3 | ImageNet-pretrained RepViT | US image only |
+| ResNet-50 | Classification | dataset_3 | ImageNet ResNet-50; fine-tuned on dataset_3 | US image only |
+| TransUNet | Segmentation | dataset_4 | ImageNet-21k ViT-B/16 (TransUNet default) | US image + GT box/mask (`gt_mask`) |
+| UltraFedFM | Classification | dataset_3 | ViT backbone + dataset_3_cls fine-tune | US image only |
+| UltraFedFM | Segmentation | dataset_4 | MAE / federated FM + dataset_4 fine-tune | US image + GT box/mask (`gt_mask`) |
+| ThyroidXAgent (segmentation router) | Segmentation | dataset_4 | DINOv3-UNet (ImageNet-scale backbone) | US image → LLM-routed expert mask |
+| ThyroidXAgent (classification router) | Classification | dataset_3 | DINOv3 multitask backbone (fine-tuned on dataset_3) | Routed mask + image (pipeline) |
+| GPT-5 / Gemini / MedGemma / Qwen3-VL (if in S4) | Classification | — (not finetuned) | Vendor / public VLM weights | Image ± fixed text prompt (zero-shot or API) |

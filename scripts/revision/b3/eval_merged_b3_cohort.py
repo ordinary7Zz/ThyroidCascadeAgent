@@ -41,7 +41,11 @@ import yaml
 ROOT = repo_path.install()
 
 from pipeline.revision.b3.ablation_metrics import build_b3_metrics, save_b3_metrics
-from pipeline.evaluate import evaluate_pipeline
+from pipeline.revision.b3.cluster_ci import (
+    cohort_id_from_config_path,
+    evaluate_metrics_cluster,
+    patch_b3_classification_from_cluster,
+)
 from shared.image_io import ImageIO
 
 WAVE1_MODES = (
@@ -92,6 +96,7 @@ def main() -> int:
 
     modes = [m.strip() for m in args.modes.split(",") if m.strip()]
     image_io = ImageIO()
+    cohort_id = cohort_id_from_config_path(cfg_path)
 
     for mode in modes:
         mode_dir = out_root / mode
@@ -110,13 +115,15 @@ def main() -> int:
         cls_mode = meta.get("cls_mode") or meta.get("routing_mode_cls") or mode
         task = meta.get("task") or default_task
 
-        print(f"\n>>> 评估 {mode} (n={len(results)}, task={task})")
-        metrics = evaluate_pipeline(
+        print(f"\n>>> 评估 {mode} (n={len(results)}, task={task}, cluster CI)")
+        metrics, boot_meta = evaluate_metrics_cluster(
             results,
-            str(mode_dir),
+            mode_dir,
+            gt_mask_dir,
+            cohort_id,
             image_io=image_io,
-            gt_mask_dir=gt_mask_dir,
         )
+        cls_all, cls_pb = patch_b3_classification_from_cluster(results, cohort_id)
         b3 = build_b3_metrics(
             results,
             metrics,
@@ -125,6 +132,12 @@ def main() -> int:
             seg_mode=seg_mode,
             cls_mode=cls_mode,
         )
+        if cls_all:
+            b3["classification"] = cls_all
+        if cls_pb:
+            b3["classification_path_b"] = cls_pb
+            b3["metrics_path_b_only"] = cls_pb
+        b3["bootstrap"] = boot_meta
         save_b3_metrics(mode_dir, b3)
         print(f"  ✓ {mode_dir / 'b3_metrics.json'}")
 

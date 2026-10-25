@@ -3,7 +3,7 @@
 > **用途**：回应审稿意见 **R1.2、R2.8、R3.1** 中「同一专家池上比较多种路由策略」的要求。  
 > **对应计划**：`docs/REVISION_B3_B4_PLAN.md` §1、§3。  
 > **原始数据**：`output/ablation/b3/<cohort_id>/_summary/b3_routing_table.csv`；本目录 `tables/` 为从 `b3_metrics.json` 导出的可引用 CSV。  
-> **生成说明**：波次 1 = 策略 1、2、3、4、5、8（**不含** LLM 策略 7、学习型策略 6）。统计为当前 pipeline 默认 **图像级 bootstrap 95% CI**（定稿前需与 B2 **患者/检查级 cluster bootstrap** 对齐后重算，见计划 §2）。
+> **生成说明**：波次 1 = 策略 1、2、3、4、5、8（**不含** LLM 策略 7、学习型策略 6）。**95% CI** 与 B2 一致：**cluster bootstrap**（**1000** 次，**seed=42**）；有 patient map 的 **ZJH-8K、ThyroidXL** 按 `docs/revision/b2/cluster_maps/` 聚类，其余队列 **一图一簇**（与逐图 bootstrap 数值相同）。重算：`python scripts/revision/b3/recompute_b3_cluster_ci.py --all-wave1 --summarize`。策略间 **配对**差分 CI 仍待补（`b3_paired_bootstrap.json` 现为点估计）。
 
 ---
 
@@ -38,7 +38,7 @@
 
 ## 3. 表 A — 分割（全测试集）
 
-**表内格式**：点估计 **(95% CI 下限–上限)**；CI 来自 `b3_metrics.json`（当前为 **图像级 bootstrap**，与 B2 cluster 口径对齐后须重算）。机器可读列见 `tables/b3_wave1_segmentation.csv`。
+**表内格式**：点估计 **(95% CI 下限–上限)**；CI 来自 `b3_metrics.json`（`bootstrap.method=cluster`）。机器可读列见 `tables/b3_wave1_segmentation.csv`（`export_b3_tables.py` 在全队列重算后刷新）。
 
 ### TN3K（*n* = 614）
 

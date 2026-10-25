@@ -7,7 +7,7 @@
 > **范围**：本表 **B1–B12 可主笔/可引用的回复**；**Shiyu S1–S10** 相关审稿条见文末「范围外」，不在本目录起草正文。  
 > **语言**：仅维护本中文计划（无英文平行稿）。  
 > **B11 / B12**：**无需补充实验**；以下为改稿与回信要点。  
-> **接近定稿包（可起草完整回复/改稿）**：**B11 → B12 → B1 → B2 → B10 → B6 → B8**（见 [`MANUSCRIPT_REVISION_PLAN_ZH.md`](./MANUSCRIPT_REVISION_PLAN_ZH.md)「接近定稿」表）。**B8** 不含 NHC；无 BM 标签三队列不写回复表。
+> **接近定稿包（可起草完整回复/改稿）**：**B11 → B12 → B1 → B2 → B10 → B6 → B8 → B3**（见 [`MANUSCRIPT_REVISION_PLAN_ZH.md`](./MANUSCRIPT_REVISION_PLAN_ZH.md)「接近定稿」表）。**B8** 不含 NHC；无 BM 标签三队列不写 B8 表。**B3** 波次 1 已齐，**仅缺策略 6（learned）、7（LLM）性能数字**。
 
 ---
 
@@ -27,7 +27,7 @@
 | 编号 | 主题 | 回复就绪 | 可回复要点（基于当前结论） | 素材路径 | 定稿前必改/待补 |
 |------|------|----------|---------------------------|----------|-----------------|
 | **R1.1** | 划分、去重、cluster CI、患者级 | **是**（图像侧） | ① **独立性**：**dHash** 筛查；堆叠 train↔ZJH **995** 对 H=0、TN5K test **38** 对、TN3K test↔ZJH **2** 对；② 仅 **ZJH、ThyroidXL** 可复现 patient ID；无 ID 队列 **一图一簇**；③ **患者级** AUROC/AUPRC（ZJH/ThyroidXL）；④ S3/S4 **cluster CI**（主系统 8 队列 + 基线 **58/58**，**DDTI_cls n=349**）；⑤ ZJH **敏感性**（剔除 992 train-matched 图）见 Supp. | `b1/B1_结论与回复素材.md` §三；`b2/conclusions/B2_结论与回复素材.md` | F6 **患者**重叠（可选）；近重复 **spot check** 10–20 对；1149 vs 1146 一句；**NHC** 未纳入 B2 |
-| **R1.2** | 路由消融 | **部分** | 固定专家池、静态策略+Oracle；**无单一策略全胜**；max-conf 分割差；Path B ~40–45%；TN3K/TN5K/ThyroidXL 波次 1 | `b3/REVIEWER_RESPONSE_SNIPPETS_B3.md`；`B3_WAVE1_RESULTS.md` | LLM/学习型路由；ZJH/RJH/DDTI/PKTN/**NHC**；配对 bootstrap CI 与 B2 对齐 |
+| **R1.2** | 路由消融 | **接近定稿** | 固定专家池；波次 1（策略 1–5、8）**九队列** `_summary` 已齐；**cluster-bootstrap CI**（与 B2 同）；**无单一静态策略全胜**；max-conf 分割在 TN3K/TN5K 明显差于集成；Path B ~40–45%；Oracle 上界 | `../b3/`；`recompute_b3_cluster_ci.py` | **策略 6 learned、7 LLM** 表行；**NHC**；配对策略差分 CI（可选） |
 | **R1.3** | NHC 异质性、校准、拒答 | **部分** | **校准/拒答（B8，可写）**：validation **n=875**、**95 分位** 定阈（无 LLM）；五 BM 外测 **ECE/Brier** + 送复核 **~44–48%**（TN3K/ZJH 等）+ Supp. 可靠性图与 risk–coverage；**保留子集 Acc** 略高于全量；如实说明 test 复核率高于 val 分位数设计（margin 分布偏移）。**NHC 异质性（B7）**：仍仅可承认中心差异、THYB_S_ZJ24 等；中心表/I² 待 G3 | `../b8/`；`output/b8/fit/`、`cohorts/`；`MANUSCRIPT` **§12** | **B7** 中心元数据；刷新 `B8_CALIBRATION_ABSTENTION_CONCLUSIONS.md`；Supp. 编号；**勿用 smoke** |
 | **R1.4** | 数据流图、ZJH 用于 LNM/FTC | **是**（图假定已定） | 专家未在 ZJH 训练；恶性子集仅 LNM/FTC；回复称已补充数据流图（图像臂） | `b11_b12/DATAFLOW_*`；`b9` | 统稿 Fig 编号；ZJH/TN3K 脚注可引 B1/F6 |
 | **R1 代码** | 回顾性、可部署性（**图像侧主张**） | **部分** | 弱化「广泛可部署」；强调回顾性与可审计统计（B1/B2） | B1/B2 叙事 | 全文代码发布（G4，非 B 包） |
@@ -45,7 +45,7 @@
 | **R2.5** | 参考标准与标注 | **否** | — | F5 | 标注者、病理确认表 |
 | **R2.6** | NHC 描述与中心性能 | **否** | — | B7；G3 | 35 中心元数据 |
 | **R2.7** | 「均值」定义 | **是** | **无权重宏平均** AUROC **0.9001**、AUPRC **0.8705**；修订稿摘要/§2.2/S4 注统一 | `b11_b12/README.md`；`MANUSCRIPT_REVISION_PLAN_ZH.md` §9 | 统稿写入 `ThyroidXAgent.md` |
-| **R2.8** | 增益来源、路由价值 | **部分** | B10 同堆叠微调；B3 路由消融；S6 堆叠消融已有 | `b10`；`b3` | B4 组件消融表；LLM 行 |
+| **R2.8** | 增益来源、路由价值 | **接近定稿** | B10 同堆叠微调；**B3 波次 1** 支撑「路由非 trivial」；S6 堆叠已有；B4 仍可选 | `../b10/`；`../b3/`；`MANUSCRIPT` **§13** | B4 组件表（若纳入）；**learned/LLM 数字** |
 | **R2.9** | 路由 prompt、稳定性 | **接近定稿**（sample）；TN3K 换数 | **透明性**：`router_spec.md` + `routing_log.jsonl`（≥10 例审计）；**5×**：*n*=**10**、均值 **92%**、8/10 全稳、2/10 为 60%（close 层） | `b6/REVIEWER_RESPONSE_SNIPPETS_B6.md`；`MANUSCRIPT_REVISION_PLAN_ZH.md` **§11** | TN3K：替换 §11 数据卡 + snippets；`export_router_spec` 若模型变更 |
 | **R2.10** | FTC/PTC 标签域 | **部分** | FVPTC≠FTC；ThyroidXAgent **5 折 OOF**（§2 表）；FangDai 外测 **TBD** | `b9/B9_ThyroidXAgent_修改与回复计划.md` §4.2；`需要确认.md`；Tiger 见 `B9_FTCPTC_*` | E4；F7 |
 | **R2.11** | LNM 样本量、CV | **部分** | 5 折 OOF **882 簇**；S5 ThyroidXAgent 数可写；**C2 外测 TBD** | `b9/B9_ThyroidXAgent_修改与回复计划.md` §4.1；LLNM 见 `B9_LNM_*` | E2；全栈融合换数 |
@@ -63,7 +63,7 @@
 
 | 编号 | 主题 | 回复就绪 | 可回复要点 | 素材路径 | 定稿前必改/待补 |
 |------|------|----------|------------|----------|-----------------|
-| **R3.1** | 非 LLM 学习型路由 | **部分** | 与 R1.2/B3 同；承诺学习型路由与 LLM 对照 | B3 | 策略 6/7 未跑 |
+| **R3.1** | 非 LLM 学习型路由 | **接近定稿** | 与 R1.2/B3 同；Methods 已定义 **策略 6（learned）** 与 **7（LLM）**；波次 1 静态基线九队列可写；回复说明 6/7 **性能待补**后与静态策略同表对照 | `../b3/`；`MANUSCRIPT` **§13** | 策略 **6/7** 跑完入表；**NHC** |
 | **R3.2** | 元数据消融 | **否** | — | B5 计划 | 热图 |
 | **R3.3** | 数据层级、40 datasets | **部分** | 与 R2.3、R1.4 合并；B1 审计（**dHash**、**DDTI_cls=349**） | B1 `DATASET_AUDIT.md`；B12 | 流程图定稿；NHC 行待数据 |
 
@@ -206,6 +206,33 @@
 
 ---
 
+## B3 专项（R1.2 / R2.8 / R3.1）— **接近定稿**（2026-10-25）
+
+| 项 | 状态 |
+|----|------|
+| 波次 1（策略 1–5、8） | **已完成** → 九队列 `output/ablation/b3/<cohort>/_summary/b3_routing_table.csv` |
+| 队列覆盖 | TN3K、TN5K、ThyroidXL、PKTN、DDTI_seg、DDTI_cls、ZJH-8K、RJH-7K（+ 开发 sample） |
+| 结论文档 | **可起草** → `../b3/B3_WAVE1_RESULTS.md` §6；统稿明细 `MANUSCRIPT_REVISION_PLAN_ZH.md` **§13** |
+| 回信 snippets | `../b3/REVIEWER_RESPONSE_SNIPPETS_B3.md`（定稿前并入 learned/LLM 一句） |
+| **策略 6 learned** | **进行中 / 待齐** → val fit + test infer（`fit_learned_router.py`、`run_learned_cohort.py`） |
+| **策略 7 LLM** | **未入主表** → 波次 2 配置跑完后与静态策略同表 |
+| CI | **cluster bootstrap**（1000, seed 42）已写入 `b3_metrics.json`；全队列 `--all-wave1` 重算后可刷 `export_b3_tables.py` |
+| **NHC** | **未纳入** B3 主表；R3.1 最终须含 → 单独跑或 Limitation |
+| B4 / 配对显著性 | 可选；`b3_paired_bootstrap.json` 待 B2 口径 |
+
+**回复要点（中文逻辑，英文见 snippets）**
+
+1. 感谢审稿人要求在同一 **固定专家池** 上系统比较路由；我们补充 **八种策略** 定义，并在 **九组外测/开发队列** 上报告波次 1（静态策略 1–5 + Oracle 上界）。  
+2. **主要发现（波次 1）**：不存在全面占优的单一静态策略；**最大置信度** 分割路由在多个队列上明显劣于集成；约 **40–45%** 病例落入 **Path B**（分类专家分歧），故并列报告全量与 Path B 指标；**Oracle** 与最佳可部署策略之间仍有可观间隙。  
+3. **策略 4（static_rule）** 在 B3 中为 **专家一致度** 规则（非完整 radiomics 级联），与主系统部署路径区分说明。  
+4. **学习型路由（策略 6）** 与 **LLM 路由（策略 7）** 已纳入 Methods；**修订稿 Supp. 表将补全两行性能**，与最佳静态策略及 Oracle 对照，直接回应 R3.1 与「LLM 排第几」。  
+5. **NHC** 与多中心扩展将按协议并入主表或于 Limitations 说明时间表（与 **B7** 中心叙事衔接）。  
+6. **95% CI** 定稿采用与主结果一致的 **cluster bootstrap**（与 B2 同 seed/层级）。
+
+**补充实验**：波次 1 **不需要重跑**（除非统一专家池或 static_rule 口径变更）；**需要** 完成策略 **6、7** 的 test 评估并更新汇总 CSV。
+
+---
+
 ## B10 专项（R2.14）— **接近定稿**（2026-10-23）
 
 | 项 | 状态 |
@@ -232,7 +259,7 @@
 5. **R1.3（B8 校准/拒答，接近定稿）** → 上表 **B8 专项** + `MANUSCRIPT` **§12**（NHC 异质性句待 B7）。  
 6. **R2.20–21（B11）** → 上表 + §8.3 机制 + `reproducibility_radiomics.md`。  
 7. **R2.11–12 + R2.10** → B9（加 `需要确认` 脚注）。  
-8. **R1.2 + R2.8 + R3.1** → B3 波次 1 + 待补声明。  
+8. **R1.2 + R2.8 + R3.1（B3，接近定稿）** → 上表 **B3 专项** + `MANUSCRIPT` **§13**（learned/LLM 行待补数）。  
 
 ## 建议标注「修订稿将补充」、暂不写死数字（仍在 B1–B12 内）
 

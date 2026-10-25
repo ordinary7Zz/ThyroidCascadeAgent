@@ -1,0 +1,102 @@
+% Shared style for ThyroidXAgent reviewer response (EN / ZH)
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{reviewer_response}[2026/10/25 reviewer response letter]
+
+\RequirePackage[a4paper,margin=2.2cm]{geometry}
+\RequirePackage{fontspec}
+\RequirePackage{xeCJK}
+\RequirePackage{microtype}
+\RequirePackage{graphicx}
+\graphicspath{{../figures/}}
+\RequirePackage{booktabs}
+\RequirePackage{tabularx}
+\RequirePackage{longtable}
+\RequirePackage{array}
+\RequirePackage{multirow}
+\RequirePackage{threeparttable}
+\RequirePackage{caption}
+\RequirePackage{subcaption}
+\RequirePackage{etoolbox}
+\RequirePackage{xcolor}
+\RequirePackage{enumitem}
+\RequirePackage{hyperref}
+\RequirePackage{fancyvrb}
+\RequirePackage{adjustbox}
+
+\hypersetup{colorlinks=true,linkcolor=blue!60!black,urlcolor=blue!60!black,citecolor=blue!60!black}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+\setlist[itemize]{leftmargin=1.4em,topsep=0.25em,itemsep=0.15em}
+\setlist[enumerate]{leftmargin=1.6em,topsep=0.25em,itemsep=0.15em}
+
+\newcommand{\ReviewerCommentLabel}{Reviewer comment:}
+\newcommand{\ResponseLabel}{Response:}
+\newcommand{\SupportingLabel}{Supporting tables and figures}
+
+\newcommand{\reviewersection}[1]{\section*{#1}\vspace{-0.3em}}
+\newcommand{\reviewersubtitle}[1]{\paragraph*{#1}\vspace{-0.2em}}
+
+\newenvironment{reviewercomment}{%
+  \noindent\textbf{\ReviewerCommentLabel}\par\vspace{0.15em}\itshape
+}{\par\normalfont\vspace{0.35em}}
+
+\newenvironment{authorresponse}{%
+  \noindent\textbf{\ResponseLabel}\par\vspace{0.15em}
+}{\par\vspace{0.35em}}
+
+\newenvironment{supportingblock}{%
+  \noindent\textbf{\SupportingLabel}\par\vspace{0.25em}
+}{}
+
+% Float captions: full text in \caption{Table R1. ...} (no extra "Table 1:" prefix)
+\captionsetup[table]{position=above,skip=6pt,font=small,labelfont=bf,singlelinecheck=false,labelformat=empty,labelsep=none}
+\captionsetup[figure]{font=small,labelfont=bf,singlelinecheck=false,labelformat=empty,labelsep=none}
+\captionsetup[sub]{font=footnotesize,labelfont=bf}
+
+\newcommand{\responseappendix}{\section*{Supporting Figures and Tables}}
+\newcommand{\responseappendixzh}{\section*{回复信支撑图表（Supporting Figures and Tables）}}
+
+% Supplementary-style table (caption + tablenotes via threeparttable)
+\newenvironment{responsetable}{%
+  \begin{table}[htbp]
+  \centering
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{threeparttable}
+}{%
+  \end{threeparttable}
+  \end{table}
+}
+
+\newenvironment{responsefigure}{%
+  \begin{figure}[htbp]
+  \centering
+}{%
+  \end{figure}
+}
+
+\newcommand{\responsetablenote}[1]{%
+  \begin{tablenotes}
+  \footnotesize
+  \item #1
+  \end{tablenotes}
+}
+
+\newcommand{\responsetablenotes}[1]{%
+  \begin{tablenotes}
+  \footnotesize
+  #1
+  \end{tablenotes}
+}
+
+\DefineVerbatimEnvironment{promptverbatim}{Verbatim}{%
+  fontsize=\small,%
+  frame=single,%
+  rulecolor=\color{black!25},%
+  framesep=6pt,%
+  commandchars=\\\{\}%
+}
+
+\endinput

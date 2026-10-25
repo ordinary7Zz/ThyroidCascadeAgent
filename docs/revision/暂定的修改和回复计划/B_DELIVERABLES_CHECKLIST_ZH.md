@@ -14,7 +14,7 @@
 |---|:---:|:---:|:---:|:---:|:---:|:---:|---|
 | B1 | ⬜ | ⬜ | ✅ | ✅ | ✅ | R1.1, R2.2, R2.4, R3.3 | 审计 JSON、筛查脚本 |
 | B2 | ⬜ | ⬜ | ✅ | ✅ | ✅ | R1.1, R2.2, R2.14 | `b2/tables/*.json` |
-| B3 | 🟡 | 🟡 | 🟡 | ✅ | ✅ | R1.2, R2.8, R3.1 | pipeline 多策略输出 |
+| B3 | 🟡 | 🟡 | 🟡 | ✅ | ✅ | R1.2, R2.8, R3.1 | **接近定稿**；波次 1 九队列；缺 6/7 行 + NHC |
 | B4 | ⬜ | ⬜ | ⬜ | 🟡 | ⬜ | R2.8 | 单专家训练+评测 |
 | B5 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | R3.2 | LLM×5 metadata 跑数 |
 | B6 | ⬜ | ⬜ | 🟡 | ✅ | 🟡 | R2.9 | sample 已闭环；TN3K 5× 待跑；§11 / B6 专项 |
@@ -65,12 +65,12 @@
 
 | 类别 | 必交付项 | 稿内位置 | 仓库入口 | 状态 |
 |------|----------|----------|----------|------|
-| **表或图** | 8 策略 × 分割/分类 × **全测试集（含 NHC 协议）**；Oracle 上界 | Results 新小节 + **正文表或 Fig** 或 Supp. | `../b3/B3_WAVE1_RESULTS.md`；`../b3/tables/` | 🟡 仅波次 1 |
-| **文** | Methods 4.3 消融列表；NHC **非 LLM** 主结果与 LLM 消融分报告 | Methods + Limitations | `REVISION_B3_B4_PLAN.md` | 🟡 |
-| **统计** | 与 B2 一致的 **配对 cluster bootstrap** | 表注 / Methods | 定稿前重算 | ⬜ |
-| **回** | R1.2、R2.8、R3.1 | 回复信 | `../b3/REVIEWER_RESPONSE_SNIPPETS_B3.md` | 🟡 |
+| **表或图** | 8 策略 × 分割/分类 × 九队列测试集；Oracle 上界；**6 learned、7 LLM 待补列** | Results + Supp. | `../b3/B3_WAVE1_RESULTS.md`；`output/ablation/b3/<cohort>/_summary/`；`MANUSCRIPT` **§13** | 🟡 **接近定稿**（波次 1 齐） |
+| **文** | Methods 4.3 八策略；static_rule 口径；NHC 待纳入或 Limitation | Methods + Limitations | `REVISION_B3_B4_PLAN.md` | 🟡 |
+| **统计** | **cluster bootstrap CI**（与 B2 同脚本逻辑）；**配对**策略差分 CI | 表注 / Methods | `recompute_b3_cluster_ci.py` | 🟡 CI **已对齐**；配对差分仍 ⬜ |
+| **回** | R1.2、R2.8、R3.1 | 回复信 | `REVIEWER_RESPONSE_SNIPPETS_B3.md`；`REVIEWER_RESPONSE_PLAN` **B3 专项** | 🟡 **可起草**（6/7 占位） |
 
-**验收**：波次 1 可写「主论点 + 待补队列」；勿把 LLM/学习型/NHC 全队列写死。
+**验收**：波次 1 主论点与九队列 CSV **可统稿**；策略 **6/7 性能** 与 **NHC** 勿写死；learned/LLM 跑完后只换表行与回信一句。
 
 ---
 

@@ -120,6 +120,16 @@ python scripts/revision/b3/run_b3_batch.py --config config/b3/ddti_cls.yaml --pr
 
 `wave1` 含：`soft_voting`, `majority`, `max_confidence`, `static_rule`, `best_single`, `oracle`。
 
+**与 B2 对齐的 cluster-bootstrap CI**（不重跑路由，只刷新 `b3_metrics.json` / `_summary`）：
+
+```bash
+python scripts/revision/b3/recompute_b3_cluster_ci.py --config config/b3/tn3k.yaml --summarize
+python scripts/revision/b3/recompute_b3_cluster_ci.py --all-wave1 --summarize
+# 大队列日志：output/ablation/b3/_batch_logs/recompute_cluster_ci_all.log
+```
+
+无 patient map 的队列（TN3K/TN5K/DDTI/PKTN/RJH 等）**一图一簇**，CI 与旧图像级 bootstrap **一致**；**ZJH-8K / ThyroidXL** 使用 `docs/revision/b2/cluster_maps/*.json`，CI 会略宽。`eval_merged_b3_cohort.py` 与新跑 learned 的 eval 默认已走同一口径。
+
 **大队列（ZJH-8K / RJH-7K）**：`static_rule` 默认 **inter-expert agreement**（无 radiomics judge），与 fast5 同属 npz 轻量扫图。可一次 `--preset wave1`，或仍拆两趟仅为 **内存/断点** 方便：
 
 ```bash

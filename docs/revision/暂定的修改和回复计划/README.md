@@ -33,8 +33,9 @@
 | 6 | **B6** | **R2.9**；路由器透明性；**5×** 稳定性与 `routing_log` | `../b6/B6_ROUTING_STABILITY_CONCLUSIONS.md`；`docs/supplementary/router_spec.md`；`output/b6/tn3k/pipeline_run/`（250 例 + `stability_summary.json` *n*=10） | `export_router_spec.py`（`config/b6/tn3k.yaml`）重导规格；Supp. 稳定性表 + log 样例入稿；§11 / B6 专项 / snippets **已换 TN3K 数** |
 | 7 | **B9** | **R2.10–12**；**S5** ThyroidXAgent 灰底；§2.4 / Fig.3 | `../b9/B9_ThyroidXAgent_修改与回复计划.md`；专家行 `B9_LNM_*` / `B9_FTCPTC_*` | 五折 OOF 可占位；AG/路由/C2·FangDai 外测待补 |
 | 8 | **B8** | **R1.3**（校准 + 送复核）；Supp. ECE/Brier、可靠性图、risk–coverage | `../b8/`；`output/b8/fit/`、`cohorts/`、`figures/` | 结论文档与 Supp. 表入稿；**不含 NHC**；无 BM 三队列不写稿 |
+| 9 | **B3** | **R1.2、R2.8、R3.1**；同专家池 **静态路由消融**（波次 1） | `../b3/B3_WAVE1_RESULTS.md`；`../b3/REVIEWER_RESPONSE_SNIPPETS_B3.md`；`output/ablation/b3/<cohort>/_summary/` | **波次 1 已齐**（9 队列 × 策略 1–5、8）；**仅待补** 策略 **6 learned**、**7 LLM** 性能行；Supp. 表与 B2 **cluster CI** 对齐；**NHC** 仍单列 |
 
-**修改/回复计划中的对应位置**：B11/B12 → `MANUSCRIPT_REVISION_PLAN_ZH.md` **§8–§9**；B1/B2 → **§2.1、§3、§4、§6** 与 `REVIEWER_RESPONSE_PLAN_ZH.md` **B1+B2 专项**；**B10** → **§10** 与 **B10 专项（R2.14）**；**B6** → **§11** 与 **B6 专项（R2.9）**；**B8** → **§12** 与 **B8 专项（R1.3 校准/拒答）**。其余 **B3–B5、B7、B9** 见 [`B_DELIVERABLES_CHECKLIST_ZH.md`](./B_DELIVERABLES_CHECKLIST_ZH.md)。
+**修改/回复计划中的对应位置**：B11/B12 → `MANUSCRIPT_REVISION_PLAN_ZH.md` **§8–§9**；B1/B2 → **§2.1、§3、§4、§6** 与 `REVIEWER_RESPONSE_PLAN_ZH.md` **B1+B2 专项**；**B10** → **§10** 与 **B10 专项（R2.14）**；**B6** → **§11** 与 **B6 专项（R2.9）**；**B8** → **§12** 与 **B8 专项（R1.3 校准/拒答）**；**B3** → **§13** 与 **B3 专项（R1.2 / R2.8 / R3.1）**。其余 **B4–B5、B7、B9** 见 [`B_DELIVERABLES_CHECKLIST_ZH.md`](./B_DELIVERABLES_CHECKLIST_ZH.md)。
 
 ## 范围（重要）
 
@@ -62,5 +63,5 @@
 
 - 稿件：`../../ThyroidXAgent.md`
 - 审稿 PDF：`../../Nature Communications Reviews.pdf`
-- 接近定稿包：`../b11_b12/`、`../b1/`、`../b2/conclusions/`、`../b10/`、`../b6/`（TN3K：`config/b6/tn3k.yaml`、`output/b6/tn3k/pipeline_run/`）、`../b8/`（`output/b8/fit/`、`output/b8/cohorts/`、`output/b8/figures/`）、`../b9/`
+- 接近定稿包：`../b11_b12/`、`../b1/`、`../b2/conclusions/`、`../b10/`、`../b6/`（TN3K：`config/b6/tn3k.yaml`、`output/b6/tn3k/pipeline_run/`）、`../b8/`（`output/b8/fit/`、`output/b8/cohorts/`、`output/b8/figures/`）、`../b3/`（`output/ablation/b3/`）、`../b9/`
 - 其余包：`../b3/` … `../b7/` 等（见 `../README.md`）

@@ -75,7 +75,7 @@ THYROIDXAGENT_ROWS = [
         "model": "ThyroidXAgent (classification router)",
         "task": "classification",
         "protocol": "full_finetune",
-        "upstream_pretraining": "DINOv3 multitask (GAMTL) backbone",
+        "upstream_pretraining": "DINOv3 multitask backbone (fine-tuned on dataset_3)",
         "thyroid_development_set": DEV_CLS,
         "model_selection_split": "dataset_3 train/val",
         "checkpoint_for_tables": "infer_dinov3_unet_multitask / Classification_Agent weights",

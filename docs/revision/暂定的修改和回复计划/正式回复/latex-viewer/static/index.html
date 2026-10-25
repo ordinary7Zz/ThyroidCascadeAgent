@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>审稿回复 · LaTeX 工作区</title>
+  <link rel="stylesheet" href="/static/workspace.css" />
+</head>
+<body>
+  <header class="toolbar">
+    <h1>ThyroidXAgent 审稿回复</h1>
+    <div class="group">
+      <span class="group-label">项目</span>
+      <div class="seg">
+        <button type="button" data-project-lang="en" class="active">English</button>
+        <button type="button" data-project-lang="zh">中文</button>
+      </div>
+    </div>
+    <div class="group">
+      <span class="group-label">PDF</span>
+      <div class="seg tabs">
+        <button type="button" data-pdf-lang="en" class="active">EN</button>
+        <button type="button" data-pdf-lang="zh">ZH</button>
+        <button type="button" id="btnSplitPdf" title="左右对照中英文 PDF">对照</button>
+      </div>
+    </div>
+    <div id="status" class="status busy"><span class="dot"></span><span id="statusText">启动中…</span></div>
+    <button type="button" class="ghost" id="btnSave" disabled>保存 (Ctrl+S)</button>
+    <button type="button" class="primary" id="btnBuild">编译</button>
+  </header>
+
+  <div class="workspace-main">
+  <div class="workspace" id="workspace">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-head">latex/ 文件</div>
+      <div id="fileTree" class="file-tree"></div>
+    </aside>
+    <div class="resize-handle vertical" id="resizeSidebar" title="拖动调整文件树宽度"></div>
+
+    <section class="editor-pane" id="editorPane">
+      <div class="editor-bar">
+        <span>编辑</span>
+        <span id="openPath">—</span>
+      </div>
+      <textarea id="editor" spellcheck="false" placeholder="从左侧选择 .tex / .sty 文件…"></textarea>
+    </section>
+
+    <div class="resize-handle vertical" id="resizePreview" title="拖动调整 PDF 宽度"></div>
+    <section class="preview-pane" id="previewPane">
+      <div class="preview-toolbar">PDF 预览</div>
+      <div id="previewBody" class="preview-body">
+        <div class="pdf-cell" id="pdfEnCell">
+          <span class="preview-label">English</span>
+          <iframe id="pdfEn" title="English PDF"></iframe>
+        </div>
+        <div class="pdf-cell" id="pdfZhCell">
+          <span class="preview-label">中文</span>
+          <iframe id="pdfZh" title="Chinese PDF"></iframe>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="resize-handle horizontal" id="resizeLog" title="拖动调整日志高度"></div>
+  <div id="logDrawer" class="log-drawer">
+    <div class="log-drawer-head" id="logToggle">编译日志（点击折叠）</div>
+    <pre id="log">等待编译…</pre>
+  </div>
+  </div>
+
+  <script src="/static/workspace.js"></script>
+</body>
+</html>
