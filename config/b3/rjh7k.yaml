@@ -114,19 +114,24 @@ pipeline:
     # RJH 外测无分类标签；B3 wave1 只评分割路由（bundle 读 ablation.task，非 run_classification）
     task: seg
     learned_router:
-      seg_artifact: artifacts/learned_router_seg.joblib
-      cls_artifact: artifacts/learned_router_cls.joblib
-      allow_missing_artifact: true
+      seg_artifact: artifacts/b3/rjh7k/learned_router_seg.joblib
+      cls_artifact: artifacts/b3/rjh7k/learned_router_cls.joblib
+      allow_missing_artifact: false
       write_random_artifact: false
       params:
         C: 0.1
         max_iter: 200
         random_state: 42
-        random_init: true
+        random_init: false
         random_coef_scale: 0.05
     best_single_seg: all_datasets
     best_single_cls: all_datasets
-    val_list: null
+    val_list: config/revision/b3/val_lists/rjh7k_holdout_chunk07.json
+    val_intermediate: output/RJH-7K/b3_reinfer/chunk_07/intermediate
+    val_data:
+      gt_mask_dir: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/augtrain_PNG/mask
+      label_file: ''
+      label_key: malignancy
   data:
     image_input: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/augtrain_PNG/image
     gt_mask_dir: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/augtrain_PNG/mask

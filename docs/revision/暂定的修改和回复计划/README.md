@@ -53,6 +53,8 @@
 |------|------|
 | [MANUSCRIPT_REVISION_PLAN_ZH.md](./MANUSCRIPT_REVISION_PLAN_ZH.md) | 稿件修改计划（中文，**唯一稿本**） |
 | [REVIEWER_RESPONSE_PLAN_ZH.md](./REVIEWER_RESPONSE_PLAN_ZH.md) | 审稿意见回复就绪度（中文，R1–R3，**唯一稿本**） |
+| [REVIEWER_RESPONSE_DRAFT_EN.md](./REVIEWER_RESPONSE_DRAFT_EN.md) / [REVIEWER_RESPONSE_DRAFT_ZH.md](./REVIEWER_RESPONSE_DRAFT_ZH.md) | **正式回复信稿本（直接改这两个文件）**：审稿意见、回复、表图均写在 MD 里；**不必**经过任何 Python |
+| `build_reviewer_response_docx.py` | 仅在未来需要 Word 版时再考虑；与日常改 MD 无关 |
 | [B_DELIVERABLES_CHECKLIST_ZH.md](./B_DELIVERABLES_CHECKLIST_ZH.md) | **B1–B12 交付清单**（文/图/表 + 稿面位置 + 仓库路径 + 状态） |
 | [../../scripts/README_REVISION.md](../../scripts/README_REVISION.md) | **返修脚本 / pipeline 模块索引**（按 B 包归类） |
 

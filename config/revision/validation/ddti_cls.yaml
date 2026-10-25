@@ -1,0 +1,55 @@
+# DDTI 分类 valid（n≈52）。拟合 B3 learned（仅 cls）前请先跑 Phase 1–2：
+#   python run_pipeline.py --config config/revision/validation/ddti_cls.yaml
+shared:
+  agent_llm:
+    api_key_env: DASHSCOPE_API_KEY
+    base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    model_name: qwen3.8-omni-flash
+    temperature: 0.3
+    max_tokens: 768
+    enable_thinking: false
+segmentation:
+  models: []
+  agent:
+    enable_agent: false
+classification:
+  models:
+  - type: dinov3_unet_multitask
+    name: all_datasets
+    model_path: ../Classification_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth
+    use_tirads: false
+  - type: dinov3_unet_multitask
+    name: TN3K
+    model_path: ../Classification_Agent/weights/TN3K/dino_unet_train_multitask_TN3K_epoch_50.pth
+    use_tirads: false
+  - type: dinov3_unet_multitask
+    name: TN5K
+    model_path: ../Classification_Agent/weights/TN5K/dino_unet_train_multitask_TN5K_epoch_50.pth
+    use_tirads: false
+  - type: dinov3_unet_multitask
+    name: ThyroidXL
+    model_path: ../Classification_Agent/weights/ThyroidXL/dino_unet_train_multitask_ThyroidXL_epoch_50.pth
+    use_tirads: false
+  agent:
+    enable_agent: false
+    routing_mode: soft_voting
+    consensus_min_confidence: 0.6
+radiomics_judge:
+  enabled: false
+pipeline:
+  preload_workers: 4
+  run_segmentation: false
+  run_classification: true
+  data:
+    image_input: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/DDTI_Classification/valid/images
+    gt_mask_dir: ''
+    label_file: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/DDTI_Classification/valid/DDTI_Classification_valid_label.json
+    label_key: malignancy
+    device_info:
+    - GE Logiq E9
+    start_index: 0
+    max_images: null
+  log_routing: true
+  routing_log_include_prompts: false
+  output:
+    output_dir: output/validation/_parts/ddti_cls

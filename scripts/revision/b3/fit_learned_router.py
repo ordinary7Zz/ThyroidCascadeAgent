@@ -32,6 +32,7 @@ import yaml
 
 ROOT = repo_path.install()
 
+from routing.best_single_expert import resolve_val_fit_paths
 from routing.learned_router import (
     LearnedRouterParams,
     artifact_path_for_task,
@@ -75,6 +76,12 @@ def main() -> None:
         action="store_true",
         help="仅按 config 随机系数写 joblib，不使用 val 标签",
     )
+    parser.add_argument(
+        "--task",
+        choices=("seg", "cls", "both"),
+        default=None,
+        help="覆盖 config pipeline.ablation.task（seg / cls / both）",
+    )
     args = parser.parse_args()
 
     with open(args.config, "r", encoding="utf-8") as f:
@@ -85,24 +92,23 @@ def main() -> None:
         print(json.dumps(payload, ensure_ascii=False, indent=2))
         return
 
-    if not args.intermediate:
-        parser.error("拟合 val 须指定 --intermediate；或改用 --random-init")
+    ab = config.get("pipeline", {}).get("ablation", {}) or {}
+    intermediate = args.intermediate or ab.get("val_intermediate")
+    if not intermediate:
+        parser.error("拟合 val 须指定 --intermediate 或在 yaml 配置 ablation.val_intermediate")
 
-    data = config.get("pipeline", {}).get("data", {})
+    gt_mask_dir, label_file, label_key = resolve_val_fit_paths(config)
     payload = fit_learned_on_val(
         config,
-        Path(args.intermediate),
-        gt_mask_dir=Path(data["gt_mask_dir"]),
-        label_file=data["label_file"],
-        label_key=data.get("label_key", "malignancy"),
+        Path(intermediate),
+        gt_mask_dir=gt_mask_dir,
+        label_file=label_file,
+        label_key=label_key,
+        task=args.task,
     )
     print(json.dumps(payload, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
     main()
-
-import importlib.util
-from pathlib import Path
-
 

@@ -70,6 +70,8 @@ def main():
         help="B5：full | drop_device | drop_source | drop_both | quality_only",
     )
     parser.add_argument("--device", default="cuda")
+    parser.add_argument("--start-index", type=int, default=None, help="覆盖 pipeline.data.start_index")
+    parser.add_argument("--max-images", type=int, default=None, help="覆盖 pipeline.data.max_images")
     parser.add_argument("--skip-eval", action="store_true")
     parser.add_argument(
         "--best-single-artifact",
@@ -101,6 +103,10 @@ def main():
         force_phase3=args.force_phase3,
         best_single_artifact=artifact,
     )
+    if args.start_index is not None:
+        cfg.setdefault("pipeline", {}).setdefault("data", {})["start_index"] = args.start_index
+    if args.max_images is not None:
+        cfg.setdefault("pipeline", {}).setdefault("data", {})["max_images"] = args.max_images
 
     llm_cfg = cfg["shared"]["agent_llm"]
     seg_cfg = cfg["segmentation"]

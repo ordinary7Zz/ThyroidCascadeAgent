@@ -177,7 +177,13 @@ def main() -> None:
     )
     parser.add_argument(
         "--preset",
-        choices=("train_vs_tests", "tn3k_zjh", "stacked_vs_zjh", "all"),
+        choices=(
+            "train_vs_tests",
+            "tn3k_zjh",
+            "stacked_vs_zjh",
+            "cross_cohort",
+            "all",
+        ),
         default="all",
     )
     parser.add_argument(
@@ -206,12 +212,26 @@ def main() -> None:
         root / "TN3K/valid/images",
         root / "TN3K/test/images",
     ]
+    tn5k_splits = [
+        root / "TN5K/train/images",
+        root / "TN5K/valid/images",
+        root / "TN5K/test/images",
+    ]
+    thyroidxl_splits = [
+        root / "ThyroidXL/train/images",
+        root / "ThyroidXL/valid/images",
+        root / "ThyroidXL/test/images",
+    ]
 
-    report: dict = {
-        "method": "64-bit difference hash (dHash), grayscale resize; Hamming threshold configurable",
-        "hamming_max": args.hamming_max,
-        "comparisons": {},
-    }
+    if args.preset == "cross_cohort" and args.out.is_file():
+        report = json.loads(args.out.read_text(encoding="utf-8"))
+        report["hamming_max"] = args.hamming_max
+    else:
+        report = {
+            "method": "64-bit difference hash (dHash), grayscale resize; Hamming threshold configurable",
+            "hamming_max": args.hamming_max,
+            "comparisons": {},
+        }
 
     def write_pairs_file(label: str, pairs: list[dict]) -> None:
         if args.export_pairs_dir is None:
@@ -239,6 +259,20 @@ def main() -> None:
         rn, rh = hash_paths(right_paths, f"hash {label} right")
         pairs = find_pairs(ln, lh, rn, rh, args.hamming_max)
         record_comparison(label, str(left_dir), str(right_dir), len(ln), len(rn), pairs)
+
+    def run_comparison_merged(
+        label: str,
+        left_dirs: list[Path],
+        right_dirs: list[Path],
+        left_desc: str,
+        right_desc: str,
+    ) -> None:
+        left_paths = unique_paths([p for d in left_dirs for p in iter_images(d)])
+        right_paths = unique_paths([p for d in right_dirs for p in iter_images(d)])
+        ln, lh = hash_paths(left_paths, f"hash {label} left")
+        rn, rh = hash_paths(right_paths, f"hash {label} right")
+        pairs = find_pairs(ln, lh, rn, rh, args.hamming_max)
+        record_comparison(label, left_desc, right_desc, len(ln), len(rn), pairs)
 
     stack_ln: np.ndarray | None = None
     stack_lh: np.ndarray | None = None
@@ -280,6 +314,60 @@ def main() -> None:
             **summarize_pairs(pairs, args.hamming_max),
         }
         run_comparison("TN3K_test_vs_ZJH-8K", tests["TN3K_test"], tests["ZJH-8K"])
+
+    if args.preset in ("cross_cohort", "all"):
+        zjh_dir = tests["ZJH-8K"]
+        if "TN3K_splits_vs_ZJH-8K" not in report["comparisons"]:
+            tn3k_paths = unique_paths([p for d in tn3k_splits for p in iter_images(d)])
+            ln, lh = hash_paths(tn3k_paths, "hash TN3K splits")
+            rn, rh = hash_paths(iter_images(zjh_dir), "hash ZJH-8K")
+            pairs = find_pairs(ln, lh, rn, rh, args.hamming_max)
+            record_comparison(
+                "TN3K_splits_vs_ZJH-8K",
+                "TN3K train+valid+test/images",
+                str(zjh_dir),
+                len(ln),
+                len(rn),
+                pairs,
+            )
+        if "TN3K_test_vs_ZJH-8K" not in report["comparisons"]:
+            run_comparison("TN3K_test_vs_ZJH-8K", tests["TN3K_test"], tests["ZJH-8K"])
+        run_comparison_merged(
+            "TN5K_splits_vs_ZJH-8K",
+            tn5k_splits,
+            [zjh_dir],
+            "TN5K train+valid+test/images",
+            str(zjh_dir),
+        )
+        run_comparison_merged(
+            "ThyroidXL_splits_vs_ZJH-8K",
+            thyroidxl_splits,
+            [zjh_dir],
+            "ThyroidXL train+valid+test/images",
+            str(zjh_dir),
+        )
+        run_comparison_merged(
+            "TN3K_splits_vs_TN5K_splits",
+            tn3k_splits,
+            tn5k_splits,
+            "TN3K train+valid+test/images",
+            "TN5K train+valid+test/images",
+        )
+        run_comparison_merged(
+            "TN3K_splits_vs_ThyroidXL_splits",
+            tn3k_splits,
+            thyroidxl_splits,
+            "TN3K train+valid+test/images",
+            "ThyroidXL train+valid+test/images",
+        )
+        run_comparison("DDTI_test_vs_PKTN_test", tests["DDTI_test"], tests["PKTN_test"])
+        run_comparison_merged(
+            "TN5K_test_vs_TN5K_train",
+            [root / "TN5K/test/images"],
+            [root / "TN5K/train/images"],
+            "TN5K test/images",
+            "TN5K train/images",
+        )
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")

@@ -44,7 +44,7 @@ COHORT_LABELS = {
     "tn5k": "TN5K",
     "thyroidxl": "ThyroidXL",
     "zjh8k": "ZJH-8K",
-    "ddti_cls": "DDTI-cls",
+    "ddti_cls": "DDTI",
     "rjh7k": "RJH-7K",
     "ddti_seg": "DDTI-seg",
     "pktn": "PKTN",

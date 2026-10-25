@@ -26,7 +26,7 @@
 
 | 编号 | 主题 | 回复就绪 | 可回复要点（基于当前结论） | 素材路径 | 定稿前必改/待补 |
 |------|------|----------|---------------------------|----------|-----------------|
-| **R1.1** | 划分、去重、cluster CI、患者级 | **是**（图像侧） | ① **独立性**：**dHash** 筛查（非 stem）；堆叠 train↔ZJH **995** 对 H=0、TN5K test **38** 对、TN3K test↔ZJH **2** 对；**勿**写「文件名无重叠即无泄漏」；② 仅 **ZJH、ThyroidXL** 可复现 patient ID；无 ID 队列 **一图一簇**；③ **患者级** AUROC/AUPRC（ZJH/ThyroidXL）；④ S3/S4 **cluster CI**（主系统 8 队列 + 基线 **58/58**，**DDTI_cls n=349**）；⑤ ZJH **敏感性**（剔除 992 train-matched 图）见 Supp. | `b1/B1_结论与回复素材.md` §三；`b2/conclusions/B2_结论与回复素材.md` | F6 **患者**重叠（可选）；近重复 **spot check** 10–20 对；1149 vs 1146 一句；**NHC** 未纳入 B2 |
+| **R1.1** | 划分、去重、cluster CI、患者级 | **是**（图像侧） | ① **独立性**：**dHash** 筛查；堆叠 train↔ZJH **995** 对 H=0、TN5K test **38** 对、TN3K test↔ZJH **2** 对；② 仅 **ZJH、ThyroidXL** 可复现 patient ID；无 ID 队列 **一图一簇**；③ **患者级** AUROC/AUPRC（ZJH/ThyroidXL）；④ S3/S4 **cluster CI**（主系统 8 队列 + 基线 **58/58**，**DDTI_cls n=349**）；⑤ ZJH **敏感性**（剔除 992 train-matched 图）见 Supp. | `b1/B1_结论与回复素材.md` §三；`b2/conclusions/B2_结论与回复素材.md` | F6 **患者**重叠（可选）；近重复 **spot check** 10–20 对；1149 vs 1146 一句；**NHC** 未纳入 B2 |
 | **R1.2** | 路由消融 | **部分** | 固定专家池、静态策略+Oracle；**无单一策略全胜**；max-conf 分割差；Path B ~40–45%；TN3K/TN5K/ThyroidXL 波次 1 | `b3/REVIEWER_RESPONSE_SNIPPETS_B3.md`；`B3_WAVE1_RESULTS.md` | LLM/学习型路由；ZJH/RJH/DDTI/PKTN/**NHC**；配对 bootstrap CI 与 B2 对齐 |
 | **R1.3** | NHC 异质性、校准、拒答 | **部分** | **校准/拒答（B8，可写）**：validation **n=875**、**95 分位** 定阈（无 LLM）；五 BM 外测 **ECE/Brier** + 送复核 **~44–48%**（TN3K/ZJH 等）+ Supp. 可靠性图与 risk–coverage；**保留子集 Acc** 略高于全量；如实说明 test 复核率高于 val 分位数设计（margin 分布偏移）。**NHC 异质性（B7）**：仍仅可承认中心差异、THYB_S_ZJ24 等；中心表/I² 待 G3 | `../b8/`；`output/b8/fit/`、`cohorts/`；`MANUSCRIPT` **§12** | **B7** 中心元数据；刷新 `B8_CALIBRATION_ABSTENTION_CONCLUSIONS.md`；Supp. 编号；**勿用 smoke** |
 | **R1.4** | 数据流图、ZJH 用于 LNM/FTC | **是**（图假定已定） | 专家未在 ZJH 训练；恶性子集仅 LNM/FTC；回复称已补充数据流图（图像臂） | `b11_b12/DATAFLOW_*`；`b9` | 统稿 Fig 编号；ZJH/TN3K 脚注可引 B1/F6 |
@@ -140,7 +140,7 @@
 | 待写作 | Methods 4.1/4.6 条文；Supp. ZJH 敏感性表；回复信摘 `B1_结论` §三 |
 | 待可选 | F6 患者数；近重复人工 spot check |
 
-**回复要点（勿写）**：「外测与 train **stem 无重叠**故独立」——已改为 **dHash + 敏感性** 叙事（见 `B1_结论`）。
+**回复要点**：独立性叙事用 **dHash + 敏感性**（见 `B1_结论`）；勿在回复中声称原稿用过 filename stem 论证（原稿无此表述，故勿写「不再」）。
 
 **ZJH 敏感性数字（主系统，供回信/Supp.）**：全量图级 AUROC **0.937** → excl. **0.927**；患者级 **0.982** → **0.958**；Dice **0.836** → **0.831**（6966 图 / 1078 患者）。
 

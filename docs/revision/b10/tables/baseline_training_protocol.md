@@ -1,4 +1,4 @@
-# Supplementary Table S[X] — Baseline training and inference protocol (B10)
+# Supplementary Table S[X] — Baseline training and inference protocol
 
 Supervised rows match **Table S3/S4** exports (`b2_exports`, 2026-10-21). External test cohorts are not used for development finetuning.
 

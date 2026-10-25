@@ -40,6 +40,18 @@ def _compare_models():
     )
 
 
+def resolve_val_fit_paths(config: dict) -> tuple[Path, str, str]:
+    """拟合 learned / best_single 时用的 GT 与标签（默认 test data；可用 ablation.val_data 指向 valid）。"""
+    ab = config.get("pipeline", {}).get("ablation", {}) or {}
+    data = config.get("pipeline", {}).get("data", {})
+    vd = ab.get("val_data") or {}
+    gt_raw = vd.get("gt_mask_dir", data.get("gt_mask_dir"))
+    gt_mask_dir = Path(gt_raw) if gt_raw else Path(".")
+    label_file = str(vd.get("label_file") if "label_file" in vd else (data.get("label_file") or ""))
+    label_key = str(vd.get("label_key") or data.get("label_key", "malignancy"))
+    return gt_mask_dir, label_file, label_key
+
+
 def _resolve_val_stems(
     config: dict,
     all_image_names: list[str],

@@ -32,7 +32,7 @@ import yaml
 
 ROOT = repo_path.install()
 
-from routing.best_single_expert import fit_best_single_on_val
+from routing.best_single_expert import fit_best_single_on_val, resolve_val_fit_paths
 
 
 def main():
@@ -48,13 +48,13 @@ def main():
 
     with open(args.config, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
-    data = config.get("pipeline", {}).get("data", {})
+    gt_mask_dir, label_file, label_key = resolve_val_fit_paths(config)
     payload = fit_best_single_on_val(
         config,
         Path(args.intermediate),
-        gt_mask_dir=Path(data["gt_mask_dir"]),
-        label_file=data["label_file"],
-        label_key=data.get("label_key", "malignancy"),
+        gt_mask_dir=gt_mask_dir,
+        label_file=label_file,
+        label_key=label_key,
         artifact_path=Path(args.out),
     )
     print(json.dumps({
@@ -67,8 +67,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-import importlib.util
-from pathlib import Path
-
 

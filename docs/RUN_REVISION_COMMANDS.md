@@ -161,18 +161,46 @@ python scripts/run_routing_ablation.py \
 
 ### 2.3 波次 3：策略 6 `learned`
 
+每队列在 `config/b3/<cohort>.yaml` 配好 `val_list`、`val_data`（valid 的 mask/label）、`val_intermediate`（valid 的 Phase 1–2），以及 **每队列独立** `learned_router.*_artifact`（如 `artifacts/b3/tn3k/`）。
+
+生成 `val_list`：
+
 ```bash
-# 拟合或随机初始化占位 router
-python scripts/revision/b3/fit_learned_router.py --config config/b3/tn3k.yaml --intermediate <intermediate_dir>
-# 可选：--random-init（无 val 时占位）
+python scripts/revision/b3/export_val_list.py \
+  --image-dir /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN3K/valid/images \
+  --out config/revision/b3/val_lists/tn3k.json
+```
+
+**一键（valid fit → test infer → eval）：**
+
+| 队列 | val intermediate | n | 脚本 |
+|------|------------------|---|------|
+| TN3K | `output/validation/_parts/tn3k/intermediate` | 100 | `bash scripts/revision/b3/run_learned_tn3k.sh` |
+| TN5K | `output/validation/_parts/tn5k/intermediate` | 525 | `bash scripts/revision/b3/run_learned_tn5k.sh` |
+| ThyroidXL | `output/validation/_parts/thyroidxl/intermediate` | 100 | `bash scripts/revision/b3/run_learned_thyroidxl.sh` |
+
+`output/validation/_parts/` 另有 **pktn**（无 TN3K 式双 split 时需单独配 val）。
+
+或分步（fit 用 valid intermediate + `val_data`；推理用 **test** intermediate）：
+
+```bash
+python scripts/revision/b3/fit_learned_router.py --config config/b3/tn3k.yaml
+# 默认读 ablation.val_intermediate；也可 --intermediate output/validation/_parts/tn3k/intermediate
 
 python scripts/revision/b3/run_learned_b3.py \
   --config config/b3/tn3k.yaml \
-  --shared-intermediate <intermediate_dir> \
+  --shared-intermediate output/TN3K/pipeline_run/intermediate \
   --output-dir output/ablation/b3/tn3k/learned \
   --force-phase3 \
   --device cpu
+
+python scripts/revision/b3/eval_merged_b3_cohort.py \
+  --config config/b3/tn3k.yaml \
+  --root output/ablation/b3/tn3k \
+  --modes learned
 ```
+
+`sample` 调试：`val_list` 见 `config/revision/b3/val_lists/sample.json`（7/10 图），fit 与 infer 共用 `output/sample/pipeline_run/intermediate`。
 
 ### 2.4 单次消融（任意 mode）
 

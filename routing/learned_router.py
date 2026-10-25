@@ -414,7 +414,11 @@ def fit_learned_seg_router(
     gt_mask_dir: Path,
     image_io: Any = None,
 ) -> LearnedExpertRouter:
-    from pipeline.compare_models import load_seg_model_masks
+    from pipeline.compare_models import (
+        build_gt_mask_stem_map,
+        load_seg_model_masks,
+        resolve_gt_mask_path,
+    )
     from routing.best_single_expert import _image_names_for_stems
     from shared.image_io import ImageIO
 
@@ -445,6 +449,8 @@ def fit_learned_seg_router(
 
     from segmentation.base_model import SegModelOutput
 
+    gt_stem_map = build_gt_mask_stem_map(gt_mask_dir)
+
     for img_name in val_img_names:
         preds: list[Any] = []
         for mname in model_names:
@@ -459,8 +465,8 @@ def fit_learned_seg_router(
             )
         if len(preds) < 2:
             continue
-        gt_path = gt_mask_dir / img_name
-        if not gt_path.exists():
+        gt_path = resolve_gt_mask_path(gt_mask_dir, img_name, stem_map=gt_stem_map)
+        if gt_path is None:
             continue
         gt_mask = image_io.binarize_mask(image_io.load_mask(gt_path))
         quality = qeval.evaluate_batch([p.mask for p in preds], [p.model_name for p in preds])
@@ -588,6 +594,11 @@ def fit_learned_cls_router(
     )
 
 
+def ablation_task(config: dict) -> str:
+    ab = config.get("pipeline", {}).get("ablation", {}) or {}
+    return str(ab.get("task") or "both")
+
+
 def fit_learned_on_val(
     config: dict,
     intermediate_dir: Path,
@@ -597,48 +608,74 @@ def fit_learned_on_val(
     label_key: str = "malignancy",
     seg_artifact: Optional[Path] = None,
     cls_artifact: Optional[Path] = None,
+    task: Optional[str] = None,
 ) -> dict[str, Any]:
     from routing.best_single_expert import _resolve_val_stems
     from pipeline.compare_models import load_seg_model_masks
 
+    task = task or ablation_task(config)
+    if task not in ("seg", "cls", "both"):
+        raise ValueError(f"未知 ablation.task: {task}")
+
     seg_dir = intermediate_dir / "seg"
-    sample_npz = next(seg_dir.glob("*.npz"), None)
-    if sample_npz is None:
+    cls_dir = intermediate_dir / "cls"
+    sample_npz = next(seg_dir.glob("*.npz"), None) if seg_dir.is_dir() else None
+    if sample_npz is None and task in ("seg", "both"):
         raise FileNotFoundError(f"无分割 npz: {seg_dir}")
-    img_names, _, _ = load_seg_model_masks(sample_npz)
+
+    if sample_npz is not None:
+        img_names, _, _ = load_seg_model_masks(sample_npz)
+    else:
+        sample_cls = next(cls_dir.glob("*.json"), None) if cls_dir.is_dir() else None
+        if sample_cls is None:
+            raise FileNotFoundError(f"task={task} 需要 intermediate/seg 或 intermediate/cls")
+        _, img_map = _load_cls_predictions_by_image(sample_cls)
+        img_names = sorted(img_map.keys())
+
     val_stems = _resolve_val_stems(config, img_names)
 
     cls_cfg = config.get("classification", {}).get("agent", {})
     consensus_th = float(cls_cfg.get("consensus_min_confidence", 0.6))
 
-    seg_router = fit_learned_seg_router(
-        config,
-        intermediate_dir,
-        val_stems=val_stems,
-        gt_mask_dir=gt_mask_dir,
-    )
-    cls_router = fit_learned_cls_router(
-        config,
-        intermediate_dir,
-        val_stems=val_stems,
-        label_file=label_file,
-        label_key=label_key,
-        consensus_min_confidence=consensus_th,
-    )
+    seg_router: Optional[LearnedExpertRouter] = None
+    cls_router: Optional[LearnedExpertRouter] = None
+
+    if task in ("seg", "both"):
+        seg_router = fit_learned_seg_router(
+            config,
+            intermediate_dir,
+            val_stems=val_stems,
+            gt_mask_dir=gt_mask_dir,
+        )
+    if task in ("cls", "both"):
+        if not label_file:
+            raise ValueError("拟合 cls learned 路由须配置 val_data.label_file 或 pipeline.data.label_file")
+        cls_router = fit_learned_cls_router(
+            config,
+            intermediate_dir,
+            val_stems=val_stems,
+            label_file=label_file,
+            label_key=label_key,
+            consensus_min_confidence=consensus_th,
+        )
 
     lr_cfg = learned_router_config(config)
     seg_path = seg_artifact or artifact_path_for_task(config, "seg")
     cls_path = cls_artifact or artifact_path_for_task(config, "cls")
-    if seg_path:
+    if seg_router is not None and seg_path:
         save_learned_router(seg_router, seg_path)
-    if cls_path:
+    if cls_router is not None and cls_path:
         save_learned_router(cls_router, cls_path)
 
-    return {
+    out: dict[str, Any] = {
+        "task": task,
         "val_stems": val_stems,
-        "n_val_seg_fit": len(val_stems),
-        "seg_artifact": str(seg_path) if seg_path else None,
-        "cls_artifact": str(cls_path) if cls_path else None,
-        "seg_init_mode": seg_router.init_mode,
-        "cls_init_mode": cls_router.init_mode,
+        "n_val_stems": len(val_stems),
+        "seg_artifact": str(seg_path) if seg_router is not None and seg_path else None,
+        "cls_artifact": str(cls_path) if cls_router is not None and cls_path else None,
     }
+    if seg_router is not None:
+        out["seg_init_mode"] = seg_router.init_mode
+    if cls_router is not None:
+        out["cls_init_mode"] = cls_router.init_mode
+    return out

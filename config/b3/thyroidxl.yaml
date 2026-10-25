@@ -107,19 +107,24 @@ pipeline:
     summarize: true
     task: both
     learned_router:
-      seg_artifact: artifacts/learned_router_seg.joblib
-      cls_artifact: artifacts/learned_router_cls.joblib
-      allow_missing_artifact: true
+      seg_artifact: artifacts/b3/thyroidxl/learned_router_seg.joblib
+      cls_artifact: artifacts/b3/thyroidxl/learned_router_cls.joblib
+      allow_missing_artifact: false
       write_random_artifact: false
       params:
         C: 0.1
         max_iter: 200
         random_state: 42
-        random_init: true
+        random_init: false
         random_coef_scale: 0.05
     best_single_seg: all_datasets
     best_single_cls: all_datasets
-    val_list: null
+    val_list: config/revision/b3/val_lists/thyroidxl.json
+    val_intermediate: output/validation/_parts/thyroidxl/intermediate
+    val_data:
+      gt_mask_dir: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/ThyroidXL/valid/masks
+      label_file: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/ThyroidXL/valid/ThyroidXL_valid_label.json
+      label_key: malignancy
   data:
     image_input: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/ThyroidXL/test/images
     gt_mask_dir: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/ThyroidXL/test/masks

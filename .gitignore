@@ -18,6 +18,7 @@ env/
 *.swo
 
 # 运行产物
+artifacts/b3/
 output/*
 !output/shared_output/
 !output/shared_output/**
