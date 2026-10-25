@@ -81,23 +81,26 @@ def merge_table_r4(appendix: str, lang: str) -> str:
     if not re.search(pat, appendix):
         return appendix
 
-    appendix = re.sub(
-        pat,
-        (
+    def _open_r4(m: re.Match) -> str:
+        return (
             "\\begin{responsetable}\n"
             f"\\caption{{{cap}}}\n"
             "\\label{tab:R4}\n"
             f"\\responsetablenote{{{note}}}\n"
             f"{sub_dice}\n"
             "\\par\\vspace{0.35em}\n"
-        ),
-        appendix,
-        count=1,
-    )
+        )
+
+    appendix = re.sub(pat, _open_r4, appendix, count=1)
     # Remove second float wrapper around HD95 block
+    hd_hdr = sub_hd
+
+    def _merge_hd95(m: re.Match) -> str:
+        return "\\par\\vspace{0.65em}\n" + hd_hdr + "\n\\par\\vspace{0.35em}\n"
+
     appendix = re.sub(
         r"\\end\{responsetable\}\s*\n\s*\\textbf\{HD95[^}]+\}\s*\\par\s*\\begin\{responsetable\}",
-        f"\\par\\vspace{0.65em}\n{sub_hd}\n\\par\\vspace{0.35em}\n",
+        _merge_hd95,
         appendix,
         count=1,
     )
@@ -122,10 +125,17 @@ def process_appendix(appendix: str, lang: str) -> str:
         )
         if m:
             kind, body = m.group("kind"), m.group("body")
-            if kind == "Appendix":
-                out.append(f"\\subsection*{{Appendix {body}}}\n")
-                if body.startswith("A"):
-                    out.append(f"\\label{{app:{body.split('.')[0].replace(' ', '')}}}\n")
+            if kind == "Appendix" or (lang == "zh" and m.group(0).startswith("\\reviewersection{附录")):
+                if kind == "Appendix":
+                    out.append(f"\\subsection*{{Appendix {body}}}\n")
+                    label_body = body.split(".")[0].strip()
+                    if label_body.startswith("A"):
+                        out.append(f"\\label{{app:{label_body}}}\n")
+                else:
+                    out.append(f"\\subsection*{{附录 {body}}}\n")
+                    label_body = body.split(".")[0].strip()
+                    if label_body.startswith("A"):
+                        out.append(f"\\label{{app:{label_body}}}\n")
                 pending_caption = None
                 pending_label = None
             else:
@@ -146,7 +156,7 @@ def process_appendix(appendix: str, lang: str) -> str:
             i += 1
             continue
 
-        if line.strip() in (r"\begin{figure}", r"\begin{responsefigure}"):
+        if line.strip().startswith(r"\begin{figure}") or line.strip() == r"\begin{responsefigure}":
             out.append(r"\begin{responsefigure}" + "\n")
             if pending_caption:
                 out.append(f"\\caption{{{pending_caption}}}\n")

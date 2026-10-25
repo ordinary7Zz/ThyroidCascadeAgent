@@ -23,7 +23,9 @@
 \RequirePackage{fancyvrb}
 \RequirePackage{adjustbox}
 
-\hypersetup{colorlinks=true,linkcolor=blue!60!black,urlcolor=blue!60!black,citecolor=blue!60!black}
+\definecolor{ResponseBlue}{RGB}{0,63,136}
+
+\hypersetup{colorlinks=true,linkcolor=ResponseBlue!80!black,urlcolor=ResponseBlue!80!black,citecolor=ResponseBlue!80!black}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.45em}
@@ -33,17 +35,62 @@
 \newcommand{\ReviewerCommentLabel}{Reviewer comment:}
 \newcommand{\ResponseLabel}{Response:}
 \newcommand{\SupportingLabel}{Supporting tables and figures}
+\newcommand{\ResponseTableNoteLabel}{Note.}
 
-\newcommand{\reviewersection}[1]{\section*{#1}\vspace{-0.3em}}
+\newcommand{\ManuscriptTitle}{ThyroidXAgent}
+\newcommand{\ManuscriptJournal}{Nature Communications major revision}
+
+% Letter head (TURG-style)
+\newcommand{\responselettertitle}[2]{%
+  \begin{center}
+  {\LARGE\bfseries #1}\par\vspace{0.5em}
+  {\large #2}\par
+  \end{center}
+  \vspace{0.35em}
+}
+
+\newcommand{\responseletteropening}{%
+  \noindent Dear Editor and Reviewers,\par\vspace{0.35em}
+  \noindent We thank you for your careful evaluation of our manuscript,
+  \textit{\ManuscriptTitle}, and for your constructive comments.
+  We respond to each comment below.
+  The reviewers' comments are shown in \textit{black italics} and our responses in \textcolor{ResponseBlue}{blue}.
+  Tables and figures cited in the responses are reproduced at the end of this letter.\par
+  \vspace{0.75em}
+}
+
+\newcommand{\responseletteropeningzh}{%
+  \noindent 尊敬的编辑与审稿人：\par\vspace{0.35em}
+  \noindent 感谢您对稿件 \textit{\ManuscriptTitle}（\ManuscriptJournal）的认真审阅与建设性意见。
+  下文逐条回复。
+  审稿意见以\textbf{黑色斜体}呈现，作者回复以\textcolor{ResponseBlue}{蓝色}呈现；
+  回复中引用的表、图均复现于信末。\par
+  \vspace{0.75em}
+}
+
+\newcommand{\responsetoreviewer}[1]{%
+  \par\vspace{0.85em}%
+  \noindent{\large\bfseries #1}\par\vspace{0.25em}%
+}
+
+\newcommand{\reviewersection}[1]{%
+  \par\vspace{0.55em}%
+  \noindent\textbf{#1}\par\vspace{0.15em}%
+}
+
 \newcommand{\reviewersubtitle}[1]{\paragraph*{#1}\vspace{-0.2em}}
 
 \newenvironment{reviewercomment}{%
-  \noindent\textbf{\ReviewerCommentLabel}\par\vspace{0.15em}\itshape
-}{\par\normalfont\vspace{0.35em}}
+  \itshape\color{black}%
+}{%
+  \par\normalfont\color{black}\vspace{0.35em}%
+}
 
 \newenvironment{authorresponse}{%
-  \noindent\textbf{\ResponseLabel}\par\vspace{0.15em}
-}{\par\vspace{0.35em}}
+  \color{ResponseBlue}%
+}{%
+  \par\color{black}\vspace{0.45em}%
+}
 
 \newenvironment{supportingblock}{%
   \noindent\textbf{\SupportingLabel}\par\vspace{0.25em}
@@ -54,19 +101,25 @@
 \captionsetup[figure]{font=small,labelfont=bf,singlelinecheck=false,labelformat=empty,labelsep=none}
 \captionsetup[sub]{font=footnotesize,labelfont=bf}
 
-\newcommand{\responseappendix}{\section*{Supporting Figures and Tables}}
-\newcommand{\responseappendixzh}{\section*{回复信支撑图表（Supporting Figures and Tables）}}
+\newcommand{\responseappendix}{%
+  \clearpage
+  \section*{Supporting Tables and Figures}%
+  \noindent\footnotesize New supplementary-style tables and figures cited in the point-by-point responses above (labels \textbf{R1--R13}, \textbf{Figures R1--R2}). Entries aligned with revised Supplementary Tables S3--S5 retain the manuscript table numbers.\par\vspace{0.5em}%
+}
 
-% Supplementary-style table (caption + tablenotes via threeparttable)
+\newcommand{\responseappendixzh}{%
+  \clearpage
+  \section*{支撑表图（Supporting Tables and Figures）}%
+  \noindent\footnotesize 下文复现回复中引用的表、图（编号 \textbf{R1--R13}、\textbf{图 R1--R2}）；与修订稿 Supplementary Tables S3--S5 对齐者保留原表号。\par\vspace{0.5em}%
+}
+
 \newenvironment{responsetable}{%
   \begin{table}[htbp]
   \centering
   \footnotesize
   \setlength{\tabcolsep}{4pt}
   \renewcommand{\arraystretch}{1.15}
-  \begin{threeparttable}
 }{%
-  \end{threeparttable}
   \end{table}
 }
 
@@ -78,17 +131,13 @@
 }
 
 \newcommand{\responsetablenote}[1]{%
-  \begin{tablenotes}
-  \footnotesize
-  \item #1
-  \end{tablenotes}
+  \par\vspace{0.4em}%
+  {\footnotesize\textit{\ResponseTableNoteLabel}\ #1\par}%
 }
 
 \newcommand{\responsetablenotes}[1]{%
-  \begin{tablenotes}
-  \footnotesize
-  #1
-  \end{tablenotes}
+  \par\vspace{0.4em}%
+  {\footnotesize #1\par}%
 }
 
 \DefineVerbatimEnvironment{promptverbatim}{Verbatim}{%

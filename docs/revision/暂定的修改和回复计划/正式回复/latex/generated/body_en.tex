@@ -1,9 +1,5 @@
-\begin{center}{\Large\bfseries Response to Reviewers}\end{center}
-\vspace{0.6em}
-Manuscript: ThyroidXAgent (\textit{Nature Communications}, major revision).
-\par
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 1 --- Comment 1 (R1.1)}
+\responsetoreviewer{Response to Reviewer 1}
+\reviewersection{Reviewer 1, Comment 1 (R1.1)}
 \begin{reviewercomment}
 Segmentation and classification results are largely reported at the image level. The authors should clarify patient- and examination-level splits, cross-dataset deduplication, and whether multiple frames or views from the same patient appear across splits. Patient-level re-analysis and cluster-aware confidence intervals would strengthen confidence in the reported performance.
 \end{reviewercomment}
@@ -17,8 +13,7 @@ Segmentation and classification results are largely reported at the image level.
 \textbf{Supporting material:} See \textbf{Table R1} (dHash near-duplicate screening), \textbf{Tables R2–R3} (Supplementary Table S4, AUROC/AUPRC), and \textbf{Table R4} (Supplementary Table S3, segmentation Dice/HD95) at the end of this letter.
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 1 --- Comment 3 (R1.3)}
+\reviewersection{Reviewer 1, Comment 3 (R1.3)}
 \begin{reviewercomment}
 Although overall performance on the private multi-center cohort is encouraging, performance varies substantially across centers (e.g., much lower nodule segmentation at some centers). The authors should examine associations with scanner type, image quality, case mix, and annotation protocols, and define calibration, abstention, or mandatory human review for low-confidence cases.
 \end{reviewercomment}
@@ -32,8 +27,7 @@ Although overall performance on the private multi-center cohort is encouraging, 
 \textbf{Supporting material:} See \textbf{Table R5} (external-test calibration and referral), \textbf{Figure R1} (reliability diagrams), and \textbf{Figure R2} (risk–coverage curves) at the end of this letter.
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 1 --- Comment 4 (R1.4)}
+\reviewersection{Reviewer 1, Comment 4 (R1.4)}
 \begin{reviewercomment}
 ZJH-8K is described as an external test set for segmentation and benign–malignant classification, while its malignant images are also used to develop LNM and FTC/PTC tasks. The manuscript should provide a complete data-flow diagram showing, for each component, which data were used for training, validation, threshold selection, and testing.
 \end{reviewercomment}
@@ -45,8 +39,7 @@ ZJH-8K is described as an external test set for segmentation and benign–malign
 \textbf{Supporting material:} Patient–examination–image–task dataflow figure (to be supplied); tabular summary in \textbf{Table R6} at the end of this letter.
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 1 --- General remark (deployability)}
+\reviewersection{Reviewer 1, General remark (deployability)}
 \begin{reviewercomment}
 The work has clear strengths; however, the current evidence supports a promising retrospective workflow rather than established clinical benefit or broad deployability. I therefore recommend major revision at minimum.
 \end{reviewercomment}
@@ -55,8 +48,8 @@ The work has clear strengths; however, the current evidence supports a promising
 \item We softened deployability claims throughout the manuscript and emphasize retrospective evaluation, revised statistical reporting (data auditing and cluster-bootstrap confidence intervals), and explicit limitations. Code release improvements are described in the Data and Code Availability statement.
 \end{itemize}
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 2 --- Comment 1 (R2.1)}
+\responsetoreviewer{Response to Reviewer 2}
+\reviewersection{Reviewer 2, Comment 1 (R2.1)}
 \begin{reviewercomment}
 Several key numbers are inconsistent across the abstract, main text, figures, and supplementary materials.
 \end{reviewercomment}
@@ -69,8 +62,7 @@ Several key numbers are inconsistent across the abstract, main text, figures, an
 \textbf{Supporting material:} See \textbf{Table R7} (five-cohort summary means) and \textbf{Table R8} (Supplementary Table S5a/S5b) at the end of this letter.
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 2 --- Comment 2 (R2.2)}
+\reviewersection{Reviewer 2, Comment 2 (R2.2)}
 \begin{reviewercomment}
 Many analyses are reported at the image level although the same patient, examination, or nodule may have multiple images (e.g., ZJH-8K contains 7,958 images from 1,149 patients). Treating correlated images as independent may yield overly narrow confidence intervals. The authors should use patient- or examination-level bootstrap resampling and report patient-level performance for clinically meaningful classification tasks.
 \end{reviewercomment}
@@ -88,8 +80,7 @@ Many analyses are reported at the image level although the same patient, examina
 \textbf{Supporting material:} Full \textbf{Tables S3/S4} are \textbf{Tables R2–R4}; patient-level ZJH-8K / ThyroidXL results are \textbf{Tables R9} and \textbf{R10} at the end of this letter.
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 2 --- Comment 3 (R2.3)}
+\reviewersection{Reviewer 2, Comment 3 (R2.3)}
 \begin{reviewercomment}
 Please clarify why 28,458 observations are described as "non-overlapping test cases", as this number appears to combine 19,737 test images with 8,721 NHC-MISD-TUS cases.
 \end{reviewercomment}
@@ -100,8 +91,7 @@ Please clarify why 28,458 observations are described as "non-overlapping test ca
 \textbf{Supporting material:} Dataflow figure (to be supplied); tabular summary in \textbf{Table R6} at the end of this letter.
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 2 --- Comment 4 (R2.4)}
+\reviewersection{Reviewer 2, Comment 4 (R2.4)}
 \begin{reviewercomment}
 ZJH-8K and TN3K were both collected at Nanfang Hospital, Southern Medical University. Unless patient populations, acquisition periods, cohort composition, and clinical workflows are demonstrably independent, ZJH-8K should not be described as an external center cohort.
 \end{reviewercomment}
@@ -112,8 +102,7 @@ ZJH-8K and TN3K were both collected at Nanfang Hospital, Southern Medical Univer
 \textbf{Supporting material:} dHash screening in \textbf{Table R1} at the end of this letter (same protocol as R1.1).
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 2 --- Comment 7 (R2.7)}
+\reviewersection{Reviewer 2, Comment 7 (R2.7)}
 \begin{reviewercomment}
 The authors should clarify whether reported "means" are unweighted macro-averages across cohorts, sample-size-weighted averages, or another scheme.
 \end{reviewercomment}
@@ -124,21 +113,21 @@ The authors should clarify whether reported "means" are unweighted macro-average
 \textbf{Supporting material:} See \textbf{Table R7} at the end of this letter.
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 2 --- Comment 9 (R2.9)}
+\reviewersection{Reviewer 2, Comment 9 (R2.9)}
 \begin{reviewercomment}
 The manuscript states that the LLM router "reasons" to select the best expert output but does not report prompt design, LLM version, decoding parameters, reproducibility, or decision stability when candidate quality is similar. The authors should provide structured routing records for at least ten representative cases.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item We provide \textbf{model and decoding parameters, full prompt templates, JSON output schemas, and structured routing-log fields} at the end of this letter (\textbf{Table R11}, \textbf{Appendix A1}) (the revised Supplementary Information will contain the same content). On the TN3K \texttt{test\_for\_llm\_malignancy} cohort (\textit{N} = 250), every routing call is logged in \texttt{routing\_log.jsonl}. With \textbf{frozen Phase 1–2 expert outputs}, we repeated LLM \textbf{segmentation} routing five times per case on a stability subset (\textit{n} = \textbf{10}; Path A classification consensus is not re-run five times; Path B reports classification agreement separately). Mean selection agreement was \textbf{98\%} (\textbf{9/10} cases identical across five repeats; \textbf{1/10} at \textbf{80\%}, \texttt{TN3K\_test\_0009.jpg}, one repeat switching between \texttt{all\_datasets} and \texttt{TN3K}, Dice range ≈ 0.017). All \textbf{10/10} cases were \textbf{close} tier (\textbf{Table R11}); no \textbf{easy} cases appeared in this subset, so we report the close stratum only.
-\item \textbf{Tier (\texttt{disagreement\_tier})}: for segmentation, candidates are ranked by inter-expert \texttt{average\_agreement}; top1 minus top2 \textbf{≤ 0.10} → \textbf{close} (similar-quality candidates), \textbf{> 0.10} → \textbf{easy} (clear winner). The tier column in the stability table is \textbf{per-case routing difficulty}, not per-dataset stratification.
+\item We list \textbf{model and decoding parameters, full prompt templates, JSON output schemas, and structured routing-log fields} in \textbf{Appendix A1} at the end of this letter (the revised Supplementary Information will contain the same content). For TN3K \texttt{test\_for\_llm\_malignancy} (\textit{N} = 250), every \textbf{LLM routing call} (\texttt{llm\_invoked=true}) is written to \texttt{routing\_log.jsonl} for reproducibility and audit.
+\item \textbf{LLM decision stability (similar candidates)}: the reviewer’s concern about ``wobble'' when candidate quality is similar applies to \textbf{pipeline steps that invoke the LLM}. With \textbf{frozen upstream expert outputs}, we drew \textit{n} = \textbf{10} cases from the \texttt{disagreement\_tier=close} subset and repeated \textbf{segmentation LLM routing} five times per case. \textbf{Mean agreement across the five repeats was 98\%} (\textbf{9/10} cases identical on all five runs; \textbf{1/10} at \textbf{80\%}, \texttt{TN3K\_test\_0009.jpg}, one repeat switching between \texttt{all\_datasets} and \texttt{TN3K}, Dice difference ≈ 0.017); see \textbf{Table R11}. When independent classifiers \textbf{already agree}, malignancy classification follows a \textbf{deterministic consensus rule} (\textbf{no LLM call}) and is therefore outside this five-repeat LLM experiment.
+\item \textbf{Similar-candidate tier (\texttt{disagreement\_tier})}: segmentation candidates are ranked by inter-expert \texttt{average\_agreement}; top1 minus top2 \textbf{≤ 0.10} → \textbf{close}, \textbf{> 0.10} → \textbf{easy}. All \textbf{10/10} stability cases are \textbf{close}; we report LLM consistency on this subset only.
+\item The revision will attach \textbf{≥10} de-identified \texttt{routing\_log} exemplars with the same case IDs as \textbf{Table R11} (including archived prompts when available).
 \end{itemize}
 \textbf{Supporting material:} See \textbf{Table R11} (routing stability) and \textbf{Appendix A1} (LLM router specification and routing\_log fields) at the end of this letter.
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 2 --- Comment 10 (R2.10)}
+\reviewersection{Reviewer 2, Comment 10 (R2.10)}
 \begin{reviewercomment}
 For FTC/PTC classification, the training cohort consists of classic PTC versus follicular-variant PTC, whereas the external test set uses FTC versus PTC. Follicular-variant PTC is not histologic FTC; training and testing therefore target different definitions.
 \end{reviewercomment}
@@ -149,8 +138,7 @@ For FTC/PTC classification, the training cohort consists of classic PTC versus f
 \textbf{Supporting material:} Full \textbf{Table S5} is \textbf{Table R8} at the end of this letter.
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 2 --- Comment 11 (R2.11)}
+\reviewersection{Reviewer 2, Comment 11 (R2.11)}
 \begin{reviewercomment}
 The LNM task used only 4,753 malignant images, while Table S5 shows validation with only 20 cases. Please clarify: (a) whether transfer or multitask learning was used; (b) data augmentation; (c) how overfitting was mitigated.
 \end{reviewercomment}
@@ -161,8 +149,7 @@ The LNM task used only 4,753 malignant images, while Table S5 shows validation w
 \textbf{Supporting material:} Full \textbf{Table S5} is \textbf{Table R8} at the end of this letter.
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 2 --- Comment 12 (R2.12)}
+\reviewersection{Reviewer 2, Comment 12 (R2.12)}
 \begin{reviewercomment}
 For lymph-node metastasis prediction, the manuscript inconsistently uses overall LNM, lateral LNM, and CN0/CN1 labels, including primary thyroid lesions on ZJH-8K versus lymph-node images on LymphUs.
 \end{reviewercomment}
@@ -173,8 +160,7 @@ For lymph-node metastasis prediction, the manuscript inconsistently uses overall
 \textbf{Supporting material:} Full \textbf{Table S5} is \textbf{Table R8} at the end of this letter.
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 2 --- Comment 14 (R2.14)}
+\reviewersection{Reviewer 2, Comment 14 (R2.14)}
 \begin{reviewercomment}
 It is unclear whether all expert baselines were retrained on the same development data, evaluated with original weights, or tested zero-shot.
 \end{reviewercomment}
@@ -185,8 +171,7 @@ It is unclear whether all expert baselines were retrained on the same developmen
 \textbf{Supporting material:} See \textbf{Table R12} (Supplementary Table S[X], baseline training and inference protocol) at the end of this letter.
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 2 --- Comment 20 (R2.20)}
+\reviewersection{Reviewer 2, Comment 20 (R2.20)}
 \begin{reviewercomment}
 Thresholds for connected-component post-processing are not specified, including: (a) minimum component area; (b) whether nodules <5 mm may be removed; (c) how multiple nodules are separated.
 \end{reviewercomment}
@@ -197,21 +182,20 @@ Thresholds for connected-component post-processing are not specified, including:
 \textbf{Supporting material:} See \textbf{Table R13} (<5 mm nodule pipeline failure statistics) at the end of this letter.
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 2 --- Comment 21 (R2.21)}
+\reviewersection{Reviewer 2, Comment 21 (R2.21)}
 \begin{reviewercomment}
 The AutoGluon-based radiomics branch is insufficiently described.
 (Editorial comment; no sub-bullets.)
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item We thank the reviewer for this comment. We expanded \textbf{Methods §4.3} in the revision and list reproducibility details in \textbf{Appendix A2} at the end of this letter (the revised Supplementary Information will contain the same text). At inference, \textbf{two-dimensional PyRadiomics} is extracted on the router-selected \textbf{selected mask} with \textbf{no additional connected-component refinement} before radiomics (the same mask underlies reported Dice/HD95; expert-internal ≥50 px rules are under \textbf{Reviewer 2 --- Comment 20}). The \textbf{AutoGluon} tabular model was trained on stacked \textbf{dataset\_3} with \textbf{GT masks} (17,774 images) and applied frozen at test time---\textbf{no} retraining or tuning on external tests. Path B may include AutoGluon in weighted soft voting (default weight 0.5); segmentation routing may include per-candidate radiomics-judge summaries in the LLM prompt (\textbf{Reviewer 2 --- Comment 9}).
+\item We thank the reviewer for this comment. We expanded \textbf{Methods §4.3} in the revision and list reproducibility details in \textbf{Appendix A2} at the end of this letter (the revised Supplementary Information will contain the same text). At inference, \textbf{two-dimensional PyRadiomics} is extracted on the router-selected \textbf{selected mask} with \textbf{no additional connected-component refinement} before radiomics (the same mask underlies reported Dice/HD95; expert-internal ≥50 px rules are under \textbf{Reviewer 2 --- Comment 20}). The \textbf{AutoGluon} tabular model was trained on stacked \textbf{dataset\_3} with \textbf{GT masks} (17,774 images) and applied frozen at test time---\textbf{no} retraining or tuning on external tests. When independent classifiers disagree, the agent may combine AutoGluon malignancy probability with other signals (Methods §4.3); segmentation LLM prompts may include per-candidate radiomics-judge summaries (\textbf{Reviewer 2, Comment 9} and Appendix A1).
 \end{itemize}
 \textbf{Supporting material:} See \textbf{Appendix A2} (radiomics / AutoGluon specification) at the end of this letter.
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\reviewersection{Reviewer 3 --- Comment 3 (R3.3)}
+\responsetoreviewer{Response to Reviewer 3}
+\reviewersection{Reviewer 3, Comment 3 (R3.3)}
 \begin{reviewercomment}
 The definition of "28,458 non-overlapping test cases" is unclear. Please describe the data hierarchy clearly, confirm patient-disjoint train/validation/test splits where applicable, and provide a simple flowchart relating patients, examinations, images/videos, lesions, and tasks.
 \end{reviewercomment}
@@ -222,13 +206,10 @@ The definition of "28,458 non-overlapping test cases" is unclear. Please describ
 \textbf{Supporting material:} See \textbf{Table R6} (dataflow) and \textbf{Table R1} (dHash screening) at the end of this letter.
 \par
 \end{authorresponse}
-\bigskip\hrule\bigskip
-\begin{center}{\Large\bfseries Supporting Figures and Tables for This Response}\end{center}
-\vspace{0.6em}
-Tables and figures cited in the point-by-point responses above. Labels \textbf{R1--R13} and \textbf{Figures R1--R2} match in-text cross-references. Entries aligned with revised Supplementary Tables S3--S5 retain the original table numbers.
-\par
-\reviewersection{Table R1. dHash cross-cohort near-duplicate screening (Hamming $\leq$ 5)}
+\responseappendix
 \begin{responsetable}
+\caption{Table R1. dHash cross-cohort near-duplicate screening (Hamming $\leq$ 5)}
+\label{tab:R1}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{lcccccc}
 \toprule
@@ -239,12 +220,12 @@ TN3K (test) & ZJH-8K & 614 & 7958 & 39 & 2 & 37 \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
+\responsetablenote{Each row is pairwise screening between two \textbf{source cohorts} (not a merged training-pool definition).}
 \end{responsetable}
 
-Each row is pairwise screening between two \textbf{source cohorts} (not a merged training-pool definition).
-\par
-\reviewersection{Table R2. Supplementary Table S4 --- AUROC}
 \begin{responsetable}
+\caption{Table R2. Supplementary Table S4 --- AUROC}
+\label{tab:R2}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{lccccc}
 \toprule
@@ -262,8 +243,9 @@ ThyroidXAgent & \textbf{0.8511 (0.8183–0.8824)} & \textbf{0.9312 (0.9142–0.9
 \end{adjustbox}
 \end{responsetable}
 
-\reviewersection{Table R3. Supplementary Table S4 --- AUPRC}
 \begin{responsetable}
+\caption{Table R3. Supplementary Table S4 --- AUPRC}
+\label{tab:R3}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{lccccc}
 \toprule
@@ -281,14 +263,12 @@ ThyroidXAgent & \textbf{0.8001 (0.7347–0.8562)} & \textbf{0.9135 (0.8872–0.9
 \end{adjustbox}
 \end{responsetable}
 
-Cluster-bootstrap 95\% CIs (1000 resamples, seed 42).
-\par
-\reviewersection{Table R4. Supplementary Table S3 --- Cross-dataset nodule segmentation}
-Note: \textbf{Dice} in \textbf{\%} ($\uparrow$), \textbf{HD95} in \textbf{mm} ($\downarrow$); point estimate $\pm$ half-width of 95\% CI (cluster bootstrap, 1000 resamples, seed=42, image-level).
-\par
-\textbf{Dice (\% $\uparrow$)}
-\par
 \begin{responsetable}
+\caption{Table R4. Supplementary Table S3 — Cross-dataset nodule segmentation}
+\label{tab:R4}
+\textbf{Dice (\% $\uparrow$)}
+\par\vspace{0.35em}
+
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{lccccccc}
 \toprule
@@ -302,11 +282,10 @@ ThyroidXAgent & \textbf{86.40 ± 1.25} & \textbf{87.65 ± 0.75} & \textbf{83.78 
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\end{responsetable}
-
+\par\vspace{0.65em}
 \textbf{HD95 (mm $\downarrow$)}
-\par
-\begin{responsetable}
+\par\vspace{0.35em}
+
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{lccccccc}
 \toprule
@@ -320,10 +299,12 @@ ThyroidXAgent & \textbf{10.31 ± 1.70} & \textbf{5.43 ± 0.53} & \textbf{9.01 ±
 \bottomrule
 \end{tabular}
 \end{adjustbox}
+\responsetablenote{\textbf{Dice} in \textbf{\%} ($\uparrow$), \textbf{HD95} in \textbf{mm} ($\downarrow$); point estimate $\pm$ half-width of 95\% CI (cluster bootstrap, 1000 resamples, seed=42, image-level).}
 \end{responsetable}
 
-\reviewersection{Table R5. External-test calibration and referral (per-cohort percentile thresholds; referral $\approx$ 5\%--15\%)}
 \begin{responsetable}
+\caption{Table R5. External-test calibration and referral (per-cohort percentile thresholds; referral $\approx$ 5\%--15\%)}
+\label{tab:R5}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{lcccc}
 \toprule
@@ -339,22 +320,19 @@ DDTI & 349 & 0.0934 & 0.1098 & 5.2\% \\
 \end{adjustbox}
 \end{responsetable}
 
-\reviewersection{Figure R1. External-test reliability diagrams (five cohorts; per-cohort thresholds)}
-\begin{figure}[htbp]
-\centering
+\begin{responsefigure}
+\caption{Figure R1. External-test reliability diagrams (five cohorts; per-cohort thresholds)}
+\label{fig:R1}
 \includegraphics[width=0.92\textwidth]{reliability_panels.png}
-\caption*{External-test reliability diagrams (TN3K, TN5K, ThyroidXL, ZJH-8K, DDTI)}
-\end{figure}
-\reviewersection{Figure R2. Risk–coverage（Operating points = referral \% in Table R5）}
-\begin{figure}[htbp]
-\centering
+\end{responsefigure}
+\begin{responsefigure}
+\caption{Figure R2. Risk--coverage (operating points = referral \% in Table R5)}
+\label{fig:R2}
 \includegraphics[width=0.92\textwidth]{risk_coverage_panels.png}
-\caption*{Risk--coverage curves (five external cohorts; markers = operating points)}
-\end{figure}
-\reviewersection{Table R6. Image-level dataflow (tabular)}
-\textbf{Dataflow figure (patient–examination–image–task): to be supplied.}
-\par
+\end{responsefigure}
 \begin{responsetable}
+\caption{Table R6. Image-level dataflow (tabular)}
+\label{tab:R6}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{ll}
 \toprule
@@ -369,10 +347,12 @@ ZJH-8K role & Benign--malignant / segmentation external test; experts not traine
 \bottomrule
 \end{tabular}
 \end{adjustbox}
+\responsetablenote{Patient--examination--image--task dataflow figure: to be supplied.}
 \end{responsetable}
 
-\reviewersection{Table R7. Five-cohort malignancy summary means (AUROC / AUPRC)}
 \begin{responsetable}
+\caption{Table R7. Five-cohort malignancy summary means (AUROC / AUPRC)}
+\label{tab:R7}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{lll}
 \toprule
@@ -385,12 +365,11 @@ AUPRC & 0.8707 & 0.9533 \\
 \end{adjustbox}
 \end{responsetable}
 
-\reviewersection{Table R8. Supplementary Table S5 --- Malignant thyroid lesion subtasks}
-\textbf{Table S5a --- Independent external test.} After finalising the five-fold OOF development protocol, models were trained on the \textbf{full development set} and evaluated once externally; values are $\pm$ half-width of 95\% CI and match the corresponding expert cells in the submitted Supplementary Table S5.
-\par
-Note: \textbf{LNM}: LymphUs \textbf{Center 2} (\textbf{$n$=158}). \textbf{FTC/PTC}: FangDai public external set (\textbf{$n\approx$200}). Only \textbf{ThyroidXAgent}, \textbf{LLNM-Net} (LNM), and \textbf{Tiger-Model} (FTC/PTC) are shown, consistent with main-text results.
-\par
 \begin{responsetable}
+\caption{Table R8. Supplementary Table S5 --- Malignant thyroid lesion subtasks}
+\label{tab:R8}
+\textbf{Table S5a --- Independent external test.} After finalising the five-fold OOF development protocol, models were trained on the \textbf{full development set} and evaluated once externally; values are $\pm$ half-width of 95\% CI and match the corresponding expert cells in the submitted Supplementary Table S5.
+\par\vspace{0.35em}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{lcccc}
 \toprule
@@ -402,13 +381,9 @@ ThyroidXAgent & \textbf{0.8642 ± 0.0550} & \textbf{0.8808 ± 0.0537} & \textbf{
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\end{responsetable}
-
+\par\vspace{0.65em}
 \textbf{Table S5b --- Development set: patient/cluster-stratified five-fold OOF} (cluster-bootstrap 95\% CI, 1000 resamples, seed=42; metrics after arithmetic mean of image probabilities within cluster).
-\par
-Note: Replaces the original \textbf{20-case} hold-out. \textbf{LNM}: \textbf{4753} development images, \textbf{882} clusters. \textbf{FTC/PTC}: ZJH malignant development \textbf{4756} images, \textbf{722} clusters. \textbf{ThyroidXAgent}, \textbf{LLNM-Net}, and \textbf{Tiger-Model} share the same OOF folds (seed 42). \textbf{RepViT} through \textbf{Gemini-2.5-Pro} match the submitted Table S5 (not re-run with five-fold OOF). ``---'' = task not evaluated.
-\par
-\begin{responsetable}
+\par\vspace{0.35em}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{lcccc}
 \toprule
@@ -427,12 +402,14 @@ ThyroidXAgent & \textbf{0.8710 ± 0.0550} & \textbf{0.8929 ± 0.0537} & \textbf{
 \bottomrule
 \end{tabular}
 \end{adjustbox}
+\responsetablenote{\textbf{S5a note:} \textbf{LNM}: LymphUs \textbf{Center 2} (\textbf{$n$=158}). \textbf{FTC/PTC}: FangDai public external set (\textbf{$n\approx$200}). Only \textbf{ThyroidXAgent}, \textbf{LLNM-Net} (LNM), and \textbf{Tiger-Model} (FTC/PTC) are shown, consistent with main-text results. \textbf{S5b note:} Replaces the original \textbf{20-case} hold-out. \textbf{LNM}: \textbf{4753} development images, \textbf{882} clusters. \textbf{FTC/PTC}: ZJH malignant development \textbf{4756} images, \textbf{722} clusters. \textbf{ThyroidXAgent}, \textbf{LLNM-Net}, and \textbf{Tiger-Model} share the same OOF folds (seed 42). \textbf{RepViT} through \textbf{Gemini-2.5-Pro} match the submitted Table S5 (not re-run with five-fold OOF). ``---'' = task not evaluated.}
 \end{responsetable}
 
-\reviewersection{Table R9. Malignancy: image-level vs patient-level (ThyroidXAgent, ZJH-8K and ThyroidXL)}
 Cluster-bootstrap 95\% CI (1000 resamples, seed=42). Patient-level: arithmetic mean of malignancy probability within cluster; label = within-cluster max.
 \par
 \begin{responsetable}
+\caption{Table R9. Malignancy: image-level vs patient-level (ThyroidXAgent, ZJH-8K and ThyroidXL)}
+\label{tab:R9}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{lcccccc}
 \toprule
@@ -447,8 +424,9 @@ ThyroidXL & Patient & 739 & \textbf{0.9484} & 0.9326–0.9628 & \textbf{0.9355} 
 \end{adjustbox}
 \end{responsetable}
 
-\reviewersection{Table R10. Segmentation: within-patient mean Dice (ThyroidXAgent, supplement)}
 \begin{responsetable}
+\caption{Table R10. Segmentation: within-patient mean Dice (ThyroidXAgent, supplement)}
+\label{tab:R10}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{llll}
 \toprule
@@ -461,8 +439,9 @@ ThyroidXL & 739 & 0.8749 & 0.8675–0.8816 \\
 \end{adjustbox}
 \end{responsetable}
 
-\reviewersection{Table R11. Routing stability (TN3K stability subset, five repeats)}
 \begin{responsetable}
+\caption{Table R11. Routing stability (TN3K stability subset, five repeats)}
+\label{tab:R11}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{lll}
 \toprule
@@ -483,12 +462,13 @@ TN3K\_test\_0031.jpg & close & 100\% \\
 \end{adjustbox}
 \end{responsetable}
 
-\reviewersection{Appendix A1. LLM router specification (response-letter excerpt; full text in revised SI)}
+\subsection*{Appendix A1. LLM router specification (response-letter excerpt; full text in revised SI)}
+\label{app:A1}
 \textit{Production API calls use the Chinese prompts verbatim; faithful English translations are given below (Chinese text will be reproduced in the revised SI and in routing logs when prompts are archived).}
 \par
-\textbf{Shared decoding (segmentation router, classification router, Path B arbitration)}
-\par
 \begin{responsetable}
+\caption{Table A1-1. Shared LLM decoding parameters (segmentation router, classification router, and LLM arbitration when classifiers disagree)}
+\label{tab:A1-decode}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{ll}
 \toprule
@@ -519,7 +499,7 @@ Output a single line of JSON with "selected_model", "confidence" (0–1), and "r
 Priority: higher agreement_with_others; when experts disagree, lower mean_hd95_to_others; prefer masks whose radiomics_judge aligns with classification_anchor; morphology and device match are secondary.
 \end{promptverbatim}
 \begin{itemize}
-\item \textbf{System append --- Path A} (independent classifiers agree; anchor example «malignant»):
+\item \textbf{Optional system append --- independent classifiers agree} (classification anchor; example «malignant»):
 \end{itemize}
 \begin{promptverbatim}
 
@@ -531,7 +511,7 @@ Use this anchor to judge each segmentation:
 - If all masks’ radiomics classes contradict the anchor → select the mask with highest confidence and explain why.
 \end{promptverbatim}
 \begin{itemize}
-\item \textbf{System append --- Path B} (no classification consensus):
+\item \textbf{Optional system append --- independent classifiers disagree} (no classification anchor):
 \end{itemize}
 \begin{promptverbatim}
 
@@ -569,7 +549,7 @@ No chain-of-thought or Markdown. Output one line of JSON: selected_model, select
 \item \textbf{System (top-k fusion, current \texttt{top\_k=5})}: select five models for probability fusion; output \texttt{\{"selected\_models": [...], "reasoning": "..."\}} (no \texttt{selected\_class} / \texttt{confidence}).
 \item \textbf{User}: \texttt{Input device:} + per-model prediction JSON + question sentence (assembled by code).
 \end{itemize}
-\textbf{3. Classification --- Path B (Phase 5, no consensus, \texttt{enable\_agent=true})}
+\textbf{3. Classification --- LLM arbitration (classifiers disagree, \texttt{enable\_agent=true})}
 \par
 \begin{itemize}
 \item \textbf{System}:
@@ -590,34 +570,17 @@ Reasoning must cite specific confidence values. (Deployed labels use Chinese str
 \end{promptverbatim}
 \begin{itemize}
 \item \textbf{User}: single JSON string with \texttt{scenario}, \texttt{independent\_models[]}, \texttt{autogluon\_based\_on\_selected\_mask}, \texttt{segmentation\_decision}, \texttt{question} (structure in revised SI).
-\item \textbf{Output JSON}: \texttt{\{"selected\_class": "benign|malignant (Chinese labels in production)", "confidence": 0.0--1.0, "reasoning": "..."\}} (stored as \texttt{selected\_model: agent\_path\_b\_llm}).
+\item \textbf{Output JSON}: \texttt{\{"selected\_class": "benign|malignant (Chinese labels in production)", "confidence": 0.0--1.0, "reasoning": "..."\}} (\texttt{llm\_invoked=true}; \texttt{method} marks LLM arbitration).
 \end{itemize}
-\textbf{4. Path A classification (consensus)}: \texttt{task: cls\_path\_a}, \texttt{method: classification\_consensus}, logged only, no LLM.
+\textbf{4. Classification --- deterministic consensus (classifiers agree)}: \texttt{method: classification\_consensus} (or \texttt{unanimous}), \textbf{no LLM}, logged only.
 \par
 \textbf{Structured routing\_log (audit, ≥10 cases)}
 \par
-Typical JSONL fields: \texttt{image\_id}, \texttt{task} (e.g. \texttt{seg}, \texttt{cls}, \texttt{cls\_path\_b}), \texttt{disagreement\_tier}, \texttt{llm\_invoked}, \texttt{method}, \texttt{selected\_model} / \texttt{selected\_class}, \texttt{confidence}, \texttt{reasoning}, \texttt{candidates\_summary}, \texttt{judge\_summary} (if radiomics judge enabled), \texttt{llm\_model} / \texttt{temperature} / \texttt{max\_tokens}, timestamp \texttt{ts}; optional \texttt{prompts} (\texttt{system} / \texttt{user}) for verbatim reproduction in SI. The \textbf{10} cases in \textbf{Table R11} are drawn from the TN3K main pipeline and 5× stability audit logs; the revision will attach \textbf{≥10} de-identified exemplar records (same case IDs as Table R11).
-\par
-\reviewersection{Table R12. Supplementary Table S[X] --- Baseline training and inference protocol (complete)}
-\textbf{Table notes}
-\par
-1. \textbf{dataset\_3 (classification development):} TN3K + ThyroidXL + TN5K stacked training split (OpenThyroid public multitask classification development set).
-\par
-2. \textbf{dataset\_4 (segmentation development):} TN3K + ThyroidXL + PKTN + TN5K stacked training split (OpenThyroid public segmentation development set).
-\par
-3. \textbf{Supervised baseline protocol:} full fine-tuning on the stacked development set from public upstream weights; best validation checkpoint for all Table S3/S4 external tests---\textbf{not} thyroid zero-shot or frozen upstream weights only.
-\par
-4. \textbf{Segmentation external test:} image + \textbf{GT box/mask} prompt (\texttt{gt\_mask} protocol), consistent with Table S3.
-\par
-5. \textbf{Classification external test:} ultrasound image only.
-\par
-6. \textbf{ThyroidXAgent:} full-stack S3/S4 results use the same stacked development data; progressive ablations in \textbf{Table S6} separately.
-\par
-7. \textbf{Vision--language models:} not end-to-end trained on dataset\_3; vendor/public weights; API or frozen inference with fixed prompts.
-\par
-8. Supervised rows match models in \textbf{Tables S3/S4}; external cohorts (ZJH-8K, DDTI, etc.) \textbf{do not} enter development fine-tuning.
+Typical JSONL fields: \texttt{image\_id}, \texttt{task} (e.g. segmentation routing \texttt{seg}, classification \texttt{cls}, LLM arbitration when classifiers disagree \texttt{cls\_arbitration}), \texttt{disagreement\_tier}, \texttt{llm\_invoked}, \texttt{method}, \texttt{selected\_model} / \texttt{selected\_class}, \texttt{confidence}, \texttt{reasoning}, \texttt{candidates\_summary}, \texttt{judge\_summary} (if radiomics judge enabled), \texttt{llm\_model} / \texttt{temperature} / \texttt{max\_tokens}, timestamp \texttt{ts}; optional \texttt{prompts} (\texttt{system} / \texttt{user}) for verbatim reproduction in SI. The \textbf{10} cases in \textbf{Table R11} are drawn from the TN3K main pipeline and the 5× \textbf{segmentation LLM routing} stability experiment; the revision will attach \textbf{≥10} de-identified exemplar records (same case IDs as Table R11).
 \par
 \begin{responsetable}
+\caption{Table R12. Supplementary Table S[X] --- Baseline training and inference protocol (complete)}
+\label{tab:R12}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{lcccc}
 \toprule
@@ -639,10 +602,12 @@ GPT-5 / Gemini / MedGemma / Qwen3-VL (if in S4) & Classification & --- (not fine
 \bottomrule
 \end{tabular}
 \end{adjustbox}
+\responsetablenote{1. \textbf{dataset\_3 (classification development):} TN3K + ThyroidXL + TN5K stacked training split (OpenThyroid public multitask classification development set). 2. \textbf{dataset\_4 (segmentation development):} TN3K + ThyroidXL + PKTN + TN5K stacked training split (OpenThyroid public segmentation development set). 3. \textbf{Supervised baseline protocol:} full fine-tuning on the stacked development set from public upstream weights; best validation checkpoint for all Table S3/S4 external tests---\textbf{not} thyroid zero-shot or frozen upstream weights only. 4. \textbf{Segmentation external test:} image + \textbf{GT box/mask} prompt (\texttt{gt\_mask} protocol), consistent with Table S3. 5. \textbf{Classification external test:} ultrasound image only. 6. \textbf{ThyroidXAgent:} full-stack S3/S4 results use the same stacked development data; progressive ablations in \textbf{Table S6} separately. 7. \textbf{Vision--language models:} not end-to-end trained on dataset\_3; vendor/public weights; API or frozen inference with fixed prompts. 8. Supervised rows match models in \textbf{Tables S3/S4}; external cohorts (ZJH-8K, DDTI, etc.) \textbf{do not} enter development fine-tuning.}
 \end{responsetable}
 
-\reviewersection{Table R13. Nodules <5 mm --- Pipeline failure statistics}
 \begin{responsetable}
+\caption{Table R13. Nodules <5 mm --- Pipeline failure statistics}
+\label{tab:R13}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{lccccc}
 \toprule
@@ -660,20 +625,23 @@ zjh8k & 7958 & 1001 & 44 & 0.818 & 1001 \\
 \end{adjustbox}
 \end{responsetable}
 
-\reviewersection{Appendix A2. Radiomics / AutoGluon specification (response-letter excerpt)}
+\subsection*{Appendix A2. Radiomics / AutoGluon specification (response-letter excerpt)}
+\label{app:A2}
 \textbf{1. Pipeline placement}
 \par
 1. Phase 3 segmentation routing yields the \textbf{selected mask}.
 \par
 2. \textbf{No} radiomics-specific connected-component post-processing; inference and training share the same 2D PyRadiomics settings.
 \par
-3. Phase 4: PyRadiomics features → \textbf{AutoGluon-Tabular} inference; malignancy probability is stored in the evidence bank and used for routing / Path B.
+3. Phase 4: PyRadiomics features → \textbf{AutoGluon-Tabular} inference; malignancy probability is stored in the evidence bank and used for routing and classification fusion.
 \par
 4. Optional \textbf{SHAP} feature attribution for the tabular model (consistent with the architecture figure).
 \par
 \textbf{2. PyRadiomics}
 \par
 \begin{responsetable}
+\caption{Table A2-1. PyRadiomics feature extraction settings}
+\label{tab:A2-pyradiomics}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{ll}
 \toprule
@@ -695,6 +663,8 @@ Feature dimension & \textbf{100} radiomics columns at extraction; \textbf{86} nu
 \textbf{3. AutoGluon-Tabular}
 \par
 \begin{responsetable}
+\caption{Table A2-2. AutoGluon-Tabular training and deployment settings}
+\label{tab:A2-autogluon}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{ll}
 \toprule
