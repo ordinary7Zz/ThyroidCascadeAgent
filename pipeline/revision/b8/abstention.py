@@ -128,6 +128,54 @@ def fit_thresholds_quantile(
     )
 
 
+def fit_thresholds_split_quantile(
+    val_results: list[dict],
+    rules: Optional[list[dict]] = None,
+    *,
+    combination: str = "any",
+    rule_subset: Optional[str] = None,
+    q_gt: float = 0.9,
+    q_lt: float = 0.05,
+    fitted_on: str = "validation",
+) -> AbstentionThresholds:
+    """
+    gt / lt 规则使用独立分位（用于在 OR 组合下更细地调节送复核率）。
+
+    - gt：阈值为 q_gt 分位
+    - lt：阈值为 q_lt 分位（低 margin / 低 IoU 尾部分位）
+    """
+    rules = list(rules or DEFAULT_RULES)
+    rules = _active_rules(rules, rule_subset)
+    thresholds: dict[str, float] = {}
+
+    for rule in rules:
+        field = rule["field"]
+        op = rule["op"]
+        values = []
+        for r in val_results:
+            v = _get_uncertainty_field(r, field)
+            if v is not None:
+                values.append(v)
+        if not values:
+            thresholds[rule["name"]] = float("nan")
+            continue
+        arr = np.array(values, dtype=np.float64)
+        if op == "gt":
+            thresholds[rule["name"]] = float(np.quantile(arr, q_gt))
+        elif op == "lt":
+            thresholds[rule["name"]] = float(np.quantile(arr, q_lt))
+        else:
+            thresholds[rule["name"]] = float(rule.get("value", 1.0))
+
+    return AbstentionThresholds(
+        fitted_on=fitted_on,
+        n_val=len(val_results),
+        combination=combination,
+        rules=rules,
+        thresholds=thresholds,
+    )
+
+
 def flag_for_review(
     result: dict,
     thresholds: AbstentionThresholds,

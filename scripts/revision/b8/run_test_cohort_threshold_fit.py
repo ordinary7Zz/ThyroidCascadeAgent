@@ -31,8 +31,11 @@ repo_path.install()
 
 from pipeline.evaluate import _label_to_binary
 from pipeline.revision.b8.abstention import (
+    AbstentionThresholds,
     apply_abstention,
     fit_thresholds_quantile,
+    fit_thresholds_split_quantile,
+    flag_for_review,
     risk_coverage_curve,
     save_thresholds,
     summarize_abstention_by_group,
@@ -48,20 +51,94 @@ COHORT_RESULTS: dict[str, str] = {
     "ddti_cls": "output/DDTI_cls/pipeline_run/results.json",
 }
 
+# 送复核比例目标（约 5%–15% 带内，各队列略有差异）
+DEFAULT_TARGET_FLAG_RATE: dict[str, float] = {
+    "tn3k": 0.15,
+    "tn5k": 0.125,
+    "thyroidxl": 0.10,
+    "zjh8k": 0.075,
+    "ddti_cls": 0.05,
+}
+
+
+def _flag_rate_thresholds(data: list[dict], th: AbstentionThresholds) -> float:
+    if not data:
+        return 0.0
+    n = sum(1 for r in data if flag_for_review(r, th))
+    return n / len(data)
+
+
+def _flag_rate_unified(data: list[dict], quantile: float) -> float:
+    th = fit_thresholds_quantile(
+        data,
+        rule_subset="nhc",
+        quantile=quantile,
+        fitted_on="search",
+    )
+    return _flag_rate_thresholds(data, th)
+
+
+def quantiles_for_target_flag_rate(
+    data: list[dict],
+    target_rate: float,
+    *,
+    n_grid: int = 72,
+) -> tuple[float, float]:
+    """二维网格：q_gt（熵）与 q_lt（margin/IoU 低尾）使送复核率最接近 target。"""
+    target_rate = max(0.0, min(1.0, target_rate))
+    best_q_gt, best_q_lt = 0.95, 0.05
+    best_err = 1.0
+    for i in range(n_grid + 1):
+        q_gt = 0.50 + 0.49 * i / n_grid
+        for j in range(n_grid + 1):
+            q_lt = 0.01 + 0.49 * j / n_grid
+            th = fit_thresholds_split_quantile(
+                data,
+                rule_subset="nhc",
+                q_gt=q_gt,
+                q_lt=q_lt,
+                fitted_on="search",
+            )
+            rate = _flag_rate_thresholds(data, th)
+            err = abs(rate - target_rate)
+            if err < best_err:
+                best_err = err
+                best_q_gt, best_q_lt = q_gt, q_lt
+    return best_q_gt, best_q_lt
+
 
 def run_one(
     cohort: str,
     results_path: Path,
     out_dir: Path,
-    quantile: float,
+    quantile: float | None,
+    target_flag_rate: float | None,
+    n_grid: int = 72,
 ) -> dict:
     data = json.loads(results_path.read_text(encoding="utf-8"))
-    th = fit_thresholds_quantile(
-        data,
-        rule_subset="nhc",
-        quantile=quantile,
-        fitted_on=f"test_{cohort}",
-    )
+    q_gt: float | None = None
+    q_lt: float | None = None
+    if target_flag_rate is not None:
+        q_gt, q_lt = quantiles_for_target_flag_rate(
+            data, target_flag_rate, n_grid=n_grid
+        )
+        th = fit_thresholds_split_quantile(
+            data,
+            rule_subset="nhc",
+            q_gt=q_gt,
+            q_lt=q_lt,
+            fitted_on=f"test_{cohort}",
+        )
+        quantile = None
+    else:
+        if quantile is None:
+            quantile = 0.95
+        th = fit_thresholds_quantile(
+            data,
+            rule_subset="nhc",
+            quantile=quantile,
+            fitted_on=f"test_{cohort}",
+        )
     out_dir.mkdir(parents=True, exist_ok=True)
     save_thresholds(out_dir / "abstention_thresholds.json", th)
     flagged = apply_abstention(data, th)
@@ -77,6 +154,9 @@ def run_one(
         "n_total": len(flagged),
         "threshold_fitted_on": f"test_same_cohort_{cohort}",
         "quantile": quantile,
+        "quantile_gt": q_gt,
+        "quantile_lt": q_lt,
+        "target_flag_rate": target_flag_rate,
     }
     (out_dir / "abstention_eval.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
@@ -88,15 +168,20 @@ def run_one(
     plot_reliability_diagram(
         cal.get("bins", []),
         out_dir / "reliability_test.png",
-        title=f"{label}: test calibration (thresholds fit on this test cohort, q={quantile})",
+        title=f"{label}: Test calibration (per-cohort thresholds)",
     )
+    pct = 100.0 * n_flagged / len(flagged) if flagged else 0.0
     return {
         "cohort": cohort,
         "n": len(flagged),
         "n_flagged": n_flagged,
         "ece": cal.get("ece"),
         "brier": cal.get("brier"),
-        "flagged_pct": 100.0 * n_flagged / len(flagged) if flagged else 0.0,
+        "flagged_pct": pct,
+        "flagged_pct_1dp": round(pct, 1),
+        "quantile": quantile,
+        "quantile_gt": q_gt,
+        "quantile_lt": q_lt,
     }
 
 
@@ -107,7 +192,29 @@ def main() -> None:
         choices=list(COHORT_RESULTS.keys()),
         help="单队列；省略则跑全部 BM 五队列",
     )
-    parser.add_argument("--quantile", type=float, default=0.95)
+    parser.add_argument(
+        "--quantile",
+        type=float,
+        default=None,
+        help="固定分位阈；与 --target-flag-rate 互斥",
+    )
+    parser.add_argument(
+        "--target-flag-rate",
+        type=float,
+        default=None,
+        help="目标送复核比例（0–1）；对单队列生效",
+    )
+    parser.add_argument(
+        "--use-default-targets",
+        action="store_true",
+        help="使用内置 per-cohort 目标（约 5%%–15%%）",
+    )
+    parser.add_argument(
+        "--n-grid",
+        type=int,
+        default=72,
+        help="目标送复核率搜索网格边长（越大越慢）",
+    )
     parser.add_argument(
         "--out-root",
         type=Path,
@@ -121,12 +228,27 @@ def main() -> None:
         path = Path(rel)
         if not path.is_file():
             raise FileNotFoundError(path)
-        print(f">>> {c}: {path}")
-        s = run_one(c, path, args.out_root / c, args.quantile)
+        tfr: float | None = None
+        q: float | None = args.quantile
+        if args.use_default_targets:
+            tfr = DEFAULT_TARGET_FLAG_RATE[c]
+            q = None
+        elif args.target_flag_rate is not None:
+            tfr = args.target_flag_rate
+            q = None
+        elif q is None:
+            tfr = DEFAULT_TARGET_FLAG_RATE[c]
+        print(f">>> {c}: {path}" + (f" target_flag={tfr:.1%}" if tfr else f" q={q}"))
+        s = run_one(c, path, args.out_root / c, q, tfr, n_grid=args.n_grid)
         summaries.append(s)
+        q_info = (
+            f"q_gt={s['quantile_gt']:.4f} q_lt={s['quantile_lt']:.4f}"
+            if s.get("quantile_gt") is not None
+            else f"q={s['quantile']:.4f}"
+        )
         print(
-            f"    n={s['n']} flagged={s['n_flagged']} ({s['flagged_pct']:.1f}%) "
-            f"ECE={s['ece']:.4f} Brier={s['brier']:.4f}"
+            f"    n={s['n']} flagged={s['n_flagged']} ({s['flagged_pct_1dp']:.1f}%) "
+            f"{q_info} ECE={s['ece']:.4f} Brier={s['brier']:.4f}"
         )
     print("✓ done:", args.out_root)
 

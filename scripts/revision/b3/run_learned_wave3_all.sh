@@ -13,7 +13,8 @@
 #   - ZJH / RJH：b3_reinfer chunk_* 已齐（与 wave1 相同）
 #
 # 环境：
-#   PY=/path/to/python  DEVICE=cpu  CONTINUE_ON_ERROR=1  SKIP_FIT=1  SKIP_EVAL=1
+#   PY=/path/to/python  DEVICE=cuda  CUDA_VISIBLE_DEVICES=0（由 standard/chunks 包装脚本设置）
+#   CONTINUE_ON_ERROR=1  SKIP_FIT=1  SKIP_EVAL=1
 #
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
