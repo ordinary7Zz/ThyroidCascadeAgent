@@ -46,10 +46,4 @@ xelatex -interaction=nonstopmode REVIEWER_RESPONSE_ZH.tex
 # 需要更新目录时再各跑一遍
 ```
 
-## 可选：从 MD 重新生成（会覆盖 generated/body_*.tex）
-
-仅当需要把旧 Markdown 灌回 TeX 时手动执行：
-
-```bash
-python3 ../scripts/md_to_latex.py
-```
+正文与表图请在 `../latex/generated/` 内直接编辑 TeX；本预览器只编译现有源文件。

@@ -1,6 +1,6 @@
 # B3 审稿回复草稿片段（波次 1 + 策略 6 learned + 策略 7 LLM）
 
-> 可直接粘贴到返修回复 LaTeX / Markdown。静态策略见 `B3_WAVE1_RESULTS.md`；**策略 6** 见 `B3_LEARNED_RESULTS.md`；**策略 7** 见 `B3_LLM_RESULTS.md`（= 主文 Table S3/S4，**2026-10-26**）。R14–R15 由 `export_b3_response_letter_tables.py` 导出（策略 7 读 `manuscript_llm_metrics.yaml`）。
+> 可直接粘贴到返修回复 LaTeX / Markdown。静态策略见 `B3_WAVE1_RESULTS.md`；**策略 6** 见 `B3_LEARNED_RESULTS.md`；**策略 7** 见 `B3_LLM_RESULTS.md`（= 主文 Table S3/S4，**2026-10-26**）。信末 **R13–R14** 在 `latex/generated/routing_ablation_tables_*.tex` 手维（策略 7 对照 `manuscript_llm_metrics.yaml`）。
 
 ---
 

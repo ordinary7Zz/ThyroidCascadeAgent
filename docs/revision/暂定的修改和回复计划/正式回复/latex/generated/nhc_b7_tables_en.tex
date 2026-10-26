@@ -1,0 +1,59 @@
+% B7 NHC-MISD-TUS (Tables R19--R21): PLACEHOLDER pilot numbers until NHC pipeline is finalized.
+
+\begin{responsetable}
+\caption{\responsetabletitle{tab_nhc_center_descriptive}{NHC-MISD-TUS center descriptors (example rows; full 35 centers in revised supplement)}}
+\label{tab_nhc_center_descriptive}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{@{}l r r r l c c@{}}
+\toprule
+Center ID & Patients & Nodules & Images & Scanner (example) & Seg.\ labels & BM labels \\
+\midrule
+THYB\_S\_ZJ24 & 156 & 198 & 321 & Mixed vendors & Yes & Yes \\
+THYB\_S\_BJ01 & 89 & 112 & 205 & GE Logiq E9 & Yes & Yes \\
+THYB\_S\_SH02 & 42 & 51 & 98 & Philips EPIQ & Yes & Yes \\
+THYB\_S\_CD03 & 18 & 22 & 41 & Siemens ACUSON & Yes & Partial \\
+\ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \\
+\textbf{Total (35 centers)} & \textbf{[TBD]} & \textbf{[TBD]} & \textbf{8721} & --- & --- & --- \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{Thirty-five centers are contributing sites to the national imaging-standard database cohort. Only four example rows are shown. \rpending{Co-author--confirmed full 35-center table (patients/nodules/images, scanners, label availability, governance; G3); replace totals and ``\ldots'' rows}} Revised Methods/Data availability will align the 8721 count with \responsetableref{tab_dataflow}.
+\end{responsetable}
+
+\begin{responsetable}
+\caption{\responsetabletitle{tab_nhc_center_performance}{NHC-MISD-TUS: ThyroidXAgent center-level performance (pilot point estimates; to be reconciled with Fig.~2h / Supp.\ S7--S12)}}
+\label{tab_nhc_center_performance}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{@{}l r l l l@{}}
+\toprule
+Center ID & $n$ images & Gland Dice (\%) & Nodule Dice (\%) & BM AUROC \\
+\midrule
+THYB\_S\_ZJ24 & 321 & 52.1 & 45.53 & 0.712 \\
+THYB\_S\_BJ01 & 205 & 61.4 & 78.2 & 0.856 \\
+THYB\_S\_SH02 & 98 & 58.9 & 82.6 & 0.801 \\
+THYB\_S\_CD03 & 41 & 48.3 & 21.28 & NE \\
+\ldots & \ldots & \ldots & \ldots & \ldots \\
+\textbf{Pooled (full cohort)} & \textbf{8721} & \textbf{59.28} & \textbf{82.31} & \textbf{0.819} \\
+\textbf{Unweighted macro across centers} & --- & \textbf{57.6} & \textbf{76.4} & \textbf{0.798} \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{\textbf{Pilot} values prefilled from the submitted supplement layout for letter drafting only---not final experimental output. \rpending{Full 35-center table after NHC re-evaluation; NE rules for small centers; gland vs.\ nodule pipeline wording aligned with Fig.~2h}} NE = AUROC not estimable (no placeholder 0.5/0.0). Macro averages exclude NE centers.
+\end{responsetable}
+
+\begin{responsetable}
+\caption{\responsetabletitle{tab_nhc_heterogeneity}{NHC-MISD-TUS: between- and within-center heterogeneity summary (image-level; pilot)}}
+\label{tab_nhc_heterogeneity}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{@{}l l r r l l r l@{}}
+\toprule
+Task & Metric & Centers & Images & Pooled & Macro mean & $I^2$ (\%) & $\tau^2$ \\
+\midrule
+Gland segmentation & Dice $\uparrow$ & 35 & 8721 & 59.28 & 57.6 & 71.2 & 0.042 \\
+Nodule segmentation & Dice $\uparrow$ & 35 & 8721 & 82.31 & 76.4 & 62.4 & 0.028 \\
+Benign--malignant & AUROC $\uparrow$ & 32 & 8450 & 0.819 & 0.798 & 48.6 & 0.011 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{$I^2$/$\tau^2$ use the simplified random-effects approximation on image-level outcomes aggregated by center (consistent with \texttt{run\_b7\_analysis.py}). Classification excludes three NE centers (8450 images, pilot). Nodule Dice range across centers: 21.28\% ($n{=}2$)--92.74\%. \rpending{Final $I^2$/$\tau^2$, meta-regression covariates (scanner/malignancy fraction/nodule size), within-center variance}} \rpending{Optional: per-center referral rates under frozen B8 thresholds (R1.3 calibration; separate from B7 main tables)}
+\end{responsetable}

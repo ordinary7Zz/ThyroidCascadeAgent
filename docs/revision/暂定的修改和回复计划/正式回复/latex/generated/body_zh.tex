@@ -35,12 +35,12 @@
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item 我们同意中心异质性重要。NHC-MISD-TUS 中心级表现与元数据关联见对审稿人 2 意见 6（R2.6）的回复。此处就五个有良恶性病理标签的外测队列报告校准与送复核策略。
+\item 我们同意私有多中心队列存在显著的中心间差异。NHC-MISD-TUS 的队列描述、按中心分割/分类表现及 $I^2$ 等异质性指标见 \textbf{审稿人 2，意见 6（R2.6）} 及 \responsetablerefrange{tab_nhc_center_descriptive}{tab_nhc_heterogeneity}（表 R19--R21；\textbf{当前为假设性占位}，NHC 定稿实验后替换）。\rpendingzh{修订稿 Results 异质性段落：全腺体池化 Dice 59.28\% vs 结节 82.31\%、低表现中心个案 THYB\_S\_ZJ24 等（R1.3 异质性段）} 本条\textbf{不}重复报告校准/送复核（见下）。
 \item 在五个有病理标签的外测队列上，以投票熵、前两名恶性概率之差（margin）、各分割候选 mask 间最小 IoU 定义不确定度（与主文测试协议一致）；送复核阈值仅在合并验证集上拟合（熵与 margin/IoU 分别取分位），任一超阈即送复核（OR 组合），外测只应用、不调参。验证集送复核比例基本落在约 5\%–15\%；各外测队列上的实际送复核比例见 \responsetableref{tab_calib_referral}（一位小数）。
 \item \responsetableref{tab_calib_referral} 中 ECE/Brier 为各外测全集上的校准指标（图像级预测，与 \responsetableref{tab_cls_ext} 同口径）。\responsefigurerefrange{fig_reliability}{fig_risk_coverage} 与 \responsetableref{tab_calib_referral} 使用同一套验证集拟定的冻结阈值；风险–覆盖率曲线上工作点与 \responsetableref{tab_calib_referral} 送复核\%一致。各队列保留子集上的分类表现见补充材料。
 \item 我们将其表述为回顾性工作流：低不确定度病例可自动采纳模型输出，高不确定度病例送人工复核。将在 Methods 说明阈值拟合与评估划分；送复核病例的临床处置边界在 Limitations 与讨论中说明。\rpendingzh{修订稿 Methods 校准/送复核与 Discussion/Limitations（R1.3）}
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_calib_referral}（外测校准与送复核）、\responsefigureref{fig_reliability}（可靠性图）、\responsefigureref{fig_risk_coverage}（风险–覆盖率曲线）。
+\textbf{支撑材料：} \responsetableref{tab_calib_referral}（外测校准与送复核）、\responsefigureref{fig_reliability}（可靠性图）、\responsefigureref{fig_risk_coverage}（风险–覆盖率曲线）；NHC 异质性（R2.6），\responsetablerefrange{tab_nhc_center_descriptive}{tab_nhc_heterogeneity}。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 1，意见 4（R1.4）}
@@ -138,11 +138,13 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item 感谢审稿人。我们同意 NHC-MISD-TUS 需单独说明队列构成、中心定义与中心间异质性，而不能仅报告合并后的总体指标。将在 Methods 与 Results 中澄清 35 个「中心」的含义（独立参与单位及数据贡献关系），并补充各中心患者/结节/图像计数、扫描仪与标签可用性，以及分割与良恶性分类的中心级性能汇总。\rpendingzh{修订稿 §2.2/§4.1、Results 与 Supp.\ 中心表/图（R2.6）}
-\item 对样本量过小或标签不可估计的中心，将标为无法估计（not estimable），不再以 0.5/0.0 等占位值进入宏平均；中心间异质性将报告随机效应或等价汇总指标（如 $I^2$）。上述分析与 审稿人 1，意见 3（R1.3） 中五队列校准/送复核 互补：R1.3 针对有病理标签的外测良恶性分类队列，R2.6 针对 NHC 多中心分割/分类表现。
+\item \textbf{队列与中心定义（B7 / G3）。} NHC-MISD-TUS 为国家卫健委医学影像标准数据库框架下的私有多中心\textbf{仅测试}队列：\textbf{35} 个参与中心、\textbf{8721} 张测试图像（与 \responsetableref{tab_dataflow} 一致；不再使用易误解的 ``28{,}458 cases'' 混称）。各中心为患者/结节/图像计数、扫描仪与标签可用性的示例与合计见 \responsetableref{tab_nhc_center_descriptive}（表 R19）。\rpendingzh{G3：35 家独立医院界定、全中心行、伦理/DUA 可发表表述；修订稿 Methods §2.2/§4.1 与 Data availability（R2.6/R2.15）}
+\item \textbf{按中心性能（B7）。} 在统一 ThyroidXAgent 测试协议下，我们报告全腺体分割、结节分割与良恶性分类的\textbf{中心级}点估计，并与稿面池化结果（全腺体 Dice \textbf{59.28\%}、结节 \textbf{82.31\%}、AUROC \textbf{0.819}）对账；示例中心含 THYB\_S\_ZJ24（结节 Dice \textbf{45.53\%}，$n{=}321$）及极低结节 Dice 中心（\textbf{21.28\%}，$n{=}2$）。完整 35 中心将扩展至修订稿 Supp.\（对应投稿 S7--S12）。见 \responsetableref{tab_nhc_center_performance}（表 R20）。\rpendingzh{NHC pipeline 定稿后替换表 R20 全部中心行；与九模型 Supp.\ 表对账}
+\item \textbf{中心间 / 中心内异质性（B7）。} 在图像级结果上汇总随机效应近似指标：全腺体 Dice $I^2{\approx}\mathbf{71.2\%}$、结节 $I^2{\approx}\mathbf{62.4\%}$、良恶性 AUROC $I^2{\approx}\mathbf{48.6\%}$（排除 NE 中心后，见表 R21 注）。\rpendingzh{定稿 $I^2$/$\tau^2$、中心内方差及单变量 meta 回归（扫描仪、恶性比例、结节大小/ROI）} 修订稿 Results 将讨论全腺体任务整体偏低及部分中心 MedSAM2 更优等现象（与投稿 Supp.\ 一致）。
+\item \textbf{与 R1.3 分工。} 本条覆盖 R1.3 中\textbf{异质性 / 关联因素}部分；R1.3 的\textbf{校准与送复核}在五 BM 外测队列（\responsetableref{tab_calib_referral}、图 R1--R2）。\rpendingzh{可选：NHC 上应用同一冻结阈值的按中心送复核比例（B8 eval，写入 R1.3 或 Limitations）}
+\item 样本量过小或标签不可估计的中心标为 \textbf{NE}，不以 0.5/0.0 进入宏平均（表 R20 示例行 THYB\_S\_CD03）。
 \end{itemize}
-\noindent\rpendingzh{中心元数据与 35 中心界定（与合作者/数据治理确认）；各中心计数表、中心级 Dice/AUROC 与异质性指标；修订稿 Supp.\ 表图编号（R2.6）}\par
-\textbf{支撑材料：} \rpendingzh{NHC-MISD-TUS 中心级性能与异质性表/图（R2.6）}；五队列校准，\responsetableref{tab_calib_referral}、\responsefigurerefrange{fig_reliability}{fig_risk_coverage}。
+\textbf{支撑材料：} \responsetablerefrange{tab_nhc_center_descriptive}{tab_nhc_heterogeneity}（\textbf{B7}；表 R19--R21 当前为假设性占位，\rpendingzh{NHC 实验定稿后替换全部数字与 35 中心全表}）；R1.3 校准/送复核，\responsetableref{tab_calib_referral}、\responsefigurerefrange{fig_reliability}{fig_risk_coverage}。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 7（R2.7）}
@@ -275,12 +277,12 @@ LLM 路由器除预测质量信号外还利用了设备与数据来源等元数�
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item 感谢审稿人。我们同意须检验路由是否过度依赖数据来源/设备元数据，而非病例级质量与分歧信号。在与 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} 主文全系统 LLM 路由（\textbf{策略 7}）\textbf{相同的固定专家池与固定上游候选输出}上（不重训专家），仅改变 LLM 路由器 prompt 中可见的元数据。\responsetableref{tab_metadata_ablation} 列出五档条件（表注）：\textbf{完整元数据}（与投稿 S4 一致）；\textbf{隐去数据来源}；\textbf{隐去设备信息}；\textbf{两者均隐去}；\textbf{仅质量与分歧信号}（主对比端点）。与 审稿人 3，意见 1 中策略 6 学习型路由不同：策略 6 自始不含设备/来源元数据，单独在 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} 报告。
-\item \textbf{性能消融（稿面主队列）}：修订稿在 \textbf{TN5K} 恶性分类主评估子集（\rpendingzh{定稿 $n$=250 点估计及 95\% CI；表 R17 暂为内部开发试点 $n$=10}}）上报告上述五档条件下的分割 Dice/HD95 与分类 AUROC/AUPRC（\responsetableref{tab_metadata_ablation}）。该队列与九队列路由/组件外测表（\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}、表 R15--R16）\textbf{口径不同}、不作逐项对齐。试点子集上 \textbf{完整元数据 $\rightarrow$ 仅质量与分歧信号} 的 $\Delta$Dice $\approx -0.0002$、$\Delta$AUROC $=0$，分割 Dice 跨条件为 0.827--0.838（\textbf{两者均隐去}略低）；\rpendingzh{TN5K 定稿主对比 $\Delta$ 与 CI}。试点子集中分类五条件 AUROC 均为 0.92，因多数病例三分类模型已一致、未调用 LLM（仅 1/10 需 LLM 裁决），\textbf{不能外推}至大队列。
+\item 感谢审稿人。我们同意须检验路由是否过度依赖数据来源/设备元数据，而非病例级质量与分歧信号。在与 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} 主文全系统 LLM 路由（\textbf{策略 7}）\textbf{相同的固定专家池与固定上游候选输出}上（不重训专家），仅改变 LLM 路由器 prompt 中可见的元数据。\responsetablerefrange{tab_metadata_ablation_seg}{tab_metadata_ablation_cls} 列出五档条件（表注）：\textbf{完整元数据}（与投稿 S4 一致）；\textbf{隐去数据来源}；\textbf{隐去设备信息}；\textbf{两者均隐去}；\textbf{仅质量与分歧信号}（主对比端点）。与 审稿人 3，意见 1 中策略 6 学习型路由不同：策略 6 自始不含设备/来源元数据，单独在 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} 报告。
+\item \textbf{性能消融（稿面主队列）}：修订稿在 \textbf{TN5K} 恶性分类主评估子集（\rpendingzh{定稿 $n$=250 点估计及 95\% CI；表 R17--R18 暂为内部开发试点 $n$=10}}）上报告上述五档条件下的分割 Dice/HD95（\responsetableref{tab_metadata_ablation_seg}）与分类 AUROC/AUPRC（\responsetableref{tab_metadata_ablation_cls}）。该队列与九队列路由/组件外测表（\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}、表 R15--R16）\textbf{口径不同}、不作逐项对齐。试点子集上 \textbf{完整元数据 $\rightarrow$ 仅质量与分歧信号} 的 $\Delta$Dice $\approx -0.0002$、$\Delta$AUROC $=0$，分割 Dice 点估计跨条件为 0.8269--0.8383（\textbf{两者均隐去}略低；各条件 95\% CI 见表 R17）；\rpendingzh{TN5K 定稿主对比 $\Delta$ 与 CI}。试点子集中分类五条件 AUROC 点估计均为 0.9200（表 R18），因多数病例三分类模型已一致、未调用 LLM（仅 1/10 需 LLM 裁决），\textbf{不能外推}至大队列。
 \item NHC-MISD-TUS 的 35 个中心未参与路由权重训练，外测元数据不能编码「背过的中心 ID」。\textbf{各中心专家选择模式}：将从结构化路由日志中\textbf{实际调用 LLM 的路由步骤}汇总\textbf{完整元数据}条件下中心$\times$专家频数热图及简单关联统计，与 审稿人 2，意见 6（R2.6）中心异质性分析互补。\rpendingzh{NHC-MISD-TUS 中心$\times$专家热图及互信息（R3.2）}
-\item Methods 将写明：分类模型不一致时的 LLM 裁决输入\textbf{未}纳入本次元数据消融；修订稿 Results 短段与 \responsetableref{tab_metadata_ablation} 一致。\rpendingzh{修订稿 Methods §4.3 五档元数据条件与 Results R3.2 短段（TN5K 定稿数字同步）}
+\item Methods 将写明：分类模型不一致时的 LLM 裁决输入\textbf{未}纳入本次元数据消融；修订稿 Results 短段与 \responsetablerefrange{tab_metadata_ablation_seg}{tab_metadata_ablation_cls} 一致。\rpendingzh{修订稿 Methods §4.3 五档元数据条件与 Results R3.2 短段（TN5K 定稿数字同步）}
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_metadata_ablation}；路由框架，审稿人 1，意见 2、\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}；路由器规格，附录 A1。
+\textbf{支撑材料：} \responsetablerefrange{tab_metadata_ablation_seg}{tab_metadata_ablation_cls}；路由框架，审稿人 1，意见 2、\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}；路由器规格，附录 A1。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 3，意见 3（R3.3）}
@@ -604,6 +606,8 @@ ZJH-8K & 7958 & 1001 & 44 & 0.818 & 1001 \\
 \input{generated/component_ablation_tables_zh.tex}
 
 \input{generated/metadata_ablation_tables_zh.tex}
+
+\input{generated/nhc_b7_tables_zh.tex}
 
 \responseproseappendixstart
 \subsection*{附录 A1. LLM 路由器规格（R2.9）}

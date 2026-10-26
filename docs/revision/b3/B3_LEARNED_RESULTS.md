@@ -2,7 +2,7 @@
 
 > **用途**：回应 **R1.2、R2.8、R3.1** 中「学习型路由」一行；与波次 1 静态策略（`B3_WAVE1_RESULTS.md`）并列。  
 > **原始数据**：`output/ablation/b3/<cohort>/learned/b3_metrics.json`；本目录 `tables/b3_learned_*.csv` 由 `scripts/export_b3_learned_tables.py` 导出。  
-> **回复信 LaTeX 表**：`scripts/revision/b3/export_b3_response_letter_tables.py` → `docs/revision/.../latex/generated/routing_ablation_tables_{zh,en}.tex`（R14–R15 策略 6 列）。  
+> **回复信 LaTeX 表**：手改 `docs/revision/.../latex/generated/routing_ablation_tables_{zh,en}.tex`（R13–R14，含策略 6 列）；数字对照本页与 `tables/b3_learned_*.csv`。  
 > **生成说明**（冻结于 **2026-10-26**）：验证集拟合 **多项逻辑回归**（`fit_learned_router.py`）；测试集推理为 **static bundle 快速路径**（`run_learned_b3.py`，`phase3_expert_judge=false`）。**95% CI** 与波次 1 相同：**cluster bootstrap**（1000 次，seed=42）。ZJH-8K / ThyroidXL 使用 B2 cluster map；其余队列一图一簇。  
 > **表内数值**：Dice / AUROC / AUPRC / HD95 与回复信 R14–R15 一致，均为 **比例制四位小数**（Dice 0.8452 = 84.52%，非稿面 Table S3 的百分数 85.28）。
 
@@ -98,8 +98,7 @@ COHORTS="ddti_seg ddti_cls" DEVICE=cpu bash scripts/revision/b3/run_learned_wave
 # 刷新本目录 CSV
 python docs/revision/b3/scripts/export_b3_learned_tables.py
 
-# 刷新回复信 LaTeX
-python scripts/revision/b3/export_b3_response_letter_tables.py
+# 回复信 R13–R14：在 latex/generated/routing_ablation_tables_*.tex 中手改
 ```
 
 **实现备注**：`ddti_cls` 等 **cls-only** val 无 `intermediate/seg` 时，`routing/learned_router.py` 从各专家 `cls/*.json` 的图像名交集对齐（2026-10-26 修复）。

@@ -66,7 +66,7 @@ CSV：`tables/b3_llm_classification_full.csv`。来源：**Table S4** ThyroidXAg
 python docs/revision/b3/scripts/export_b3_llm_tables.py
 
 # 回复信 LaTeX（策略 7 读 yaml）
-python scripts/revision/b3/export_b3_response_letter_tables.py
+# 回复信策略 7 列：手改 latex/generated/routing_ablation_tables_*.tex
 ```
 
 若主文表数字修订，只改 `manuscript_llm_metrics.yaml` 并重新导出；**无需** API 重跑。

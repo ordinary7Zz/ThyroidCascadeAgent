@@ -39,7 +39,7 @@
 
 ## 3. 表 A — 分割（全测试集）
 
-**表内格式**：点估计 **(95% CI 下限–上限)**；CI 来自 `b3_metrics.json`（`bootstrap.method=cluster`）。机器可读列见 `tables/b3_wave1_segmentation.csv`（`export_b3_tables.py` 在全队列重算后刷新）。**回复信 R14–R15** 由 `export_b3_response_letter_tables.py` 导出，Dice/AUROC/AUPRC/HD95 为 **四位小数（比例制 Dice）**；下文表 A–C 仍为三位小数快照，定稿以 LaTeX 导出为准。
+**表内格式**：点估计 **(95% CI 下限–上限)**；CI 来自 `b3_metrics.json`（`bootstrap.method=cluster`）。机器可读列见 `tables/b3_wave1_segmentation.csv`（`export_b3_tables.py` 在全队列重算后刷新）。**回复信 R13–R14**（`latex/generated/routing_ablation_tables_*.tex`）中 Dice/AUROC/AUPRC/HD95 为 **四位小数（比例制 Dice）**，手改 TeX 时对照本目录 CSV；下文表 A–C 仍为三位小数快照。
 
 ### TN3K（*n* = 614）
 

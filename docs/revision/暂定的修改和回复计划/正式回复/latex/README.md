@@ -21,8 +21,8 @@
 - 审稿意见：黑色斜体；作者回复：`ResponseBlue`。
 - 分节：`\responsetoreviewer{…}`；无目录、无 `\hrule`。
 - 正文引用表图：`\responsetableref{键}`、`\responsefigureref{键}`、`\responsetablerefrange{键A}{键B}`；**勿**在蓝色回复里重复 “见文末” / “at the end of this letter”。
-- 信内表图编号**仅** R1–R17、图 R1–R2（见 `reviewer_response.sty` 页眉说明）；**不复用**稿件 Supplementary Table S* 序号。
-- `authorresponse` 内尽量少用 `\textbf`；仅「支撑材料：」/ **Supporting material:** 加粗。表图编号用普通蓝字。批量弱化粗体：`scripts/soften_response_bold.py`。
+- 信内表图编号**仅** R1–R21、图 R1–R2（见 `reviewer_response.sty` 页眉说明）；**不复用**稿件 Supplementary Table S* 序号。
+- `authorresponse` 内尽量少用 `\textbf`；仅「支撑材料：」/ **Supporting material:** 加粗。表图编号用普通蓝字。
 
 ## 表图注册与命名
 
@@ -41,18 +41,11 @@
 
 ## 性能表加粗规则
 
-回复信中性能表（如外测、OOF 等块）数据格加粗表示**该指标块内该列点估计最优**（Dice/AUROC/AUPRC ↑，HD95 ↓）。校验：`python3 scripts/audit_response_table_bold.py`。
+回复信中性能表（如外测、OOF 等块）数据格加粗表示**该指标块内该列点估计最优**（Dice/AUROC/AUPRC ↑，HD95 ↓）；改表时在 `generated/*_tables_*.tex` 内人工核对。
 
-## 维护脚本（本目录 `scripts/`）
+## 编辑约定
 
-| 脚本 | 用途 |
-|------|------|
-| `soften_response_bold.py` | 弱化 `authorresponse` 内多余 `\textbf` |
-| `audit_response_table_bold.py` | 检查性能表最优列加粗 |
-| `patch_manuscript_table_format.py`、`turgify_body_tex.py`、`add_response_captions.py` | 表版式/信头批量调整 |
-| `migrate_response_asset_refs.py`、`rename_response_asset_keys.py` | 表图键迁移 |
-
-从指标 JSON **重新生成**某类长表（如 `generated/routing_ablation_tables_*.tex`）时，使用仓库 `scripts/revision/` 下对应导出脚本（索引见 [`scripts/README_REVISION.md`](../../../../../scripts/README_REVISION.md)）。**手编表**直接改 `generated/*_tables_*.tex`，并在 `body_*.tex` 信末保持 `\input` 顺序与正文引用一致。
+回信 **LaTeX 为唯一编辑源**：直接改 `generated/body_*.tex`、`generated/*_tables_*.tex`、`reviewer_response.sty` 等；实验指标见 `docs/revision/b3/`、`output/ablation/` 的 CSV/JSON，**不再**用脚本覆盖 `generated/*.tex`。信末 `\input` 顺序须与正文 `\responsetableref` 一致。
 
 ## 编译与预览
 
