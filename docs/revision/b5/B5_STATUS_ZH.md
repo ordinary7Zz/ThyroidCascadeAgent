@@ -13,9 +13,9 @@
 | 代码骨架（metadata_mode、batch、表、分析） | ✅ | 见 [`B5_BUILD_PLAN_ZH.md`](./B5_BUILD_PLAN_ZH.md) §2.1 |
 | B3 波次 2 `llm`（各正式 cohort） | 🟡 | 多数队列尚未全量；阻塞 `full` 复用与 B4 L3 |
 | `output/ablation/b5/` 跑数 | 🟡 | **sample** 已试跑（2026-10-15）；正式队列 ⬜ |
-| 补表 5 mode × 队列 | ⬜ | 待跑数 + `build_b5_tables.py` |
+| 稿面主表（TN5K × 五 mode） | 🟡 | 设计已定；**正式回信表 R17**（sample 占位）→ TN5K 换数 |
 | 补图 NHC 中心×专家 | ⬜ | 待 NHC labels + `full` routing_log |
-| 回复 R3.2 数字 | ⬜ | 待 `full → quality_only` Δ |
+| 回复 R3.2 正文 | ✅ | `正式回复/latex/generated/body_*.tex` + **R17**；`\rpending` 标 TN5K/NHC/修订稿 |
 
 ---
 

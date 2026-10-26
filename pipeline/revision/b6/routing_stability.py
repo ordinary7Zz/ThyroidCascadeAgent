@@ -14,6 +14,7 @@ import numpy as np
 
 from shared.routing_log import seg_disagreement_tier
 from segmentation.metrics import compute_dice
+from pipeline.cascade import build_intermediate_row_index, discover_intermediate_image_names
 
 
 def _agreement_rate(choices: list[str]) -> float:
@@ -93,7 +94,7 @@ def run_stability_from_caches(
         else:
             print(f"  ✗ seg 缓存缺失: {cache_path}", flush=True)
 
-    cls_cache_by_model: dict[str, list] = {}
+    cls_cache_by_model: dict[str, dict[str, Any]] = {}
     for model_cfg in cls_model_configs:
         model_name = model_cfg.get("name", "")
         cache_path = cls_cache_dir / f"{model_name}.json"
@@ -102,6 +103,9 @@ def run_stability_from_caches(
             print(f"  ✓ cls 缓存: {cache_path.name}", flush=True)
         else:
             print(f"  ✗ cls 缓存缺失: {cache_path}", flush=True)
+
+    intermediate_names = discover_intermediate_image_names(seg_cache_dir)
+    intermediate_row_index = build_intermediate_row_index(intermediate_names)
 
     n_cases = len(img_names)
     if n_cases == 0:
@@ -129,19 +133,22 @@ def run_stability_from_caches(
         img_path = image_paths[idx]
         image = image_io.load_image(img_path)
 
+        inter_row = intermediate_row_index.get(img_name)
         seg_preds = []
         for model_cfg in seg_model_configs:
             model_name = model_cfg.get("name", "")
             cache = seg_cache_by_model.get(model_name)
-            if cache is not None and idx < len(cache):
-                seg_preds.append(cache[idx])
+            if cache is not None and inter_row is not None and inter_row < len(cache):
+                seg_preds.append(cache[inter_row])
 
         indie_preds = []
         for model_cfg in cls_model_configs:
             model_name = model_cfg.get("name", "")
-            cache = cls_cache_by_model.get(model_name)
-            if cache is not None and idx < len(cache):
-                indie_preds.append(cache[idx])
+            cls_map = cls_cache_by_model.get(model_name)
+            if cls_map is not None:
+                pred = cls_map.get(img_name)
+                if pred is not None:
+                    indie_preds.append(pred)
 
         consensus, anchor_class = check_classification_consensus(
             indie_preds, min_confidence=consensus_threshold

@@ -165,11 +165,12 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item 我们同意：须区分「专家池与训练堆叠」「放射组学分支」「报告生成」与「在同一专家输出上如何路由」的贡献。对分割与分类图像任务，后者由 审稿人 1，意见 2 所述固定专家池路由消融直接检验；监督基线是否在相同开发数据上微调见 审稿人 2，意见 14（\responsetableref{tab_baseline_protocol}）；逐级叠加（单专家、专家池、池+路由等）在修订稿逐级叠加结果与正文中讨论。\rpendingzh{修订稿 Results 逐级叠加表述（R2.8）} 报告侧静态流程与工具消融不在本条展开。
-\item 消融表明：在\textbf{同一专家池、同一批候选输出}上，仅更换路由策略即可显著改变分割与分类指标，主系统表现因此不能仅归因于默认集成或单一启发式。已完成的静态策略比较显示：(i)~最大置信度在多个队列上劣于集成类策略；(ii)~无全面最优的静态路由；(iii)~不可部署上界与最佳可部署静态策略之间仍有间隙（\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}）。
-\item 学习型路由 (6) 与全系统 (7) 相对最佳静态策略及 Oracle 上界的对照见 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}（例：TN5K 分割上 (6) 与验证集最优单专家 Dice 均为 0.831；TN3K 分类 (7) AUROC 0.869）。讨论中仍强调可审计 \texttt{routing\_log}、跨任务重配置等优势（与 审稿人 2，意见 9、\responsetableref{tab_routing_stability} 互补；\responsetableref{tab_routing_stability} 报告部署流水线中 LLM 重复调用的一致性，而非八种策略的性能排序）。
+\item 我们同意须区分各模块贡献。对分割与分类，我们补充\textbf{逐级组件消融}（\responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}）：\textbf{L1} 在完整堆叠 development 上训练的单个多队列联合 DINO 专家（无智能体、无 AutoGluon）；\textbf{L2} 固定专家池 + 掩膜/概率软投票（与 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} 中\textbf{策略 2} 相同，在\textbf{固定上游候选专家输出}上评估、不重训专家）；\textbf{L3} 投稿主文全系统 ThyroidXAgent（LLM 路由 + 证据综合，与修订稿 Table S3/S4 一致）。L1/L2 与 L3 \textbf{评测协议不同}，层间差分用于对照而非同一流水线的因果分解。固定专家池上的\textbf{路由策略}对照见 审稿人 1，意见 2；监督基线微调见 审稿人 2，意见 14（\responsetableref{tab_baseline_protocol}）。报告生成侧静态流程与工具消融不在本条展开。
+\item 组件消融要点：（i）TN3K 上 L2 相对 L1 提升分割 Dice（0.856 vs 0.845）与分类 AUROC（0.828 vs 0.770），L3 分类进一步升至 0.869；（ii）固定软投票并非普适最优（例：ZJH-8K 分类 L1 AUROC 0.957 $>$ L2 0.932）；（iii）全系统 L3 在多数队列上优于 L2（例：TN5K 分割 Dice 0.833 vs 0.810；ZJH-8K 分割 0.943 vs 0.836）。ZJH 上 L1 单专家 AUROC 高于部署级全系统 L3（0.917），与修订稿 Supplementary 中单专家对照及\textbf{不同任务/协议口径}一致，不宜解读为「单专家优于 ThyroidXAgent」；修订稿 Results 将并列说明 S6 对账与上述分层。\rpendingzh{修订稿 Results 正文措辞（本信表 R15--R16 已定）}
+\item 在\textbf{同一专家池、同一批候选输出}上，仅更换路由策略即可显著改变指标（\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}）：(i)~最大置信度在多个队列上劣于集成类策略；(ii)~无全面最优的静态路由；(iii)~不可部署 Oracle 与最佳可部署静态策略之间仍有间隙。
+\item 学习型路由 (6) 与全系统 (7) 相对最佳静态策略及 Oracle 的对照见 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}（例：TN5K 分割 (6) Dice 0.831；TN3K 分类 (7) AUROC 0.869，与 L3 组件行一致）。可审计的结构化路由记录与重复调用稳定性见 审稿人 2，意见 9（\responsetableref{tab_routing_stability}）。
 \end{itemize}
-\textbf{支撑材料：} 审稿人 1，意见 2、\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}；基线协议，\responsetableref{tab_baseline_protocol}。
+\textbf{支撑材料：} \responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}；审稿人 1，意见 2、\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}；\responsetableref{tab_baseline_protocol}。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 9（R2.9）}
@@ -178,12 +179,12 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item 附录 A1 列出 LLM 路由的模型与解码参数、完整 prompt 模板、输出 JSON 结构及路由日志字段，供审稿人核对 R2.9。TN3K 恶性分类测试子集（250 例）中，每一次调用 LLM 的分割/分类路由均写入结构化日志（字段定义见附录 A1）。
+\item 附录 A1 列出 LLM 路由的模型与解码参数、完整 prompt 模板、模型输出格式说明及结构化路由记录所含信息，供审稿人核对 R2.9。TN3K 恶性分类测试子集（250 例）中，每一次调用 LLM 的分割/分类路由均写入可审计的结构化记录（记录项说明见附录 A1）。
 \item LLM 决策稳定性（相近候选）：在固定上游专家输出前提下，我们从「候选 mask 质量相近」子集（见下条）抽取 10 例，对每例重复 5 次分割 LLM 路由；五次所选分割专家完全一致的比例为 98\%（9/10 例五次相同；1/10 为 80\%，病例 \texttt{TN3K\_test\_0009.jpg}：一次在「多队列联合训练专家」与「TN3K 专用专家」之间切换，对应 mask 的 Dice 差异约 0.017），见 \responsetableref{tab_routing_stability}。当三名独立分类模型已一致时，分类走确定性共识（不调用 LLM），故不纳入上述重复实验。
-\item 相近候选分层：按各候选 mask 间一致度，最优与次优候选的质量分差 $\leq 0.10$ 记为「相近」、$>0.10$ 记为「易区分」。稳定性分析的 10 例均为「相近」层，故 \responsetableref{tab_routing_stability} 仅报告该层上的 LLM 一致性。日志中的 \texttt{disagreement\_tier}、\texttt{selected\_model} 等字段含义见附录 A1。
-\item 附录 A1 末附 ≥10 条与 \responsetableref{tab_routing_stability} 病例 ID 一致的去标识化 \texttt{routing\_log} 样例（含归档的 \texttt{prompts} 字段时一并给出）。
+\item 相近候选分层：按各候选 mask 间一致度，最优与次优候选的质量分差 $\leq 0.10$ 记为「相近」、$>0.10$ 记为「易区分」。稳定性分析的 10 例均为「相近」层，故 \responsetableref{tab_routing_stability} 仅报告该层上的 LLM 一致性。记录中所选专家、候选相近度分层等项的含义见附录 A1。
+\item 附录 A1 末附 ≥10 条与 \responsetableref{tab_routing_stability} 病例 ID 一致的去标识化结构化路由记录样例（若存档当次 prompt 全文则一并给出）。
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_routing_stability}（路由稳定性）、附录 A1（LLM 路由器规格与 routing\_log 字段）。
+\textbf{支撑材料：} \responsetableref{tab_routing_stability}（路由稳定性）、附录 A1（LLM 路由器规格与路由记录说明）。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 10（R2.10）}
@@ -215,7 +216,7 @@ LNM 任务只使用了 4,753 张恶性图像，而 \responsetableref{tab_malig_o
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item 将统一 LNM 二分类标签键（如 \texttt{LNM\_CN01}）及「原发灶（ZJH-8K 恶性子集）vs.\ 淋巴结图（LymphUs）」的数据来源表述，并区分侧颈 LNM 与 CN0/CN1 标签键。\rpendingzh{修订稿 Methods/§2.4/Fig.3/\responsetableref{tab_malig_oof} 用语；LNM 临床定义与病理/临床合作者确认（R2.12）}
+\item 将统一 LNM 二分类的临床标签定义（CN0/CN1 口径）及「原发灶（ZJH-8K 恶性子集）vs.\ 淋巴结图（LymphUs）」的数据来源表述，并区分侧颈 LNM 与 CN0/CN1 用语。\rpendingzh{修订稿 Methods/§2.4/Fig.3/\responsetableref{tab_malig_oof} 用语；LNM 临床定义与病理/临床合作者确认（R2.12）}
 \item 统计与评估协议与 审稿人 2，意见 11（R2.11） 一致：ZJH 按年/姓名聚类、LymphUs 开发用中心 1（淋巴结图像，一图一簇）；簇内恶性概率算术平均；开发集 患者/簇级分层五折 OOF（seed 42）及 cluster-bootstrap CI 将在 Methods 写明。\rpendingzh{修订稿 Methods §4.1/§4.6 与 \responsetableref{tab_malig_oof} 协议表述（R2.11/R2.12）} \responsetableref{tab_malig_oof} 报告 ThyroidXAgent 等模型的 OOF AUROC/AUPRC；\responsetableref{tab_malig_ext} 并列报告 LNM（LymphUs Center 2）与 FTC/PTC（FangDai）两项外测，不是通用「统计协议」表。
 \end{itemize}
 \textbf{支撑材料：} \responsetableref{tab_malig_oof} 与 \responsetableref{tab_malig_ext}。
@@ -227,9 +228,9 @@ LNM 任务只使用了 4,753 张恶性图像，而 \responsetableref{tab_malig_o
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item \responsetableref{tab_cls_ext} 与 R3 中监督基线均在同一\textbf{分割/分类开发集}上微调（各队列组成见 \responsetableref{tab_baseline_protocol} 表注），自公开上游预训练权重出发，非甲状腺零样本或仅用原始权重外测。完整 ThyroidXAgent 主结果使用相同开发数据；逐级叠加消融在修订稿中单独报告。视觉–语言基线为零样本/API + 固定 prompt，未在分类开发集上端到端重训。ZJH-8K、DDTI 等外测队列仅用于 test。完整训练与推理协议见 \responsetableref{tab_baseline_protocol}。
+\item \responsetableref{tab_cls_ext} 与 R3 中监督基线均在同一\textbf{分割/分类开发集}上微调（各队列组成见 \responsetableref{tab_baseline_protocol} 表注），自公开上游预训练权重出发，非甲状腺零样本或仅用原始权重外测。完整 ThyroidXAgent 主结果使用相同开发数据；逐级组件消融（L1 单专家 $\rightarrow$ L2 软投票 $\rightarrow$ L3 全系统）见 审稿人 2，意见 8（\responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}）。视觉–语言基线为零样本/API + 固定 prompt，未在分类开发集上端到端重训。ZJH-8K、DDTI 等外测队列仅用于 test。完整训练与推理协议见 \responsetableref{tab_baseline_protocol}。
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_baseline_protocol}（基线训练与推理协议）。
+\textbf{支撑材料：} \responsetableref{tab_baseline_protocol}；组件消融 \responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 20（R2.20）}
@@ -262,7 +263,7 @@ LNM 任务只使用了 4,753 张恶性图像，而 \responsetableref{tab_malig_o
 \begin{authorresponse}
 \begin{itemize}
 \item 感谢审稿人。我们在与 审稿人 1，意见 2 相同的固定专家池上，已纳入所要求的多数票、概率/掩膜软投票、规则路由（静态一致度），并另报验证集最优单专家、最大置信度与不可部署上界，避免仅与弱启发式对比。
-\item \textbf{非 LLM 学习型路由（策略 6）}：分割与分类各拟合一个多项逻辑回归路由器（$C{=}0.1$，\texttt{seed}${=}42$）；输入为各候选专家的\textbf{质量与分歧摘要特征}（不含设备/数据来源元数据，亦不含 LLM）。验证集监督：分割为相对 GT \textbf{Dice 最高}的专家；分类仅在\textbf{多模型未共识（Path B）}子集上，在\textbf{预测正确}的专家中取\textbf{置信度最高}者为标签。测试集冻结权重后仅做离散专家选择。LLM 全系统路由（策略 7）与主文 \responsetableref{tab_cls_ext} 协议一致。二者与全部静态基线并列列入\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。
+\item \textbf{非 LLM 学习型路由（策略 6）}：分割与分类各拟合一个多项逻辑回归路由器（$C{=}0.1$，随机种子 42）；输入为各候选专家的\textbf{质量与分歧摘要特征}（不含设备/数据来源元数据，亦不含 LLM）。验证集监督：分割为相对 GT \textbf{Dice 最高}的专家；分类仅在\textbf{三名独立分类模型未达成共识}的子集上，在\textbf{预测正确}的专家中取\textbf{置信度最高}者为标签。测试集冻结权重后仅做离散专家选择。LLM 全系统路由（策略 7）与主文 \responsetableref{tab_cls_ext} 协议一致。二者与全部静态基线并列列入\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。
 \item 外部泛化：除 TN3K、TN5K、ThyroidXL 外，我们在 ZJH-8K、RJH-7K（分割）、DDTI（分割/分类分队列）、PKTN（分割）上完成相同协议（含策略 6）；策略 (7) 数字见 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}（与主文 S3/S4 一致）。NHC-MISD-TUS 尚未列入该子表；主文全系统结果与未见中心讨论见 R1.3/R2.6。
 \end{itemize}
 \textbf{支撑材料：} 与 审稿人 1，意见 2 共用 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。
@@ -274,11 +275,12 @@ LLM 路由器除预测质量信号外还利用了设备与数据来源等元数�
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item 感谢审稿人。我们同意须检验路由是否过度依赖 数据来源/设备 等元数据，而非病例级质量信号。计划在\textbf{固定专家池}与同一评估协议下，对路由输入做消融：（i）全部输入；（ii）去掉数据来源；（iii）去掉设备/扫描仪字段；（iv）两者均去掉；（v）仅质量与分歧特征（与 审稿人 1，意见 2 中策略 6 学习型路由 的特征子集对齐并单独报告）。将报告对分割 Dice/HD95 与分类 AUROC/AUPRC 的影响，并汇总各中心（及院内队列）的专家选择频率或混淆矩阵。
-\item NHC-MISD-TUS 的 35 个中心未参与开发集路由训练，外测上元数据无法编码「见过的中心 ID」；若消融显示院内队列对元数据敏感，将在讨论中区分 开发见过的中心偏好 与 未见中心泛化。
+\item 感谢审稿人。我们同意须检验路由是否过度依赖数据来源/设备元数据，而非病例级质量与分歧信号。在与 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} 主文全系统 LLM 路由（\textbf{策略 7}）\textbf{相同的固定专家池与固定上游候选输出}上（不重训专家），仅改变 LLM 路由器 prompt 中可见的元数据。\responsetableref{tab_metadata_ablation} 列出五档条件（表注）：\textbf{完整元数据}（与投稿 S4 一致）；\textbf{隐去数据来源}；\textbf{隐去设备信息}；\textbf{两者均隐去}；\textbf{仅质量与分歧信号}（主对比端点）。与 审稿人 3，意见 1 中策略 6 学习型路由不同：策略 6 自始不含设备/来源元数据，单独在 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} 报告。
+\item \textbf{性能消融（稿面主队列）}：修订稿在 \textbf{TN5K} 恶性分类主评估子集（\rpendingzh{定稿 $n$=250 点估计及 95\% CI；表 R17 暂为内部开发试点 $n$=10}}）上报告上述五档条件下的分割 Dice/HD95 与分类 AUROC/AUPRC（\responsetableref{tab_metadata_ablation}）。该队列与九队列路由/组件外测表（\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}、表 R15--R16）\textbf{口径不同}、不作逐项对齐。试点子集上 \textbf{完整元数据 $\rightarrow$ 仅质量与分歧信号} 的 $\Delta$Dice $\approx -0.0002$、$\Delta$AUROC $=0$，分割 Dice 跨条件为 0.827--0.838（\textbf{两者均隐去}略低）；\rpendingzh{TN5K 定稿主对比 $\Delta$ 与 CI}。试点子集中分类五条件 AUROC 均为 0.92，因多数病例三分类模型已一致、未调用 LLM（仅 1/10 需 LLM 裁决），\textbf{不能外推}至大队列。
+\item NHC-MISD-TUS 的 35 个中心未参与路由权重训练，外测元数据不能编码「背过的中心 ID」。\textbf{各中心专家选择模式}：将从结构化路由日志中\textbf{实际调用 LLM 的路由步骤}汇总\textbf{完整元数据}条件下中心$\times$专家频数热图及简单关联统计，与 审稿人 2，意见 6（R2.6）中心异质性分析互补。\rpendingzh{NHC-MISD-TUS 中心$\times$专家热图及互信息（R3.2）}
+\item Methods 将写明：分类模型不一致时的 LLM 裁决输入\textbf{未}纳入本次元数据消融；修订稿 Results 短段与 \responsetableref{tab_metadata_ablation} 一致。\rpendingzh{修订稿 Methods §4.3 五档元数据条件与 Results R3.2 短段（TN5K 定稿数字同步）}
 \end{itemize}
-\noindent\rpendingzh{元数据消融实验（五条件）及中心级专家选择模式图/表（R3.2）；与\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} 同队列协议}\par
-\textbf{支撑材料：} \rpendingzh{元数据路由消融补充表/图（R3.2）}；路由对照框架，审稿人 1，意见 2、\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。
+\textbf{支撑材料：} \responsetableref{tab_metadata_ablation}；路由框架，审稿人 1，意见 2、\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}；路由器规格，附录 A1。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 3，意见 3（R3.3）}
@@ -535,16 +537,16 @@ ThyroidXL & 739 & 0.8749 & 0.8675–0.8816 \\
 \toprule
 病例 & 分层 & 5 次选择一致率 \\
 \midrule
-TN3K\_test\_0002.jpg & close & 100\% \\
-TN3K\_test\_0006.jpg & close & 100\% \\
-TN3K\_test\_0007.jpg & close & 100\% \\
-TN3K\_test\_0009.jpg & close & 80\% \\
-TN3K\_test\_0010.jpg & close & 100\% \\
-TN3K\_test\_0011.jpg & close & 100\% \\
-TN3K\_test\_0019.jpg & close & 100\% \\
-TN3K\_test\_0025.jpg & close & 100\% \\
-TN3K\_test\_0026.jpg & close & 100\% \\
-TN3K\_test\_0031.jpg & close & 100\% \\
+TN3K\_test\_0002.jpg & 相近 & 100\% \\
+TN3K\_test\_0006.jpg & 相近 & 100\% \\
+TN3K\_test\_0007.jpg & 相近 & 100\% \\
+TN3K\_test\_0009.jpg & 相近 & 80\% \\
+TN3K\_test\_0010.jpg & 相近 & 100\% \\
+TN3K\_test\_0011.jpg & 相近 & 100\% \\
+TN3K\_test\_0019.jpg & 相近 & 100\% \\
+TN3K\_test\_0025.jpg & 相近 & 100\% \\
+TN3K\_test\_0026.jpg & 相近 & 100\% \\
+TN3K\_test\_0031.jpg & 相近 & 100\% \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
@@ -560,21 +562,21 @@ TN3K\_test\_0031.jpg & close & 100\% \\
 \midrule
 BiomedCLIP & 分类 & dataset\_3 & OpenCLIP BiomedCLIP；在 dataset\_3\_cls 上微调分类头 & 仅图像 \\
 LSNet & 分类 & dataset\_3 & ImageNet 预训练 LSNet & 仅图像 \\
-MedSAM2 & 分割 & dataset\_4 & SAM 2.1 Hiera & 图像 + GT box/mask（\texttt{gt\_mask}） \\
-MedSegX & 分割 & dataset\_4 & SAM ViT-B + MedSegX 甲状腺适配器 & 图像 + GT box/mask（\texttt{gt\_mask}） \\
+MedSAM2 & 分割 & dataset\_4 & SAM 2.1 Hiera & 图像 + 参考 box/mask 提示 \\
+MedSegX & 分割 & dataset\_4 & SAM ViT-B + MedSegX 甲状腺适配器 & 图像 + 参考 box/mask 提示 \\
 MedSigLIP & 分类 & dataset\_3 & Google MedSigLIP；在 dataset\_3\_cls 上部分微调 & 仅图像 \\
 RepViT & 分类 & dataset\_3 & ImageNet 预训练 RepViT & 仅图像 \\
 ResNet-50 & 分类 & dataset\_3 & ImageNet ResNet-50；dataset\_3 微调 & 仅图像 \\
-TransUNet & 分割 & dataset\_4 & ImageNet-21k ViT-B/16（TransUNet 默认） & 图像 + GT box/mask（\texttt{gt\_mask}） \\
+TransUNet & 分割 & dataset\_4 & ImageNet-21k ViT-B/16（TransUNet 默认） & 图像 + 参考 box/mask 提示 \\
 UltraFedFM & 分类 & dataset\_3 & ViT 骨干 + dataset\_3\_cls 微调 & 仅图像 \\
-UltraFedFM & 分割 & dataset\_4 & MAE / 联邦 FM + dataset\_4 微调 & 图像 + GT box/mask（\texttt{gt\_mask}） \\
+UltraFedFM & 分割 & dataset\_4 & MAE / 联邦 FM + dataset\_4 微调 & 图像 + 参考 box/mask 提示 \\
 ThyroidXAgent（分割路由） & 分割 & dataset\_4 & DINOv3-UNet（ImageNet 级骨干） & 图像 → LLM 路由后的专家 mask \\
 ThyroidXAgent（分类路由） & 分类 & dataset\_3 & DINOv3 多任务骨干（dataset\_3 微调） & 超声图像 + 路由所选 mask 及关联特征 \\
 GPT-5 / Gemini / MedGemma / Qwen3-VL（若见于 S4） & 分类 & ---（未微调） & 厂商/公开 VLM 权重 & 图像 ± 固定文本 prompt（零样本或 API） \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{1. \textbf{dataset\_3（分类开发）}：TN3K + ThyroidXL + TN5K 堆叠训练划分（与 OpenThyroid 公开 multitask 分类开发集一致）。2. \textbf{dataset\_4（分割开发）}：TN3K + ThyroidXL + PKTN + TN5K 堆叠训练划分（与 OpenThyroid 公开分割开发集一致）。3. \textbf{监督基线默认协议}：在对应堆叠开发集上\textbf{全量微调}（自公开上游预训练权重出发），取验证集最佳权重用于\responsetableref{tab_cls_ext}/R3 全部外测；\textbf{非}甲状腺零样本或仅用原始权重评估。4. \textbf{分割基线外测}：图像 + \textbf{标注框/mask} 作为提示（与 \responsetableref{tab_seg_ext} 一致）。5. \textbf{分类基线外测}：仅超声图像输入。6. \textbf{ThyroidXAgent}：完整多队列微调后的分类/分割主结果与上表使用相同开发数据；逐级叠加消融在修订稿中另报。7. \textbf{视觉–语言模型}：未在 dataset\_3 端到端训练；厂商/公开权重；API 或冻结推理 + 固定 prompt。8. 监督行与 \textbf{\responsetableref{tab_cls_ext}/R3} 出表模型一致；ZJH-8K、DDTI 等外测队列\textbf{不参与}开发微调。}
+\responsetablenote{1. \textbf{dataset\_3（分类开发）}：TN3K + ThyroidXL + TN5K 堆叠训练划分（与 OpenThyroid 公开 multitask 分类开发集一致；队列组成与修订稿堆叠数据集配置表一致）。2. \textbf{dataset\_4（分割开发）}：TN3K + ThyroidXL + PKTN + TN5K 堆叠训练划分（与 OpenThyroid 公开分割开发集一致；同上配置表）。3. \textbf{监督基线默认协议}：在对应堆叠开发集上\textbf{全量微调}（自公开上游预训练权重出发），取验证集最佳权重用于\responsetableref{tab_cls_ext}/R3 全部外测；\textbf{非}甲状腺零样本或仅用原始权重评估。4. \textbf{分割基线外测}：图像 + \textbf{标注框/mask} 作为提示（与 \responsetableref{tab_seg_ext} 一致）。5. \textbf{分类基线外测}：仅超声图像输入。6. \textbf{ThyroidXAgent}：完整多队列微调后的分类/分割主结果与上表使用相同开发数据；逐级组件消融见 \responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}。7. \textbf{视觉–语言模型}：未在 dataset\_3 端到端训练；厂商/公开权重；API 或冻结推理 + 固定 prompt。8. 监督行与 \textbf{\responsetableref{tab_cls_ext}/R3} 出表模型一致；ZJH-8K、DDTI 等外测队列\textbf{不参与}开发微调。}
 \end{responsetable}
 
 \begin{responsetable}
@@ -599,10 +601,14 @@ ZJH-8K & 7958 & 1001 & 44 & 0.818 & 1001 \\
 
 \input{generated/routing_ablation_tables_zh.tex}
 
+\input{generated/component_ablation_tables_zh.tex}
+
+\input{generated/metadata_ablation_tables_zh.tex}
+
 \responseproseappendixstart
 \subsection*{附录 A1. LLM 路由器规格（R2.9）}
 \label{app:A1}
-\noindent\footnotesize 本附录满足 R2.9 可复现性：先给出自然语言流程摘要，再列出解码参数、中文 prompt 全文、JSON 结构与日志字段（代码中的类名/配置键与下表一致）。\textbf{流程摘要}：分割路由在多名候选分割专家输出中择一 mask；若三名独立分类模型已一致则分类不调用 LLM；若分类不一致则由 LLM 综合各模型与基于所选 mask 的放射组学概率；所有步骤写入结构化日志。
+\noindent\footnotesize 本附录满足 R2.9 可复现性：先给出自然语言流程摘要，再列出解码参数、中文 prompt 全文、模型须遵循的输出格式及结构化路由记录所含信息。\textbf{流程摘要}：分割路由在多名候选分割专家输出中择一 mask；若三名独立分类模型已一致则分类不调用 LLM；若分类不一致则由 LLM 综合各模型与基于所选 mask 的放射组学概率；所有步骤写入可审计的结构化记录。
 \par
 \begin{responseinlinetable}
 \responseinlinetablecaption{表 A1-1. LLM 共享解码参数（分割路由、分类路由及分类不一致时的 LLM 综合裁决共用）}
@@ -610,31 +616,30 @@ ZJH-8K & 7958 & 1001 & 44 & 0.818 & 1001 \\
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{ll}
 \toprule
-字段 & 值 \\
+参数 & 设定 \\
 \midrule
-API & OpenAI-compatible endpoint（DashScope） \\
-base\_url & \texttt{https://dashscope.aliyuncs.com/compatible-mode/v1} \\
-model\_name & \texttt{qwen3.8-27b} \\
-temperature & \texttt{0.3} \\
-max\_tokens & \texttt{768} \\
-enable\_thinking & \texttt{false} \\
-API key & 环境变量 \texttt{DASHSCOPE\_API\_KEY}（不写入日志） \\
+API 类型 & OpenAI 兼容端点（DashScope） \\
+端点 URL & \texttt{https://dashscope.aliyuncs.com/compatible-mode/v1} \\
+模型 & \texttt{qwen3.8-27b} \\
+温度 & 0.3 \\
+最大生成 token 数 & 768 \\
+扩展思考模式 & 关闭 \\
+API 密钥 & 经环境变量配置，不写入路由记录 \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
 \end{responseinlinetable}
 
-\textbf{1. 分割路由（\texttt{SegmentationAgent}）}
+\textbf{1. 分割 LLM 路由}
 \par
 \begin{itemize}
-\item 配置要点：\texttt{enable\_agent=true}；\texttt{include\_disagreement\_metrics\_in\_prompt=true}；\texttt{metadata\_mode=full}；\texttt{radiomics\_judge.enabled=true}；ensemble \texttt{top\_k=1}（单 mask 选择）。
+\item 运行设定：启用 LLM 路由；prompt 中包含候选间分歧度量；使用完整设备/来源元数据（与投稿 S4 一致）；纳入各候选 mask 的放射组学裁判摘要；每次仅选择单个 mask。
 \item \textbf{System（基础段，始终使用）：}
 \end{itemize}
 \begin{promptverbatim}
-你是分割模型选择代理。根据 user 中 JSON 指标选最佳 mask。
-禁止输出思考过程、Markdown 或任何 JSON 外的文字。第一个字符必须是 {，最后一个必须是 }。
-只输出一行 JSON："selected_model", "confidence"(0-1), "reasoning"(固定为"-")。示例：{"selected_model":"模型名", "confidence":0.9, "reasoning":"-"}
-优先级：agreement_with_others↑；分歧大时 mean_hd95_to_others↓；radiomics_judge 与 classification_anchor 一致者优先；形态学与设备匹配次之。
+你是分割模型选择代理。根据 user 消息中的结构化指标选最佳 mask。
+禁止输出思考过程、Markdown 或 JSON 外的文字。只输出一行 JSON，须包含：所选模型名称、0--1 置信度、理由（固定为「-」）。
+优先级：候选 mask 间一致度更高者优先；分歧大时与其他候选平均 Hausdorff 距离更低者优先；放射组学裁判与独立分类锚点一致者优先；形态学合理性与设备匹配次之。
 \end{promptverbatim}
 \begin{itemize}
 \item \textbf{System 追加（可选）--- 独立分类模型一致时，提供分类锚点（示例为「恶性」）}：
@@ -646,7 +651,7 @@ API key & 环境变量 \texttt{DASHSCOPE\_API\_KEY}（不写入日志） \\
 此锚点用于评估各分割结果的合理性：
 - 与锚点矛盾的Radiomics裁判分类 → 该mask可能覆盖了错误的ROI → 可信度显著降低。
 - 与锚点吻合的mask → 额外加分。
-- 若所有mask的Radiomics分类都与锚点矛盾 → 选confidence最高的mask并解释原因。
+- 若所有mask的Radiomics分类都与锚点矛盾 → 选置信度最高的 mask 并解释原因。
 \end{promptverbatim}
 \begin{itemize}
 \item \textbf{System 追加（可选）--- 独立分类模型不一致时（无分类锚点）}：
@@ -661,33 +666,28 @@ API key & 环境变量 \texttt{DASHSCOPE\_API\_KEY}（不写入日志） \\
 3. 设备匹配与历史性能
 \end{promptverbatim}
 \begin{itemize}
-\item \textbf{User 模板}：可选分歧度量摘要 + \texttt{输入设备} / \texttt{输入数据} 行 +
+\item \textbf{User 消息}：由程序拼接---可选分歧度量摘要、设备与数据来源行、各候选分割模型的质量评估（含放射组学裁判与分歧信息），并以自然语言要求模型\textbf{仅输出一行 JSON}（所选专家名称、0--1 置信度、固定占位理由），格式见下方 System 示例。
 \end{itemize}
-  \texttt{以下是 \{N\} 个分割模型的输出及质量评估：} + \texttt{\{formatted\_predictions\_json\}} +
-\par
-  \texttt{哪个模型提供了最佳分割结果？只输出纯JSON。格式：\{"selected\_model": "模型名称", "confidence": 0.95, "reasoning": "..."\}}
-\par
-  （\texttt{formatted\_predictions\_json} 含各模型质量指标、可选 radiomics\_judge、disagreement 等，由代码生成。）
 \par
 \begin{itemize}
-\item \textbf{输出 JSON}：\texttt{\{"selected\_model": "<name>", "confidence": 0.0–1.0, "reasoning": "..."\}}
-\item \textbf{非 LLM 回退}：\texttt{enable\_agent=false} 或解析/API 失败时使用规则静态选择（\texttt{static\_fallback} / \texttt{llm\_fallback}）。
+\item \textbf{模型输出}：单行 JSON，包含所选分割专家、置信度与理由（理由在部署中固定为占位符 ``-''）。
+\item \textbf{非 LLM 回退}：关闭 LLM 路由或 API/解析失败时，使用确定性规则静态选择器。
 \end{itemize}
-\textbf{2. 分类 --- 独立路由（\texttt{run\_cls.py}；全体一致时不调用 LLM）}
+\textbf{2. 分类 --- 独立 LLM 路由（三名模型预测一致时不调用 LLM）}
 \par
 \begin{itemize}
-\item 全体 top class 一致 → \texttt{method: unanimous}，无 LLM。
-\item \textbf{System（单选，\texttt{top\_k==1}）}：
+\item 三名独立分类模型 top 类一致时，采用确定性共识，不调用 LLM。
+\item \textbf{System（单专家选择）}：
 \end{itemize}
 \begin{promptverbatim}
-从 user JSON predictions 中选最可信模型。
-禁止思考/Markdown。只输出一行 JSON：selected_model, selected_class, confidence(0-1), reasoning 固定为 "-"。
+从 user 消息中的各模型预测摘要中选最可信模型。
+禁止思考/Markdown。只输出一行 JSON，须包含：所选模型名称、预测良恶性类别、0--1 置信度、理由（固定为「-」）。
 \end{promptverbatim}
 \begin{itemize}
-\item \textbf{System（top-k 融合，当前 \texttt{top\_k=5}）}：选出 5 个模型做概率融合；输出 \texttt{\{"selected\_models": [...], "reasoning": "..."\}}（无 \texttt{selected\_class} / \texttt{confidence}）。
-\item \textbf{User}：\texttt{输入设备} + 各模型预测 JSON + 问题句（由代码拼接）。
+\item \textbf{System（多模型概率融合，$k{=}5$）}：选出 5 个模型做概率融合；输出所选模型列表与简短理由（不输出单一良恶性类别标签）。
+\item \textbf{User 消息}：设备信息、各模型预测摘要与问题句（由程序拼接）。
 \end{itemize}
-\textbf{3. 分类 --- LLM 综合裁决（独立分类不一致且 \texttt{enable\_agent=true}）}
+\textbf{3. 分类 --- LLM 综合裁决（三名独立分类模型不一致时）}
 \par
 \begin{itemize}
 \item \textbf{System}：
@@ -698,52 +698,50 @@ API key & 环境变量 \texttt{DASHSCOPE\_API\_KEY}（不写入日志） \\
 你将收到：
 1. 独立分类模型预测（3个，无需mask，整图判断）
 2. AutoGluon 基于分割筛选 mask 的 Radiomics 分类（有 ROI 引导）
-3. 分割 Agent 选择该 mask 的推理
+3. 分割路由对该 mask 的选择理由
 
 若所有信号都模糊，保守倾向恶性（宁可假阳性不可假阴性），但标注低置信度。
 
-输出纯JSON（无 Markdown/代码块），首尾为{}：
-{"selected_class": "恶性", "confidence": 0.75, "reasoning": "..."}
-reasoning 须引用具体置信度数值。
+输出纯 JSON（无 Markdown/代码块）：最终良恶性类别、0--1 置信度、须引用具体置信度数值的简短理由。
 \end{promptverbatim}
 \begin{itemize}
-\item \textbf{User}：单条 JSON 字符串（\texttt{ensure\_ascii=false}；\texttt{autogluon\_based\_on\_selected\_mask} 在 AutoGluon 不可用时为 \texttt{null}）：
+\item \textbf{User 消息}：单条结构化文本，包含（i）场景说明（独立分类无共识）；（ii）三名独立分类模型的类别与置信度；（iii）基于所选 mask 的 AutoGluon 放射组学预测（若不可用则标明缺失）；（iv）分割路由结论与理由；（v）要求输出最终良恶性判断与置信度的问句。
 \end{itemize}
-\begin{promptverbatim}
-{
-  "scenario": "独立分类模型无共识，需综合裁决",
-  "independent_models": [
-    {"model_name": "<name>", "top_class": "良性|恶性", "top_confidence": 0.0}
-  ],
-  "autogluon_based_on_selected_mask": {
-    "top_class": "良性|恶性",
-    "top_confidence": 0.0
-  },
-  "segmentation_decision": {
-    "selected_mask_from": "<seg_model_name>",
-    "reasoning": "<segmentation agent reasoning>"
-  },
-  "question": "请综合以上信息，给出最终良恶性判断和置信度(0-1)。"
-}
-\end{promptverbatim}
 \begin{itemize}
-\item \textbf{输出 JSON}：\texttt{\{"selected\_class": "良性|恶性", "confidence": 0.0–1.0, "reasoning": "..."\}}（日志中 \texttt{llm\_invoked=true}，\texttt{method} 标记为 LLM 裁决）。
+\item \textbf{模型输出}：单行 JSON---最终良恶性类别、0--1 置信度及须引用数值的简短理由；路由记录中标记为「LLM 综合裁决」且「已调用 LLM」。
 \end{itemize}
-\textbf{4. 分类 --- 确定性共识（独立分类一致）}：\texttt{method: classification\_consensus}（或 \texttt{unanimous}），\textbf{不调用 LLM}，仅记入 routing\_log。
+\textbf{4. 分类 --- 确定性共识（三名独立分类一致）}：\textbf{不调用 LLM}；路由记录中标记为「分类共识」。
 \par
-\textbf{结构化 routing\_log（≥10 例审计）}
+\textbf{结构化路由记录（≥10 例审计，表 A1-2）}
 \par
-每条 JSONL 记录典型字段：\texttt{image\_id}、\texttt{task}（分割 / 分类 / 分类不一致时的 LLM 综合裁决）、\texttt{disagreement\_tier}（候选相近程度）、\texttt{llm\_invoked}、\texttt{method}、\texttt{selected\_model}（分割专家标识，如多队列联合专家或 TN3K 专用专家）/ \texttt{selected\_class}、\texttt{confidence}、\texttt{reasoning} 等；可选 \texttt{prompts} 存档当次调用全文。\responsetableref{tab_routing_stability} 的 \textbf{10} 例来自 TN3K 主流程与 5× 分割 LLM 路由稳定性实验。
+\begin{responseinlinetable}
+\responseinlinetablecaption{表 A1-2. 每条结构化路由记录所含信息（去标识化存档）}
+\label{tab:A1-log-fields}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{ll}
+\toprule
+记录项 & 说明 \\
+\midrule
+病例标识 & 去标识化图像/病例 ID \\
+任务类型 & 分割路由 / 分类路由 / 分类不一致时的 LLM 综合裁决 \\
+候选相近度分层 & 「相近」或「易区分」（定义见 R2.9 正文） \\
+是否调用 LLM & 是 / 否 \\
+决策方式 & LLM 路由、分类共识、规则回退等 \\
+所选分割专家 & 多队列联合专家、队列专用专家等（分割任务） \\
+最终良恶性类别 & 分类或综合裁决任务 \\
+置信度 & 0--1 \\
+理由摘要 & 模型返回的简短文本 \\
+解码设定 & 模型名称、温度、最大 token（与表 A1-1 一致） \\
+时间戳 & ISO 8601 \\
+可选附件 & 当次完整 prompt 文本（若存档） \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{responseinlinetable}
 \par
-\textbf{routing\_log 样例（单条，去标识化；字段与上同）}
+\textbf{单条记录叙述样例（与表 R11 中 \texttt{TN3K\_test\_0002.jpg} 对应，去标识化）}：分割任务；候选为「相近」层；调用 LLM；选择多队列联合训练专家；置信度 0.91；理由为占位符 ``-''；解码设定与表 A1-1 一致。
 \par
-\begin{promptverbatim}
-{"image_id":"TN3K_test_0002.jpg","task":"seg","disagreement_tier":"close",
-"llm_invoked":true,"method":"llm","selected_model":"all_datasets",
-"confidence":0.91,"reasoning":"-","llm_model":"qwen3.8-27b",
-"temperature":0.3,"max_tokens":768,"ts":"2025-06-01T12:00:00Z"}
-\end{promptverbatim}
-\noindent\footnotesize 与\responsetableref{tab_routing_stability} 病例 ID 一致的 \textbf{≥10} 条去标识化完整 JSONL 样例列于本附录末尾（含 \texttt{prompts} 字段时一并给出）。
+\noindent\footnotesize 与\responsetableref{tab_routing_stability} 病例 ID 一致的 \textbf{≥10} 条去标识化完整记录列于本附录末尾（若存档当次 prompt 全文则一并给出）。\responsetableref{tab_routing_stability} 的 \textbf{10} 例来自 TN3K 主评估流程与 5× 分割 LLM 路由稳定性实验。
 \par
 \FloatBarrier
 \responseproseappendixstart
@@ -770,7 +768,7 @@ reasoning 须引用具体置信度数值。
 项目 & 设定 \\
 \midrule
 软件版本 & \textbf{pyradiomics 3.1.0}（与训练环境一致） \\
-参数设定 & 推理与训练共用表 A2-1 所列二维 PyRadiomics 配置（与代码仓库 \texttt{pyradiomics} 配置 YAML 一致） \\
+参数设定 & 推理与训练共用表 A2-1 所列二维 PyRadiomics 配置（与训练环境配置文件一致） \\
 几何 & 强制 2D；mask 几何校正；重采样间距 \textbf{(1.0, 1.0)} 像素（各向同性假设） \\
 强度 & 归一化 scale \textbf{100}；直方图 binWidth \textbf{25}；对称 GLCM \\
 图像类型滤波 & Original、Wavelet、LoG（σ=2, 4）、Square、SquareRoot、Logarithm、Exponential、Gradient \\

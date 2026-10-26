@@ -1,0 +1,20 @@
+% LLM metadata ablation (Table R17); pilot n=10 until TN5K primary numbers
+
+\begin{responsetable}
+\caption{\responsetabletitle{tab_metadata_ablation}{LLM router metadata ablation (\rpending{TN5K primary malignancy-classification evaluation subset, $n$=250; table shows internal development pilot, $n$=10})}}
+\label{tab_metadata_ablation}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{@{}l r c c c c@{}}
+\toprule
+Metadata condition & $n$ & Dice $\uparrow$ & HD95 $\downarrow$ & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
+\midrule
+Full (manuscript S4) & 10 & 0.837 & 14.0 & 0.92 & 0.927 \\
+Device withheld & 10 & 0.837 & 12.1 & 0.92 & 0.927 \\
+Data source withheld & 10 & 0.838 & 12.0 & 0.92 & 0.927 \\
+Both withheld & 10 & 0.827 & 12.3 & 0.92 & 0.927 \\
+Quality/disagreement only & 10 & 0.837 & 12.1 & 0.92 & 0.927 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{Same expert pool as strategy (7) in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}; segmentation and classification use LLM routing with only prompt-visible metadata changed (Methods / Appendix A1). The \textbf{full metadata} row matches the manuscript full-system LLM router (same source as strategy (7) in Tables R13--R14). Primary contrast: \textbf{full metadata $\rightarrow$ quality/disagreement only}; \rpending{TN5K $\Delta$Dice and $\Delta$AUROC with 95\% CIs}. Pilot subset: $\Delta$Dice $\approx -0.0002$, $\Delta$AUROC $=0$. Identical classification AUROC across conditions on the pilot reflects deterministic consensus when three classifiers agree (LLM invoked on 1/10 cases). LLM arbitration inputs used when classifiers disagree were \textbf{not} metadata-ablated (stated in Methods).}
+\end{responsetable}

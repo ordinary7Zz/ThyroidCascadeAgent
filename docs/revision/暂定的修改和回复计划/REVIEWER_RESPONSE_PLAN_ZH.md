@@ -7,7 +7,8 @@
 > **范围**：本表 **B1–B12 可主笔/可引用的回复**；**Shiyu S1–S10** 相关审稿条见文末「范围外」，不在本目录起草正文。  
 > **语言**：仅维护本中文计划（无英文平行稿）。  
 > **B11 / B12**：**无需补充实验**；以下为改稿与回信要点。  
-> **接近定稿包（可起草完整回复/改稿）**：**B11 → B12 → B1 → B2 → B10 → B6 → B8 → B3**（见 [`MANUSCRIPT_REVISION_PLAN_ZH.md`](./MANUSCRIPT_REVISION_PLAN_ZH.md)「接近定稿」表）。**B8** 不含 NHC；无 BM 标签三队列不写 B8 表。**B3** 波次 1 已齐，**仅缺策略 6（learned）、7（LLM）性能数字**。
+> **进行中（2026-10-26）**：**B5**（R3.2，**接近定稿**：五 mode + **sample→TN5K 换数**）、**B7**（R1.3 NHC + R2.6）。  
+> **已归档**：**B1–B4、B6、B8–B12**（含正式回信 `正式回复/latex` 中已写入条目）；本表 **专项小节** 仍作索引，**勿**重复扩写长表。快照见 [`README.md`](./README.md)。
 
 ---
 
@@ -45,11 +46,11 @@
 | **R2.5** | 参考标准与标注 | **部分** | 回复信已起草（Methods §4.1 + 补充表；红色待补充合作者确认） | F5 | 标注者、病理确认表 |
 | **R2.6** | NHC 描述与中心性能 | **部分** | 回复信已起草（中心表/异质性；红色待补充元数据与分析） | B7；G3 | 35 中心元数据 |
 | **R2.7** | 「均值」定义 | **是** | **无权重宏平均** AUROC **0.9001**、AUPRC **0.8705**；修订稿摘要/§2.2/S4 注统一 | `b11_b12/README.md`；`MANUSCRIPT_REVISION_PLAN_ZH.md` §9 | 统稿写入 `ThyroidXAgent.md` |
-| **R2.8** | 增益来源、路由价值 | **接近定稿** | B10 同堆叠微调；**B3 波次 1** 支撑「路由非 trivial」；S6 堆叠已有；B4 仍可选 | `../b10/`；`../b3/`；`MANUSCRIPT` **§13** | B4 组件表（若纳入）；**learned/LLM 数字** |
+| **R2.8** | 增益来源、路由价值 | **接近定稿** | **B4 L1→L2→L3** 九队列表已写入 **B4 专项**（L3=**B3 策略 7**=稿面 S3/S4）；叠 **B3 波次 1**、**B10** 公平性；ZJH L1&gt;L2 AUROC 用对账句 | `../b4/B4_STATUS_ZH.md`；`../b3/B3_LLM_RESULTS.md`；`MANUSCRIPT` **§15** | Path B 附录 B-a/b/c；Δ 配对 bootstrap CI（可选） |
 | **R2.9** | 路由 prompt、稳定性 | **接近定稿**（sample）；TN3K 换数 | **透明性**：`router_spec.md` + `routing_log.jsonl`（≥10 例审计）；**5×**：*n*=**10**、均值 **92%**、8/10 全稳、2/10 为 60%（close 层） | `b6/REVIEWER_RESPONSE_SNIPPETS_B6.md`；`MANUSCRIPT_REVISION_PLAN_ZH.md` **§11** | TN3K：替换 §11 数据卡 + snippets；`export_router_spec` 若模型变更 |
-| **R2.10** | FTC/PTC 标签域 | **部分** | FVPTC≠FTC；ThyroidXAgent **5 折 OOF**（§2 表）；FangDai 外测 **TBD** | `b9/B9_ThyroidXAgent_修改与回复计划.md` §4.2；`需要确认.md`；Tiger 见 `B9_FTCPTC_*` | E4；F7 |
-| **R2.11** | LNM 样本量、CV | **部分** | 5 折 OOF **882 簇**；S5 ThyroidXAgent 数可写；**C2 外测 TBD** | `b9/B9_ThyroidXAgent_修改与回复计划.md` §4.1；LLNM 见 `B9_LNM_*` | E2；全栈融合换数 |
-| **R2.12** | LNM 术语 CN0/CN1 | **部分** | 簇聚合与五折协议；临床定义句 | `b9/B9_ThyroidXAgent_修改与回复计划.md` §4.3 | `需要确认.md` 协作 |
+| **R2.10** | FTC/PTC 标签域 | **部分**（**B9 已归档**） | FVPTC≠FTC；OOF **722 簇** AUROC **0.521**；FangDai **TBD** — 见 **B9 专项** / b9 §4.2 | `../b9/B9_ThyroidXAgent_修改与回复计划.md` | E4；F7 |
+| **R2.11** | LNM 样本量、CV | **部分**（**B9 已归档**） | 5 折 OOF **882 簇** AUROC **0.718**；C2 外测 **TBD** — **B9 专项** / b9 §4.1 | 同上 | E2；全栈 OOF 换数 |
+| **R2.12** | LNM 术语 CN0/CN1 | **部分**（**B9 已归档**） | 簇聚合与五折；临床定义句待协作 — b9 §4.3 | 同上；`需要确认.md` | 协作定稿 |
 | **R2.14** | 基线公平性 | **接近定稿** | 监督基线 **dataset3/4 微调**（非 off-the-shelf）；新增 Supp. **S[X]**（`baseline_training_protocol.md`，13 行）；VLM **零样本** 分块；S3/S4 **cluster CI** 与 B2 一致 | `b10/B10_结论与回复素材.md` §一–§二；`b10/tables/` | 定 Supp. 编号；Methods/S3/S4 表注入稿；§6.2 核对（A7） |
 | **R2.20** | 连通域、小结节 | **是**（待间距脚注） | **(a)(c)**：`selected_masks`、无 radiomics CCA、专家 ≥50 px、单图单 ROI；**(b)** 七队列 N/M 已算（`mm_per_pixel=0.1` 假设，见下表）；重点 **zjh8k N=1001/M=44** | `b11_b12/REVIEWER_SNIPPETS_ZH.md`；`tables/R2_20_SUMMARY.md`；`scripts/revision/b11/run_r2_20_small_nodules_all.sh` | 定稿：间距校准或敏感性一句；核对 JSON 内 `selected_masks_npz` 与投稿主 config |
 | **R2.21** | AutoGluon/PyRadiomics | **是** | 版本、预设、特征数、无 radiomics CCA | `docs/reproducibility_radiomics.md` | 统稿时并入 Methods 4.3 / Supp. |
@@ -64,7 +65,7 @@
 | 编号 | 主题 | 回复就绪 | 可回复要点 | 素材路径 | 定稿前必改/待补 |
 |------|------|----------|------------|----------|-----------------|
 | **R3.1** | 非 LLM 学习型路由 | **接近定稿** | 与 R1.2/B3 同；Methods 已定义 **策略 6（learned）** 与 **7（LLM）**；波次 1 静态基线九队列可写；回复说明 6/7 **性能待补**后与静态策略同表对照 | `../b3/`；`MANUSCRIPT` **§13** | 策略 **6/7** 跑完入表；**NHC** |
-| **R3.2** | 元数据消融 | **部分** | 回复信已起草（五条件消融 + 中心选择模式；红色待补充实验） | B5 计划 | 热图 |
+| **R3.2** | 元数据消融 | **接近定稿** | **正式回信已写** → 审稿人 3 意见 2 + **表 R17**（`metadata_ablation_tables_*.tex`；表内 **sample 占位**，红色 `\rpending` 标 **TN5K *n*=250/Δ+CI**、**NHC 热图**、修订稿 Methods/Results）。要点同 **B5 专项**；性能主表设计为 **仅 TN5K for_llm**（不与 B3 九队列对齐） | `正式回复/latex/generated/body_*.tex`；**§14**；`../b5/` | **TN5K 换 R17 表**；删/改 pending；NHC 图 |
 | **R3.3** | 数据层级、40 datasets | **部分** | 与 R2.3、R1.4 合并；B1 审计（**dHash**、**DDTI_cls=349**） | B1 `DATASET_AUDIT.md`；B12 | 流程图定稿；NHC 行待数据 |
 
 ---
@@ -215,7 +216,7 @@
 | 结论文档 | **可起草** → `../b3/B3_WAVE1_RESULTS.md` §6；统稿明细 `MANUSCRIPT_REVISION_PLAN_ZH.md` **§13** |
 | 回信 snippets | `../b3/REVIEWER_RESPONSE_SNIPPETS_B3.md`（定稿前并入 learned/LLM 一句） |
 | **策略 6 learned** | **进行中 / 待齐** → val fit + test infer（`fit_learned_router.py`、`run_learned_cohort.py`） |
-| **策略 7 LLM** | **未入主表** → 波次 2 配置跑完后与静态策略同表 |
+| **策略 7 LLM** | **稿面数字已齐** → `manuscript_llm_metrics.yaml` / `B3_LLM_RESULTS.md`（**非** `b3/*/llm/` 重跑）；与 **B4 L3** 同源 |
 | CI | **cluster bootstrap**（1000, seed 42）已写入 `b3_metrics.json`；全队列 `--all-wave1` 重算后可刷 `export_b3_tables.py` |
 | **NHC** | **未纳入** B3 主表；R3.1 最终须含 → 单独跑或 Limitation |
 | B4 / 配对显著性 | 可选；`b3_paired_bootstrap.json` 待 B2 口径 |
@@ -225,11 +226,135 @@
 1. 感谢审稿人要求在同一 **固定专家池** 上系统比较路由；我们补充 **八种策略** 定义，并在 **九组外测/开发队列** 上报告波次 1（静态策略 1–5 + Oracle 上界）。  
 2. **主要发现（波次 1）**：不存在全面占优的单一静态策略；**最大置信度** 分割路由在多个队列上明显劣于集成；分类与分割均在各队列测试集上报告（回复信 **表 R14–R15**，不单独向审稿人展开内部分歧子集）；**Oracle** 与最佳可部署策略之间仍有可观间隙。  
 3. **策略 4（static_rule）** 在 B3 中为 **专家一致度** 规则（非完整 radiomics 级联），与主系统部署路径区分说明。  
-4. **学习型路由（策略 6）** 与 **LLM 路由（策略 7）** 已纳入 Methods；**修订稿 Supp. 表将补全两行性能**，与最佳静态策略及 Oracle 对照，直接回应 R3.1 与「LLM 排第几」。  
+4. **学习型路由（策略 6）** 与 **LLM 路由（策略 7）** 已纳入 Methods；**策略 7 性能** 与主文 Table S3/S4 一致（见 `B3_LLM_RESULTS.md`）；**策略 6 test 行** 仍待 disk 汇总后与静态策略及 Oracle 对照（R3.1「排第几」）。  
 5. **NHC** 与多中心扩展将按协议并入主表或于 Limitations 说明时间表（与 **B7** 中心叙事衔接）。  
 6. **95% CI** 定稿采用与主结果一致的 **cluster bootstrap**（与 B2 同 seed/层级）。
 
-**补充实验**：波次 1 **不需要重跑**（除非统一专家池或 static_rule 口径变更）；**需要** 完成策略 **6、7** 的 test 评估并更新汇总 CSV。
+**补充实验**：波次 1 **不需要重跑**（除非统一专家池或 static_rule 口径变更）；**需要** 完成策略 **6** 的 test 评估并更新汇总 CSV（策略 **7** 见 yaml，与 B4 L3 共用）。
+
+**B3 状态小结**：波次 1 **实验与叙事已闭环** → **接近定稿**；**策略 7** 已冻结于 yaml；**仍缺策略 6 全队列入主表** + **CI 口径定稿** + **NHC 行**。
+
+---
+
+## B4 专项（R2.8 / S6 对账）— **已归档**（L1+L2+L3；正式回复 R15–R16）
+
+> **L3 数据源**：与 **B3 策略 7** 相同 → `docs/revision/b3/manuscript_llm_metrics.yaml`（`ThyroidXAgent.md` Table S3/S4，冻结 **2026-10-26**）。**不要求** `output/ablation/b3/<cohort>/llm/` API 重跑；与 L1/L2（shared-intermediate 消融栈）**协议不同**，Δ(L3−L2) 为稿面对照，见 `B3_LLM_RESULTS.md` §1。  
+> **L1/L2 数据源**：`../b4/B4_STATUS_ZH.md` §3；机器表 `output/ablation/b4/<cohort>/b4_component_table.csv`（当前 CSV **仅含 L1/L2**，L3 以本专项为准）。  
+> **换数约定**：主文 S3/S4 修订后 **只改 yaml** 并同步本表；L1/L2 若重跑 L1 cohort 则改 STATUS §3。
+
+| 项 | 状态 |
+|----|------|
+| L1 九队列（无 NHC） | **已完成** → `artifacts/b4_l1_<cohort>.json` |
+| L2（B3 策略 2 `soft_voting`） | **已完成** → 已写入 `b4_component_table.csv` |
+| L3（B3 策略 7 / 稿面 LLM） | **已定稿（文档）** → 本表；可选物化 `b3/<cohort>/llm/b3_metrics.json` + `build_b4_tables` |
+| Path B 附录 B-a/B-b/B-c | **待** `path_b_autogluon` + L3 Path B 子集（稿面 S3/S4 无分列） |
+| S6 vs S4 对账备忘录 | **待写** → `docs/B4_S6_S4_reconciliation.md` |
+| NHC L1 | **搁置**（标签路径缺失） |
+
+### 三层定义（简）
+
+| 层 | 含义 | 来源 |
+|----|------|------|
+| **L1** | 单 DINO `all_datasets` 专家 | L1 pipeline，`enable_agent=false` |
+| **L2** | 专家池 + 软投票（B3 策略 2） | `b3/<cohort>/soft_voting` |
+| **L3** | 全系统 LLM 路由（B3 策略 7 ≈ 投稿 S4） | **yaml / 策略 7 表** |
+
+### 分割 Dice（点估计；Δ 为 L3−L2）
+
+| cohort | *n* | L1 | L2 | **L3** | Δ(L3−L2) |
+|--------|-----|-----|-----|--------|----------|
+| tn3k | 614 | 0.8454 | 0.8559 | **0.8528** | −0.0031 |
+| tn5k | 1000 | 0.8292 | 0.8097 | **0.8326** | +0.0229 |
+| thyroidxl | 2090 | 0.8792 | 0.8640 | **0.8758** | +0.0118 |
+| ddti_seg | 637 | 0.8492 | 0.8451 | **0.8562** | +0.0111 |
+| pktn | 150 | 0.8388 | 0.8376 | **0.8299** | −0.0077 |
+| zjh8k | 7958 | 0.8376 | 0.8356 | **0.9430** | +0.1074 |
+| rjh7k | 7288 | 0.9128 | 0.8931 | **0.9146** | +0.0215 |
+
+`sample`（*n*=10）仅作开发试点，L3 **不以** 旧 `b3/sample/llm` 为准，正式叙事用上表七队列。
+
+### 分类 AUROC（点估计；Δ 为 L3−L2）
+
+| cohort | *n* | L1 | L2 | **L3** | Δ(L3−L2) |
+|--------|-----|-----|-----|--------|----------|
+| tn3k | 614 | 0.7695 | 0.8282 | **0.8692** | +0.0410 |
+| tn5k | 1000 | 0.9544 | 0.9437 | **0.9472** | +0.0035 |
+| thyroidxl | 2090 | 0.9288 | 0.9359 | **0.9676** | +0.0317 |
+| ddti_cls | 349 | 0.7506 | 0.7537 | **0.7991** | +0.0454 |
+| zjh8k | 7958 | 0.9571 | 0.9322 | **0.9175** | −0.0147 |
+
+### 回复要点（R2.8；英文可扩写）
+
+1. 感谢审稿人追问 **增益来自堆叠、集成还是路由**；我们补充 **组件消融**：L1 单专家 → L2 固定软投票 → L3 **稿面全系统 LLM**（与 Table S3/S4 ThyroidXAgent 行一致）。  
+2. **L2 vs L1**：队列依赖（如 TN3K 分类/分割均有提升；ZJH **L1 AUROC 高于 L2**）→ 说明「池化平均」非普适最优，需 **路由/全系统**（L3）与 **S6 对账** 一并解释。  
+3. **L3 vs L2**：多数队列 L3 分类 AUROC 高于 L2；ZJH 分割 Dice **L3 远高于 L2**（稿面全系统 vs 消融 intermediate 协议差异，**勿**写成同一 pipeline 的逐步加和）。  
+4. 与 **B3 波次 1** 交叉：静态路由无全胜；**B10** 澄清监督基线微调公平性。  
+5. **Limitation**：层间 Δ 当前为点估计；Path B 放射组学分解表待附录脚本；NHC 未纳入 L1。
+
+**统稿入口**：`MANUSCRIPT_REVISION_PLAN_ZH.md` **§15**；仓库细节 `../b4/B4_STATUS_ZH.md`、`../b4/README.md`。
+
+**补充实验**：L3 **不需要 API 重跑**（稿面数已定）；Path B 附录与可选 `build_b4_tables` 物化 **非阻塞** 本专项回信。
+
+---
+
+## B5 专项（R3.2）— **接近定稿**（五 mode 已齐；**sample 占位 → TN5K 换数**）
+
+> **稿面范围**：**性能消融仅 TN5K for_llm 单列表**（*n*=**250**），**不要求**九队列五 mode（与 B3/B4 区分）。  
+> **换数约定**：下表数字来自 **sample（*n*=10）**，供当前起草；**TN5K 跑完后**用 `output/ablation/b5/tn5k/<mode>/` + `output/ablation/b3/tn5k/llm`（`full`）**只替换数字与 CI**，与 `MANUSCRIPT` **§14.1** 同步。
+
+| 项 | 状态 |
+|----|------|
+| 五种 `metadata_mode` 定义 | **✅** → `docs/REVISION_B5_PLAN.md`；`shared/metadata_prompt.py` |
+| sample 四 mode + B3 `llm`=`full` | **✅** → `output/ablation/b5/sample/{drop_device,drop_source,drop_both,quality_only}/`；`full` → `output/ablation/b3/sample/llm/` |
+| 回复/改稿表结构与主对比叙事 | **✅**（**sample 数字**）→ 本专项 + **§14** |
+| **正式回信 R3.2** | **✅** → `正式回复/latex/generated/body_{zh,en}.tex` + **表 R17**（sample 占位 + `\rpending` 换数项） |
+| TN5K 四 mode（`--skip-full`） | **换数槽** → 更新 R17 + 删相关 `\rpending`；`build_b5_tables.py --cohort tn5k` |
+| NHC 中心×专家热图（`full`） | **⬜** 院方/G3；不阻塞性能主表 |
+| 九队列五 mode | **不做**（非 R3.2 最小集） |
+
+**性能表（稿面队列：TN5K；**当前格内数字 = sample 占位**）**
+
+| metadata_mode | *n*（占位→定稿） | Dice | HD95 | AUROC | AUPRC | 备注 |
+|---------------|-------------------|------|------|-------|-------|------|
+| **full**（B3 `llm`） | 10 → **250** | 0.837 | 14.0 | 0.92 | 0.927 | 非 `b5/sample/full/` |
+| drop_device | 10 → **250** | 0.837 | 12.1 | 0.92 | 0.927 | 本批与 `quality_only` 同 seg 路由 |
+| drop_source | 10 | 0.838 | 12.0 | 0.92 | 0.927 | |
+| drop_both | 10 | 0.827 | 12.3 | 0.92 | 0.927 | 本批最低 Dice |
+| quality_only | 10 → **250** | 0.837 | 12.1 | 0.92 | 0.927 | R3.2 主对比端点 |
+
+**主对比（占位）**：**full → quality_only** → ΔDice **≈ −0.0002**、ΔAUROC **0**（TN5K 换数后重写并加 CI）。
+
+**回复要点（TN5K 换数后保留条目）**
+
+1. 在与 B3 **策略 7** 相同专家池与 shared intermediate 上，**仅**消融 prompt 中 **设备/数据来源** 等元数据（五档 + **`quality_only`**）。  
+2. **性能（单队列 TN5K for_llm）**：五 mode 并列；主对比 **`full` vs `quality_only`**（占位 sample 上 Δ 近零；**以 TN5K 表为准**）。  
+3. **选择模式**：`routing_log`；**NHC `full`** 热图 **将补充** 或 Limitation（与 **B7** 分条）。  
+4. **限定**：Path B 短路致分类 LLM 少；Path B LLM 输入未做 metadata 消融（Methods 一句）。
+
+**统稿入口**：`MANUSCRIPT_REVISION_PLAN_ZH.md` **§14**；`../b5/B5_UNDERSTANDING_ZH.md`；正式回信 **`正式回复/latex/generated/`**（R3.2 段落 + **R17**）。
+
+**TN5K 换数清单**：① `metadata_ablation_tables_{zh,en}.tex` 数字（+CI）；② `body_*` R3.2 与 R17 表题/表注中的 `\rpending`；③ 本专项表与 **§14.1** 同步。
+
+**补充实验**：**TN5K 换数**投稿前必做；**不必**九队列五 mode；NHC 热图加强 R3.2 但非性能表替代。
+
+---
+
+## B9 专项（R2.10–12 · LNM/FTC）— **已归档**（改稿真源在 `b9/`）
+
+> **单一真源**：[`../b9/B9_ThyroidXAgent_修改与回复计划.md`](../b9/B9_ThyroidXAgent_修改与回复计划.md)（§2 S5 数、§3 改稿、§4 回复信）。  
+> **本目录**：`MANUSCRIPT_REVISION_PLAN_ZH.md` **§16** 为索引；换数只改 b9 **§2**，再更新下文 **一行** 与 **§16.2**（保持同步）。
+
+| 项 | 状态 |
+|----|------|
+| 5 折 OOF 协议 + DINO 五折 | **✅** |
+| S5 ThyroidXAgent 灰底（LNM/FTC） | **🟡** OOF 可回复；全栈融合后换格 |
+| E2 LNM C2、E4 FangDai 外测 | **⬜** |
+| 专家 S5（LLNM / Tiger） | **✅** 独立素材 |
+| 回复 R2.11 / R2.10 / R2.12 | **可起草** → b9 **§4** |
+
+**S5 灰底一行**（与 `MANUSCRIPT` **§16.2** 同步，2026-10-26）：LNM **882** 簇 AUROC **0.718** / AUPRC **0.598**；FTC **722** 簇 AUROC **0.521** / AUPRC **0.109** — CI 与表注仅 [`b9` 主文档 §2](../b9/B9_ThyroidXAgent_修改与回复计划.md)。
+
+**补充实验**：全栈 OOF、双外测为 **进行中/待排**；不在本目录计划里重复列 E1–E6（见 b9 §1 覆盖度表）。
 
 ---
 
@@ -250,20 +375,16 @@
 
 ---
 
-## 建议先发出的回复块（仅 B1–B12）
+## 建议优先推进（2026-10-26）
 
-1. **R2.2 + R1.1 + R2.4（统计/同院）** → 引用上表 B1+B2 专项 + `B1_结论` §三。  
-2. **R2.7 + R2.1（宏平均，B12）** → 上表 B12 专项 + `b11_b12/README.md`。  
-3. **R2.9（B6，sample 可发；TN3K 换数）** → 上表 B6 专项 + `REVIEWER_RESPONSE_SNIPPETS_B6.md`。  
-4. **R2.14（B10，接近定稿）** → 上表 B10 专项 + B2 S3/S4 CI。  
-5. **R1.3（B8 校准/拒答，接近定稿）** → 上表 **B8 专项** + `MANUSCRIPT` **§12**（NHC 异质性句待 B7）。  
-6. **R2.20–21（B11）** → 上表 + §8.3 机制 + `reproducibility_radiomics.md`。  
-7. **R2.11–12 + R2.10** → B9（加 `需要确认` 脚注）。  
-8. **R1.2 + R2.8 + R3.1（B3，接近定稿）** → 上表 **B3 专项** + `MANUSCRIPT` **§13**（learned/LLM 行待补数）。  
+**进行中包**：**B5**（R3.2，**接近定稿**：sample 占位、**TN5K 换数**）→ **B5 专项** + **§14**；**B7**（R1.3 NHC 段 + R2.6）→ G3 + `b7/`。
+
+**已归档包**：B1–B4、B6、B8–B12 的回复要点见各 **专项** 与 `正式回复/latex/generated/body_*.tex`；统稿时按 [`README.md`](./README.md) 归档表取真源。
 
 ## 建议标注「修订稿将补充」、暂不写死数字（仍在 B1–B12 内）
 
-- **R1.3 / R2.6（NHC 中心异质性）**：**B7**、G3 元数据（**B8 校准/拒答已可写死数字**）  
+- **R1.3 / R2.6（NHC 中心异质性）**：**B7（进行中）**、G3 元数据（B8 校准/拒答已归档，与 NHC 分条）
+- **R3.2（元数据消融）**：正式回信 **已写入 R17**（sample 占位 + pending）；投稿前 **TN5K 换 R17**；NHC 热图 pending  
 - R2.4 **患者**定位：**F6**（图级重复与敏感性已在 B1 可写）  
 - **NHC**：B2 未批跑；稿面/回复单独说明或 Limitation  
 - R2.5 标注：回复信占位已写；数字与表待 **F5** / 合作者确认  

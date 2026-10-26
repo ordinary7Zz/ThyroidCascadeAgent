@@ -6,36 +6,47 @@
 
 ## 本 README 的作用与更新规则
 
-**作用**：只维护一张 **「哪些 B 包已接近定稿、优先统稿」** 的快照表（下表 + 文末「接近定稿包」路径列表）。**不写**实验细节、不改稿、不替代同目录下的 `MANUSCRIPT_*` / `REVIEWER_*` / `B_DELIVERABLES_*` 或各 `docs/revision/b*/` 结论文档。
+**作用**：维护 **「哪些 B 包仍在进行中」** 与 **「已归档包索引」** 两张快照。**不写**实验细节、不改稿、不替代同目录下的 `MANUSCRIPT_*` / `REVIEWER_*` / `B_DELIVERABLES_*` 或各 `docs/revision/b*/` 结论文档。
 
-**新增或上调一个「接近定稿」任务时，只改这几处（勿扩写新章节）**：
+**包状态变更时（归档 / 新开）**：
 
 | 步骤 | 改什么 |
 |------|--------|
-| 1 | 在下表 **追加一行**（顺序按团队统稿优先级；五列与现有行一致） |
-| 2 | 文末 **「接近定稿包」** 列表补上 `../bN/`（若尚未出现） |
-| 3 | 同步 [`B_DELIVERABLES_CHECKLIST_ZH.md`](./B_DELIVERABLES_CHECKLIST_ZH.md) 该包状态 |
-| 4 | 细节写入 `../bN/` 结论文档，并在 `MANUSCRIPT_REVISION_PLAN_ZH.md` / `REVIEWER_RESPONSE_PLAN_ZH.md` 维护对应小节 |
+| 1 | 从下表 **进行中** 挪入 **已归档**（或反向，少见） |
+| 2 | 同步 [`B_DELIVERABLES_CHECKLIST_ZH.md`](./B_DELIVERABLES_CHECKLIST_ZH.md) 总览行 |
+| 3 | 更新 `MANUSCRIPT_REVISION_PLAN_ZH.md` / `REVIEWER_RESPONSE_PLAN_ZH.md` 页眉一句；**已归档包**在本目录只保留 **§/专项索引**（长表留在 `b*/` 或 `正式回复/latex`） |
 
-**不要**：为单个 B 包在本 README 里另开二级标题、长表格或实验状态说明；`docs/revision/README.md` 的 `bN/` 行也只保留 **一个**写稿入口文件名。若某包在 `MANUSCRIPT_*` 已有固定 §（如 B10→§10、B6→§11），可在下表后 **一句**补充「B*N* → §*」；其余包统一写「见 checklist」。
+**不要**：为单个 B 包在本 README 里另开二级标题、长表格或实验状态说明。
 
-## 接近定稿的工作包（当前优先统稿）
+## 进行中的工作包（2026-10-26）
 
-下列工作包 **实验/审计与结论文档已基本齐**（**B6** 以 **TN3K `test_for_llm`** 为主队列；`sample` 仅作早期试点对照），剩余以 **写入 `ThyroidXAgent.md`、Supp. 制表、回复信摘段** 为主（非新训练）。**先后顺序**为团队定稿习惯：先 B11/B12，再 B1/B2。
+| 包 | 审稿/稿面侧重 | 仓库入口 | 当前阻塞 |
+|----|---------------|----------|----------|
+| **B5** | **R3.2**；prompt 元数据五 mode 消融 | `../b5/`；**§14**；`REVIEWER` **B5 专项**；**正式回信表 R17** | **回信已写**（sample 占位 + `\rpending`）。**待**：TN5K 换 R17 数字；NHC **`full` 热图**（与 B7 分条） |
+| **B7** | **R1.3** NHC 异质性 + **R2.6** | `../b7/B7_NHC_SCOPE_SUMMARY_ZH.md` | 🔒 **G3** 中心元数据；中心表 / I² |
 
-| 顺序 | 包 | 审稿/稿面侧重 | 仓库入口 | 统稿前常见小项 |
-|:---:|---|---------------|----------|----------------|
-| 1 | **B11** | R2.20–21；Methods 4.3（后处理、小结节、放射组学） | `../b11_b12/`；`docs/reproducibility_radiomics.md` | §8.3 入 Methods；R2_20 Supp. 表；mm/px 脚注 |
-| 2 | **B12** | R2.7、R2.1、R2.3、R1.4；摘要/§2.2 宏平均；图像侧数据流 | `../b11_b12/README.md`；`DATAFLOW_FIGURE.mmd` | 摘要 **0.9001/0.8705**；Fig.1 导出；28,458 分层文案 |
-| 3 | **B1** | R1.1、R2.2、R2.4、R3.3；数据边界与 **dHash** 近重复 | `../b1/B1_结论与回复素材.md`；`../b1/tables/` | 可选 F6 患者数；spot check；ZJH excl. Supp. 入稿 |
-| 4 | **B2** | R1.1、R2.2、R2.14（CI 部分）；**S3/S4** cluster CI、患者级 | `../b2/conclusions/B2_结论与回复素材.md`；`../b2/tables/` | 刷 Supp. 表；**不含 NHC**；DDTI_cls **n=349** |
-| 5 | **B10** | **R2.14**；Supp. 基线协议表；S3/S4 表注 | `../b10/B10_结论与回复素材.md`；`../b10/tables/baseline_training_protocol.md` | 定 **S[X]**；Methods 4.3 入稿；§6.2 核对 |
-| 6 | **B6** | **R2.9**；路由器透明性；**5×** 稳定性与 `routing_log` | `../b6/B6_ROUTING_STABILITY_CONCLUSIONS.md`；`docs/supplementary/router_spec.md`；`output/b6/tn3k/pipeline_run/`（250 例 + `stability_summary.json` *n*=10） | `export_router_spec.py`（`config/revision/b6/tn3k.yaml`）重导规格；Supp. 稳定性表 + log 样例入稿；§11 / B6 专项 / snippets **已换 TN3K 数** |
-| 7 | **B9** | **R2.10–12**；**S5** ThyroidXAgent 灰底；§2.4 / Fig.3 | `../b9/B9_ThyroidXAgent_修改与回复计划.md`；专家行 `B9_LNM_*` / `B9_FTCPTC_*` | 五折 OOF 可占位；AG/路由/C2·FangDai 外测待补 |
-| 8 | **B8** | **R1.3**（校准 + 送复核）；Supp. ECE/Brier、可靠性图、risk–coverage | `../b8/`；`output/b8/fit/`、`cohorts/`、`figures/` | 结论文档与 Supp. 表入稿；**不含 NHC**；无 BM 三队列不写稿 |
-| 9 | **B3** | **R1.2、R2.8、R3.1**；同专家池 **静态路由消融**（波次 1） | `../b3/B3_WAVE1_RESULTS.md`；`../b3/REVIEWER_RESPONSE_SNIPPETS_B3.md`；`output/ablation/b3/<cohort>/_summary/` | **波次 1 已齐**（9 队列 × 策略 1–5、8）；**仅待补** 策略 **6 learned**、**7 LLM** 性能行；Supp. 表与 B2 **cluster CI** 对齐；**NHC** 仍单列 |
+其余 **B1–B4、B6、B8–B12** 均已 **归档**（见下表）；统稿时按各包真源与 `MANUSCRIPT` **§7–§16** 并入稿件即可。
 
-**修改/回复计划中的对应位置**：B11/B12 → `MANUSCRIPT_REVISION_PLAN_ZH.md` **§8–§9**；B1/B2 → **§2.1、§3、§4、§6** 与 `REVIEWER_RESPONSE_PLAN_ZH.md` **B1+B2 专项**；**B10** → **§10** 与 **B10 专项（R2.14）**；**B6** → **§11** 与 **B6 专项（R2.9）**；**B8** → **§12** 与 **B8 专项（R1.3 校准/拒答）**；**B3** → **§13** 与 **B3 专项（R1.2 / R2.8 / R3.1）**。其余 **B4–B5、B7、B9** 见 [`B_DELIVERABLES_CHECKLIST_ZH.md`](./B_DELIVERABLES_CHECKLIST_ZH.md)。
+## 已归档工作包（改稿真源不在本目录展开）
+
+实验结论、改稿清单与（多数）正式回信已收敛；本目录 **仅保留交叉索引**，**勿**在三计划中重复维护长表。
+
+| 包 | 审稿条（主） | 单一真源（统稿时优先改此处） | 本目录索引 |
+|----|--------------|------------------------------|------------|
+| **B1** | R1.1, R2.2, R2.4, R3.3 | `../b1/B1_结论与回复素材.md` | `MANUSCRIPT` §2.1、§3、§4；`REVIEWER` B1+B2 专项 |
+| **B2** | R1.1, R2.2, R2.14（CI） | `../b2/conclusions/B2_结论与回复素材.md` | 同上；`b2/tables/` |
+| **B3** | R1.2, R2.8, R3.1 | `../b3/B3_WAVE1_RESULTS.md`；`REVIEWER_RESPONSE_SNIPPETS_B3.md` | **§13**；`REVIEWER` **B3 专项**；正式回复 R13–R14 |
+| **B4** | R2.8 | `../b4/B4_STATUS_ZH.md`；L3 → `../b3/manuscript_llm_metrics.yaml` | **§15**；`REVIEWER` **B4 专项**；正式回复 R15–R16 |
+| **B6** | R2.9 | `../b6/B6_ROUTING_STABILITY_CONCLUSIONS.md`；`docs/supplementary/router_spec.md` | **§11**；`REVIEWER` **B6 专项** |
+| **B8** | R1.3（校准/拒答，不含 NHC） | `../b8/`；`output/b8/` | **§12**；`REVIEWER` **B8 专项** |
+| **B9** | R2.10–12；S5 灰底 | [`../b9/B9_ThyroidXAgent_修改与回复计划.md`](../b9/B9_ThyroidXAgent_修改与回复计划.md) | **§16**；`REVIEWER` **B9 专项** |
+| **B10** | R2.14 | `../b10/B10_结论与回复素材.md` | **§10**；`REVIEWER` **B10 专项** |
+| **B11** | R2.20–21 | `../b11_b12/`；`docs/reproducibility_radiomics.md` | **§8.3–§8.4** |
+| **B12** | R2.7, R2.1, R2.3, R1.4 | `../b11_b12/README.md`；`DATAFLOW_FIGURE.mmd` | **§8–§9**；`REVIEWER` B12 专项 |
+
+**修改/回复计划中的对应位置**：进行中 **B5** → **§14** + **B5 专项**（五 mode 已齐，**sample→TN5K 换数**）；进行中 **B7** → checklist + R1.3/R2.6 段（与 B8 校准分条）。
+
+**B5 与 B3/B4 范围差**：B3/B4 为九队列全外测；B5 **性能消融仅单列 TN5K**（不必九队列五 mode）。见 `MANUSCRIPT` **§14** 稿面范围段。
 
 ## 范围（重要）
 
@@ -54,8 +65,7 @@
 |------|------|
 | [MANUSCRIPT_REVISION_PLAN_ZH.md](./MANUSCRIPT_REVISION_PLAN_ZH.md) | 稿件修改计划（中文，**唯一稿本**） |
 | [REVIEWER_RESPONSE_PLAN_ZH.md](./REVIEWER_RESPONSE_PLAN_ZH.md) | 审稿意见回复就绪度（中文，R1–R3，**唯一稿本**） |
-| [REVIEWER_RESPONSE_DRAFT_EN.md](./REVIEWER_RESPONSE_DRAFT_EN.md) / [REVIEWER_RESPONSE_DRAFT_ZH.md](./REVIEWER_RESPONSE_DRAFT_ZH.md) | **正式回复信稿本（直接改这两个文件）**：审稿意见、回复、表图均写在 MD 里；**不必**经过任何 Python |
-| `build_reviewer_response_docx.py` | 仅在未来需要 Word 版时再考虑；与日常改 MD 无关 |
+| [REVIEWER_RESPONSE_DRAFT_EN.md](./REVIEWER_RESPONSE_DRAFT_EN.md) / [REVIEWER_RESPONSE_DRAFT_ZH.md](./REVIEWER_RESPONSE_DRAFT_ZH.md) | 历史 MD 稿本；**正式回信**以 `正式回复/latex/generated/body_*.tex` 为准 |
 | [B_DELIVERABLES_CHECKLIST_ZH.md](./B_DELIVERABLES_CHECKLIST_ZH.md) | **B1–B12 交付清单**（文/图/表 + 稿面位置 + 仓库路径 + 状态） |
 | [../../scripts/README_REVISION.md](../../scripts/README_REVISION.md) | **返修脚本 / pipeline 模块索引**（按 B 包归类） |
 
@@ -63,5 +73,5 @@
 
 - 稿件：`../../ThyroidXAgent.md`
 - 审稿 PDF：`../../Nature Communications Reviews.pdf`
-- 接近定稿包：`../b11_b12/`、`../b1/`、`../b2/conclusions/`、`../b10/`、`../b6/`（TN3K：`config/revision/b6/tn3k.yaml`、`output/b6/tn3k/pipeline_run/`）、`../b8/`（`output/b8/fit/`、`output/b8/cohorts/`、`output/b8/figures/`）、`../b3/`（`output/ablation/b3/`）、`../b9/`
-- 其余包：`../b3/` … `../b7/` 等（见 `../README.md`）
+- **进行中**：`../b5/`、`../b7/`
+- **已归档**：上表各 `../b*/` 真源；正式回信 `正式回复/latex/`

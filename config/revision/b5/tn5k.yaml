@@ -4,7 +4,7 @@ shared:
   agent_llm:
     api_key_env: DASHSCOPE_API_KEY
     base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
-    model_name: qwen3.7-flash
+    model_name: deepseek-v4-flash-0731
     temperature: 0.3
     max_tokens: 768
     enable_thinking: false

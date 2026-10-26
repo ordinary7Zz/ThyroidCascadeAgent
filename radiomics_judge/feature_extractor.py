@@ -142,6 +142,21 @@ class RadiomicsFeatureExtractor:
         if int(mask_binary.sum()) == 0:
             return {}
 
+        target_hw = gray.shape[:2]
+        if mask_binary.shape[:2] != target_hw:
+            import cv2
+
+            mask_binary = cv2.resize(
+                mask_binary,
+                (target_hw[1], target_hw[0]),
+                interpolation=cv2.INTER_NEAREST,
+            )
+            if image_name:
+                print(
+                    f"  ⚠️ radiomics: mask {mask_arr.shape[:2]} → 对齐图像 {target_hw}"
+                    f" (image_name={image_name})"
+                )
+
         # ---- numpy → SimpleITK ----
         # 图像转 float32（与训练侧 sitk.GetImageFromArray(image.astype(np.float32)) 一致）
         img_sitk = sitk.GetImageFromArray(gray.astype(np.float32))

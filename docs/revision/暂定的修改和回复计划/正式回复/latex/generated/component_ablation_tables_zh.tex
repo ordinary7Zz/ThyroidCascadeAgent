@@ -1,0 +1,41 @@
+% B4 component stacking (L1→L2→L3); L1/L2 from b4_component_table.csv; L3 from manuscript_llm_metrics.yaml
+
+\begin{responsetable}
+\caption{\responsetabletitle{tab_component_ablation_seg}{组件消融 --- 结节分割（Dice $\uparrow$；点估计及 95\% CI）}}
+\label{tab_component_ablation_seg}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{@{}l r l l l@{}}
+\toprule
+队列 & $n$ & L1 Dice & L2 Dice & L3 Dice \\
+\midrule
+TN3K & 614 & 0.8454 (0.8319--0.8583) & 0.8559 (0.8427--0.8681) & 0.8528 (0.8400--0.8656) \\
+TN5K & 1000 & 0.8292 (0.8152--0.8424) & 0.8097 (0.7969--0.8221) & 0.8326 (0.8192--0.8460) \\
+ThyroidXL & 2090 & 0.8792 (0.8745--0.8837) & 0.8640 (0.8559--0.8708) & 0.8758 (0.8714--0.8802) \\
+DDTI (seg) & 637 & 0.8492 (0.8369--0.8596) & 0.8451 (0.8313--0.8559) & 0.8562 (0.8455--0.8669) \\
+PKTN & 150 & 0.8388 (0.8127--0.8592) & 0.8376 (0.8145--0.8583) & 0.8299 (0.8089--0.8509) \\
+ZJH-8K & 7958 & 0.8376 (0.8331--0.8418) & 0.8356 (0.8286--0.8423) & 0.9430 (0.9392--0.9468) \\
+RJH-7K & 7288 & 0.9128 (0.9113--0.9143) & 0.8931 (0.8905--0.8955) & 0.9146 (0.9132--0.9160) \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{\textbf{L1}：堆叠 development 上训练的单个多队列联合 DINO 专家（无智能体、无 AutoGluon）。\textbf{L2}：固定专家池 + 软投票（与表 R13--R14 中\textbf{策略 2} 相同；在 L1 的\textbf{固定上游候选输出}上评估、不重训专家）。\textbf{L3}：投稿主文全系统 ThyroidXAgent（\textbf{策略 7} LLM 路由，与修订稿 Table S3/S4 一致）。L1/L2 的 CI 为 cluster bootstrap（1000 次，seed=42）；L3 CI 与稿面 S3/S4 一致。L3 与 L1/L2 \textbf{评测协议不同}，不宜将层间数值差解读为同一条流水线上的逐步因果分解。}
+\end{responsetable}
+
+\begin{responsetable}
+\caption{\responsetabletitle{tab_component_ablation_cls}{组件消融 --- 良恶性分类（AUROC $\uparrow$；点估计及 95\% CI）}}
+\label{tab_component_ablation_cls}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{@{}l r l l l@{}}
+\toprule
+队列 & $n$ & L1 AUROC & L2 AUROC & L3 AUROC \\
+\midrule
+TN3K & 614 & 0.7695 (0.7279--0.8057) & 0.8282 (0.7939--0.8633) & 0.8692 (0.8343--0.9041) \\
+TN5K & 1000 & 0.9544 (0.9393--0.9672) & 0.9437 (0.9278--0.9589) & 0.9472 (0.9320--0.9624) \\
+ThyroidXL & 2090 & 0.9288 (0.9180--0.9397) & 0.9359 (0.9202--0.9500) & 0.9676 (0.9610--0.9742) \\
+DDTI (cls) & 349 & 0.7506 (0.6700--0.8257) & 0.7537 (0.6707--0.8319) & 0.7991 (0.7250--0.8732) \\
+ZJH-8K & 7958 & 0.9571 (0.9527--0.9611) & 0.9322 (0.9208--0.9423) & 0.9175 (0.9008--0.9342) \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{层定义与 CI 口径见表 R15 注。DDTI 行为分类子集（$n$=349）。}
+\end{responsetable}

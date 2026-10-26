@@ -51,6 +51,23 @@ from shared.phase3_options import (
 from shared.uncertainty_signals import build_uncertainty_block, seg_disagreement_from_masks
 
 
+def read_seg_npz_image_names(path: Path) -> list[str]:
+    """intermediate/seg/*.npz 内 image_names 列（Phase 1 写入顺序）。"""
+    with np.load(str(path), allow_pickle=True) as data:
+        return [str(x) for x in data["image_names"]]
+
+
+def discover_intermediate_image_names(seg_cache_dir: Path) -> list[str]:
+    """任取一个 seg npz 的 image_names；B5 for_llm 子集须用其名查行，不能用 batch idx。"""
+    for npz in sorted(seg_cache_dir.glob("*.npz")):
+        return read_seg_npz_image_names(npz)
+    return []
+
+
+def build_intermediate_row_index(intermediate_names: list[str]) -> dict[str, int]:
+    return {str(n): i for i, n in enumerate(intermediate_names)}
+
+
 def preload_workers_for_config(config: dict) -> int:
     """Phase 3 等阶段并行读 intermediate 的线程数（与「多策略 batch 并行」无关）。"""
     pipe = config.get("pipeline", {}) or {}
@@ -244,23 +261,28 @@ class CascadePipeline:
 
     @staticmethod
     def _load_cls_json(path: Path) -> list:
-        """加载分类 json，返回 list[ClsModelOutput]。"""
+        """加载分类 json，返回 list[ClsModelOutput]（顺序不保证；Phase 3 请用 _load_cls_json_map）。"""
+        return list(CascadePipeline._load_cls_json_map(path).values())
+
+    @staticmethod
+    def _load_cls_json_map(path: Path) -> dict[str, Any]:
+        """按 image_name 索引的 ClsModelOutput（与 Phase 2 json results 键一致）。"""
         from classification.base_model import ClsModelOutput
 
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
-        results = []
-        for _img_name, pred_dict in data["results"].items():
-            results.append(ClsModelOutput(
+        out: dict[str, Any] = {}
+        for img_name, pred_dict in data.get("results", {}).items():
+            out[str(img_name)] = ClsModelOutput(
                 model_name=pred_dict["model_name"],
                 predictions=pred_dict["predictions"],
                 top_class=pred_dict["top_class"],
                 top_confidence=pred_dict["top_confidence"],
                 requires_mask=pred_dict["requires_mask"],
                 metadata=pred_dict.get("metadata", {}),
-            ))
-        return results
+            )
+        return out
 
     def _preload_seg_cls_caches(
         self,
@@ -270,11 +292,12 @@ class CascadePipeline:
         cls_cache_dir: Path,
         *,
         need_seg_conf: bool,
-    ) -> tuple[dict[str, list], dict[str, list]]:
+    ) -> tuple[dict[str, list], dict[str, dict[str, Any]], list[str]]:
         """并行加载 Phase 3 所需的 seg npz / cls json（策略推理仍按图串行）。"""
         workers = preload_workers_for_config(self.config)
         seg_cache_by_model: dict[str, list] = {}
-        cls_cache_by_model: dict[str, list] = {}
+        cls_cache_by_model: dict[str, dict[str, Any]] = {}
+        intermediate_names: list[str] = []
 
         seg_jobs: list[tuple[str, Path, bool]] = []
         for model_cfg in seg_model_configs:
@@ -294,9 +317,12 @@ class CascadePipeline:
             if path.is_file():
                 cls_jobs.append((model_name, path))
 
+        if seg_jobs:
+            intermediate_names = read_seg_npz_image_names(seg_jobs[0][1])
+
         n_tasks = len(seg_jobs) + len(cls_jobs)
         if n_tasks == 0:
-            return seg_cache_by_model, cls_cache_by_model
+            return seg_cache_by_model, cls_cache_by_model, intermediate_names
         if n_tasks == 1:
             workers = 1
 
@@ -310,9 +336,9 @@ class CascadePipeline:
             name, path, need_conf = job
             return name, self._load_seg_npz(path, load_confidence=need_conf)
 
-        def _load_cls(job: tuple[str, Path]) -> tuple[str, list]:
+        def _load_cls(job: tuple[str, Path]) -> tuple[str, dict[str, Any]]:
             name, path = job
-            return name, self._load_cls_json(path)
+            return name, self._load_cls_json_map(path)
 
         with ThreadPoolExecutor(max_workers=min(workers, n_tasks)) as pool:
             futs: list[tuple[str, Any]] = []
@@ -329,7 +355,7 @@ class CascadePipeline:
                 else:
                     cls_cache_by_model[name] = rows
 
-        return seg_cache_by_model, cls_cache_by_model
+        return seg_cache_by_model, cls_cache_by_model, intermediate_names
 
     @staticmethod
     def _save_selected_masks_npz(
@@ -990,13 +1016,16 @@ class CascadePipeline:
             # 次解压，是 Phase 3 的性能/内存瓶颈（ZJH-8K 上卡死 1.5 天零产出）。
             # 静态模式（enable_seg_agent=False）下不使用 confidence_map，跳过以省内存。
             need_seg_conf = enable_seg_agent or seg_routing_mode == "max_confidence"
-            seg_cache_by_model, cls_cache_by_model = self._preload_seg_cls_caches(
+            seg_cache_by_model, cls_cache_by_model, intermediate_names = self._preload_seg_cls_caches(
                 seg_model_configs,
                 cls_model_configs,
                 seg_cache_dir,
                 cls_cache_dir,
                 need_seg_conf=need_seg_conf,
             )
+            if not intermediate_names:
+                intermediate_names = discover_intermediate_image_names(seg_cache_dir)
+            intermediate_row_index = build_intermediate_row_index(intermediate_names)
 
             # radiomics judge 对象（Phase 3 统一跑一次，结果同时用于 mask 选择
             # 和填充 autogluon 缓存，避免 Phase 4 对 all_datasets mask 重复计算）
@@ -1040,21 +1069,23 @@ class CascadePipeline:
                             self.image_io.load_mask(gt_path)
                         )
 
-                # 按 idx 取该图像的分割结果（已预加载，O(1) 索引）
+                # 按 image_name 在 intermediate npz 中查行（支持 for_llm 子集 ≠ Phase1 列表顺序）
+                inter_row = intermediate_row_index.get(img_name)
                 seg_preds = []
                 for model_cfg in seg_model_configs:
                     model_name = model_cfg.get("name", "")
                     cache = seg_cache_by_model.get(model_name)
-                    if cache is not None and idx < len(cache):
-                        seg_preds.append(cache[idx])
+                    if cache is not None and inter_row is not None and inter_row < len(cache):
+                        seg_preds.append(cache[inter_row])
 
-                # 按 idx 取该图像的分类结果（已预加载）
                 indie_preds = []
                 for model_cfg in cls_model_configs:
                     model_name = model_cfg.get("name", "")
-                    cache = cls_cache_by_model.get(model_name)
-                    if cache is not None and idx < len(cache):
-                        indie_preds.append(cache[idx])
+                    cls_map = cls_cache_by_model.get(model_name)
+                    if cls_map is not None:
+                        pred = cls_map.get(img_name)
+                        if pred is not None:
+                            indie_preds.append(pred)
 
                 # 分类共识
                 consensus, anchor_class = self._check_classification_consensus(
@@ -1062,6 +1093,9 @@ class CascadePipeline:
                 )
 
                 # 分割 Agent
+                if inter_row is None and run_segmentation:
+                    print(f"  ✗ {img_name} 不在 intermediate image_names 中，跳过")
+                    continue
                 if not seg_preds:
                     print(f"  ✗ {img_name} 无分割结果，跳过")
                     continue
@@ -1424,10 +1458,11 @@ class CascadePipeline:
                 model_name = model_cfg.get("name", "")
                 cache_path = cls_cache_dir / f"{model_name}.json"
                 if cache_path.exists():
-                    cls_outputs = self._load_cls_json(cache_path)
-                    for j, img_name in enumerate(img_names):
-                        if j < len(cls_outputs):
-                            all_indie_cls[img_name].append(cls_outputs[j])
+                    cls_map = self._load_cls_json_map(cache_path)
+                    for img_name in img_names:
+                        pred = cls_map.get(img_name)
+                        if pred is not None:
+                            all_indie_cls[img_name].append(pred)
 
             for idx, img_name in enumerate(img_names):
                 indie_preds = all_indie_cls[img_name]

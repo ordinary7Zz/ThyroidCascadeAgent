@@ -17,7 +17,11 @@ import numpy as np
 
 from classification.agent import LLMClassificationAgent
 from pipeline.revision.b3.ablation_metrics import build_b3_metrics, save_b3_metrics
-from pipeline.cascade import CascadePipeline
+from pipeline.cascade import (
+    CascadePipeline,
+    build_intermediate_row_index,
+    discover_intermediate_image_names,
+)
 from pipeline.evaluate import evaluate_pipeline
 from pipeline.revision.b3.intermediate_manifest import write_intermediate_manifest
 from routing.best_single_expert import get_best_single_names
@@ -374,11 +378,12 @@ def run_static_b3_bundle(
     run_classification = task in ("cls", "both")
 
     seg_cache_by_model: dict[str, SegCacheValue] = {}
-    cls_cache_by_model: dict[str, list] = {}
+    cls_cache_by_model: dict[str, dict[str, Any]] = {}
     lazy_seg = run_segmentation and _bundle_lazy_seg_threshold(config, len(img_names))
+    intermediate_names: list[str] = []
 
     if run_segmentation and run_classification and not lazy_seg:
-        seg_cache_by_model, cls_cache_by_model = pipeline._preload_seg_cls_caches(
+        seg_cache_by_model, cls_cache_by_model, intermediate_names = pipeline._preload_seg_cls_caches(
             seg_model_configs,
             cls_model_configs,
             seg_cache_dir,
@@ -387,7 +392,7 @@ def run_static_b3_bundle(
         )
     else:
         if run_classification:
-            _, cls_cache_by_model = pipeline._preload_seg_cls_caches(
+            _, cls_cache_by_model, intermediate_names = pipeline._preload_seg_cls_caches(
                 [],
                 cls_model_configs,
                 seg_cache_dir,
@@ -412,7 +417,7 @@ def run_static_b3_bundle(
                             path, load_confidence=need_seg_conf
                         )
             else:
-                seg_only, _ = pipeline._preload_seg_cls_caches(
+                seg_only, _, inter_from_seg = pipeline._preload_seg_cls_caches(
                     seg_model_configs,
                     [],
                     seg_cache_dir,
@@ -420,6 +425,12 @@ def run_static_b3_bundle(
                     need_seg_conf=need_seg_conf,
                 )
                 seg_cache_by_model = seg_only
+                if inter_from_seg:
+                    intermediate_names = inter_from_seg
+
+    if not intermediate_names:
+        intermediate_names = discover_intermediate_image_names(seg_cache_dir)
+    intermediate_row_index = build_intermediate_row_index(intermediate_names)
 
     judge_obj = getattr(pipeline.seg_agent, "radiomics_judge", None)
     phase3_expert_judge = phase3_expert_judge_enabled(config)
@@ -455,14 +466,18 @@ def run_static_b3_bundle(
     for idx, img_name in enumerate(img_names):
         gt_mask = _load_gt_mask_for_image(gt_stem_map, img_name, pipeline.image_io)
         image: Optional[np.ndarray] = None
+        inter_row = intermediate_row_index.get(img_name)
 
         seg_preds = []
         if run_segmentation:
+            if inter_row is None:
+                print(f"  ✗ {img_name} 不在 intermediate image_names 中，跳过", flush=True)
+                continue
             for model_cfg in seg_model_configs:
                 model_name = model_cfg.get("name", "")
                 cache = seg_cache_by_model.get(model_name)
                 if cache is not None:
-                    pred = _seg_pred_at(cache, idx)
+                    pred = _seg_pred_at(cache, inter_row)
                     if pred is not None:
                         seg_preds.append(pred)
 
@@ -470,9 +485,11 @@ def run_static_b3_bundle(
         if run_classification:
             for model_cfg in cls_model_configs:
                 model_name = model_cfg.get("name", "")
-                cache = cls_cache_by_model.get(model_name)
-                if cache is not None and idx < len(cache):
-                    indie_preds.append(cache[idx])
+                cls_map = cls_cache_by_model.get(model_name)
+                if cls_map is not None:
+                    pred = cls_map.get(img_name)
+                    if pred is not None:
+                        indie_preds.append(pred)
 
         consensus, anchor_class = False, None
         if indie_preds:

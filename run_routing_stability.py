@@ -135,7 +135,7 @@ def main():
         seg_cache_dir=inter / "seg",
         cls_cache_dir=inter / "cls",
         load_seg_npz=CascadePipeline._load_seg_npz,
-        load_cls_json=CascadePipeline._load_cls_json,
+        load_cls_json=CascadePipeline._load_cls_json_map,
         check_classification_consensus=CascadePipeline._check_classification_consensus,
         consensus_threshold=cls_cfg.get("agent", {}).get("consensus_min_confidence", 0.6),
         enable_seg_agent=enable_seg_agent,

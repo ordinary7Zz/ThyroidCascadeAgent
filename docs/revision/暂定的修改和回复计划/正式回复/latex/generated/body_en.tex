@@ -164,11 +164,12 @@ The key innovation is the agentic evidence workflow, but observed gains may larg
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item We agree that contributions from the expert pool and training stack, radiomics branch, report generation, and how experts are routed on fixed outputs must be separated. For segmentation and classification, the last is tested directly by the fixed-pool routing ablation in Reviewer 1, Comment 2; whether supervised baselines were fine-tuned on the same development data is in Reviewer 2, Comment 14 (\responsetableref{tab_baseline_protocol}); stepwise stacking (single expert, pool, pool+routing, etc.) is discussed in the revised manuscript stepwise-stacking results. \rpending{Revised manuscript: Results stepwise-stacking narrative (R2.8)} Report-side static/tool ablations are not repeated here.
-\item The ablation shows that with the \textbf{same expert pool and candidate outputs}, changing only the routing policy materially changes segmentation and classification metrics, so system performance cannot be attributed only to a default ensemble or a single heuristic. Completed static comparisons show: (i)~max-confidence underperforms ensembling on several cohorts; (ii)~no universally best static router; (iii) a gap between the non-deployable upper bound and the best deployable static policy (\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}).
-\item Comparisons of learned routing (6) and the full system (7) against the best static policies and the non-deployable upper bound are in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} (e.g., TN5K segmentation: (6) matches the validation-selected best single expert at Dice 0.831; TN3K classification: (7) AUROC 0.869). We will still emphasize auditable \texttt{routing\_log}s and cross-task reconfiguration in the Discussion (complementary to Reviewer 2, Comment 9 and \responsetableref{tab_routing_stability}, which reports repeat-call LLM stability in the deployed pipeline, not the eight-strategy performance ranking).
+\item We agree that module contributions must be separated. For segmentation and classification we add \textbf{stepwise component ablation} (\responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}): \textbf{L1}, a single multi-cohort joint DINO expert trained on the full stacked development data (no agent, no AutoGluon); \textbf{L2}, fixed pool + mask/probability soft voting (same as \textbf{strategy (2)} in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}, evaluated on \textbf{frozen upstream candidate expert outputs} without retraining experts); \textbf{L3}, the manuscript ThyroidXAgent (LLM routing + evidence synthesis, aligned with revised Table S3/S4). L1/L2 and L3 use \textbf{different evaluation protocols}; layer-wise deltas are for comparison, not stepwise causation on one pipeline. Fixed-pool \textbf{routing-policy} comparisons are in Reviewer 1, Comment 2; supervised baseline fine-tuning in Reviewer 2, Comment 14 (\responsetableref{tab_baseline_protocol}). Report-side static/tool ablations are not repeated here.
+\item Component ablation highlights: (i)~on TN3K, L2 improves over L1 for segmentation Dice (0.856 vs 0.845) and classification AUROC (0.828 vs 0.770), with L3 classification at 0.869; (ii)~soft voting is not universally best (e.g., ZJH-8K classification L1 AUROC 0.957 $>$ L2 0.932); (iii)~L3 exceeds L2 on most cohorts (e.g., TN5K segmentation Dice 0.833 vs 0.810; ZJH-8K segmentation 0.943 vs 0.836). On ZJH, L1 AUROC exceeds deployable L3 (0.917), consistent with supplementary single-expert contrasts and \textbf{different task/protocol definitions}---not evidence that a single expert outperforms ThyroidXAgent; the revised Results will state this alongside S6 reconciliation. \rpending{Revised manuscript: Results wording (Tables R15--R16 fixed in this letter)}
+\item With the \textbf{same expert pool and candidate outputs}, changing only the routing policy materially changes metrics (\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}): (i)~max-confidence underperforms ensembling on several cohorts; (ii)~no universally best static router; (iii)~a gap between the non-deployable Oracle and the best deployable static policy.
+\item Learned routing (6) and the full system (7) vs.\ best static policies and Oracle are in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} (e.g., TN5K segmentation (6) Dice 0.831; TN3K classification (7) AUROC 0.869, matching the L3 component row). Auditable structured routing records and repeat-call stability are in Reviewer 2, Comment 9 (\responsetableref{tab_routing_stability}).
 \end{itemize}
-\textbf{Supporting material:} Reviewer 1, Comment 2, \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}; baseline protocol in \responsetableref{tab_baseline_protocol}.
+\textbf{Supporting material:} \responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}; Reviewer 1, Comment 2, \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}; \responsetableref{tab_baseline_protocol}.
 \par
 \end{authorresponse}
 \reviewersection{Reviewer 2, Comment 9 (R2.9)}
@@ -177,12 +178,12 @@ The manuscript states that the LLM router "reasons" to select the best expert ou
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item Appendix A1 lists model/decoding parameters, full prompt templates, output JSON schemas, and routing-log field definitions for R2.9. On the TN3K malignancy-classification test subset (\textit{N} = 250), every segmentation/classification step that invokes the LLM is written to structured logs (field definitions in Appendix A1).
+\item Appendix A1 lists model/decoding parameters, full prompt templates, required LLM output formats, and the contents of structured routing records for R2.9. On the TN3K malignancy-classification test subset (\textit{N} = 250), every segmentation/classification step that invokes the LLM is written to auditable structured records (described in Appendix A1).
 \item LLM decision stability (similar candidates): with frozen upstream expert outputs, we drew 10 cases from the ``similar candidate'' subset (below) and repeated segmentation LLM routing five times per case. The fraction of runs with identical selected segmentation expert was 98\% (9/10 cases identical on all five runs; 1/10 at 80\%, case \texttt{TN3K\_test\_0009.jpg}: one run switched between the multi-cohort joint expert and the TN3K-specific expert, Dice difference $\approx$ 0.017); see \responsetableref{tab_routing_stability}. When three independent classifiers already agree, classification uses deterministic consensus (no LLM) and is outside this repeat experiment.
-\item Similar-candidate tier: candidates are ranked by inter-mask agreement; if the quality gap between the top two is $\leq 0.10$ the tier is ``close,'' otherwise ``easy.'' All 10 stability cases are close; \responsetableref{tab_routing_stability} reports LLM consistency on this tier only. Log fields such as \texttt{disagreement\_tier} and \texttt{selected\_model} are defined in Appendix A1.
-\item ≥10 de-identified \texttt{routing\_log} exemplars with the same case IDs as \responsetableref{tab_routing_stability} are listed at the end of Appendix A1 (including the \texttt{prompts} field when archived).
+\item Similar-candidate tier: candidates are ranked by inter-mask agreement; if the quality gap between the top two is $\leq 0.10$ the tier is ``similar,'' otherwise ``easy.'' All 10 stability cases are similar; \responsetableref{tab_routing_stability} reports LLM consistency on this tier only. How each record reports the selected expert and similarity tier is defined in Appendix A1.
+\item ≥10 de-identified structured routing-record exemplars with the same case IDs as \responsetableref{tab_routing_stability} are listed at the end of Appendix A1 (including the full prompt text when archived).
 \end{itemize}
-\textbf{Supporting material:} \responsetableref{tab_routing_stability} (routing stability) and Appendix A1 (LLM router specification and routing\_log fields).
+\textbf{Supporting material:} \responsetableref{tab_routing_stability} (routing stability) and Appendix A1 (LLM router specification and routing-record description).
 \par
 \end{authorresponse}
 \reviewersection{Reviewer 2, Comment 10 (R2.10)}
@@ -214,7 +215,7 @@ For lymph-node metastasis prediction, the manuscript inconsistently uses overall
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item We will harmonize the LNM binary label key (e.g.\ \texttt{LNM\_CN01}) and the data sources (primary lesions on the ZJH-8K malignant subset vs.\ lymph-node images on LymphUs), and separate lateral LNM wording from CN0/CN1 label keys. \rpending{Revised manuscript: Methods/\S2.4/Fig.~3/\responsetableref{tab_malig_oof} wording; LNM clinical definitions with pathology/clinical co-authors (R2.12)}
+\item We will harmonize the clinical LNM binary label definition (CN0/CN1 convention) and the data sources (primary lesions on the ZJH-8K malignant subset vs.\ lymph-node images on LymphUs), and separate lateral LNM wording from CN0/CN1 terminology. \rpending{Revised manuscript: Methods/\S2.4/Fig.~3/\responsetableref{tab_malig_oof} wording; LNM clinical definitions with pathology/clinical co-authors (R2.12)}
 \item Statistical and evaluation protocol matches Reviewer 2, Comment 11 (R2.11): ZJH clustered by year/name; LymphUs Center~1 (lymph-node images) for development with one image per cluster; arithmetic mean of malignancy probability within cluster; patient/cluster-stratified five-fold OOF on the development set (seed 42) with cluster-bootstrap CIs will be stated in Methods. \rpending{Revised manuscript: Methods \S4.1/\S4.6 and \responsetableref{tab_malig_oof} protocol (R2.11/R2.12)} \responsetableref{tab_malig_oof} reports OOF AUROC/AUPRC for ThyroidXAgent and baselines; \responsetableref{tab_malig_ext} reports external tests for LNM (LymphUs Center~2) and FTC/PTC (FangDai) in parallel---not a general statistical-protocol table.
 \end{itemize}
 \textbf{Supporting material:} \responsetableref{tab_malig_oof} and \responsetableref{tab_malig_ext}.
@@ -226,9 +227,9 @@ It is unclear whether all expert baselines were retrained on the same developmen
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item All supervised baselines in \responsetableref{tab_cls_ext} and \responsetableref{tab_seg_ext} were fine-tuned on the same \textbf{segmentation/classification development sets} (cohort composition in the \responsetableref{tab_baseline_protocol} notes) from publicly available upstream weights---not thyroid zero-shot or frozen-upstream evaluation only. Full ThyroidXAgent main results use the same development data; progressive stacking ablations are reported separately in the manuscript stepwise-stacking table. Vision--language baselines were zero-shot/API with fixed prompts and were not end-to-end trained on the classification development set. External cohorts (e.g.\ ZJH-8K, DDTI) were used for testing only. The complete training and inference protocol is in \responsetableref{tab_baseline_protocol}.
+\item All supervised baselines in \responsetableref{tab_cls_ext} and \responsetableref{tab_seg_ext} were fine-tuned on the same \textbf{segmentation/classification development sets} (cohort composition in the \responsetableref{tab_baseline_protocol} notes) from publicly available upstream weights---not thyroid zero-shot or frozen-upstream evaluation only. Full ThyroidXAgent main results use the same development data; stepwise component ablation (L1 single expert $\rightarrow$ L2 soft voting $\rightarrow$ L3 full system) is in Reviewer 2, Comment 8 (\responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}). Vision--language baselines were zero-shot/API with fixed prompts and were not end-to-end trained on the classification development set. External cohorts (e.g.\ ZJH-8K, DDTI) were used for testing only. The complete training and inference protocol is in \responsetableref{tab_baseline_protocol}.
 \end{itemize}
-\textbf{Supporting material:} \responsetableref{tab_baseline_protocol} (baseline training and inference protocol).
+\textbf{Supporting material:} \responsetableref{tab_baseline_protocol}; component ablation \responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}.
 \par
 \end{authorresponse}
 \reviewersection{Reviewer 2, Comment 20 (R2.20)}
@@ -262,7 +263,7 @@ Comparisons against majority vote, probability averaging, rule-based routing, an
 \begin{authorresponse}
 \begin{itemize}
 \item We thank the reviewer. On the same fixed expert pool as Reviewer 1, Comment 2, we include majority vote, soft voting, and static agreement-based routing, plus validation best single expert, max-confidence, and the non-deployable upper bound, so comparisons are not limited to weak heuristics.
-\item \textbf{Non-LLM learned routing (strategy 6):} We fit separate multinomial logistic routers for segmentation and classification ($C{=}0.1$, \texttt{seed}${=}42$) on validation \textbf{quality and disagreement summaries} per candidate expert (no device/data-source metadata; no LLM). Segmentation labels are the expert with highest mask Dice vs.\ GT on validation; classification labels are defined on the \textbf{Path B} subset (among \textbf{correct} experts, highest confidence). Weights are frozen on test for discrete expert selection. Full-system LLM routing (strategy 7) follows the main \responsetableref{tab_cls_ext} protocol. Both are tabulated with all static baselines in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}.
+\item \textbf{Non-LLM learned routing (strategy 6):} We fit separate multinomial logistic routers for segmentation and classification ($C{=}0.1$, random seed 42) on validation \textbf{quality and disagreement summaries} per candidate expert (no device/data-source metadata; no LLM). Segmentation labels are the expert with highest mask Dice vs.\ GT on validation; classification labels are defined on the subset where \textbf{three independent classifiers did not agree} (among \textbf{correct} experts, highest confidence). Weights are frozen on test for discrete expert selection. Full-system LLM routing (strategy 7) follows the main \responsetableref{tab_cls_ext} protocol. Both are tabulated with all static baselines in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}.
 \item External generalization: beyond TN3K, TN5K, and ThyroidXL, we ran the same protocol on ZJH-8K, RJH-7K (segmentation only), DDTI (separate seg/cls cohorts), and PKTN (segmentation only), including strategy (6); strategy (7) values follow Table~S3/S4 in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}. NHC-MISD-TUS is not yet in this sub-table; main-text full-system results and unseen-center discussion are under R1.3/R2.6.
 \end{itemize}
 \textbf{Supporting material:} Shared with Reviewer 1, Comment 2: \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}.
@@ -274,11 +275,12 @@ The LLM router uses metadata such as device and data source in addition to predi
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item We agree that routing must be tested for over-reliance on data-source or scanner metadata versus case-level quality signals. Under the \textbf{same fixed expert pool} and evaluation protocol as Reviewer 1, Comment 2, we will ablate router inputs: (i) full inputs; (ii) drop data source; (iii) drop device/scanner fields; (iv) drop both; (v) quality and disagreement features only (aligned with strategy-6 learned routing and reported separately). We will report effects on segmentation Dice/HD95 and classification AUROC/AUPRC and summarize expert-selection frequencies or confusion matrices by center (and in-hospital cohorts where applicable).
-\item The 35 NHC-MISD-TUS centers were not seen during router development, so metadata cannot encode memorized center IDs at external test; if ablations show sensitivity on in-hospital cohorts, we will separate development-seen center preferences from unseen-center generalization in the Discussion.
+\item We thank the reviewer. We agree that routing must be tested for over-reliance on data-source or scanner metadata versus case-level quality and disagreement signals. On the \textbf{same fixed expert pool} and \textbf{frozen upstream candidate outputs} as the full-system LLM router (\textbf{strategy (7)}) in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} (no expert retraining), we vary only metadata visible in the LLM router prompts. \responsetableref{tab_metadata_ablation} lists five conditions (table note): \textbf{full metadata} (manuscript S4); \textbf{data source withheld}; \textbf{device withheld}; \textbf{both withheld}; \textbf{quality and disagreement signals only} (primary contrast). This is distinct from Reviewer 3, Comment 1 strategy-6 learned routing, which never used device/source metadata and is reported separately in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}.
+\item \textbf{Performance ablation (manuscript primary cohort):} The revised manuscript reports segmentation and classification metrics under these five conditions on the \textbf{TN5K} primary malignancy-classification evaluation subset (\rpending{$n$=250 point estimates and 95\% CIs; Table R17 currently shows an internal development pilot, $n$=10}) in \responsetableref{tab_metadata_ablation}. This cohort uses a \textbf{different reporting scope} than the nine-cohort routing/component external tables (\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}, Tables R15--R16) and is not row-aligned with them. On the pilot subset, \textbf{full metadata $\rightarrow$ quality/disagreement only} gives $\Delta$Dice $\approx -0.0002$ and $\Delta$AUROC $=0$; Dice spans 0.827--0.838 across conditions (\textbf{both withheld} lowest); \rpending{TN5K primary $\Delta$ values and CIs}. Identical classification AUROC (0.92) across conditions on the pilot reflects deterministic consensus when three classifiers agree (LLM invoked on only 1/10 cases) and must not be extrapolated.
+\item The 35 NHC-MISD-TUS centers were not used to train router weights; metadata at external test cannot encode memorized center IDs. \textbf{Per-center expert-selection patterns} will be summarized from structured routing logs for steps that \textbf{invoked the LLM}, as a centre$\times$expert heatmap under \textbf{full metadata}, complementary to centre-heterogeneity analyses in Reviewer 2, Comment 6 (R2.6). \rpending{NHC-MISD-TUS centre$\times$expert heatmap and association statistics (R3.2)}
+\item Methods will state that LLM arbitration inputs used when classifiers disagree were \textbf{not} included in this metadata ablation; the Results short paragraph will match \responsetableref{tab_metadata_ablation}. \rpending{Revised Methods \S4.3 five metadata conditions and Results R3.2 paragraph (sync after TN5K final numbers)}
 \end{itemize}
-\noindent\rpending{Metadata ablation experiment (five conditions) and per-center expert-selection figures/tables (R3.2); same cohort protocol as \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}}\par
-\textbf{Supporting material:} \rpending{Metadata routing ablation supplement tables/figures (R3.2)}; routing framework in Reviewer 1, Comment 2, \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}.
+\textbf{Supporting material:} \responsetableref{tab_metadata_ablation}; Reviewer 1, Comment 2, \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}; router specification, Appendix A1.
 \par
 \end{authorresponse}
 \reviewersection{Reviewer 3, Comment 3 (R3.3)}
@@ -536,16 +538,16 @@ ThyroidXL & 739 & 0.8749 & 0.8675–0.8816 \\
 \toprule
 Case & Tier & Choice agreement (5 runs) \\
 \midrule
-TN3K\_test\_0002.jpg & close & 100\% \\
-TN3K\_test\_0006.jpg & close & 100\% \\
-TN3K\_test\_0007.jpg & close & 100\% \\
-TN3K\_test\_0009.jpg & close & 80\% \\
-TN3K\_test\_0010.jpg & close & 100\% \\
-TN3K\_test\_0011.jpg & close & 100\% \\
-TN3K\_test\_0019.jpg & close & 100\% \\
-TN3K\_test\_0025.jpg & close & 100\% \\
-TN3K\_test\_0026.jpg & close & 100\% \\
-TN3K\_test\_0031.jpg & close & 100\% \\
+TN3K\_test\_0002.jpg & Similar & 100\% \\
+TN3K\_test\_0006.jpg & Similar & 100\% \\
+TN3K\_test\_0007.jpg & Similar & 100\% \\
+TN3K\_test\_0009.jpg & Similar & 80\% \\
+TN3K\_test\_0010.jpg & Similar & 100\% \\
+TN3K\_test\_0011.jpg & Similar & 100\% \\
+TN3K\_test\_0019.jpg & Similar & 100\% \\
+TN3K\_test\_0025.jpg & Similar & 100\% \\
+TN3K\_test\_0026.jpg & Similar & 100\% \\
+TN3K\_test\_0031.jpg & Similar & 100\% \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
@@ -561,21 +563,21 @@ Model & Task & Thyroid development set & Upstream pretraining & External inferen
 \midrule
 BiomedCLIP & Classification & dataset\_3 & OpenCLIP BiomedCLIP; classification head fine-tuned on dataset\_3\_cls & Image only \\
 LSNet & Classification & dataset\_3 & ImageNet-pretrained LSNet & Image only \\
-MedSAM2 & Segmentation & dataset\_4 & SAM 2.1 Hiera & Image + GT box/mask (\texttt{gt\_mask}) \\
-MedSegX & Segmentation & dataset\_4 & SAM ViT-B + MedSegX thyroid adapter & Image + GT box/mask (\texttt{gt\_mask}) \\
+MedSAM2 & Segmentation & dataset\_4 & SAM 2.1 Hiera & Image + reference box/mask prompts \\
+MedSegX & Segmentation & dataset\_4 & SAM ViT-B + MedSegX thyroid adapter & Image + reference box/mask prompts \\
 MedSigLIP & Classification & dataset\_3 & Google MedSigLIP; partial fine-tune on dataset\_3\_cls & Image only \\
 RepViT & Classification & dataset\_3 & ImageNet-pretrained RepViT & Image only \\
 ResNet-50 & Classification & dataset\_3 & ImageNet ResNet-50; fine-tuned on dataset\_3 & Image only \\
-TransUNet & Segmentation & dataset\_4 & ImageNet-21k ViT-B/16 (TransUNet default) & Image + GT box/mask (\texttt{gt\_mask}) \\
+TransUNet & Segmentation & dataset\_4 & ImageNet-21k ViT-B/16 (TransUNet default) & Image + reference box/mask prompts \\
 UltraFedFM & Classification & dataset\_3 & ViT backbone + dataset\_3\_cls fine-tune & Image only \\
-UltraFedFM & Segmentation & dataset\_4 & MAE / federated FM + dataset\_4 fine-tune & Image + GT box/mask (\texttt{gt\_mask}) \\
+UltraFedFM & Segmentation & dataset\_4 & MAE / federated FM + dataset\_4 fine-tune & Image + reference box/mask prompts \\
 ThyroidXAgent (seg. router) & Segmentation & dataset\_4 & DINOv3-UNet (ImageNet-scale backbone) & Image $\rightarrow$ LLM-routed expert mask \\
 ThyroidXAgent (cls. router) & Classification & dataset\_3 & DINOv3 multitask backbone (dataset\_3 fine-tune) & Ultrasound image + routed mask and associated features \\
 GPT-5 / Gemini / MedGemma / Qwen3-VL (if in S4) & Classification & --- (not fine-tuned) & Vendor/public VLM weights & Image $\pm$ fixed text prompt (zero-shot or API) \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{1. \textbf{dataset\_3 (classification development):} TN3K + ThyroidXL + TN5K stacked training split (OpenThyroid public multitask classification development set). 2. \textbf{dataset\_4 (segmentation development):} TN3K + ThyroidXL + PKTN + TN5K stacked training split (OpenThyroid public segmentation development set). 3. \textbf{Supervised baseline protocol:} full fine-tuning on the stacked development set from public upstream weights; best validation checkpoint for all \responsetableref{tab_cls_ext} and R3 external tests---\textbf{not} thyroid zero-shot or frozen upstream weights only. 4. \textbf{Segmentation external test:} image + \textbf{reference box/mask} prompts (consistent with \responsetableref{tab_seg_ext}). 5. \textbf{Classification external test:} ultrasound image only. 6. \textbf{ThyroidXAgent:} full multi-cohort fine-tuned classification/segmentation results use the same development data as above; progressive ablations reported separately in the revised manuscript. 7. \textbf{Vision--language models:} not end-to-end trained on dataset\_3; vendor/public weights; API or frozen inference with fixed prompts. 8. Supervised rows match models in \textbf{\responsetableref{tab_cls_ext} and \responsetableref{tab_seg_ext}}; external cohorts (ZJH-8K, DDTI, etc.) \textbf{do not} enter development fine-tuning.}
+\responsetablenote{1. \textbf{dataset\_3 (classification development):} TN3K + ThyroidXL + TN5K stacked training split (OpenThyroid public multitask classification development set; cohort composition per the revised manuscript stacked-dataset configuration table). 2. \textbf{dataset\_4 (segmentation development):} TN3K + ThyroidXL + PKTN + TN5K stacked training split (OpenThyroid public segmentation development set; same configuration table). 3. \textbf{Supervised baseline protocol:} full fine-tuning on the stacked development set from public upstream weights; best validation checkpoint for all \responsetableref{tab_cls_ext} and R3 external tests---\textbf{not} thyroid zero-shot or frozen upstream weights only. 4. \textbf{Segmentation external test:} image + \textbf{reference box/mask} prompts (consistent with \responsetableref{tab_seg_ext}). 5. \textbf{Classification external test:} ultrasound image only. 6. \textbf{ThyroidXAgent:} full multi-cohort fine-tuned classification/segmentation results use the same development data as above; stepwise component ablation in \responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}. 7. \textbf{Vision--language models:} not end-to-end trained on dataset\_3; vendor/public weights; API or frozen inference with fixed prompts. 8. Supervised rows match models in \textbf{\responsetableref{tab_cls_ext} and \responsetableref{tab_seg_ext}}; external cohorts (ZJH-8K, DDTI, etc.) \textbf{do not} enter development fine-tuning.}
 \end{responsetable}
 
 \begin{responsetable}
@@ -600,10 +602,14 @@ ZJH-8K & 7958 & 1001 & 44 & 0.818 & 1001 \\
 
 \input{generated/routing_ablation_tables_en.tex}
 
+\input{generated/component_ablation_tables_en.tex}
+
+\input{generated/metadata_ablation_tables_en.tex}
+
 \responseproseappendixstart
 \subsection*{Appendix A1. LLM router specification (R2.9)}
 \label{app:A1}
-\noindent\footnotesize This appendix addresses R2.9 reproducibility: a plain-language flow summary first, then decoding parameters, English prompt templates, JSON schemas, and log fields (class/config keys match the repository). \textbf{Flow summary:} segmentation routing selects one mask among candidate experts; if three independent classifiers agree, classification does not call the LLM; if they disagree, an LLM synthesizes model outputs and radiomics probabilities on the selected mask; all steps are logged.
+\noindent\footnotesize This appendix addresses R2.9 reproducibility: a plain-language flow summary first, then decoding parameters, English prompt templates, required LLM output formats, and the contents of structured routing records. \textbf{Flow summary:} segmentation routing selects one mask among candidate experts; if three independent classifiers agree, classification does not call the LLM; if they disagree, an LLM synthesizes model outputs and radiomics probabilities on the selected mask; all steps are written to auditable structured records.
 \par
 \begin{responseinlinetable}
 \responseinlinetablecaption{Table A1-1. Shared LLM decoding parameters (segmentation router, classification router, and LLM arbitration when classifiers disagree)}
@@ -611,31 +617,30 @@ ZJH-8K & 7958 & 1001 & 44 & 0.818 & 1001 \\
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{ll}
 \toprule
-Field & Value \\
+Parameter & Setting \\
 \midrule
-API & OpenAI-compatible endpoint (DashScope) \\
-base\_url & \texttt{https://dashscope.aliyuncs.com/compatible-mode/v1} \\
-model\_name & \texttt{qwen3.8-27b} \\
-temperature & \texttt{0.3} \\
-max\_tokens & \texttt{768} \\
-enable\_thinking & \texttt{false} \\
-API key & Environment variable \texttt{DASHSCOPE\_API\_KEY} (not written to logs) \\
+API type & OpenAI-compatible endpoint (DashScope) \\
+Endpoint URL & \texttt{https://dashscope.aliyuncs.com/compatible-mode/v1} \\
+Model & \texttt{qwen3.8-27b} \\
+Temperature & 0.3 \\
+Max output tokens & 768 \\
+Extended thinking & Disabled \\
+API key & Configured via environment variable; not written to routing records \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
 \end{responseinlinetable}
 
-\textbf{1. Segmentation router (\texttt{SegmentationAgent})}
+\textbf{1. Segmentation LLM routing}
 \par
 \begin{itemize}
-\item Config: \texttt{enable\_agent=true}; \texttt{include\_disagreement\_metrics\_in\_prompt=true}; \texttt{metadata\_mode=full}; \texttt{radiomics\_judge.enabled=true}; ensemble \texttt{top\_k=1} (single-mask selection).
+\item Runtime settings: LLM routing enabled; disagreement metrics included in the prompt; full device/source metadata (manuscript S4); radiomics-judge summaries per candidate mask; single-mask selection per case.
 \item \textbf{System (base, always used):}
 \end{itemize}
 \begin{promptverbatim}
-You are a segmentation model selection agent. Choose the best mask from the JSON metrics in the user message.
-Do not output chain-of-thought, Markdown, or any text outside JSON. The first character must be { and the last must be }.
-Output a single line of JSON with "selected_model", "confidence" (0–1), and "reasoning" (fixed to "-"). Example: {"selected_model":"<name>", "confidence":0.9, "reasoning":"-"}
-Priority: higher agreement_with_others; when experts disagree, lower mean_hd95_to_others; prefer masks whose radiomics_judge aligns with classification_anchor; morphology and device match are secondary.
+You are a segmentation model selection agent. Choose the best mask from the structured metrics in the user message.
+Do not output chain-of-thought, Markdown, or any text outside JSON. Output one JSON line with: chosen model name, confidence in [0,1], and rationale (fixed to "-").
+Priority: higher inter-candidate mask agreement; when experts disagree, lower mean Hausdorff distance to other candidates; prefer masks whose radiomics judge aligns with the independent classification anchor; morphology and device match are secondary.
 \end{promptverbatim}
 \begin{itemize}
 \item \textbf{Optional system append --- independent classifiers agree} (classification anchor; example «malignant»):
@@ -662,33 +667,28 @@ Whole-image features are ambiguous. Prioritize:
 3. Device match and historical performance
 \end{promptverbatim}
 \begin{itemize}
-\item \textbf{User template}: optional disagreement summary + device/data lines +
+\item \textbf{User message}: assembled by the pipeline---optional disagreement summary, device/data lines, per-candidate segmentation quality (including radiomics-judge and disagreement summaries), and a natural-language instruction to output \textbf{one line of JSON only} (chosen expert name, confidence in [0,1], fixed placeholder rationale); see the System example below.
 \end{itemize}
-  \texttt{Below are outputs and quality assessments from \{N\} segmentation models:} + \texttt{\{formatted\_predictions\_json\}} +
-\par
-  \texttt{Which model provides the best segmentation? Output pure JSON only: \{"selected\_model": "<name>", "confidence": 0.95, "reasoning": "..."\}}
-\par
-  (\texttt{formatted\_predictions\_json} includes per-model quality metrics, optional radiomics\_judge, disagreement fields; built by code.)
 \par
 \begin{itemize}
-\item \textbf{Output JSON}: \texttt{\{"selected\_model": "<name>", "confidence": 0.0–1.0, "reasoning": "..."\}}
-\item \textbf{Non-LLM fallbacks}: \texttt{enable\_agent=false} or parse/API failure → rule-based static selector (\texttt{static\_fallback} / \texttt{llm\_fallback}).
+\item \textbf{Model output}: one JSON line with the chosen segmentation expert, confidence, and rationale (deployment uses ``-'' as a fixed placeholder rationale).
+\item \textbf{Non-LLM fallbacks}: if LLM routing is off or the API/parse fails, a deterministic rule-based static selector is used.
 \end{itemize}
-\textbf{2. Classification --- standalone router (\texttt{run\_cls.py}; no LLM if unanimous)}
+\textbf{2. Classification --- standalone LLM router (no LLM when three classifiers agree)}
 \par
 \begin{itemize}
-\item Unanimous top class → \texttt{method: unanimous}, no LLM call.
-\item \textbf{System (single selection, \texttt{top\_k==1})}:
+\item When all three independent classifiers share the same top class, deterministic consensus is used with no LLM call.
+\item \textbf{System (single-expert selection)}:
 \end{itemize}
 \begin{promptverbatim}
-From the predictions JSON in the user message, select the most trustworthy model.
-No chain-of-thought or Markdown. Output one line of JSON: selected_model, selected_class, confidence (0–1), reasoning fixed to "-".
+From the per-model prediction summaries in the user message, select the most trustworthy model.
+No chain-of-thought or Markdown. Output one JSON line with: chosen model name, predicted benign/malignant class, confidence in [0,1], rationale fixed to "-".
 \end{promptverbatim}
 \begin{itemize}
-\item \textbf{System (top-k fusion, current \texttt{top\_k=5})}: select five models for probability fusion; output \texttt{\{"selected\_models": [...], "reasoning": "..."\}} (no \texttt{selected\_class} / \texttt{confidence}).
-\item \textbf{User}: \texttt{Input device:} + per-model prediction JSON + question sentence (assembled by code).
+\item \textbf{System ($k{=}5$ probability fusion)}: select five models for probability fusion; output the chosen model list and brief rationale (no single benign/malignant class label).
+\item \textbf{User message}: device information, per-model prediction summaries, and the question sentence (assembled by the pipeline).
 \end{itemize}
-\textbf{3. Classification --- LLM arbitration (classifiers disagree, \texttt{enable\_agent=true})}
+\textbf{3. Classification --- LLM arbitration (three independent classifiers disagree)}
 \par
 \begin{itemize}
 \item \textbf{System}:
@@ -703,48 +703,46 @@ You will receive:
 
 If all signals are ambiguous, bias conservatively toward malignant (prefer false positives over false negatives) but report low confidence.
 
-Output pure JSON (no Markdown/code fences), wrapped in {}:
-{"selected_class": "malignant", "confidence": 0.75, "reasoning": "..."}
-Reasoning must cite specific confidence values. Production \texttt{selected\_class} strings match the deployment locale (e.g.\ \texttt{benign}/\texttt{malignant} or equivalent).
+Output pure JSON (no Markdown/code fences): final benign/malignant class, confidence in [0,1], and a brief rationale that cites specific confidence values (class labels match the deployment locale).
 \end{promptverbatim}
 \begin{itemize}
-\item \textbf{User}: single JSON string (\texttt{ensure\_ascii=false}; \texttt{autogluon\_based\_on\_selected\_mask} may be \texttt{null} if AutoGluon is unavailable):
+\item \textbf{User message}: one structured text block with (i) scenario text (classifiers disagree); (ii) predictions and confidences from three independent classifiers; (iii) AutoGluon radiomics prediction on the selected mask (marked missing if unavailable); (iv) segmentation routing conclusion and rationale; (v) a question requesting the final benign/malignant label and confidence.
 \end{itemize}
-\begin{promptverbatim}
-{
-  "scenario": "Independent classifiers disagree; LLM arbitration required",
-  "independent_models": [
-    {"model_name": "<name>", "top_class": "benign|malignant", "top_confidence": 0.0}
-  ],
-  "autogluon_based_on_selected_mask": {
-    "top_class": "benign|malignant",
-    "top_confidence": 0.0
-  },
-  "segmentation_decision": {
-    "selected_mask_from": "<seg_model_name>",
-    "reasoning": "<segmentation agent reasoning>"
-  },
-  "question": "Synthesize the above and output the final benign/malignant label and confidence (0-1)."
-}
-\end{promptverbatim}
 \begin{itemize}
-\item \textbf{Output JSON}: \texttt{\{"selected\_class": "benign|malignant", "confidence": 0.0--1.0, "reasoning": "..."\}} (\texttt{llm\_invoked=true}; \texttt{method} marks LLM arbitration).
+\item \textbf{Model output}: one JSON line---final benign/malignant class, confidence in [0,1], and a brief rationale citing numeric confidences; the routing record marks ``LLM arbitration'' and ``LLM invoked.''
 \end{itemize}
-\textbf{4. Classification --- deterministic consensus (classifiers agree)}: \texttt{method: classification\_consensus} (or \texttt{unanimous}), \textbf{no LLM}, logged only.
+\textbf{4. Classification --- deterministic consensus (three classifiers agree)}: \textbf{no LLM}; the routing record marks ``classification consensus.''
 \par
-\textbf{Structured routing\_log (audit, ≥10 cases)}
+\textbf{Structured routing records (audit, ≥10 cases; Table A1-2)}
 \par
-Typical JSONL fields: \texttt{image\_id}, \texttt{task} (segmentation / classification / LLM arbitration when classifiers disagree), \texttt{disagreement\_tier} (candidate similarity), \texttt{llm\_invoked}, \texttt{method}, \texttt{selected\_model} (segmentation expert ID, e.g.\ multi-cohort joint vs.\ TN3K-specific) / \texttt{selected\_class}, \texttt{confidence}, \texttt{reasoning}, etc.; optional \texttt{prompts} archives the full call. The \textbf{10} cases in \textbf{\responsetableref{tab_routing_stability}} come from the TN3K main pipeline and the 5× segmentation LLM routing stability experiment.
+\begin{responseinlinetable}
+\responseinlinetablecaption{Table A1-2. Information stored per structured routing record (de-identified archive)}
+\label{tab:A1-log-fields}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{ll}
+\toprule
+Item & Description \\
+\midrule
+Case ID & De-identified image/case identifier \\
+Task type & Segmentation routing / classification routing / LLM arbitration when classifiers disagree \\
+Candidate similarity tier & ``Similar'' or ``easy'' (definitions in R2.9 main text) \\
+LLM invoked & Yes / no \\
+Decision mode & LLM routing, classification consensus, rule fallback, etc. \\
+Selected segmentation expert & Multi-cohort joint vs.\ cohort-specific expert (segmentation) \\
+Final benign/malignant class & Classification or arbitration tasks \\
+Confidence & 0--1 \\
+Rationale summary & Short model-generated text \\
+Decoding settings & Model name, temperature, max tokens (Table A1-1) \\
+Timestamp & ISO 8601 \\
+Optional attachment & Full prompt text for that call (if archived) \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{responseinlinetable}
 \par
-\textbf{Sample routing\_log line (de-identified)}
+\textbf{Narrative exemplar (matches \texttt{TN3K\_test\_0002.jpg} in Table R11, de-identified)}: segmentation task; ``similar'' candidate tier; LLM invoked; multi-cohort joint expert selected; confidence 0.91; placeholder rationale ``-''; decoding per Table A1-1.
 \par
-\begin{promptverbatim}
-{"image_id":"TN3K_test_0002.jpg","task":"seg","disagreement_tier":"close",
-"llm_invoked":true,"method":"llm","selected_model":"all_datasets",
-"confidence":0.91,"reasoning":"-","llm_model":"qwen3.8-27b",
-"temperature":0.3,"max_tokens":768,"ts":"2025-06-01T12:00:00Z"}
-\end{promptverbatim}
-\noindent\footnotesize \textbf{≥10} de-identified full JSONL exemplars matching \textbf{\responsetableref{tab_routing_stability}} case IDs are listed at the end of this appendix (including \texttt{prompts} when archived).
+\noindent\footnotesize \textbf{≥10} de-identified full records matching \textbf{\responsetableref{tab_routing_stability}} case IDs are listed at the end of this appendix (including full prompt text when archived). The \textbf{10} stability cases come from the TN3K primary pipeline and the 5× segmentation LLM routing repeat experiment.
 \par
 \FloatBarrier
 \responseproseappendixstart
@@ -771,7 +769,7 @@ Typical JSONL fields: \texttt{image\_id}, \texttt{task} (segmentation / classifi
 Item & Setting \\
 \midrule
 Package version & \textbf{pyradiomics 3.1.0} (training environment) \\
-Parameter set & Shared 2D PyRadiomics configuration for train and inference (Table A2-1; matches repository YAML) \\
+Parameter set & Shared 2D PyRadiomics configuration for train and inference (Table A2-1; matches the training-environment configuration file) \\
 Geometry & Forced 2D; mask correction; resampling spacing \textbf{(1.0, 1.0)} px (isotropic assumption) \\
 Intensity & Normalization scale \textbf{100}; histogram binWidth \textbf{25}; symmetrical GLCM \\
 Image filters & Original, Wavelet, LoG (σ=2, 4), Square, SquareRoot, Logarithm, Exponential, Gradient \\

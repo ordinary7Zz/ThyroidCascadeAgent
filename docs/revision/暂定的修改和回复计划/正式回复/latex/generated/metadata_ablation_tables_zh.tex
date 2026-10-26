@@ -1,0 +1,20 @@
+% LLM metadata ablation (Table R17); pilot n=10 until TN5K primary numbers
+
+\begin{responsetable}
+\caption{\responsetabletitle{tab_metadata_ablation}{LLM 路由元数据消融（\rpendingzh{稿面主队列 TN5K 恶性分类评估子集 $n$=250；下表暂为内部开发试点 $n$=10}}）}}
+\label{tab_metadata_ablation}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{@{}l r c c c c@{}}
+\toprule
+元数据条件 & $n$ & Dice $\uparrow$ & HD95 $\downarrow$ & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
+\midrule
+完整元数据（与投稿 S4 一致） & 10 & 0.837 & 14.0 & 0.92 & 0.927 \\
+隐去设备信息 & 10 & 0.837 & 12.1 & 0.92 & 0.927 \\
+隐去数据来源 & 10 & 0.838 & 12.0 & 0.92 & 0.927 \\
+两者均隐去 & 10 & 0.827 & 12.3 & 0.92 & 0.927 \\
+仅质量与分歧信号 & 10 & 0.837 & 12.1 & 0.92 & 0.927 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{与 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} 策略 7 相同专家池；分割与分类均为 LLM 路由，仅改变 prompt 可见元数据（见 Methods / 附录 A1）。\textbf{完整元数据}行与主文全系统 LLM 路由指标一致（与表 R13--R14 策略 7 同源）。主对比：\textbf{完整元数据 $\rightarrow$ 仅质量与分歧信号}，\rpendingzh{TN5K 定稿 $\Delta$Dice 与 $\Delta$AUROC（及 95\% CI）}；试点子集上 $\Delta$Dice $\approx -0.0002$、$\Delta$AUROC $=0$。试点子集分类五条件 AUROC 相同，因多数病例三分类模型已一致、未调用 LLM（仅 1/10 需 LLM 裁决）。分类模型不一致时的 LLM 裁决输入\textbf{未}做元数据消融（Methods 一句）。}
+\end{responsetable}

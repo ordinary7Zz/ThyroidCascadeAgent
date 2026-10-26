@@ -27,11 +27,11 @@
 | L1 外测（9 cohort） | ✅ | sample, tn3k, tn5k, thyroidxl, ddti_cls, ddti_seg, pktn, zjh8k, rjh7k |
 | L1 外测 NHC | ⏸️ | `labels.json` 路径不存在，批处理失败；暂搁置 |
 | L2 写入 B4 主表 | ✅ | 来自既有 B3 `soft_voting`，已 `build_b4_tables` |
-| L3 写入 B4 主表 | 🟡 | **仅 sample** 有旧版 `b3/sample/llm`（n=10）；**正式 8 队列缺全量 LLM** |
+| L3 写入 B4 主表 | ✅（文档） | **与 B3 策略 7 同源**：`manuscript_llm_metrics.yaml`；已写入 `暂定的修改和回复计划` **B4 专项** + `MANUSCRIPT` **§15**；`b4_component_table.csv` L3 行 **可选** `build_b4_tables` 物化 |
 | Path B 附录 B-a/B-b/B-c | ⬜ | 依赖 `soft_voting`、`path_b_autogluon`、`llm` |
 | S6 vs S4 对账备忘录 | ⬜ | `docs/B4_S6_S4_reconciliation.md` 仍为模板 |
 | 层间 Δ 配对 bootstrap CI | ⬜ | 主表现为点估计 Δ |
-| 稿面 Results / R2.8 段落 | ⬜ | 待 L3 定稿 |
+| 稿面 Results / R2.8 段落 | 🟡 | L3 数字已定（yaml）；待统稿入 `ThyroidXAgent.md` / 回复信 |
 
 ---
 
@@ -72,12 +72,20 @@
 - **ZJH-8K**：L1 单专家 AUROC（0.957）高于 L2（0.932）→ 与 S6/S4 反差同一脉络，需对账备忘录说明协议差异；L3 全系统待 LLM 跑完后对比。
 - **多队列**：L2 分割 Dice 并非处处高于 L1（如 tn5k、thyroidxl、rjh7k），主文应报告 **逐队列** 结果，避免声称「池化必然更好」。
 
-### 3.4 L3（sample 仅作开发参考）
+### 3.4 L3（B3 策略 7 = 稿面 S3/S4；`manuscript_llm_metrics.yaml`）
 
-| cohort | L3 Dice | L3 AUROC | 备注 |
-|--------|---------|----------|------|
-| sample | 0.8368 | 0.9200 | 旧 `b3/sample/llm`，与 L2 同 n=10；**不替代正式队列 LLM** |
-| 其余 8 队列 | — | — | 待 B3 波次 2 全量 `llm` |
+| cohort | L3 Dice | L3 AUROC | Δ(L3−L2) Dice | Δ(L3−L2) AUROC |
+|--------|---------|----------|---------------|----------------|
+| tn3k | 0.8528 | 0.8692 | −0.0031 | +0.0410 |
+| tn5k | 0.8326 | 0.9472 | +0.0229 | +0.0035 |
+| thyroidxl | 0.8758 | 0.9676 | +0.0118 | +0.0317 |
+| ddti_seg | 0.8562 | — | +0.0111 | — |
+| ddti_cls | — | 0.7991 | — | +0.0454 |
+| pktn | 0.8299 | — | −0.0077 | — |
+| zjh8k | 0.9430 | 0.9175 | +0.1074 | −0.0147 |
+| rjh7k | 0.9146 | — | +0.0215 | — |
+
+**勿用** `b3/sample/llm`（*n*=10）作正式 L3。详情与回复要点 → `docs/revision/暂定的修改和回复计划/REVIEWER_RESPONSE_PLAN_ZH.md` **B4 专项**。
 
 ---
 
@@ -96,8 +104,8 @@
 
 ## 5. 下一步（建议顺序）
 
-1. **B3 波次 2**：各正式 cohort `routing_mode=llm`（需 `DASHSCOPE_API_KEY`），写出 `b3/<cohort>/llm/b3_metrics.json`。
-2. **再跑** `build_b4_tables.py` → 补齐 L3、S4_check。
+1. （可选）从 yaml **物化** `b3/<cohort>/llm/b3_metrics.json` 并 `build_b4_tables.py` → CSV 含 L3/S4_check（**回信/改稿计划已不依赖此步**）。
+2. 起草 **`B4_S6_S4_reconciliation.md`**；Path B 附录。
 3. （可选）`run_b4_pathb_appendix.py` → Path B 放射组学分解表。
 4. 填写 `docs/B4_S6_S4_reconciliation.md`；B2 cluster 定稿后重算 Δ CI。
 
