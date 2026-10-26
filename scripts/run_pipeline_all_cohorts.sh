@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 串行对各队列执行 run_pipeline.py，写满 config/b3/<id>.yaml 中多 DINO 专家的
+# 串行对各队列执行 run_pipeline.py，写满 config/revision/b3/<id>.yaml 中多 DINO 专家的
 # Phase 1–2 缓存（及完整级联的 selected_masks / autogluon 等，见 pipeline.output.output_dir）。
 #
 # 默认与 B3 波次 1 队列一致（不含 nhc_misd_tus）：
@@ -138,7 +138,7 @@ for cohort in "${COHORTS[@]}"; do
     fi
   fi
 
-  cfg="${ROOT}/config/b3/${cohort}.yaml"
+  cfg="${ROOT}/config/revision/b3/${cohort}.yaml"
   if [[ ! -f "${cfg}" ]]; then
     echo ">>> 缺少配置: ${cfg}" >&2
     failures+=("${cohort}:missing_config")
@@ -154,13 +154,13 @@ for cohort in "${COHORTS[@]}"; do
   log="${LOG_DIR}/${cohort}_${ts}.log"
   echo ""
   echo "======== run_pipeline: ${cohort} ========"
-  echo "  config: config/b3/${cohort}.yaml"
+  echo "  config: config/revision/b3/${cohort}.yaml"
   echo "  log:    ${log}"
 
   set +e
   (
     cd "${ROOT}"
-    "${PY}" run_pipeline.py --config "config/b3/${cohort}.yaml" --device "${DEVICE}"
+    "${PY}" run_pipeline.py --config "config/revision/b3/${cohort}.yaml" --device "${DEVICE}"
   ) 2>&1 | tee "${log}"
   rc=${PIPESTATUS[0]}
   set -e

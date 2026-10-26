@@ -139,7 +139,7 @@ for cohort in "${COHORTS[@]}"; do
     fi
   fi
 
-  cfg="${ROOT}/config/b3/${cohort}.yaml"
+  cfg="${ROOT}/config/revision/b3/${cohort}.yaml"
   if [[ ! -f "${cfg}" ]]; then
     echo ">>> 缺少配置: ${cfg}" >&2
     failures+=("${cohort}:missing_config")
@@ -156,7 +156,7 @@ for cohort in "${COHORTS[@]}"; do
 
   echo ""
   echo "======== backfill: ${cohort} ========"
-  echo "  config:     config/b3/${cohort}.yaml"
+  echo "  config:     config/revision/b3/${cohort}.yaml"
   echo "  output-dir: ${out_dir}"
 
   if [[ ! -f "${results}" ]]; then
@@ -180,7 +180,7 @@ for cohort in "${COHORTS[@]}"; do
     cd "${ROOT}"
     "${PY}" scripts/revision/b8/backfill_results_metadata.py \
       --output-dir "${out_dir}" \
-      --config "config/b3/${cohort}.yaml"
+      --config "config/revision/b3/${cohort}.yaml"
   )
   rc=$?
   set -e

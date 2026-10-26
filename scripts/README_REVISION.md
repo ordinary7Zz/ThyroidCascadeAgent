@@ -13,7 +13,7 @@
 |------|------|------|
 | **产品入口** | 仓库根 `run_pipeline.py`、`run_seg.py`、`run_cls.py`、`run_routing_stability.py` | 直接 `import pipeline` / `shared` / `segmentation` / `classification` |
 | **可复用库** | [`pipeline/`](../pipeline/README.md)（核心）；[`pipeline/revision/`](../pipeline/revision/README.md)（B3–B8） | 返修 import：`pipeline.revision.b8.*` 等 |
-| **地基 CLI** | [`scripts/README.md`](README.md) | for_llm、批量 `run_pipeline`、`run_routing_ablation`、生成 `config/b3` |
+| **地基 CLI** | [`scripts/README.md`](README.md) | for_llm、批量 `run_pipeline`、`run_routing_ablation`、生成 `config/revision/b3` 等 |
 | **返修批处理** | `scripts/revision/**` | B1–B11 制表、审计、批量消融 |
 
 级联**库**在 `pipeline/`；`scripts/` 下为命令行外壳，**不**被 `cascade` import。
@@ -30,11 +30,11 @@
 | **B1** | dHash 近重复审计 | `python scripts/revision/b1/audit_near_duplicates.py` |
 | **B2** | 一键 cluster CI | `bash scripts/revision/b2/run_b2_all.sh` |
 | **B3** | 波次 1 全队列 | `bash scripts/revision/b3/run_b3_wave1_all_cohorts.sh` |
-| **B3** | 单队列 / 多 mode | `python scripts/revision/b3/run_b3_batch.py --config config/b3/tn3k.yaml …` |
+| **B3** | 单队列 / 多 mode | `python scripts/revision/b3/run_b3_batch.py --config config/revision/b3/tn3k.yaml …` |
 | **B3** | ZJH 大队列（防 OOM） | `bash scripts/revision/b3/zjh/run_b3_zjh8k.sh` 或 chunk 版 `run_b3_zjh8k_chunks.sh` |
 | **B3** | RJH 大队列（chunk 重推 + B3） | `run_rjh7k_reinfer_chunks.sh` → `run_b3_rjh7k_chunks.sh`（`scripts/revision/b3/rjh/`） |
 | **B4** | 组件表 | `python scripts/revision/b4/build_b4_tables.py` |
-| **B5** | 元数据消融 | `python scripts/revision/b5/run_b5_batch.py --config config/b5/tn3k.yaml` |
+| **B5** | 元数据消融 | `python scripts/revision/b5/run_b5_batch.py --config config/revision/b5/tn3k.yaml` |
 | **B6** | 导出 router 规格 | `python scripts/revision/b6/export_router_spec.py` |
 | **B6** | 5× 稳定性 | 根目录 `python run_routing_stability.py`（非本目录） |
 | **B7** | 中心异质性 | `python scripts/revision/b7/run_b7_analysis.py` |
@@ -97,6 +97,10 @@
 | 文件 | 作用 |
 |------|------|
 | `build_b4_tables.py` | 组件主表 |
+| `ingest_l1_metrics.py` | L1 单专家 → `artifacts/b4_l1_<cohort>.json` |
+| `run_l1_cohort.py` | L1：`run_pipeline` + ingest（`config/revision/b4/l1/<cohort>.yaml`） |
+| `run_l1_remaining_background.sh` | 后台顺序 L1（默认跳过 sample/tn3k） |
+| `run_l1_all_cohorts.sh` | 顺序 L1 全 cohort |
 | `run_b4_pathb_appendix.py` | Path B 附录 |
 
 ### B5
@@ -111,7 +115,7 @@
 | 文件 | 作用 |
 |------|------|
 | `export_router_spec.py` | 导出 `docs/supplementary/router_spec.md` |
-| `generate_b6_configs.py` | 生成 `config/b6/*.yaml` |
+| `generate_b6_configs.py` | 生成 `config/revision/b6/*.yaml` |
 
 ### B7
 

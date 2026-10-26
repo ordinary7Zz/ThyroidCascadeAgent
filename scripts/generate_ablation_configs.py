@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""从 config/b3/sample.yaml 生成各队列的 config/b3/<cohort>.yaml 与 config/b4/<cohort>.yaml。"""
+"""从 config/revision/b3/sample.yaml 生成 revision/b3、b4、b5 与 b4/l1 各队列 YAML。"""
 
 from __future__ import annotations
 
@@ -13,11 +13,13 @@ from pathlib import Path
 import yaml
 
 ROOT = repo_path.find_repo_root()
-CONFIG = ROOT / "config"
-B3_DIR = CONFIG / "b3"
-B4_DIR = CONFIG / "b4"
-B5_DIR = CONFIG / "b5"
+REV = ROOT / "config" / "revision"
+B3_DIR = REV / "b3"
+B4_DIR = REV / "b4"
+B5_DIR = REV / "b5"
 B3_TEMPLATE = B3_DIR / "sample.yaml"
+L1_DIR = REV / "b4" / "l1"
+L1_MODELS = L1_DIR / "_single_expert_models.yaml"
 
 B5_METADATA_MODES = (
     "full",
@@ -99,6 +101,57 @@ COHORTS: dict[str, dict] = {
     },
 }
 
+# B5 LLM 跑数：与 config/revision/b6 对齐的 test_for_llm_malignancy 子集（sample / nhc 用 COHORTS 全量）
+COHORTS_B5_DATA: dict[str, dict[str, str]] = {
+    "tn3k": {
+        "image_input": f"{_DATA}/TN3K/test_for_llm_malignancy/images",
+        "gt_mask_dir": f"{_DATA}/TN3K/test_for_llm_malignancy/masks",
+        "label_file": f"{_DATA}/TN3K/test_for_llm_malignancy/TN3K_test_label.json",
+    },
+    "tn5k": {
+        "image_input": f"{_DATA}/TN5K/test_for_llm_malignancy/images",
+        "gt_mask_dir": f"{_DATA}/TN5K/test_for_llm_malignancy/masks",
+        "label_file": f"{_DATA}/TN5K/test_for_llm_malignancy/TN5K_test_label.json",
+    },
+    "thyroidxl": {
+        "image_input": f"{_DATA}/ThyroidXL/test_for_llm_malignancy/images",
+        "gt_mask_dir": f"{_DATA}/ThyroidXL/test_for_llm_malignancy/masks",
+        "label_file": f"{_DATA}/ThyroidXL/test_for_llm_malignancy/ThyroidXL_test_label.json",
+    },
+    "zjh8k": {
+        "image_input": f"{_DATA}/ZJH-8K_for_llm_malignancy/images",
+        "gt_mask_dir": f"{_DATA}/ZJH-8K_for_llm_malignancy/masks",
+        "label_file": f"{_DATA}/ZJH-8K_for_llm_malignancy/ZJH-8K_BM_labels.json",
+    },
+    "rjh7k": {
+        "image_input": f"{_AUG}/augtrain_PNG_for_llm_malignancy/image",
+        "gt_mask_dir": f"{_AUG}/augtrain_PNG_for_llm_malignancy/mask",
+        "label_file": "",
+    },
+    "ddti_seg": {
+        "image_input": f"{_DATA}/DDTI/all_seg_for_llm_malignancy/images",
+        "gt_mask_dir": f"{_DATA}/DDTI/all_seg_for_llm_malignancy/masks",
+        "label_file": "",
+    },
+    "ddti_cls": {
+        "image_input": f"{_DATA}/DDTI_Classification/all_for_llm_malignancy/images_processed",
+        "gt_mask_dir": "",
+        "label_file": f"{_DATA}/DDTI_Classification/all_for_llm_malignancy/DDTI_Classification_test_label.json",
+    },
+    "pktn": {
+        "image_input": f"{_DATA}/PKTN/test_for_llm_malignancy/images",
+        "gt_mask_dir": f"{_DATA}/PKTN/test_for_llm_malignancy/masks",
+        "label_file": f"{_DATA}/PKTN/test_for_llm_malignancy/PKTN_test_label.json",
+    },
+}
+
+
+def paths_for_b5(cohort_id: str, paths: dict) -> dict:
+    extra = COHORTS_B5_DATA.get(cohort_id)
+    if not extra:
+        return paths
+    return {**paths, **extra}
+
 
 def _load_b3_template() -> dict:
     with open(B3_TEMPLATE, "r", encoding="utf-8") as f:
@@ -170,6 +223,75 @@ def build_b5(cohort_id: str, paths: dict) -> dict:
     return cfg
 
 
+def _load_l1_single_models() -> dict:
+    with open(L1_MODELS, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+def build_l1(cohort_id: str, paths: dict) -> dict:
+    """B4 L1：单 all_datasets 专家，无 LLM、无 AutoGluon/radiomics_judge。"""
+    tpl = _load_b3_template()
+    singles = _load_l1_single_models()
+    task = paths.get("ablation_task", "both")
+    run_seg = paths.get("run_segmentation", task in ("seg", "both"))
+    run_cls = paths.get("run_classification", task in ("cls", "both"))
+    l1_out = f"output/ablation/l1/{cohort_id}/run1"
+
+    seg_models = list(singles["segmentation_models"]) if run_seg else []
+    cls_models = list(singles["classification_models"]) if run_cls else []
+
+    return {
+        "shared": tpl.get("shared", {}),
+        "segmentation": {
+            "models": seg_models,
+            "agent": {
+                "enable_agent": False,
+                "routing_mode": "static_rule",
+                "include_disagreement_metrics_in_prompt": False,
+                "pre_filter": {
+                    "cosine_threshold": 0.0,
+                    "prob_outlier_threshold": 1.0,
+                    "min_keep": 1,
+                },
+                "ensemble": {
+                    "enabled": True,
+                    "top_k": 1,
+                    "method": "weighted_average",
+                    "threshold": 0.5,
+                },
+            },
+        },
+        "classification": {
+            "models": cls_models,
+            "agent": {
+                "enable_agent": False,
+                "routing_mode": "best_single",
+                "top_k": 1,
+                "consensus_min_confidence": 0.0,
+            },
+        },
+        "radiomics_judge": {"enabled": False},
+        "pipeline": {
+            "preload_workers": 4,
+            "run_segmentation": run_seg,
+            "run_classification": run_cls,
+            "log_routing": False,
+            "data": {
+                "image_input": paths["image_input"],
+                "gt_mask_dir": paths.get("gt_mask_dir") or "",
+                "label_file": paths.get("label_file") or "",
+                "label_key": paths.get("label_key", "malignancy"),
+                "device_info": paths.get("device_info", ["GE Logiq E9", "GE S7"]),
+                "input_data_info": {"dataset_name": cohort_id, "split": "test"},
+                "start_index": 0,
+                "max_images": None,
+            },
+            "output": {"output_dir": l1_out},
+            "ablation_b4": {"dataset_id": cohort_id, "layer": "L1"},
+        },
+    }
+
+
 def build_b4(cohort_id: str, paths: dict) -> dict:
     b3_root = f"output/ablation/b3/{cohort_id}"
     return {
@@ -180,12 +302,12 @@ def build_b4(cohort_id: str, paths: dict) -> dict:
                 "l2_b3_mode": "soft_voting",
                 "l3_b3_mode": "llm",
                 "s4_replica_b3_mode": "llm",
-                "l1_metrics": f"artifacts/b4_l1_{cohort_id}_placeholder.json",
+                "l1_metrics": f"artifacts/b4_l1_{cohort_id}.json",
                 "reference_manifest": f"{b3_root}/soft_voting/intermediate_manifest.json",
                 "pathb": {
                     "b_a_b3_mode": "soft_voting",
                     "b_b_b3_mode": "path_b_autogluon",
-                    "b_b_metrics_dir": None,
+                    "b_b_metrics_dir": f"output/ablation/b4/{cohort_id}/path_b_autogluon",
                     "b_c_b3_mode": "llm",
                 },
             },
@@ -236,16 +358,23 @@ def main() -> None:
         "# B5 元数据消融；须先有 pipeline_run/intermediate。批量: scripts/revision/b5/run_b5_batch.py\n"
         "# full 可与 B3 llm 复用: run_b5_batch.py --skip-full\n"
     )
+    l1_header = (
+        "# B4 L1 单专家外测；生成: scripts/generate_ablation_configs.py\n"
+        "# 跑数: python scripts/revision/b4/run_l1_cohort.py --cohort <id>\n"
+    )
     B3_DIR.mkdir(parents=True, exist_ok=True)
     B4_DIR.mkdir(parents=True, exist_ok=True)
     B5_DIR.mkdir(parents=True, exist_ok=True)
+    L1_DIR.mkdir(parents=True, exist_ok=True)
     for cohort_id, paths in COHORTS.items():
         b3_path = B3_DIR / f"{cohort_id}.yaml"
         b4_path = B4_DIR / f"{cohort_id}.yaml"
         b5_path = B5_DIR / f"{cohort_id}.yaml"
+        l1_path = L1_DIR / f"{cohort_id}.yaml"
         b3_doc = build_b3(cohort_id, paths)
         b4_doc = build_b4(cohort_id, paths)
-        b5_doc = build_b5(cohort_id, paths)
+        b5_doc = build_b5(cohort_id, paths_for_b5(cohort_id, paths))
+        l1_doc = build_l1(cohort_id, paths)
         with open(b3_path, "w", encoding="utf-8") as f:
             f.write(header)
             yaml.dump(b3_doc, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
@@ -255,14 +384,13 @@ def main() -> None:
         with open(b5_path, "w", encoding="utf-8") as f:
             f.write(b5_header)
             yaml.dump(b5_doc, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
+        with open(l1_path, "w", encoding="utf-8") as f:
+            f.write(l1_header)
+            yaml.dump(l1_doc, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
         write_l1_placeholder(cohort_id)
-        print(f"wrote {b3_path.name} {b4_path.name} {b5_path.name}")
+        print(f"wrote {b3_path.name} {b4_path.name} {b5_path.name} {l1_path.name}")
 
 
 if __name__ == "__main__":
     main()
-
-import importlib.util
-from pathlib import Path
-
 

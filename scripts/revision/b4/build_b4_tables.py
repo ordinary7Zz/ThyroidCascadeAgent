@@ -37,7 +37,7 @@ from pipeline.revision.b4.b4_summary import summarize_b4
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="B4 L1–L3 + S4 校验行汇总")
-    parser.add_argument("--config", default="config/b4/sample.yaml")
+    parser.add_argument("--config", default="config/revision/b4/sample.yaml")
     parser.add_argument("--output-dir", default=None, help="默认 config pipeline.output.output_dir")
     args = parser.parse_args()
 

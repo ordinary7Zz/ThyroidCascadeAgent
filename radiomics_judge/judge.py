@@ -65,7 +65,12 @@ class RadiomicsJudge:
         except Exception:
             self._feature_names = None
 
-    def judge(self, image: np.ndarray, mask: np.ndarray) -> dict[str, Any]:
+    def judge(
+        self,
+        image: np.ndarray,
+        mask: np.ndarray,
+        image_name: Optional[str] = None,
+    ) -> dict[str, Any]:
         """
         评估单个 pred mask 的可信度。
 
@@ -86,7 +91,7 @@ class RadiomicsJudge:
         self._ensure_loaded()
 
         # 提取特征
-        features = self._extractor.extract(image, mask)
+        features = self._extractor.extract(image, mask, image_name=image_name)
         if not features:
             return {"valid": False, "reason": "empty mask or feature extraction failed"}
 
@@ -144,6 +149,7 @@ class RadiomicsJudge:
         self,
         image: np.ndarray,
         masks: list[np.ndarray],
+        image_name: Optional[str] = None,
     ) -> list[dict[str, Any]]:
         """
         对同一张图的多个 pred mask 批量裁判。
@@ -155,4 +161,4 @@ class RadiomicsJudge:
         Returns:
             每个 mask 的裁判结果列表。
         """
-        return [self.judge(image, m) for m in masks]
+        return [self.judge(image, m, image_name=image_name) for m in masks]

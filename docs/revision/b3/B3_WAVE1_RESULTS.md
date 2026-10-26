@@ -14,13 +14,14 @@
 | **TN3K** | 614 | 279 (45.4%) | ✅ 6/6 + 汇总表 | 院内公开测试集 |
 | **TN5K** | 1,000 | 404 (40.4%) | ✅ 6/6 + 汇总表 | |
 | **ThyroidXL** | 2,090 | 921 (44.1%) | ✅ 6/6 + 汇总表 | |
-| ZJH-8K | 8,000+ | — | ⏳ 未完成 | 仅有 `.bundle_staging` |
-| RJH-7K | — | — | ⏳ 未完成 | |
-| DDTI seg / cls、PKTN | — | — | ⏳ 未跑 B3 | pipeline 缓存需与 B3 对齐 |
-| NHC-MISD-TUS | — | — | ⏳ 未纳入本表 | R3.1 要求最终主表必须包含 |
+| ZJH-8K | 7,958 | — | ✅ 波次 1 六策略 + 汇总 | 学习型策略 6 见 [**B3_LEARNED_RESULTS.md**](./B3_LEARNED_RESULTS.md) |
+| RJH-7K | 7,288 | — | ✅ 波次 1（seg） | 策略 6 seg only，同上 |
+| DDTI seg / PKTN | 637 / 150 | — | ✅ 波次 1 + learned seg | cls 仅 DDTI cls 队列 |
+| DDTI cls | 349 | — | ✅ learned cls | 无分割消融 |
+| NHC-MISD-TUS | — | — | ⏳ 未纳入 | R3.1 要求最终主表须包含 |
 
 **专家池与 intermediate 说明（投稿前须统一口径）**  
-上述三队列的 Phase 1–2 缓存为 **`output/{TN3K|TN5K|ThyroidXL}/pipeline_run/intermediate`**，当前磁盘上为 **9 个分割 npz + 6 个分类 json**（含 MedSAM2、TransUNet、BiomedCLIP 等），与最新 `config/b3/*.yaml` 中写的 **5 DINO 分割 + 4 multitask 分类** 池不完全一致。若定稿以新池为准，需重跑 Phase 1–2 后 **重跑 B3 波次 1** 并替换本目录表格。
+上述三队列的 Phase 1–2 缓存为 **`output/{TN3K|TN5K|ThyroidXL}/pipeline_run/intermediate`**，当前磁盘上为 **9 个分割 npz + 6 个分类 json**（含 MedSAM2、TransUNet、BiomedCLIP 等），与最新 `config/revision/b3/*.yaml` 中写的 **5 DINO 分割 + 4 multitask 分类** 池不完全一致。若定稿以新池为准，需重跑 Phase 1–2 后 **重跑 B3 波次 1** 并替换本目录表格。
 
 ---
 
@@ -38,7 +39,7 @@
 
 ## 3. 表 A — 分割（全测试集）
 
-**表内格式**：点估计 **(95% CI 下限–上限)**；CI 来自 `b3_metrics.json`（`bootstrap.method=cluster`）。机器可读列见 `tables/b3_wave1_segmentation.csv`（`export_b3_tables.py` 在全队列重算后刷新）。
+**表内格式**：点估计 **(95% CI 下限–上限)**；CI 来自 `b3_metrics.json`（`bootstrap.method=cluster`）。机器可读列见 `tables/b3_wave1_segmentation.csv`（`export_b3_tables.py` 在全队列重算后刷新）。**回复信 R14–R15** 由 `export_b3_response_letter_tables.py` 导出，Dice/AUROC/AUPRC/HD95 为 **四位小数（比例制 Dice）**；下文表 A–C 仍为三位小数快照，定稿以 LaTeX 导出为准。
 
 ### TN3K（*n* = 614）
 
@@ -161,9 +162,9 @@
 
 3. **Path B 子集（约 40–45% 病例）是分类路由的主战场。** 全量指标受 Path A 共识短路稀释；补充材料或正文应 **并列报告全量与 Path B**（本目录表 B + 表 C），与 `REVISION_B3_B4_PLAN.md` §3.1 一致。
 
-4. **Oracle 与最佳可部署策略之间的差距** 量化了「理想路由」的上界：例如 TN3K 分割 Dice Oracle 0.895 vs 最优非 Oracle 约 0.857；分类全量 AUROC Oracle 0.901 vs 软投票 0.828。波次 2 **LLM（策略 7）** 与波次 3 **学习型路由（策略 6）** 将在此间隙中定位，并回答 R1.2「LLM 排第几」。
+4. **Oracle 与最佳可部署策略之间的差距** 量化了「理想路由」的上界：例如 TN3K 分割 Dice Oracle 0.895 vs 最优非 Oracle 约 0.857；分类全量 AUROC Oracle 0.901 vs 软投票 0.828。**学习型路由（策略 6）** 全队列见 [**B3_LEARNED_RESULTS.md**](./B3_LEARNED_RESULTS.md)；**LLM（策略 7）** = 主文 Table S3/S4，见 [**B3_LLM_RESULTS.md**](./B3_LLM_RESULTS.md)（如 TN3K 分割 Dice 0.8528）。
 
-5. **对外部泛化（R3.1）**：本摘要仅含 TN3K / TN5K / ThyroidXL；**ZJH-8K、RJH-7K、DDTI、PKTN 与 NHC-MISD-TUS** 待波次 1 跑完后并入同结构主表，再报告「LLM vs 最佳非 LLM」在院内/院外是否排序一致。
+5. **对外部泛化（R3.1）**：波次 1 正文表仍以 TN3K / TN5K / ThyroidXL 为主；**ZJH-8K、RJH-7K、DDTI、PKTN** 的静态与 learned 见 `B3_LEARNED_RESULTS.md`；对应队列 **策略 7** 稿面数字见 `B3_LLM_RESULTS.md` 与 `tables/b3_llm_*.csv`。**NHC-MISD-TUS** 仍待纳入八策略子表。
 
 ---
 
@@ -172,7 +173,7 @@
 ```bash
 # 单队列（示例 TN3K）
 python scripts/revision/b3/run_b3_batch.py \
-  --config config/b3/tn3k.yaml \
+  --config config/revision/b3/tn3k.yaml \
   --preset wave1 --force-phase3 --summarize
 
 # 从本仓库刷新 CSV（三队列）
@@ -192,3 +193,7 @@ python docs/revision/b3/scripts/export_b3_tables.py
 | `tables/b3_wave1_classification_path_b.csv` | Path B 分类 |
 | `tables/b3_wave1_cohort_meta.csv` | *n*、Path B 例数 |
 | `REVIEWER_RESPONSE_SNIPPETS_B3.md` | 回复信段落草稿（中英） |
+| `B3_LEARNED_RESULTS.md` | 策略 6 全队列表与复现 |
+| `B3_LLM_RESULTS.md` | 策略 7（稿面 ThyroidXAgent） |
+| `tables/b3_learned_*.csv` | 策略 6 机器可读导出 |
+| `tables/b3_llm_*.csv` | 策略 7 机器可读导出 |

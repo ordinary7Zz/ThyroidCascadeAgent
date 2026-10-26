@@ -1072,7 +1072,7 @@ class CascadePipeline:
                 if judge_obj is not None and phase3_expert_judge:
                     try:
                         judge_results = judge_obj.judge_batch(
-                            image, [p.mask for p in seg_preds]
+                            image, [p.mask for p in seg_preds], image_name=img_name
                         )
                     except Exception as e:
                         print(f"  ⚠️ {img_name} radiomics judge 失败: {e}")
@@ -1330,7 +1330,7 @@ class CascadePipeline:
                         mask = sel_map[img_name]["mask"]
 
                     try:
-                        result = judge.judge(image, mask)
+                        result = judge.judge(image, mask, image_name=img_name)
                         if result.get("valid"):
                             mp = float(result["malignant_prob"])
                             autogluon_results[img_name] = {

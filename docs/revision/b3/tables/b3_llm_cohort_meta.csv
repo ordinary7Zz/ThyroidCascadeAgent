@@ -1,0 +1,13 @@
+cohort,routing_mode,n_total,source
+tn3k,llm,614,manuscript_table_s3
+tn5k,llm,1000,manuscript_table_s3
+thyroidxl,llm,2090,manuscript_table_s3
+pktn,llm,150,manuscript_table_s3
+ddti_seg,llm,637,manuscript_table_s3
+zjh8k,llm,7958,manuscript_table_s3
+rjh7k,llm,7288,manuscript_table_s3
+tn3k,llm,614,manuscript_table_s4
+tn5k,llm,1000,manuscript_table_s4
+thyroidxl,llm,2090,manuscript_table_s4
+ddti_cls,llm,349,manuscript_table_s4
+zjh8k,llm,7958,manuscript_table_s4

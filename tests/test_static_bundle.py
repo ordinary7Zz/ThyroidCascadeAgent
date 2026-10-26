@@ -55,7 +55,7 @@ class StaticBundleTest(unittest.TestCase):
             self.skipTest("无 sample intermediate")
         import yaml
 
-        with open(ROOT / "config/b3/sample.yaml", "r", encoding="utf-8") as f:
+        with open(ROOT / "config/revision/b3/sample.yaml", "r", encoding="utf-8") as f:
             cfg = yaml.safe_load(f)
         from pipeline.revision.b3.routing_ablation import parse_ablation_routing_entry
         from pipeline.revision.b3.static_b3_bundle import (

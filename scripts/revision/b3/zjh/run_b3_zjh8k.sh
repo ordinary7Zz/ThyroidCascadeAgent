@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ZJH-8K B3 波次 1（bundle + 整包预加载，见 config/b3/zjh8k.yaml bundle_lazy_seg_min_images）。
+# ZJH-8K B3 波次 1（bundle + 整包预加载，见 config/revision/b3/zjh8k.yaml bundle_lazy_seg_min_images）。
 #
 # 默认分两趟扫图（fast5 → static_rule），避免单次 wave1 在内存中攒 6 套全队列 mask 导致 OOM（exit 137）。
 #
@@ -36,7 +36,7 @@ DEVICE="${DEVICE:-cpu}"
 
 export PYTHONUNBUFFERED=1
 LOG_DIR="${ROOT}/output/ablation/b3/_batch_logs"
-CFG="${ROOT}/config/b3/zjh8k.yaml"
+CFG="${ROOT}/config/revision/b3/zjh8k.yaml"
 FAST5_ONLY="${FAST5_ONLY:-0}"
 STATIC_RULE_ONLY="${STATIC_RULE_ONLY:-0}"
 WAVE1_ONE_SHOT="${WAVE1_ONE_SHOT:-0}"

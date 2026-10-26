@@ -148,21 +148,25 @@ STATIC_B3_MODES = frozenset({
     "oracle",
 })  # 不含 path_b_autogluon（B4 专用）
 
-NON_STATIC = frozenset({"llm", "learned"})
+BUNDLE_SEG_MODES = STATIC_B3_MODES | {"learned"}
+BUNDLE_CLS_MODES = STATIC_B3_MODES | {"learned"}
 
 
 def _assert_static_mode(mode: str, *, side: str) -> str:
     m = normalize_routing_mode(mode) or mode
-    if m in NON_STATIC:
-        raise ValueError(f"bundle 不支持 {side} routing_mode={mode}，请用 run_routing_ablation 或 --legacy-subprocess")
-    if m not in STATIC_B3_MODES:
-        raise ValueError(f"未知静态 {side} mode: {mode}")
+    if m == "llm":
+        raise ValueError(f"bundle 不支持 {side} routing_mode=llm，请用 run_routing_ablation")
+    allowed = BUNDLE_SEG_MODES if side == "seg" else BUNDLE_CLS_MODES
+    if m not in allowed:
+        raise ValueError(f"未知 bundle {side} mode: {mode}")
     return m
 
 
 def _seg_method_name(mode: str) -> str:
     if mode == "static_rule":
         return "routing_static_rule_seg"
+    if mode == "learned":
+        return "routing_learned_seg"
     return f"routing_{mode}_seg"
 
 
@@ -200,6 +204,14 @@ def _pick_seg_decision(
     input_data_info: Optional[dict],
     skip_radiomics: bool = False,
 ) -> SegAgentDecision:
+    if seg_mode == "learned":
+        quality_results = pipeline.seg_agent.quality_evaluator.evaluate_batch(
+            [p.mask for p in seg_preds],
+            [p.model_name for p in seg_preds],
+        )
+        return pipeline._learned_router("seg").select_mask(
+            seg_preds, quality_results, anchor_class
+        )
     if seg_mode == "static_rule":
         decision, _ = pipeline._select_mask_static(
             image,
@@ -267,6 +279,14 @@ def _resolve_cls_for_image(
         if bin_tl is None:
             bin_tl = int(tl) if isinstance(tl, (int, float)) else 0
         return resolve_cls_oracle(indie_preds, bin_tl)
+
+    if cls_mode == "learned":
+        return resolve_path_b_indie_only(
+            "learned",
+            indie_preds,
+            best_single_model=best_single_cls,
+            learned_router=pipeline._learned_router("cls"),
+        )
 
     return resolve_path_b_indie_only(
         cls_mode,

@@ -239,6 +239,8 @@ def prepare_ablation_run(
 
     seg_mode = get_seg_routing_mode(cfg)
     cls_mode = get_cls_routing_mode(cfg)
+    if seg_mode == "learned" or cls_mode == "learned":
+        cfg.setdefault("pipeline", {})["phase3_expert_judge"] = False
     meta_mode = normalize_metadata_mode(
         cfg.get("segmentation", {}).get("agent", {}).get("metadata_mode")
     )

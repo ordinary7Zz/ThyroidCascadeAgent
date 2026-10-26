@@ -121,9 +121,9 @@ fi
 failures=()
 
 for cohort in "${COHORTS[@]}"; do
-  cfg="${ROOT}/config/b3/${cohort}.yaml"
+  cfg="${ROOT}/config/revision/b3/${cohort}.yaml"
   if [[ ! -f "${cfg}" ]]; then
-    echo ">>> 跳过 ${cohort}: 无 config/b3/${cohort}.yaml" >&2
+    echo ">>> 跳过 ${cohort}: 无 config/revision/b3/${cohort}.yaml" >&2
     failures+=("${cohort}:no_config")
     continue
   fi
@@ -157,7 +157,7 @@ for cohort in "${COHORTS[@]}"; do
     set +e
     "${PY}" scripts/revision/b8/backfill_results_metadata.py \
       --output-dir "${out_dir}" \
-      --config "config/b3/${cohort}.yaml"
+      --config "config/revision/b3/${cohort}.yaml"
     rc=$?
     set -e
     if [[ "${rc}" -ne 0 ]]; then

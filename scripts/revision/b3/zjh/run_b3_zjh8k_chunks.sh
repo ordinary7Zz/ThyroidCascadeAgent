@@ -41,7 +41,7 @@ SRC_INTER="${ROOT}/output/ZJH-8K/pipeline_run/intermediate"
 CHUNK_INTER="${B3_CHUNK_ROOT:-${ROOT}/output/ZJH-8K/pipeline_run/intermediate_chunks}"
 OUT_CHUNKS="${ROOT}/output/ablation/b3/zjh8k_chunks"
 OUT_FINAL="${ROOT}/output/ablation/b3/zjh8k"
-CFG="${ROOT}/config/b3/zjh8k.yaml"
+CFG="${ROOT}/config/revision/b3/zjh8k.yaml"
 LOG_DIR="${ROOT}/output/ablation/b3/_batch_logs"
 
 FAST5_MODES="soft_voting,majority,max_confidence,best_single,oracle"

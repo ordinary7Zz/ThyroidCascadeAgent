@@ -30,7 +30,7 @@
 | 3 | **B1** | R1.1、R2.2、R2.4、R3.3；数据边界与 **dHash** 近重复 | `../b1/B1_结论与回复素材.md`；`../b1/tables/` | 可选 F6 患者数；spot check；ZJH excl. Supp. 入稿 |
 | 4 | **B2** | R1.1、R2.2、R2.14（CI 部分）；**S3/S4** cluster CI、患者级 | `../b2/conclusions/B2_结论与回复素材.md`；`../b2/tables/` | 刷 Supp. 表；**不含 NHC**；DDTI_cls **n=349** |
 | 5 | **B10** | **R2.14**；Supp. 基线协议表；S3/S4 表注 | `../b10/B10_结论与回复素材.md`；`../b10/tables/baseline_training_protocol.md` | 定 **S[X]**；Methods 4.3 入稿；§6.2 核对 |
-| 6 | **B6** | **R2.9**；路由器透明性；**5×** 稳定性与 `routing_log` | `../b6/B6_ROUTING_STABILITY_CONCLUSIONS.md`；`docs/supplementary/router_spec.md`；`output/b6/tn3k/pipeline_run/`（250 例 + `stability_summary.json` *n*=10） | `export_router_spec.py`（`config/b6/tn3k.yaml`）重导规格；Supp. 稳定性表 + log 样例入稿；§11 / B6 专项 / snippets **已换 TN3K 数** |
+| 6 | **B6** | **R2.9**；路由器透明性；**5×** 稳定性与 `routing_log` | `../b6/B6_ROUTING_STABILITY_CONCLUSIONS.md`；`docs/supplementary/router_spec.md`；`output/b6/tn3k/pipeline_run/`（250 例 + `stability_summary.json` *n*=10） | `export_router_spec.py`（`config/revision/b6/tn3k.yaml`）重导规格；Supp. 稳定性表 + log 样例入稿；§11 / B6 专项 / snippets **已换 TN3K 数** |
 | 7 | **B9** | **R2.10–12**；**S5** ThyroidXAgent 灰底；§2.4 / Fig.3 | `../b9/B9_ThyroidXAgent_修改与回复计划.md`；专家行 `B9_LNM_*` / `B9_FTCPTC_*` | 五折 OOF 可占位；AG/路由/C2·FangDai 外测待补 |
 | 8 | **B8** | **R1.3**（校准 + 送复核）；Supp. ECE/Brier、可靠性图、risk–coverage | `../b8/`；`output/b8/fit/`、`cohorts/`、`figures/` | 结论文档与 Supp. 表入稿；**不含 NHC**；无 BM 三队列不写稿 |
 | 9 | **B3** | **R1.2、R2.8、R3.1**；同专家池 **静态路由消融**（波次 1） | `../b3/B3_WAVE1_RESULTS.md`；`../b3/REVIEWER_RESPONSE_SNIPPETS_B3.md`；`output/ablation/b3/<cohort>/_summary/` | **波次 1 已齐**（9 队列 × 策略 1–5、8）；**仅待补** 策略 **6 learned**、**7 LLM** 性能行；Supp. 表与 B2 **cluster CI** 对齐；**NHC** 仍单列 |
@@ -63,5 +63,5 @@
 
 - 稿件：`../../ThyroidXAgent.md`
 - 审稿 PDF：`../../Nature Communications Reviews.pdf`
-- 接近定稿包：`../b11_b12/`、`../b1/`、`../b2/conclusions/`、`../b10/`、`../b6/`（TN3K：`config/b6/tn3k.yaml`、`output/b6/tn3k/pipeline_run/`）、`../b8/`（`output/b8/fit/`、`output/b8/cohorts/`、`output/b8/figures/`）、`../b3/`（`output/ablation/b3/`）、`../b9/`
+- 接近定稿包：`../b11_b12/`、`../b1/`、`../b2/conclusions/`、`../b10/`、`../b6/`（TN3K：`config/revision/b6/tn3k.yaml`、`output/b6/tn3k/pipeline_run/`）、`../b8/`（`output/b8/fit/`、`output/b8/cohorts/`、`output/b8/figures/`）、`../b3/`（`output/ablation/b3/`）、`../b9/`
 - 其余包：`../b3/` … `../b7/` 等（见 `../README.md`）

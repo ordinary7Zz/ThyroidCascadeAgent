@@ -12,6 +12,7 @@ GT-trained radiomics 特征提取器。
 
 from __future__ import annotations
 
+import contextvars
 import logging
 import os
 from typing import Optional
@@ -20,6 +21,36 @@ import numpy as np
 
 # 抑制 pyradiomics 的大量 INFO 日志（Computing firstorder / glcm / ...）
 logging.getLogger("radiomics").setLevel(logging.WARNING)
+
+_radiomics_image_name: contextvars.ContextVar[str | None] = contextvars.ContextVar(
+    "radiomics_image_name", default=None
+)
+_radiomics_name_filter_installed = False
+
+
+class _RadiomicsImageNameFilter(logging.Filter):
+    """为 pyradiomics geometry mismatch 等 warning 附加当前 image_name。"""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        name = _radiomics_image_name.get()
+        if not name:
+            return True
+        try:
+            msg = record.getMessage()
+        except Exception:
+            return True
+        if "geometry mismatch" in msg and "image_name=" not in msg:
+            record.msg = f"{msg} (image_name={name})"
+            record.args = ()
+        return True
+
+
+def _ensure_radiomics_image_name_filter() -> None:
+    global _radiomics_name_filter_installed
+    if _radiomics_name_filter_installed:
+        return
+    logging.getLogger("radiomics").addFilter(_RadiomicsImageNameFilter())
+    _radiomics_name_filter_installed = True
 
 
 # 默认 YAML 配置路径：与本模块同目录的 radiomics_2d.yaml
@@ -57,17 +88,37 @@ class RadiomicsFeatureExtractor:
         self._spacing = spacing
         self._mask_threshold = mask_threshold
 
-    def extract(self, image: np.ndarray, mask: np.ndarray) -> dict[str, float]:
+    def extract(
+        self,
+        image: np.ndarray,
+        mask: np.ndarray,
+        image_name: Optional[str] = None,
+    ) -> dict[str, float]:
         """
         提取 radiomics 特征。
 
         Args:
             image: (H, W, 3) RGB uint8 或 (H, W) gray uint8。
             mask: (H, W) uint8 [0,255] 或 0/1 二值。
+            image_name: 可选；传入时 pyradiomics geometry 相关 warning 会带上该名。
 
         Returns:
             {feature_name: value}，空 mask 返回 {}。
         """
+        _ensure_radiomics_image_name_filter()
+        name_token = _radiomics_image_name.set(image_name) if image_name else None
+        try:
+            return self._extract_impl(image, mask, image_name)
+        finally:
+            if name_token is not None:
+                _radiomics_image_name.reset(name_token)
+
+    def _extract_impl(
+        self,
+        image: np.ndarray,
+        mask: np.ndarray,
+        image_name: Optional[str],
+    ) -> dict[str, float]:
         import SimpleITK as sitk
         from PIL import Image as PILImage
 
@@ -96,17 +147,19 @@ class RadiomicsFeatureExtractor:
         img_sitk = sitk.GetImageFromArray(gray.astype(np.float32))
         msk_sitk = sitk.GetImageFromArray(mask_binary.astype(np.uint8))
 
-        # 设置 spacing（correctMask: true 依赖）
+        # 与训练侧一致设 spacing；mask 复制 image 的 origin/direction/spacing，
+        # 避免 LabelStatisticsImageFilter 首次失败 → pyradiomics 每张图打 geometry mismatch WARNING
+        #（float32 图 + uint8 mask 仅 SetSpacing 时常见，与 H×W 是否为 224 无关）。
         img_sitk.SetSpacing(self._spacing)
-        msk_sitk.SetSpacing(self._spacing)
+        msk_sitk.CopyInformation(img_sitk)
 
         try:
             result = self._extractor.execute(img_sitk, msk_sitk, label=1)
         except Exception as e:
-            print(f"  ⚠️ pyradiomics 特征提取失败: {e}")
+            suffix = f" (image_name={image_name})" if image_name else ""
+            print(f"  ⚠️ pyradiomics 特征提取失败: {e}{suffix}")
             return {}
 
-        # 过滤诊断性字段，只留特征
         features: dict[str, float] = {}
         for key, val in result.items():
             if not str(key).startswith("diagnostics_"):

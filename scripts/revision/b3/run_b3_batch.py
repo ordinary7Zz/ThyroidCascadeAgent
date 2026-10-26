@@ -138,7 +138,7 @@ def _run_one(run_id: str, cmd: list[str], child_env: dict[str, str]) -> tuple[st
 
 def main():
     parser = argparse.ArgumentParser(description="批量运行 B3 routing ablation")
-    parser.add_argument("--config", default="config/b3/sample.yaml")
+    parser.add_argument("--config", default="config/revision/b3/sample.yaml")
     parser.add_argument("--shared-intermediate", default=None)
     parser.add_argument("--output-root", default=None)
     parser.add_argument(

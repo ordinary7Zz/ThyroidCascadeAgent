@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "dataset_id": "thyroidxl",
+  "layer": "L1",
+  "description": "单 DINO 专家（完整堆叠 development 训练）；无专家池、无 LLM 路由",
+  "provenance": {
+    "training": "stacked OpenThyroid dataset_3 (cls) / dataset_4 (seg); all_datasets joint DINO",
+    "seg_checkpoint": "../Segmentation_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth",
+    "cls_checkpoint": "../Classification_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth",
+    "eval_run_dir": "output/ablation/l1/thyroidxl/run1",
+    "eval_config": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/config/revision/b4/l1/thyroidxl.yaml",
+    "eval_protocol": "run_pipeline.py; single seg+cls; enable_agent=false; radiomics_judge=false",
+    "bootstrap": "evaluate_pipeline image-level n=1000 seed=42"
+  },
+  "segmentation": {
+    "dice_mean": 0.8792432759412485,
+    "dice_ci_lower": 0.8744743941000629,
+    "dice_ci_upper": 0.8836790455665969,
+    "hd95_mean": 5.21720710810788,
+    "hd95_ci_lower": 4.835218786925305,
+    "hd95_ci_upper": 5.613416733918888
+  },
+  "classification": {
+    "n": 2090,
+    "auroc": 0.9287720913107511,
+    "auroc_ci_lower": 0.9179843399044493,
+    "auroc_ci_upper": 0.9397476160121789,
+    "auprc": 0.9076436110370517,
+    "auprc_ci_lower": 0.8889082782838742,
+    "auprc_ci_upper": 0.9251736095274463,
+    "accuracy": 0.8401913875598086
+  }
+}

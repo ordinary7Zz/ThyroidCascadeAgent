@@ -7,7 +7,7 @@
 用法:
   export DASHSCOPE_API_KEY=...
   python scripts/revision/b6/rerun_failed_path_b_llm.py \\
-    --config config/b6/tn3k.yaml \\
+    --config config/revision/b6/tn3k.yaml \\
     --output-dir output/b6/tn3k/pipeline_run
 """
 

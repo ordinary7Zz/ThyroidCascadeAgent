@@ -65,9 +65,21 @@ def _run(cmd: list[str], *, cwd: Path) -> None:
     subprocess.run(cmd, cwd=str(cwd), check=True)
 
 
+def _chunk_infer_done(chunk_out: Path, expected: int) -> bool:
+    results_path = chunk_out / "results.json"
+    if not results_path.is_file():
+        return False
+    try:
+        data = json.loads(results_path.read_text(encoding="utf-8"))
+        n = len(data) if isinstance(data, list) else len(data.get("results", data))
+    except (json.JSONDecodeError, TypeError, AttributeError):
+        return False
+    return n >= expected
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="B3 learned 单 cohort")
-    parser.add_argument("--config", default=None, help="config/b3/<id>.yaml（可与 --cohort-meta 二选一）")
+    parser.add_argument("--config", default=None, help="config/revision/b3/<id>.yaml（可与 --cohort-meta 二选一）")
     parser.add_argument(
         "--cohort-meta",
         required=True,
@@ -76,7 +88,11 @@ def main() -> int:
     parser.add_argument("--skip-fit", action="store_true")
     parser.add_argument("--skip-infer", action="store_true")
     parser.add_argument("--skip-eval", action="store_true")
-    parser.add_argument("--device", default="cpu")
+    parser.add_argument(
+        "--device",
+        default="cpu",
+        help="learned bundle 为 CPU 路径；默认 cpu（勿用 cuda 占卡）",
+    )
     parser.add_argument(
         "--manifest",
         default="config/revision/b3/learned_wave3_cohorts.yaml",
@@ -153,19 +169,22 @@ def main() -> int:
             chunk_dirs = sorted(chunk_root_path.glob("chunk_*"))
             if not chunk_dirs:
                 raise FileNotFoundError(f"无 chunk 目录: {chunk_root_path}")
-            runner = ROOT / "scripts" / "run_routing_ablation.py"
             for chunk_dir in chunk_dirs:
                 shared = _chunk_shared_dir(chunk_dir)
                 start, count = _chunk_meta(chunk_dir, chunk_size)
                 chunk_out = out_chunks / chunk_dir.name / "learned"
                 chunk_out.mkdir(parents=True, exist_ok=True)
+                if _chunk_infer_done(chunk_out, count):
+                    print(
+                        f"跳过 {chunk_dir.name}/learned：results.json 已齐（≥{count} 条）",
+                        flush=True,
+                    )
+                    continue
                 infer_cmd = [
                     py,
-                    str(runner),
+                    str(infer_script),
                     "--config",
                     str(cfg_path),
-                    "--routing-mode",
-                    "learned",
                     "--shared-intermediate",
                     str(shared),
                     "--output-dir",

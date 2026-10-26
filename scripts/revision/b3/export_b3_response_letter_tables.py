@@ -7,6 +7,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import yaml
+
 
 def _bootstrap() -> None:
     p = Path(__file__).resolve()
@@ -59,14 +61,38 @@ STRATEGIES = (
 SEG_COHORTS = ("tn3k", "tn5k", "thyroidxl", "pktn", "ddti_seg", "zjh8k", "rjh7k")
 CLS_COHORTS = ("tn3k", "tn5k", "thyroidxl", "ddti_cls", "zjh8k")
 
+_MANUSCRIPT_LLM_PATH = REPO / "docs" / "revision" / "b3" / "manuscript_llm_metrics.yaml"
+_MANUSCRIPT_LLM_COHORTS: dict | None = None
+
+
+def _manuscript_llm_cohorts() -> dict:
+    global _MANUSCRIPT_LLM_COHORTS
+    if _MANUSCRIPT_LLM_COHORTS is None:
+        raw = yaml.safe_load(_MANUSCRIPT_LLM_PATH.read_text(encoding="utf-8"))
+        _MANUSCRIPT_LLM_COHORTS = raw.get("cohorts") or {}
+    return _MANUSCRIPT_LLM_COHORTS
+
+
+def _load_manuscript_llm_metrics(cohort: str) -> dict | None:
+    """策略 7：稿面 Table S3/S4（见 docs/revision/b3/manuscript_llm_metrics.yaml）。"""
+    c = _manuscript_llm_cohorts().get(cohort)
+    if not c:
+        return None
+    out: dict = {"n_total": c.get("n_test")}
+    if c.get("segmentation"):
+        out["segmentation"] = c["segmentation"]
+    if c.get("classification"):
+        out["classification"] = c["classification"]
+    return out
+
 
 def _modes_for_cohort(cid: str, lang: str = "zh") -> list[tuple[str, str, dict | None]]:
-    """All strategy rows for one cohort; missing learned/llm → None metrics."""
+    """All strategy rows for one cohort; llm from manuscript yaml; learned from disk."""
     rows: list[tuple[str, str, dict | None]] = []
     for mode, _num, zlabel, elabel in STRATEGIES:
         label = zlabel if lang == "zh" else elabel
         if mode == "llm":
-            rows.append((mode, label, None))
+            rows.append((mode, label, _load_manuscript_llm_metrics(cid)))
             continue
         m = _load_metrics(cid, mode)
         if mode == "learned":
@@ -84,7 +110,11 @@ def _load_metrics(cohort: str, mode: str) -> dict | None:
     return json.loads(p.read_text(encoding="utf-8"))
 
 
-def _fmt_ci(mean: float | None, lo: float | None, hi: float | None, nd: int = 3) -> str:
+# B3 回复表与稿面 Table S3/S4 对齐：Dice/AUROC/AUPRC/HD95 均四位小数（比例制 Dice，非 %）
+_B3_CI_DECIMALS = 4
+
+
+def _fmt_ci(mean: float | None, lo: float | None, hi: float | None, nd: int = _B3_CI_DECIMALS) -> str:
     if mean is None or lo is None or hi is None:
         return "---"
     if any(x != x for x in (mean, lo, hi)):  # nan
@@ -96,14 +126,14 @@ def _seg_dice(m: dict | None) -> str:
     if not m:
         return "---"
     s = m.get("segmentation") or {}
-    return _fmt_ci(s.get("dice_mean"), s.get("dice_ci_lower"), s.get("dice_ci_upper"), 3)
+    return _fmt_ci(s.get("dice_mean"), s.get("dice_ci_lower"), s.get("dice_ci_upper"))
 
 
 def _seg_hd95(m: dict | None) -> str:
     if not m:
         return "---"
     s = m.get("segmentation") or {}
-    return _fmt_ci(s.get("hd95_mean"), s.get("hd95_ci_lower"), s.get("hd95_ci_upper"), 2)
+    return _fmt_ci(s.get("hd95_mean"), s.get("hd95_ci_lower"), s.get("hd95_ci_upper"))
 
 
 def _cls_block(m: dict | None, key: str = "classification") -> tuple[str, str]:
@@ -112,8 +142,8 @@ def _cls_block(m: dict | None, key: str = "classification") -> tuple[str, str]:
     c = m.get(key) or m.get("metrics_path_b_only") or {}
     if key == "classification_path_b" or key == "metrics_path_b_only":
         c = m.get("classification_path_b") or m.get("metrics_path_b_only") or {}
-    auroc = _fmt_ci(c.get("auroc"), c.get("auroc_ci_lower"), c.get("auroc_ci_upper"), 3)
-    auprc = _fmt_ci(c.get("auprc"), c.get("auprc_ci_lower"), c.get("auprc_ci_upper"), 3)
+    auroc = _fmt_ci(c.get("auroc"), c.get("auroc_ci_lower"), c.get("auroc_ci_upper"))
+    auprc = _fmt_ci(c.get("auprc"), c.get("auprc_ci_lower"), c.get("auprc_ci_upper"))
     return auroc, auprc
 
 
@@ -188,10 +218,10 @@ def _build_zh_tables() -> str:
     seg_header = "队列 & $n$ & 路由策略 & Dice $\\uparrow$ & HD95 $\\downarrow$ (mm)"
     _longtable_preamble(
         out,
-        "表 R14. 路由消融 --- 结节分割（固定专家池；点估计及 95\\% CI；"
+        "表 R13. 路由消融 --- 结节分割（固定专家池；点估计及 95\\% CI；"
         "cluster bootstrap，1000 次，seed=42）。",
-        "tab:R14",
-        "表 R14（续）",
+        "tab_routing_ablation_seg",
+        "表 R13（续）",
         seg_header,
     )
     for cid, clabel in COHORTS:
@@ -203,7 +233,7 @@ def _build_zh_tables() -> str:
         ref = _ref_metrics(cid)
         n_ref = _n_test(ref)
         for i, (_mode, zlabel, m) in enumerate(modes_present):
-            if _mode == "llm" or m is None:
+            if m is None:
                 dice, hd = "---", "---"
             else:
                 dice, hd = _seg_dice(m), _seg_hd95(m)
@@ -216,17 +246,17 @@ def _build_zh_tables() -> str:
     _longtable_close(
         out,
         "静态规则 (4) 为专家一致度（agreement-only）。Oracle (8) 为上界。"
-        "策略 (7) 完整 ThyroidXAgent 路由与学习型 (6) 在部分队列定稿补全（表中 ---）。"
+        "策略 (7) 与投稿主文 Table~S3 ThyroidXAgent 行一致（非消融 intermediate 重跑）。"
         "仅列入具备分割评估的队列。",
     )
 
     cls_header = "队列 & $n$ & 路由策略 & AUROC $\\uparrow$ & AUPRC $\\uparrow$"
     _longtable_preamble(
         out,
-        "表 R15. 路由消融 --- 良恶性分类（AUROC / AUPRC；点估计及 95\\% CI；"
+        "表 R14. 路由消融 --- 良恶性分类（AUROC / AUPRC；点估计及 95\\% CI；"
         "cluster bootstrap，1000 次，seed=42）。",
-        "tab:R15",
-        "表 R15（续）",
+        "tab_routing_ablation_cls",
+        "表 R14（续）",
         cls_header,
     )
     for cid, clabel in COHORTS:
@@ -238,7 +268,7 @@ def _build_zh_tables() -> str:
         ref = _ref_metrics(cid)
         n_ref = _n_test(ref)
         for i, (_mode, zlabel, m) in enumerate(modes_present):
-            if _mode == "llm" or m is None:
+            if m is None:
                 auroc, auprc = "---", "---"
             else:
                 auroc, auprc = _cls_block(m, "classification")
@@ -250,7 +280,7 @@ def _build_zh_tables() -> str:
         out.pop()
     _longtable_close(
         out,
-        "策略 (7) 为完整 ThyroidXAgent；策略 1--6 为 Methods~\\S4.3 受控路由对照。"
+        "策略 (7) 与投稿主文 Table~S4 ThyroidXAgent 行一致；策略 1--6 为 Methods~\\S4.3 受控路由对照。"
         "仅列入具备良恶性分类评估的队列。",
     )
     return "\n".join(out)
@@ -262,10 +292,10 @@ def _build_en_tables() -> str:
     seg_header = "Cohort & $n$ & Routing strategy & Dice $\\uparrow$ & HD95 $\\downarrow$ (mm)"
     _longtable_preamble(
         out,
-        "Table R14. Routing ablation --- nodule segmentation (fixed expert pool; "
+        "Table R13. Routing ablation --- nodule segmentation (fixed expert pool; "
         "point estimate and 95\\% CI; cluster bootstrap, 1000 resamples, seed=42).",
-        "tab:R14",
-        "Table R14 (continued)",
+        "tab_routing_ablation_seg",
+        "Table R13 (continued)",
         seg_header,
     )
     for cid, clabel in COHORTS:
@@ -277,7 +307,7 @@ def _build_en_tables() -> str:
         ref = _ref_metrics(cid)
         n_ref = _n_test(ref)
         for i, (_mode, elabel, m) in enumerate(modes_present):
-            if _mode == "llm" or m is None:
+            if m is None:
                 dice, hd = "---", "---"
             else:
                 dice, hd = _seg_dice(m), _seg_hd95(m)
@@ -290,17 +320,17 @@ def _build_en_tables() -> str:
     _longtable_close(
         out,
         "Static rule (4): inter-expert agreement (agreement-only). Oracle (8): non-deployable upper bound. "
-        "Strategy (7) full ThyroidXAgent routing and learned (6) on some cohorts: to be completed (---). "
+        "Strategy (7) matches primary manuscript Table~S3 ThyroidXAgent row (not re-run on ablation intermediate). "
         "Only cohorts with segmentation evaluation are listed.",
     )
 
     cls_header = "Cohort & $n$ & Routing strategy & AUROC $\\uparrow$ & AUPRC $\\uparrow$"
     _longtable_preamble(
         out,
-        "Table R15. Routing ablation --- benign--malignant classification (AUROC / AUPRC; "
+        "Table R14. Routing ablation --- benign--malignant classification (AUROC / AUPRC; "
         "point estimate and 95\\% CI; cluster bootstrap, 1000 resamples, seed=42).",
-        "tab:R15",
-        "Table R15 (continued)",
+        "tab_routing_ablation_cls",
+        "Table R14 (continued)",
         cls_header,
     )
     for cid, clabel in COHORTS:
@@ -312,7 +342,7 @@ def _build_en_tables() -> str:
         ref = _ref_metrics(cid)
         n_ref = _n_test(ref)
         for i, (_mode, elabel, m) in enumerate(modes_present):
-            if _mode == "llm" or m is None:
+            if m is None:
                 auroc, auprc = "---", "---"
             else:
                 auroc, auprc = _cls_block(m, "classification")
@@ -324,7 +354,7 @@ def _build_en_tables() -> str:
         out.pop()
     _longtable_close(
         out,
-        "Strategy (7): full ThyroidXAgent; strategies 1--6: controlled routing ablation (Methods~\\S4.3). "
+        "Strategy (7) matches primary manuscript Table~S4 ThyroidXAgent row; strategies 1--6: controlled routing ablation (Methods~\\S4.3). "
         "Only cohorts with benign--malignant classification evaluation are listed.",
     )
     return "\n".join(out)

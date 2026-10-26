@@ -3,7 +3,7 @@
 
 不重跑路由；只读 results.json + intermediate/selected_masks.npz。
 
-  python scripts/revision/b3/recompute_b3_cluster_ci.py --config config/b3/tn3k.yaml
+  python scripts/revision/b3/recompute_b3_cluster_ci.py --config config/revision/b3/tn3k.yaml
   python scripts/revision/b3/recompute_b3_cluster_ci.py --all-wave1 --summarize
 """
 
@@ -137,7 +137,7 @@ def recompute_cohort(cfg_path: Path, root: Path, modes: tuple[str, ...], summari
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="B3 metrics: 重算 cluster-bootstrap CI")
-    parser.add_argument("--config", type=Path, help="config/b3/<cohort>.yaml")
+    parser.add_argument("--config", type=Path, help="config/revision/b3/<cohort>.yaml")
     parser.add_argument("--root", type=Path, help="默认 output/ablation/b3/<cohort>")
     parser.add_argument("--modes", default=",".join(WAVE1_MODES))
     parser.add_argument("--all-wave1", action="store_true", help="重算 WAVE1_COHORTS")

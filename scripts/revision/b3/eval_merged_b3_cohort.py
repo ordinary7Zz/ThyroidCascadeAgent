@@ -2,11 +2,11 @@
 """合并后的 B3 全队列：对每 mode 目录跑 evaluate_pipeline → b3_metrics.json，可选 ablation_summary。
 
   python scripts/revision/b3/eval_merged_b3_cohort.py \\
-    --config config/b3/zjh8k.yaml \\
+    --config config/revision/b3/zjh8k.yaml \\
     --root output/ablation/b3/zjh8k
 
   python scripts/revision/b3/eval_merged_b3_cohort.py \\
-    --config config/b3/rjh7k.yaml \\
+    --config config/revision/b3/rjh7k.yaml \\
     --root output/ablation/b3/rjh7k
 """
 from __future__ import annotations
@@ -68,7 +68,7 @@ def _load_results(path: Path) -> list[dict]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="合并 B3 目录后生成 b3_metrics.json")
-    parser.add_argument("--config", required=True, help="config/b3/<cohort>.yaml")
+    parser.add_argument("--config", required=True, help="config/revision/b3/<cohort>.yaml")
     parser.add_argument("--root", required=True, help="合并输出根目录，含各 mode 子目录")
     parser.add_argument(
         "--modes",

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""生成 config/b6/<cohort>.yaml，结构与 config/b6/sample_stability.yaml 一致。"""
+"""生成 config/revision/b6/<cohort>.yaml，结构与 config/revision/b6/sample_stability.yaml 一致。"""
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ from pathlib import Path
 
 import repo_path
 ROOT = repo_path.find_repo_root()
-OUT_DIR = ROOT / "config" / "b6"
+OUT_DIR = ROOT / "config" / "revision" / "b6"
 DATA = Path("/mnt/wangbd8/workspace/DataSets/ThyroidAgent")
 
 COHORTS: list[dict] = [
@@ -131,13 +131,13 @@ from pathlib import Path
 # 构建子集: bash scripts/build_all_test_for_llm.sh
 # 用法:
 #   export DASHSCOPE_API_KEY=...
-#   python run_pipeline.py --config config/b6/{name}.yaml --device cuda
+#   python run_pipeline.py --config config/revision/b6/{name}.yaml --device cuda
 #   python run_routing_stability.py \\
-#     --config config/b6/{name}.yaml \\
+#     --config config/revision/b6/{name}.yaml \\
 #     --output-dir {out_run} \\
 #     --repeats 5 --device cuda
 #
-# 结构对齐 config/b6/sample_stability.yaml；勿用于 B3 波次 1 static bundle。
+# 结构对齐 config/revision/b6/sample_stability.yaml；勿用于 B3 波次 1 static bundle。
 shared:
   agent_llm:
     api_key_env: DASHSCOPE_API_KEY

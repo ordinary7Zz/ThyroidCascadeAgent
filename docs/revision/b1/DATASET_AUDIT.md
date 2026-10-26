@@ -21,7 +21,7 @@
 | DDTI_Classification（**cls，主评估**） | 外部 test（分类） | `train_val_test/DDTI_Classification/all/images_processed` + `all/DDTI_Classification_test_label.json` | **349** | **无** | 标签 JSON 与 pipeline/B2 一致 | 一图一簇 | `test/images` 为更小子目录（~53 图），**主表不用** |
 | RJH-7K | 外部 test（分割） | `train_val_test/RJH-7K/` 等 | **TBD** | **无** | 外部 | — | — |
 | ZJH-8K | 外部 test | `train_val_test/ZJH-8K/` | 7958 | **有**（`ZJH-8K_labels.json.patient_map.json` → `P0001`…；文件名 `姓名_01_…` 或匿名 `P0091_01_…`） | 机构队列，全量作 test | 稿内 1,149 **患者** vs 本地 map **1146** 患者：**F6 对齐** | 与 TN3K 同院；重叠筛查见 §3 |
-| NHC-MISD-TUS | 外部 test | **本地缺失** | — | **TBD** | — | — | 配置见 `config/b3/nhc_misd_tus.yaml` |
+| NHC-MISD-TUS | 外部 test | **本地缺失** | — | **TBD** | — | — | 配置见 `config/revision/b3/nhc_misd_tus.yaml` |
 | SMU-HMC 等报告队列 | 报告侧 | 非 `train_val_test` 主表 | — | 稿内称 400 例 **患者级** test | 稿内 Methods | 已声明患者留出 | 与 B12/S9 数据流图联动 |
 
 **Bootstrap 聚类键（B2 口径草案）**

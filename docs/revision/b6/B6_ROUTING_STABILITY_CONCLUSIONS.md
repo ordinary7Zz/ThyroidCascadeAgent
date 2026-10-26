@@ -15,7 +15,7 @@
 | 汇总一致率 | **0.92**（92%） | `mean_selection_agreement` |
 | 分层 `close` 例数 / 均值 | **10** 例，均值 **0.92** | `by_disagreement_tier.close` |
 | 分层 `easy` 例数 / 均值 | **0** 例（本批未出现） | `by_disagreement_tier.easy`（若有） |
-| 配置 | `config/b6/sample_stability.yaml` | 复制为 `config/b6/<cohort>_stability.yaml` 并改 `data` / `shared_intermediate` |
+| 配置 | `config/revision/b6/sample_stability.yaml` | 复制为 `config/revision/b6/<cohort>_stability.yaml` 并改 `data` / `shared_intermediate` |
 | 稳定性 JSON | `output/sample/pipeline_run/stability_summary.json` | `output/<cohort>/pipeline_run/stability_summary.json` |
 | 路由审计日志 | `output/sample/pipeline_run/routing_log.jsonl` | 同目录 `routing_log.jsonl` |
 | LLM（稳定性配置） | qwen3.7-flash，`temperature=0.3`，`max_tokens=768` | 与 config 中 `shared.agent_llm` 一致 |
@@ -89,7 +89,7 @@ On the **sample** subset (*n* = 10, five repeated LLM segmentation routing calls
 output/sample/pipeline_run/stability_summary.json   # 5× 汇总
 output/sample/pipeline_run/routing_log.jsonl      # 结构化审计
 docs/supplementary/router_spec.md                   # 透明性
-config/b6/sample_stability.yaml                     # 稳定性实验 config
+config/revision/b6/sample_stability.yaml                     # 稳定性实验 config
 ```
 
 ---

@@ -1,4 +1,4 @@
-# B2 各队列任务范围（与 config/b3/README.md、稿内 S3/S4 一致）
+# B2 各队列任务范围（与 config/revision/b3/README.md、稿内 S3/S4 一致）
 # classification: 良恶性分类 + cluster-bootstrap AUROC/AUPRC
 # segmentation: Dice/HD95 + cluster-bootstrap（需 selected_masks.npz + gt_mask_dir）
 

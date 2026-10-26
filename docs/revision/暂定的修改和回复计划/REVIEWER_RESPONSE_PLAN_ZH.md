@@ -166,7 +166,7 @@
 | 全稳定 | **8 / 10** |
 | 低一致 | **2 / 10** 为 **60%**（`0002.jpg`、`0003.jpg`；0003 另 cls 80%） |
 | 分层 | 本批 **均为 close**（10/10）；无 easy 层对比句 |
-| 配置 / 产物 | `config/b6/sample_stability.yaml`；`output/sample/pipeline_run/` |
+| 配置 / 产物 | `config/revision/b6/sample_stability.yaml`；`output/sample/pipeline_run/` |
 
 **回复要点（中文逻辑，英文见 snippets）**
 

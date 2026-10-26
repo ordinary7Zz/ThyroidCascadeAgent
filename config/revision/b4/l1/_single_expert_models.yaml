@@ -1,0 +1,15 @@
+# B4 L1：仅 all_datasets 联合训练专家（与 B3 池中 joint 成员权重一致）
+# 由 generate_ablation_configs.build_l1() 嵌入各 cohort yaml
+
+segmentation_models:
+  - type: dinov3_unet
+    name: all_datasets
+    model_path: ../Segmentation_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth
+    input_size: [224, 224]
+    threshold: 0.5
+
+classification_models:
+  - type: dinov3_unet_multitask
+    name: all_datasets
+    model_path: ../Classification_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth
+    use_tirads: false

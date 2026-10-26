@@ -37,7 +37,7 @@ from routing.best_single_expert import fit_best_single_on_val, resolve_val_fit_p
 
 def main():
     parser = argparse.ArgumentParser(description="B3 策略 1：val 上选最优单专家")
-    parser.add_argument("--config", default="config/b3/sample.yaml")
+    parser.add_argument("--config", default="config/revision/b3/sample.yaml")
     parser.add_argument("--intermediate", required=True, help="含 seg/ cls 的 intermediate 目录")
     parser.add_argument(
         "--out",

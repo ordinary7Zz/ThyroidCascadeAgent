@@ -34,7 +34,7 @@ STATIC_RULE_ONLY="${STATIC_RULE_ONLY:-0}"
 CHUNK_INTER="${B3_CHUNK_ROOT:-${ROOT}/output/RJH-7K/b3_reinfer}"
 OUT_CHUNKS="${ROOT}/output/ablation/b3/rjh7k_chunks"
 OUT_FINAL="${ROOT}/output/ablation/b3/rjh7k"
-CFG="${ROOT}/config/b3/rjh7k.yaml"
+CFG="${ROOT}/config/revision/b3/rjh7k.yaml"
 LOG_DIR="${ROOT}/output/ablation/b3/_batch_logs"
 
 FAST5_MODES="soft_voting,majority,max_confidence,best_single,oracle"

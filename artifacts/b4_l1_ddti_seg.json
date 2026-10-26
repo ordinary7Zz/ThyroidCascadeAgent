@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "dataset_id": "ddti_seg",
+  "layer": "L1",
+  "description": "单 DINO 专家（完整堆叠 development 训练）；无专家池、无 LLM 路由",
+  "provenance": {
+    "training": "stacked OpenThyroid dataset_3 (cls) / dataset_4 (seg); all_datasets joint DINO",
+    "seg_checkpoint": "../Segmentation_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth",
+    "cls_checkpoint": "../Classification_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth",
+    "eval_run_dir": "output/ablation/l1/ddti_seg/run1",
+    "eval_config": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/config/revision/b4/l1/ddti_seg.yaml",
+    "eval_protocol": "run_pipeline.py; single seg+cls; enable_agent=false; radiomics_judge=false",
+    "bootstrap": "evaluate_pipeline image-level n=1000 seed=42"
+  },
+  "segmentation": {
+    "dice_mean": 0.8492219117439584,
+    "dice_ci_lower": 0.8369436914805544,
+    "dice_ci_upper": 0.8595961564961397,
+    "hd95_mean": 9.555571084148346,
+    "hd95_ci_lower": 8.594906031149945,
+    "hd95_ci_upper": 10.753756914790209
+  }
+}

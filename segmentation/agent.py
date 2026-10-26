@@ -316,13 +316,20 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 
     # ========== Radiomics 裁判 ==========
 
-    def _run_judge(self, image: np.ndarray, predictions: list[SegModelOutput]) -> Optional[list[dict]]:
+    def _run_judge(
+        self,
+        image: np.ndarray,
+        predictions: list[SegModelOutput],
+        image_name: Optional[str] = None,
+    ) -> Optional[list[dict]]:
         """对每个 pred mask 跑 radiomics 裁判。Phase 7 注入 judge 后生效。"""
         if self.radiomics_judge is None:
             return None
         masks = [p.mask for p in predictions]
         try:
-            return self.radiomics_judge.judge_batch(image, masks)
+            return self.radiomics_judge.judge_batch(
+                image, masks, image_name=image_name
+            )
         except Exception as e:
             print(f"  ⚠️ radiomics 裁判失败: {e}")
             return None
@@ -721,7 +728,7 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
         # radiomics 裁判（阶段 1 前置）
         # 若外部已传入 judge_results（Phase 3 统一跑过），则不重复计算
         if judge_results is None:
-            judge_results = self._run_judge(image, predictions)
+            judge_results = self._run_judge(image, predictions, image_name=image_name)
 
         # 阶段 1: 基于 radiomics 裁判预筛选（Python 规则，不用 LLM）
         predictions, judge_results, removed_indices = self._pre_filter_by_judge(

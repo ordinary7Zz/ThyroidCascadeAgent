@@ -137,7 +137,7 @@ def validate_b3_manifests(
 
 def build_component_table(cfg: dict) -> tuple[list[dict], dict]:
     """
-    config 结构见 config/b4/sample.yaml。
+    config 结构见 config/revision/b4/sample.yaml。
     返回 (主表行, 构建报告)。
     """
     b4 = cfg.get("pipeline", {}).get("ablation_b4") or cfg.get("ablation_b4") or {}

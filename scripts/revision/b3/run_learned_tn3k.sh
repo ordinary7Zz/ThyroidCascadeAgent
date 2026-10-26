@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
 cd "$ROOT"
 PY="${PY:-python3}"
-CFG="config/b3/tn3k.yaml"
+CFG="config/revision/b3/tn3k.yaml"
 VAL_INT="output/validation/_parts/tn3k/intermediate"
 TEST_INT="output/TN3K/pipeline_run/intermediate"
 OUT="output/ablation/b3/tn3k/learned"

@@ -1,0 +1,13 @@
+cohort,routing_mode,n_total,n_consensus,n_path_b
+tn3k,learned,614,335,279
+tn5k,learned,1000,596,404
+thyroidxl,learned,2090,1169,921
+pktn,learned,150,0,150
+ddti_seg,learned,637,0,637
+zjh8k,learned,7958,3856,4102
+rjh7k,learned,7288,0,7288
+tn3k,learned,614,335,279
+tn5k,learned,1000,596,404
+thyroidxl,learned,2090,1169,921
+ddti_cls,learned,349,126,223
+zjh8k,learned,7958,3856,4102

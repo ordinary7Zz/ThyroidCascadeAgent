@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
 cd "$ROOT"
 PY="${PY:-python3}"
-CFG="config/b3/thyroidxl.yaml"
+CFG="config/revision/b3/thyroidxl.yaml"
 VAL_INT="output/validation/_parts/thyroidxl/intermediate"
 TEST_INT="output/ThyroidXL/pipeline_run/intermediate"
 OUT="output/ablation/b3/thyroidxl/learned"

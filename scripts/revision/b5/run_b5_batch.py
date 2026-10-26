@@ -1,7 +1,17 @@
 #!/usr/bin/env python3
+"""B5 元数据消融：固定 routing_mode=llm，遍历 metadata_mode。
+
+示例:
+  python scripts/revision/b5/run_b5_batch.py --config config/revision/b5/sample.yaml
+  python scripts/revision/b5/run_b5_batch.py --config config/revision/b5/tn3k.yaml --force-phase3 --skip-full
+  python scripts/revision/b5/run_b5_batch.py --config config/revision/b5/sample.yaml --modes drop_device quality_only
 """
+
+from __future__ import annotations
+
 import importlib.util
 from pathlib import Path
+
 
 def __revision_bootstrap() -> None:
     p = Path(__file__).resolve()
@@ -15,30 +25,13 @@ def __revision_bootstrap() -> None:
             return
     raise RuntimeError(f"revision _path_setup.py not found above {__file__}")
 
+
 __revision_bootstrap()
-
-import importlib.util
-from pathlib import Path
-
-B5 元数据消融：固定 routing_mode=llm，遍历 metadata_mode。
-
-示例:
-  python scripts/revision/b5/run_b5_batch.py --config config/b5/sample.yaml
-  python scripts/revision/b5/run_b5_batch.py --config config/b5/sample.yaml --modes drop_device quality_only
-"""
-
-from __future__ import annotations
-
-import importlib.util
-from pathlib import Path
-
-
 
 import argparse
 import os
 import subprocess
 import sys
-from pathlib import Path
 
 import repo_path
 import yaml
@@ -65,7 +58,7 @@ def _child_env() -> dict[str, str]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="B5 metadata_mode batch (LLM routing)")
-    parser.add_argument("--config", required=True, help="config/b5/<cohort>.yaml")
+    parser.add_argument("--config", required=True, help="config/revision/b5/<cohort>.yaml")
     parser.add_argument(
         "--modes",
         nargs="+",
@@ -82,7 +75,6 @@ def main() -> None:
 
     cfg = _load_config(args.config)
     ab = cfg.get("pipeline", {}).get("ablation", {}) or {}
-    data = cfg.get("pipeline", {}).get("data", {}) or {}
     shared = ab.get("shared_intermediate")
     if not shared:
         parser.error("config 须设置 pipeline.ablation.shared_intermediate")
@@ -102,7 +94,10 @@ def main() -> None:
         for mode in modes:
             print(f"would run metadata_mode={mode} -> {out_root / mode}")
         if args.skip_full:
-            print(f"skip full; reuse B3 llm at {args.b3_llm_dir}")
+            b3_llm = args.b3_llm_dir or (
+                f"output/ablation/b3/{cohort}/llm" if cohort else None
+            )
+            print(f"skip full; reuse B3 llm metrics from: {b3_llm or '(set --b3-llm-dir)'}")
         return
 
     for mode in modes:

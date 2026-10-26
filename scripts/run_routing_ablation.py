@@ -5,7 +5,7 @@
 
 示例（sample 队列，共享地基 + 静态规则）:
   python scripts/run_routing_ablation.py \\
-    --config config/b3/sample.yaml \\
+    --config config/revision/b3/sample.yaml \\
     --routing-mode static_rule \\
     --task both \\
     --shared-intermediate output/sample/pipeline_run/intermediate \\
@@ -48,7 +48,7 @@ def load_config(path: str) -> dict:
 
 def main():
     parser = argparse.ArgumentParser(description="B3 routing ablation (wave 0–1)")
-    parser.add_argument("--config", default="config/b3/sample.yaml")
+    parser.add_argument("--config", default="config/revision/b3/sample.yaml")
     parser.add_argument(
         "--routing-mode",
         default=None,

@@ -52,10 +52,10 @@ declare -A RESULTS=(
   [pktn]="${ROOT}/output/PKTN/pipeline_run/results.json"
 )
 declare -A CFG=(
-  [tn3k]=config/b3/tn3k.yaml
-  [tn5k]=config/b3/tn5k.yaml
-  [thyroidxl]=config/b3/thyroidxl.yaml
-  [pktn]=config/b3/pktn.yaml
+  [tn3k]=config/revision/b3/tn3k.yaml
+  [tn5k]=config/revision/b3/tn5k.yaml
+  [thyroidxl]=config/revision/b3/thyroidxl.yaml
+  [pktn]=config/revision/b3/pktn.yaml
 )
 
 cd "${ROOT}"

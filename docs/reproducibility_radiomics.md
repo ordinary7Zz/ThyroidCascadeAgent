@@ -22,6 +22,8 @@ Inference in this repo matches training-side `pyradiomics_train` / `extract_radi
 
 Grayscale: PIL `convert("L")` (ITU-R 601-2). Mask foreground: `mask > 0`.
 
+Inference aligns SimpleITK geometry with `msk_sitk.CopyInformation(img_sitk)` after `SetSpacing` (same as fixing systematic `correctMask` resample warnings when image is float32 and mask is uint8).
+
 Training extraction yields **100** radiomics columns; AutoGluon preprocessing uses **86** numeric features at fit time (14 sparse/unused glszm columns dropped internally).
 
 ## AutoGluon

@@ -4,7 +4,7 @@
 # 默认队列（不含 nhc_misd_tus；DDTI 拆为 ddti_seg + ddti_cls；PKTN 仅分割）：
 #   tn3k, tn5k, thyroidxl, zjh8k, rjh7k, ddti_seg, ddti_cls, pktn, sample
 #
-# 前置：每个 config/b3/<id>.yaml 已配置数据路径，且 shared_intermediate 对应 Phase 1–2 已跑满。
+# 前置：每个 config/revision/b3/<id>.yaml 已配置数据路径，且 shared_intermediate 对应 Phase 1–2 已跑满。
 #
 # 用法：
 #   ./scripts/revision/b3/run_b3_wave1_all_cohorts.sh
@@ -172,7 +172,7 @@ for job in "${JOBS[@]}"; do
     fi
   fi
 
-  cfg="${ROOT}/config/b3/${cohort}.yaml"
+  cfg="${ROOT}/config/revision/b3/${cohort}.yaml"
   if [[ ! -f "${cfg}" ]]; then
     echo ">>> 缺少配置: ${cfg}" >&2
     failures+=("${job_id}:missing_config")
@@ -198,7 +198,7 @@ for job in "${JOBS[@]}"; do
   set +e
   (
     cd "${ROOT}"
-    "${PY}" scripts/revision/b3/run_b3_batch.py --config "config/b3/${cohort}.yaml" "${batch_args[@]}"
+    "${PY}" scripts/revision/b3/run_b3_batch.py --config "config/revision/b3/${cohort}.yaml" "${batch_args[@]}"
   ) 2>&1 | tee "${log}"
   rc=${PIPESTATUS[0]}
   set -e

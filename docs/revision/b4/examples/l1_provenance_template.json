@@ -1,0 +1,8 @@
+{
+  "training": "stacked OpenThyroid dataset_3 (cls) / dataset_4 (seg); same as S3/S4 development",
+  "seg_checkpoint": "REPLACE: e.g. all_datasets/dino_unet_epoch_40.pth",
+  "cls_checkpoint": "REPLACE: e.g. all_datasets/dino_cls_epoch_*.pth",
+  "eval_run_dir": "REPLACE: output/ablation/l1/<cohort>/run1",
+  "eval_protocol": "single expert; no pool; no LLM",
+  "bootstrap": "evaluate_pipeline image-level bootstrap n=1000 seed=42; revise with B2 cluster before submission"
+}

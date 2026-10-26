@@ -86,7 +86,7 @@ for job in "${JOBS[@]}"; do
     fi
   fi
 
-  cfg="${ROOT}/config/b3/${cohort}.yaml"
+  cfg="${ROOT}/config/revision/b3/${cohort}.yaml"
   if [[ ! -f "${cfg}" ]]; then
     echo ">>> 缺少配置: ${cfg}" >&2
     failures+=("${cohort}:missing_config")
@@ -97,14 +97,14 @@ for job in "${JOBS[@]}"; do
   log="${LOG_DIR}/${cohort}_wave1_${ts}.log"
   echo ""
   echo "======== B3 ${PRESET}: ${cohort} (task=${task}) ========"
-  echo "  config: config/b3/${cohort}.yaml"
+  echo "  config: config/revision/b3/${cohort}.yaml"
   echo "  log:    ${log}"
 
   set +e
   (
     cd "${ROOT}"
     "${PY}" scripts/revision/b3/run_b3_batch.py \
-      --config "config/b3/${cohort}.yaml" \
+      --config "config/revision/b3/${cohort}.yaml" \
       --preset "${PRESET}" \
       --task "${task}" \
       --force-phase3 \

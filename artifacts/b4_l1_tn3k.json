@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "dataset_id": "tn3k",
+  "layer": "L1",
+  "description": "单 DINO 专家（完整堆叠 development 训练）；无专家池、无 LLM 路由",
+  "provenance": {
+    "training": "stacked OpenThyroid dataset_3 (cls) / dataset_4 (seg); all_datasets joint DINO",
+    "seg_checkpoint": "../Segmentation_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth",
+    "cls_checkpoint": "../Classification_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth",
+    "eval_run_dir": "output/ablation/l1/tn3k/run1",
+    "eval_config": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/config/revision/b4/l1/tn3k.yaml",
+    "eval_protocol": "run_pipeline.py; single seg+cls; enable_agent=false; radiomics_judge=false",
+    "bootstrap": "evaluate_pipeline image-level n=1000 seed=42"
+  },
+  "segmentation": {
+    "dice_mean": 0.8454455551577831,
+    "dice_ci_lower": 0.8319236596572973,
+    "dice_ci_upper": 0.8583198806340315,
+    "hd95_mean": 11.706438513688203,
+    "hd95_ci_lower": 10.043933232310065,
+    "hd95_ci_upper": 13.437827717794852
+  },
+  "classification": {
+    "n": 614,
+    "auroc": 0.7694993722536096,
+    "auroc_ci_lower": 0.7278662176892815,
+    "auroc_ci_upper": 0.8056852979901874,
+    "auprc": 0.6851854758300047,
+    "auprc_ci_lower": 0.6213550477385126,
+    "auprc_ci_upper": 0.7465386980537261,
+    "accuracy": 0.6986970684039088
+  }
+}

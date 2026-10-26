@@ -1,40 +1,40 @@
 # B3 策略 6 批量队列元数据（由 run_learned_wave3_all.sh / run_learned_cohort.py 读取）
-# task 以各 config/b3/*.yaml 的 pipeline.ablation.task 为准：both | seg | cls
+# task 以各 config/revision/b3/*.yaml 的 pipeline.ablation.task 为准：both | seg | cls
 cohorts:
   tn5k:
-    config: config/b3/tn5k.yaml
+    config: config/revision/b3/tn5k.yaml
     val_intermediate: output/validation/_parts/tn5k/intermediate
     test_intermediate: output/TN5K/pipeline_run/intermediate
     output_dir: output/ablation/b3/tn5k/learned
 
   thyroidxl:
-    config: config/b3/thyroidxl.yaml
+    config: config/revision/b3/thyroidxl.yaml
     val_intermediate: output/validation/_parts/thyroidxl/intermediate
     test_intermediate: output/ThyroidXL/pipeline_run/intermediate
     output_dir: output/ablation/b3/thyroidxl/learned
 
   pktn:
-    config: config/b3/pktn.yaml
+    config: config/revision/b3/pktn.yaml
     val_intermediate: output/validation/_parts/pktn/intermediate
     test_intermediate: output/PKTN/pipeline_run/intermediate
     output_dir: output/ablation/b3/pktn/learned
 
   ddti_seg:
-    config: config/b3/ddti_seg.yaml
+    config: config/revision/b3/ddti_seg.yaml
     # 前置：python run_pipeline.py --config config/revision/validation/ddti_seg.yaml
     val_intermediate: output/validation/_parts/ddti_seg/intermediate
     test_intermediate: output/DDTI_seg/pipeline_run/intermediate
     output_dir: output/ablation/b3/ddti_seg/learned
 
   ddti_cls:
-    config: config/b3/ddti_cls.yaml
+    config: config/revision/b3/ddti_cls.yaml
     # 前置：python run_pipeline.py --config config/revision/validation/ddti_cls.yaml
     val_intermediate: output/validation/_parts/ddti_cls/intermediate
     test_intermediate: output/DDTI_cls/pipeline_run/intermediate
     output_dir: output/ablation/b3/ddti_cls/learned
 
   zjh8k:
-    config: config/b3/zjh8k.yaml
+    config: config/revision/b3/zjh8k.yaml
     # fit：holdout chunk_07（与全队列 test reinfer 同分布；稿面可说明为计算约束下的 val）
     val_intermediate: output/ZJH-8K/b3_reinfer/chunk_07/intermediate
     chunked_infer:
@@ -44,7 +44,7 @@ cohorts:
       chunk_size: 1000
 
   rjh7k:
-    config: config/b3/rjh7k.yaml
+    config: config/revision/b3/rjh7k.yaml
     val_intermediate: output/RJH-7K/b3_reinfer/chunk_07/intermediate
     chunked_infer:
       chunk_root: output/RJH-7K/b3_reinfer

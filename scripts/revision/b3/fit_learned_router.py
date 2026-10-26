@@ -65,7 +65,7 @@ def _init_random_artifacts(config: dict) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="拟合或初始化 B3 learned 路由器")
-    parser.add_argument("--config", default="config/b3/sample.yaml")
+    parser.add_argument("--config", default="config/revision/b3/sample.yaml")
     parser.add_argument(
         "--intermediate",
         default=None,

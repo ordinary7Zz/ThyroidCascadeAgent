@@ -121,7 +121,7 @@
 | **新 Supp：ZJH train-duplicate 敏感性** | 全量 vs excl.（992 图）；见 `BASELINES_INDEX_excl_train_dup.json` | B1+B2 | **可改** |
 | **新 Supp（可选）：近重复审计** | dHash 配对计数或 `near_dup_pairs/stacked_train_vs_ZJH-8K.pairs.json` 摘要 | B1 | **框架可改** |
 | **新 Supp：B3 路由消融** | **九队列**波次 1 表（分割 + 全量/Path B 分类）；learned/LLM 列 **待补**；配对 bootstrap 待 B2 口径 | `../b3/tables/`；`export_b3_tables.py` | **接近定稿** |
-| **新 Supp：路由器规格（B6）** | `router_spec.md`（模型、解码、prompt、JSON schema） | `docs/supplementary/router_spec.md`；`export_router_spec.py` | **可改**（统稿前：`--config config/b6/tn3k.yaml` 重导） |
+| **新 Supp：路由器规格（B6）** | `router_spec.md`（模型、解码、prompt、JSON schema） | `docs/supplementary/router_spec.md`；`export_router_spec.py` | **可改**（统稿前：`--config config/revision/b6/tn3k.yaml` 重导） |
 | **新 Supp：路由稳定性（B6）** | *n* 例 × 5 次一致率；`disagreement_tier` 分层；1–2 例不稳定个案 | `output/b6/tn3k/pipeline_run/stability_summary.json`；§11.3 | **可改**（制 Supp. 表） |
 | **新 Supp：routing log 样例（B6）** | ≥10 条结构化 `routing_log.jsonl` 摘录 | `output/b6/tn3k/pipeline_run/routing_log.jsonl`（575 行；主跑 250 + 稳定性追加） | **可改**（撰稿筛 ≥10 例） |
 | **新 Supp：校准（B8）** | Validation pooled + **五队列** test：**ECE、Brier**；可靠性图 | `output/b8/fit/`；`cohorts/*/calibration_test.json`、`reliability_*.png` | **可改**（制 Supp. 表） |
@@ -341,13 +341,13 @@
 
 > **实验状态（TN3K，2026-10-24）**：`output/b6/tn3k/pipeline_run/` 已具备主 pipeline（**250** 例 `test_for_llm_malignancy`）、`stability_summary.json`（稳定性子集 *n*=**10**，**5×**）、`routing_log.jsonl`（**575** 行：主跑审计 + 稳定性重复追加）、`results.json`；Path B 分类 **121/121** 为 LLM 裁决（`path_b_llm`）。  
 > **早期试点**：`output/sample/pipeline_run/`（92% 一致率）仅作方法开发对照，**稿面主数字以下表 TN3K 为准**。  
-> **统稿前**：`python scripts/revision/b6/export_router_spec.py --config config/b6/tn3k.yaml` 更新 `docs/supplementary/router_spec.md`（当前文件可能仍为旧默认模型名）。同步润色 `b6/B6_ROUTING_STABILITY_CONCLUSIONS.md`、`b6/REVIEWER_RESPONSE_SNIPPETS_B6.md`（可与本 §11 互拷）。
+> **统稿前**：`python scripts/revision/b6/export_router_spec.py --config config/revision/b6/tn3k.yaml` 更新 `docs/supplementary/router_spec.md`（当前文件可能仍为旧默认模型名）。同步润色 `b6/B6_ROUTING_STABILITY_CONCLUSIONS.md`、`b6/REVIEWER_RESPONSE_SNIPPETS_B6.md`（可与本 §11 互拷）。
 
 ### 11.1 数据卡（稿面主队列 **TN3K**；换队列时 **只改本表**）
 
 | 字段 | 当前定稿值（**TN3K**） | 仓库来源 |
 |------|------------------------|----------|
-| 队列 / cohort | **TN3K** `test_for_llm_malignancy` | `config/b6/tn3k.yaml` → `pipeline.data` |
+| 队列 / cohort | **TN3K** `test_for_llm_malignancy` | `config/revision/b6/tn3k.yaml` → `pipeline.data` |
 | 主 pipeline 图像数 | **250** | `results.json`；`comparison_report.txt` N=250 |
 | 稳定性子集 *n* | **10**（目录排序前 10 张） | `stability_summary.json` → `n_cases` |
 | 重复次数 | **5** | `repeats`（与 R2.9 一致） |
@@ -357,7 +357,7 @@
 | 分层 `close` | **10 / 10**，层内均值 **0.98** | `by_disagreement_tier.close` |
 | 分层 `easy` | **0**（本批未出现） | 若扩大 *n* 后出现则补 easy vs close 句 |
 | LLM | **qwen3.8-27b**，T=**0.3**，`max_tokens`=**768** | `shared.agent_llm` |
-| 配置 | `config/b6/tn3k.yaml` | 与主 pipeline、稳定性共用 |
+| 配置 | `config/revision/b6/tn3k.yaml` | 与主 pipeline、稳定性共用 |
 | 产物目录 | `output/b6/tn3k/pipeline_run/` | `stability_summary.json`、`routing_log.jsonl`、`results.json` |
 | 审计 log | **575** 行（≥10 例制 Supp. 表） | 含 250 例单次路由 + 10 例×5× 稳定性追加 |
 | 主系统分类（全量 250，参考） | Pipeline AUROC **0.8237**；Path B 子集 AUROC **0.7051** | `comparison.json`（非 R2.9 硬性，可不放正文） |
@@ -383,7 +383,7 @@
 
 ### 11.4 统稿前 checklist（**不必再跑 B6 实验**）
 
-1. `export_router_spec.py --config config/b6/tn3k.yaml` → 刷新 `docs/supplementary/router_spec.md`。  
+1. `export_router_spec.py --config config/revision/b6/tn3k.yaml` → 刷新 `docs/supplementary/router_spec.md`。  
 2. 将 §11.1–§11.3 写入 **Methods / Results / Supp.**；`routing_log` 筛 ≥10 例制表。  
 3. 回复信 **R2.9** 用 `REVIEWER_RESPONSE_PLAN_ZH.md` **B6 专项** + `b6/REVIEWER_RESPONSE_SNIPPETS_B6.md`（数字与上表一致）。  
 4. **不必**全队列 **250×5** 稳定性，除非正文明确承诺。
@@ -480,7 +480,7 @@
 ### 13.4 统稿前 checklist（**不必重跑波次 1**，除非专家池或 static_rule 口径变更）
 
 1. learned（6）全队列：**fit**（`artifacts/b3/<cohort>/learned_router_*.joblib`）→ **test infer** → 写入 `b3_routing_table.csv` 新行。  
-2. LLM（7）按 `config/b3/*.yaml` 波次 2 跑完并 eval，同上汇总。  
+2. LLM（7）按 `config/revision/b3/*.yaml` 波次 2 跑完并 eval，同上汇总。  
 3. `python scripts/revision/b3/recompute_b3_cluster_ci.py --all-wave1 --summarize`（若尚未跑）→ `export_b3_tables.py` 刷新 `../b3/tables/`。  
 4. 更新 `B3_WAVE1_RESULTS.md` §1 覆盖表（ZJH/RJH/DDTI/PKTN 已完成波次 1）；§6 标题改为「九队列 + 三队列细表」。  
 5. **NHC**：纳入同表或 Limitation + 回复承诺时间表（与 B7 分工）。

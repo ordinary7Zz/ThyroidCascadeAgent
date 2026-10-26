@@ -1,0 +1,119 @@
+# B3 策略 7（LLM 全系统 ThyroidXAgent）= 主文 Table S3 / S4 的 ThyroidXAgent 行。
+# 数值来源：docs/ThyroidXAgent.md（tab:seg_performance, tab:cls_performance）。
+# 表中 ± 按稿面 95% CI 半宽处理为 (mean - half, mean + half)；分割 Dice 稿面为 %，此处已换算为 0–1。
+# 非 shared-intermediate 重跑；与修订 B3 消融栈一致化见 B4「S4 校验」说明。
+
+provenance:
+  document: docs/ThyroidXAgent.md
+  strategy_b3: llm
+  strategy_label: "完整 ThyroidXAgent (7) / LLM routing"
+  frozen_date: "2026-10-26"
+
+cohorts:
+  tn3k:
+    n_test: 614
+    segmentation:
+      dice_mean: 0.8528
+      dice_ci_lower: 0.8400
+      dice_ci_upper: 0.8656
+      hd95_mean: 10.31
+      hd95_ci_lower: 8.61
+      hd95_ci_upper: 12.01
+    classification:
+      auroc: 0.8692
+      auroc_ci_lower: 0.8343
+      auroc_ci_upper: 0.9041
+      auprc: 0.8545
+      auprc_ci_lower: 0.7945
+      auprc_ci_upper: 0.9145
+
+  thyroidxl:
+    n_test: 2090
+    segmentation:
+      dice_mean: 0.8758
+      dice_ci_lower: 0.8714
+      dice_ci_upper: 0.8802
+      hd95_mean: 5.43
+      hd95_ci_lower: 4.90
+      hd95_ci_upper: 5.96
+    classification:
+      auroc: 0.9676
+      auroc_ci_lower: 0.9610
+      auroc_ci_upper: 0.9742
+      auprc: 0.9653
+      auprc_ci_lower: 0.9575
+      auprc_ci_upper: 0.9731
+
+  pktn:
+    n_test: 150
+    segmentation:
+      dice_mean: 0.8299
+      dice_ci_lower: 0.8089
+      dice_ci_upper: 0.8509
+      hd95_mean: 9.01
+      hd95_ci_lower: 5.43
+      hd95_ci_upper: 12.59
+
+  tn5k:
+    n_test: 1000
+    segmentation:
+      dice_mean: 0.8326
+      dice_ci_lower: 0.8192
+      dice_ci_upper: 0.8460
+      hd95_mean: 10.12
+      hd95_ci_lower: 8.89
+      hd95_ci_upper: 11.35
+    classification:
+      auroc: 0.9472
+      auroc_ci_lower: 0.9320
+      auroc_ci_upper: 0.9624
+      auprc: 0.9752
+      auprc_ci_lower: 0.9663
+      auprc_ci_upper: 0.9841
+
+  ddti_seg:
+    n_test: 637
+    segmentation:
+      dice_mean: 0.8562
+      dice_ci_lower: 0.8455
+      dice_ci_upper: 0.8669
+      hd95_mean: 9.24
+      hd95_ci_lower: 8.17
+      hd95_ci_upper: 10.31
+
+  ddti_cls:
+    n_test: 349
+    classification:
+      auroc: 0.7991
+      auroc_ci_lower: 0.7250
+      auroc_ci_upper: 0.8732
+      auprc: 0.5863
+      auprc_ci_lower: 0.4483
+      auprc_ci_upper: 0.7243
+
+  zjh8k:
+    n_test: 7958
+    segmentation:
+      dice_mean: 0.9430
+      dice_ci_lower: 0.9392
+      dice_ci_upper: 0.9468
+      hd95_mean: 2.25
+      hd95_ci_lower: 1.86
+      hd95_ci_upper: 2.64
+    classification:
+      auroc: 0.9175
+      auroc_ci_lower: 0.9008
+      auroc_ci_upper: 0.9342
+      auprc: 0.9711
+      auprc_ci_lower: 0.9705
+      auprc_ci_upper: 0.9717
+
+  rjh7k:
+    n_test: 7288
+    segmentation:
+      dice_mean: 0.9146
+      dice_ci_lower: 0.9132
+      dice_ci_upper: 0.9160
+      hd95_mean: 1.92
+      hd95_ci_lower: 1.84
+      hd95_ci_upper: 2.00

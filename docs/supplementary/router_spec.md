@@ -1,6 +1,6 @@
 # ThyroidCascadeAgent — LLM router specification (B6)
 
-_Generated from config: `config/b6/tn3k.yaml`_
+_Generated from config: `config/revision/b6/tn3k.yaml`_
 
 ## Shared decoding (`shared.agent_llm`)
 

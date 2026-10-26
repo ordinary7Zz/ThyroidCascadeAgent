@@ -15,7 +15,7 @@
 ```bash
 export DASHSCOPE_API_KEY=...
 python run_routing_stability.py \
-  --config config/b6/sample_stability.yaml \
+  --config config/revision/b6/sample_stability.yaml \
   --output-dir output/<队列>/pipeline_run \
   --repeats 5 --max-cases <N> --device cuda
 ```

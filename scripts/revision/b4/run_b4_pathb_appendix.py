@@ -27,7 +27,7 @@ B4 Path B 附录 B-b：独立模型 + AutoGluon 静态软投票（无 LLM）。
 
 示例（cls 重跑 Phase 4–5，seg 与 soft_voting 一致）:
   python scripts/revision/b4/run_b4_pathb_appendix.py \\
-    --config config/b4/sample.yaml \\
+    --config config/revision/b4/sample.yaml \\
     --shared-intermediate output/sample/pipeline_run/intermediate \\
     --output-dir output/ablation/b4/sample/path_b_autogluon \\
     --seg-mode soft_voting \\
@@ -54,7 +54,7 @@ def main() -> None:
     import argparse
 
     parser = argparse.ArgumentParser(description="B4 Path B 附录 B-b 跑数")
-    parser.add_argument("--config", default="config/b3/sample.yaml")
+    parser.add_argument("--config", default="config/revision/b3/sample.yaml")
     parser.add_argument("--shared-intermediate", required=True)
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--seg-mode", default="soft_voting", help="与 L3 对齐时改为 llm")

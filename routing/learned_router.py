@@ -513,6 +513,22 @@ def _load_cls_predictions_by_image(json_path: Path) -> tuple[str, dict[str, Any]
     return model_name, out
 
 
+def _image_names_from_cls_by_model(
+    by_model: dict[str, dict[str, Any]],
+    model_names: Sequence[str],
+) -> list[str]:
+    """cls-only intermediate（无 seg）时，用各专家 predictions 的交集对齐图像名。"""
+    maps = [by_model[m] for m in model_names if m in by_model]
+    if not maps:
+        raise FileNotFoundError("intermediate/cls 无可用专家预测")
+    common = set(maps[0].keys())
+    for img_map in maps[1:]:
+        common &= set(img_map.keys())
+    if not common:
+        raise RuntimeError("各分类专家无共同图像名，无法拟合 learned 路由")
+    return sorted(common)
+
+
 def fit_learned_cls_router(
     config: dict,
     intermediate_dir: Path,
@@ -544,10 +560,11 @@ def fit_learned_cls_router(
 
     if image_names is None:
         seg_dir = intermediate_dir / "seg"
-        sample_npz = next(seg_dir.glob("*.npz"), None)
-        if sample_npz is None:
-            raise FileNotFoundError("需要 intermediate/seg 以对齐图像列表")
-        image_names, _, _ = load_seg_model_masks(sample_npz)
+        sample_npz = next(seg_dir.glob("*.npz"), None) if seg_dir.is_dir() else None
+        if sample_npz is not None:
+            image_names, _, _ = load_seg_model_masks(sample_npz)
+        else:
+            image_names = _image_names_from_cls_by_model(by_model, model_names)
 
     val_names = _image_names_for_stems(image_names, val_stems)
     X_rows: list[np.ndarray] = []

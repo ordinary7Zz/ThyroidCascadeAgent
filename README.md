@@ -43,14 +43,14 @@ pipeline/            串联编排（分割筛选 → 分类筛选）；模块索
 
 ```bash
 conda activate /mnt/wangbd8/workspace/envs/thyroid_infer
-# 方式 A：在 config/b3/<cohort>.yaml 的 pipeline.ablation 里配置 routing_modes 后：
-python scripts/revision/b3/run_b3_batch.py --config config/b3/<cohort>.yaml
+# 方式 A：在 config/revision/b3/<cohort>.yaml 的 pipeline.ablation 里配置 routing_modes 后：
+python scripts/revision/b3/run_b3_batch.py --config config/revision/b3/<cohort>.yaml
 # 默认 static bundle：一次扫图输出 config 中全部静态策略（见 pipeline/static_b3_bundle.py）
 # 旧行为（每策略子进程）：--legacy-subprocess
 
 # 方式 B：命令行覆盖
 python scripts/revision/b3/run_b3_batch.py \
-  --config config/b3/<cohort>.yaml \
+  --config config/revision/b3/<cohort>.yaml \
   --shared-intermediate output/sample/pipeline_run/intermediate \
   --output-root output/ablation/b3/sample \
   --modes soft_voting,static_rule,oracle \
@@ -74,7 +74,7 @@ CLI 批量简写：`--modes soft_voting,static_rule:soft_voting`（`seg:cls`）�
 
 ```bash
 python scripts/run_routing_ablation.py \
-  --config config/b3/<cohort>.yaml \
+  --config config/revision/b3/<cohort>.yaml \
   --routing-mode soft_voting \
   --task both \
   --shared-intermediate output/sample/pipeline_run/intermediate \
@@ -86,7 +86,7 @@ python scripts/run_routing_ablation.py \
 
 ```bash
 python scripts/revision/b3/fit_best_single_expert.py \
-  --config config/b3/<cohort>.yaml \
+  --config config/revision/b3/<cohort>.yaml \
   --intermediate output/sample/pipeline_run/intermediate
 ```
 

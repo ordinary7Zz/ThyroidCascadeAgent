@@ -19,7 +19,7 @@ _find_revision_repo_root() {
 ROOT="${REPO_ROOT:-$(_find_revision_repo_root)}"
 OUT="$ROOT/output/ablation/b3/$COHORT"
 PROGRESS="$OUT/.bundle_progress.json"
-PGREP_PATTERN="run_b3_batch.py --config config/b3/${COHORT}.yaml"
+PGREP_PATTERN="run_b3_batch.py --config config/revision/b3/${COHORT}.yaml"
 
 echo "watching $OUT (every ${INTERVAL}s); Ctrl+C to stop"
 while true; do
