@@ -21,23 +21,38 @@
 - 审稿意见：黑色斜体；作者回复：`ResponseBlue`。
 - 分节：`\responsetoreviewer{…}`；无目录、无 `\hrule`。
 - 正文引用表图：`\responsetableref{键}`、`\responsefigureref{键}`、`\responsetablerefrange{键A}{键B}`；**勿**在蓝色回复里重复 “见文末” / “at the end of this letter”。
-- 信内表图编号**仅** R1–R21、图 R1–R2（见 `reviewer_response.sty` 页眉说明）；**不复用**稿件 Supplementary Table S* 序号。
+- 信内表图编号**仅** R1–R20、图 R1–R3（见 `reviewer_response.sty` 页眉说明）；**不复用**稿件 Supplementary Table S* 序号。
+- 图：先 `\includegraphics`，再 `\caption{\responsefiguretitle{键}{短标题}}`，图例正文用 `\responsefigurenote{…}`（题注在图下方）。
 - `authorresponse` 内尽量少用 `\textbf`；仅「支撑材料：」/ **Supporting material:** 加粗。表图编号用普通蓝字。
 
 ## 表图注册与命名
 
-1. 在 `generated/response_asset_registry.tex` 增加一行，例如 `\responsetableregister{tab_example}{R18}`（新增编号时同步改 `reviewer_response.sty` 中 R1–R* 范围说明）。
+1. 在 `generated/response_asset_registry.tex` 增加一行，例如 `\responsetableregister{tab_example}{R20}`（新增编号时同步改 `reviewer_response.sty` 中 R1–R* 范围说明）。
 2. `\label{tab_example}` 与注册键、`\responsetableref{}` 参数**必须相同**（语义 slug，不含数字）。
-3. 表题：`\caption{\responsetabletitle{tab_example}{短标题}}`。
-4. 续表：`\responsetablesetcontinued{tab_…}`（显示为 R*（续））。
+3. 表题：`\caption{\responsetabletitle{tab_example}{短标题}}`；正文与表注引用用 `\responsetableref` / `\responsetablerefrange`，勿手写「表 R*」。
+4. 续表页眉（`longtable` 的 `\endhead`/`\endfoot`）：`\responsetablecontinuedrow{tab_…}`（勿用 `\responsetableref`，避免列宽异常）。正文引用续表可选 `\responsetablesetcontinued{tab_…}`。
 5. 长表分页：`\begin{responsepaginatedtable}…\end{responsepaginatedtable}`；单页浮动表：`\begin{responsetable}…\end{responsetable}`（含 `\centering`）。
 6. 与投稿主表版式一致的复现块：`manuscriptresponsetable`（AUROC/AUPRC 或 Dice/HD95 分节、± 半宽 CI、灰底 ThyroidXAgent 行，见 `docs/ThyroidXAgent.md` 表标签）。
-7. 附录 A1/A2 前：`\responseproseappendixstart`；附录内小表：`responseinlinetable`。Prompt：`promptverbatim`（`breaklines=true`）。
+7. 附录 A1/A2 前：`\responseproseappendixstart`；附录正文：`\begin{responseappendixprose}…\end{responseappendixprose}`；附录内表一律 `responseinlinetable` + `\responseinlinetablecaption`（勿用浮动 `responsetable`）。Prompt：`promptverbatim`（`breaklines=true`）。
+8. **附录 / 表 R* / 图 R***：题注与正文按补充材料写法自洽表述，**不写**审稿意见编号（如 R2.9）或「本附录回应…」；对应关系仅在蓝色 **回复** 与「支撑材料」中正向引用附录 A1/A2 或 `\responsetableref`。
+
+### 长表 `longtable` 版式陷阱（路由消融表 R12 / R13 等）
+
+信内仅 `generated/routing_ablation_tables_*.tex` 使用 `responsepaginatedtable` + `longtable`。该表**多次**因续页页眉或边距宏被改坏版式，修改时请对照本节。
+
+| 现象 | 常见原因 | 正确做法 |
+|------|----------|----------|
+| 表头/`\toprule` 行明显变窄 | 在 `\endhead` / `\endfoot` 的 `\multicolumn{…}{…}{\responsetableref{…}}` 里用交叉引用 | 续页页眉只用 `\responsetablecontinuedrow{tab_routing_ablation_seg}`（或 `tab_routing_ablation_cls`）。该宏为**纯文本**「表 R*（续）」+ `@{}r@{}` 跨列，避免 hyperref 链接盒参与 `longtable` 列宽计算。正文里仍用 `\responsetableref`。 |
+| 表体贴左、不居中 | `responsepaginatedtable` 内把 `\LTleft` / `\LTright` 设为 `0pt` | 保持 sty 默认：`\setlength{\LTleft}{0pt plus 1fill}`、`\setlength{\LTright}{0pt plus 1fill}`（表宽小于版心时左右均分空白）。**不要**为「拉宽」而清零左右边距。 |
+| 表题第一行只有「表 R12.」很短一行 | 表题在编号后的普通空格处断行 | 表题统一 `\responsetabletitle{键}{…}`（编号后已用 `\nobreakspace` 与标题粘连）。 |
+
+**原则**：`longtable` 的续页页眉是版式行，不是正文引用；边距用 `plus 1fill` 居中，不要用 `\responsetableref` 换编号。
 
 ## 待定与修订稿承诺
 
 - `\rpendingzh{…}` / `\rpending{…}`：红色 `[待补充：…]` / `[PENDING: …]`，**投稿前删除或换成终稿内容**。
 - 蓝色正文若承诺写入**修订稿**而尚未改稿：用「将…」表述，并保留红色 `修订稿 …` pending（或等价 `\rpending`）。
+- **NHC（表 R18--R20，`nhc_b7_tables_*.tex`）**：表内数字来自流水线试点 `nhc_prepared_sample`（10 图）；`\rpending{G3}` / 全量替换见表注与 R2.6/R1.3 正文。NHC **无** B3 策略 7、B4 L3、B5 热图（托管机无 LLM，正文写 N/A，非留空）。
 
 ## 性能表加粗规则
 

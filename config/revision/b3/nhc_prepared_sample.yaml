@@ -1,0 +1,107 @@
+# NHC 示例：B3 静态策略 + learned 推理（router 在开发队列拟合，不在 NHC 上 fit）。
+# 无策略 7 LLM、无 Qwen/GPT/Gemini API。
+# 模型政策: docs/revision/nhc_sample/MODEL_POLICY_ZH.md
+#
+# 前置：须先跑通 Cascade 并留下 Phase 1–2 缓存（与下列 shared_intermediate 一致）:
+#   python run_pipeline.py --config config/revision/nhc_prepared_sample.yaml
+#
+# 运行:
+#   python scripts/revision/b3/run_b3_static_bundle.py \
+#     --config config/revision/b3/nhc_prepared_sample.yaml
+#
+# 产出: output/ablation/b3/nhc_prepared_sample/<routing_mode>/
+shared:
+  agent_llm:
+    api_key_env: DASHSCOPE_API_KEY
+    base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    model_name: qwen3.8-omni-flash
+    temperature: 0.3
+    max_tokens: 768
+    enable_thinking: false
+segmentation:
+  models:
+  - type: dinov3_unet
+    name: all_datasets
+    model_path: ../Segmentation_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth
+    input_size: [224, 224]
+    threshold: 0.5
+  - type: dinov3_unet
+    name: TN3K
+    model_path: ../Segmentation_Agent/weights/TN3K/dino_unet_train_TN3K_epoch_50.pth
+    input_size: [224, 224]
+    threshold: 0.5
+  agent:
+    enable_agent: false
+    routing_mode: static_rule
+    brief_routing_prompt: true
+    include_disagreement_metrics_in_prompt: true
+    pre_filter:
+      cosine_threshold: 0.8
+      prob_outlier_threshold: 0.4
+      min_keep: 1
+    ensemble:
+      enabled: true
+      top_k: 1
+      method: weighted_average
+      threshold: 0.5
+classification:
+  models:
+  - type: dinov3_unet_multitask
+    name: all_datasets
+    model_path: ../Classification_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth
+    use_tirads: false
+  - type: dinov3_unet_multitask
+    name: TN3K
+    model_path: ../Classification_Agent/weights/TN3K/dino_unet_train_multitask_TN3K_epoch_50.pth
+    use_tirads: false
+  agent:
+    enable_agent: false
+    routing_mode: soft_voting
+    brief_routing_prompt: true
+    top_k: 2
+    consensus_min_confidence: 0.6
+radiomics_judge:
+  enabled: true
+  model_dir: ../Classification_Agent/weights/dataset_3/autogluon_model_20260106_215755
+  top_k_features: 5
+  radiomics_params: null
+pipeline:
+  preload_workers: 2
+  run_segmentation: true
+  run_classification: true
+  ablation:
+    routing_modes:
+    - soft_voting
+    - majority
+    - max_confidence
+    - static_rule
+    - best_single
+    - oracle
+    shared_intermediate: output/b7/nhc_cascade_sample/intermediate
+    output_root: output/ablation/b3/nhc_prepared_sample
+    force_phase3: true
+    summarize: true
+    task: both
+    learned_router:
+      seg_artifact: artifacts/b3/tn5k/learned_router_seg.joblib
+      cls_artifact: artifacts/b3/tn5k/learned_router_cls.joblib
+      allow_missing_artifact: false
+      write_random_artifact: false
+    best_single_seg: all_datasets
+    best_single_cls: all_datasets
+    val_list: config/revision/b3/val_lists/nhc_prepared_sample.json
+    val_intermediate: output/b7/nhc_cascade_sample/intermediate
+  data:
+    image_input: output/b7/nhc_prepared_smoke/images
+    gt_mask_dir: output/b7/nhc_prepared_smoke/nodule_masks
+    label_file: output/b7/nhc_prepared_smoke/labels.json
+    label_key: malignancy
+    device_info:
+    - GE Logiq E9
+    - GE S7
+    start_index: 0
+    max_images: 10
+  log_routing: true
+  routing_log_include_prompts: false
+  output:
+    output_dir: output/b7/nhc_cascade_sample

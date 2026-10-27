@@ -114,6 +114,30 @@ def aggregate_by_center(
     }
 
 
+def score_values_by_center(
+    per_image_rows: list[dict],
+    results: Optional[list[dict]] = None,
+    *,
+    field: str = "score_malignant",
+) -> dict[str, list[float]]:
+    stem_to_center: dict[str, str] = {}
+    if results:
+        for r in results:
+            stem = Path(r.get("image_name", "")).stem
+            cid = r.get("center_id")
+            if stem and cid:
+                stem_to_center[stem] = str(cid)
+    out: dict[str, list[float]] = {}
+    for row in per_image_rows:
+        val = row.get(field)
+        if val is None:
+            continue
+        stem = row.get("stem") or Path(row.get("image_name", "")).stem
+        cid = row.get("center_id") or stem_to_center.get(stem) or "unknown"
+        out.setdefault(str(cid), []).append(float(val))
+    return out
+
+
 def dice_values_by_center(
     per_image_seg: list[dict],
     results: Optional[list[dict]] = None,
@@ -134,6 +158,49 @@ def dice_values_by_center(
         cid = row.get("center_id") or stem_to_center.get(stem) or "unknown"
         out.setdefault(str(cid), []).append(float(d))
     return out
+
+
+def aggregate_gland_by_center(
+    per_image_gland: list[dict],
+    results: Optional[list[dict]] = None,
+) -> dict[str, Any]:
+    """全腺体逐图 Dice 按中心汇总（结构同结节，仅 dice/hd95）。"""
+    stem_to_center: dict[str, str] = {}
+    if results:
+        for r in results:
+            stem = Path(r.get("image_name", "")).stem
+            cid = r.get("center_id")
+            if stem and cid:
+                stem_to_center[stem] = str(cid)
+
+    centers: dict[str, dict[str, Any]] = defaultdict(lambda: {"dice_values": [], "hd95_values": []})
+    for row in per_image_gland:
+        stem = row.get("stem") or Path(row.get("image_name", "")).stem
+        cid = row.get("center_id") or stem_to_center.get(stem) or "unknown"
+        block = centers[cid]
+        if row.get("dice") is not None:
+            block["dice_values"].append(float(row["dice"]))
+        if row.get("hd95") is not None:
+            block["hd95_values"].append(float(row["hd95"]))
+
+    out_centers: dict[str, Any] = {}
+    dice_macro: list[float] = []
+    for cid, block in sorted(centers.items()):
+        dice_vals = block["dice_values"]
+        hd95_vals = block["hd95_values"]
+        dice_mean = float(np.mean(dice_vals)) if dice_vals else None
+        if dice_mean is not None:
+            dice_macro.append(dice_mean)
+        out_centers[cid] = {
+            "n_images": len(dice_vals),
+            "dice_mean": dice_mean,
+            "hd95_mean": float(np.mean(hd95_vals)) if hd95_vals else None,
+        }
+    return {
+        "n_centers": len(out_centers),
+        "macro_mean_dice": float(np.mean(dice_macro)) if dice_macro else None,
+        "centers": out_centers,
+    }
 
 
 def load_center_metrics_from_output_dir(output_dir: str | Path) -> dict[str, Any]:

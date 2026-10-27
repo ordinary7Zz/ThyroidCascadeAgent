@@ -18,7 +18,7 @@ RJH-7K & 7288 & 0.9128 (0.9113--0.9143) & 0.8931 (0.8905--0.8955) & 0.9146 (0.91
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{\textbf{L1}: single multi-cohort joint DINO expert trained on the stacked development data (no agent, no AutoGluon). \textbf{L2}: fixed expert pool + soft voting (same as \textbf{strategy (2)} in Tables R13--R14; evaluated on \textbf{frozen upstream candidate outputs} shared with L1, without retraining experts). \textbf{L3}: full manuscript ThyroidXAgent (\textbf{strategy (7)} LLM routing; aligned with revised Table S3/S4). L1/L2 CIs use cluster bootstrap (1000 resamples, seed=42); L3 CIs match manuscript S3/S4. L3 uses a \textbf{different evaluation protocol} than L1/L2; do not interpret cross-layer differences as stepwise causation on one pipeline.}
+\responsetablenote{\textbf{L1}: single multi-cohort joint DINO expert trained on the stacked development data (no agent, no AutoGluon). \textbf{L2}: fixed expert pool + soft voting (same as \textbf{strategy (2)} in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}; evaluated on \textbf{frozen upstream candidate outputs} shared with L1, without retraining experts). \textbf{L3}: full manuscript ThyroidXAgent (\textbf{strategy (7)} LLM routing; aligned with submitted Table S3/S4). L1/L2 CIs use cluster bootstrap (1000 resamples, seed=42); L3 CIs match manuscript S3/S4. L3 uses a \textbf{different evaluation protocol} than L1/L2; do not interpret cross-layer differences as stepwise causation on one pipeline.}
 \end{responsetable}
 
 \begin{responsetable}
@@ -37,5 +37,5 @@ ZJH-8K & 7958 & 0.9571 (0.9527--0.9611) & 0.9322 (0.9208--0.9423) & 0.9175 (0.90
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Layer definitions and CI conventions as in the note to Table R15. DDTI row is the classification subset ($n$=349).}
+\responsetablenote{Layer definitions and CI conventions as in the note to \responsetableref{tab_component_ablation_seg}. DDTI row is the classification subset ($n$=349).}
 \end{responsetable}

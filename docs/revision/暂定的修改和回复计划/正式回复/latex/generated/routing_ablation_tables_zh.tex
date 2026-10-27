@@ -1,7 +1,7 @@
-% Routing ablation tables R13--R14 (edit in place; metrics: docs/revision/b3/, output/ablation/b3/)
+% Routing ablation (tab_routing_ablation_seg / tab_routing_ablation_cls); metrics: docs/revision/b3/, output/ablation/b3/
 
 \begin{responsepaginatedtable}
-\captionof{table}{表 R13. 路由消融 --- 结节分割（固定专家池；点估计及 95\% CI；cluster bootstrap，1000 次，seed=42）。}
+\captionof{table}{\responsetabletitle{tab_routing_ablation_seg}{路由消融 --- 结节分割（固定专家池；点估计及 95\% CI；cluster bootstrap，1000 次，seed=42）}}
 \label{tab_routing_ablation_seg}
 \begin{longtable}{@{}lllll@{}}
 \toprule
@@ -9,13 +9,13 @@
 \midrule
 \endfirsthead
 
-\multicolumn{5}{r}{\footnotesize\emph{表 R13（续）}} \\
+\responsetablecontinuedrow{tab_routing_ablation_seg}
 \toprule
 队列 & $n$ & 路由策略 & Dice $\uparrow$ & HD95 $\downarrow$ (mm) \\
 \midrule
 \endhead
 
-\multicolumn{5}{r}{\footnotesize\emph{表 R13（续）}} \\
+\responsetablecontinuedrow{tab_routing_ablation_seg}
 \midrule
 \endfoot
 \bottomrule
@@ -88,7 +88,7 @@ RJH-7K & 7288 & 最优单专家 (1) & 0.9128 (0.9113--0.9143) & 1.9676 (1.8965--
 \end{responsepaginatedtable}
 
 \begin{responsepaginatedtable}
-\captionof{table}{表 R14. 路由消融 --- 良恶性分类（AUROC / AUPRC；点估计及 95\% CI；cluster bootstrap，1000 次，seed=42）。}
+\captionof{table}{\responsetabletitle{tab_routing_ablation_cls}{路由消融 --- 良恶性分类（AUROC / AUPRC；点估计及 95\% CI；cluster bootstrap，1000 次，seed=42）}}
 \label{tab_routing_ablation_cls}
 \begin{longtable}{@{}lllll@{}}
 \toprule
@@ -96,13 +96,13 @@ RJH-7K & 7288 & 最优单专家 (1) & 0.9128 (0.9113--0.9143) & 1.9676 (1.8965--
 \midrule
 \endfirsthead
 
-\multicolumn{5}{r}{\footnotesize\emph{表 R14（续）}} \\
+\responsetablecontinuedrow{tab_routing_ablation_cls}
 \toprule
 队列 & $n$ & 路由策略 & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
 \endhead
 
-\multicolumn{5}{r}{\footnotesize\emph{表 R14（续）}} \\
+\responsetablecontinuedrow{tab_routing_ablation_cls}
 \midrule
 \endfoot
 \bottomrule
@@ -153,5 +153,5 @@ ZJH-8K & 7958 & 最优单专家 (1) & 0.9572 (0.9529--0.9613) & 0.9671 (0.9628--
  &  & 完整 ThyroidXAgent (7) & 0.9175 (0.9008--0.9342) & 0.9711 (0.9705--0.9717) \\
  &  & Oracle (8) & 0.9863 (0.9839--0.9885) & 0.9896 (0.9874--0.9916) \\
 \end{longtable}
-\responsetablenote{策略 (7) 与投稿主文 Table~S4 ThyroidXAgent 行一致；策略 1--6 为 Methods~\S4.3 受控路由对照。仅列入具备良恶性分类评估的队列。}
+\responsetablenote{策略 (7) 与投稿主文 Table~S4 ThyroidXAgent 行一致；策略 1--6 为本回信受控路由对照（与 R1.2/R3.1 正文一致）。仅列入具备良恶性分类评估的队列。}
 \end{responsepaginatedtable}

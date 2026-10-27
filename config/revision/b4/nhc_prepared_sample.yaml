@@ -1,0 +1,19 @@
+# B4 汇总（NHC 10 图示例；无 B3 llm / 无 Path B 专用跑次时 L3 与 Path B 行会缺省并告警）。
+# 前置: run_l1_cohort + run_b3_static_bundle（见 docs/revision/nhc_sample/README.md）
+pipeline:
+  ablation_b4:
+    dataset_id: nhc_prepared_sample
+    b3_root: output/ablation/b3/nhc_prepared_sample
+    l2_b3_mode: soft_voting
+    # NHC 政策不跑策略 7；build 时 L3/S4/B-c 缺失属预期
+    l3_b3_mode: llm
+    s4_replica_b3_mode: llm
+    l1_metrics: artifacts/b4_l1_nhc_prepared_sample.json
+    reference_manifest: output/ablation/b3/nhc_prepared_sample/soft_voting/intermediate_manifest.json
+    pathb:
+      b_a_b3_mode: soft_voting
+      b_b_b3_mode: path_b_autogluon
+      b_b_metrics_dir: output/ablation/b4/nhc_prepared_sample/path_b_autogluon
+      b_c_b3_mode: llm
+  output:
+    output_dir: output/ablation/b4/nhc_prepared_sample

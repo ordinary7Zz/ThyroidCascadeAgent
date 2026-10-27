@@ -49,7 +49,7 @@
 \newcommand{\ReviewerCommentLabel}{Reviewer comment:}
 \newcommand{\ResponseLabel}{Response:}
 \newcommand{\SupportingLabel}{Supporting tables and figures}
-\newcommand{\ResponseTableNoteLabel}{Note.}
+\newcommand{\ResponseTableNoteLabel}{}
 
 % Response-letter table/figure IDs (register in generated/response_asset_registry.tex)
 \newcommand{\ResponseTableName}{Table}
@@ -76,7 +76,11 @@
   \ResponseTablesName~\csname rtab@#1\endcsname--\csname rtab@#2\endcsname
 }
 \newcommand{\responsetabletitle}[2]{%
-  \ResponseTableName~\csname rtab@#1\endcsname. #2%
+  \ResponseTableName~\csname rtab@#1\endcsname.\nobreakspace #2%
+}
+% Longtable page header only (plain text; avoid hyperref/link boxes in \multicolumn width calc)
+\newcommand{\responsetablecontinuedrow}[1]{%
+  \multicolumn{5}{@{}r@{}}{\footnotesize\emph{\ResponseTableName~\csname rtab@#1\endcsname\responsecontinuedsuffix}} \\%
 }
 \newcommand{\responsefigureref}[1]{%
   \ResponseFigureName~\csname rfig@#1\endcsname
@@ -150,25 +154,34 @@
 
 % Float captions: full text in \caption{Table R1. ...} (no extra "Table 1:" prefix)
 \captionsetup[table]{position=above,skip=6pt,font=small,labelfont=bf,singlelinecheck=false,labelformat=empty,labelsep=none}
-\captionsetup[figure]{font=small,labelfont=bf,singlelinecheck=false,labelformat=empty,labelsep=none}
+\captionsetup[figure]{position=below,skip=6pt,font=small,labelfont=bf,singlelinecheck=false,labelformat=empty,labelsep=none}
 \captionsetup[sub]{font=footnotesize,labelfont=bf}
 
 \newcommand{\responseappendix}{%
   \clearpage
   \section*{Supporting Tables and Figures}%
-  \noindent\footnotesize New supplementary-style tables and figures cited in the point-by-point responses above (labels \textbf{R1--R21}, \textbf{Figures R1--R2}). Tables and figures use response-letter labels \textbf{R1--R21} and \textbf{Figures R1--R2} only.\par\vspace{0.5em}%
+  \noindent\footnotesize New supplementary-style tables and figures cited in the point-by-point responses above (labels \textbf{R1--R20}, \textbf{Figures R1--R3}). Tables and figures use response-letter labels \textbf{R1--R20} and \textbf{Figures R1--R3} only.\par\vspace{0.5em}%
 }
 
 \newcommand{\responseappendixzh}{%
   \clearpage
   \section*{支撑表图（Supporting Tables and Figures）}%
-  \noindent\footnotesize 下文复现回复中引用的表、图（编号 \textbf{R1--R21}、\textbf{图 R1--R2}）；表图编号仅使用本信 \textbf{R1--R21}、\textbf{图 R1--R2}，不复用稿件补充表序号。\par\vspace{0.5em}%
+  \noindent\footnotesize 下文复现回复中引用的表、图（编号 \textbf{R1--R20}、\textbf{图 R1--R3}）；表图编号仅使用本信 \textbf{R1--R20}、\textbf{图 R1--R3}，不复用稿件补充表序号。\par\vspace{0.5em}%
 }
 
 % Flush pending floats before prose appendices (A1/A2 prompts)
 \newcommand{\responseproseappendixstart}{%
   \clearpage
   \FloatBarrier
+}
+
+% Uniform body size for appendix A1/A2 (subsection title stays \large outside)
+\newenvironment{responseappendixprose}{%
+  \begingroup
+  \footnotesize
+  \setlength{\parskip}{0.4em}%
+}{%
+  \endgroup
 }
 
 % Match supplementary tables in the manuscript (ThyroidXAgent.md / tab:seg_performance, tab:cls_performance)
@@ -197,6 +210,9 @@
   \setlength{\LTpre}{0.4em}
   \setlength{\LTpost}{0.6em}
   \setlength{\LTcapwidth}{\textwidth}
+  % Center the table when natural width < \textwidth (see longtable.pdf)
+  \setlength{\LTleft}{0pt plus 1fill}
+  \setlength{\LTright}{0pt plus 1fill}
 }{%
   \par\medskip
 }
@@ -235,7 +251,14 @@
 
 \newcommand{\responsetablenote}[1]{%
   \par\vspace{0.4em}%
-  {\footnotesize\textit{\ResponseTableNoteLabel}\ #1\par}%
+  {\footnotesize #1\par}%
+}
+
+% Figure legend text below the bold ``Figure R*. short title'' line (Nature-style legend body)
+\newcommand{\responsefigurenote}[1]{%
+  \par\vspace{0.35em}%
+  {\footnotesize\normalfont #1\par}%
+  \vspace{0.5em}%
 }
 
 \newcommand{\responsetablenotes}[1]{%

@@ -37,7 +37,7 @@
 | **B5** | 元数据消融 | `python scripts/revision/b5/run_b5_batch.py --config config/revision/b5/tn3k.yaml` |
 | **B6** | 导出 router 规格 | `python scripts/revision/b6/export_router_spec.py` |
 | **B6** | 5× 稳定性 | 根目录 `python run_routing_stability.py`（非本目录） |
-| **B7** | 中心异质性 | `python scripts/revision/b7/run_b7_analysis.py` |
+| **B7** | 中心异质性 | `bash scripts/revision/b7/run_b7_nhc.sh` 或 `run_b7_analysis.py` + `export_b7_tables.py` |
 | **B8** | 正式定阈 + 全队列 eval | `bash scripts/revision/b8/run_openthyroid_validation_b8.sh` → `run_b8_all_cohorts.sh` |
 | **B10** | 基线协议表 | `python scripts/revision/b10/build_b10_protocol_table.py` |
 | **B11** | &lt;5 mm 结节统计 | `bash scripts/revision/b11/run_r2_20_small_nodules_all.sh` |
@@ -121,8 +121,13 @@
 
 | 文件 | 作用 |
 |------|------|
-| `run_b7_analysis.py` | 按中心分析 |
-| `build_nhc_center_table.py` | NHC 中心描述表 |
+| `run_b7_nhc.sh` | backfill → 分析 → 导出 CSV |
+| `run_nhc_prepare.py` | NHC 原始 → `output/b7/nhc_prepared`（`center_stats.json`、labels 含 `center_id`） |
+| `run_b7_analysis.py` | 中心性能 + I²/τ² + 中心内汇总 + meta 回归 → `b7_report.json` |
+| `export_b7_tables.py` | CSV 制表 |
+| `build_nhc_center_table.py` | labels + G3 → `output/b7/descriptive/` |
+
+实现模块见 `pipeline/revision/b7/`（`report.py`、`gland_metrics.py` 等）。
 
 ### B8
 

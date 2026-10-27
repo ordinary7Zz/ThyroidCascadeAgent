@@ -1,39 +1,39 @@
-% LLM metadata ablation (Tables R17--R18); pilot n=10 from output/ablation/b5/sample + B3 llm (full)
+% LLM metadata ablation (tab_metadata_ablation_seg / cls); TN5K
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_metadata_ablation_seg}{LLM 路由元数据消融 --- 结节分割（\rpendingzh{稿面主队列 TN5K 恶性分类评估子集 $n$=250；下表暂为内部开发试点 $n$=10}}；点估计及 95\% CI）}}
+\caption{\responsetabletitle{tab_metadata_ablation_seg}{LLM 路由元数据消融 --- 结节分割（TN5K 恶性分类评估子集；点估计及 95\% CI）}}
 \label{tab_metadata_ablation_seg}
 \begin{adjustbox}{max width=\textwidth,center}
-\begin{tabular}{@{}l r l l@{}}
+\begin{tabular}{@{}l l l@{}}
 \toprule
-元数据条件 & $n$ & Dice $\uparrow$ & HD95 $\downarrow$ \\
+元数据条件 & Dice $\uparrow$ & HD95 $\downarrow$ \\
 \midrule
-完整元数据（与投稿 S4 一致） & 10 & 0.8368 (0.7436--0.9046) & 14.03 (5.42--23.85) \\
-隐去设备信息 & 10 & 0.8370 (0.7194--0.9146) & 12.10 (3.11--27.02) \\
-隐去数据来源 & 10 & 0.8383 (0.7201--0.9169) & 12.00 (2.92--26.93) \\
-两者均隐去 & 10 & 0.8269 (0.7131--0.9090) & 12.27 (3.27--27.12) \\
-仅质量与分歧信号 & 10 & 0.8370 (0.7194--0.9146) & 12.10 (3.11--27.02) \\
+完整元数据 & 0.8326 (0.8192--0.8460) & 10.12 (8.89--11.35) \\
+隐去设备信息 & 0.8242 (0.8020--0.8446) & 7.81 (5.92--9.85) \\
+隐去数据来源 & 0.8179 (0.7950--0.8365) & 7.84 (6.04--9.73) \\
+两者均隐去 & 0.8179 (0.7945--0.8380) & 7.44 (5.70--9.30) \\
+仅质量与分歧信号 & 0.8228 (0.8010--0.8419) & 7.60 (5.79--9.50) \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{与 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} 策略 7 相同专家池；分割为 LLM 路由，仅改变 prompt 可见元数据（见 Methods / 附录 A1）。\textbf{完整元数据}行与主文全系统 LLM 路由分割指标一致（与表 R13--R14 策略 7 同源）。95\% CI 为 cluster bootstrap（$n$=10 试点；定稿 TN5K 换数后同步）。}
+\responsetablenote{固定专家池与 \texttt{output/TN5K/pipeline\_run/intermediate}；分割为 LLM 路由，仅改变 prompt 可见元数据（附录 A1）。隐去设备/来源/两者均隐去及仅质量与分歧信号四档的 95\% CI 为 cluster bootstrap（1000 次，seed=42）。}
 \end{responsetable}
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_metadata_ablation_cls}{LLM 路由元数据消融 --- 良恶性分类（点估计及 95\% CI）}}
+\caption{\responsetabletitle{tab_metadata_ablation_cls}{LLM 路由元数据消融 --- 良恶性分类（TN5K；点估计及 95\% CI）}}
 \label{tab_metadata_ablation_cls}
 \begin{adjustbox}{max width=\textwidth,center}
-\begin{tabular}{@{}l r l l@{}}
+\begin{tabular}{@{}l l l@{}}
 \toprule
-元数据条件 & $n$ & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
+元数据条件 & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
-完整元数据（与投稿 S4 一致） & 10 & 0.9200 (0.6667--1.0000) & 0.9267 (0.6667--1.0000) \\
-隐去设备信息 & 10 & 0.9200 (0.6667--1.0000) & 0.9267 (0.6667--1.0000) \\
-隐去数据来源 & 10 & 0.9200 (0.6667--1.0000) & 0.9267 (0.6667--1.0000) \\
-两者均隐去 & 10 & 0.9200 (0.6667--1.0000) & 0.9267 (0.6667--1.0000) \\
-仅质量与分歧信号 & 10 & 0.9200 (0.6667--1.0000) & 0.9267 (0.6667--1.0000) \\
+完整元数据 & 0.9472 (0.9320--0.9624) & 0.9752 (0.9663--0.9841) \\
+隐去设备信息 & 0.9403 (0.9048--0.9699) & 0.9733 (0.9549--0.9877) \\
+隐去数据来源 & 0.9400 (0.9040--0.9690) & 0.9741 (0.9555--0.9878) \\
+两者均隐去 & 0.9392 (0.9038--0.9679) & 0.9737 (0.9563--0.9873) \\
+仅质量与分歧信号 & 0.9404 (0.9038--0.9700) & 0.9740 (0.9556--0.9878) \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{五档条件与表 R17 相同；分类亦为 LLM 路由（仅 prompt 元数据不同）。主对比：\textbf{完整元数据 $\rightarrow$ 仅质量与分歧信号}，\rpendingzh{TN5K 定稿 $\Delta$AUROC/$\Delta$AUPRC（及 95\% CI）}；试点子集上 $\Delta$AUROC $=0$、$\Delta$AUPRC $=0$。试点 $n$=10 时分类五条件 AUROC/AUPRC 点估计相同且 CI 极宽，因多数病例三分类模型已一致、未调用 LLM（仅 1/10 需 LLM 裁决），\textbf{不能外推}。分类模型不一致时的 LLM 裁决输入\textbf{未}做元数据消融（Methods 一句）。}
+\responsetablenote{条件与 \responsetableref{tab_metadata_ablation_seg} 相同。消融四档下分类在 Path A（三模型已一致）为确定性共识、\textbf{不}调用 LLM；Path B 经 LLM 裁决，元数据效应应结合 Path B 解读。分类模型不一致时的 LLM 裁决\textbf{输入}未做元数据消融（本条消融仅改 prompt 可见字段）。}
 \end{responsetable}

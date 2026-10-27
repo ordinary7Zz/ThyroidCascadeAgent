@@ -1,7 +1,7 @@
 % Routing ablation tables R13--R14 (edit in place; metrics: docs/revision/b3/, output/ablation/b3/)
 
 \begin{responsepaginatedtable}
-\captionof{table}{Table R13. Routing ablation --- nodule segmentation (fixed expert pool; point estimate and 95\% CI; cluster bootstrap, 1000 resamples, seed=42).}
+\captionof{table}{\responsetabletitle{tab_routing_ablation_seg}{Routing ablation --- nodule segmentation (fixed expert pool; point estimate and 95\% CI; cluster bootstrap, 1000 resamples, seed=42)}}
 \label{tab_routing_ablation_seg}
 \begin{longtable}{@{}lllll@{}}
 \toprule
@@ -9,13 +9,13 @@ Cohort & $n$ & Routing strategy & Dice $\uparrow$ & HD95 $\downarrow$ (mm) \\
 \midrule
 \endfirsthead
 
-\multicolumn{5}{r}{\footnotesize\emph{Table R13 (continued)}} \\
+\responsetablecontinuedrow{tab_routing_ablation_seg}
 \toprule
 Cohort & $n$ & Routing strategy & Dice $\uparrow$ & HD95 $\downarrow$ (mm) \\
 \midrule
 \endhead
 
-\multicolumn{5}{r}{\footnotesize\emph{Table R13 (continued)}} \\
+\responsetablecontinuedrow{tab_routing_ablation_seg}
 \midrule
 \endfoot
 \bottomrule
@@ -88,7 +88,7 @@ RJH-7K & 7288 & Best single (1) & 0.9128 (0.9113--0.9143) & 1.9676 (1.8965--2.04
 \end{responsepaginatedtable}
 
 \begin{responsepaginatedtable}
-\captionof{table}{Table R14. Routing ablation --- benign--malignant classification (AUROC / AUPRC; point estimate and 95\% CI; cluster bootstrap, 1000 resamples, seed=42).}
+\captionof{table}{\responsetabletitle{tab_routing_ablation_cls}{Routing ablation --- benign--malignant classification (AUROC / AUPRC; point estimate and 95\% CI; cluster bootstrap, 1000 resamples, seed=42)}}
 \label{tab_routing_ablation_cls}
 \begin{longtable}{@{}lllll@{}}
 \toprule
@@ -96,13 +96,13 @@ Cohort & $n$ & Routing strategy & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
 \endfirsthead
 
-\multicolumn{5}{r}{\footnotesize\emph{Table R14 (continued)}} \\
+\responsetablecontinuedrow{tab_routing_ablation_cls}
 \toprule
 Cohort & $n$ & Routing strategy & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
 \endhead
 
-\multicolumn{5}{r}{\footnotesize\emph{Table R14 (continued)}} \\
+\responsetablecontinuedrow{tab_routing_ablation_cls}
 \midrule
 \endfoot
 \bottomrule
@@ -153,5 +153,5 @@ ZJH-8K & 7958 & Best single (1) & 0.9572 (0.9529--0.9613) & 0.9671 (0.9628--0.97
  &  & Full ThyroidXAgent (7) & 0.9175 (0.9008--0.9342) & 0.9711 (0.9705--0.9717) \\
  &  & Oracle (8) & 0.9863 (0.9839--0.9885) & 0.9896 (0.9874--0.9916) \\
 \end{longtable}
-\responsetablenote{Strategy (7) matches primary manuscript Table~S4 ThyroidXAgent row; strategies 1--6: controlled routing ablation (Methods~\S4.3). Only cohorts with benign--malignant classification evaluation are listed.}
+\responsetablenote{Strategy (7) matches primary manuscript Table~S4 ThyroidXAgent row; strategies 1--6: controlled routing ablation (same protocol as Reviewer 1, Comment 2 / Reviewer 3, Comment 1). Only cohorts with benign--malignant classification evaluation are listed.}
 \end{responsepaginatedtable}

@@ -1,0 +1,72 @@
+# NHC 示例：本地 DINO 专家级联（无 LLM / 无 Qwen·GPT·Gemini API）。
+# 九模型多架构对比见 my_Thyroid_Infer + config/revision/infer/nhc_prepared_sample.yaml。
+# 模型政策: docs/revision/nhc_sample/MODEL_POLICY_ZH.md
+#
+# 用法（先激活 GPU 环境，见 docs/revision/b7/NHC_GPU_AND_WEIGHTS_ZH.md）:
+#   python run_pipeline.py --config config/revision/nhc_prepared_sample.yaml
+#
+# 数据默认: ThyroidCascadeAgent/output/b7/nhc_prepared_smoke
+shared:
+  agent_llm:
+    api_key_env: DASHSCOPE_API_KEY
+    base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    model_name: qwen3.8-omni-flash
+    temperature: 0.3
+    max_tokens: 768
+    enable_thinking: false
+segmentation:
+  models:
+  - type: dinov3_unet
+    name: all_datasets
+    model_path: ../Segmentation_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth
+    input_size: [224, 224]
+    threshold: 0.5
+  - type: dinov3_unet
+    name: TN3K
+    model_path: ../Segmentation_Agent/weights/TN3K/dino_unet_train_TN3K_epoch_50.pth
+    input_size: [224, 224]
+    threshold: 0.5
+  agent:
+    enable_agent: false
+    routing_mode: static_rule
+    ensemble:
+      enabled: true
+      top_k: 1
+      method: weighted_average
+      threshold: 0.5
+classification:
+  models:
+  - type: dinov3_unet_multitask
+    name: all_datasets
+    model_path: ../Classification_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth
+    use_tirads: false
+  - type: dinov3_unet_multitask
+    name: TN3K
+    model_path: ../Classification_Agent/weights/TN3K/dino_unet_train_multitask_TN3K_epoch_50.pth
+    use_tirads: false
+  agent:
+    enable_agent: false
+    routing_mode: soft_voting
+    top_k: 2
+    consensus_min_confidence: 0.6
+radiomics_judge:
+  enabled: true
+  model_dir: ../Classification_Agent/weights/dataset_3/autogluon_model_20260106_215755
+  top_k_features: 5
+  radiomics_params: null
+pipeline:
+  preload_workers: 2
+  run_segmentation: true
+  run_classification: true
+  revision:
+    nhc_primary_results_dir: output/b7/nhc_cascade_sample
+    center_manifest: output/b7/nhc_prepared_smoke/center_manifest.json
+  data:
+    image_input: output/b7/nhc_prepared_smoke/images
+    gt_mask_dir: output/b7/nhc_prepared_smoke/nodule_masks
+    label_file: output/b7/nhc_prepared_smoke/labels.json
+    label_key: malignancy
+    start_index: 0
+    max_images: 10
+  output:
+    output_dir: output/b7/nhc_cascade_sample

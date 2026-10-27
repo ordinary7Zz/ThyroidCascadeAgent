@@ -1,0 +1,73 @@
+# NHC 示例：B4 L1 本地单专家（无 L3/LLM；禁止云端/开源 LLM API）。
+# 九模型清单见 my_Thyroid_Infer/config.yaml；模型政策见 MODEL_POLICY_ZH.md
+#
+# 运行:
+#   python scripts/revision/b4/run_l1_cohort.py --cohort nhc_prepared_sample
+# 可选冒烟: --max-images 10 --fresh
+#
+# 产出: output/ablation/b4/l1/nhc_prepared_sample/run1/
+#       artifacts/b4_l1_nhc_prepared_sample.json
+shared:
+  agent_llm:
+    api_key_env: DASHSCOPE_API_KEY
+    base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    model_name: qwen3.7-flash
+    temperature: 0.3
+    max_tokens: 768
+    enable_thinking: false
+segmentation:
+  models:
+  - type: dinov3_unet
+    name: all_datasets
+    model_path: ../Segmentation_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth
+    input_size: [224, 224]
+    threshold: 0.5
+  agent:
+    enable_agent: false
+    routing_mode: static_rule
+    include_disagreement_metrics_in_prompt: false
+    pre_filter:
+      cosine_threshold: 0.0
+      prob_outlier_threshold: 1.0
+      min_keep: 1
+    ensemble:
+      enabled: true
+      top_k: 1
+      method: weighted_average
+      threshold: 0.5
+classification:
+  models:
+  - type: dinov3_unet_multitask
+    name: all_datasets
+    model_path: ../Classification_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth
+    use_tirads: false
+  agent:
+    enable_agent: false
+    routing_mode: best_single
+    top_k: 1
+    consensus_min_confidence: 0.0
+radiomics_judge:
+  enabled: false
+pipeline:
+  preload_workers: 2
+  run_segmentation: true
+  run_classification: true
+  log_routing: false
+  data:
+    image_input: output/b7/nhc_prepared_smoke/images
+    gt_mask_dir: output/b7/nhc_prepared_smoke/nodule_masks
+    label_file: output/b7/nhc_prepared_smoke/labels.json
+    label_key: malignancy
+    device_info:
+    - GE Logiq E9
+    - GE S7
+    input_data_info:
+      dataset_name: nhc_prepared_sample
+      split: test
+    start_index: 0
+    max_images: 10
+  output:
+    output_dir: output/ablation/b4/l1/nhc_prepared_sample/run1
+  ablation_b4:
+    dataset_id: nhc_prepared_sample
+    layer: L1

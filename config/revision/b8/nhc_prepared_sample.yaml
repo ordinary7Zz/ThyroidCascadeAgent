@@ -1,0 +1,19 @@
+# NHC 示例：B8 校准/拒答（结构样板；阈值为 smoke 伪 validation，不可写入稿面）。
+#
+# NHC（含示例）拒答 eval：仅用 OpenThyroid validation 已拟合阈值（不在 NHC 上 --fit）。
+#   python scripts/revision/b8/run_calibration_abstention.py --eval \
+#     --thresholds output/b8/fit/abstention_thresholds.json \
+#     --test-results output/b7/nhc_cascade_sample/results.json \
+#     --out output/b8/nhc_prepared_sample/eval_formal
+#
+# 下列路径供脚本读取（非 run_pipeline 配置）。
+revision_b8:
+  cohort_id: nhc_prepared_sample
+  label_file: output/b7/nhc_prepared_smoke/labels.json
+  center_manifest: output/b7/nhc_prepared_smoke/center_manifest.json
+  cascade_results: output/b7/nhc_cascade_sample/results.json
+  cascade_output_dir: output/b7/nhc_cascade_sample
+  formal:
+    thresholds: output/b8/fit/abstention_thresholds.json
+    eval_out: output/b8/nhc_prepared_sample/eval_formal
+    rule_subset: nhc

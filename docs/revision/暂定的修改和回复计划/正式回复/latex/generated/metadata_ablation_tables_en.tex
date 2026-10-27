@@ -1,39 +1,39 @@
-% LLM metadata ablation (Tables R17--R18); pilot n=10 from output/ablation/b5/sample + B3 llm (full)
+% LLM metadata ablation (tab_metadata_ablation_seg / cls); TN5K
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_metadata_ablation_seg}{LLM router metadata ablation --- nodule segmentation (\rpending{TN5K primary malignancy-classification evaluation subset, $n$=250; table shows internal development pilot, $n$=10}; point estimates and 95\% CIs)}}
+\caption{\responsetabletitle{tab_metadata_ablation_seg}{LLM router metadata ablation --- nodule segmentation (TN5K malignancy-classification evaluation subset; point estimates and 95\% CIs)}}
 \label{tab_metadata_ablation_seg}
 \begin{adjustbox}{max width=\textwidth,center}
-\begin{tabular}{@{}l r l l@{}}
+\begin{tabular}{@{}l l l@{}}
 \toprule
-Metadata condition & $n$ & Dice $\uparrow$ & HD95 $\downarrow$ \\
+Metadata condition & Dice $\uparrow$ & HD95 $\downarrow$ \\
 \midrule
-Full (manuscript S4) & 10 & 0.8368 (0.7436--0.9046) & 14.03 (5.42--23.85) \\
-Device withheld & 10 & 0.8370 (0.7194--0.9146) & 12.10 (3.11--27.02) \\
-Data source withheld & 10 & 0.8383 (0.7201--0.9169) & 12.00 (2.92--26.93) \\
-Both withheld & 10 & 0.8269 (0.7131--0.9090) & 12.27 (3.27--27.12) \\
-Quality/disagreement only & 10 & 0.8370 (0.7194--0.9146) & 12.10 (3.11--27.02) \\
+Full metadata & 0.8326 (0.8192--0.8460) & 10.12 (8.89--11.35) \\
+Device withheld & 0.8242 (0.8020--0.8446) & 7.81 (5.92--9.85) \\
+Data source withheld & 0.8179 (0.7950--0.8365) & 7.84 (6.04--9.73) \\
+Both withheld & 0.8179 (0.7945--0.8380) & 7.44 (5.70--9.30) \\
+Quality/disagreement only & 0.8228 (0.8010--0.8419) & 7.60 (5.79--9.50) \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Same expert pool as strategy (7) in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}; segmentation uses LLM routing with only prompt-visible metadata changed (Methods / Appendix A1). The \textbf{full metadata} row matches manuscript full-system LLM segmentation metrics (same source as strategy (7)). 95\% CIs: cluster bootstrap (pilot $n$=10; sync after TN5K final numbers).}
+\responsetablenote{Fixed expert pool and \texttt{output/TN5K/pipeline\_run/intermediate}; segmentation uses LLM routing with only prompt-visible metadata changed (Appendix A1). Device/source/both-withheld and quality/disagreement-only conditions use cluster-bootstrap 95\% CIs (1000 resamples, seed 42).}
 \end{responsetable}
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_metadata_ablation_cls}{LLM router metadata ablation --- malignancy classification (point estimates and 95\% CIs)}}
+\caption{\responsetabletitle{tab_metadata_ablation_cls}{LLM router metadata ablation --- malignancy classification (TN5K; point estimates and 95\% CIs)}}
 \label{tab_metadata_ablation_cls}
 \begin{adjustbox}{max width=\textwidth,center}
-\begin{tabular}{@{}l r l l@{}}
+\begin{tabular}{@{}l l l@{}}
 \toprule
-Metadata condition & $n$ & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
+Metadata condition & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
-Full (manuscript S4) & 10 & 0.9200 (0.6667--1.0000) & 0.9267 (0.6667--1.0000) \\
-Device withheld & 10 & 0.9200 (0.6667--1.0000) & 0.9267 (0.6667--1.0000) \\
-Data source withheld & 10 & 0.9200 (0.6667--1.0000) & 0.9267 (0.6667--1.0000) \\
-Both withheld & 10 & 0.9200 (0.6667--1.0000) & 0.9267 (0.6667--1.0000) \\
-Quality/disagreement only & 10 & 0.9200 (0.6667--1.0000) & 0.9267 (0.6667--1.0000) \\
+Full metadata & 0.9472 (0.9320--0.9624) & 0.9752 (0.9663--0.9841) \\
+Device withheld & 0.9403 (0.9048--0.9699) & 0.9733 (0.9549--0.9877) \\
+Data source withheld & 0.9400 (0.9040--0.9690) & 0.9741 (0.9555--0.9878) \\
+Both withheld & 0.9392 (0.9038--0.9679) & 0.9737 (0.9563--0.9873) \\
+Quality/disagreement only & 0.9404 (0.9038--0.9700) & 0.9740 (0.9556--0.9878) \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Same five conditions as Table R17; classification also uses LLM routing (metadata in prompt only). Primary contrast: \textbf{full metadata $\rightarrow$ quality/disagreement only}; \rpending{TN5K $\Delta$AUROC/$\Delta$AUPRC with 95\% CIs}. Pilot subset: $\Delta$AUROC $=0$, $\Delta$AUPRC $=0$. Identical point estimates and wide CIs on the pilot ($n$=10) reflect deterministic consensus when three classifiers agree (LLM invoked on 1/10 cases)---not extrapolatable. LLM arbitration inputs when classifiers disagree were \textbf{not} metadata-ablated (stated in Methods).}
+\responsetablenote{Same conditions as \responsetableref{tab_metadata_ablation_seg}. Under the four ablation conditions, Path A uses deterministic consensus when three classifiers agree (no LLM); Path B uses LLM arbitration; interpret metadata effects together with Path B. LLM arbitration \textbf{inputs} when classifiers disagree were not separately metadata-ablated (only prompt-visible fields varied).}
 \end{responsetable}

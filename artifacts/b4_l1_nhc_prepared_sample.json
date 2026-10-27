@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "dataset_id": "nhc_prepared_sample",
+  "layer": "L1",
+  "description": "单 DINO 专家（完整堆叠 development 训练）；无专家池、无 LLM 路由",
+  "provenance": {
+    "training": "stacked OpenThyroid dataset_3 (cls) / dataset_4 (seg); all_datasets joint DINO",
+    "seg_checkpoint": "../Segmentation_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth",
+    "cls_checkpoint": "../Classification_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth",
+    "eval_run_dir": "output/ablation/b4/l1/nhc_prepared_sample/run1",
+    "eval_config": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/config/revision/b4/l1/nhc_prepared_sample.yaml",
+    "eval_protocol": "run_pipeline.py; single seg+cls; enable_agent=false; radiomics_judge=false",
+    "bootstrap": "evaluate_pipeline image-level n=1000 seed=42"
+  },
+  "segmentation": {
+    "dice_mean": 0.9265352788861815,
+    "dice_ci_lower": 0.8771107645216206,
+    "dice_ci_upper": 0.9615867124414804,
+    "hd95_mean": 1.3064495102245979,
+    "hd95_ci_lower": 0.523606797749979,
+    "hd95_ci_upper": 2.1658466627048525
+  },
+  "classification": {
+    "n": 10,
+    "auroc": 1.0,
+    "auroc_ci_lower": 1.0,
+    "auroc_ci_upper": 1.0,
+    "auprc": 1.0,
+    "auprc_ci_lower": 1.0,
+    "auprc_ci_upper": 1.0,
+    "accuracy": 0.9
+  }
+}

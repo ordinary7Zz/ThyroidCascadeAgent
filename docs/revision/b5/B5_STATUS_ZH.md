@@ -1,6 +1,6 @@
 # B5 进度看板
 
-**最后更新**：2026-10-26
+**最后更新**：2026-10-27
 
 > **本机范围**：NHC 为私密数据、不在当前机器；本地 B5 以 **9 个公开/院内可访问 cohort**（不含 `nhc_misd_tus`）为准。NHC 热图与 `full` 跑数由协作方环境完成后并入稿面。
 
@@ -13,7 +13,7 @@
 | 代码骨架（metadata_mode、batch、表、分析） | ✅ | 见 [`B5_BUILD_PLAN_ZH.md`](./B5_BUILD_PLAN_ZH.md) §2.1 |
 | B3 波次 2 `llm`（各正式 cohort） | 🟡 | 多数队列尚未全量；阻塞 `full` 复用与 B4 L3 |
 | `output/ablation/b5/` 跑数 | 🟡 | **sample** 已试跑（2026-10-15）；正式队列 ⬜ |
-| 稿面主表（TN5K × 五 mode） | 🟡 | 设计已定；**正式回信表 R17**（sample 占位）→ TN5K 换数 |
+| 稿面主表（TN5K × 五 mode） | 🟡 | 回信 **R17–R18** 已定稿；稿面 Supp. 统稿待 |
 | 补图 NHC 中心×专家 | ⬜ | 待 NHC labels + `full` routing_log |
 | 回复 R3.2 正文 | ✅ | `正式回复/latex/generated/body_*.tex` + **R17**；`\rpending` 标 TN5K/NHC/修订稿 |
 
@@ -25,7 +25,7 @@
 |--------|:------------:|:------:|:---------:|------|
 | sample | ✅ | 🟡 | 🟡 | 4 mode + `_smoke_*`（n=10）；`full` 用 B3 `llm`；见 §sample 验证 |
 | tn3k | ✅ | ⬜ | ⬜ | |
-| tn5k | ✅ | ⬜ | ⬜ | |
+| tn5k | ✅ | ⬜ | ✅ | `test_for_llm_malignancy`；四 mode 已跑；**表内 `full` = R13/R14 策略 7**（回信 R17–R18 已定稿；无 `b5/tn5k/full/` 目录） |
 | thyroidxl | ✅ | ⬜ | ⬜ | |
 | zjh8k | ✅ | ⬜ | ⬜ | |
 | rjh7k | ✅ | ⬜ | ⬜ | seg only |

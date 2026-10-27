@@ -18,7 +18,7 @@ RJH-7K & 7288 & 0.9128 (0.9113--0.9143) & 0.8931 (0.8905--0.8955) & 0.9146 (0.91
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{\textbf{L1}：堆叠 development 上训练的单个多队列联合 DINO 专家（无智能体、无 AutoGluon）。\textbf{L2}：固定专家池 + 软投票（与表 R13--R14 中\textbf{策略 2} 相同；在 L1 的\textbf{固定上游候选输出}上评估、不重训专家）。\textbf{L3}：投稿主文全系统 ThyroidXAgent（\textbf{策略 7} LLM 路由，与修订稿 Table S3/S4 一致）。L1/L2 的 CI 为 cluster bootstrap（1000 次，seed=42）；L3 CI 与稿面 S3/S4 一致。L3 与 L1/L2 \textbf{评测协议不同}，不宜将层间数值差解读为同一条流水线上的逐步因果分解。}
+\responsetablenote{\textbf{L1}：堆叠 development 上训练的单个多队列联合 DINO 专家（无智能体、无 AutoGluon）。\textbf{L2}：固定专家池 + 软投票（与 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} 中\textbf{策略 2} 相同；在 L1 的\textbf{固定上游候选输出}上评估、不重训专家）。\textbf{L3}：投稿主文全系统 ThyroidXAgent（\textbf{策略 7} LLM 路由，与投稿 Table S3/S4 一致）。L1/L2 的 CI 为 cluster bootstrap（1000 次，seed=42）；L3 CI 与稿面 S3/S4 一致。L3 与 L1/L2 \textbf{评测协议不同}，不宜将层间数值差解读为同一条流水线上的逐步因果分解。}
 \end{responsetable}
 
 \begin{responsetable}
@@ -37,5 +37,5 @@ ZJH-8K & 7958 & 0.9571 (0.9527--0.9611) & 0.9322 (0.9208--0.9423) & 0.9175 (0.90
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{层定义与 CI 口径见表 R15 注。DDTI 行为分类子集（$n$=349）。}
+\responsetablenote{层定义与 CI 口径见 \responsetableref{tab_component_ablation_seg} 表注。DDTI 行为分类子集（$n$=349）。}
 \end{responsetable}

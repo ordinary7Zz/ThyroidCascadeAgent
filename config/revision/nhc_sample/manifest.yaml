@@ -1,0 +1,48 @@
+# NHC 示例数据（10 图）返修任务路径索引 — 仅配置与目录约定，不含 G3 元数据。
+# 数据根: ThyroidCascadeAgent/output/b7/
+version: 1
+cohort_id: nhc_prepared_sample
+raw_input_dir: /mnt/wangbd8/workspace/ThyroidAgent/my_Thyroid_Infer/datasets/甲状腺私有数据/新建文件夹
+
+paths:
+  prepared_dir: output/b7/nhc_prepared_smoke
+  cascade_dir: output/b7/nhc_cascade_sample
+  labels: output/b7/nhc_prepared_smoke/labels.json
+  center_stats: output/b7/nhc_prepared_smoke/center_stats.json
+  center_manifest: output/b7/nhc_prepared_smoke/center_manifest.json
+
+configs:
+  cascade_primary: config/revision/nhc_prepared_sample.yaml
+  b7_canonical_script: scripts/revision/b7/run_b7_sample_canonical.sh
+  b3: config/revision/b3/nhc_prepared_sample.yaml
+  b4_l1: config/revision/b4/l1/nhc_prepared_sample.yaml
+  b4_summary: config/revision/b4/nhc_prepared_sample.yaml
+  b8: config/revision/b8/nhc_prepared_sample.yaml
+  b2: config/revision/b2/nhc_prepared_sample.yaml
+  b2_cluster_map: config/revision/b2/nhc_prepared_sample.cluster_map.json
+  infer_nine_models: config/revision/infer/nhc_prepared_sample.yaml
+
+outputs_expected:
+  b7: output/b7/nhc_sample_canonical/
+  b3: output/ablation/b3/nhc_prepared_sample/
+  b4_l1: output/ablation/b4/l1/nhc_prepared_sample/run1/
+  b4_tables: output/ablation/b4/nhc_prepared_sample/
+  b4_artifacts: artifacts/b4_l1_nhc_prepared_sample.json
+  b8: output/b8/nhc_prepared_sample/eval_formal/
+  b3_learned: output/ablation/b3/nhc_prepared_sample/learned/
+  b2: output/b2/nhc_prepared_sample/
+  infer: ../my_Thyroid_Infer/results/nhc_prepared_sample/
+
+model_policy:
+  doc: docs/revision/nhc_sample/MODEL_POLICY_ZH.md
+  allowed_nine_models: my_Thyroid_Infer/config.yaml
+  infer_config: config/revision/infer/nhc_prepared_sample.yaml
+  forbidden_on_nhc:
+    - "GPT / Gemini / 等闭源 API"
+    - "Qwen 等开源 LLM API 路由（含 DashScope 兼容模式）"
+    - "B3 策略 7、seg_agent/cls_agent、B4 L3"
+excluded_by_design:
+  - "B3 策略 7 (LLM full-system routing)"
+  - "在 NHC 上 fit learned_router（仅推理，权重来自开发队列）"
+  - "B4 L3（LLM 级联）"
+  - "在 NHC 上 B8 --fit 定阈（仅用 OpenThyroid validation 阈值 eval）"

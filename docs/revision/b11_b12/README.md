@@ -66,7 +66,7 @@ python scripts/revision/b11/analyze_r2_20_small_nodules.py \
   --output docs/revision/b11_b12/tables/r2_20_<cohort>.json
 ```
 
-## B12 数据流（文字稿 + 待制图）
+## B12 数据流（文字稿 + 图像臂图已定稿）
 
 见 [`IMAGE_DATAFLOW_DRAFT.md`](IMAGE_DATAFLOW_DRAFT.md)。与 **S9** 报告侧合并前，节点样本量以 **Table S1** 与 **B1 审计** 为准。
 
@@ -76,7 +76,8 @@ python scripts/revision/b11/analyze_r2_20_small_nodules.py \
 - [ ] **S9**：SMU-HMC、KMVE、ZJH-TS、TNVideo、模板库划分。
 - [ ] **B8**：拒答阈值 `abstention_thresholds.json`（验证集 fit）→ 图中标注。
 - [ ] **主结果 config 快照**：投稿 LLM 路由 vs `nhc_no_llm_primary` 需在图中区分 S4 与 NHC 部署假设。
-- [ ] **Fig.1 / Supp. 数据流** 最终版式（G2）。
+- [x] **正式回信图 R3**（`暂定的修改和回复计划/正式回复/figures/fig_image_dataflow.png`；LaTeX `fig_image_dataflow`）。
+- [ ] **修订稿 Fig.1 / Supp. 数据流** 最终版式与编号（G2；可与 S9 合并）。
 
 ## 回复信素材
 

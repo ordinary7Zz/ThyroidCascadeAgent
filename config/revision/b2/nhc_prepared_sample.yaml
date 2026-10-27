@@ -1,0 +1,22 @@
+# NHC 示例：B2 簇 bootstrap（患者簇 = labels 中的 patient_id）。
+#
+# 运行:
+#   python scripts/revision/b2/run_b2_cluster_metrics.py \
+#     --task both \
+#     --results output/b7/nhc_cascade_sample/results.json \
+#     --pipeline-dir output/b7/nhc_cascade_sample \
+#     --gt-mask-dir output/b7/nhc_prepared_smoke/nodule_masks \
+#     --cluster-map config/revision/b2/nhc_prepared_sample.cluster_map.json \
+#     --patient-level \
+#     --out output/b2/nhc_prepared_sample
+#
+revision_b2:
+  cohort_id: nhc_prepared_sample
+  results: output/b7/nhc_cascade_sample/results.json
+  pipeline_dir: output/b7/nhc_cascade_sample
+  gt_mask_dir: output/b7/nhc_prepared_smoke/nodule_masks
+  cluster_map: config/revision/b2/nhc_prepared_sample.cluster_map.json
+  out_dir: output/b2/nhc_prepared_sample
+  n_bootstrap: 1000
+  seed: 42
+  patient_level: true

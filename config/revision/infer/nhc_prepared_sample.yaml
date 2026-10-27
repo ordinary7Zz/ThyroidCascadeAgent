@@ -1,0 +1,78 @@
+# NHC 允许运行的多架构模型：与 my_Thyroid_Infer/config.yaml 完全一致（仅本地 checkpoint）。
+# 禁止：GPT/Gemini/闭源 API；禁止 Qwen 等 LLM API 路由；不跑 seg_agent/cls_agent。
+# 政策: docs/revision/nhc_sample/MODEL_POLICY_ZH.md
+#
+# 在 my_Thyroid_Infer 根目录运行:
+#   conda activate /mnt/wangbd8/workspace/envs/thyroid_infer
+#   python run_all.py --config ../ThyroidCascadeAgent/config/revision/infer/nhc_prepared_sample.yaml \
+#     --tasks gland nodule binary tirads
+#
+# 或先生成等价配置:
+#   python pipeline.py --skip_prepare --skip_roi \
+#     --processed_dir ../ThyroidCascadeAgent/output/b7/nhc_prepared_smoke \
+#     --new_config ../ThyroidCascadeAgent/output/b7/nhc_prepared_smoke/infer_run_config.yaml
+#
+# 产出: my_Thyroid_Infer/results/nhc_prepared_sample/<task>/<model>/...
+
+datasets:
+  gland_images: /mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/b7/nhc_prepared_smoke/images
+  gland_masks: /mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/b7/nhc_prepared_smoke/gland_masks
+  nodule_images: /mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/b7/nhc_prepared_smoke/images
+  nodule_masks: /mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/b7/nhc_prepared_smoke/nodule_masks
+  binary_images: /mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/b7/nhc_prepared_smoke/images
+  binary_masks: /mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/b7/nhc_prepared_smoke/nodule_masks
+  tirads_images: /mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/b7/nhc_prepared_smoke/images
+  tirads_masks: /mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/b7/nhc_prepared_smoke/nodule_masks
+
+labels:
+  binary_json: /mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/b7/nhc_prepared_smoke/labels.json
+  binary_field: malignancy
+  tirads_json: /mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/b7/nhc_prepared_smoke/labels.json
+  tirads_field: tirads
+
+weights:
+  gland:
+    dinov3_unet: ./infer_dinov3_unet/checkpoints/TGVideo/dino_unet_train_TGVideo_epoch_30.pth
+    medsam2: ./infer_medsam2/checkpoints/TGVideo/checkpoint_10.pt
+    medsegx: ./infer_medsegx/checkpoints/TGVideo/checkpoint_epoch_29.pth
+    transunet: ./infer_transunet/checkpoints/TGVideo/epoch_49.pth
+    ultrafedfm: ./infer_ultrafedfm/checkpoints/epoch_bestDice.pth
+  nodule:
+    dinov3_unet: ./infer_dinov3_unet/checkpoints/Nodule/dino_unet_train_dataset_4_epoch_50.pth
+    medsam2: ./infer_medsam2/checkpoints/Nodule/checkpoint_15.pt
+    medsegx: ./infer_medsegx/checkpoints/Nodule/model_best.pth
+    transunet: ./infer_transunet/checkpoints/Nodule/epoch_49.pth
+    ultrafedfm: ./infer_ultrafedfm/checkpoints/epoch_bestDice.pth
+  binary:
+    biomedclip: ./infer_biomedclip/checkpoints/BM_2cls/best_model.pth
+    medsiglip: ./infer_medsiglip/checkpoints/BM_2cls/best_model.pt
+    ultrafedfm: ./infer_ultrafedfm/checkpoints/checkpoint-best_auroc.pth
+    dinov3_unet_multitask: ./infer_dinov3_unet_multitask/checkpoints/BM_2cls/dino_unet_gamtl_train_multitask_dataset_3_epoch_50.pth
+    autogluon: ./infer_autogluon/checkpoints/binary
+  tirads:
+    biomedclip: ./infer_biomedclip/checkpoints/TIRADS_5cls/best_model.pth
+    medsiglip: ./infer_medsiglip/checkpoints/TIRADS_5cls/best_model.pt
+    ultrafedfm: ./infer_ultrafedfm/checkpoints/checkpoint-best_auroc.pth
+    dinov3_unet_multitask: ./infer_dinov3_unet_multitask/checkpoints/TIRADS_5cls/dino_unet_train_TIRADS_Cine-Clip_epoch_50.pth
+    autogluon: ./infer_autogluon/checkpoints/tirads
+
+pretrained:
+  biomedclip_dir: ./infer_biomedclip/pretrained_models/biomedclip
+  medsiglip_dir: ./infer_medsiglip/pretrained_models/medsiglip-448
+  medsegx_sam_dir: ./infer_medsegx/pretrained_models/SAM
+  medsam2_config: ./infer_medsam2/sam2/configs/sam2.1_hiera_t512.yaml
+  radiomics_params: ./infer_autogluon/radiomics_2d.yaml
+
+pretrained_weights:
+  gland:
+    medsam2: ./infer_medsam2/checkpoints/MedSAM2_latest.pt
+    medsegx: ./infer_medsegx/checkpoints/medsegx_vit_b.pth
+  nodule:
+    medsam2: ./infer_medsam2/checkpoints/MedSAM2_latest.pt
+    medsegx: ./infer_medsegx/checkpoints/medsegx_vit_b.pth
+
+output_root: ./results/nhc_prepared_sample
+save_masks: true
+use_dino_mask_for_cls: nodule/dinov3_unet
+device: cuda
+n_bootstrap: 2000
