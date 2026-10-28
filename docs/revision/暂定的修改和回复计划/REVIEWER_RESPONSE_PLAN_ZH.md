@@ -55,7 +55,7 @@
 | **R2.20** | 连通域、小结节 | **是**（待间距脚注） | **(a)(c)**：`selected_masks`、无 radiomics CCA、专家 ≥50 px、单图单 ROI；**(b)** 七队列 N/M 已算（`mm_per_pixel=0.1` 假设，见下表）；重点 **zjh8k N=1001/M=44** | `b11_b12/REVIEWER_SNIPPETS_ZH.md`；`tables/R2_20_SUMMARY.md`；`scripts/revision/b11/run_r2_20_small_nodules_all.sh` | 定稿：间距校准或敏感性一句；核对 JSON 内 `selected_masks_npz` 与投稿主 config |
 | **R2.21** | AutoGluon/PyRadiomics | **是** | 版本、预设、特征数、无 radiomics CCA | `docs/reproducibility_radiomics.md` | 统稿时并入 Methods 4.3 / Supp. |
 | **R2.22** | 语言 | — | **范围外** | G5 | — |
-| **R2.23** | TI-RADS 体系 | — | **范围外** | F8 | — |
+| **R2.23** | TI-RADS 体系 | 本回复信 R2.23 段 + `\rpending` 正文 Methods/F8 | **B + F8** | F8 | C-TIRADS vs ACR；分割/分类表不用 TI-RADS 标签 |
 | **R2 code** | 代码许可与测试 | — | **范围外** | G4 | — |
 
 ---

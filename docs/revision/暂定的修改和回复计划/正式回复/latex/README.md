@@ -47,7 +47,7 @@ NHC 表 R18–R20 另遵守下文「待定与修订稿承诺」中的 NHC 条款
 - 审稿意见：黑色斜体；作者回复：`ResponseBlue`。
 - 分节：`\responsetoreviewer{…}`；无目录、无 `\hrule`。
 - `authorresponse` 内**不用** `\textbf`（不另设「支撑材料：」行；表图在正文句中引用，信末 `\responseappendix` 集中复现，与 TURG 样稿一致）。
-- **逐条明确回应**：每条 `\reviewercomment` 下的回复须让审稿人看出「**是否同意/是否已做** + **证据在哪**（`\responsetableref` / `\responsefigureref` / 附录 / 修订稿 Methods）」。避免只有方法描述或 cross-ref 而无「我们已…」；多子问题时用 `(a)(b)(c)` 或分 `\item` 逐条对应；暂缺数据用 `\rpending`，勿留看似未写完的单句。
+- **逐条明确回应**：每条 `\reviewercomment` 下的回复须让审稿人看出「**是否同意/是否已做** + **证据在哪**（`\responsetableref` / `\responsefigureref` / 附录 / 修订稿 Methods）」。避免只有方法描述或 cross-ref 而无「我们已…」；审稿人列出多个并列子要求时用 **`\par` 分段** 或 **主题句起段**（与 TURG/`Response_TURG.pdf` 一致，如 *Audit design.*；**不用** `\begin{itemize}`）；暂缺数据用 `\rpending`，勿留看似未写完的单句。
 - 正文引用：`\responsetableref` / `\responsefigureref` / `\responsetablerefrange` 嵌入句子；**勿** `（见表 R*）`、**勿**「见信末」/ “at the end of this letter”、**勿**每条末尾重复表号清单。
 - **只引用表/图，不单独引用「表注/图注」**：Nature 系回复信与正文一样，交叉引用对象是 **Table/Figure**（本信用 `\responsetableref`）；表注 `\responsetablenote` 是表的一部分，读者跟表号即可。**勿**写 “in Table~R12 **notes**” /「见 \responsetableref{…} **表注**」——除非正文刻意不写细节、且细节**仅**在表注（此时也只写 `\responsetableref{…}`，不必点「表注」二字）。同一句里已写清操作定义时，**删除**再指向表注的尾巴（避免重复）。
 - 信内表图编号**仅** R1–R20、图 R1–R3（见 `reviewer_response.sty` 页眉说明）；**不复用**稿件 Supplementary Table S* 序号。

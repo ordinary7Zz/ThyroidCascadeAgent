@@ -205,6 +205,66 @@
 
 ---
 
+## 2026-10-29 — R1.2 策略 (1) 可执行定义
+
+**文件：** `body_en.tex`、`body_zh.tex`、`routing_ablation_tables_*.tex`、`component_ablation_tables_*.tex`
+
+**做了什么：** R1.2 八策略条目中展开 (1)：验证集上分割按平均 Dice、分类按 AUROC 在池内各选一名专家；外测冻结候选、不重训。R12/R14 表注同步一句。
+
+**对意图的理解：** 审稿人需知 (1) 非「单独训一个 DINO」，而是池内 val 选优 + test 固定输出。
+
+**教训 / 避免重犯：** 策略 (1) 与 L1/主文单专家叙事勿混写；定义以 R1.2 为准，表注只保留短版。
+
+---
+
+## 2026-10-29 — R1.2 策略 (2)--(8) 操作定义
+
+**文件：** `body_en.tex`、`body_zh.tex`、`routing_ablation_tables_*.tex`、`component_ablation_tables_*.tex`
+
+**做了什么：** R1.2 第二条补全 (2) 软投票、(3) 多数票、(5) 最大置信度、(7)(8) 等可执行规则；(6) 仍指 R3.1。R12/R14 表注改为「(1)--(5) 见 R1.2」，避免与正文三处重复。未写入 intermediate/概率图 vs mask 缓存等内部原因。
+
+**对意图的理解：** 审稿人需可复现的策略语义；讨论中的实现细节不进 PDF。
+
+**教训 / 避免重犯：** R1.2 一条写清八种定义；表注只指 R1.2，勿再堆 (1) 长定义。
+
+---
+
+## 2026-10-29 — R2.8 不引入策略 (6)
+
+**文件：** `body_en.tex`、`body_zh.tex`、`component_ablation_tables_*.tex`
+
+**做了什么：** R2.8 删「(1)--(6) 冻结候选」与整段 (6) vs (7) 举例；改为 (1)(2) 冻结池 + (7) 主文协议，完整路由仍指 R1.2。R14 表注 CI 只写 (1)(2) 与 R12--R13 同源。
+
+**对意图的理解：** R2.8 答模块贡献，摘录 (1)(2)(7)；学习型路由 (6) 属 R3.1/R1.2 全表，不在 R2.8 展开。
+
+**教训 / 避免重犯：** R2.8 正文与 R14 只谈 (1)(2)(7)；学习型路由 (6) 留在 R1.2/R3.1，勿在 R2.8 举例或写 (1)--(6) 协议句。
+
+---
+
+## 2026-10-29 — 全文回复改 prose（对齐 TURG）
+
+**文件：** `body_en.tex`、`body_zh.tex`、`latex/README.md`、`ai/INSTRUCTIONS.md`
+
+**做了什么：** 去掉全部 `\begin{itemize}`（含附录 A1 prompt 说明），原 `\item` 改为 `\par` 分段；R2.8 合并为两段连贯叙述并删 R1.2 式 Oracle/max-conf 重复。文档约定改为 TURG 风格分段/主题句，不用 itemize。
+
+**对意图的理解：** 用户要求全信匹配 Shiyu `Response_TURG.pdf` 的段落体，而非提纲式 bullet。
+
+**教训 / 避免重犯：** 新改 `\authorresponse` 勿恢复 itemize；多子要求用 `\par` 或英文主题句起段（不用 `\textbf`）。
+
+---
+
+## 2026-10-29 — R2.23 TI-RADS 体系回复
+
+**文件：** `body_en.tex`、`body_zh.tex`、`REVIEWER_RESPONSE_PLAN_ZH.md`
+
+**做了什么：** R2.23 由「从略」改为三段 prose：ACR vs C-TIRADS（含 4b）；本信分割/分类与 TI-RADS 无关；机构中文报告用 C-TIRADS；KMVE/模板细节 `\rpending` + 合并稿指 R1.5。
+
+**对意图的理解：** 图像分析组也需在回信澄清体系，与 F8 正文待定并行。
+
+**教训 / 避免重犯：** 勿再标 R2.23 范围外；F8 定稿后替换 `\rpending` 并删「合并稿」过渡句若只留单信。
+
+---
+
 ```markdown
 ## YYYY-MM-DD — 简短标题
 
