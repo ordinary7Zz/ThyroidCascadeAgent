@@ -1,7 +1,7 @@
 % LLM metadata ablation (tab_metadata_ablation_seg / cls); TN5K
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_metadata_ablation_seg}{LLM 路由元数据消融 --- 结节分割（TN5K 恶性分类评估子集；点估计及 95\% CI）}}
+\caption{\responsetabletitle{tab_metadata_ablation_seg}{LLM 路由元数据消融 --- 结节分割（TN5K 测试集；点估计及 95\% CI）}}
 \label{tab_metadata_ablation_seg}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l l l@{}}
@@ -16,7 +16,7 @@
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{固定专家池与 \texttt{output/TN5K/pipeline\_run/intermediate}；分割为 LLM 路由，仅改变 prompt 可见元数据（附录 A1）。隐去设备/来源/两者均隐去及仅质量与分歧信号四档的 95\% CI 为 cluster bootstrap（1000 次，seed=42）。}
+\responsetablenote{固定专家池与 TN5K 外测共享上游专家输出；分割为 LLM 路由，仅改变 prompt 可见元数据（附录 A1）。隐去设备/来源/两者均隐去及仅质量与分歧信号四档的 95\% CI 为 cluster bootstrap（1000 次，seed=42）。}
 \end{responsetable}
 
 \begin{responsetable}

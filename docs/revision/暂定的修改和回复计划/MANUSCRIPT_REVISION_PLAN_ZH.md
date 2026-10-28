@@ -357,7 +357,7 @@
 | 低一致例 | **1 / 10** 为 **0.80**（`TN3K_test_0009.jpg`） | `per_case`；分割 4×`all_datasets` + 1×`TN3K` |
 | 分层 `close` | **10 / 10**，层内均值 **0.98** | `by_disagreement_tier.close` |
 | 分层 `easy` | **0**（本批未出现） | 若扩大 *n* 后出现则补 easy vs close 句 |
-| LLM | **qwen3.8-27b**，T=**0.3**，`max_tokens`=**768** | `shared.agent_llm` |
+| LLM | **deepseek-v4-pro-0813**，T=**0.3**，`max_tokens`=**768** | `shared.agent_llm`（各 cohort B6 YAML 已统一） |
 | 配置 | `config/revision/b6/tn3k.yaml` | 与主 pipeline、稳定性共用 |
 | 产物目录 | `output/b6/tn3k/pipeline_run/` | `stability_summary.json`、`routing_log.jsonl`、`results.json` |
 | 审计 log | **575** 行（≥10 例制 Supp. 表） | 含 250 例单次路由 + 10 例×5× 稳定性追加 |
@@ -369,7 +369,7 @@
 
 | # | 位置 | 拟写入（逻辑；数字取自 §11.1） | 就绪度 |
 |---|------|--------------------------------|--------|
-| 1 | **Methods §4.3（路由）** | 说明 LLM 路由器输入为各专家 mask 的质量摘要与 radiomics 裁判摘要；输出 JSON 选定专家（及可选 ensemble 权重）；完整 **prompt、模型 ID（qwen3.8-27b）、temperature/max_tokens、schema** 见 **Supp. Note**（`router_spec.md`）。 | **可改** |
+| 1 | **Methods §4.3（路由）** | 说明 LLM 路由器输入为各专家 mask 的质量摘要与 radiomics 裁判摘要；输出 JSON 选定专家（及可选 ensemble 权重）；完整 **prompt、模型 ID（deepseek-v4-pro-0813）、temperature/max_tokens、schema** 见 **Supp. Note**（`router_spec.md`）。 | **可改** |
 | 2 | **Methods §4.3（稳定性协议）** | 在固定 Phase 1–2 专家输出前提下，对 **TN3K for_llm** 稳定性子集（*n*=**10**）每例重复 **5** 次 LLM **分割**路由；Path A 分类共识不重复 5× 分类；Path B 另报告分类侧 5× 一致率；按 `disagreement_tier` 汇总。 | **可改** |
 | 3 | **Results 或 Discussion（短段）** | 报告平均选择一致率 **98%**（**9/10** 五次完全相同；**1/10** 为 **80%**，`close` 层、重复间 Dice range ≈ **0.017**）；说明全队列 **250** 例结构化 `routing_log` 已归档（另 **不必**写全量 250×5，除非稿面承诺）。 | **可改** |
 | 4 | **Supp.** | 附 `router_spec.md`；稳定性表（总体 + close 层 + §11.3 个案）；≥10 条 `routing_log` 样例表。 | **可改**（制表） |

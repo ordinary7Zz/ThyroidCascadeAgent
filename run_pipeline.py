@@ -70,6 +70,19 @@ def main():
     parser = argparse.ArgumentParser(description="串联 Pipeline: 分割筛选 → 分类筛选")
     parser.add_argument("--config", default="config/config.yaml")
     parser.add_argument("--device", default="cuda")
+    parser.add_argument(
+        "--stop-after-phase2",
+        action="store_true",
+        help="仅跑 Phase 1–2 写 intermediate，跳过 Phase 3–5（无 LLM 路由）",
+    )
+    parser.add_argument("--sample-size", type=int, default=None, help="B6：只对 N 张图跑 pipeline")
+    parser.add_argument("--sample-seed", type=int, default=None, help="与 --sample-mode random 联用")
+    parser.add_argument(
+        "--sample-mode",
+        choices=("first", "random"),
+        default=None,
+        help="子集选取方式；默认 first（或 yaml pipeline.data.stability_sample）",
+    )
     args = parser.parse_args()
 
     config = load_config(args.config)
@@ -87,10 +100,14 @@ def main():
         print("⚠️ 分割与分类均已关闭，无可执行阶段，退出")
         return
 
+    stop_after_phase2 = args.stop_after_phase2 or pipe_cfg.get("stop_after_phase2", False)
+
     # 检查是否需要 LLM（阶段关闭时对应 Agent 也不需要）
     enable_seg_agent = run_segmentation and seg_cfg.get("agent", {}).get("enable_agent", True)
     enable_cls_agent = run_classification and cls_cfg.get("agent", {}).get("enable_agent", True)
-    need_llm = enable_seg_agent or enable_cls_agent
+    need_llm = (enable_seg_agent or enable_cls_agent) and not stop_after_phase2
+    if stop_after_phase2:
+        print("✓ stop_after_phase2：本 run 仅 Phase 1–2，不调用 LLM")
 
     # LLM 客户端
     if need_llm:
@@ -128,8 +145,10 @@ def main():
 
     output_dir_final = pipe_cfg.get("output", {}).get("output_dir", "output/pipeline_run")
     routing_logger = build_routing_logger_from_config(config, output_dir_final)
-    if routing_logger.enabled:
+    if routing_logger.enabled and not stop_after_phase2:
         print(f"✓ 路由审计日志: {routing_logger.path}")
+    elif routing_logger.enabled and stop_after_phase2:
+        print("  routing_log: 跳过（stop_after_phase2，本 run 无 LLM 路由）")
 
     seg_agent = SegmentationAgent(
         llm_client=llm_client,
@@ -155,6 +174,44 @@ def main():
         device=args.device,
     )
 
+    from pipeline.revision.b6.case_selection import (
+        MANIFEST_NAME,
+        select_stability_cases,
+        write_manifest,
+    )
+
+    stab_cfg = data_cfg.get("stability_sample") or {}
+    sample_size = args.sample_size if args.sample_size is not None else stab_cfg.get("n")
+    sample_seed = (
+        args.sample_seed if args.sample_seed is not None else stab_cfg.get("seed")
+    )
+    sample_mode = args.sample_mode or stab_cfg.get("mode", "first")
+    image_paths_subset = None
+    if sample_size is not None:
+        mode_eff = "random" if sample_seed is not None else sample_mode
+        image_paths_subset = select_stability_cases(
+            Path(data_cfg["image_input"]),
+            int(sample_size),
+            start_index=data_cfg.get("start_index", 0),
+            seed=sample_seed,
+            mode=mode_eff,
+        )
+        sample_mode = mode_eff
+        write_manifest(
+            Path(output_dir_final) / MANIFEST_NAME,
+            image_paths_subset,
+            {
+                "n": len(image_paths_subset),
+                "seed": sample_seed,
+                "mode": sample_mode,
+                "source": "run_pipeline",
+            },
+        )
+        print(
+            f"✓ B6 子集: {len(image_paths_subset)} 张 "
+            f"(mode={sample_mode}, seed={sample_seed}) → {MANIFEST_NAME}"
+        )
+
     # 运行
     results = pipeline.run_batch(
         image_dir=data_cfg["image_input"],
@@ -165,12 +222,13 @@ def main():
         input_device_info=data_cfg.get("device_info"),
         input_data_info=data_cfg.get("input_data_info"),
         start_index=data_cfg.get("start_index", 0),
-        max_images=data_cfg.get("max_images"),
+        max_images=data_cfg.get("max_images") if image_paths_subset is None else None,
+        image_paths=image_paths_subset,
     )
 
     print(f"\nPipeline 完成: {len(results)} 张图像")
 
-    if pipe_cfg.get("stop_after_phase2", False):
+    if stop_after_phase2:
         print("✓ stop_after_phase2：跳过 evaluate / compare_models")
         return
 

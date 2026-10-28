@@ -755,6 +755,7 @@ class CascadePipeline:
         input_data_info: Optional[dict] = None,
         start_index: int = 0,
         max_images: Optional[int] = None,
+        image_paths: Optional[list] = None,
         label_key: str = "malignancy",
         skip_phase1_2: Optional[bool] = None,
         force_phase3: bool = False,
@@ -810,19 +811,23 @@ class CascadePipeline:
         data_info_label_keys = pipe_data_cfg.get("input_data_info_label_keys")
 
         # 收集图像
-        img_dir = Path(image_dir)
-        exts = {".png", ".jpg", ".jpeg", ".bmp", ".tiff"}
-        image_paths = sorted(
-            [f for f in img_dir.iterdir() if f.suffix.lower() in exts],
-            key=lambda x: x.name,
-        )
-        if start_index > 0:
-            image_paths = image_paths[start_index:]
-        if max_images is not None:
-            image_paths = image_paths[:max_images]
-
-        img_names = [p.name for p in image_paths]
-        print(f"级联推理: {len(img_names)} 张图像 (start={start_index})")
+        if image_paths is not None:
+            image_paths = [Path(p) for p in image_paths]
+            img_names = [p.name for p in image_paths]
+            print(f"级联推理: {len(img_names)} 张图像 (显式子集)")
+        else:
+            img_dir = Path(image_dir)
+            exts = {".png", ".jpg", ".jpeg", ".bmp", ".tiff"}
+            image_paths = sorted(
+                [f for f in img_dir.iterdir() if f.suffix.lower() in exts],
+                key=lambda x: x.name,
+            )
+            if start_index > 0:
+                image_paths = image_paths[start_index:]
+            if max_images is not None:
+                image_paths = image_paths[:max_images]
+            img_names = [p.name for p in image_paths]
+            print(f"级联推理: {len(img_names)} 张图像 (start={start_index})")
 
         # 获取配置
         seg_cfg_full = self.config.get("segmentation", {})

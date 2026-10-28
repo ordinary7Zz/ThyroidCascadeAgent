@@ -1,7 +1,7 @@
 % LLM metadata ablation (tab_metadata_ablation_seg / cls); TN5K
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_metadata_ablation_seg}{LLM router metadata ablation --- nodule segmentation (TN5K malignancy-classification evaluation subset; point estimates and 95\% CIs)}}
+\caption{\responsetabletitle{tab_metadata_ablation_seg}{LLM router metadata ablation --- nodule segmentation (TN5K test set; point estimates and 95\% CIs)}}
 \label{tab_metadata_ablation_seg}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l l l@{}}
@@ -16,7 +16,7 @@ Quality/disagreement only & 0.8228 (0.8010--0.8419) & 7.60 (5.79--9.50) \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Fixed expert pool and \texttt{output/TN5K/pipeline\_run/intermediate}; segmentation uses LLM routing with only prompt-visible metadata changed (Appendix A1). Device/source/both-withheld and quality/disagreement-only conditions use cluster-bootstrap 95\% CIs (1000 resamples, seed 42).}
+\responsetablenote{Fixed expert pool with TN5K external-test shared upstream expert outputs; segmentation uses LLM routing with only prompt-visible metadata changed (Appendix A1). Device/source/both-withheld and quality/disagreement-only conditions use cluster-bootstrap 95\% CIs (1000 resamples, seed 42).}
 \end{responsetable}
 
 \begin{responsetable}

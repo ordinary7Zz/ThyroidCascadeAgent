@@ -123,11 +123,6 @@ def render(cohort: dict) -> str:
     mask_line = f"    gt_mask_dir: {mask}" if mask else "    gt_mask_dir: ''"
 
     return f"""# B6 路由稳定性（5× LLM 重复）；数据为 test_for_llm 子集（非全量 test）。
-
-import importlib.util
-from pathlib import Path
-
-
 # 构建子集: bash scripts/build_all_test_for_llm.sh
 # 用法:
 #   export DASHSCOPE_API_KEY=...
@@ -142,7 +137,7 @@ shared:
   agent_llm:
     api_key_env: DASHSCOPE_API_KEY
     base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
-    model_name: qwen3.8-27b
+    model_name: deepseek-v4-pro-0813
     temperature: 0.3
     max_tokens: 768
     enable_thinking: false
@@ -228,6 +223,7 @@ radiomics_judge:
   radiomics_params: null
 pipeline:
   preload_workers: 4
+  stop_after_phase2: true
   run_segmentation: {_bool_yaml(cohort["run_segmentation"])}
   run_classification: {_bool_yaml(cohort["run_classification"])}
   ablation:
@@ -265,6 +261,10 @@ pipeline:
     device_info:
     - GE Logiq E9
     - GE S7
+    stability_sample:
+      n: 10
+      seed: 42
+      mode: random
     start_index: 0
     max_images: null
   log_routing: true

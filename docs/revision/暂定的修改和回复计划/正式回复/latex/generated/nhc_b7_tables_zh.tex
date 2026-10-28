@@ -1,47 +1,46 @@
-% B7 NHC-MISD-TUS（表 R18--R20）：当前为 nhc_prepared_sample 流水线真值（10 图、2 中心）；定稿替换全量 8721 图 / 35 中心。
-% 真源：output/b7/nhc_sample_canonical/；config/revision/nhc_sample/manifest.yaml
+% B7 NHC-MISD-TUS（表 R18--R20）：暂行子集真值（10 图、2 中心）；定稿替换全量。
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_nhc_center_descriptive}{NHC-MISD-TUS 中心描述（流水线试点；目标 35 中心全表）}}
+\caption{\responsetabletitle{tab_nhc_center_descriptive}{NHC-MISD-TUS 中心描述（暂行子集；目标 35 中心全表）}}
 \label{tab_nhc_center_descriptive}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l r r r r l c c@{}}
 \toprule
 中心 ID & 患者 & 结节 & 图像 & 扫描仪 & 分割标签 & 良恶性标签 \\
 \midrule
-THYB\_S\_AH04 & \rpendingzh{G3} & \rpendingzh{G3} & 2 & \rpendingzh{G3} & 是 & 是（$n{=}2$） \\
-THYB\_S\_AN01 & \rpendingzh{G3} & \rpendingzh{G3} & 8 & \rpendingzh{G3} & 是 & 部分（$n{=}0$ 有标签） \\
+THYB\_S\_AH04 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 2 & \rpendingzh{院方确认} & 是 & 是（$n{=}2$） \\
+THYB\_S\_AN01 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 8 & \rpendingzh{院方确认} & 是 & 部分（$n{=}0$ 有标签） \\
 \ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \\
-\textbf{试点合计（2 中心）} & --- & --- & \textbf{10} & --- & --- & --- \\
-\textbf{目标合计（35 中心）} & \rpendingzh{G3} & \rpendingzh{G3} & \textbf{8721} & --- & --- & --- \\
+\textbf{暂行子集合计（2 中心）} & --- & --- & \textbf{10} & --- & --- & --- \\
+\textbf{目标合计（35 中心）} & \rpendingzh{院方确认} & \rpendingzh{院方确认} & \textbf{8721} & --- & --- & --- \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{上表前两行为 \texttt{nhc\_prepared\_sample} 预处理输出（匿名中心 ID）。\rpendingzh{向数据负责人（G3）确认并填入：35 中心是否均为独立参与医院/站点；各中心患者数、结节数、图像数；扫描仪厂商/型号或类别；分割/良恶性/全腺体标签可用性；伦理批准、DUA 与去标识化可发表表述；可选字段 province、hospital、标注协议简述（见 \texttt{docs/supplementary/nhc\_center\_schema.md}）}} \rpendingzh{全量 NHC-MISD-TUS 定稿后替换「\ldots」行与 35 中心合计行；与 \responsefigureref{fig_image_dataflow} 外测 8721 图对账}}
+\responsetablenote{上表前两行为去标识化中心 ID 的\textbf{暂行分析子集}（10 张图）。\rpendingzh{向数据负责人确认并填入：35 中心是否均为独立参与医院/站点；各中心患者数、结节数、图像数；扫描仪厂商/型号或类别；分割/良恶性/全腺体标签可用性；伦理批准、数据使用协议与去标识化可发表表述；可选省份、医院名称、标注协议简述} \rpendingzh{全量 NHC-MISD-TUS 定稿后替换「\ldots」行与 35 中心合计行；与 \responsefigureref{fig_image_dataflow} 外测 8721 图对账}}
 \end{responsetable}
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_nhc_center_performance}{NHC-MISD-TUS：非 LLM 级联中心级性能（流水线试点；与稿面池化数对账待全量）}}
+\caption{\responsetabletitle{tab_nhc_center_performance}{NHC-MISD-TUS：非 LLM 级联中心级性能（暂行子集；全队列对账待补）}}
 \label{tab_nhc_center_performance}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l r l l l@{}}
 \toprule
 中心 ID & $n$ 图像 & 全腺体 Dice (\%) & 结节 Dice (\%) & 良恶性 AUROC \\
 \midrule
-THYB\_S\_AH04 & 2 & \rpendingzh{真实腺体预测} & 83.3 & NE \\
-THYB\_S\_AN01 & 8 & \rpendingzh{真实腺体预测} & 96.0 & NE \\
+THYB\_S\_AH04 & 2 & \rpendingzh{全腺体模型预测} & 83.3 & NE \\
+THYB\_S\_AN01 & 8 & \rpendingzh{全腺体模型预测} & 96.0 & NE \\
 \ldots & \ldots & \ldots & \ldots & \ldots \\
-\textbf{池化（试点 $n{=}10$）} & \textbf{10} & --- & \textbf{93.4} & \textbf{0.813} \\
+\textbf{池化（暂行 $n{=}10$）} & \textbf{10} & --- & \textbf{93.4} & \textbf{0.813} \\
 \textbf{跨中心等权宏平均（2 中心）} & --- & --- & \textbf{89.6} & --- \\
 \textbf{池化（目标全队列）} & \textbf{8721} & \rpendingzh{全量} & \rpendingzh{全量} & \rpendingzh{全量} \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{协议：\texttt{enable\_agent=false} 本地 DINO 专家池级联（\textbf{无} LLM）；与 OpenThyroid 稿面 LLM 全系统（策略 7）\textbf{分开展示}。结节 Dice / 分类 AUROC 来自 \texttt{output/b7/nhc\_cascade\_sample}；池化行含 95\% CI（试点：结节 Dice 0.898--0.962；AUROC 0.444--1.000，$n$ 过小）。全腺体列：试点曾用 GT 拷贝占位（Dice=100\%），\textbf{不可进终稿}。\rpendingzh{全量 35 中心表；与投稿 Fig.~2h / Supp.\ S7--S12 及九模型外测表对账；NE 规则与小样本中心}} NE = 该中心 AUROC 不可估计（不以 0.5/0.0 占位进入宏平均）。
+\responsetablenote{协议：本地 DINO 专家池级联，\textbf{未使用 LLM 路由}（与 OpenThyroid 稿面 LLM 全系统策略 7 \textbf{分开展示}）。结节 Dice 与分类 AUROC 来自上述非 LLM 外测协议；池化行 95\% CI（暂行：结节 Dice 0.898--0.962；AUROC 0.444--1.000，$n$ 过小）。全腺体列在暂行子集中曾用标注 mask 代替模型预测核对流程，\textbf{不可作为终稿性能}。\rpendingzh{全量 35 中心表；与投稿 Fig.~2h / Supp.\ S7--S12 及九模型外测表对账；NE 规则与小样本中心} NE = 该中心 AUROC 不可估计（不以 0.5/0.0 占位进入宏平均）。}
 \end{responsetable}
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_nhc_heterogeneity}{NHC-MISD-TUS：中心间异质性（DerSimonian--Laird $I^2$；流水线试点）}}
+\caption{\responsetabletitle{tab_nhc_heterogeneity}{NHC-MISD-TUS：中心间异质性（DerSimonian--Laird $I^2$；暂行子集）}}
 \label{tab_nhc_heterogeneity}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l l r r l r l@{}}
@@ -50,11 +49,11 @@ THYB\_S\_AN01 & 8 & \rpendingzh{真实腺体预测} & 96.0 & NE \\
 \midrule
 结节分割 & Dice $\uparrow$ & 2 & 10 & 93.4 / 89.6 & 98.5 & 0.025 \\
 良恶性分类 & score $\uparrow$ & 2 & 10 & --- & 39.0 & 0.070 \\
-全腺体分割 & Dice $\uparrow$ & 2 & 10 & \rpendingzh{全量腺体预测} & --- & --- \\
+全腺体分割 & Dice $\uparrow$ & 2 & 10 & \rpendingzh{全腺体模型预测} & --- & --- \\
 \ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \\
 \textbf{目标（35 中心）} & --- & \textbf{35} & \textbf{8721} & \rpendingzh{全量} & \rpendingzh{全量} & \rpendingzh{全量} \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{试点 $I^2$/$\tau^2$ 由 \texttt{run\_b7\_analysis.py} 对 2 中心汇总（\texttt{b7\_report.json}）。\rpendingzh{全量 NHC 上重算 $I^2$/$\tau^2$、中心内方差、单变量 meta 回归（扫描仪类别、中心恶性比例、结节大小/ROI）；讨论高异质性个案中心（如 THYB\_S\_ZJ24）}} \rpendingzh{可选：全量 NHC 上应用 OpenThyroid validation 冻结 B8 阈值后的按中心送复核比例（R1.3，与 \responsetableref{tab_calib_referral} 阈值同源；试点 10 图送复核 0/10 仅验结构）}
+\responsetablenote{暂行 $I^2$/$\tau^2$ 在 2 个中心、10 张图上按图像级结果汇总（与修订稿中心异质性分析同一统计约定）。\rpendingzh{全量 NHC 上重算 $I^2$/$\tau^2$、中心内方差、单变量 meta 回归（扫描仪类别、中心恶性比例、结节大小/ROI）；讨论高异质性个案中心（如 THYB\_S\_ZJ24）} \rpendingzh{可选：全量 NHC 上应用与 \responsetableref{tab_calib_referral} 相同之 validation 冻结送复核阈值后的按中心送复核比例（R1.3；暂行子集 0/10 送复核仅作流程核对）}}
 \end{responsetable}

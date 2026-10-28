@@ -4,6 +4,8 @@
 数据路径对齐 `scripts/build_all_test_for_llm.sh`（约 ≤250 张），**不用全量 test**。  
 **YAML 字段与 `sample_stability.yaml` 同构**（含 `pipeline.ablation` 块）；仅 `data` 路径与 `output/b6/<cohort>/` 不同。
 
+**LLM 路由（各 cohort 统一）**：`shared.agent_llm.model_name` = **`deepseek-v4-pro-0813`**（DashScope compatible API，`DASHSCOPE_API_KEY`；`temperature=0.3`，`max_tokens=768`，与 B5 主消融配置一致）。
+
 | 配置文件 | 数据根目录 | seg / cls |
 |----------|------------|-----------|
 | `tn3k.yaml` | `.../TN3K/test_for_llm_malignancy` | both |
@@ -17,6 +19,23 @@
 
 输出目录统一：`output/b6/<cohort>/pipeline_run/`（含 `intermediate/`、`routing_log.jsonl`、`stability_summary.json`）。
 
+**Intermediate 在哪？** B6 脚本默认只认 `output/b6/<cohort>/pipeline_run/intermediate/`。主外测 pipeline 的 Phase 1–2 往往在 **别的路径**（与 B3 共用），例如：
+
+| cohort | 已有 Phase 1–2（本机典型路径） | for_llm 250 张是否在其中 |
+|--------|-------------------------------|---------------------------|
+| thyroidxl | `output/ThyroidXL/pipeline_run/intermediate` | 是（250/250） |
+| zjh8k | `output/ZJH-8K/pipeline_run/intermediate` | 是（250/250） |
+| ddti_cls | `output/DDTI_cls/pipeline_run/intermediate`（**仅 cls**，无 seg） | cls 250/250 |
+| tn3k / tn5k | `output/b6/tn3k|tn5k/...` 或 `output/TN3K|TN5K/...` | B6 下多为 250 行 npz |
+
+若 `run_b6_stability_*.sh` 报「缺少 intermediate」，可先链到主缓存（不复制大文件）：
+
+```bash
+bash scripts/revision/b6/link_b6_intermediate_from_main.sh
+```
+
+然后再跑 `run_b6_stability_remaining.sh`（写 `stability_case_manifest.json` + 5× LLM）。
+
 `sample_stability.yaml`：仅 10 例本地调试，不参与上表批量。
 
 ## 前置：构建 for_llm 子集
@@ -28,20 +47,27 @@ bash scripts/build_all_test_for_llm.sh
 
 若某目录不存在，先跑上式再执行 pipeline。
 
-## 推荐流程
+## 推荐流程（**仅 10 例 LLM**，默认已写入 yaml）
+
+各 cohort 默认：`stop_after_phase2: true` + `pipeline.data.stability_sample`（`n=10`, `seed=42`, `mode=random`）。
 
 ```bash
 export DASHSCOPE_API_KEY=...
 
-COHORT=tn3k
-# 1) 完整 pipeline（Phase 1–5，写 log）；或先设 pipeline.stop_after_phase2: true 只跑 Phase 1–2
-python run_pipeline.py --config config/revision/b6/${COHORT}.yaml --device cuda
+COHORT=tn5k
+OUT=output/b6/${COHORT}/pipeline_run
 
-# 2) 5× 稳定性（复用 intermediate，仅重复 LLM 路由）
+# 1) 仅 Phase 1–2：对 stability_sample 的 10 张做专家推理（无 LLM）
+python run_pipeline.py --config config/revision/b6/${COHORT}.yaml --device cuda --stop-after-phase2
+
+# 2) 5× 稳定性：同一 10 张（读 stability_case_manifest.json）仅重复 LLM 路由
 python run_routing_stability.py \
   --config config/revision/b6/${COHORT}.yaml \
-  --output-dir output/b6/${COHORT}/pipeline_run \
+  --output-dir "$OUT" \
   --repeats 5 --device cuda
+
+# 批跑剩余队列（若曾误跑 250 张，先 FORCE_REFRESH=1）
+bash scripts/revision/b6/run_b6_stability_remaining.sh
 
 # 3) 规格导出（无 GPU）
 python scripts/revision/b6/export_router_spec.py --config config/revision/b6/${COHORT}.yaml

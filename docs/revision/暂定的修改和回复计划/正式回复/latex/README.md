@@ -23,7 +23,7 @@
 - 正文引用表图：`\responsetableref{键}`、`\responsefigureref{键}`、`\responsetablerefrange{键A}{键B}`；**勿**在蓝色回复里重复 “见文末” / “at the end of this letter”。
 - 信内表图编号**仅** R1–R20、图 R1–R3（见 `reviewer_response.sty` 页眉说明）；**不复用**稿件 Supplementary Table S* 序号。
 - 图：先 `\includegraphics`，再 `\caption{\responsefiguretitle{键}{短标题}}`，图例正文用 `\responsefigurenote{…}`（题注在图下方）。
-- `authorresponse` 内尽量少用 `\textbf`；仅「支撑材料：」/ **Supporting material:** 加粗。表图编号用普通蓝字。
+- `authorresponse` 内除「\textbf{支撑材料：}」/「\textbf{Supporting material:}」外**不用** `\textbf`（蓝色正文已足够区分；术语与数字用正常字重，表图用 `\responsetableref` 等引用即可）。
 
 ## 表图注册与命名
 
@@ -35,6 +35,7 @@
 6. 与投稿主表版式一致的复现块：`manuscriptresponsetable`（AUROC/AUPRC 或 Dice/HD95 分节、± 半宽 CI、灰底 ThyroidXAgent 行，见 `docs/ThyroidXAgent.md` 表标签）。
 7. 附录 A1/A2 前：`\responseproseappendixstart`；附录正文：`\begin{responseappendixprose}…\end{responseappendixprose}`；附录内表一律 `responseinlinetable` + `\responseinlinetablecaption`（勿用浮动 `responsetable`）。Prompt：`promptverbatim`（`breaklines=true`）。
 8. **附录 / 表 R* / 图 R***：题注与正文按补充材料写法自洽表述，**不写**审稿意见编号（如 R2.9）或「本附录回应…」；对应关系仅在蓝色 **回复** 与「支撑材料」中正向引用附录 A1/A2 或 `\responsetableref`。
+9. **附录少用加粗**：小节用 `\noindent 1.~标题`；prompt 说明用普通「System / User / 模型输出」标签；A2 表内版本号用 `\texttt`，数值与术语不必 `\textbf`（表题仍由 `\responseinlinetablecaption` 加粗）。
 
 ### 长表 `longtable` 版式陷阱（路由消融表 R12 / R13 等）
 
@@ -52,7 +53,7 @@
 
 - `\rpendingzh{…}` / `\rpending{…}`：红色 `[待补充：…]` / `[PENDING: …]`，**投稿前删除或换成终稿内容**。
 - 蓝色正文若承诺写入**修订稿**而尚未改稿：用「将…」表述，并保留红色 `修订稿 …` pending（或等价 `\rpending`）。
-- **NHC（表 R18--R20，`nhc_b7_tables_*.tex`）**：表内数字来自流水线试点 `nhc_prepared_sample`（10 图）；`\rpending{G3}` / 全量替换见表注与 R2.6/R1.3 正文。NHC **无** B3 策略 7、B4 L3、B5 热图（托管机无 LLM，正文写 N/A，非留空）。
+- **NHC（表 R18--R20）**：回信正文与表注**不得**出现仓库路径、脚本名、配置键或内部文件名；暂行子集（10 图）数字定稿后替换为全量 8721 图。院方元数据用 `\rpending` 标出。NHC **无** 策略 7 / LLM 全系统层 / 元数据热图（托管政策，正文写 N/A）。
 
 ## 性能表加粗规则
 

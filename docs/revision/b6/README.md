@@ -5,7 +5,9 @@
 | [**B6_ROUTING_STABILITY_CONCLUSIONS.md**](./B6_ROUTING_STABILITY_CONCLUSIONS.md) | **主结论文档**（当前填 **sample** 试点数值；换队列时改文内「数据卡」与表格） |
 | [REVIEWER_RESPONSE_SNIPPETS_B6.md](./REVIEWER_RESPONSE_SNIPPETS_B6.md) | R2.9 回复段落草稿（与主文档数字一致） |
 
-**规格与审计（与队列无关，一般不需随换数而改）：**
+**LLM 型号（B6 各 cohort YAML 已统一）：** `deepseek-v4-pro-0813`（见 `config/revision/b6/*.yaml` → `shared.agent_llm`）。
+
+**规格与审计（换 LLM 或 prompt 时需同步）：**
 
 - `docs/supplementary/router_spec.md`（prompt / 模型 / 解码 / JSON）
 - 各 cohort 的 `output/<队列>/pipeline_run/routing_log.jsonl`（结构化记录 ≥10 条）

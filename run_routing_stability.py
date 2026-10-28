@@ -38,7 +38,15 @@ def main():
     parser.add_argument("--config", default="config/config.yaml")
     parser.add_argument("--output-dir", required=True, help="含 intermediate/ 的 pipeline 输出目录")
     parser.add_argument("--repeats", type=int, default=5)
-    parser.add_argument("--max-cases", type=int, default=None)
+    parser.add_argument(
+        "--max-cases",
+        type=int,
+        default=None,
+        help="兼容旧参：等同 --sample-size（取排序后前 N 张）",
+    )
+    parser.add_argument("--sample-size", type=int, default=None, help="稳定性子集大小（默认读 manifest 或 yaml）")
+    parser.add_argument("--sample-seed", type=int, default=None)
+    parser.add_argument("--sample-mode", choices=("first", "random"), default=None)
     parser.add_argument("--device", default="cuda")
     args = parser.parse_args()
 
@@ -64,7 +72,8 @@ def main():
     print(f"  config:      {args.config}")
     print(f"  output-dir:  {out.resolve()}")
     print(f"  repeats:     {args.repeats}")
-    print(f"  max-cases:   {args.max_cases if args.max_cases is not None else 'all'}")
+    sample_n = args.sample_size if args.sample_size is not None else args.max_cases
+    print(f"  sample-size: {sample_n if sample_n is not None else 'manifest/all'}")
     print(f"  seg LLM:     {enable_seg_agent}")
     print(f"  cls LLM:     {enable_cls_agent}")
     print(f"  LLM model:   {llm_cfg.get('model_name')} (T={llm_cfg.get('temperature')})")
@@ -112,14 +121,58 @@ def main():
         routing_logger=routing_logger,
     )
 
-    image_dir = Path(data_cfg["image_input"])
-    exts = {".png", ".jpg", ".jpeg", ".bmp", ".tiff"}
-    image_paths = sorted(
-        [f for f in image_dir.iterdir() if f.suffix.lower() in exts],
-        key=lambda x: x.name,
+    from pipeline.revision.b6.case_selection import (
+        MANIFEST_NAME,
+        load_manifest,
+        paths_from_manifest,
+        select_stability_cases,
+        write_manifest,
     )
+
+    image_dir = Path(data_cfg["image_input"])
+    stab_cfg = data_cfg.get("stability_sample") or {}
+    sample_n = args.sample_size if args.sample_size is not None else args.max_cases
+    if sample_n is None:
+        sample_n = stab_cfg.get("n")
+    sample_seed = (
+        args.sample_seed if args.sample_seed is not None else stab_cfg.get("seed")
+    )
+    sample_mode = args.sample_mode or stab_cfg.get("mode", "first")
+
+    manifest_path = out / MANIFEST_NAME
+    names = load_manifest(manifest_path)
+    if names:
+        image_paths = paths_from_manifest(image_dir, names)
+        print(f"  子集来源:    {MANIFEST_NAME} ({len(image_paths)} 张)")
+    elif sample_n is not None:
+        mode_eff = "random" if sample_seed is not None else sample_mode
+        image_paths = select_stability_cases(
+            image_dir,
+            int(sample_n),
+            start_index=data_cfg.get("start_index", 0),
+            seed=sample_seed,
+            mode=mode_eff,
+        )
+        write_manifest(
+            manifest_path,
+            image_paths,
+            {
+                "n": len(image_paths),
+                "seed": sample_seed,
+                "mode": mode_eff,
+                "source": "run_routing_stability",
+            },
+        )
+        print(
+            f"  子集:        {len(image_paths)} 张 (mode={mode_eff}, seed={sample_seed})"
+        )
+    else:
+        from pipeline.revision.b6.case_selection import list_sorted_image_paths
+
+        image_paths = list_sorted_image_paths(image_dir)
+        print(f"  图像目录:    {image_dir} (全量 {len(image_paths)} 张)")
     img_names = [p.name for p in image_paths]
-    print(f"  图像目录:    {image_dir} ({len(image_paths)} 张)")
+    print(f"  稳定性 N:    {len(image_paths)} 张 @ {image_dir}")
     print(f"  seg 缓存:    {inter / 'seg'}")
     print(f"  cls 缓存:    {inter / 'cls'}")
     print("")
@@ -143,7 +196,7 @@ def main():
         device_info=data_cfg.get("device_info"),
         gt_mask_dir=data_cfg.get("gt_mask_dir"),
         repeats=args.repeats,
-        max_cases=args.max_cases,
+        max_cases=None,
         output_path=out / "stability_summary.json",
     )
 
