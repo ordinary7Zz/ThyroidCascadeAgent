@@ -1,7 +1,7 @@
 \responsetoreviewer{Response to Reviewer 1}
 \reviewersection{Reviewer 1, Comment 1 (R1.1)}
 \begin{reviewercomment}
-Segmentation and classification results are largely reported at the image level. The authors should clarify patient- and examination-level splits, cross-dataset deduplication, and whether multiple frames or views from the same patient appear across splits. Patient-level re-analysis and cluster-aware confidence intervals would strengthen confidence in the reported performance.
+Independence of image-level evaluations. Segmentation and classification results are largely reported at the image level. The authors should clarify patient-level and examination-level splitting, deduplication across datasets, and whether multiple frames or views from the same patient could occur across splits. Patient-level reanalysis and cluster-aware confidence intervals would strengthen confidence in the reported performance.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -12,9 +12,10 @@ Segmentation and classification results are largely reported at the image level.
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 1, Comment 2 (R1.2)}
 \begin{reviewercomment}
-The system combines expert ensembles, radiomics, multiple tools, and LLM routing. The current analysis does not separate the contribution of the router itself. I recommend a systematic ablation comparing single-model, averaging ensembles, rule-based routing, confidence-based routing, LLM-based routing, and an oracle upper bound.
+Causal contribution of the agentic router. The system combines expert ensembles, radiomics, multiple tools, and LLM routing. The current analyses do not isolate the contribution of the router itself. I recommend adding a systematic ablation study comparing a single model, average ensemble, rule-based routing, confidence-based routing, LLM-based routing, and an oracle upper bound.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -25,9 +26,10 @@ The system combines expert ensembles, radiomics, multiple tools, and LLM routing
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 1, Comment 3 (R1.3)}
 \begin{reviewercomment}
-Although overall performance on the private multi-center cohort is encouraging, performance varies substantially across centers (e.g., much lower nodule segmentation at some centers). The authors should examine associations with scanner type, image quality, case mix, and annotation protocols, and define calibration, abstention, or mandatory human review for low-confidence cases.
+Heterogeneity in external performance. Although aggregate performance on the private multicentre cohort is encouraging, there is substantial centre-level variation. For example, nodule segmentation performance is much lower at some centres. The authors should investigate associations with scanner type, image quality, case mix, and annotation protocol, and define calibration, abstention, or mandatory human-review policies for low-confidence cases.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -40,9 +42,10 @@ Although overall performance on the private multi-center cohort is encouraging, 
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 1, Comment 4 (R1.4)}
 \begin{reviewercomment}
-ZJH-8K is described as an external test set for segmentation and benign–malignant classification, while its malignant images are also used to develop LNM and FTC/PTC tasks. The manuscript should provide a complete data-flow diagram showing, for each component, which data were used for training, validation, threshold selection, and testing.
+Data boundaries across tasks. ZJH-8K is described as an external test set for segmentation and benign-malignant classification, while its malignant images are used for development of LNM and FTC/PTC tasks. This may be acceptable because the tasks differ, but the manuscript should provide a complete data-flow diagram showing which data were used for training, validation, threshold selection, and testing for each component.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -50,19 +53,37 @@ ZJH-8K is described as an external test set for segmentation and benign–malign
 \end{itemize}
 \par
 \end{authorresponse}
+
+\reviewersection{Reviewer 1, Comment 5 (R1.5)}
+\begin{reviewercomment}
+Validation of report quality and template dependence. ThyClinScore is well motivated, but its validation primarily relies on correlation with an LLM judge. A stronger validation would include blinded assessment by multiple independent clinicians, inter-rater agreement, and sensitivity analyses for lesion-matching thresholds and score weights. The authors should also audit patient overlap, near-duplicate report text, and centre-specific template effects between template libraries and test sets.
+\end{reviewercomment}
+\begin{authorresponse}
+\noindent\textit{This comment does not concern nodule segmentation or benign--malignant classification; no point-by-point response is provided in this letter.}
+\end{authorresponse}
+
+\reviewersection{Reviewer 1, Comment 6 (R1.6)}
+\begin{reviewercomment}
+Reader study and clinical safety. The two-physician, 145-case crossover study supports initial workflow feasibility, but does not establish patient benefit. Results should be reported separately by physician, with case-order randomization, learning-effect analysis, error categories, and confidence intervals. More importantly, the system should define when it abstains or escalates to mandatory human review, and quantify the effect of these safety rules on missed diagnoses, false positives, and workload.
+\end{reviewercomment}
+\begin{authorresponse}
+\noindent\textit{This comment does not concern nodule segmentation or benign--malignant classification; no point-by-point response is provided in this letter.}
+\end{authorresponse}
+
 \reviewersection{Reviewer 1, General remark (deployability)}
 \begin{reviewercomment}
-The work has clear strengths; however, the current evidence supports a promising retrospective workflow rather than established clinical benefit or broad deployability. I therefore recommend major revision at minimum.
+Overall, this is a thoughtful and technically ambitious study. Its strongest contribution is the framing of clinical AI as an editable and auditable evidence workflow rather than a black-box predictor. Addressing the issues above, particularly patient-level independence, routing ablations, centre-level failure analysis, clinical validation of ThyClinScore, and prospective human-AI safety evaluation, would substantially strengthen the manuscript. The work has notable strengths; however, the current evidence supports a promising retrospective workflow rather than established clinical benefit or broad deployability. I therefore recommend major revision at minimum.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
 \item We agree to soften deployability claims and emphasize retrospective evaluation, updated statistical reporting (data auditing and cluster-bootstrap confidence intervals), and explicit limitations. 
 \end{itemize}
 \end{authorresponse}
+
 \responsetoreviewer{Response to Reviewer 2}
 \reviewersection{Reviewer 2, Comment 1 (R2.1)}
 \begin{reviewercomment}
-Several key numbers are inconsistent across the abstract, main text, figures, and supplementary materials.
+Several key values are inconsistent across the abstract, main text, figures, and supplementary materials.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -72,9 +93,10 @@ Several key numbers are inconsistent across the abstract, main text, figures, an
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 2, Comment 2 (R2.2)}
 \begin{reviewercomment}
-Many analyses are reported at the image level although the same patient, examination, or nodule may have multiple images (e.g., ZJH-8K contains 7,958 images from 1,149 patients). Treating correlated images as independent may yield overly narrow confidence intervals. The authors should use patient- or examination-level bootstrap resampling and report patient-level performance for clinically meaningful classification tasks.
+Many analyses are reported at the image level, although multiple images may come from the same patient, examination, or nodule. For example, ZJH-8K includes 7,958 images from 1,149 cases. Treating correlated images as independent observations may produce overly narrow confidence intervals. The authors should recalculate confidence intervals using patient- or examination-level bootstrap resampling and report patient-level performance for clinically relevant classification tasks.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -85,9 +107,10 @@ Many analyses are reported at the image level although the same patient, examina
 \noindent\par
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 2, Comment 3 (R2.3)}
 \begin{reviewercomment}
-Please clarify why 28,458 observations are described as "non-overlapping test cases", as this number appears to combine 19,737 test images with 8,721 NHC-MISD-TUS cases.
+Please clarify why 28,458 observations are described as "non-overlapping test cases," as this number appears to combine 19,737 test images with 8,721 NHC-MISD-TUS cases.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -95,9 +118,10 @@ Please clarify why 28,458 observations are described as "non-overlapping test ca
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 2, Comment 4 (R2.4)}
 \begin{reviewercomment}
-ZJH-8K and TN3K were both collected at Nanfang Hospital, Southern Medical University. Unless patient populations, acquisition periods, cohort composition, and clinical workflows are demonstrably independent, ZJH-8K should not be described as an external center cohort.
+ZJH-8K and TN3K were both collected at Zhujiang Hospital, Southern Medical University. Unless they are demonstrably independent in patient population, collection period, cohort composition, and clinical workflow, ZJH-8K should not be described as an external-centre cohort.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -107,9 +131,10 @@ ZJH-8K and TN3K were both collected at Nanfang Hospital, Southern Medical Univer
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 2, Comment 5 (R2.5)}
 \begin{reviewercomment}
-The Methods should state the reference standards, annotation procedures, annotator qualifications and disagreement resolution, patient-level deduplication, and handling of missing data for nodule segmentation and benign--malignant classification.
+The Methods should specify the reference standards for nodule segmentation and benign-malignant classification, annotation procedures, annotator qualifications and adjudication of disagreements, patient-level deduplication, and handling of missing data.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -117,9 +142,10 @@ The Methods should state the reference standards, annotation procedures, annotat
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 2, Comment 6 (R2.6)}
 \begin{reviewercomment}
-The manuscript reports validation on 8,721 cases from 35 centers, but NHC-MISD-TUS is insufficiently described. The authors should clarify whether these are 35 independent hospitals, report per-center patient, nodule, and image counts, and report center-level macro-averaged performance and between-center heterogeneity.
+The manuscript reports validation on 8,721 cases from 35 centres, but the NHC-MISD-TUS cohort is insufficiently described. The authors should clarify whether these represent 35 independent hospitals and report the numbers of patients, nodules, and images per centre, together with centre-level macro-averaged performance and between-centre heterogeneity.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -129,9 +155,10 @@ The manuscript reports validation on 8,721 cases from 35 centers, but NHC-MISD-T
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 2, Comment 7 (R2.7)}
 \begin{reviewercomment}
-The authors should clarify whether reported "means" are unweighted macro-averages across cohorts, sample-size-weighted averages, or another scheme.
+The authors should clarify whether the reported "mean" performance represents an unweighted macro-average across cohorts, a sample-size-weighted average, or another calculation.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -139,9 +166,10 @@ The authors should clarify whether reported "means" are unweighted macro-average
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 2, Comment 8 (R2.8)}
 \begin{reviewercomment}
-The key innovation is the agentic evidence workflow, but observed gains may largely reflect the DINOv3 expert pool, multi-cohort training, the radiomics classifier, or template-based reporting rather than agentic routing itself. Because static-pipeline comparisons are largely limited to report generation, the independent value of LLM routing for segmentation and classification remains unclear.
+The key innovation is the agentic evidence workflow, but the observed gains may largely reflect the DINOv3 expert pool, multicohort training, radiomics classifiers, or template-based reporting rather than agentic routing itself. As the static-pipeline comparison is limited mainly to report generation, the independent value of LLM-based routing for segmentation and classification remains unclear.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -152,9 +180,10 @@ The key innovation is the agentic evidence workflow, but observed gains may larg
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 2, Comment 9 (R2.9)}
 \begin{reviewercomment}
-The manuscript states that the LLM router "reasons" to select the best expert output but does not report prompt design, LLM version, decoding parameters, reproducibility, or decision stability when candidate quality is similar. The authors should provide structured routing records for at least ten representative cases.
+The manuscript states that the LLM router selects the best expert output through "reasoning," but does not report the prompt design, LLM version, decoding parameters, reproducibility, or decision stability when candidate outputs have similar quality. The router therefore remains a black-box selector. The authors should provide structured routing records for at least 10 representative cases, including input quality metrics, candidate outputs, final selections, uncertainty indicators, brief decision rationales, and consistency across repeated runs.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -165,9 +194,10 @@ The manuscript states that the LLM router "reasons" to select the best expert ou
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 2, Comment 10 (R2.10)}
 \begin{reviewercomment}
-For FTC/PTC classification, the training cohort consists of classic PTC versus follicular-variant PTC, whereas the external test set uses FTC versus PTC. Follicular-variant PTC is not histologic FTC; training and testing therefore target different definitions.
+For FTC/PTC classification, the training cohort comprised classic PTC and follicular-variant PTC, whereas the external test set comprised FTC and PTC. Because follicular-variant PTC is not equivalent to FTC, the target definition differs between training and testing. Unless this is justified as a clinically valid domain-transfer task, the reported performance may not be valid.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -176,9 +206,10 @@ For FTC/PTC classification, the training cohort consists of classic PTC versus f
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 2, Comment 11 (R2.11)}
 \begin{reviewercomment}
-The LNM task used only 4,753 malignant images, while \responsetableref{tab_malig_oof} shows validation with only 20 cases. Please clarify: (a) whether transfer or multitask learning was used; (b) data augmentation; (c) how overfitting was mitigated.
+The LNM task uses only 4,753 malignant images, and Table S5 indicates only 20 cases for validation---sample sizes far too small for training reliable deep learning classifiers. Please clarify: (a) whether transfer learning or multi-task learning was employed; (b) whether data augmentation was applied; (c) how overfitting is avoided given the wide confidence intervals in Table S5 that reflect inadequate sample size.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -189,9 +220,10 @@ The LNM task used only 4,753 malignant images, while \responsetableref{tab_malig
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 2, Comment 12 (R2.12)}
 \begin{reviewercomment}
-For lymph-node metastasis prediction, the manuscript inconsistently uses overall LNM, lateral LNM, and CN0/CN1 labels, including primary thyroid lesions on ZJH-8K versus lymph-node images on LymphUs.
+For lymph-node metastasis prediction, the manuscript inconsistently refers to overall LNM, lateral LNM, and CN0/CN1 labels. The authors should clarify whether CN denotes central-compartment nodal status, whether the target is central, lateral, or any cervical LNM, whether the inputs include primary thyroid lesions, lymph nodes, or both, and how image-level predictions are aggregated at the patient level.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -200,9 +232,18 @@ For lymph-node metastasis prediction, the manuscript inconsistently uses overall
 \end{itemize}
 \par
 \end{authorresponse}
+
+\reviewersection{Reviewer 2, Comment 13 (R2.13)}
+\begin{reviewercomment}
+The report-generation reader study included only two physicians, with each case assessed under the two conditions by different readers. Although this may reduce recall bias, it may also confound reader effects with the assistance condition.
+\end{reviewercomment}
+\begin{authorresponse}
+\noindent\textit{This comment does not concern nodule segmentation or benign--malignant classification; no point-by-point response is provided in this letter.}
+\end{authorresponse}
+
 \reviewersection{Reviewer 2, Comment 14 (R2.14)}
 \begin{reviewercomment}
-It is unclear whether all expert baselines were retrained on the same development data, evaluated with original weights, or tested zero-shot.
+It is unclear whether all specialist baselines were retrained on the same development data, evaluated using their original weights, or tested zero-shot. Comparisons may be unfair if ThyroidXAgent benefits from multicohort training and task-specific models while the baselines are used off the shelf.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -210,9 +251,50 @@ It is unclear whether all expert baselines were retrained on the same developmen
 \end{itemize}
 \par
 \end{authorresponse}
+
+\reviewersection{Reviewer 2, Comment 15 (R2.15)}
+\begin{reviewercomment}
+The manuscript provides an ethics approval number but does not state whether informed consent was obtained or waived. For all institutional datasets, the authors should report the study design and period, consent or waiver arrangements, de-identification procedures, and data-governance measures. Authorization by a co-author to use NHC-MISD-TUS does not replace documentation of ethical approval and regulatory compliance.
+\end{reviewercomment}
+\begin{authorresponse}
+\noindent\textit{This comment does not concern nodule segmentation or benign--malignant classification; no point-by-point response is provided in this letter.}
+\end{authorresponse}
+
+\reviewersection{Reviewer 2, Comment 16 (R2.16)}
+\begin{reviewercomment}
+The ReAct-style planner-executor workflow lacks systematic failure-mode evaluation. The authors should report the frequency of invalid or unnecessary tool calls, hallucinated tasks, repeated calls, execution failures, retries, and rollbacks, and provide representative traces for successful cases and major failure modes, particularly cases with no nodules, multiple nodules, or conflicting intermediate evidence.
+\end{reviewercomment}
+\begin{authorresponse}
+\noindent\textit{This comment does not concern nodule segmentation or benign--malignant classification; no point-by-point response is provided in this letter.}
+\end{authorresponse}
+
+\reviewersection{Reviewer 2, Comment 17 (R2.17)}
+\begin{reviewercomment}
+Agent workflow lacks concurrency control and conflict resolution mechanisms: When lymph-node screening and nodule analysis execute concurrently, how is duplication avoided if both detect the same hypoechoic structure in the lateral neck region?
+\end{reviewercomment}
+\begin{authorresponse}
+\noindent\textit{This comment does not concern nodule segmentation or benign--malignant classification; no point-by-point response is provided in this letter.}
+\end{authorresponse}
+
+\reviewersection{Reviewer 2, Comment 18 (R2.18)}
+\begin{reviewercomment}
+The ThyClinScore weights lambda and eta directly affect report-quality assessment, but their selection, optimization dataset, and sensitivity analysis are not reported, raising concerns about overfitting. Although Figure 4c shows correlation with an LLM judge, validation against radiologist ratings and inter-rater reliability analysis are lacking.
+\end{reviewercomment}
+\begin{authorresponse}
+\noindent\textit{This comment does not concern nodule segmentation or benign--malignant classification; no point-by-point response is provided in this letter.}
+\end{authorresponse}
+
+\reviewersection{Reviewer 2, Comment 19 (R2.19)}
+\begin{reviewercomment}
+The term "training-free" should be qualified. Although BM25 requires no parameter training, the workflow still depends on corpus selection, report decomposition, template construction, slot definitions, and clause-assembly rules. The authors should describe the extent of manual curation, template deduplication, slot-filling rules, and adaptation to centre-specific reporting styles. Clinician assessment of readability, factual consistency, and clinical usability is also needed beyond lexical-overlap metrics such as BLEU and ROUGE.
+\end{reviewercomment}
+\begin{authorresponse}
+\noindent\textit{This comment does not concern nodule segmentation or benign--malignant classification; no point-by-point response is provided in this letter.}
+\end{authorresponse}
+
 \reviewersection{Reviewer 2, Comment 20 (R2.20)}
 \begin{reviewercomment}
-Thresholds for connected-component post-processing are not specified, including: (a) minimum component area; (b) whether nodules <5 mm may be removed; (c) how multiple nodules are separated.
+Thresholds for connected-component analysis in post-processing are unspecified. The manuscript mentions removing isolated noise regions via connected-component analysis but does not specify: (a) the minimum connected-component area threshold; (b) whether small nodules (< 5 mm) may be erroneously removed; (c) the algorithm for separating multiple nodules. These details directly affect segmentation quality but are entirely absent from the Methods section.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -220,10 +302,10 @@ Thresholds for connected-component post-processing are not specified, including:
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 2, Comment 21 (R2.21)}
 \begin{reviewercomment}
 The AutoGluon-based radiomics branch is insufficiently described.
-(Editorial comment; no sub-bullets.)
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -231,10 +313,27 @@ The AutoGluon-based radiomics branch is insufficiently described.
 \end{itemize}
 \par
 \end{authorresponse}
+
+\reviewersection{Reviewer 2, Comment 22 (R2.22)}
+\begin{reviewercomment}
+Please check the manuscript for grammatical errors, such as "ThyroidXAgent improved produced."
+\end{reviewercomment}
+\begin{authorresponse}
+\noindent\textit{This comment does not concern nodule segmentation or benign--malignant classification; no point-by-point response is provided in this letter.}
+\end{authorresponse}
+
+\reviewersection{Reviewer 2, Comment 23 (R2.23)}
+\begin{reviewercomment}
+Please specify whether TI-RADS refers to ACR TI-RADS, C-TIRADS, or another system, as categories such as "TI-RADS 4b" are system-specific.
+\end{reviewercomment}
+\begin{authorresponse}
+\noindent\textit{This comment does not concern nodule segmentation or benign--malignant classification; no point-by-point response is provided in this letter.}
+\end{authorresponse}
+
 \responsetoreviewer{Response to Reviewer 3}
 \reviewersection{Reviewer 3, Comment 1 (R3.1)}
 \begin{reviewercomment}
-Comparisons against majority vote, probability averaging, rule-based routing, and a non-LLM learned router on the same expert pool would better clarify the unique advantage of the agentic design.
+The proposed system integrates a heterogeneous ensemble of expert models, radiomic features, metadata, and an LLM-based router. It is therefore unclear to what extent the performance obtained comes from the agent itself rather than from model ensembling or the use of stronger component models. Including controlled baseline comparisons with majority voting, probability averaging, rule-based routing, and a non-LLM learned router based on the same expert pool would better clarify the unique advantage provided by the agent.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -244,9 +343,10 @@ Comparisons against majority vote, probability averaging, rule-based routing, an
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 3, Comment 2 (R3.2)}
 \begin{reviewercomment}
-The LLM router uses metadata such as device and data source in addition to prediction-quality signals. This may let the system learn center-specific expert preferences rather than case-level routing. Please provide ablation analyses of data-source and scanner metadata and report per-center expert-selection patterns.
+The LLM router leverages metadata such as device and data source in addition to prediction quality signals. This may allow the system to learn center-specific expert preferences rather than case-level routing. Please provide ablation analysis to evaluate the effect from data-source, scanner metadata and report expert-selection patterns across centers.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -257,9 +357,10 @@ The LLM router uses metadata such as device and data source in addition to predi
 \end{itemize}
 \par
 \end{authorresponse}
+
 \reviewersection{Reviewer 3, Comment 3 (R3.3)}
 \begin{reviewercomment}
-The definition of "28,458 non-overlapping test cases" is unclear. Please describe the data hierarchy clearly, confirm patient-disjoint train/validation/test splits where applicable, and provide a simple flowchart relating patients, examinations, images/videos, lesions, and tasks.
+The definition of "28,458 non-overlapping test cases" is unclear. Please clearly describe the data hierarchy and confirm that all train/validation/test splits are patient disjoint. Besides, a simple flowchart showing the relationship of patient, examination, image/video, lesion and task would greatly improve the clarity.
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
@@ -270,6 +371,30 @@ The definition of "28,458 non-overlapping test cases" is unclear. Please describ
 \item The vague ``40 datasets'' phrase is disambiguated in this letter by an explicit list of source cohorts and task roles (\responsefigureref{fig_image_dataflow}). \rpending{Manuscript: replace ``40 datasets'' with the same explicit cohort list (R3.3)} 
 \end{itemize}
 \par
+\end{authorresponse}
+
+\reviewersection{Reviewer 3, Comment 4 (R3.4)}
+\begin{reviewercomment}
+The reporting study includes only two physicians and 145 videos. The results are encouraging, but the conclusions regarding improved physician performance should be moderated. Please report confidence intervals, appropriate paired or mixed-effects statistics, and clearly distinguish annotation consistency from validated diagnostic accuracy.
+\end{reviewercomment}
+\begin{authorresponse}
+\noindent\textit{This comment does not concern nodule segmentation or benign--malignant classification; no point-by-point response is provided in this letter.}
+\end{authorresponse}
+
+\reviewersection{Reviewer 3, Comment 5 (R3.5)}
+\begin{reviewercomment}
+ThyClinScore is mainly validated by correlation with an LLM judge. This is not sufficient as a clinical gold standard. To strengthen the validity of the metric, please validate the metric against blinded ratings from multiple radiologists and provide sensitivity analysis for the main weights and thresholds used. The manuscript should also acknowledge that ThyroidXAgent does not outperform all baselines across every semantic submetric.
+\end{reviewercomment}
+\begin{authorresponse}
+\noindent\textit{This comment does not concern nodule segmentation or benign--malignant classification; no point-by-point response is provided in this letter.}
+\end{authorresponse}
+
+\reviewersection{Reviewer 3, Minor comment 1 (R3.M1)}
+\begin{reviewercomment}
+ThyroidXAgent receives structured outputs from multiple specialized tools, whereas several multimodal LLM baselines appear to work more directly from images. The manuscript should clarify this difference and avoid interpreting these comparisons as a pure test of language-generation ability.
+\end{reviewercomment}
+\begin{authorresponse}
+\noindent\textit{This comment does not concern nodule segmentation or benign--malignant classification; no point-by-point response is provided in this letter.}
 \end{authorresponse}
 \responseappendix
 \begin{responsetable}
