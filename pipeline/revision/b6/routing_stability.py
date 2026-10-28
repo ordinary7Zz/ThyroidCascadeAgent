@@ -14,7 +14,6 @@ import numpy as np
 
 from shared.routing_log import seg_disagreement_tier
 from segmentation.metrics import compute_dice
-from pipeline.cascade import build_intermediate_row_index, discover_intermediate_image_names
 
 
 def _agreement_rate(choices: list[str]) -> float:
@@ -84,13 +83,22 @@ def run_stability_from_caches(
         image_paths = image_paths[:max_cases]
         img_names = img_names[:max_cases]
 
-    seg_cache_by_model: dict[str, list] = {}
+    from pipeline.revision.b6.cache_subset import load_cls_json_map_subset, load_seg_npz_subset
+
+    wanted = list(img_names)
+    seg_cache_by_model: dict[str, dict[str, Any]] = {}
     for model_cfg in seg_model_configs:
         model_name = model_cfg.get("name", "")
         cache_path = seg_cache_dir / f"{model_name}.npz"
         if cache_path.exists():
-            seg_cache_by_model[model_name] = load_seg_npz(cache_path, load_confidence=enable_seg_agent)
-            print(f"  ✓ seg 缓存: {cache_path.name}", flush=True)
+            seg_cache_by_model[model_name] = load_seg_npz_subset(
+                cache_path, wanted, load_confidence=enable_seg_agent
+            )
+            hit = len(seg_cache_by_model[model_name])
+            print(
+                f"  ✓ seg 缓存: {cache_path.name}（子集 {hit}/{len(wanted)} 张）",
+                flush=True,
+            )
         else:
             print(f"  ✗ seg 缓存缺失: {cache_path}", flush=True)
 
@@ -99,13 +107,14 @@ def run_stability_from_caches(
         model_name = model_cfg.get("name", "")
         cache_path = cls_cache_dir / f"{model_name}.json"
         if cache_path.exists():
-            cls_cache_by_model[model_name] = load_cls_json(cache_path)
-            print(f"  ✓ cls 缓存: {cache_path.name}", flush=True)
+            cls_cache_by_model[model_name] = load_cls_json_map_subset(cache_path, wanted)
+            hit = len(cls_cache_by_model[model_name])
+            print(
+                f"  ✓ cls 缓存: {cache_path.name}（子集 {hit}/{len(wanted)} 张）",
+                flush=True,
+            )
         else:
             print(f"  ✗ cls 缓存缺失: {cache_path}", flush=True)
-
-    intermediate_names = discover_intermediate_image_names(seg_cache_dir)
-    intermediate_row_index = build_intermediate_row_index(intermediate_names)
 
     n_cases = len(img_names)
     if n_cases == 0:
@@ -133,13 +142,14 @@ def run_stability_from_caches(
         img_path = image_paths[idx]
         image = image_io.load_image(img_path)
 
-        inter_row = intermediate_row_index.get(img_name)
         seg_preds = []
         for model_cfg in seg_model_configs:
             model_name = model_cfg.get("name", "")
-            cache = seg_cache_by_model.get(model_name)
-            if cache is not None and inter_row is not None and inter_row < len(cache):
-                seg_preds.append(cache[inter_row])
+            by_name = seg_cache_by_model.get(model_name)
+            if by_name is not None:
+                pred = by_name.get(img_name)
+                if pred is not None:
+                    seg_preds.append(pred)
 
         indie_preds = []
         for model_cfg in cls_model_configs:

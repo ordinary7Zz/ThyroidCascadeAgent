@@ -34,7 +34,9 @@
 bash scripts/revision/b6/link_b6_intermediate_from_main.sh
 ```
 
-然后再跑 `run_b6_stability_remaining.sh`（写 `stability_case_manifest.json` + 5× LLM）。
+然后再跑 `run_b6_stability_remaining.sh`（写 manifest + 5× LLM）。
+
+| **ZJH-8K 等大队列** | symlink 到全量 `intermediate` 时，稳定性脚本 **只 mmap 加载 manifest 内 10 张**（`pipeline/revision/b6/cache_subset.py`）。旧版曾一次性载入 ~9×4GB npz 导致 **Killed（内存 OOM）**；**换 CUDA 设备无效**。 |
 
 `sample_stability.yaml`：仅 10 例本地调试，不参与上表批量。
 
