@@ -5,13 +5,12 @@
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item 感谢审稿人。统计报告口径如下（cluster-bootstrap、患者级与去重见本条及支撑表 \responsetableref{tab_dhash}、\responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext}、\responsetableref{tab_patient_cls}、\responsetableref{tab_patient_seg}）。
+\item 感谢审稿人。统计报告口径如下（cluster-bootstrap、患者级与去重见 \responsetableref{tab_dhash}、\responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext}、\responsetableref{tab_patient_cls}、\responsetableref{tab_patient_seg}）。
 \item 独立性与近重复：在 TN3K、TN5K、ThyroidXL、DDTI、PKTN、ZJH-8K 等各来源队列之间做感知哈希（dHash，Hamming ≤ 5）筛查（见 \responsetableref{tab_dhash}）。其中与 审稿人 2 --- 意见 4（ZJH 与 TN3K 关系）最相关的是：TN3K（train+val+test）与 ZJH-8K 共 1156 对 H=0 图像对；若仅看 TN3K test 与 ZJH-8K，则为 2 对 H=0。
 \item 聚类定义：ZJH-8K、ThyroidXL 使用可复现 patient ID；无 ID 队列 一图一簇。Bootstrap 1000 次、seed=42，CI 为 cluster-aware。
 \item 患者级分类：ZJH-8K、ThyroidXL 对图像概率 簇内/患者内算术平均 后报告 AUROC/AUPRC。
-\item 聚类 bootstrap 置信区间：均用 1000 次聚类 bootstrap（seed=42）重算 95\% CI。完整结果见 \responsetableref{tab_cls_ext}（良恶性分类，7 方法 × 5 外测队列）与 \responsetableref{tab_seg_ext}（结节分割，5 方法 × 7 外测队列；Dice 与 HD95）。DDTI 分类外测 n=349；分割 DDTI 为 637 图。
+\item 聚类 bootstrap 置信区间：均用 1000 次聚类 bootstrap（seed=42）重算 95\% CI。完整结果见 \responsetableref{tab_cls_ext}（良恶性分类，7 方法 × 5 外测队列）与 \responsetableref{tab_seg_ext}（结节分割，5 方法 × 7 外测队列；Dice 与 HD95）。
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_dhash}（dHash 近重复筛查）、\responsetableref{tab_cls_ext}（良恶性分类，AUROC/AUPRC）、\responsetableref{tab_seg_ext}（结节分割，Dice/HD95）。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 1，意见 2（R1.2）}
@@ -26,7 +25,6 @@
 \item 主要发现：（i）不存在在所有队列与任务上全面占优的单一静态策略；须结合 95\% CI 解读（多队列上区间重叠常见）。（ii）分割：TN3K（$n{=}614$）与 TN5K（$n{=}1000$）上最大置信度明显劣于软投票/多数票（例：TN5K Dice 约 0.63 vs.\ 0.81）；不可部署上界仍高于最佳可部署静态策略（例：TN3K 上界 Dice 0.895 vs.\ 软投票 0.856），见 \responsetableref{tab_routing_ablation_seg}。（iii）分类：队列间排序不同（例：TN3K 软投票 AUROC 0.828 点估计最高；TN5K 静态规则/最大置信度 0.951 vs.\ 软投票 0.944，CI 大量重叠），见 \responsetableref{tab_routing_ablation_cls}。（iv）学习型路由 (6) 与全系统 (7) 已列入同表；外测大队列（如 RJH-7K 分割、ZJH-8K 分类）与院内三队列趋势一致，详见 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。
 \item NHC-MISD-TUS（数据托管政策）。 该队列不列入上表策略 (7) 与八策略并列子表：托管环境禁止调用闭源/开源 LLM API，故无 LLM 全系统重跑。我们在 NHC 上报告与主评估一致的非 LLM 级联，及静态策略 (1)--(5)、(8) 与验证集冻结的学习型路由 (6) 推理（不在 NHC 上拟合路由器）。中心描述、性能与 $I^2$ 见 R2.6 与 \responsetablerefrange{tab_nhc_center_descriptive}{tab_nhc_heterogeneity}（表内为暂行子集数字，全量定稿后替换）。
 \end{itemize}
-\textbf{支撑材料：} \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 1，意见 3（R1.3）}
@@ -41,7 +39,6 @@
 \item \responsetableref{tab_calib_referral} 中 ECE/Brier 为各外测全集上的校准指标（图像级预测，与 \responsetableref{tab_cls_ext} 同口径）。\responsefigurerefrange{fig_reliability}{fig_risk_coverage} 与 \responsetableref{tab_calib_referral} 使用同一套验证集拟定的冻结阈值；风险–覆盖率曲线上工作点与 \responsetableref{tab_calib_referral} 送复核\%一致。各队列保留子集上的分类表现见补充材料。
 \item 我们将其表述为回顾性工作流：低不确定度病例可自动采纳模型输出，高不确定度病例送人工复核。阈值拟合与评估划分见 \responsetableref{tab_calib_referral} 及 \responsefigurerefrange{fig_reliability}{fig_risk_coverage}；送复核病例的临床处置边界在本回复中作回顾性工作流说明（见上条）。
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_calib_referral}（外测校准与送复核）、\responsefigureref{fig_reliability}（可靠性图）、\responsefigureref{fig_risk_coverage}（风险–覆盖率曲线）；NHC 异质性（R2.6），\responsetablerefrange{tab_nhc_center_descriptive}{tab_nhc_heterogeneity}。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 1，意见 4（R1.4）}
@@ -52,7 +49,6 @@ ZJH-8K 被描述为分割与良恶性分类的外部测试集，而它的恶性�
 \begin{itemize}
 \item 分割与通用良恶性专家 未在 ZJH-8K 训练；ZJH 恶性子集仅用于 LNM/FTC 任务开发，外测分别为 LymphUs Center 2 与 FangDai。图像侧各组件的训练、验证与外测数据划分见 \responsefigureref{fig_image_dataflow}。
 \end{itemize}
-\textbf{支撑材料：} \responsefigureref{fig_image_dataflow}（图像侧数据流图）。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 1，总评（可部署性）}
@@ -76,7 +72,6 @@ ZJH-8K 被描述为分割与良恶性分类的外部测试集，而它的恶性�
 \item Fig.3b：AUROC/AUPRC 轴标签标反，已与 \responsetableref{tab_cls_ext} 及 \responsetableref{tab_cls_macro_mean} 宏平均对齐。
 \item LNM 训练池更正为 4936 图（4756 ZJH 恶性 + 180 LymphUs C1）；五折 CV 合并 manifest 4753 图。\responsetableref{tab_malig_oof} 为开发集五折 OOF，\responsetableref{tab_malig_ext} 为独立外测；OOF 块中通用基线行与送审稿版式一致。
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_cls_macro_mean}（五队列汇总均值）、\responsetableref{tab_malig_oof}（OOF 与外测）。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 2（R2.2）}
@@ -86,7 +81,7 @@ ZJH-8K 被描述为分割与良恶性分类的外部测试集，而它的恶性�
 \begin{authorresponse}
 \begin{itemize}
 \item 我们同意：将同一患者/检查的多张图像当作独立观测会使 bootstrap 置信区间偏窄，且与临床决策单位不一致。
-\item 统计协议（与 R1.1/R2.2 一致）：凡队列提供可复现 patient ID（ZJH-8K、ThyroidXL），bootstrap 在 患者簇 上有放回重采样（1000 次，seed=42），再展开到图像计算指标；无 ID 外测队列（如 TN3K、TN5K、DDTI）按 一图一簇 处理。本回复 \responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext} 及投稿 Tables S3--S5 中 AUROC/AUPRC/Dice 的 95\% CI 均按此 cluster-bootstrap 协议报告。
+\item 统计协议（与 R1.1/R2.2 一致）：凡队列提供可复现 patient ID（ZJH-8K、ThyroidXL），bootstrap 在 患者簇 上有放回重采样，再展开到图像计算指标；无 ID 外测队列（如 TN3K、TN5K、DDTI）按 一图一簇 处理。本回复 \responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext} 及投稿 Tables S3--S5 中 AUROC/AUPRC/Dice 的 95\% CI 均按此 cluster-bootstrap 协议报告（1000 次、seed=42 见 R1.1）。
 \item 哪些队列 CI 会变：TN3K、TN5K、DDTI 等无患者 ID 外测队列因一图一簇，cluster-bootstrap 95\% CI 与逐图 bootstrap 一致（点估计不变）。仅 ZJH-8K 与 ThyroidXL 图像级 CI 因簇内相关性而略宽，并 另报患者级分类与分割（\responsetableref{tab_patient_cls}、\responsetableref{tab_patient_seg}）；其余良恶性外测队列见 \responsetableref{tab_cls_ext}。
 \item ZJH 患者簇（全稿一致）：对 ZJH 图像采用同一 患者级 cluster 规则（基于可复现患者 ID / 姓名映射，与恶性子任务开发集同一规则）。1146 簇（全外测）与 \responsetableref{tab_malig_oof} 恶性开发池簇数不同，仅因 纳入图像子集不同，而非两套划分键。
 \item 良恶性分类（患者级，主分析补充）：对 ZJH-8K、ThyroidXL，在图像级恶性概率基础上，于患者内 算术平均 得到患者分数；患者标签为组内图像标签的 max（任一张恶性→恶性），再报告患者级 AUROC/AUPRC 及 cluster-bootstrap CI（\responsetableref{tab_patient_cls}、\responsetableref{tab_patient_seg}）。正文/补充材料在图像级 \responsetableref{tab_cls_ext} 之外增加患者级一行或附表。
@@ -94,7 +89,6 @@ ZJH-8K 被描述为分割与良恶性分类的外部测试集，而它的恶性�
 \item 恶性子任务（LNM、FTC/PTC）：\responsetableref{tab_malig_oof} 为开发集五折 OOF（三专家）；\responsetableref{tab_malig_ext} 为两项子任务各自的独立外测（LNM：LymphUs Center 2；FTC/PTC：FangDai），与图像级 bootstrap 分开表述。
 \item ZJH-8K 患者数：可复现 ID 聚合为 1146 例（7958 图）；审稿人所述 1149 例为队列原始登记口径，差异说明见 \responsetableref{tab_patient_cls} 与下文（无 ID 或重复登记图像的处理规则）。
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_cls_ext} 与 \responsetableref{tab_seg_ext}（完整外测性能）；ZJH-8K / ThyroidXL 患者级结果，\responsetableref{tab_patient_cls}、\responsetableref{tab_patient_seg}。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 3（R2.3）}
@@ -105,7 +99,6 @@ ZJH-8K 被描述为分割与良恶性分类的外部测试集，而它的恶性�
 \begin{itemize}
 \item 审稿人正确：28,458 = 七个分割/分类队列 19,737 张测试图 + NHC 8,721 例之和；称「cases」不准确且未含报告生成与恶性子任务测试。回复中改为分层计数，见 \responsefigureref{fig_image_dataflow}。
 \end{itemize}
-\textbf{支撑材料：} \responsefigureref{fig_image_dataflow}（分层测试计数与图像侧数据流）。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 4（R2.4）}
@@ -116,7 +109,6 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 \begin{itemize}
 \item ZJH-8K 与 TN3K 虽同属珠江医院来源，但队列用途与采集框架不同；将弱化「外部中心」表述，并报告各基础队列之间的 dHash 近重复（与上文 审稿人 1 --- 意见 1 相同口径，见 \responsetableref{tab_dhash}）。TN3K（train+val+test）与 ZJH-8K：1156 对 H=0；TN3K test 与 ZJH-8K 仅 2 对 H=0，提示 test 子集与 ZJH 几乎无逐像素重复。
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_dhash}（dHash 筛查，与 R1.1 同口径）。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 5（R2.5）}
@@ -127,7 +119,6 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 \begin{itemize}
 \item 感谢审稿人。本回复中，患者级去重与划分键见 审稿人 1，意见 1（R1.1）/ 审稿人 2，意见 2（R2.2）；各外测队列图像级指标与表注见 \responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext}。公开数据集的病理/mask 定义遵循原始发表；机构队列（ZJH-8K、ZJH-TS、TNVideo、SMU-HMC 等）的良恶性金标准、mask 勾画与复核、标注者资质与分歧裁决，以及无有效 mask/标签 时的排除（不做插补）均按与合作者一致的口径执行；缺失或无效标注的图像计数将在补充表中列出。
 \end{itemize}
-\textbf{支撑材料：} R1.1、R2.2；\responsetableref{tab_dhash}（去重筛查）、\responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext}。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 6（R2.6）}
@@ -143,7 +134,6 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 \item 与 R1.3 分工。 异质性与本条；NHC 送复核/ECE 见 R1.3（冻结 validation 阈值）。五 BM 外测见 \responsetableref{tab_calib_referral}、\responsefigurerefrange{fig_reliability}{fig_risk_coverage}。
 \item 样本量过小或标签不可估计的中心标为 NE，不以 0.5/0.0 进入宏平均。
 \end{itemize}
-\textbf{支撑材料：} \responsetablerefrange{tab_nhc_center_descriptive}{tab_nhc_heterogeneity}（暂行子集 + 表注 \rpendingzh{院方元数据与全量替换}）；R1.3，\responsetableref{tab_calib_referral}、\responsefigurerefrange{fig_reliability}{fig_risk_coverage}。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 7（R2.7）}
@@ -157,7 +147,6 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 \item 补充口径：\responsetableref{tab_cls_macro_mean} 同时列出按五队列测试图像数加权的平均（AUROC 0.9286、AUPRC 0.9533），便于读者看到大样本队列（如 ZJH-8K）的影响；正文头条数字以等权宏平均为准，与 R2.1 核对结论一致。
 \item 跨队列汇总口径：本回复表 \responsetableref{tab_cls_macro_mean}、\responsetableref{tab_cls_ext} 对五个外测队列采用等权宏平均（``unweighted macro-average across five test cohorts''）；分割 \responsetableref{tab_seg_ext} 跨队列汇总亦对各外测队列等权宏平均（不与分类队列混算），见各表注。
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_cls_macro_mean}（两种平均）、\responsetableref{tab_cls_ext}（五队列点估计与 CI）。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 8（R2.8）}
@@ -171,7 +160,6 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 \item 在同一专家池、同一批候选输出上，仅更换路由策略即可显著改变指标（\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}）：(i)~最大置信度在多个队列上劣于集成类策略；(ii)~无全面最优的静态路由；(iii)~不可部署 Oracle 与最佳可部署静态策略之间仍有间隙。
 \item 学习型路由 (6) 与全系统 (7) 相对最佳静态策略及 Oracle 的对照见 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}（例：TN5K 分割 (6) Dice 0.831；TN3K 分类 (7) AUROC 0.869，与 L3 组件行一致）。可审计的结构化路由记录与重复调用稳定性见 审稿人 2，意见 9（\responsetableref{tab_routing_stability}）。
 \end{itemize}
-\textbf{支撑材料：} \responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}；审稿人 1，意见 2、\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}；\responsetableref{tab_baseline_protocol}。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 9（R2.9）}
@@ -185,7 +173,6 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 \item 相近候选分层：按各候选 mask 间一致度，最优与次优候选的质量分差 $\leq 0.10$ 记为「相近」、$>0.10$ 记为「易区分」。\responsetableref{tab_routing_stability} 在「相近」层上报告 LLM 一致性（TN3K 试点 10/10 为相近层）。记录中所选专家、候选相近度分层等项的含义见附录 A1。
 \item 附录 A1 末附 ≥10 条来自上述稳定性与主评估流程的去标识化结构化路由记录样例（若存档当次 prompt 全文则一并给出），不以磁盘文件名作为病例标识。
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_routing_stability}（路由稳定性）、附录 A1（LLM 路由器规格与路由记录说明）。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 10（R2.10）}
@@ -197,7 +184,6 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 \item 感谢审稿人。其顾虑来自送审稿将 ZJH 恶性子集亚型表述为「classic PTC \emph{vs.} follicular variant」，易被读成滤泡型 PTC（FVPTC）与 FangDai 的组织学 FTC 相对，从而显得训练/外测标签目标不一致。经与病理/临床合作者核对 ZJH 恶性队列中 FTC/PTC 子任务的组织学定义（术后病理报告口径），开发与 FangDai 外测均为组织学乳头状癌（PTC）\emph{vs.} 滤泡癌（FTC）二分类，并非以 FVPTC 代替 FTC。
 \item 本回复中：（i）FTC/PTC 与 FangDai 外测的组织学二分类定义一致，见 \responsetableref{tab_malig_ext} 表注；（ii）主内部验证为患者/簇级五折 OOF（\responsetableref{tab_malig_oof}）；（iii）两项恶性子任务的独立外测并列报告于 \responsetableref{tab_malig_ext}（LNM：LymphUs Center 2；FTC/PTC：FangDai）；（iv）各外测队列的设备/人群差异属分布迁移，而非组织学标签错配。
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_malig_oof} 与 \responsetableref{tab_malig_ext}。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 11（R2.11）}
@@ -208,7 +194,6 @@ LNM 任务只使用了 4,753 张恶性图像，而 \responsetableref{tab_malig_o
 \begin{itemize}
 \item 训练规模更正为 4936 图；将 20 例 val 改为 882 簇上 患者级分层五折 OOF（seed 42），见 \responsetableref{tab_malig_oof}（ThyroidXAgent LNM OOF AUROC 0.8710 ± 0.0550，AUPRC 0.8929 ± 0.0537）。LymphUs 外测中心 2（独立淋巴结图像外测）见 \responsetableref{tab_malig_ext}，与正文一致：ThyroidXAgent LNM AUROC 0.8642 ± 0.0550，AUPRC 0.8808 ± 0.0537。
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_malig_oof} 与 \responsetableref{tab_malig_ext}。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 12（R2.12）}
@@ -220,7 +205,6 @@ LNM 任务只使用了 4,753 张恶性图像，而 \responsetableref{tab_malig_o
 \item 本回复统一将 LNM 二分类临床标签按 CN0/CN1 口径表述，并明确数据来源：ZJH-8K 恶性子集为原发灶图像、LymphUs 为淋巴结图像；侧颈 LNM 与 CN0/CN1 用语在 \responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext} 表注中区分。\rpendingzh{LNM 临床定义书面确认（病理/临床合作者）}
 \item 统计与评估协议与 审稿人 2，意见 11（R2.11）一致：ZJH 按年/姓名聚类、LymphUs 开发用中心 1（淋巴结图像，一图一簇）；簇内恶性概率算术平均；开发集患者/簇级分层五折 OOF（seed 42）及 cluster-bootstrap CI 见 \responsetableref{tab_malig_oof} 表注。\responsetableref{tab_malig_oof} 报告 ThyroidXAgent 等模型的 OOF AUROC/AUPRC；\responsetableref{tab_malig_ext} 并列报告 LNM（LymphUs Center 2）与 FTC/PTC（FangDai）两项外测。
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_malig_oof} 与 \responsetableref{tab_malig_ext}。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 14（R2.14）}
@@ -231,7 +215,6 @@ LNM 任务只使用了 4,753 张恶性图像，而 \responsetableref{tab_malig_o
 \begin{itemize}
 \item \responsetableref{tab_cls_ext} 与 R3 中监督基线均在同一分割/分类开发集上微调（各队列组成见 \responsetableref{tab_baseline_protocol} 表注），自公开上游预训练权重出发，非甲状腺零样本或仅用原始权重外测。完整 ThyroidXAgent 主结果使用相同开发数据；逐级组件消融（L1 单专家 $\rightarrow$ L2 软投票 $\rightarrow$ L3 全系统）见 审稿人 2，意见 8（\responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}）。视觉–语言基线为零样本/API + 固定 prompt，未在分类开发集上端到端重训。ZJH-8K、DDTI 等外测队列仅用于 test。完整训练与推理协议见 \responsetableref{tab_baseline_protocol}。
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_baseline_protocol}；组件消融 \responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 20（R2.20）}
@@ -242,7 +225,6 @@ LNM 任务只使用了 4,753 张恶性图像，而 \responsetableref{tab_malig_o
 \begin{itemize}
 \item 报告 Dice 与 radiomics 共用路由器最终采用的结节 mask；专家内部 ≥50 像素连通域、5×5 闭运算；单图单 ROI。<5 mm 统计见 \responsetableref{tab_small_nodule_fail}（mm\_per\_pixel=0.1 敏感性假设；M 为整条流水线失败，非 radiomics 前删除）。
 \end{itemize}
-\textbf{支撑材料：} \responsetableref{tab_small_nodule_fail}（<5 mm 结节流水线失败统计）。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 2，意见 21（R2.21）}
@@ -253,7 +235,6 @@ LNM 任务只使用了 4,753 张恶性图像，而 \responsetableref{tab_malig_o
 \begin{itemize}
 \item 感谢审稿人指出该缺口。附录 A2 列出可复现要点；同等口径见附录 A2。 核心口径：推理在路由器最终采用的结节 mask上提取二维 PyRadiomics，不在 radiomics 前做额外连通域精修（与报告 Dice/HD95 所用 mask 一致；专家内部 ≥50 px 等规则见 R2.20）。训练 AutoGluon 表格模型在分类开发集（见 \responsetableref{tab_baseline_protocol} 表注）上用标注 mask（17,774 图）；外测仅用已训练模型推断，未在测试集重训或调参。当独立分类模型不一致时，智能体可将 AutoGluon 恶性概率与其余信号一并综合；分割 LLM 路由的 prompt 中亦可纳入各候选 mask 的 radiomics 裁判摘要（见 R2.9 与附录 A1）。
 \end{itemize}
-\textbf{支撑材料：} 附录 A2（放射组学 / AutoGluon 规范）。
 \par
 \end{authorresponse}
 \responsetoreviewer{对审稿人 3 的回复}
@@ -267,7 +248,6 @@ LNM 任务只使用了 4,753 张恶性图像，而 \responsetableref{tab_malig_o
 \item 非 LLM 学习型路由（策略 6）：分割与分类各拟合一个多项逻辑回归路由器（$C{=}0.1$，随机种子 42）；输入为各候选专家的质量与分歧摘要特征（不含设备/数据来源元数据，亦不含 LLM）。验证集监督：分割为相对 GT Dice 最高的专家；分类仅在三名独立分类模型未达成共识的子集上，在预测正确的专家中取置信度最高者为标签。测试集冻结权重后仅做离散专家选择。LLM 全系统路由（策略 7）与主文 \responsetableref{tab_cls_ext} 协议一致。二者与全部静态基线并列列入\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。
 \item 外部泛化：除 TN3K、TN5K、ThyroidXL 外，我们在 ZJH-8K、RJH-7K（分割）、DDTI（分割/分类分队列）、PKTN（分割）上完成相同协议（含策略 6）；策略 (7) 数字见 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}（与主文 S3/S4 一致）。NHC：策略 (6) 推理与静态基线见 R2.6；策略 (7) 不适用（无 LLM）。
 \end{itemize}
-\textbf{支撑材料：} 与 审稿人 1，意见 2 共用 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 3，意见 2（R3.2）}
@@ -281,7 +261,6 @@ LLM 路由器除预测质量信号外还利用了设备与数据来源等元数�
 \item NHC-MISD-TUS 的 35 个中心未参与路由权重训练。因托管环境禁止 LLM API，未在 NHC 上执行本条的 prompt 元数据消融与「完整元数据」下的中心$\times$专家选择热图（性能消融见 TN5K 五档，\responsetablerefrange{tab_metadata_ablation_seg}{tab_metadata_ablation_cls}）。NHC 多中心性能与异质性见 R2.6 / \responsetablerefrange{tab_nhc_center_descriptive}{tab_nhc_heterogeneity}。
 \item 分类模型不一致时的 LLM 裁决输入未纳入本次元数据消融（\responsetableref{tab_metadata_ablation_cls} 表注）；各条件性能见 \responsetablerefrange{tab_metadata_ablation_seg}{tab_metadata_ablation_cls}。
 \end{itemize}
-\textbf{支撑材料：} \responsetablerefrange{tab_metadata_ablation_seg}{tab_metadata_ablation_cls}；路由框架，审稿人 1，意见 2、\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}；路由器规格，附录 A1。
 \par
 \end{authorresponse}
 \reviewersection{审稿人 3，意见 3（R3.3）}
@@ -296,7 +275,6 @@ LLM 路由器除预测质量信号外还利用了设备与数据来源等元数�
 \item 流程图：图像侧开发池、共享流水线组件与外测角色见 \responsefigureref{fig_image_dataflow}。
 \item 送审稿中含糊的 ``40 datasets'' 在修订稿与 \responsefigureref{fig_image_dataflow} 中改为明示基础队列列表（各数据集名称与任务角色），避免与「模型专家个数」或「堆叠折数」混淆。
 \end{itemize}
-\textbf{支撑材料：} \responsefigureref{fig_image_dataflow}、\responsetableref{tab_dhash}（dHash）；划分与 cluster CI，R1.1、R2.2。
 \par
 \end{authorresponse}
 \responseappendixzh

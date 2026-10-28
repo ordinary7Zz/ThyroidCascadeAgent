@@ -39,10 +39,33 @@
 
     <section class="editor-pane" id="editorPane">
       <div class="editor-bar">
-        <span>编辑</span>
-        <span id="openPath">—</span>
+        <div class="editor-bar-left">
+          <span>编辑</span>
+          <span id="openPath">—</span>
+        </div>
+        <div class="editor-bar-actions">
+          <button type="button" class="ghost sm" id="btnAddNote" title="为选区添加注释 (Ctrl+Alt+M)">添加注释</button>
+          <span id="noteRoundBadge" class="note-badge" title="当前轮次">轮次 —</span>
+        </div>
       </div>
-      <textarea id="editor" spellcheck="false" placeholder="从左侧选择 .tex / .sty 文件…"></textarea>
+      <div class="editor-body">
+        <div class="editor-code" id="editorCode">
+          <div class="line-gutter" id="lineGutter" aria-hidden="true"></div>
+          <textarea id="editor" spellcheck="false" placeholder="从左侧选择 .tex / .sty 文件…"></textarea>
+        </div>
+        <aside class="notes-panel" id="notesPanel">
+          <div class="notes-panel-head">
+            <span>本轮注释</span>
+            <span id="noteCount">0</span>
+          </div>
+          <div id="notesList" class="notes-list"></div>
+          <div class="notes-panel-foot">
+            <button type="button" class="ghost sm full" id="btnCloseRound" disabled title="AI 改稿后填写改动说明">写入历史并清空</button>
+          </div>
+          <p class="notes-hint notes-hint-en">English 下加注释 → AI 改 EN 并同步 ZH → 点下方 <strong>写入历史并清空</strong>（或粘贴 AI 的 entries JSON）。</p>
+          <p class="notes-hint notes-hint-zh">当前为中文阅读模式，不加注释。请切到 English 标注英文稿。</p>
+        </aside>
+      </div>
     </section>
 
     <div class="resize-handle vertical" id="resizePreview" title="拖动调整 PDF 宽度"></div>
@@ -67,6 +90,36 @@
     <pre id="log">等待编译…</pre>
   </div>
   </div>
+
+  <dialog id="noteDialog" class="note-dialog">
+    <form id="noteForm">
+      <h2>添加注释</h2>
+      <p class="note-dialog-meta" id="noteDialogMeta"></p>
+      <blockquote id="noteDialogQuote"></blockquote>
+      <label for="noteDialogText">修改建议</label>
+      <textarea id="noteDialogText" rows="4" required placeholder="希望如何修改…"></textarea>
+      <div class="note-dialog-actions">
+        <button type="button" class="ghost" id="noteDialogCancel">取消</button>
+        <button type="submit" class="primary">保存到本轮</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="closeRoundDialog" class="note-dialog close-round-dialog">
+    <form id="closeRoundForm">
+      <h2>写入历史并清空</h2>
+      <p class="note-dialog-meta">为每条注释填写实际改动（可粘贴 AI 回复中的说明）。提交后追加 <code>history.jsonl</code> 并清空本轮。</p>
+      <div id="closeRoundFields" class="close-round-fields"></div>
+      <details class="close-round-paste">
+        <summary>粘贴 entries JSON（覆盖上方表单）</summary>
+        <textarea id="closeRoundPaste" rows="6" placeholder='{"entries":[{"comment_id":"c…","path":"…","note":"…","action":"applied","summary":"…"}]}'></textarea>
+      </details>
+      <div class="note-dialog-actions">
+        <button type="button" class="ghost" id="closeRoundCancel">取消</button>
+        <button type="submit" class="primary">确认写入并清空</button>
+      </div>
+    </form>
+  </dialog>
 
   <script src="/static/workspace.js"></script>
 </body>

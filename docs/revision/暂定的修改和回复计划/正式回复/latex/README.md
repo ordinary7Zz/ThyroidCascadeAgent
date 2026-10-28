@@ -20,10 +20,10 @@
 - 信头：`\responselettertitle`、`\responseletteropening` / `openingzh`（说明表图复现于信末）。
 - 审稿意见：黑色斜体；作者回复：`ResponseBlue`。
 - 分节：`\responsetoreviewer{…}`；无目录、无 `\hrule`。
-- 正文引用表图：`\responsetableref{键}`、`\responsefigureref{键}`、`\responsetablerefrange{键A}{键B}`；**勿**在蓝色回复里重复 “见文末” / “at the end of this letter”。
+- `authorresponse` 内**不用** `\textbf`（不另设「支撑材料：」行；表图在正文句中引用，信末 `\responseappendix` 集中复现，与 TURG 样稿一致）。
+- 正文引用：`\responsetableref` / `\responsefigureref` / `\responsetablerefrange` 嵌入句子；**勿** `（见表 R*）`、**勿**「见信末」/ “at the end of this letter”、**勿**每条末尾重复表号清单。
 - 信内表图编号**仅** R1–R20、图 R1–R3（见 `reviewer_response.sty` 页眉说明）；**不复用**稿件 Supplementary Table S* 序号。
 - 图：先 `\includegraphics`，再 `\caption{\responsefiguretitle{键}{短标题}}`，图例正文用 `\responsefigurenote{…}`（题注在图下方）。
-- `authorresponse` 内除「\textbf{支撑材料：}」/「\textbf{Supporting material:}」外**不用** `\textbf`（蓝色正文已足够区分；术语与数字用正常字重，表图用 `\responsetableref` 等引用即可）。
 
 ## 表图注册与命名
 
@@ -34,7 +34,7 @@
 5. 长表分页：`\begin{responsepaginatedtable}…\end{responsepaginatedtable}`；单页浮动表：`\begin{responsetable}…\end{responsetable}`（含 `\centering`）。
 6. 与投稿主表版式一致的复现块：`manuscriptresponsetable`（AUROC/AUPRC 或 Dice/HD95 分节、± 半宽 CI、灰底 ThyroidXAgent 行，见 `docs/ThyroidXAgent.md` 表标签）。
 7. 附录 A1/A2 前：`\responseproseappendixstart`；附录正文：`\begin{responseappendixprose}…\end{responseappendixprose}`；附录内表一律 `responseinlinetable` + `\responseinlinetablecaption`（勿用浮动 `responsetable`）。Prompt：`promptverbatim`（`breaklines=true`）。
-8. **附录 / 表 R* / 图 R***：题注与正文按补充材料写法自洽表述，**不写**审稿意见编号（如 R2.9）或「本附录回应…」；对应关系仅在蓝色 **回复** 与「支撑材料」中正向引用附录 A1/A2 或 `\responsetableref`。
+8. **附录 / 表 R* / 图 R***：题注与正文按补充材料写法自洽表述，**不写**审稿意见编号；表图在蓝色回复正文中嵌入引用，信末 `\responseappendix` 集中复现。
 9. **附录少用加粗**：小节用 `\noindent 1.~标题`；prompt 说明用普通「System / User / 模型输出」标签；A2 表内版本号用 `\texttt`，数值与术语不必 `\textbf`（表题仍由 `\responseinlinetablecaption` 加粗）。
 
 ### 长表 `longtable` 版式陷阱（路由消融表 R12 / R13 等）

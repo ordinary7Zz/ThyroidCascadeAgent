@@ -1,0 +1,11 @@
+{
+  "entries": [
+    {
+      "comment_id": "c1709123456789",
+      "path": "generated/body_en.tex",
+      "note": "原注释全文（可与 current 中一致）",
+      "action": "applied",
+      "summary": "实际做了什么改动，一两句话"
+    }
+  ]
+}

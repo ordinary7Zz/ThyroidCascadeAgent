@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
+import json
 import os
 import subprocess
 import threading
@@ -14,7 +16,17 @@ from flask import Flask, Response, jsonify, request, send_file, send_from_direct
 
 BASE = Path(__file__).resolve().parents[1]
 LATEX_DIR = BASE / "latex"
+REVIEW_NOTES_DIR = BASE / "review-notes"
+CURRENT_NOTES = REVIEW_NOTES_DIR / "current.json"
+HISTORY_NOTES = REVIEW_NOTES_DIR / "history.jsonl"
 STATIC = Path(__file__).resolve().parent / "static"
+
+_EMPTY_CURRENT = {
+    "schema_version": 1,
+    "round_id": None,
+    "updated_at": None,
+    "comments": [],
+}
 
 LANG_CFG = {
     "en": {
@@ -172,6 +184,46 @@ def _list_latex_files() -> list[dict]:
     return items
 
 
+def _ensure_review_notes() -> None:
+    REVIEW_NOTES_DIR.mkdir(parents=True, exist_ok=True)
+    if not CURRENT_NOTES.exists():
+        CURRENT_NOTES.write_text(
+            json.dumps(_EMPTY_CURRENT, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+    if not HISTORY_NOTES.exists():
+        HISTORY_NOTES.write_text("", encoding="utf-8")
+
+
+def _read_current_notes() -> dict:
+    _ensure_review_notes()
+    try:
+        data = json.loads(CURRENT_NOTES.read_text(encoding="utf-8"))
+        if isinstance(data, dict) and isinstance(data.get("comments"), list):
+            return data
+    except json.JSONDecodeError:
+        pass
+    return dict(_EMPTY_CURRENT)
+
+
+def _write_current_notes(data: dict) -> None:
+    _ensure_review_notes()
+    CURRENT_NOTES.write_text(
+        json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def _round_close_module():
+    path = REVIEW_NOTES_DIR / "round_close.py"
+    spec = importlib.util.spec_from_file_location("review_round_close", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("round_close.py not found")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def _tex_mtime_summary() -> dict[str, float | None]:
     mtimes: list[float] = []
     sty = LATEX_DIR / "reviewer_response.sty"
@@ -251,6 +303,42 @@ def create_app() -> Flask:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8")
         return jsonify({"ok": True, "path": path.relative_to(LATEX_DIR).as_posix()})
+
+    @app.get("/api/review-notes/current")
+    def get_review_notes_current():
+        data = _read_current_notes()
+        return jsonify(data)
+
+    @app.put("/api/review-notes/current")
+    def put_review_notes_current():
+        data = request.get_json(silent=True)
+        if not isinstance(data, dict) or not isinstance(data.get("comments"), list):
+            return jsonify({"error": "expected object with comments[]"}), 400
+        if data.get("schema_version") != 1:
+            return jsonify({"error": "unsupported schema_version"}), 400
+        _write_current_notes(data)
+        return jsonify({"ok": True})
+
+    @app.post("/api/review-notes/close")
+    def post_review_notes_close():
+        data = request.get_json(silent=True) or {}
+        entries = data.get("entries")
+        if not isinstance(entries, list):
+            return jsonify({"error": "expected { entries: [...] }"}), 400
+        try:
+            rc = _round_close_module()
+        except RuntimeError as e:
+            return jsonify({"error": str(e)}), 500
+        record, err = rc.execute_close(entries, CURRENT_NOTES, HISTORY_NOTES)
+        if err:
+            return jsonify({"error": err}), 400
+        return jsonify({"ok": True, "round_id": record["round_id"], "closed_at": record["closed_at"]})
+
+    @app.get("/api/review-notes/history")
+    def get_review_notes_history():
+        _ensure_review_notes()
+        text = HISTORY_NOTES.read_text(encoding="utf-8")
+        return Response(text, mimetype="text/plain; charset=utf-8")
 
     @app.get("/pdf/<lang>")
     def pdf(lang: str):
