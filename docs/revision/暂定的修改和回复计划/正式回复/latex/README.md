@@ -35,7 +35,8 @@
 **允许例外**
 
 - 复现所必需的 **API 端点、模型 ID**（表 A1-1）。
-- 本信**表内已定义**的缩写层（L1/L2/L3、策略编号、R* 表号）。
+- 本信**表内已定义**的缩写层（路由策略编号、R* 表号）。
+
 - `\rpending{…}` 中若需内部跟踪，投稿前仍应改成审稿人可读表述或删除。
 
 NHC 表 R18–R20 另遵守下文「待定与修订稿承诺」中的 NHC 条款（与本节一致，不重复写路径/脚本）。
@@ -96,9 +97,10 @@ NHC 表 R18–R20 另遵守下文「待定与修订稿承诺」中的 NHC 条款
 ## 编译与预览
 
 ```bash
-# 本目录
+# 本目录（必须用 XeLaTeX；pdflatex 会因 fontspec/ctex 直接失败）
 xelatex REVIEWER_RESPONSE_ZH.tex
 xelatex REVIEWER_RESPONSE_EN.tex
+# 或：latexmk -pdf -xelatex REVIEWER_RESPONSE_ZH.tex  （会读取本目录 .latexmkrc）
 
 # 可选本地预览（上级 latex-viewer）
 cd ../latex-viewer && python3 app.py

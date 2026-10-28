@@ -1,41 +1,45 @@
-% B4 component stacking (L1→L2→L3); L1/L2 from b4_component_table.csv; L3 from manuscript_llm_metrics.yaml
+% R2.8 summary: strategies (1)(2)(7) extracted from tab_routing_ablation_* (same point estimates and CIs)
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_component_ablation_seg}{Component ablation --- nodule segmentation (Dice $\uparrow$; point estimate and 95\% CI)}}
+\caption{\responsetabletitle{tab_component_ablation_seg}{R2.8 summary --- nodule segmentation for routing strategies (1), (2), and (7) (Dice $\uparrow$; point estimate and 95\% CI; from Tables R12--R13)}}
 \label{tab_component_ablation_seg}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l r l l l@{}}
 \toprule
-Cohort & $n$ & L1 Dice & L2 Dice & L3 Dice \\
+Cohort & $n$ & Strategy (1) Dice & Strategy (2) Dice & Strategy (7) Dice \\
 \midrule
-TN3K & 614 & 0.8454 (0.8319--0.8583) & 0.8559 (0.8427--0.8681) & 0.8528 (0.8400--0.8656) \\
-TN5K & 1000 & 0.8292 (0.8152--0.8424) & 0.8097 (0.7969--0.8221) & 0.8326 (0.8192--0.8460) \\
-ThyroidXL & 2090 & 0.8792 (0.8745--0.8837) & 0.8640 (0.8559--0.8708) & 0.8758 (0.8714--0.8802) \\
+TN3K & 614 & 0.8566 (0.8438--0.8685) & 0.8559 (0.8427--0.8681) & 0.8528 (0.8400--0.8656) \\
+TN5K & 1000 & 0.8303 (0.8168--0.8436) & 0.8097 (0.7969--0.8221) & 0.8326 (0.8192--0.8460) \\
+ThyroidXL & 2090 & 0.8779 (0.8706--0.8837) & 0.8640 (0.8559--0.8708) & 0.8758 (0.8714--0.8802) \\
 DDTI (seg) & 637 & 0.8492 (0.8369--0.8596) & 0.8451 (0.8313--0.8559) & 0.8562 (0.8455--0.8669) \\
 PKTN & 150 & 0.8388 (0.8127--0.8592) & 0.8376 (0.8145--0.8583) & 0.8299 (0.8089--0.8509) \\
 ZJH-8K & 7958 & 0.8376 (0.8331--0.8418) & 0.8356 (0.8286--0.8423) & 0.9430 (0.9392--0.9468) \\
 RJH-7K & 7288 & 0.9128 (0.9113--0.9143) & 0.8931 (0.8905--0.8955) & 0.9146 (0.9132--0.9160) \\
+\midrule
+Unweighted mean & --- & 0.8576 & 0.8487 & 0.8721 \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{\textbf{L1}: single multi-cohort joint DINO expert trained on the stacked development data (no agent, no AutoGluon). \textbf{L2}: fixed expert pool + soft voting (same as \textbf{strategy (2)} in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}; evaluated on \textbf{frozen upstream candidate outputs} shared with L1, without retraining experts). \textbf{L3}: full manuscript ThyroidXAgent (\textbf{strategy (7)} LLM routing; aligned with submitted Table S3/S4). L1/L2 CIs use cluster bootstrap (1000 resamples, seed=42); L3 CIs match manuscript S3/S4. L3 uses a \textbf{different evaluation protocol} than L1/L2; do not interpret cross-layer differences as stepwise causation on one pipeline.}
+\responsetablenote{Each cell repeats the corresponding row in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} (Reviewer 1, Comment 2). Strategy (1): validation-selected best single expert from the fixed pool. Strategy (2): mask/probability soft voting on frozen upstream candidate outputs. Strategy (7): deployable ThyroidXAgent (primary manuscript Table~S3). The bottom row is the unweighted arithmetic mean of cohort point estimates only (no pooled CI). 95\% CIs for strategies (1)--(6) follow Reviewer 2, Comment 2; strategy (7) CIs match Table~S3.}
 \end{responsetable}
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_component_ablation_cls}{Component ablation --- benign--malignant classification (AUROC $\uparrow$; point estimate and 95\% CI)}}
+\caption{\responsetabletitle{tab_component_ablation_cls}{R2.8 summary --- benign--malignant classification for routing strategies (1), (2), and (7) (AUROC $\uparrow$; point estimate and 95\% CI; from Tables R12--R13)}}
 \label{tab_component_ablation_cls}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l r l l l@{}}
 \toprule
-Cohort & $n$ & L1 AUROC & L2 AUROC & L3 AUROC \\
+Cohort & $n$ & Strategy (1) AUROC & Strategy (2) AUROC & Strategy (7) AUROC \\
 \midrule
-TN3K & 614 & 0.7695 (0.7279--0.8057) & 0.8282 (0.7939--0.8633) & 0.8692 (0.8343--0.9041) \\
-TN5K & 1000 & 0.9544 (0.9393--0.9672) & 0.9437 (0.9278--0.9589) & 0.9472 (0.9320--0.9624) \\
-ThyroidXL & 2090 & 0.9288 (0.9180--0.9397) & 0.9359 (0.9202--0.9500) & 0.9676 (0.9610--0.9742) \\
+TN3K & 614 & 0.8010 (0.7636--0.8372) & 0.8282 (0.7939--0.8633) & 0.8692 (0.8343--0.9041) \\
+TN5K & 1000 & 0.9509 (0.9352--0.9643) & 0.9437 (0.9278--0.9589) & 0.9472 (0.9320--0.9624) \\
+ThyroidXL & 2090 & 0.9309 (0.9137--0.9455) & 0.9359 (0.9202--0.9500) & 0.9676 (0.9610--0.9742) \\
 DDTI (cls) & 349 & 0.7506 (0.6700--0.8257) & 0.7537 (0.6707--0.8319) & 0.7991 (0.7250--0.8732) \\
-ZJH-8K & 7958 & 0.9571 (0.9527--0.9611) & 0.9322 (0.9208--0.9423) & 0.9175 (0.9008--0.9342) \\
+ZJH-8K & 7958 & 0.9572 (0.9529--0.9613) & 0.9322 (0.9208--0.9423) & 0.9175 (0.9008--0.9342) \\
+\midrule
+Unweighted mean & --- & 0.8781 & 0.8787 & 0.9001 \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Layer definitions and CI conventions as in the note to \responsetableref{tab_component_ablation_seg}. DDTI row is the classification subset ($n$=349).}
+\responsetablenote{Same extraction as \responsetableref{tab_component_ablation_seg}; classification cohorts only. DDTI row is the classification subset ($n$=349). Mean row: unweighted mean of cohort point estimates (no pooled CI).}
 \end{responsetable}

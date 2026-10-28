@@ -465,4 +465,7 @@ button.ghost {
   color: #c5d0de;
   font-family: ui-monospace, monospace;
   min-height: 0;
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
 }

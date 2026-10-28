@@ -10,6 +10,7 @@
   let savedContent = "";
   let splitPdf = false;
   let lastPdfMtime = { en: null, zh: null };
+  let pendingLogText = null;
   let findActiveIndex = -1;
 
   const editor = document.getElementById("editor");
@@ -483,10 +484,40 @@
     return r.json();
   }
 
+  function logHasUserSelection() {
+    const sel = window.getSelection();
+    if (!sel || sel.isCollapsed || sel.rangeCount === 0) return false;
+    const node = sel.anchorNode;
+    return node && logEl.contains(node);
+  }
+
+  function applyLogText(text) {
+    const stickBottom =
+      logEl.scrollHeight - logEl.scrollTop - logEl.clientHeight < 24;
+    logEl.textContent = text;
+    if (stickBottom) logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  function flushPendingLog() {
+    if (pendingLogText == null || logHasUserSelection()) return;
+    const text = pendingLogText;
+    pendingLogText = null;
+    if (text !== logEl.textContent) applyLogText(text);
+  }
+
   async function fetchLog() {
     const r = await fetch("/api/log");
-    logEl.textContent = await r.text();
-    logEl.scrollTop = logEl.scrollHeight;
+    const text = await r.text();
+    if (text === logEl.textContent) {
+      pendingLogText = null;
+      return;
+    }
+    if (logHasUserSelection()) {
+      pendingLogText = text;
+      return;
+    }
+    pendingLogText = null;
+    applyLogText(text);
   }
 
   function setStatus(s) {
@@ -717,6 +748,8 @@
   loadLayout();
   loadFileList().then(() => setProjectLang("en"));
   refreshPdf();
+  document.addEventListener("selectionchange", flushPendingLog);
+
   setInterval(poll, 1500);
   poll();
 })();

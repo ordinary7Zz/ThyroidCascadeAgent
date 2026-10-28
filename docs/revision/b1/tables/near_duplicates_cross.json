@@ -1,0 +1,838 @@
+{
+  "method": "64-bit difference hash (dHash), grayscale resize; Hamming threshold configurable",
+  "hamming_max": 5,
+  "comparisons": {
+    "TN3K_splits_vs_ZJH-8K": {
+      "left_dir": "TN3K train+valid+test/images",
+      "right_dir": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/ZJH-8K/images",
+      "left_n": 5347,
+      "right_n": 7958,
+      "pair_count": 1333,
+      "exact_hamming_0": 1156,
+      "near_only": 177,
+      "unique_left_images": 1251,
+      "unique_right_images": 1271,
+      "top_samples": [
+        {
+          "hamming": 0,
+          "left": "TN3K_test_0535.jpg",
+          "right": "王武英_01_0009_0009.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_test_0536.jpg",
+          "right": "王武英_01_0011_0011.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_1546.jpg",
+          "right": "胡木英_01_0026_0026.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_1570.jpg",
+          "right": "邓小华_01_0015_0015.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_2745.jpg",
+          "right": "李木子_01_0024_0024.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1.jpg",
+          "right": "潘少芬_01_0007_0007.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_10.jpg",
+          "right": "朱配勤_01_0004_0004.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_100.jpg",
+          "right": "陈凯桦_01_0008_0008.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1000.jpg",
+          "right": "黎庆芳_01_0020_0020.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1001.jpg",
+          "right": "李爱勤_01_0017_0017.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1002.jpg",
+          "right": "劳艳霞_01_0002_0002.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1003.jpg",
+          "right": "詹爱娴_01_0004_0004.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1004.jpg",
+          "right": "黎惠晖_01_0006_0006.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1006.jpg",
+          "right": "彭淑霞_01_0002_0002.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1007.jpg",
+          "right": "张圣弟_01_0005_0005.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1008.jpg",
+          "right": "范秀兰_01_0011_0011.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_101.jpg",
+          "right": "胡冬霞_01_0019_0019.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1010.jpg",
+          "right": "何志辉_01_0010_0010.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1011.jpg",
+          "right": "王子睿_01_0012_0012.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1012.jpg",
+          "right": "黄群莲_01_0011_0011.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1013.jpg",
+          "right": "刘运坤_01_0002_0002.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1017.jpg",
+          "right": "邓碧兰_01_0001_0001.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1019.jpg",
+          "right": "黄惠萍_01_0009_0009.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_102.jpg",
+          "right": "李胜儿_01_0008_0008.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1022.jpg",
+          "right": "姜秀山_01_0002_0002.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1023.jpg",
+          "right": "王丽君_01_0011_0011.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1024.jpg",
+          "right": "林燕玲_01_0003_0003.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1029.jpg",
+          "right": "陶日进_01_0007_0007.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_103.jpg",
+          "right": "李木子_01_0024_0024.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1030.jpg",
+          "right": "陈少娟_01_0007_0007.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1031.jpg",
+          "right": "阎亚波_01_0005_0005.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1032.jpg",
+          "right": "杨丽丝_01_0009_0009.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1033.jpg",
+          "right": "邓奇香_01_0008_0008.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_104.jpg",
+          "right": "谢晓霞_01_0004_0004.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1040.jpg",
+          "right": "陈峰_01_0006_0006.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1042.jpg",
+          "right": "蔡德培_01_0010_0010.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1043.jpg",
+          "right": "吴晓春_01_0006_0006.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1045.jpg",
+          "right": "林惠玲_01_0007_0007.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1046.jpg",
+          "right": "陈颖欣_01_0006_0006.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1048.jpg",
+          "right": "陈石凤_01_0014_0014.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1052.jpg",
+          "right": "周莉_01_0005_0005.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1053.jpg",
+          "right": "宋育霞_01_0001_0001.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1054.jpg",
+          "right": "刘厚慧_01_0009_0009.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1056.jpg",
+          "right": "彭青英_01_0001_0001.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1057.jpg",
+          "right": "黄惠惠_01_0003_0003.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1058.jpg",
+          "right": "刘恒保_01_0003_0003.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_106.jpg",
+          "right": "刘金风_01_0002_0002.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1061.jpg",
+          "right": "江杰新_01_0014_0014.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1062.jpg",
+          "right": "莫庆光_01_0002_0002.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_train_private_1063.jpg",
+          "right": "王雪萍_01_0015_0015.jpg"
+        }
+      ]
+    },
+    "TN3K_test_vs_ZJH-8K": {
+      "left_dir": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/TN3K/test/images",
+      "right_dir": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/ZJH-8K/images",
+      "left_n": 614,
+      "right_n": 7958,
+      "pair_count": 39,
+      "exact_hamming_0": 2,
+      "near_only": 37,
+      "unique_left_images": 37,
+      "unique_right_images": 39,
+      "top_samples": [
+        {
+          "hamming": 0,
+          "left": "TN3K_test_0535.jpg",
+          "right": "王武英_01_0009_0009.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN3K_test_0536.jpg",
+          "right": "王武英_01_0011_0011.jpg"
+        },
+        {
+          "hamming": 1,
+          "left": "TN3K_test_0437.jpg",
+          "right": "容有生_01_0011_0011.jpg"
+        },
+        {
+          "hamming": 1,
+          "left": "TN3K_test_0442.jpg",
+          "right": "左振浩_01_0007_0007.jpg"
+        },
+        {
+          "hamming": 1,
+          "left": "TN3K_test_0448.jpg",
+          "right": "廖浚深_01_0002_0002.jpg"
+        },
+        {
+          "hamming": 1,
+          "left": "TN3K_test_0519.jpg",
+          "right": "江惠荷_01_0004_0004.jpg"
+        },
+        {
+          "hamming": 2,
+          "left": "TN3K_test_0432.jpg",
+          "right": "唐飞龙_01_0011_0011.jpg"
+        },
+        {
+          "hamming": 2,
+          "left": "TN3K_test_0458.jpg",
+          "right": "文桂芳_01_0008_0008.jpg"
+        },
+        {
+          "hamming": 2,
+          "left": "TN3K_test_0613.jpg",
+          "right": "黎锦辉_01_0005_0005.jpg"
+        },
+        {
+          "hamming": 3,
+          "left": "TN3K_test_0116.jpg",
+          "right": "曾容妹_01_0003_0003.jpg"
+        },
+        {
+          "hamming": 3,
+          "left": "TN3K_test_0381.jpg",
+          "right": "何志辉_01_0011_0011.jpg"
+        },
+        {
+          "hamming": 3,
+          "left": "TN3K_test_0396.jpg",
+          "right": "冼俭良_01_0004_0003.jpg"
+        },
+        {
+          "hamming": 3,
+          "left": "TN3K_test_0465.jpg",
+          "right": "曾玥_01_0004_0004.jpg"
+        },
+        {
+          "hamming": 3,
+          "left": "TN3K_test_0490.jpg",
+          "right": "杨文钢_01_0005_0005.jpg"
+        },
+        {
+          "hamming": 3,
+          "left": "TN3K_test_0496.jpg",
+          "right": "林广_01_0009_0009.jpg"
+        },
+        {
+          "hamming": 3,
+          "left": "TN3K_test_0501.jpg",
+          "right": "梁展龙_01_0001_0001.jpg"
+        },
+        {
+          "hamming": 3,
+          "left": "TN3K_test_0515.jpg",
+          "right": "毕雁方_01_0004_0004.jpg"
+        },
+        {
+          "hamming": 3,
+          "left": "TN3K_test_0530.jpg",
+          "right": "潘秋蓉_01_0001_0001.jpg"
+        },
+        {
+          "hamming": 3,
+          "left": "TN3K_test_0604.jpg",
+          "right": "马成养_01_0014_0014.jpg"
+        },
+        {
+          "hamming": 4,
+          "left": "TN3K_test_0421.jpg",
+          "right": "吴秀龙_01_0010_0010.jpg"
+        },
+        {
+          "hamming": 4,
+          "left": "TN3K_test_0436.jpg",
+          "right": "容有生_01_0002_0002.jpg"
+        },
+        {
+          "hamming": 4,
+          "left": "TN3K_test_0459.jpg",
+          "right": "方玉珍_01_0025_0025.jpg"
+        },
+        {
+          "hamming": 4,
+          "left": "TN3K_test_0483.jpg",
+          "right": "李爱芹_01_0005_0005.jpg"
+        },
+        {
+          "hamming": 4,
+          "left": "TN3K_test_0493.jpg",
+          "right": "林伟钟_01_0002_0002.jpg"
+        },
+        {
+          "hamming": 4,
+          "left": "TN3K_test_0509.jpg",
+          "right": "梁飞_01_0006_0006.jpg"
+        },
+        {
+          "hamming": 4,
+          "left": "TN3K_test_0560.jpg",
+          "right": "谭田姣_01_0009_0009.jpg"
+        },
+        {
+          "hamming": 4,
+          "left": "TN3K_test_0599.jpg",
+          "right": "陈镜松_01_0010_0010.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN3K_test_0129.jpg",
+          "right": "李凤_01_0006_0006.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN3K_test_0393.jpg",
+          "right": "冯胜强_01_0005_0005.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN3K_test_0448.jpg",
+          "right": "刘龙武_01_0002_0002.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN3K_test_0448.jpg",
+          "right": "刘龙武_01_0007_0007.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN3K_test_0482.jpg",
+          "right": "李海波_01_0004_0004.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN3K_test_0486.jpg",
+          "right": "李艳燕_01_0003_0003.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN3K_test_0487.jpg",
+          "right": "李菊英_01_0006_0006.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN3K_test_0491.jpg",
+          "right": "杨海涛_01_0002_0002.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN3K_test_0510.jpg",
+          "right": "欧丽娟_01_0009_0009.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN3K_test_0524.jpg",
+          "right": "洪飞宇_01_0015_0015.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN3K_test_0544.jpg",
+          "right": "范艳春_01_0002_0002.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN3K_test_0570.jpg",
+          "right": "邓秀娟_01_0001_0001.jpg"
+        }
+      ]
+    },
+    "TN5K_splits_vs_ZJH-8K": {
+      "left_dir": "TN5K train+valid+test/images",
+      "right_dir": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/ZJH-8K/images",
+      "left_n": 4500,
+      "right_n": 7958,
+      "pair_count": 2,
+      "exact_hamming_0": 0,
+      "near_only": 2,
+      "unique_left_images": 2,
+      "unique_right_images": 2,
+      "top_samples": [
+        {
+          "hamming": 5,
+          "left": "TN5K_train_000467.jpg",
+          "right": "吕小芹_01_0012_0012.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN5K_train_003039.jpg",
+          "right": "廖浚深_01_0002_0002.jpg"
+        }
+      ]
+    },
+    "ThyroidXL_splits_vs_ZJH-8K": {
+      "left_dir": "ThyroidXL train+valid+test/images",
+      "right_dir": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/ZJH-8K/images",
+      "left_n": 11631,
+      "right_n": 7958,
+      "pair_count": 5,
+      "exact_hamming_0": 0,
+      "near_only": 5,
+      "unique_left_images": 3,
+      "unique_right_images": 5,
+      "top_samples": [
+        {
+          "hamming": 4,
+          "left": "ThyroidXL_test_00001661_DFB42A89_1.png",
+          "right": "吕小芹_01_0012_0012.jpg"
+        },
+        {
+          "hamming": 4,
+          "left": "ThyroidXL_test_00003932_89B4CFAD_1.png",
+          "right": "林婷芬_01_0018_0018.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "ThyroidXL_test_00001661_DFB42A89_1.png",
+          "right": "吕小芹_01_0009_0009.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "ThyroidXL_test_00001661_DFB42A89_1.png",
+          "right": "吕小芹_01_0014_0014.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "ThyroidXL_train_00004740_21DE1376_0.png",
+          "right": "陈国强_01_0007_0007.jpg"
+        }
+      ]
+    },
+    "TN3K_splits_vs_TN5K_splits": {
+      "left_dir": "TN3K train+valid+test/images",
+      "right_dir": "TN5K train+valid+test/images",
+      "left_n": 5347,
+      "right_n": 4500,
+      "pair_count": 0,
+      "exact_hamming_0": 0,
+      "near_only": 0,
+      "unique_left_images": 0,
+      "unique_right_images": 0,
+      "top_samples": []
+    },
+    "TN3K_splits_vs_ThyroidXL_splits": {
+      "left_dir": "TN3K train+valid+test/images",
+      "right_dir": "ThyroidXL train+valid+test/images",
+      "left_n": 5347,
+      "right_n": 11631,
+      "pair_count": 2,
+      "exact_hamming_0": 0,
+      "near_only": 2,
+      "unique_left_images": 2,
+      "unique_right_images": 2,
+      "top_samples": [
+        {
+          "hamming": 5,
+          "left": "TN3K_train_private_614.jpg",
+          "right": "ThyroidXL_train_00004740_21DE1376_0.png"
+        },
+        {
+          "hamming": 5,
+          "left": "TN3K_train_private_720.jpg",
+          "right": "ThyroidXL_test_00001661_DFB42A89_1.png"
+        }
+      ]
+    },
+    "DDTI_test_vs_PKTN_test": {
+      "left_dir": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/DDTI/test/images",
+      "right_dir": "/mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/PKTN/test/images",
+      "left_n": 191,
+      "right_n": 150,
+      "pair_count": 0,
+      "exact_hamming_0": 0,
+      "near_only": 0,
+      "unique_left_images": 0,
+      "unique_right_images": 0,
+      "top_samples": []
+    },
+    "TN5K_test_vs_TN5K_train": {
+      "left_dir": "TN5K test/images",
+      "right_dir": "TN5K train/images",
+      "left_n": 1000,
+      "right_n": 3400,
+      "pair_count": 48,
+      "exact_hamming_0": 42,
+      "near_only": 6,
+      "unique_left_images": 46,
+      "unique_right_images": 48,
+      "top_samples": [
+        {
+          "hamming": 0,
+          "left": "TN5K_test_000445.jpg",
+          "right": "TN5K_train_000444.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_000573.jpg",
+          "right": "TN5K_train_000572.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_000630.jpg",
+          "right": "TN5K_train_000631.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_000649.jpg",
+          "right": "TN5K_train_000648.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_000942.jpg",
+          "right": "TN5K_train_000943.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_000966.jpg",
+          "right": "TN5K_train_000965.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_001030.jpg",
+          "right": "TN5K_train_001029.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_001097.jpg",
+          "right": "TN5K_train_001098.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_001263.jpg",
+          "right": "TN5K_train_001262.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_001299.jpg",
+          "right": "TN5K_train_001298.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_001314.jpg",
+          "right": "TN5K_train_001313.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_001403.jpg",
+          "right": "TN5K_train_001402.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_001446.jpg",
+          "right": "TN5K_train_001445.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_001446.jpg",
+          "right": "TN5K_train_001447.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_001475.jpg",
+          "right": "TN5K_train_001476.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_001562.jpg",
+          "right": "TN5K_train_001561.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_001633.jpg",
+          "right": "TN5K_train_001634.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_001657.jpg",
+          "right": "TN5K_train_001656.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_001941.jpg",
+          "right": "TN5K_train_001940.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_002069.jpg",
+          "right": "TN5K_train_002068.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_002071.jpg",
+          "right": "TN5K_train_002070.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_002072.jpg",
+          "right": "TN5K_train_002073.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_002124.jpg",
+          "right": "TN5K_train_002122.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_002275.jpg",
+          "right": "TN5K_train_002276.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_002448.jpg",
+          "right": "TN5K_train_002449.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_002465.jpg",
+          "right": "TN5K_train_002466.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_002503.jpg",
+          "right": "TN5K_train_002502.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_002653.jpg",
+          "right": "TN5K_train_003579.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_002686.jpg",
+          "right": "TN5K_train_002687.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_002939.jpg",
+          "right": "TN5K_train_002940.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_003001.jpg",
+          "right": "TN5K_train_003002.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_003302.jpg",
+          "right": "TN5K_train_003301.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_003383.jpg",
+          "right": "TN5K_train_003382.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_003781.jpg",
+          "right": "TN5K_train_004532.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_003936.jpg",
+          "right": "TN5K_train_003935.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_003936.jpg",
+          "right": "TN5K_train_003937.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_003942.jpg",
+          "right": "TN5K_train_003941.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_003992.jpg",
+          "right": "TN5K_train_003991.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_004230.jpg",
+          "right": "TN5K_train_004229.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_004336.jpg",
+          "right": "TN5K_train_004337.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_004489.jpg",
+          "right": "TN5K_train_004490.jpg"
+        },
+        {
+          "hamming": 0,
+          "left": "TN5K_test_004628.jpg",
+          "right": "TN5K_train_004627.jpg"
+        },
+        {
+          "hamming": 3,
+          "left": "TN5K_test_003559.jpg",
+          "right": "TN5K_train_003560.jpg"
+        },
+        {
+          "hamming": 4,
+          "left": "TN5K_test_003758.jpg",
+          "right": "TN5K_train_003759.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN5K_test_003257.jpg",
+          "right": "TN5K_train_003258.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN5K_test_003830.jpg",
+          "right": "TN5K_train_003831.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN5K_test_004358.jpg",
+          "right": "TN5K_train_001172.jpg"
+        },
+        {
+          "hamming": 5,
+          "left": "TN5K_test_004974.jpg",
+          "right": "TN5K_train_004975.jpg"
+        }
+      ]
+    }
+  }
+}

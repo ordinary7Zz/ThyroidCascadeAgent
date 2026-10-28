@@ -1,0 +1,48 @@
+{
+  "method": "64-bit dHash, Hamming <= 5 (same as audit_near_duplicates.py)",
+  "frozen_date": "2026-10-28",
+  "external_test": "ZJH-8K/images (n=7958)",
+  "rows_for_response_tab_dhash": [
+    {
+      "label": "Stacked train (dataset_3+4)",
+      "left_n": 38518,
+      "right_n": 7958,
+      "pair_count": 1123,
+      "exact_hamming_0": 995,
+      "near_only": 128,
+      "unique_zjh_h0": 992
+    },
+    {
+      "label": "TN3K train",
+      "left_n": 4633,
+      "right_n": 7958,
+      "pair_count": 1290,
+      "exact_hamming_0": 1154,
+      "near_only": 136
+    },
+    {
+      "label": "TN5K train",
+      "left_n": 3400,
+      "right_n": 7958,
+      "pair_count": 2,
+      "exact_hamming_0": 0,
+      "near_only": 2
+    },
+    {
+      "label": "ThyroidXL train",
+      "left_n": 9441,
+      "right_n": 7958,
+      "pair_count": 1,
+      "exact_hamming_0": 0,
+      "near_only": 1
+    },
+    {
+      "label": "PKTN train",
+      "left_n": 703,
+      "right_n": 7958,
+      "pair_count": 1,
+      "exact_hamming_0": 0,
+      "near_only": 1
+    }
+  ]
+}

@@ -145,10 +145,10 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item 我们同意须区分各模块贡献。对分割与分类，我们补充逐级组件消融（\responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}）：L1 在完整堆叠 development 上训练的单个多队列联合 DINO 专家（无智能体、无 AutoGluon）；L2 固定专家池 + 掩膜/概率软投票（与 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} 中策略 2 相同，在固定上游候选专家输出上评估、不重训专家）；L3 全系统 ThyroidXAgent（策略 7：LLM 路由 + 证据综合，与路由消融表中策略 7 相同评测范围）。L1/L2 与 L3 评测协议不同，层间差分用于对照而非同一流水线的因果分解。固定专家池上的路由策略对照见 审稿人 1，意见 2；监督基线微调见 审稿人 2，意见 14（\responsetableref{tab_baseline_protocol}）。报告生成侧静态流程与工具消融不在本条展开。
-\item 组件消融要点：（i）TN3K 上 L2 相对 L1 提升分割 Dice（0.856 vs 0.845）与分类 AUROC（0.828 vs 0.770），L3 分类进一步升至 0.869；（ii）固定软投票并非普适最优（例：ZJH-8K 分类 L1 AUROC 0.957 $>$ L2 0.932）；（iii）全系统 L3 在多数队列上优于 L2（例：TN5K 分割 Dice 0.833 vs 0.810；ZJH-8K 分割 0.943 vs 0.836）。ZJH 上 L1 单专家 AUROC 高于部署级全系统 L3（0.917），与投稿补充材料 中单专家对照及不同任务/协议口径一致，不宜解读为「单专家优于 ThyroidXAgent」；本回复 \responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls} 已并列说明 S6 对账与上述分层。
-\item 在同一专家池、同一批候选输出上，仅更换路由策略即可显著改变指标（\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}）：(i)~最大置信度在多个队列上劣于集成类策略；(ii)~无全面最优的静态路由；(iii)~不可部署 Oracle 与最佳可部署静态策略之间仍有间隙。
-\item 学习型路由 (6) 与全系统 (7) 相对最佳静态策略及 Oracle 的对照见 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}（例：TN5K 分割 (6) Dice 0.831；TN3K 分类 (7) AUROC 0.869，与 L3 组件行一致）。可审计的结构化路由记录与重复调用稳定性见 审稿人 2，意见 9（\responsetableref{tab_routing_stability}）。
+\item 我们同意须区分各模块贡献。完整八策略路由消融见 审稿人 1，意见 2（\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}）。为回应 R2.8，我们在 \responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls} 中摘录策略 (1) 验证集最优单专家、(2) 掩膜/概率软投票、(7) 可部署全系统 ThyroidXAgent（与投稿 Table S3/S4 同行），并给出所列队列的未加权算术均值以便阅读；并非另做一套实验。策略 (1)--(6) 在固定专家池、冻结上游候选输出上评估；策略 (7) 与主文评测协议一致。监督基线微调见 审稿人 2，意见 14（\responsetableref{tab_baseline_protocol}）。报告生成侧的静态流程与工具消融不在本条展开。
+\item 摘要要点（\responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}）：TN3K 分类上软投票优于最优单专家，AUROC 0.828 对 0.801，全系统为 0.869。集成并非普适最优，例如 ZJH-8K 分类策略 (1) AUROC 为 0.957、策略 (2) 为 0.932。策略 (7) 在多个队列上优于策略 (2)，如 TN5K 分割 Dice 0.833 对 0.810、ZJH-8K 分割 0.943 对 0.836。ZJH-8K 分类上策略 (1) 高于策略 (7)，0.957 对 0.918；与投稿补充材料中的单专家对照一致，不宜解读为「静态单专家优于 ThyroidXAgent」。
+\item 在同一专家池、同一批候选输出上，仅更换路由策略即可显著改变指标（\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}）：最大置信度在多个队列上劣于集成类策略；不存在在每个队列上都最优的静态路由；不可部署 Oracle 与最佳可部署静态策略之间仍有间隙。
+\item 学习型路由策略~6 与全系统策略~7 相对最佳静态策略及 Oracle 的对照见 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}，例如 TN5K 分割策略~6 Dice 0.831、TN3K 分类策略~7 AUROC 0.869，与 \responsetableref{tab_component_ablation_cls} 中策略 (7) 行一致。可审计的结构化路由记录与重复调用稳定性见 审稿人 2，意见 9（\responsetableref{tab_routing_stability}）。
 \end{itemize}
 \par
 \end{authorresponse}
@@ -206,7 +206,7 @@ LNM 任务只使用了 4,753 张恶性图像，而 \responsetableref{tab_malig_o
 \end{reviewercomment}
 \begin{authorresponse}
 \begin{itemize}
-\item \responsetableref{tab_cls_ext} 与 R3 中监督基线均在同一分割/分类开发集上微调（各队列组成见 \responsetableref{tab_baseline_protocol}），自公开上游预训练权重出发，非甲状腺零样本或仅用原始权重外测。完整 ThyroidXAgent 主结果使用相同开发数据；逐级组件消融（L1 单专家 $\rightarrow$ L2 软投票 $\rightarrow$ L3 全系统）见 审稿人 2，意见 8（\responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}）。视觉–语言基线为零样本/API + 固定 prompt，未在分类开发集上端到端重训。ZJH-8K、DDTI 等外测队列仅用于 test。完整训练与推理协议见 \responsetableref{tab_baseline_protocol}。
+\item \responsetableref{tab_cls_ext} 与 R3 中监督基线均在同一分割/分类开发集上微调（各队列组成见 \responsetableref{tab_baseline_protocol}），自公开上游预训练权重出发，非甲状腺零样本或仅用原始权重外测。完整 ThyroidXAgent 主结果使用相同开发数据；R2.8 对路由策略 (1)(2)(7) 的摘要见 审稿人 2，意见 8（\responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}）。视觉–语言基线为零样本/API + 固定 prompt，未在分类开发集上端到端重训。ZJH-8K、DDTI 等外测队列仅用于 test。完整训练与推理协议见 \responsetableref{tab_baseline_protocol}。
 \end{itemize}
 \par
 \end{authorresponse}
@@ -250,7 +250,7 @@ LLM 路由器除预测质量信号外还利用了设备与数据来源等元数�
 \begin{authorresponse}
 \begin{itemize}
 \item 感谢审稿人。我们同意须检验路由是否过度依赖数据来源/设备元数据，而非病例级质量与分歧信号。在与 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} 主文全系统 LLM 路由（策略 7）相同的固定专家池与固定上游候选输出上（不重训专家），仅改变 LLM 路由器 prompt 中可见的元数据。\responsetablerefrange{tab_metadata_ablation_seg}{tab_metadata_ablation_cls} 列出五档元数据条件：完整元数据；隐去数据来源；隐去设备信息；两者均隐去；仅质量与分歧信号（主对比端点）。与 审稿人 3，意见 1 中策略 6 学习型路由不同：策略 6 自始不含设备/来源元数据，单独在 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} 报告。
-\item 性能消融：本回复在 TN5K 测试集上报告分割与分类指标（\responsetablerefrange{tab_metadata_ablation_seg}{tab_metadata_ablation_cls}），与策略 (7) 全系统评估在本回复中所用外测划分一致。该表与九队列路由/组件外测表（\responsetablerefrange{tab_routing_ablation_seg}{tab_component_ablation_cls}）报告范围不同、不作逐项对齐。消融四档下，三分类器一致时为确定性共识、不调用 LLM；不一致时由 LLM 裁决分类（\responsetableref{tab_metadata_ablation_cls}）。
+\item 性能消融：本回复在 TN5K 测试集上报告分割与分类指标（\responsetablerefrange{tab_metadata_ablation_seg}{tab_metadata_ablation_cls}），与策略 (7) 全系统评估在本回复中所用外测划分一致。该表与多队列路由表及 R2.8 摘要（\responsetablerefrange{tab_routing_ablation_seg}{tab_component_ablation_cls}）报告范围不同、不作逐项对齐。消融四档下，三分类器一致时为确定性共识、不调用 LLM；不一致时由 LLM 裁决分类（\responsetableref{tab_metadata_ablation_cls}）。
 \item NHC-MISD-TUS 的 35 个中心未参与路由权重训练。因托管环境禁止 LLM API，未在 NHC 上执行本条的 prompt 元数据消融与「完整元数据」下的中心$\times$专家选择热图（性能消融见 TN5K 五档，\responsetablerefrange{tab_metadata_ablation_seg}{tab_metadata_ablation_cls}）。NHC 多中心性能与异质性见 R2.6 / \responsetablerefrange{tab_nhc_center_descriptive}{tab_nhc_heterogeneity}。
 \item 分类模型不一致时的 LLM 裁决输入未纳入本次元数据消融（\responsetableref{tab_metadata_ablation_cls}）；各条件性能见 \responsetablerefrange{tab_metadata_ablation_seg}{tab_metadata_ablation_cls}。
 \end{itemize}
@@ -532,7 +532,7 @@ GPT-5 / Gemini / MedGemma / Qwen3-VL（若见于 S4） & 分类 & ---（未微�
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{1. \textbf{dataset\_3（分类开发）}：TN3K + ThyroidXL + TN5K 堆叠训练划分（与 OpenThyroid 公开 multitask 分类开发集一致；队列组成与投稿/OpenThyroid 堆叠开发集定义一致）。2. \textbf{dataset\_4（分割开发）}：TN3K + ThyroidXL + PKTN + TN5K 堆叠训练划分（与 OpenThyroid 公开分割开发集一致；配置与 note~1 堆叠开发定义一致）。3. \textbf{监督基线默认协议}：在对应堆叠开发集上\textbf{全量微调}（自公开上游预训练权重出发），取验证集最佳权重用于\responsetableref{tab_cls_ext}/R3 全部外测；\textbf{非}甲状腺零样本或仅用原始权重评估。4. \textbf{分割基线外测}：图像 + \textbf{标注框/mask} 作为提示（与 \responsetableref{tab_seg_ext} 一致）。5. \textbf{分类基线外测}：仅超声图像输入。6. \textbf{ThyroidXAgent}：完整多队列微调后的分类/分割主结果与 note~1--2 所述开发数据相同；逐级组件消融见 \responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}。7. \textbf{视觉–语言模型}：未在 dataset\_3 端到端训练；厂商/公开权重；API 或冻结推理 + 固定 prompt。8. 监督行与 \textbf{\responsetableref{tab_cls_ext}/R3} 出表模型一致；ZJH-8K、DDTI 等外测队列\textbf{不参与}开发微调。}
+\responsetablenote{1. \textbf{dataset\_3（分类开发）}：TN3K + ThyroidXL + TN5K 堆叠训练划分（与 OpenThyroid 公开 multitask 分类开发集一致；队列组成与投稿/OpenThyroid 堆叠开发集定义一致）。2. \textbf{dataset\_4（分割开发）}：TN3K + ThyroidXL + PKTN + TN5K 堆叠训练划分（与 OpenThyroid 公开分割开发集一致；配置与 note~1 堆叠开发定义一致）。3. \textbf{监督基线默认协议}：在对应堆叠开发集上\textbf{全量微调}（自公开上游预训练权重出发），取验证集最佳权重用于\responsetableref{tab_cls_ext}/R3 全部外测；\textbf{非}甲状腺零样本或仅用原始权重评估。4. \textbf{分割基线外测}：图像 + \textbf{标注框/mask} 作为提示（与 \responsetableref{tab_seg_ext} 一致）。5. \textbf{分类基线外测}：仅超声图像输入。6. \textbf{ThyroidXAgent}：完整多队列微调后的分类/分割主结果与 note~1--2 所述开发数据相同；R2.8 路由策略 (1)(2)(7) 摘要见 \responsetablerefrange{tab_component_ablation_seg}{tab_component_ablation_cls}。7. \textbf{视觉–语言模型}：未在 dataset\_3 端到端训练；厂商/公开权重；API 或冻结推理 + 固定 prompt。8. 监督行与 \textbf{\responsetableref{tab_cls_ext}/R3} 出表模型一致；ZJH-8K、DDTI 等外测队列\textbf{不参与}开发微调。}
 \end{responsetable}
 
 \begin{responsetable}
@@ -572,7 +572,7 @@ ZJH-8K & 7958 & 1001 & 44 & 0.818 & 1001 \\
 \par
 \begin{responseinlinetable}
 \responseinlinetablecaption{表 A1-1. LLM 共享解码参数（分割路由、分类路由及分类器不一致时的 LLM 裁决共用）}
-\label{tab:A1-decode}
+\label{tab_A1_decode}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{ll}
 \toprule
@@ -676,7 +676,7 @@ API 密钥 & 经环境变量配置，不写入路由记录 \\
 \par
 \begin{responseinlinetable}
 \responseinlinetablecaption{表 A1-2. 每条结构化路由记录所含信息（去标识化存档）}
-\label{tab:A1-log-fields}
+\label{tab_A1_log_fields}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{ll}
 \toprule

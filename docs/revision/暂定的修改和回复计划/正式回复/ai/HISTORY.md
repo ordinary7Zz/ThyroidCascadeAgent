@@ -183,6 +183,28 @@
 
 ---
 
+## 2026-10-28 — R2.8 去括号堆砌，L1/L2/L3 直述
+
+**文件：** `body_en.tex`、`body_zh.tex`
+
+**做了什么：** R2.8 首条改为分句定义 L1/L2/L3 并指路由消融策略~2/7；其余条去掉 (i)(ii) 与多层英文括号，用 ``for example'' / 破折号 / 策略~编号。
+
+**教训 / 避免重犯：** 组件消融勿用 ``L1, xxx (no agent); L2, xxx (same as (2))'' 链式括号；一层表号 + 策略编号或分句即可。
+
+---
+
+## 2026-10-28 — R14/R15：用 (1)(2)(7) 替代 L1–L3
+
+**文件：** `component_ablation_tables_en.tex`、`component_ablation_tables_zh.tex`、`body_en.tex`、`body_zh.tex`、`routing_ablation_tables_en.tex`、`routing_ablation_tables_zh.tex`、`latex/README.md`（缩写层说明）
+
+**做了什么：** 表 R14/R15 改题为 R2.8 摘要，列名为策略 (1)(2)(7)，数值自 R12/R13 摘录并加未加权均值行；R2.8/R2.14/R2.5 元数据与 baseline 表注去掉 L1/L2/L3 与「独立组件消融」；路由表注说明 R14 为摘录。
+
+**对意图的理解：** 用户要求用策略 (1) 完全替代 L1 出表；R14 是方便 R2.8 阅读的路由子集摘要，不是 B4 新实验。
+
+**教训 / 避免重犯：** 改 R12/R13 策略 (1)(2)(7) 行时必须同步 R14/R15；PDF 勿再混用 L1 与策略 (1)。
+
+---
+
 ```markdown
 ## YYYY-MM-DD — 简短标题
 
