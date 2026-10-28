@@ -73,6 +73,7 @@ COHORTS: list[dict] = [
         "task": "both",
         "run_segmentation": True,
         "run_classification": True,
+        "llm_model_name": "qwen3.8-27b",
         "image_input": DATA / "train_val_test/ZJH-8K_for_llm_malignancy/images",
         "gt_mask_dir": DATA / "train_val_test/ZJH-8K_for_llm_malignancy/masks",
         "label_file": DATA / "train_val_test/ZJH-8K_for_llm_malignancy/ZJH-8K_BM_labels.json",
@@ -100,6 +101,7 @@ COHORTS: list[dict] = [
         "task": "cls",
         "run_segmentation": False,
         "run_classification": True,
+        "llm_model_name": "qwen3.8-27b",
         "image_input": DATA
         / "train_val_test/DDTI_Classification/all_for_llm_malignancy/images_processed",
         "gt_mask_dir": None,
@@ -108,6 +110,8 @@ COHORTS: list[dict] = [
     },
 ]
 
+DEFAULT_LLM_MODEL = "deepseek-v4-pro-0813"
+
 
 def _bool_yaml(v: bool) -> str:
     return "true" if v else "false"
@@ -115,6 +119,7 @@ def _bool_yaml(v: bool) -> str:
 
 def render(cohort: dict) -> str:
     name = cohort["name"]
+    llm_model = cohort.get("llm_model_name", DEFAULT_LLM_MODEL)
     out_run = f"output/b6/{name}/pipeline_run"
     inter = f"{out_run}/intermediate"
     label = cohort.get("label_file")
@@ -137,7 +142,7 @@ shared:
   agent_llm:
     api_key_env: DASHSCOPE_API_KEY
     base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
-    model_name: deepseek-v4-pro-0813
+    model_name: {llm_model}
     temperature: 0.3
     max_tokens: 2048
     enable_thinking: false

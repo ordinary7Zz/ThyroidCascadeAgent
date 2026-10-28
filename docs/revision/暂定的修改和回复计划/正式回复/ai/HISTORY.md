@@ -157,7 +157,29 @@
 
 **文件：** `body_en.tex`, `body_zh.tex`
 
-**做了什么：** (iii) 去掉重复的 CI 重叠句；(iv) 改为「同协议并列评估」+ 大队列与 OpenThyroid 三队列定性一致；分割/分类/(6)(7) 代表性数字用 `\rpending` / `\rpendingzh` 占位，定稿表 R12--R13 后再填。
+**做了什么：** (iii) 去掉重复的 CI 重叠句；(iv) 改为「同协议并列评估」+ 大队列与 OpenThyroid 三队列定性一致；分割/分类/(6)(7) 代表性数字用 `\rpending` / `\rpendingzh` 占位，定稿表 R12--R13 后再填。删除 R1.2 末尾 NHC 专条（改由 R2.6 / R1.3 / R3.1 承担）。
+
+---
+
+## 2026-10-28 — 回信少承诺「修订稿」+ Manuscript pending
+
+**文件：** `body_{en,zh}.tex`，`nhc_b7_tables_{en,zh}.tex`，`latex/README.md`，`ai/INSTRUCTIONS.md`
+
+**做了什么：** R2.2/R2.3/R2.4/R2.5/R2.11/R3.2/R3.3 等去掉 `revised manuscript` / `将在修订稿…`；本回复已做内容 + `\rpending{Manuscript: …}` / `\rpendingzh{正文：…}` 标稿面待改。规范改为默认不承诺修订稿，pending 前缀便于扫描改正文。
+
+**对意图的理解：** 回信只证明「我们做了什么/表在哪」；稿面改写与作者后续扫红色 pending 对齐，避免蓝色段落假装 Methods 已定稿。
+
+---
+
+## 2026-10-28 — 回信：FangDai → Dai *et al.*（与正文一致）
+
+**文件：** `body_en.tex`、`body_zh.tex`、`latex/scripts/decouple_manuscript_pending.py`
+
+**做了什么：** 正式回复正文中 FTC/PTC 外测队列统一改为 **Dai *et al.* public external test set (~200 images)** / **Dai 等外测集（与正文一致）**；表 R* `tab_malig_ext` 表注同步；去掉审稿人未见过的 **FangDai** 内部简称。
+
+**对意图的理解：** 外测与 `ThyroidXAgent.md` 及 `\cite{dai2025improving}` 同一公开集；Hugging Face 仓库名不进 PDF。
+
+**教训 / 避免重犯：** 回信 `\authorresponse` / `\responsetablenote` 用稿面称谓；工程 manifest 名 `fangdai` 仅留在数据路径，不写进蓝色回复。
 
 ---
 

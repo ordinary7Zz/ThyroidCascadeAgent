@@ -191,11 +191,11 @@ def clean_tex(text: str) -> str:
     # R2.10 second bullet - rewrite future tense to letter refs
     text = text.replace(
         "将：（i）在 Methods 单列 FTC/PTC",
-        "（i）FTC/PTC 标签定义与 FangDai 外测一致（见 \\responsetableref{tab_malig_ext} 表注）；原稿 Methods 将单列",
+        "（i）FTC/PTC 标签定义与 Dai 等外测集一致（见 \\responsetableref{tab_malig_ext} 表注）；原稿 Methods 将单列",
     )
     text = text.replace(
         "We will: (i) define FTC/PTC labels explicitly in Methods",
-        "(i) FTC/PTC labels align with the FangDai external test (\\responsetableref{tab_malig_ext} notes); (i) originally in Methods we will define",
+        "(i) FTC/PTC labels align with the Dai \\textit{et al.} external test set (\\responsetableref{tab_malig_ext} notes); (i) originally in Methods we will define",
     )
 
     return text

@@ -7,6 +7,6 @@
 ## 待办
 
 - [ ] **R2.9 / 表 R9**：TN5K、ThyroidXL、ZJH-8K、DDTI-cls 路由稳定性实验填表（正文已有 `\rpending`）
-- [ ] **R2.5**：缺失/无效标注计数补充表（正文 `\rpending` Supplementary Table）
+- [ ] **R2.5 / F5**：与合作者确认后写 Methods + 各队列缺失/无效标注补充表；回信 `\rpending` 整块替换（见 `docs/需要确认.md` R2.5 行）
 - [ ] **R1.3 / R2.6**：NHC 全量 35 中心 + scanner/case-mix 关联分析（正文 `\rpending`）
 - [ ] **R2.10 / R2.12**：LNM/FTC 临床定义书面确认（`\rpending`）
