@@ -18,7 +18,7 @@
 | 配置 | `config/revision/b6/sample_stability.yaml` | 复制为 `config/revision/b6/<cohort>_stability.yaml` 并改 `data` / `shared_intermediate` |
 | 稳定性 JSON | `output/sample/pipeline_run/stability_summary.json` | `output/<cohort>/pipeline_run/stability_summary.json` |
 | 路由审计日志 | `output/sample/pipeline_run/routing_log.jsonl` | 同目录 `routing_log.jsonl` |
-| LLM（稳定性配置） | **deepseek-v4-pro-0813**，`temperature=0.3`，`max_tokens=768` | 与 `config/revision/b6/*.yaml` 中 `shared.agent_llm` 一致（DashScope compatible API） |
+| LLM（稳定性配置） | **deepseek-v4-pro-0813**，`temperature=0.3`，`max_tokens=2048` | 与 `config/revision/b6/*.yaml` 中 `shared.agent_llm` 一致（DashScope compatible API） |
 
 **分层定义（与代码一致，换数时不必改文案）：** 分割侧 `disagreement_tier`：各候选 `average_agreement` 排序后，top-1 与 top-2 差值 ≤ **0.10** → `close`，否则 `easy`（`shared/routing_log.py`）。
 

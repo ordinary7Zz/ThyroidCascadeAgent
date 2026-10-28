@@ -4,7 +4,7 @@
 数据路径对齐 `scripts/build_all_test_for_llm.sh`（约 ≤250 张），**不用全量 test**。  
 **YAML 字段与 `sample_stability.yaml` 同构**（含 `pipeline.ablation` 块）；仅 `data` 路径与 `output/b6/<cohort>/` 不同。
 
-**LLM 路由（各 cohort 统一）**：`shared.agent_llm.model_name` = **`deepseek-v4-pro-0813`**（DashScope compatible API，`DASHSCOPE_API_KEY`；`temperature=0.3`，`max_tokens=768`，与 B5 主消融配置一致）。
+**LLM 路由（各 cohort 统一）**：`shared.agent_llm.model_name` = **`deepseek-v4-pro-0813`**（DashScope compatible API，`DASHSCOPE_API_KEY`；`temperature=0.3`，**`max_tokens=2048`**（路由 JSON；若日志出现 `finish_reason=length` 可再增大），与 B5 主队列可分开调参）。
 
 | 配置文件 | 数据根目录 | seg / cls |
 |----------|------------|-----------|

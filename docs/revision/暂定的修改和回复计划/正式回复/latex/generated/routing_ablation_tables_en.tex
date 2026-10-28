@@ -84,7 +84,7 @@ RJH-7K & 7288 & Best single (1) & 0.9128 (0.9113--0.9143) & 1.9676 (1.8965--2.04
  &  & Full ThyroidXAgent (7) & 0.9146 (0.9132--0.9160) & 1.9200 (1.8400--2.0000) \\
  &  & Oracle (8) & 0.9283 (0.9271--0.9293) & 1.4098 (1.3707--1.4543) \\
 \end{longtable}
-\responsetablenote{Static rule (4): inter-expert agreement (agreement-only). Oracle (8): non-deployable upper bound. Strategy (7) matches primary manuscript Table~S3 ThyroidXAgent row (candidate expert outputs were not re-computed from the frozen stack used for component ablation). Only cohorts with segmentation evaluation are listed.}
+\responsetablenote{Static rule (4), segmentation: select the expert whose candidate mask has the highest mean pairwise IoU with all other candidates' masks. Static rule (4), classification: highest malignancy confidence among independent classifiers; tie-break lower prediction entropy. Oracle (8): non-deployable upper bound. Strategy (7) matches primary manuscript Table~S3 ThyroidXAgent row (candidate expert outputs were not re-computed from the frozen stack used for component ablation). Only cohorts with segmentation evaluation are listed.}
 \end{responsepaginatedtable}
 
 \begin{responsepaginatedtable}
@@ -153,5 +153,5 @@ ZJH-8K & 7958 & Best single (1) & 0.9572 (0.9529--0.9613) & 0.9671 (0.9628--0.97
  &  & Full ThyroidXAgent (7) & 0.9175 (0.9008--0.9342) & 0.9711 (0.9705--0.9717) \\
  &  & Oracle (8) & 0.9863 (0.9839--0.9885) & 0.9896 (0.9874--0.9916) \\
 \end{longtable}
-\responsetablenote{Strategy (7) matches primary manuscript Table~S4 ThyroidXAgent row; strategies 1--6: controlled routing ablation (same protocol as Reviewer 1, Comment 2 / Reviewer 3, Comment 1). Only cohorts with benign--malignant classification evaluation are listed.}
+\responsetablenote{Static rule (4), classification: highest malignancy confidence among independent classifiers; tie-break lower prediction entropy (same as \responsetableref{tab_routing_ablation_seg} notes). Strategy (7) matches primary manuscript Table~S4 ThyroidXAgent row; strategies 1--6: controlled routing ablation (same protocol as Reviewer 1, Comment 2 / Reviewer 3, Comment 1). Only cohorts with benign--malignant classification evaluation are listed.}
 \end{responsepaginatedtable}

@@ -29,16 +29,13 @@ python3 app.py
 python3 app.py --port 8888 --no-watch
 ```
 
-浏览器工作区（类似 Overleaf 简化版）：
+浏览器工作区：
 
 - 左侧：`latex/` 文件树（按 English / 中文 / 共用分组）
-- 中间：TeX 编辑器（**行号** + 选区 **添加注释**），保存写回磁盘（Ctrl+S）
-- 编辑区右侧：**本轮注释**（仅 **English** 项目下可添加；中文模式只读对照）
-- 右侧：PDF 预览（无页缩略图侧栏，便于与 TeX 对照），可切换 **EN / ZH**，或点 **对照** 左右并排看中英文
+- 中间：TeX 编辑器，**保存** 写回磁盘（Ctrl+S）
+- 右侧：PDF 预览（无页缩略图侧栏），可切换 **EN / ZH**，或点 **对照** 左右并排看中英文
 
-选中文本 → **添加注释**（或 Ctrl+Alt+M）→ 收集完成后在 Cursor @ `review-notes/current.json` 请 AI 改 TeX；**你本人**核对后写入 `history.jsonl` 并清空 current（可用 `review-notes/close_review_round.py`）。说明见 `../review-notes/README.md`。
-
-保存 TeX 后约每 3 秒自动重编 EN/ZH 两份 PDF，也可点「编译」。
+保存 TeX 后约每 3 秒自动重编 EN/ZH 两份 PDF，也可点「编译」。改稿与审稿讨论请在 Cursor 对话中进行。
 
 ## 手动编译（不用网页）
 

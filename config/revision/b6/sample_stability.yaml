@@ -6,7 +6,7 @@ shared:
     base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
     model_name: deepseek-v4-pro-0813
     temperature: 0.3
-    max_tokens: 768
+    max_tokens: 2048
     enable_thinking: false
 segmentation:
   models:

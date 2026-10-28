@@ -35,5 +35,5 @@
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{条件与 \responsetableref{tab_metadata_ablation_seg} 相同。消融四档下分类在 Path A（三模型已一致）为确定性共识、\textbf{不}调用 LLM；Path B 经 LLM 裁决，元数据效应应结合 Path B 解读。分类模型不一致时的 LLM 裁决\textbf{输入}未做元数据消融（本条消融仅改 prompt 可见字段）。}
+\responsetablenote{条件与 \responsetableref{tab_metadata_ablation_seg} 相同。消融四档下，三分类器一致时为确定性共识、\textbf{不}调用 LLM；不一致时由 LLM 裁决分类，元数据效应应结合后者解读。分类模型不一致时的 LLM 裁决\textbf{输入}未做元数据消融（本条消融仅改 prompt 可见字段）。}
 \end{responsetable}

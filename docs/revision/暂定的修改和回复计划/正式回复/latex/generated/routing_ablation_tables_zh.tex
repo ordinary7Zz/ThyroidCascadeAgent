@@ -84,7 +84,7 @@ RJH-7K & 7288 & 最优单专家 (1) & 0.9128 (0.9113--0.9143) & 1.9676 (1.8965--
  &  & 完整 ThyroidXAgent (7) & 0.9146 (0.9132--0.9160) & 1.9200 (1.8400--2.0000) \\
  &  & Oracle (8) & 0.9283 (0.9271--0.9293) & 1.4098 (1.3707--1.4543) \\
 \end{longtable}
-\responsetablenote{静态规则 (4) 为专家一致度（agreement-only）。Oracle (8) 为上界。策略 (7) 与投稿主文 Table~S3 ThyroidXAgent 行一致（未基于组件消融的固定候选输出缓存重算）。仅列入具备分割评估的队列。}
+\responsetablenote{静态规则 (4)，分割：取「该专家候选 mask 与其余各候选 mask 成对 IoU 的均值」最高的专家 mask。静态规则 (4)，分类：独立分类器中恶性置信度最高；平局时预测熵更低。Oracle (8) 为上界。策略 (7) 与投稿主文 Table~S3 ThyroidXAgent 行一致（未基于组件消融的固定候选输出缓存重算）。仅列入具备分割评估的队列。}
 \end{responsepaginatedtable}
 
 \begin{responsepaginatedtable}
@@ -153,5 +153,5 @@ ZJH-8K & 7958 & 最优单专家 (1) & 0.9572 (0.9529--0.9613) & 0.9671 (0.9628--
  &  & 完整 ThyroidXAgent (7) & 0.9175 (0.9008--0.9342) & 0.9711 (0.9705--0.9717) \\
  &  & Oracle (8) & 0.9863 (0.9839--0.9885) & 0.9896 (0.9874--0.9916) \\
 \end{longtable}
-\responsetablenote{策略 (7) 与投稿主文 Table~S4 ThyroidXAgent 行一致；策略 1--6 为本回信受控路由对照（与 R1.2/R3.1 正文一致）。仅列入具备良恶性分类评估的队列。}
+\responsetablenote{静态规则 (4)，分类：独立分类器中恶性置信度最高；平局时预测熵更低（与 \responsetableref{tab_routing_ablation_seg} 表注一致）。策略 (7) 与投稿主文 Table~S4 ThyroidXAgent 行一致；策略 1--6 为本回信受控路由对照（与 R1.2/R3.1 正文一致）。仅列入具备良恶性分类评估的队列。}
 \end{responsepaginatedtable}

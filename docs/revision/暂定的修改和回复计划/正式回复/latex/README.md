@@ -15,13 +15,40 @@
 
 内部返修计划与实验划分见 [`../../README.md`](../../README.md)、`docs/revision/`；**本 README 只写回信 LaTeX 编辑规则**。
 
+## 审稿人可读性：禁止内部/机器命名
+
+回信面向未读仓库的审稿人。**凡会出现在 PDF 里的叙述**（蓝色 `\authorresponse`、`\responsetablenote`、`\responsefigurenote`、附录 A1/A2 的小标题与说明文字、表 A* 的「说明」列）须能**脱离代码库独立读懂**。
+
+**不得写入（非穷举）**
+
+- 仓库/实现流程代号：Path A / Path B、Phase 1–2/5、`enable_agent`、B3/B4/B6 等返修批次名（TeX 源文件 `%` 注释除外）。
+- 路径与文件名：磁盘路径、`routing_log.jsonl`、`.py` / `.yaml` / `.csv`、配置键、脚本名、内部队列别名（如 `test_for_llm_malignancy`、`all_datasets` 作公开标识）。
+- 程序标识：函数名、类名、JSON 字段名（如 `cls_path_b`、`agent_path_b_llm`、`selected_model`）——除非封在 `promptverbatim` 内且为部署 prompt **原文**的一部分。
+- 以**图像文件名**作病例公开 ID（可写去标识化 Rec-07、队列内序号等）。
+
+**改写成什么**
+
+- 用稿件/Methods 已有概念或本信已定义术语（ThyroidXAgent、策略 (1)–(8)、三独立分类器一致/不一致、LLM 路由、确定性共识、冻结的上游专家输出等）。
+- 附录 A1：小节标题与 bullet 用自然语言（例：**分类 --- 分类器不一致时的 LLM 裁决**）；`promptverbatim` 内保留 API 实际措辞；叙述性 wrap 用「程序拼接」「结构化路由记录」，不写日志文件名。
+- 附录 A2 / 表 A2：版本号用 `\texttt{包名 版本}` 即可；不必写训练环境配置文件名（可写「与训练环境配置一致」）。
+
+**允许例外**
+
+- 复现所必需的 **API 端点、模型 ID**（表 A1-1）。
+- 本信**表内已定义**的缩写层（L1/L2/L3、策略编号、R* 表号）。
+- `\rpending{…}` 中若需内部跟踪，投稿前仍应改成审稿人可读表述或删除。
+
+NHC 表 R18–R20 另遵守下文「待定与修订稿承诺」中的 NHC 条款（与本节一致，不重复写路径/脚本）。
+
 ## 版式要点
 
 - 信头：`\responselettertitle`、`\responseletteropening` / `openingzh`（说明表图复现于信末）。
 - 审稿意见：黑色斜体；作者回复：`ResponseBlue`。
 - 分节：`\responsetoreviewer{…}`；无目录、无 `\hrule`。
 - `authorresponse` 内**不用** `\textbf`（不另设「支撑材料：」行；表图在正文句中引用，信末 `\responseappendix` 集中复现，与 TURG 样稿一致）。
+- **逐条明确回应**：每条 `\reviewercomment` 下的回复须让审稿人看出「**是否同意/是否已做** + **证据在哪**（`\responsetableref` / `\responsefigureref` / 附录 / 修订稿 Methods）」。避免只有方法描述或 cross-ref 而无「我们已…」；多子问题时用 `(a)(b)(c)` 或分 `\item` 逐条对应；暂缺数据用 `\rpending`，勿留看似未写完的单句。
 - 正文引用：`\responsetableref` / `\responsefigureref` / `\responsetablerefrange` 嵌入句子；**勿** `（见表 R*）`、**勿**「见信末」/ “at the end of this letter”、**勿**每条末尾重复表号清单。
+- **只引用表/图，不单独引用「表注/图注」**：Nature 系回复信与正文一样，交叉引用对象是 **Table/Figure**（本信用 `\responsetableref`）；表注 `\responsetablenote` 是表的一部分，读者跟表号即可。**勿**写 “in Table~R12 **notes**” /「见 \responsetableref{…} **表注**」——除非正文刻意不写细节、且细节**仅**在表注（此时也只写 `\responsetableref{…}`，不必点「表注」二字）。同一句里已写清操作定义时，**删除**再指向表注的尾巴（避免重复）。
 - 信内表图编号**仅** R1–R20、图 R1–R3（见 `reviewer_response.sty` 页眉说明）；**不复用**稿件 Supplementary Table S* 序号。
 - 图：先 `\includegraphics`，再 `\caption{\responsefiguretitle{键}{短标题}}`，图例正文用 `\responsefigurenote{…}`（题注在图下方）。
 
@@ -53,7 +80,7 @@
 
 - `\rpendingzh{…}` / `\rpending{…}`：红色 `[待补充：…]` / `[PENDING: …]`，**投稿前删除或换成终稿内容**。
 - 蓝色正文若承诺写入**修订稿**而尚未改稿：用「将…」表述，并保留红色 `修订稿 …` pending（或等价 `\rpending`）。
-- **NHC（表 R18--R20）**：回信正文与表注**不得**出现仓库路径、脚本名、配置键或内部文件名；暂行子集（10 图）数字定稿后替换为全量 8721 图。院方元数据用 `\rpending` 标出。NHC **无** 策略 7 / LLM 全系统层 / 元数据热图（托管政策，正文写 N/A）。
+- **NHC（表 R18--R20）**：遵守上文「审稿人可读性」；暂行子集（10 图）数字定稿后替换为全量 8721 图。院方元数据用 `\rpending` 标出。NHC **无** 策略 7 / LLM 全系统层 / 元数据热图（托管政策，正文写 N/A）。
 
 ## 性能表加粗规则
 
@@ -62,6 +89,8 @@
 ## 编辑约定
 
 回信 **LaTeX 为唯一编辑源**：直接改 `generated/body_*.tex`、`generated/*_tables_*.tex`、`reviewer_response.sty` 等；实验指标见 `docs/revision/b3/`、`output/ablation/` 的 CSV/JSON，**不再**用脚本覆盖 `generated/*.tex`。信末 `\input` 顺序须与正文 `\responsetableref` 一致。
+
+改稿前对照 **`latex/README.md` →「审稿人可读性：禁止内部/机器命名」**；`ai/INSTRUCTIONS.md` 与之同步。
 
 ## 编译与预览
 

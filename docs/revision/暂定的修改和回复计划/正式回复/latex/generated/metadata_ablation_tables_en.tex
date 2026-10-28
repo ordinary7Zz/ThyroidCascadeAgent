@@ -35,5 +35,5 @@ Quality/disagreement only & 0.9404 (0.9038--0.9700) & 0.9740 (0.9556--0.9878) \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Same conditions as \responsetableref{tab_metadata_ablation_seg}. Under the four ablation conditions, Path A uses deterministic consensus when three classifiers agree (no LLM); Path B uses LLM arbitration; interpret metadata effects together with Path B. LLM arbitration \textbf{inputs} when classifiers disagree were not separately metadata-ablated (only prompt-visible fields varied).}
+\responsetablenote{Same conditions as \responsetableref{tab_metadata_ablation_seg}. Under the four ablation conditions, when all three classifiers agree we use deterministic consensus without invoking the LLM; when they disagree, classification is resolved by LLM arbitration---interpret metadata effects for the latter. LLM arbitration \textbf{inputs} when classifiers disagree were not separately metadata-ablated (only prompt-visible fields varied).}
 \end{responsetable}
