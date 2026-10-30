@@ -101,7 +101,7 @@ COHORTS: list[dict] = [
         "task": "cls",
         "run_segmentation": False,
         "run_classification": True,
-        "llm_model_name": "qwen3.8-27b",
+        "llm_model_name": "qwen3.8-max",
         "image_input": DATA
         / "train_val_test/DDTI_Classification/all_for_llm_malignancy/images_processed",
         "gt_mask_dir": None,

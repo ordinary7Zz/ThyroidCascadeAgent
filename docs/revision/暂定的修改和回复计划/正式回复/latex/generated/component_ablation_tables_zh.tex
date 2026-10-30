@@ -1,7 +1,8 @@
-% R2.8 摘要：自 tab_routing_ablation_* 摘录策略 (1)(2)(7)（点估计与 CI 与 R12--R13 一致）
+% R2.8 摘要：自 tab_routing_ablation_* 摘录策略 (1)(2)(7)
+% [数据来源] R14–R15 tab_component_ablation_* | 摘录真实 | 数值与 R12–R13 对应行一致（非独立重算）；末行未加权均值为手算算术平均。
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_component_ablation_seg}{R2.8 摘要 --- 路由策略 (1)(2)(7) 结节分割（Dice $\uparrow$；点估计及 95\% CI；摘自表 R12--R13）}}
+\caption{\responsetabletitle{tab_component_ablation_seg}{R2.8 摘要 --- 路由策略 (1)(2)(7) 结节分割}}
 \label{tab_component_ablation_seg}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l r l l l@{}}
@@ -20,11 +21,12 @@ RJH-7K & 7288 & 0.9128 (0.9113--0.9143) & 0.8931 (0.8905--0.8955) & 0.9146 (0.91
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{各格与 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}（审稿人 1，意见 2）对应行相同。策略 (1)--(5) 的操作定义见 审稿人 1，意见 2。策略 (7)：可部署全系统 ThyroidXAgent（投稿 Table S3）。末行为各队列点估计的算术均值（无合并 CI）。策略 (1)(2) 的 95\% CI 与表 R12--R13 一致；策略 (7) CI 与 Table S3 一致。}
+% [SYNC] tab_component_ablation_*: cells and CIs for (1)(2)(7) must match tab_routing_ablation_seg/cls; strategy (7) CIs vs manuscript Supp Table S3 when re-enabled.
+\responsetablenote{Dice $\uparrow$；点估计及 95\% CI。策略 (1)--(5) 的操作定义见 审稿人 1，意见 2。策略 (7)：可部署全系统 ThyroidXAgent。末行为各队列点估计的算术均值（无合并 CI）。}
 \end{responsetable}
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_component_ablation_cls}{R2.8 摘要 --- 路由策略 (1)(2)(7) 良恶性分类（AUROC $\uparrow$；点估计及 95\% CI；摘自表 R12--R13）}}
+\caption{\responsetabletitle{tab_component_ablation_cls}{R2.8 摘要 --- 路由策略 (1)(2)(7) 良恶性分类}}
 \label{tab_component_ablation_cls}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l r l l l@{}}
@@ -41,5 +43,5 @@ ZJH-8K & 7958 & 0.9572 (0.9529--0.9613) & 0.9322 (0.9208--0.9423) & 0.9175 (0.90
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{与 \responsetableref{tab_component_ablation_seg} 相同摘录方式；仅含分类评测队列。DDTI 行为分类子集（$n$=349）。末行：各队列点估计未加权算术均值（无合并 CI）。}
+\responsetablenote{AUROC $\uparrow$；点估计及 95\% CI。仅含分类评测队列。DDTI 行为分类子集（$n$=349）。末行：各队列点估计未加权算术均值（无合并 CI）。}
 \end{responsetable}

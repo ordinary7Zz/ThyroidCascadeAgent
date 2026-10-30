@@ -208,9 +208,9 @@ Thresholds for connected-component post-processing are not specified, including:
 
 **Response:**
 
-- Methods now state ≥50 px components inside experts; reported Dice and radiomics use the same selected mask. Small-nodule statistics are in **Table R13** (mm_per_pixel=0.1 sensitivity assumption).
+- Methods now state ≥50 px components inside experts; reported Dice and radiomics use the same selected mask. Small-nodule statistics are in **Table R13** (**GT equivalent diameter &lt;50 px**; no per-image spacing on public external cohorts; illustrative 0.1 mm/px ≈ 5 mm mapping only to relate to the reviewer's wording).
 
-**Supporting material:** See **Table R13** (<5 mm nodule pipeline failure statistics) at the end of this letter.
+**Supporting material:** See **Table R13** (GT equiv. diameter &lt;50 px — pipeline failure statistics) at the end of this letter.
 
 ---
 
@@ -531,17 +531,17 @@ Typical JSONL fields: `image_id`, `task` (e.g. `seg`, `cls`, `cls_path_b`), `dis
 | ThyroidXAgent（分类路由） | 分类 | dataset_3 | DINOv3 多任务骨干（dataset_3 微调） | 路由 mask + 图像（pipeline） |
 | GPT-5 / Gemini / MedGemma / Qwen3-VL（若见于 S4） | 分类 | —（未微调） | 厂商/公开 VLM 权重 | 图像 ± 固定文本 prompt（零样本或 API） |
 
-## Table R13. Nodules <5 mm — Pipeline failure statistics
+## Table R13. GT equivalent diameter &lt;50 px — Pipeline failure statistics
 
-| 队列 | n 匹配 | <5.0 mm (N) | 失败 (M) | 小结节子集 mean Dice | GT 等价径 <50 px |
-|------|--------|------------------|----------|----------------------|------------------|
-| ddti_seg | 637 | 54 | 1 | 0.734 | 54 |
-| pktn | 150 | 15 | 1 | 0.741 | 15 |
-| rjh7k | 7288 | 366 | 1 | 0.766 | 366 |
-| thyroidxl | 2090 | 0 | 0 | — | 0 |
-| tn3k | 614 | 68 | 2 | 0.771 | 68 |
-| tn5k | 1000 | 103 | 12 | 0.696 | 103 |
-| zjh8k | 7958 | 1001 | 44 | 0.818 | 1001 |
+| Cohort | n matched | GT equiv. diam. &lt;50 px (N) | Failures (M) | Mean Dice (subset) |
+|--------|-----------|-------------------------------|--------------|-------------------|
+| ddti_seg | 637 | 54 | 1 | 0.734 |
+| pktn | 150 | 15 | 1 | 0.741 |
+| rjh7k | 7288 | 366 | 1 | 0.766 |
+| thyroidxl | 2090 | 0 | 0 | — |
+| tn3k | 614 | 68 | 2 | 0.771 |
+| tn5k | 1000 | 103 | 12 | 0.696 |
+| zjh8k | 7958 | 1001 | 44 | 0.818 |
 
 ## Appendix A2. Radiomics / AutoGluon specification (response-letter excerpt)
 

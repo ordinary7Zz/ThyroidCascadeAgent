@@ -164,7 +164,7 @@
 | 类别 | 必交付项 | 稿内位置 | 仓库入口 | 状态 |
 |------|----------|----------|----------|------|
 | **文** | 连通域 ≥50 px；Dice 用 `selected_masks`；**无** radiomics CCA | Methods **4.3** | `../b11_b12/REVIEWER_SNIPPETS_ZH.md` | ✅ |
-| **文/表** | &lt;5 mm 结节 N/M（注明 mm/像素假设） | Methods 或 Supp. 小表 | `../b11_b12/tables/R2_20_*` | 🟡 |
+| **文/表** | GT 等价径 &lt;50 px 子集 N/M（无 spacing 时不报 mm） | Methods 或 Supp. 小表 | `../b11_b12/tables/R2_20_*` | 🟢 |
 | **文** | AutoGluon 版本/预设/bagging；PyRadiomics 特征数 | Methods + Supp. | `docs/reproducibility_radiomics.md` | ✅ |
 | **图** | 无必须 | — | — | — |
 | **回** | R2.20、R2.21 | 回复信 | b11_b12 snippets | ✅ / 🟡 |

@@ -40,20 +40,20 @@
 
 ## 已跑分析（R2.20b）
 
-见 **`tables/R2_20_SUMMARY.md`**（ZJH-8K：&lt;5 mm **N=1001，M=44**；TN3K：**N=68，M=2**；`mm_per_pixel=0.1` 为假设）。
+见 **`tables/R2_20_SUMMARY.md`**（ZJH-8K：**N=1001，M=44**；TN3K：**N=68，M=2**；主口径 **GT 等价径 &lt;50 px**）。
 
 | 队列 | 结果 JSON | 说明 |
 |------|-----------|------|
 | TN3K | `tables/r2_20_tn3k.json` | 本地 pipeline `output/TN3K/pipeline_run` |
 | ZJH-8K | `tables/r2_20_zjh8k.json` | 本地 pipeline `output/ZJH-8K/pipeline_run` |
 
-**毫米径**：定稿前需与 **B1/像素间距** 对齐后重跑 `scripts/revision/b11/analyze_r2_20_small_nodules.py`；主结果若用不同 routing config，需对 **同一 config 的 selected_masks** 重跑。
+**毫米径**：公开外测无 spacing 时不作主结论；表 R11 用 **&lt;50 px** 子集。若将来某队列有校准 spacing，可用 `--mm-per-pixel` 作附录敏感性。主结果若用不同 routing config，需对 **同一 config 的 selected_masks** 重跑。
 
 **批量（推荐）**：
 
 ```bash
 ./scripts/revision/b11/run_r2_20_small_nodules_all.sh
-# MM_PER_PIXEL=0.1 可改；汇总表 tables/R2_20_SUMMARY.md 自动生成
+# MM_PER_PIXEL=0.1 可改（JSON 参考列）；汇总表 tables/R2_20_SUMMARY.md 自动生成
 ```
 
 单队列命令：

@@ -23,7 +23,8 @@ def load_seg_npz_subset(
     if not wanted:
         return {}
 
-    data = np.load(str(path), mmap_mode="r")
+    # object-dtype mask 数组在 mmap 下必须 allow_pickle=True
+    data = np.load(str(path), mmap_mode="r", allow_pickle=True)
     try:
         all_names = data["image_names"]
         name_to_i: dict[str, int] = {}

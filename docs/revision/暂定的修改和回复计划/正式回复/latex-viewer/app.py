@@ -70,10 +70,26 @@ def _run(cmd: list[str], cwd: Path, env: dict | None = None) -> tuple[int, str]:
     return proc.returncode, out
 
 
+def _latex_log_errors(main_tex: Path) -> list[str]:
+    log_path = main_tex.with_suffix(".log")
+    if not log_path.exists():
+        return []
+    try:
+        text = log_path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return []
+    hits: list[str] = []
+    for line in text.splitlines():
+        if line.startswith("! ") or "Emergency stop" in line:
+            hits.append(line)
+    return hits[:20]
+
+
 def compile_lang(lang: str, runs: int = 2) -> tuple[bool, str]:
     cfg = LANG_CFG[lang]
-    if not cfg["main_tex"].exists():
-        return False, f"Missing {cfg['main_tex']}"
+    main_tex: Path = cfg["main_tex"]
+    if not main_tex.exists():
+        return False, f"Missing {main_tex}"
     env = os.environ.copy()
     figures = BASE / "figures"
     env["TEXINPUTS"] = f".:{figures}:{LATEX_DIR}:"
@@ -84,13 +100,17 @@ def compile_lang(lang: str, runs: int = 2) -> tuple[bool, str]:
             [
                 "xelatex",
                 "-interaction=nonstopmode",
-                cfg["main_tex"].name,
+                "-file-line-error",
+                main_tex.name,
             ],
             LATEX_DIR,
             env=env,
         )
         logs.append(f"=== xelatex pass {pass_no} ({lang}) ===\n{log[-12000:]}")
-        if code != 0:
+        log_errors = _latex_log_errors(main_tex)
+        if log_errors:
+            logs.append("=== LaTeX errors (.log) ===\n" + "\n".join(log_errors))
+        if code != 0 or log_errors:
             ok = False
             break
     pdf_ok = cfg["pdf"].exists() and cfg["pdf"].stat().st_size > 10_000
@@ -281,7 +301,8 @@ def main() -> None:
         t = threading.Thread(target=_watcher_loop, args=(args.poll,), daemon=True)
         t.start()
 
-    threading.Thread(target=lambda: full_build("startup"), daemon=True).start()
+    # Block until first build finishes so /api/status ok matches PDFs on first load.
+    full_build("startup")
 
     app = create_app()
     print(f"Reviewer response viewer (TeX-only): http://{args.host}:{args.port}")

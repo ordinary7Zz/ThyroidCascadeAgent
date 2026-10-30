@@ -52,7 +52,7 @@
 | **R2.11** | LNM 样本量、CV | **部分**（**B9 已归档**） | 5 折 OOF **882 簇** AUROC **0.718**；C2 外测 **TBD** — **B9 专项** / b9 §4.1 | 同上 | E2；全栈 OOF 换数 |
 | **R2.12** | LNM 术语 CN0/CN1 | **部分**（**B9 已归档**） | 簇聚合与五折；临床定义句待协作 — b9 §4.3 | 同上；`需要确认.md` | 协作定稿 |
 | **R2.14** | 基线公平性 | **接近定稿** | 监督基线 **dataset3/4 微调**（非 off-the-shelf）；新增 Supp. **S[X]**（`baseline_training_protocol.md`，13 行）；VLM **零样本** 分块；S3/S4 **cluster CI** 与 B2 一致 | `b10/B10_结论与回复素材.md` §一–§二；`b10/tables/` | 定 Supp. 编号；Methods/S3/S4 表注入稿；§6.2 核对（A7） |
-| **R2.20** | 连通域、小结节 | **是**（待间距脚注） | **(a)(c)**：`selected_masks`、无 radiomics CCA、专家 ≥50 px、单图单 ROI；**(b)** 七队列 N/M 已算（`mm_per_pixel=0.1` 假设，见下表）；重点 **zjh8k N=1001/M=44** | `b11_b12/REVIEWER_SNIPPETS_ZH.md`；`tables/R2_20_SUMMARY.md`；`scripts/revision/b11/run_r2_20_small_nodules_all.sh` | 定稿：间距校准或敏感性一句；核对 JSON 内 `selected_masks_npz` 与投稿主 config |
+| **R2.20** | 连通域、小结节 | **是** | **(a)(c)**：`selected_masks`、无 radiomics CCA、专家 ≥50 px、单图单 ROI；**(b)** 七队列 N/M 已算（主口径 **GT 等价径 &lt;50 px**，不依赖 spacing）；重点 **zjh8k N=1001/M=44** | `b11_b12/REVIEWER_SNIPPETS_ZH.md`；`tables/R2_20_SUMMARY.md`；`scripts/revision/b11/run_r2_20_small_nodules_all.sh` | 核对 JSON 内 `selected_masks_npz` 与投稿主 config |
 | **R2.21** | AutoGluon/PyRadiomics | **是** | 版本、预设、特征数、无 radiomics CCA | `docs/reproducibility_radiomics.md` | 统稿时并入 Methods 4.3 / Supp. |
 | **R2.22** | 语言 | — | **范围外** | G5 | — |
 | **R2.23** | TI-RADS 体系 | 本回复信 R2.23 段 + `\rpending` 正文 Methods/F8 | **B + F8** | F8 | C-TIRADS vs ACR；分割/分类表不用 TI-RADS 标签 |
@@ -94,9 +94,9 @@
 | 回复信 R2.20–21 | **可写**；英文回信从 `b11_b12/REVIEWER_SNIPPETS_ZH.md` 扩写 |
 | 修订稿 Methods | **仅计划**（`MANUSCRIPT_REVISION_PLAN_ZH.md` §8.3–8.4）；**暂不直接改** `ThyroidXAgent.md` |
 
-**R2.20(b) 数字（`mm_per_pixel=0.1`，`max_diameter_mm=5`；失败=空 mask 或 Dice&lt;0.1）**
+**R2.20(b) 数字（主口径 GT 等价径 &lt;50 px；失败=空 mask 或 Dice&lt;0.1；与 0.1 mm/px 下 &lt;5 mm 计数相同）**
 
-| 队列 | n 匹配 | N (&lt;5 mm) | M | 小结节 mean Dice |
+| 队列 | n 匹配 | N (&lt;50 px) | M | 子集 mean Dice |
 |------|--------|-------------|---|------------------|
 | zjh8k（外测，回复主报） | 7958 | 1001 | 44 | 0.818 |
 | tn3k | 614 | 68 | 2 | 0.771 |
@@ -106,7 +106,7 @@
 | pktn | 150 | 15 | 1 | 0.741 |
 | thyroidxl | 2090 | 0 | 0 | — |
 
-回复 (b) 建议：主文强调 **M/N 比例低**（如 zjh8k 44/1001≈4.4%），并说明 **M 为整条 agent 流水线失败，非 radiomics 前删除**；脚注 **0.1 mm/px 为敏感性假设**（或定稿后替换为校准间距并重跑 `./scripts/revision/b11/run_r2_20_small_nodules_all.sh`）。
+回复 (b) 建议：主文强调 **M/N 比例低**（如 zjh8k 44/1001≈4.4%），并说明 **M 为整条 agent 流水线失败，非 radiomics 前删除**；表 R11 **主口径 GT 等价径 &lt;50 px**（与 50 px CCA 同尺度）；公开外测 **无 spacing** 时不声称临床 5 mm（0.1 mm/px≈5 mm 仅作说明性衔接审稿人表述）。
 
 ---
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# R2.20(b): 对已缓存的 pipeline_run/selected_masks.npz 批量统计 <5 mm（GT）子集 vs selected mask。
+# R2.20(b): 对已缓存的 pipeline_run/selected_masks.npz 批量统计 GT 等价径 <50 px 子集 vs selected mask。
 #
 # 当前本机可直接计算的队列（需同时存在 selected_masks.npz 与 GT mask 目录）：
 #   TN3K, TN5K, ThyroidXL, RJH-7K, ZJH-8K, DDTI_seg, PKTN
@@ -67,7 +67,7 @@ json_slug() {
 ran=0
 skipped=0
 
-echo "=== R2.20 small-nodule analysis (mm_per_pixel=${MM_PER_PIXEL}, max_diameter_mm=${MAX_DIAMETER_MM}) ==="
+echo "=== R2.20 small-nodule analysis (primary: GT equiv. diam. <50 px; mm_per_pixel=${MM_PER_PIXEL} optional for JSON) ==="
 
 for entry in "${COHORTS[@]}"; do
   IFS='|' read -r label gt_dir out_sub <<< "$entry"
@@ -128,19 +128,20 @@ for p in sorted(out_dir.glob("r2_20_*.json")):
 md = f"""# R2.20(b) 小结节统计摘要（自动生成）
 
 **生成命令**: `scripts/revision/b11/run_r2_20_small_nodules_all.sh`  
-**参数**: `mm_per_pixel = {mm}`（敏感性假设，定稿前请按队列校准）, `max_diameter_mm = {max_mm}`
+**主口径**: GT 等价直径 **<50 px**（`min_component_px=50`；不依赖 DICOM spacing）  
+**可选**: `mm_per_pixel = {mm}`, `max_diameter_mm = {max_mm}`（JSON 内 mm 敏感性；与 <50 px 在 0.1 mm/px 下数值相同）
 
 **失败定义**: selected mask 为空或 Dice < 0.1（整条分割+路由流水线，非 radiomics 前 CCA）。
 
-| 队列 | n 匹配 | <{max_mm} mm (N) | 失败 (M) | 小结节子集 mean Dice | GT 等价径 <50 px |
-|------|--------|------------------|----------|----------------------|------------------|
+| 队列 | n 匹配 | GT 等价径 <50 px (N) | 失败 (M) | 子集 mean Dice | （参考）<{max_mm} mm @0.1 mm/px |
+|------|--------|----------------------|----------|----------------|-------------------------------|
 """
 for r in rows:
     dice = r["mean_dice_small"]
     dice_s = f"{dice:.3f}" if dice is not None else "—"
     md += (
-        f"| {r['cohort']} | {r['n_matched']} | {r['n_lt_5mm']} | {r['n_fail']} | "
-        f"{dice_s} | {r['n_lt_50px']} |\n"
+        f"| {r['cohort']} | {r['n_matched']} | {r['n_lt_50px']} | {r['n_fail']} | "
+        f"{dice_s} | {r['n_lt_5mm']} |\n"
     )
 
 md += "\n逐队列 JSON：`r2_20_*.json`（含 `selected_masks_npz` 路径，便于核对主结果 config）。\n"

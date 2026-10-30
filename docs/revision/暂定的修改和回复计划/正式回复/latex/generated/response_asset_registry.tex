@@ -1,28 +1,9 @@
-% Semantic keys → displayed R numbers (single source of truth). Keys match \label{} / \responsetableref{}.
-\responsetableregister{tab_dhash}{R1}
-\responsetableregister{tab_cls_ext}{R2}
-\responsetableregister{tab_seg_ext}{R3}
-\responsetableregister{tab_calib_referral}{R4}
-\responsetableregister{tab_cls_macro_mean}{R5}
-\responsetableregister{tab_malig_oof}{R6}
-\responsetableregister{tab_malig_ext}{R6}
+% Response-letter assets: Table/Figure R numbers are assigned automatically when each
+% \responsetabletitle{<label>}{...} or \responsefiguretitle{<label>}{...} is first typeset
+% (order = order in body_*.tex and \input{} fragments). Cross-ref with \label{<label>} via
+% \responsetableref{<label>} / \responsefigureref{<label>} (same key as in title macro).
+%
+% Multi-page tables only: append “(continued)” on \responsetableref:
 \responsetablesetcontinued{tab_malig_ext}
-\responsetableregister{tab_patient_cls}{R7}
-\responsetableregister{tab_patient_seg}{R8}
-\responsetableregister{tab_routing_stability}{R9}
-\responsetableregister{tab_baseline_protocol}{R10}
-\responsetableregister{tab_small_nodule_fail}{R11}
-\responsetableregister{tab_routing_ablation_seg}{R12}
 \responsetablesetcontinued{tab_routing_ablation_seg}
-\responsetableregister{tab_routing_ablation_cls}{R13}
 \responsetablesetcontinued{tab_routing_ablation_cls}
-\responsetableregister{tab_component_ablation_seg}{R14}
-\responsetableregister{tab_component_ablation_cls}{R15}
-\responsetableregister{tab_metadata_ablation_seg}{R16}
-\responsetableregister{tab_metadata_ablation_cls}{R17}
-\responsetableregister{tab_nhc_center_descriptive}{R18}
-\responsetableregister{tab_nhc_center_performance}{R19}
-\responsetableregister{tab_nhc_heterogeneity}{R20}
-\responsefigureregister{fig_reliability}{R1}
-\responsefigureregister{fig_risk_coverage}{R2}
-\responsefigureregister{fig_image_dataflow}{R3}

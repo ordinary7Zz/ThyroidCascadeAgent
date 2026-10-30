@@ -8,9 +8,9 @@ _Generated from config: `config/revision/b6/tn3k.yaml`_
 |-------|-------|
 | API key | environment variable `DASHSCOPE_API_KEY` |
 | base_url | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
-| model_name | `qwen3.8-27b` |
+| model_name | `deepseek-v4-pro-0813` |
 | temperature | `0.3` |
-| max_tokens | `768` |
+| max_tokens | `2048` |
 
 Full config excerpt:
 
@@ -18,9 +18,9 @@ Full config excerpt:
 {
   "api_key_env": "DASHSCOPE_API_KEY",
   "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-  "model_name": "qwen3.8-27b",
+  "model_name": "deepseek-v4-pro-0813",
   "temperature": 0.3,
-  "max_tokens": 768,
+  "max_tokens": 2048,
   "enable_thinking": false
 }
 ```
@@ -43,7 +43,7 @@ If judge is disabled at runtime, omit the radiomics paragraph in the actual call
 ```
 你是分割模型选择代理。根据 user 中 JSON 指标选最佳 mask。
 禁止输出思考过程、Markdown 或任何 JSON 外的文字。第一个字符必须是 {，最后一个必须是 }。
-只输出一行 JSON："selected_model", "confidence"(0-1), "reasoning"(固定为"-")。示例：{"selected_model":"模型名", "confidence":0.9, "reasoning":"-"}
+只输出一行 JSON："selected_model", "confidence"(0-1)；勿输出 reasoning 字段。示例：{"selected_model":"模型名", "confidence":0.9}
 优先级：agreement_with_others↑；分歧大时 mean_hd95_to_others↓；radiomics_judge 与 classification_anchor 一致者优先；形态学与设备匹配次之。
 ```
 
@@ -54,35 +54,25 @@ _Only if `radiomics_judge` is not loaded:_
 ```
 你是分割模型选择代理。根据 user 中 JSON 指标选最佳 mask。
 禁止输出思考过程、Markdown 或任何 JSON 外的文字。第一个字符必须是 {，最后一个必须是 }。
-只输出一行 JSON："selected_model", "confidence"(0-1), "reasoning"(固定为"-")。示例：{"selected_model":"模型名", "confidence":0.9, "reasoning":"-"}
+只输出一行 JSON："selected_model", "confidence"(0-1)；勿输出 reasoning 字段。示例：{"selected_model":"模型名", "confidence":0.9}
 优先级：agreement_with_others↑；分歧大时 mean_hd95_to_others↓；radiomics_judge 与 classification_anchor 一致者优先；形态学与设备匹配次之。
 ```
 
 ### 1.2 System prompt — append Path A (classification consensus)
 
-Appended when independent classifiers agree (`classification_anchor` set).
+Appended at runtime when independent classifiers agree (`classification_anchor` set).
 Example anchor shown as `恶性`:
 
 ```
 
-【分类锚点（关键信号）】
-独立分类模型（3个，无需mask）一致判断该图像为「恶性」。
-此锚点用于评估各分割结果的合理性：
-- 与锚点矛盾的Radiomics裁判分类 → 该mask可能覆盖了错误的ROI → 可信度显著降低。
-- 与锚点吻合的mask → 额外加分。
-- 若所有mask的Radiomics分类都与锚点矛盾 → 选confidence最高的mask并解释原因。
+分类锚点：恶性。与锚点矛盾的 radiomics_judge 降权。
 ```
 
-### 1.3 System prompt — append Path B (no classification consensus)
+### 1.3 System prompt — append when no classification consensus
 
 ```
 
-【无分类锚点】
-独立分类模型对该图像的判断不一致，未能形成共识。
-整图级别特征模糊，分割评估应以以下为主要依据：
-1. Radiomics裁判的内部一致性（不同的分割得到相似的分类方向→更可信）
-2. 形态学合理性（circularity 0.6-0.9、单连通）
-3. 设备匹配与历史性能
+无分类锚点。以 radiomics 内部一致性与 agreement 为主。
 ```
 
 ### 1.4 User message template
@@ -100,7 +90,7 @@ Example anchor shown as `恶性`:
 {formatted_predictions_json}
 
 哪个模型提供了最佳分割结果？
-只输出纯JSON。格式：{"selected_model": "模型名称", "confidence": 0.95, "reasoning": "..."}
+只输出纯JSON。（brief：勿输出 reasoning 字段）格式：{"selected_model": "模型名称", "confidence": 0.95}
 ```
 
 `formatted_predictions_json` 由 `SegmentationAgent.format_predictions_for_agent()` 生成，
@@ -108,7 +98,8 @@ Example anchor shown as `恶性`:
 
 ### 1.5 LLM output JSON schema
 
-- Single mask: `{"selected_model": "<name>", "confidence": 0.0-1.0, "reasoning": "..."}`
+- Single mask (LLM JSON): `{"selected_model": "<name>", "confidence": 0.0-1.0}` — no `reasoning` key.
+- `routing_log.jsonl` still stores `reasoning: "-"` for successful LLM routes (filled by the pipeline).
 
 ### 1.6 Non-LLM fallbacks
 
@@ -127,7 +118,7 @@ Example anchor shown as `恶性`:
 
 ```
 从 user JSON  predictions 中选最可信模型。
-禁止思考/Markdown。只输出一行 JSON：selected_model, selected_class, confidence(0-1), reasoning 固定为 "-"。
+禁止思考/Markdown。只输出一行 JSON：selected_model, selected_class, confidence(0-1)。勿输出 reasoning 字段。
 ```
 
 ### 2.2 System prompt — top-k fusion (`top_k > 1`)
@@ -139,7 +130,7 @@ Example anchor shown as `恶性`:
 
 【决策序】综合判断哪 5 个模型组合最可信，优先级与单选类似，需考虑组合互补性。
 
-【输出】只输出纯JSON（无Markdown/思考），首尾为{}。字段：selected_models(长度恰好5的字符串数组), reasoning。不要输出 selected_class 或 confidence。
+【输出】只输出纯JSON（无Markdown/思考），首尾为{}。字段：selected_models(长度恰好5的字符串数组)。勿输出 reasoning、selected_class 或 confidence。
 ```
 
 ### 2.3 User message template
@@ -157,36 +148,26 @@ Example anchor shown as `恶性`:
 
 ### 2.4 LLM output JSON schema
 
-- Single: `{"selected_model": "...", "selected_class": "良性|恶性", "confidence": 0.0-1.0, "reasoning": "..."}`
-- Top-k: `{"selected_models": ["...", ...], "reasoning": "..."}` (no `selected_class` / `confidence` in multi mode).
+- Single (LLM JSON): `{"selected_model": "...", "selected_class": "良性|恶性", "confidence": 0.0-1.0}` — no `reasoning` key.
+- Top-k (LLM JSON): `{"selected_models": ["...", ...]}` — no `reasoning` / `selected_class` / `confidence`.
+- Log field `reasoning` may still be `"-"` or empty for LLM rows (pipeline default).
 
 ---
 
-## 3. Classification — Path B (`resolve_path_b`, Phase 5, no consensus)
+## 3. Classification — LLM arbitration when classifiers disagree (`resolve_path_b`)
 
 - Invoked when `classification_consensus == false` and `enable_agent: true`.
 - Current config `enable_agent`: `True`
+- `brief_routing_prompt`: `True`
 
 ### 3.1 System prompt
 
 ```
-你是甲状腺超声诊断专家。独立分类模型对该图像判断不一致，你需要综合所有信号，自己做出最终的良恶性判断。
-
-你将收到：
-1. 独立分类模型预测（3个，无需mask，整图判断）
-2. AutoGluon 基于分割筛选 mask 的 Radiomics 分类（有 ROI 引导）
-3. 分割 Agent 选择该 mask 的推理
-
-Markup:
-- 独立模型置信度普遍低(<0.6) → 整图级特征不明显，ROI 级特征更可信
-- AutoGluon 分类基于 ROI 特征 → 在 mask 靠谱的前提下更细腻
-- 分割 Agent reasoning 解释了为什么选这个 mask
-
-若所有信号都模糊，保守倾向恶性（宁可假阳性不可假阴性），但标注低置信度。
-
-输出纯JSON（无 Markdown/代码块），首尾为{}：
-{"selected_class": "恶性", "confidence": 0.75, "reasoning": "..."}
-reasoning 须引用具体置信度数值。
+甲状腺超声分类裁决：各独立分类模型未形成共识。
+依据 user JSON 中的 independent_models、autogluon_based_on_selected_mask、segmentation_decision。
+禁止思考过程与 Markdown。只输出一行 JSON：
+{"selected_class":"恶性或良性", "confidence":0.0-1.0}
+勿输出 reasoning 字段。信号均模糊时略倾向恶性但降低 confidence。
 ```
 
 ### 3.2 User message
@@ -219,11 +200,11 @@ Single JSON string (`ensure_ascii=False`), structure:
 
 ### 3.3 LLM output JSON schema
 
-`{"selected_class": "良性|恶性", "confidence": 0.0-1.0, "reasoning": "..."}`
+`{"selected_class": "良性|恶性", "confidence": 0.0-1.0}` — no `reasoning` key.
 
 (No `selected_model`; stored decision uses `selected_model: agent_path_b_llm`.)
 
-### 3.4 Path B without LLM
+### 3.4 Arbitration without LLM
 
 - `enable_agent: false` → weighted soft vote (`method: path_b_static_softvote`).
 

@@ -1,0 +1,27 @@
+% [DATA-SOURCE] Table A1-3 tab_A1_audit_exemplars | 真实（去标识化样例）| TN3K 外测 routing_log 抽样改写 → Rec-01--Rec-12。
+\begin{responseinlinetable}
+\responseinlinetablecaption{表 A1-3. 去标识化结构化路由记录样例（TN3K 外测；字段与表 A1-2 对齐）}
+\label{tab_A1_audit_exemplars}
+\begin{adjustbox}{max width=\textwidth}
+\footnotesize
+\begin{tabular}{llllllccp{0.30\textwidth}}
+\toprule
+\textbf{编号} & \textbf{任务} & \textbf{分层} & \textbf{LLM} & \textbf{决策方式} & \textbf{结果} & \textbf{置信度} & \textbf{候选摘要} \\
+\midrule
+Rec-01 & 分类路由 & 相近 & 是 & LLM 裁决 & 良性 & 0.72 & 4 个分类器: 恶性 (0.66), 良性 (0.78), 良性 (0.99) \\
+Rec-02 & 分割路由 & 相近 & 是 & LLM 选 mask & TN3K 专用 & 0.84 & 5 个候选; 多队列联合 (0.82), TN3K 专用 (0.82) \\
+Rec-03 & 分类路由 & 相近 & 是 & LLM 裁决 & 恶性 & 0.65 & 4 个分类器: 恶性 (0.64), 恶性 (1.00), 良性 (0.96) \\
+Rec-04 & 分割路由 & 相近 & 是 & LLM 选 mask & TN3K 专用 & 0.68 & 5 个候选; TN3K 专用 (0.37), 多队列联合 (0.35) \\
+Rec-05 & 分类路由 & 相近 & 是 & LLM 裁决 & 恶性 & 0.60 & 4 个分类器: 恶性 (1.00), 恶性 (1.00), 良性 (0.81) \\
+Rec-06 & 分割路由 & 相近 & 是 & LLM 选 mask & PKTN 专用 & 0.86 & 5 个候选; PKTN 专用 (0.92), TN3K 专用 (0.92) \\
+\textbf{Rec-07} & 分割路由 & 相近 & 是 & LLM 选 mask & 多队列联合 & 0.86 & 5 个候选; PKTN 专用 (0.80), TN3K 专用 (0.80) \\
+Rec-08 & 分类路由 & 相近 & 是 & LLM 裁决 & 恶性 & 0.60 & 4 个分类器: 良性 (0.97), 恶性 (0.83), 良性 (0.93) \\
+Rec-09 & 分类路由 & 相近 & 是 & LLM 裁决 & 恶性 & 0.83 & 4 个分类器: 恶性 (1.00), 恶性 (1.00), 恶性 (0.93) \\
+Rec-10 & 分类路由 & 易区分 & 否 & 确定性共识 & 良性（共识） & 1.00 & 4 个分类器: 良性 (0.95), 良性 (1.00), 良性 (0.99) \\
+Rec-11 & 分类路由 & 相近 & 是 & 加权软投票（LLM 不可用） & 良性 & 0.58 & 4 个分类器: 恶性 (0.64), 恶性 (1.00), 良性 (0.96) \\
+Rec-12 & 分割路由 & 相近 & 是 & 规则回退（LLM 解析/API 失败） & PKTN 专用 & 0.78 & 5 个候选; PKTN 专用 (0.78), TN3K 专用 (0.77) \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{responseinlinetable}
+\par\smallskip\noindent\footnotesize 样例行在分割 LLM 路由与分类路由（调用 LLM、确定性共识、软投票与规则回退）之间均衡选取；以 Rec-01--Rec-12 标识，不使用原始图像文件名。本 TN3K 主评估中，分割 LLM 路由的相近度分层均为「相近」（最优与次优候选 agreement 差 $\leq 0.10$）。

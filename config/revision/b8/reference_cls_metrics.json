@@ -1,0 +1,31 @@
+{
+  "_source": "Response letter tab_cls_ext (Table R2), ThyroidXAgent image-level point estimates (± CI omitted).",
+  "_table_columns": "TN3K, ThyroidXL, TN5K, DDTI, ZJH-8K",
+  "cohorts": {
+    "tn3k": {
+      "auroc": 0.8511,
+      "auprc": 0.8001
+    },
+    "tn5k": {
+      "auroc": 0.9475,
+      "auprc": 0.9786
+    },
+    "thyroidxl": {
+      "auroc": 0.9312,
+      "auprc": 0.9135
+    },
+    "zjh8k": {
+      "auroc": 0.9374,
+      "auprc": 0.9544
+    },
+    "ddti_cls": {
+      "auroc": 0.7937,
+      "auprc": 0.7070
+    }
+  },
+  "tolerance": {
+    "auroc_abs": 0.06,
+    "auprc_abs": 0.08,
+    "acc_vs_target_abs": 0.015
+  }
+}

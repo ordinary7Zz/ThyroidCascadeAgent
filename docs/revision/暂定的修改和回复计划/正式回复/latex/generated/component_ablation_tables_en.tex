@@ -1,7 +1,8 @@
-% R2.8 summary: strategies (1)(2)(7) extracted from tab_routing_ablation_* (same point estimates and CIs)
+% R2.8 summary: strategies (1)(2)(7) extracted from tab_routing_ablation_*
+% [DATA-SOURCE] R14--R15 | Derived (reproducible) | Same cells as R12--R13; unweighted mean row is hand-computed.
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_component_ablation_seg}{R2.8 summary --- nodule segmentation for routing strategies (1), (2), and (7) (Dice $\uparrow$; point estimate and 95\% CI; from Tables R12--R13)}}
+\caption{\responsetabletitle{tab_component_ablation_seg}{R2.8 summary --- nodule segmentation, strategies (1), (2), and (7)}}
 \label{tab_component_ablation_seg}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l r l l l@{}}
@@ -20,11 +21,12 @@ Unweighted mean & --- & 0.8576 & 0.8487 & 0.8721 \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Each cell repeats the corresponding row in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} (Reviewer 1, Comment 2). Strategies (1)--(5) are defined in Reviewer 1, Comment 2. Strategy (7): deployable ThyroidXAgent (primary manuscript Table~S3). The bottom row is the unweighted arithmetic mean of cohort point estimates only (no pooled CI). 95\% CIs for strategies (1) and (2) match Tables R12--R13; strategy (7) CIs match Table~S3.}
+% [SYNC] tab_component_ablation_*: cells and CIs for (1)(2)(7) must match tab_routing_ablation_seg/cls; strategy (7) CIs vs manuscript Supp Table S3 when re-enabled.
+\responsetablenote{Dice $\uparrow$; point estimates and 95\% CIs. Strategies (1)--(5) are defined in Reviewer 1, Comment 2. Strategy (7): deployable ThyroidXAgent. The bottom row is the unweighted arithmetic mean of cohort point estimates only (no pooled CI).}
 \end{responsetable}
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_component_ablation_cls}{R2.8 summary --- benign--malignant classification for routing strategies (1), (2), and (7) (AUROC $\uparrow$; point estimate and 95\% CI; from Tables R12--R13)}}
+\caption{\responsetabletitle{tab_component_ablation_cls}{R2.8 summary --- benign--malignant classification, strategies (1), (2), and (7)}}
 \label{tab_component_ablation_cls}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l r l l l@{}}
@@ -41,5 +43,5 @@ Unweighted mean & --- & 0.8781 & 0.8787 & 0.9001 \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Same extraction as \responsetableref{tab_component_ablation_seg}; classification cohorts only. DDTI row is the classification subset ($n$=349). Mean row: unweighted mean of cohort point estimates (no pooled CI).}
+\responsetablenote{AUROC $\uparrow$; point estimates and 95\% CIs. Classification cohorts only. DDTI row is the classification subset ($n$=349). Mean row: unweighted mean of cohort point estimates (no pooled CI).}
 \end{responsetable}

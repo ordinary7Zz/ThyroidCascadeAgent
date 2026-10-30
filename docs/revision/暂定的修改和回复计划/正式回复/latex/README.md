@@ -29,7 +29,7 @@
 **改写成什么**
 
 - 用稿件/Methods 已有概念或本信已定义术语（ThyroidXAgent、策略 (1)–(8)、三独立分类器一致/不一致、LLM 路由、确定性共识、冻结的上游专家输出等）。
-- 附录 A1：小节标题与 bullet 用自然语言（例：**分类 --- 分类器不一致时的 LLM 裁决**）；`promptverbatim` 内保留 API 实际措辞；叙述性 wrap 用「程序拼接」「结构化路由记录」，不写日志文件名。
+- 附录 A1：小节标题与 bullet 用自然语言（例：**分类路由**、**分割 LLM 路由**）；`promptverbatim` 内保留 API 实际措辞；叙述性 wrap 用「程序拼接」「结构化路由记录」，不写日志文件名。
 - 附录 A2 / 表 A2：版本号用 `\texttt{包名 版本}` 即可；不必写训练环境配置文件名（可写「与训练环境配置一致」）。
 
 **允许例外**
@@ -50,15 +50,15 @@ NHC 表 R18–R20 另遵守下文「待定与修订稿承诺」中的 NHC 条款
 - **逐条明确回应**：每条 `\reviewercomment` 下的回复须让审稿人看出「**是否同意/是否已做** + **证据在哪**（`\responsetableref` / `\responsefigureref` / 附录 / 修订稿 Methods）」。避免只有方法描述或 cross-ref 而无「我们已…」；审稿人列出多个并列子要求时用 **`\par` 分段** 或 **主题句起段**（与 TURG/`Response_TURG.pdf` 一致，如 *Audit design.*；**不用** `\begin{itemize}`）；暂缺数据用 `\rpending`，勿留看似未写完的单句。
 - 正文引用：`\responsetableref` / `\responsefigureref` / `\responsetablerefrange` 嵌入句子；**勿** `（见表 R*）`、**勿**「见信末」/ “at the end of this letter”、**勿**每条末尾重复表号清单。
 - **只引用表/图，不单独引用「表注/图注」**：Nature 系回复信与正文一样，交叉引用对象是 **Table/Figure**（本信用 `\responsetableref`）；表注 `\responsetablenote` 是表的一部分，读者跟表号即可。**勿**写 “in Table~R12 **notes**” /「见 \responsetableref{…} **表注**」——除非正文刻意不写细节、且细节**仅**在表注（此时也只写 `\responsetableref{…}`，不必点「表注」二字）。同一句里已写清操作定义时，**删除**再指向表注的尾巴（避免重复）。
-- 信内表图编号**仅** R1–R20、图 R1–R3（见 `reviewer_response.sty` 页眉说明）；**不复用**稿件 Supplementary Table S* 序号。
+- 信内表、图各有一套 **R1, R2, …** 序号，按 `\responsetabletitle` / `\responsefiguretitle` **在 PDF 中首次出现的顺序**自动编号（见 `reviewer_response.sty`）；**不复用**稿件 Supplementary Table S* 序号。
 - 图：先 `\includegraphics`，再 `\caption{\responsefiguretitle{键}{短标题}}`，图例正文用 `\responsefigurenote{…}`（题注在图下方）。
 
 ## 表图注册与命名
 
-1. 在 `generated/response_asset_registry.tex` 增加一行，例如 `\responsetableregister{tab_example}{R20}`（新增编号时同步改 `reviewer_response.sty` 中 R1–R* 范围说明）。
-2. `\label{tab_example}` 与注册键、`\responsetableref{}` 参数**必须相同**（语义 slug，不含数字）。
-3. 表题：`\caption{\responsetabletitle{tab_example}{短标题}}`；正文与表注引用用 `\responsetableref` / `\responsetablerefrange`，勿手写「表 R*」。
-4. 续表页眉（`longtable` 的 `\endhead`/`\endfoot`）：`\responsetablecontinuedrow{tab_…}`（勿用 `\responsetableref`，避免列宽异常）。正文引用续表可选 `\responsetablesetcontinued{tab_…}`。
+1. **勿**再在 `response_asset_registry.tex` 里写 `\responsetableregister{…}{R*}`（已废弃；保留文件仅用于 `\responsetablesetcontinued{…}` 等标记）。
+2. 表/图题：` \caption{\responsetabletitle{tab_example}{短标题}}` 或 `\responsefiguretitle{fig_example}{…}`；宏内已 `\label{键}`，**勿**在下一行重复 `\label{tab_example}`。
+3. 交叉引用：`\responsetableref{tab_example}` / `\responsefigureref{fig_example}` / `\responsetablerefrange{…}{…}`；**勿**手写「表 R12」（除非 `\rpending` 占位且尚未定稿）。
+4. 续表页眉（`longtable`）：`\responsetablecontinuedrow{tab_…}`（用 `\ref`，需编译两次）。正文引用续表可加 `\responsetablesetcontinued{tab_…}` 以显示「(continued)」。
 5. 长表分页：`\begin{responsepaginatedtable}…\end{responsepaginatedtable}`；单页浮动表：`\begin{responsetable}…\end{responsetable}`（含 `\centering`）。
 6. 与投稿主表版式一致的复现块：`manuscriptresponsetable`（AUROC/AUPRC 或 Dice/HD95 分节、± 半宽 CI、灰底 ThyroidXAgent 行，见 `docs/ThyroidXAgent.md` 表标签）。
 7. 附录 A1/A2 前：`\responseproseappendixstart`；附录正文：`\begin{responseappendixprose}…\end{responseappendixprose}`；附录内表一律 `responseinlinetable` + `\responseinlinetablecaption`（勿用浮动 `responsetable`）。Prompt：`promptverbatim`（`breaklines=true`）。
@@ -106,4 +106,4 @@ xelatex REVIEWER_RESPONSE_EN.tex
 cd ../latex-viewer && python3 app.py
 ```
 
-修改 `response_asset_registry.tex` 或新增 `\label` 后建议 **编译两次** 以稳定交叉引用。
+修改 `body_*.tex` 表顺序或增删 `\responsetabletitle` 后请 **XeLaTeX 编译两次** 以稳定 `\ref`。

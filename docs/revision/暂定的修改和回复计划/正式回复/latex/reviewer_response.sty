@@ -51,7 +51,8 @@
 \newcommand{\SupportingLabel}{Supporting tables and figures}
 \newcommand{\ResponseTableNoteLabel}{}
 
-% Response-letter table/figure IDs (register in generated/response_asset_registry.tex)
+% Response-letter table/figure IDs: auto-numbered in order of first \responsetabletitle / \responsefiguretitle.
+% Optional: \responsetablesetcontinued{key} for “(continued)” on \responsetableref.
 \newcommand{\ResponseTableName}{Table}
 \newcommand{\ResponseTablesName}{Tables}
 \newcommand{\ResponseFigureName}{Figure}
@@ -59,38 +60,44 @@
 \newcommand{\responsecontinuedsuffix}{(continued)}
 
 \makeatletter
-\newcommand{\responsetableregister}[2]{%
-  \expandafter\gdef\csname rtab@#1\endcsname{#2}%
-}
+\newcounter{responsetableno}
+\renewcommand{\theresponsetableno}{R\arabic{responsetableno}}
+\newcounter{responsefigureno}
+\renewcommand{\theresponsefigureno}{R\arabic{responsefigureno}}
+
+% Legacy registry lines are no-ops (numbering is automatic).
+\newcommand{\responsetableregister}[2]{}
+\newcommand{\responsefigureregister}[2]{}
 \newcommand{\responsetablesetcontinued}[1]{%
   \expandafter\gdef\csname rtab@cont@#1\endcsname{1}%
 }
-\newcommand{\responsefigureregister}[2]{%
-  \expandafter\gdef\csname rfig@#1\endcsname{#2}%
-}
+
 \newcommand{\responsetableref}[1]{%
-  \ResponseTableName~\csname rtab@#1\endcsname
+  \ResponseTableName~\ref{#1}%
   \@ifundefined{rtab@cont@#1}{}{\responsecontinuedsuffix}%
 }
 \newcommand{\responsetablerefrange}[2]{%
-  \ResponseTablesName~\csname rtab@#1\endcsname--\csname rtab@#2\endcsname
+  \ResponseTablesName~\ref{#1}--\ref{#2}%
 }
 \newcommand{\responsetabletitle}[2]{%
-  \ResponseTableName~\csname rtab@#1\endcsname.\nobreakspace #2%
+  \ResponseTableName~\theresponsetableno.\nobreakspace #2%
 }
 % Longtable page header only (plain text; avoid hyperref/link boxes in \multicolumn width calc)
 \newcommand{\responsetablecontinuedrow}[1]{%
-  \multicolumn{5}{@{}r@{}}{\footnotesize\emph{\ResponseTableName~\csname rtab@#1\endcsname\responsecontinuedsuffix}} \\%
+  \multicolumn{5}{@{}r@{}}{\footnotesize\emph{\ResponseTableName~\ref{#1}\responsecontinuedsuffix}} \\%
 }
 \newcommand{\responsefigureref}[1]{%
-  \ResponseFigureName~\csname rfig@#1\endcsname
+  \ResponseFigureName~\ref{#1}%
 }
 \newcommand{\responsefigurerefrange}[2]{%
-  \ResponseFiguresName~\csname rfig@#1\endcsname--\csname rfig@#2\endcsname
+  \ResponseFiguresName~\ref{#1}--\ref{#2}%
 }
 \newcommand{\responsefiguretitle}[2]{%
-  \ResponseFigureName~\csname rfig@#1\endcsname. #2%
+  \ResponseFigureName~\theresponsefigureno.\nobreakspace #2%
 }
+% Routing ablation tables R12--R13: rank highlighting (print-safe)
+\newcommand{\routingbest}[1]{\textbf{#1}}
+\newcommand{\routingsecond}[1]{\underline{#1}}
 \makeatother
 
 \newcommand{\ManuscriptTitle}{ThyroidXAgent}
@@ -153,20 +160,20 @@
 }{}
 
 % Float captions: full text in \caption{Table R1. ...} (no extra "Table 1:" prefix)
-\captionsetup[table]{position=above,skip=6pt,font=small,labelfont=bf,singlelinecheck=false,labelformat=empty,labelsep=none}
-\captionsetup[figure]{position=below,skip=6pt,font=small,labelfont=bf,singlelinecheck=false,labelformat=empty,labelsep=none}
-\captionsetup[sub]{font=footnotesize,labelfont=bf}
+\captionsetup[table]{position=above,skip=6pt,font=small,labelfont=normal,singlelinecheck=false,labelformat=empty,labelsep=none}
+\captionsetup[figure]{position=below,skip=6pt,font=small,labelfont=normal,singlelinecheck=false,labelformat=empty,labelsep=none}
+\captionsetup[sub]{font=footnotesize,labelfont=normal}
 
 \newcommand{\responseappendix}{%
   \clearpage
   \section*{Supporting Tables and Figures}%
-  \noindent\footnotesize New supplementary-style tables and figures cited in the point-by-point responses above (labels \textbf{R1--R20}, \textbf{Figures R1--R3}). Tables and figures use response-letter labels \textbf{R1--R20} and \textbf{Figures R1--R3} only.\par\vspace{0.5em}%
+  \noindent\footnotesize New supplementary-style tables and figures cited in the point-by-point responses above are numbered \textbf{R1, R2, \ldots{}} in order of appearance below (tables and figures each have their own R sequence). They do not reuse manuscript Supplementary Table numbers.\par\vspace{0.5em}%
 }
 
 \newcommand{\responseappendixzh}{%
   \clearpage
   \section*{支撑表图（Supporting Tables and Figures）}%
-  \noindent\footnotesize 下文复现回复中引用的表、图（编号 \textbf{R1--R20}、\textbf{图 R1--R3}）；表图编号仅使用本信 \textbf{R1--R20}、\textbf{图 R1--R3}，不复用稿件补充表序号。\par\vspace{0.5em}%
+  \noindent\footnotesize 下文复现回复中引用的表、图按信内出现顺序编号为 \textbf{R1、R2、\ldots{}}（表与图各有一套 R 序号），不复用稿件补充表序号。\par\vspace{0.5em}%
 }
 
 % Flush pending floats before prose appendices (A1/A2 prompts)
@@ -192,6 +199,7 @@
 \newcommand{\responserowagent}{\rowcolor{ResponseTableGray}}
 
 \newenvironment{responsetable}{%
+  \refstepcounter{responsetableno}%
   \begin{table}[H]
   \centering
   \footnotesize
@@ -218,6 +226,7 @@
 }
 
 \newenvironment{manuscriptresponsetable}{%
+  \refstepcounter{responsetableno}%
   \begin{table}[H]
   \centering
   \footnotesize
@@ -227,6 +236,7 @@
 }
 
 \newenvironment{responsefigure}{%
+  \refstepcounter{responsefigureno}%
   \begin{figure}[H]
   \centering
 }{%
@@ -245,7 +255,7 @@
 
 \newcommand{\responseinlinetablecaption}[1]{%
   \par\vspace{0.15em}%
-  {\small\bfseries #1\par}%
+  {\small #1\par}%
   \vspace{0.35em}%
 }
 

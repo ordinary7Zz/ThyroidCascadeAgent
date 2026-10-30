@@ -1,7 +1,8 @@
 % LLM metadata ablation (tab_metadata_ablation_seg / cls); TN5K
+% [数据来源] R14–R15 | 真实（可复现）| B5 output/ablation/b5/tn5k/* + docs/revision/b5/；固定专家池，仅改 LLM prompt 元数据。
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_metadata_ablation_seg}{LLM 路由元数据消融 --- 结节分割（TN5K 测试集；点估计及 95\% CI）}}
+\caption{\responsetabletitle{tab_metadata_ablation_seg}{LLM 路由元数据消融 --- 结节分割}}
 \label{tab_metadata_ablation_seg}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l l l@{}}
@@ -19,8 +20,9 @@
 \responsetablenote{固定专家池与 TN5K 外测共享上游专家输出；分割为 LLM 路由，仅改变 prompt 可见元数据（附录 A1）。隐去设备/来源/两者均隐去及仅质量与分歧信号四档的 95\% CI 为 cluster bootstrap（1000 次，seed=42）。}
 \end{responsetable}
 
+% [SYNC] tab_metadata_ablation_cls: TN5K split, expert pool, and metadata tiers match tab_metadata_ablation_seg.
 \begin{responsetable}
-\caption{\responsetabletitle{tab_metadata_ablation_cls}{LLM 路由元数据消融 --- 良恶性分类（TN5K；点估计及 95\% CI）}}
+\caption{\responsetabletitle{tab_metadata_ablation_cls}{LLM 路由元数据消融 --- 良恶性分类}}
 \label{tab_metadata_ablation_cls}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l l l@{}}
@@ -35,5 +37,5 @@
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{条件与 \responsetableref{tab_metadata_ablation_seg} 相同。消融四档下，三分类器一致时为确定性共识、\textbf{不}调用 LLM；不一致时由 LLM 裁决分类，元数据效应应结合后者解读。分类模型不一致时的 LLM 裁决\textbf{输入}未做元数据消融（本条消融仅改 prompt 可见字段）。}
+\responsetablenote{固定专家池与 TN5K 外测共享上游专家输出；分类为 LLM 路由，仅改变 prompt 可见元数据（附录 A1）。当全部独立分类专家输出一致时采用确定性共识、不调用 LLM；不一致时由 LLM 完成分类路由。需 LLM 参与的分类路由输入未做元数据消融（本条消融仅改 prompt 可见字段）。}
 \end{responsetable}

@@ -50,11 +50,11 @@ Markup:
 {"selected_class": "恶性", "confidence": 0.75, "reasoning": "..."}
 reasoning 须引用具体置信度数值。"""
 
-PATH_B_LLM_SYSTEM_PROMPT_BRIEF = f"""甲状腺超声 Path B 裁决：独立分类模型无共识。
+PATH_B_LLM_SYSTEM_PROMPT_BRIEF = """甲状腺超声分类裁决：各独立分类模型未形成共识。
 依据 user JSON 中的 independent_models、autogluon_based_on_selected_mask、segmentation_decision。
 禁止思考过程与 Markdown。只输出一行 JSON：
-{{"selected_class":"恶性或良性", "confidence":0.0-1.0, "reasoning":"{BRIEF_ROUTING_REASONING}"}}
-信号均模糊时略倾向恶性但降低 confidence。"""
+{"selected_class":"恶性或良性", "confidence":0.0-1.0}
+勿输出 reasoning 字段。信号均模糊时略倾向恶性但降低 confidence。"""
 
 PATH_B_USER_PROMPT_EXAMPLE: dict[str, Any] = {
     "scenario": "独立分类模型无共识，需综合裁决",
@@ -248,8 +248,8 @@ class LLMClassificationAgent:
 
     def _build_system_prompt_single(self) -> str:
         if self.brief_routing_prompt:
-            return f"""从 user JSON  predictions 中选最可信模型。
-禁止思考/Markdown。只输出一行 JSON：selected_model, selected_class, confidence(0-1), reasoning 固定为 "{BRIEF_ROUTING_REASONING}"。"""
+            return """从 user JSON  predictions 中选最可信模型。
+禁止思考/Markdown。只输出一行 JSON：selected_model, selected_class, confidence(0-1)。勿输出 reasoning 字段。"""
         return """你是甲状腺超声多模型预测整合专家，从若干模型输出中选最可信的一项。
 
 【字段】top_confidence（或 top_confidence_calibrated）为主置信度。entropy 越大越不确定，margin_top2 越大越稳。num_models_same_class 为投票一致性。
@@ -260,6 +260,14 @@ class LLMClassificationAgent:
 
     def _build_system_prompt_multi(self) -> str:
         tk = self.top_k
+        if self.brief_routing_prompt:
+            return f"""你是甲状腺超声多模型预测整合专家，选出最值得信任的 {tk} 个模型（按信任度从高到低），用于对各类别概率取平均融合。
+
+【字段】top_confidence（或 top_confidence_calibrated）为主置信度。entropy、margin_top2、num_models_same_class。
+
+【决策序】综合判断哪 {tk} 个模型组合最可信，优先级与单选类似，需考虑组合互补性。
+
+【输出】只输出纯JSON（无Markdown/思考），首尾为{{}}。字段：selected_models(长度恰好{tk}的字符串数组)。勿输出 reasoning、selected_class 或 confidence。"""
         return f"""你是甲状腺超声多模型预测整合专家，选出最值得信任的 {tk} 个模型（按信任度从高到低），用于对各类别概率取平均融合。
 
 【字段】top_confidence（或 top_confidence_calibrated）为主置信度。entropy、margin_top2、num_models_same_class。
@@ -550,9 +558,7 @@ class LLMClassificationAgent:
             if field not in decision_data:
                 raise ValueError(f"响应缺少 '{field}'")
         if "reasoning" not in decision_data:
-            if self.brief_routing_prompt:
-                decision_data = {**decision_data, "reasoning": BRIEF_ROUTING_REASONING}
-            else:
+            if not self.brief_routing_prompt:
                 raise ValueError("响应缺少 'reasoning'")
 
         # 修正 confidence 为实际模型置信度
@@ -563,11 +569,17 @@ class LLMClassificationAgent:
         else:
             confidence = max(0.0, min(1.0, float(decision_data["confidence"])))
 
+        reasoning = (
+            BRIEF_ROUTING_REASONING
+            if self.brief_routing_prompt
+            else decision_data["reasoning"]
+        )
+
         return ClsAgentDecision(
             selected_model=selected,
             selected_class=decision_data["selected_class"],
             confidence=confidence,
-            reasoning=decision_data["reasoning"],
+            reasoning=reasoning,
             all_predictions=[p.to_dict() for p in predictions],
             method="single",
         )
@@ -589,7 +601,11 @@ class LLMClassificationAgent:
             selected_model="agent_topk_soft_voting",
             selected_class=cls,
             confidence=float(conf),
-            reasoning=str(decision_data.get("reasoning", "")),
+            reasoning=(
+                BRIEF_ROUTING_REASONING
+                if self.brief_routing_prompt
+                else str(decision_data.get("reasoning", ""))
+            ),
             all_predictions=[p.to_dict() for p in predictions],
             selected_models=[p.model_name for p in subset],
             method="soft_voting",
@@ -831,9 +847,11 @@ class LLMClassificationAgent:
         json_text = self._extract_json_from_text(response_text)
         decision_data = json.loads(json_text)
 
-        pb_reasoning = str(decision_data.get("reasoning", "")).strip()
-        if not pb_reasoning and self.brief_routing_prompt:
-            pb_reasoning = BRIEF_ROUTING_REASONING
+        pb_reasoning = (
+            BRIEF_ROUTING_REASONING
+            if self.brief_routing_prompt
+            else str(decision_data.get("reasoning", "")).strip()
+        )
 
         decision = ClsAgentDecision(
             selected_model="agent_path_b_llm",

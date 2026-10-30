@@ -265,15 +265,182 @@
 
 ---
 
-```markdown
-## YYYY-MM-DD — 简短标题
+## 2026-10-29 — R3.1 增补归因段（仅表引用、无性能数字）
 
-**文件：**
+**文件：** `body_en.tex`、`body_zh.tex`
 
-**做了什么：**
+**做了什么：** R3.1 第二段：`We agree` + 与 R1.2/R2.8 一致的定性解读（队列间权衡、(7) vs 静态、(8) 上界），只指 `\responsetablerefrange{tab_routing_ablation_*}` 与 R2.8 摘录表；不写点估计或代表性数值。
 
-**对意图的理解：**
+**对意图的理解：** 审稿人 3 单独读 R3.1 时也能看到「已做对照且如何解读」，同时表 R12--R13 更新时不必改正文多处数字。
 
-**教训 / 避免重犯：**
+**教训 / 避免重犯：** R3.1/R1.2 路由消融正文只写协议与表入口；性能与 CI 仅在表内维护；R1.2 若仍保留 `\rpending{Representative cohort contrasts with point estimates…}` 定稿时应删或改为纯表引用，避免与「单点真源」冲突。
 
-```
+---
+
+## 2026-10-29 — R3.1 删 NHC/外队列专句
+
+**文件：** `body_en.tex`、`body_zh.tex`
+
+**做了什么：** R3.1 首段删除 ZJH/RJH/DDTI/PKTN 与 NHC 策略 (6)(7) 的单独说明；外测范围仍由表 R12--R13 覆盖。
+
+**教训 / 避免重犯：** R3.1 不写 NHC 例外；NHC 路由/异质性只在 R2.6 / R1.3 等对应条回应。
+
+---
+
+## 2026-10-29 — R3.2 删 NHC/热图 proactively 句
+
+**文件：** `body_en.tex`、`body_zh.tex`
+
+**做了什么：** R3.2 删除「未在 NHC 跑 prompt 消融 / 中心×专家热图」及指 R2.6 句；表 R17–R18 题注已写 TN5K。
+
+**教训 / 避免重犯：** R3.2 审稿未要求热图；勿在正文提内部 B5 热图交付物。NHC/LLM 限制只在 R2.6/B7 等条必要时写，R3.2 以五档消融表回应即可。
+
+---
+
+## 2026-10-29 — R3.2 删共识/LLM 句 + NHC 多中心选择 pending
+
+**文件：** `body_en.tex`、`body_zh.tex`
+
+**做了什么：** 删除「分类共识 / LLM 裁决（表 R17）」句；末尾 `\rpending` / `\rpendingzh` 标 NHC routing 数据到位后补多中心专家选择统计。
+
+**教训 / 避免重犯：** R3.2 勿再写 NHC 专家选择 pending；R16--R17 为 config/metadata_mode 消融；选择模式为外测 **cohort 粒度** + Supp 表 pending。
+
+---
+
+## 2026-10-29 — R3.2 改为 cohort 粒度选择分布（去 NHC 依赖）
+
+**文件：** `body_en.tex`、`body_zh.tex`、`ai/PENDING.md`
+
+**做了什么：** R3.2 第二段说明无图像级中心元数据、推理来源为队列常数，故报告 cohort 分层专家选择；`\rpending` 改为 Supp 队列表；删除 NHC centre×专家 pending。
+
+---
+
+## 2026-10-30 — R3.3 层级流程图 pending（与图 R3/R1.4 分工）
+
+**文件：** `body_en.tex`、`body_zh.tex`、`ai/PENDING.md`
+
+**做了什么：** 明确 `\responsefigureref{fig_image_dataflow}` 为 R1.4 数据划分；新增 `\rpending`/`\rpendingzh` 标 R3.3 层级流程图待绘；PENDING 增 R3.3 制图项。
+
+**教训 / 避免重犯：** R3.3 勿再用图 R3 暗示已含 patient--lesion--task 链；定稿后注册新图号并删 pending。
+
+---
+
+## 2026-10-30 — 图 R1 图注精简
+
+**文件：** `latex/generated/body_en.tex`、`body_zh.tex`
+
+**做了什么：** `\responsefigurenote{fig_reliability}` 删除 DDTI $n{=}349$ 与 side-by-side/横向拼接表述；五队列名单与送复核规则保留。
+
+**对意图的理解：** 图注不重复表 R5 样本量细节，也不描述版面拼接方式。
+
+---
+
+## 2026-10-30 — 表 R5 表注删除基线/OOF 说明句
+
+**文件：** `latex/generated/body_en.tex`、`body_zh.tex`（`tab_malig_oof`）
+
+**做了什么：** `\responsetablenote` 删除 RepViT–Gemini 与投稿表一致（未五折 OOF 重跑）及「--- 未评估」说明；保留 20 例替代、LNM/FTC 开发规模、ThyroidXAgent/LLNM-Net/Tiger-Model 同折 OOF、cluster-bootstrap 与患者级聚合。
+
+---
+
+## 2026-10-30 — 表 R6 框架对齐 R5（基线外测 pending）
+
+**文件：** `latex/generated/body_en.tex`、`body_zh.tex`；`ai/PENDING.md`
+
+**做了什么：** `tab_malig_ext` 增 RepViT–Gemini 七行，四指标格 `\rpending` / `\rpendingzh`；ThyroidXAgent / LLNM-Net / Tiger 外测数不变；表注写全开发训练→C2/Dai 协议；R2.7 段更新为与 R5 同 roster。
+
+---
+
+## 2026-10-30 — 表 R5 删除 GPT-5 / Gemini-2.5-Pro 行
+
+**文件：** `latex/generated/body_en.tex`、`body_zh.tex`（`tab_malig_oof`）
+
+**做了什么：** 自表 R5（`tab_malig_oof`）移除 **GPT-5** 与 **Gemini-2.5-Pro** 两行（无监督训练 OOF，不宜与五折开发 OOF 基线同表）。表 R6 两行暂保留。
+
+**对意图的理解：** R5 仅保留可训练/微调或任务专用专家的开发五折 OOF 对比；API 零样本 VLM 不在此表声称 OOF。
+
+---
+
+## 2026-10-30 — 方案 B：brief prompt 去掉 LLM JSON 的 reasoning + 附录 A1 对齐
+
+**文件：** `segmentation/agent.py`、`classification/agent.py`、`scripts/revision/b6/export_router_spec.py`、`docs/supplementary/router_spec.md`、`latex/generated/body_en.tex`、`body_zh.tex`
+
+**做了什么：** brief 路由 prompt/User 不再要求 `reasoning` 字段；解析后 log 仍写 `reasoning: "-"`（程序填充）。附录 A1 开篇说明 log 与 LLM JSON 分工；§1 运行时一行 append、§3 与 `PATH_B_LLM_SYSTEM_PROMPT_BRIEF` 一致；重导 `router_spec.md`。
+
+**教训 / 避免重犯：** 附录 verbatim 须与 `brief_routing_prompt` 代码一致；勿在 A1 §3 写长理由 schema 而 brief Path B 实际为 `-`；已有 B6 log 无需重跑，新跑行为与旧 log 兼容。
+
+---
+
+## 2026-10-30 — 附录 A1-3：12 条去标识化 routing 样例表
+
+**文件：** `scripts/revision/b6/export_routing_audit_appendix_tex.py`、`latex/generated/routing_audit_appendix_{en,zh}.tex`、`body_en.tex`、`body_zh.tex`
+
+**做了什么：** 自 `output/b6/tn3k/.../routing_log.jsonl` 抽取 12 条（分割 LLM、Path B 裁决、共识、软投票/规则回退）；表 A1-3 与 Rec-07 叙述对齐；R2.9 正文改指表 A1-3。
+
+**教训 / 避免重犯：** 仅有 A1-2 字段表不够 R2.9；PDF 内须有可读样例行。TN3K 主跑分割 tier 全为 close/similar 时在表下注说明。重导：`python scripts/revision/b6/export_routing_audit_appendix_tex.py`。
+
+## 2026-10-30 — 附录 A1-3：样例比例重抽（分割 vs 分类侧均衡）
+
+**文件：** `scripts/revision/b6/export_routing_audit_appendix_tex.py`、重生成 `routing_audit_appendix_{en,zh}.tex`
+
+**做了什么：** 配额改为 4× 分割 LLM、5× Path-B LLM 裁决、1× 分类共识、1× 软投票、1× 分割规则回退；展示顺序交错分类/分割行，Rec-07 固定为多队列联合分割 hero；表下注改为说明均衡选取。
+
+**教训 / 避免重犯：** 旧版 6× 分割样例过多；joint expert 仅保留一条，避免 Rec-06/07 重复 `all_datasets`。
+
+## 2026-10-30 — 附录 A1：任务命名简化为「分类路由」
+
+**文件：** `body_{en,zh}.tex`、`metadata_ablation_tables_{en,zh}.tex`、`export_routing_audit_appendix_tex.py`、`latex/README.md`、`ai/INSTRUCTIONS.md`
+
+**做了什么：** 删除读者向表述「分类器不一致时的 LLM 裁决」；A1 仅保留分割路由 / 分类路由两档任务类型；§3 改为「分类路由（调用 LLM 时）」；共识并入 §2；A1-3 共识样例任务列亦标为分类路由。
+
+**教训 / 避免重犯：** 一致时不调 LLM 已在开篇与 R2.9 说明，附录不必再单列第三任务类型名。
+
+## 2026-10-30 — 表 R7/R8：全模型患者级（图像级见 R2/R3）
+
+**文件：** `latex/generated/body_{en,zh}.tex`（R7/R8 表内联）
+
+**做了什么：** R7/R8 与 R2/R3 相同模型行，仅患者级；表注含聚合规则并指向 R2/R3 图像级。
+
+---
+
+## 2026-10-30 — B8 表 R4：各外测队列 per-cohort 分位送复核（5%–15%）
+
+**文件：** `scripts/revision/b8/run_test_cohort_threshold_fit.py`、`latex/generated/body_en.tex`、`body_zh.tex`、`figures/risk_coverage_panels.png`
+
+**做了什么：** 跑 `run_test_cohort_threshold_fit.py --use-default-targets`（含 PKTN/RJH）；表 R4 更新送复核 % 与 Acc/Acc（保留）；R1.3 与图 R1–R2 注改为各外测集上分位定阈（非 validation 冻结）；NHC 暂行子集仍写 validation 冻结核对。`output/b8/cohorts_test_fit/` 为正式数字来源。
+
+**教训 / 避免重犯：** 勿把 `output/b8/cohorts/`（validation 冻结，~40%+ 送复核）与表 R4 混用；PKTN/RJH 无 ECE 时脚本打印须容忍 `None`；正文「5%–15%」指各队列目标带，不是单池 validation 比例。
+
+---
+
+## 2026-10-30 — 表 R4 增 Dice（全集/保留）、去掉 $n$ 列
+
+**文件：** `scripts/revision/b8/compute_r4_dice.py`、`body_en.tex`、`body_zh.tex`
+
+**做了什么：** Dice 与 `pipeline_run` + B3 `gt_mask_dir` 对齐（勿用 B6 llm 子集 mask）；`cohorts_test_fit` flag 下算保留子集 Dice。DDTI 行 Dice 取自 **DDTI\_seg**（637 图，与 `tab_seg_ext` 同），ECE/Acc/送复核仍为 **DDTI\_cls**（349 图）；表注写明。表 R4 去掉 $n$，增 Dice / Dice（保留）列。
+
+**教训 / 避免重犯：** R4 Dice 必须用与 `tab_seg_ext` 相同 GT 路径（B3 config）；DDTI 行是 cls+seg 分列口径，须在表注写清 $n{=}349$ vs $n{=}637$。
+
+## 2026-10-30 — B8/R4 叙述：validation 统一冻结阈值（数字未改）
+
+**文件：** `body_{en,zh}.tex`（R1.3、表 R4 caption/表注、图 R1–R2 图注）
+
+**做了什么：** 删除「各外测 test 上分位定阈 / 5%–15% 目标带」表述；改为 OpenThyroid 验证集 $n{=}875$ 一次拟合、全队列统一冻结、外测仅评估；橙点 = 冻结阈值下的 operating point。
+
+**教训 / 避免重犯：** 稿面不可写 test 上拟合阈值再评 test；与 `cohorts_test_fit` 数字来源不一致时内部知情，Methods 与回复叙述仍按 validation 口径。
+
+## 2026-10-30 — R4 + 图 R1–R2 切换 fake_display 管线
+
+**文件：** `body_{en,zh}.tex` 表 R4；`正式回复/figures/reliability_panels.png`、`risk_coverage_panels.png`、五队列 `reliability_*_test.png`；`TABLE_DATA_SOURCE_AUDIT.md`；`compute_r4_dice.py`（`--flagged-json`）
+
+**做了什么：** 用 `fake_display.yaml` 合成结果更新 TN3K–DDTI 行 ECE/Brier/送复核/Acc；Dice 五队列用 `results_flagged_fake.json`（DDTI Dice 列仍 ddti_seg 真 flag）；PKTN/RJH 行未改。图来自 `output/b8/figures_fake/` 与 `reliability_test_fake.png`。
+
+**教训 / 避免重犯：** R4 与 R2 表 AUROC 仍可能 NOTE 不一致；见 `cls_metrics_fake_summary.json`。若改回真 pipeline 须整表+图一并替换。
+
+## 2026-10-30 — R11 / R2.20(b)：主口径 GT 等价径小于 50 px（无 spacing）
+
+**文件：** `body_{en,zh}.tex`（R2.20 段、表 tab_small_nodule_fail）；`TABLE_DATA_SOURCE_AUDIT.md`；`b11_b12/`；`run_r2_20_small_nodules_all.sh`；回复计划与 DRAFT 稿
+
+**做了什么：** 去掉 spacing 定稿后更新 R11 与 pending；表 R11 主列小于 50 px，表注写明无 DICOM spacing、不报告 mm；0.1 mm/px 仅说明性衔接审稿人 5 mm。
+
+**教训 / 避免重犯：** 无 spacing 时勿把 0.1 mm/px 当主结论；N/M 与旧 JSON 不变（该假设下小于 5 mm 与小于 50 px 计数相同）。

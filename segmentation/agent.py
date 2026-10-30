@@ -245,22 +245,16 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
     def _generate_system_prompt_brief(self) -> str:
         if self.ensemble_enabled and self.ensemble_top_k > 1:
             fmt = (
-                f'{{"selected_models":["m1","m2"], "weights":[0.6,0.4], '
-                f'"confidence":0.9, "reasoning":"{BRIEF_ROUTING_REASONING}"}}'
+                '{"selected_models":["m1","m2"], "weights":[0.6,0.4], '
+                '"confidence":0.9}'
             )
             fields = (
                 f'"selected_models"(长度{self.ensemble_top_k}), "weights"(和1), '
-                f'"confidence"(0-1), "reasoning"(固定为"{BRIEF_ROUTING_REASONING}")'
+                '"confidence"(0-1)；勿输出 reasoning 字段'
             )
         else:
-            fmt = (
-                f'{{"selected_model":"模型名", "confidence":0.9, '
-                f'"reasoning":"{BRIEF_ROUTING_REASONING}"}}'
-            )
-            fields = (
-                f'"selected_model", "confidence"(0-1), '
-                f'"reasoning"(固定为"{BRIEF_ROUTING_REASONING}")'
-            )
+            fmt = '{"selected_model":"模型名", "confidence":0.9}'
+            fields = '"selected_model", "confidence"(0-1)；勿输出 reasoning 字段'
         return f"""你是分割模型选择代理。根据 user 中 JSON 指标选最佳 mask。
 禁止输出思考过程、Markdown 或任何 JSON 外的文字。第一个字符必须是 {{，最后一个必须是 }}。
 只输出一行 JSON：{fields}。示例：{fmt}
@@ -777,15 +771,13 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
 
         if self.ensemble_enabled and self.ensemble_top_k > 1:
             question = f"请选择 Top {self.ensemble_top_k} 个最佳模型用于 ensemble。"
-            fmt = '{"selected_models": ["模型1", "模型2"], "weights": [0.6, 0.4], "confidence": 0.95, "reasoning": "..."}'
+            fmt = '{"selected_models": ["模型1", "模型2"], "weights": [0.6, 0.4], "confidence": 0.95}'
         else:
             question = "哪个模型提供了最佳分割结果？"
-            fmt = '{"selected_model": "模型名称", "confidence": 0.95, "reasoning": "..."}'
+            fmt = '{"selected_model": "模型名称", "confidence": 0.95}'
 
         if self.brief_routing_prompt:
-            out_hint = (
-                f'只输出一行 JSON，reasoning 必须为 "{BRIEF_ROUTING_REASONING}"。格式：{fmt}'
-            )
+            out_hint = f"只输出一行 JSON，勿包含 reasoning 字段。格式：{fmt}"
         else:
             out_hint = (
                 "只输出纯JSON，单行，不要 markdown 代码块。"
@@ -838,9 +830,7 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
         except Exception as e:
             parse_error = str(e)
             if self.brief_routing_prompt:
-                retry_tail = (
-                    f'\n\n【重试】仅输出一行 JSON，reasoning 为 "{BRIEF_ROUTING_REASONING}"，以}}结尾。'
-                )
+                retry_tail = "\n\n【重试】仅输出一行合法 JSON，勿含 reasoning 字段，以}结尾。"
             else:
                 retry_tail = (
                     "\n\n【重试】上次 JSON 不完整。仅输出一行合法 JSON，reasoning≤40字，"
@@ -874,11 +864,10 @@ reasoning 须引用关键数值（agreement、dice、hd95、area_cv、pairwise_h
         try:
             confidence = max(0.0, min(1.0, float(decision_data["confidence"])))
             reasoning = str(decision_data.get("reasoning", "")).strip()
-            if not reasoning:
-                if self.brief_routing_prompt:
-                    reasoning = BRIEF_ROUTING_REASONING
-                else:
-                    raise ValueError("reasoning 为空")
+            if self.brief_routing_prompt:
+                reasoning = BRIEF_ROUTING_REASONING
+            elif not reasoning:
+                raise ValueError("reasoning 为空")
 
             is_ensemble = "selected_models" in decision_data and self.ensemble_enabled
 

@@ -1,7 +1,11 @@
 {
   "method": "64-bit dHash, Hamming <= 5 (same as audit_near_duplicates.py)",
-  "frozen_date": "2026-10-28",
+  "frozen_date": "2026-10-30",
   "external_test": "ZJH-8K/images (n=7958)",
+  "notes": {
+    "pair_count": "Undirected train–ZJH image pairs at Hamming <= 5 (can exceed unique ZJH images).",
+    "unique_zjh_h0": "Distinct ZJH-8K test images with at least one H=0 match to the train partition (sensitivity exclude-list uses stacked-train value 992)."
+  },
   "rows_for_response_tab_dhash": [
     {
       "label": "Stacked train (dataset_3+4)",
@@ -18,7 +22,8 @@
       "right_n": 7958,
       "pair_count": 1290,
       "exact_hamming_0": 1154,
-      "near_only": 136
+      "near_only": 136,
+      "unique_zjh_h0": 1151
     },
     {
       "label": "TN5K train",
@@ -26,7 +31,8 @@
       "right_n": 7958,
       "pair_count": 2,
       "exact_hamming_0": 0,
-      "near_only": 2
+      "near_only": 2,
+      "unique_zjh_h0": 0
     },
     {
       "label": "ThyroidXL train",
@@ -34,7 +40,8 @@
       "right_n": 7958,
       "pair_count": 1,
       "exact_hamming_0": 0,
-      "near_only": 1
+      "near_only": 1,
+      "unique_zjh_h0": 0
     },
     {
       "label": "PKTN train",
@@ -42,7 +49,8 @@
       "right_n": 7958,
       "pair_count": 1,
       "exact_hamming_0": 0,
-      "near_only": 1
+      "near_only": 1,
+      "unique_zjh_h0": 0
     }
   ]
 }

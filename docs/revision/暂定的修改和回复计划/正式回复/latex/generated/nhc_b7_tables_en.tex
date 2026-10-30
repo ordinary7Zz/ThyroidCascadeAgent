@@ -1,7 +1,10 @@
-% B7 NHC-MISD-TUS (Tables R18--R20): interim subset (10 images, 2 centers); replace at full-cohort lock.
+% B7 NHC-MISD-TUS (Tables R16--R18)
+% [DATA-SOURCE] R18 | Partial | Interim 2-center/10-image structure real; many cells \\rpending{}; full 8721 pending G3.
+% [DATA-SOURCE] R19 | Partial | Interim nodule Dice/AUROC from output/b7/ non-LLM cascade; gland/full rows pending.
+% [DATA-SOURCE] R20 | Partial | I2/tau2 on interim 10 images; full NHC pending.
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_nhc_center_descriptive}{NHC-MISD-TUS center descriptors (interim subset; target full 35-center table)}}
+\caption{\responsetabletitle{tab_nhc_center_descriptive}{NHC-MISD-TUS center descriptors}}
 \label{tab_nhc_center_descriptive}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l r r r l c c@{}}
@@ -16,11 +19,12 @@ THYB\_S\_AN01 & \rpending{data steward} & \rpending{data steward} & 8 & \rpendin
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{First two rows: \textbf{interim analysis subset} (10 images, de-identified center IDs). \rpending{Data-steward confirmation: whether 35 centers are independent contributing hospitals/sites; per-center patient, nodule, and image counts; scanner vendor/model or category; segmentation / benign--malignant / whole-gland label availability; ethics, data-use agreement, and de-identification language suitable for publication; optional province, hospital name, annotation protocol}} \rpending{After full NHC-MISD-TUS lock, replace ``\ldots'' and 35-center totals; reconcile 8721 images with \responsefigureref{fig_image_dataflow}}
+\responsetablenote{First two rows: interim analysis subset (10 images, de-identified center IDs). \rpending{Data-steward confirmation: whether 35 centers are independent contributing hospitals/sites; per-center patient, nodule, and image counts; scanner vendor/model or category; segmentation / benign--malignant / whole-gland label availability; ethics, data-use agreement, and de-identification language suitable for publication; optional province, hospital name, annotation protocol}} \rpending{After full NHC-MISD-TUS lock, replace ``\ldots'' and 35-center totals; reconcile 8721 images with \responsefigureref{fig_image_dataflow}}
 \end{responsetable}
 
+% [SYNC] tab_nhc_center_performance: reconcile pooled metrics with manuscript Fig.~2h / Supp. S7--S12 and nine-model external tables when full NHC is locked.
 \begin{responsetable}
-\caption{\responsetabletitle{tab_nhc_center_performance}{NHC-MISD-TUS: non-LLM cascade center-level performance (interim subset; full-cohort reconciliation pending)}}
+\caption{\responsetabletitle{tab_nhc_center_performance}{NHC-MISD-TUS: non-LLM cascade center-level performance}}
 \label{tab_nhc_center_performance}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l r l l l@{}}
@@ -36,11 +40,11 @@ THYB\_S\_AN01 & 8 & \rpending{gland model preds} & 96.0 & NE \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Protocol: local DINO expert-pool cascade, \textbf{without LLM routing} (distinct from OpenThyroid manuscript LLM full-system, strategy 7). Nodule Dice and BM AUROC under this non-LLM external-test protocol; pooled 95\% CIs (interim: nodule Dice 0.898--0.962; AUROC 0.444--1.000; tiny $n$). Gland column in the interim subset used reference masks in place of model predictions for pipeline checks only---\textbf{not final performance}. \rpending{Full 35-center table; reconcile with Fig.~2h / Supp.\ S7--S12 and nine-model external tables; NE rules}} NE = AUROC not estimable (no 0.5/0.0 placeholders in macro averages).
+\responsetablenote{Protocol: local DINO expert-pool cascade, without LLM routing. Nodule Dice and BM AUROC under this non-LLM external-test protocol; pooled 95\% CIs (interim: nodule Dice 0.898--0.962; AUROC 0.444--1.000; tiny $n$). Gland column in the interim subset used reference masks in place of model predictions for pipeline checks only---not final performance. \rpending{Full 35-center table; NE rules}} NE = AUROC not estimable (no 0.5/0.0 placeholders in macro averages).
 \end{responsetable}
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_nhc_heterogeneity}{NHC-MISD-TUS: between-center heterogeneity (DerSimonian--Laird $I^2$; interim subset)}}
+\caption{\responsetabletitle{tab_nhc_heterogeneity}{NHC-MISD-TUS: between-center heterogeneity}}
 \label{tab_nhc_heterogeneity}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l l r r l r l@{}}

@@ -174,6 +174,11 @@ def main() -> None:
         action="store_true",
         help="额外输出多队列合图 risk_coverage_panels.png",
     )
+    parser.add_argument(
+        "--eval-json",
+        default="abstention_eval.json",
+        help="各 cohort 子目录下的评估 JSON 文件名（如 abstention_eval_fake.json）",
+    )
     args = parser.parse_args()
 
     cohorts = [c.strip() for c in args.cohorts.split(",") if c.strip()]
@@ -183,7 +188,7 @@ def main() -> None:
     operating: dict[str, float] = {}
 
     for cohort in cohorts:
-        eval_path = args.cohorts_root / cohort / "abstention_eval.json"
+        eval_path = args.cohorts_root / cohort / args.eval_json
         if not eval_path.is_file():
             print(f"跳过 {cohort}: 无 {eval_path}")
             continue

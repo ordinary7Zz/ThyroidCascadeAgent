@@ -238,17 +238,16 @@
    - AutoGluon-Tabular **1.4.0**，`best_quality`，ROC-AUC，**600 s**，**8-fold** bagging，部署 **WeightedEnsemble**；推理用冻结权重，**测试集未参与拟合或调参**。  
    - 完整参数表 → **Supplementary Note / 代码仓库** `docs/reproducibility_radiomics.md`。
 
-5. **&lt;5 mm 子集（R2.20b）**  
-   - **主文 Methods**：一句指向 **Supplementary Note [X]** 即可。  
-   - **Supp. 表**：直接采用 `../b11_b12/tables/R2_20_SUMMARY.md`（由 `scripts/revision/b11/run_r2_20_small_nodules_all.sh` 生成；JSON 在 `r2_20_*.json`）。  
-   - **定稿前可选**：改 `MM_PER_PIXEL` 重跑脚本（~1 min）；核对各 JSON 中 `selected_masks_npz` 与投稿主 pipeline 一致。  
-   - **不**新增 radiomics CCA；**不**为重表重训。
+5. **小结节子集（R2.20b）**  
+   - **主文 Methods**：一句指向 **Supplementary Note [X]**；**无 spacing 时用 GT 等价径 &lt;50 px**（与 DINO 50 px 规则对齐），不报告跨队列毫米径。  
+   - **Supp. 表 / 回复信 R11**：`../b11_b12/tables/R2_20_SUMMARY.md`（`run_r2_20_small_nodules_all.sh`；JSON 在 `r2_20_*.json`）。  
+   - **可选**：将来某队列有校准 spacing 时 `--mm-per-pixel` 作附录敏感性；核对 `selected_masks_npz` 与投稿主 pipeline 一致。
 
 ### 8.4 补充材料（B11）— 数据已就绪
 
 | 项目 | 动作 | 就绪度 |
 |------|------|--------|
-| **Supplementary Note [X] + 表** | 粘贴 `R2_20_SUMMARY.md` 七行；脚注 `mm_per_pixel=0.1`（敏感性）及失败定义 | **可改** |
+| **Supplementary Note [X] + 表** | 粘贴 `R2_20_SUMMARY.md` 七行；脚注 **&lt;50 px** 子集定义及失败定义；**无 spacing / 不报告 mm** | **可改** |
 | **Radiomics 参数** | `reproducibility_radiomics.md` → Supp. Note 或 Methods 附表 | **可改** |
 | **B11 与 B12** | 宏平均改稿在 §8.1–8.2（B12）；与 B11 Methods 可同期统稿 | **可改** |
 
@@ -285,8 +284,8 @@
 **建议回复结构（三句逻辑）**：
 
 1. **澄清机制**：修订稿已写明，**不再**在 radiomics 前做额外 CCA；小连通域剔除仅发生在 **DINO 专家内部（50 像素）** 及可选 **集成取最大连通域**；**主文 Dice 与 radiomics 共用 selected mask**。  
-2. **直接回应 (b)**：在测试集上，用 **GT 等价径** 统计 &lt;5 mm 病例数 **N**；再看 **路由/分割后** selected mask 是否失败（空或 Dice 极低）得 **M**——说明 **M 反映整条流水线**，不是「radiomics 前又删了一遍」。  
-3. **诚实限定**：若尚无可靠像素间距，**明确写** mm 阈值为 **敏感性分析** 或引用 **&lt;50 px** 与专家规则同量级；数字放 Supp.，主文不夸大；**不**为此加新后处理、**不**重训。
+2. **直接回应 (b)**：在测试集上，用 **GT 等价径 &lt;50 px** 统计 **N**（与专家 50 px 规则同尺度；**无 spacing 时不声称临床 5 mm**）；再看 selected mask 是否失败（空或 Dice 极低）得 **M**——说明 **M 反映整条流水线**，不是「radiomics 前又删了一遍」。  
+3. **诚实限定**：公开外测 **无可靠 pixel spacing** → 表 R11 **不报告毫米径**；若需衔接审稿人「5 mm」表述，仅用 **0.1 mm/px 说明性换算**（50 px≈5 mm）；数字放 Supp./回复表，主文不夸大。
 
 **代码**：保持现状即可；**不要**为回复而加 radiomics 连通域模块。
 

@@ -8,7 +8,7 @@
 
 感谢审稿人指出后处理描述不清。我们已 **更正 Methods**：**报告的分割 Dice/HD95 与放射组学输入均使用同一 `selected mask`**，**不在 radiomics 前施加额外的连通域精修**（与返修代码一致）。在 **DINO-UNet 专家内部**，概率图以 **0.5** 二值化后保留 **面积 ≥50 像素** 的连通域并做 **5×5** 椭圆闭运算；若使用 **概率集成 mask**，多连通域时 **仅保留面积最大者**。系统按 **单图单 ROI** 处理，**不对同一图像内多个结节逐灶分离**。
 
-关于 **&lt;5 mm** 结节（GT 等价径；当前统计取 **mm_per_pixel=0.1** 为敏感性假设，定稿前可按队列校准并重跑 `scripts/revision/b11/run_r2_20_small_nodules_all.sh`）：在 **七队列** 测试集上，**selected mask** 相对 GT 的失败定义为 **空 mask 或 Dice&lt;0.1**（见 `tables/R2_20_SUMMARY.md`）。**外测 ZJH-8K**（*n*=7958）：**N=1001**，**M=44**，小结节子集 mean Dice **0.818**；**TN3K**：N=68，M=2，mean Dice 0.771；**TN5K**：N=103，M=12，mean Dice 0.696；另见 rjh7k、ddti_seg、pktn 等同表（**ThyroidXL** 在该间距假设下 N=0）。因 **未对 radiomics 单独做 CCA**，**M** 反映 **分割与路由整体**，而非 radiomics 前连通域删除。
+关于审稿人 **&lt;5 mm** 举例：公开外测**无可靠逐图 pixel spacing**，回复信表 R11 以 **GT 等价径 &lt;50 px** 为主口径（与 DINO 专家 **≥50 px** 连通域规则同尺度），**不声称**跨队列临床毫米径。（说明性换算：0.1 mm/px 时 50 px ≈ 5 mm。）在 **七队列** 测试集上，**selected mask** 相对 GT 的失败定义为 **空 mask 或 Dice&lt;0.1**（见 `tables/R2_20_SUMMARY.md`）。**外测 ZJH-8K**（*n*=7958）：**N=1001**，**M=44**，子集 mean Dice **0.818**；**TN3K**：N=68，M=2，mean Dice 0.771；**TN5K**：N=103，M=12，mean Dice 0.696；另见 rjh7k、ddti_seg、pktn 等同表（**ThyroidXL** 该子集 N=0）。因 **未对 radiomics 单独做 CCA**，**M** 反映 **分割与路由整体**，而非 radiomics 前连通域删除。
 
 ## R2.7 / R2.1（均值）
 

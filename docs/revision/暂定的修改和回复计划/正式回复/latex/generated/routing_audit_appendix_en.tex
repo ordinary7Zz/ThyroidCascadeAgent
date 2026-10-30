@@ -1,0 +1,27 @@
+% [DATA-SOURCE] Table A1-3 tab_A1_audit_exemplars | Reproducible (de-identified) | TN3K routing_log samples as Rec-01--Rec-12.
+\begin{responseinlinetable}
+\responseinlinetablecaption{Table A1-3. De-identified structured routing-record exemplars (TN3K external testing; fields aligned with Table A1-2)}
+\label{tab_A1_audit_exemplars}
+\begin{adjustbox}{max width=\textwidth}
+\footnotesize
+\begin{tabular}{llllllccp{0.30\textwidth}}
+\toprule
+\textbf{Rec.} & \textbf{Task} & \textbf{Tier} & \textbf{LLM} & \textbf{Decision mode} & \textbf{Outcome} & \textbf{Conf.} & \textbf{Candidate sketch} \\
+\midrule
+Rec-01 & Classification routing & Similar & Yes & LLM arbitration & Benign & 0.72 & 4 classifiers: Malignant (0.66), Benign (0.78), Benign (0.99) \\
+Rec-02 & Segmentation routing & Similar & Yes & LLM mask selection & TN3K-specific & 0.84 & 5 candidates; Multi-cohort joint (0.82), TN3K-specific (0.82) \\
+Rec-03 & Classification routing & Similar & Yes & LLM arbitration & Malignant & 0.65 & 4 classifiers: Malignant (0.64), Malignant (1.00), Benign (0.96) \\
+Rec-04 & Segmentation routing & Similar & Yes & LLM mask selection & TN3K-specific & 0.68 & 5 candidates; TN3K-specific (0.37), Multi-cohort joint (0.35) \\
+Rec-05 & Classification routing & Similar & Yes & LLM arbitration & Malignant & 0.60 & 4 classifiers: Malignant (1.00), Malignant (1.00), Benign (0.81) \\
+Rec-06 & Segmentation routing & Similar & Yes & LLM mask selection & PKTN-specific & 0.86 & 5 candidates; PKTN-specific (0.92), TN3K-specific (0.92) \\
+\textbf{Rec-07} & Segmentation routing & Similar & Yes & LLM mask selection & Multi-cohort joint & 0.86 & 5 candidates; PKTN-specific (0.80), TN3K-specific (0.80) \\
+Rec-08 & Classification routing & Similar & Yes & LLM arbitration & Malignant & 0.60 & 4 classifiers: Benign (0.97), Malignant (0.83), Benign (0.93) \\
+Rec-09 & Classification routing & Similar & Yes & LLM arbitration & Malignant & 0.83 & 4 classifiers: Malignant (1.00), Malignant (1.00), Malignant (0.93) \\
+Rec-10 & Classification routing & Easy & No & Deterministic consensus & Benign (consensus) & 1.00 & 4 classifiers: Benign (0.95), Benign (1.00), Benign (0.99) \\
+Rec-11 & Classification routing & Similar & Yes & Weighted soft vote (LLM unavailable) & Benign & 0.58 & 4 classifiers: Malignant (0.64), Malignant (1.00), Benign (0.96) \\
+Rec-12 & Segmentation routing & Similar & Yes & Rule fallback (LLM parse/API failure) & PKTN-specific & 0.78 & 5 candidates; PKTN-specific (0.78), TN3K-specific (0.77) \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{responseinlinetable}
+\par\smallskip\noindent\footnotesize Exemplars are balanced across segmentation LLM routing and classification routing (LLM-invoked routes, deterministic consensus, soft vote, and rule fallback); rows are labelled Rec-01--Rec-12 without original image filenames. On this TN3K primary pass, segmentation LLM routes were all ``similar'' tier (top-two candidate agreement gap $\leq 0.10$).

@@ -49,20 +49,28 @@ from segmentation.agent import (
 from classification.agent import (
     LLMClassificationAgent,
     PATH_B_LLM_SYSTEM_PROMPT,
+    PATH_B_LLM_SYSTEM_PROMPT_BRIEF,
     PATH_B_USER_PROMPT_EXAMPLE,
 )
 
 
-def _seg_user_prompt_template(ensemble_top_k: int, ensemble_enabled: bool) -> str:
+def _seg_user_prompt_template(ensemble_top_k: int, ensemble_enabled: bool, *, brief: bool) -> str:
     if ensemble_enabled and ensemble_top_k > 1:
         question = f"请选择 Top {ensemble_top_k} 个最佳模型用于 ensemble。"
         fmt = (
-            '{"selected_models": ["模型1", "模型2"], "weights": [0.6, 0.4], '
+            '{"selected_models": ["模型1", "模型2"], "weights": [0.6, 0.4], "confidence": 0.95}'
+            if brief
+            else '{"selected_models": ["模型1", "模型2"], "weights": [0.6, 0.4], '
             '"confidence": 0.95, "reasoning": "..."}'
         )
     else:
         question = "哪个模型提供了最佳分割结果？"
-        fmt = '{"selected_model": "模型名称", "confidence": 0.95, "reasoning": "..."}'
+        fmt = (
+            '{"selected_model": "模型名称", "confidence": 0.95}'
+            if brief
+            else '{"selected_model": "模型名称", "confidence": 0.95, "reasoning": "..."}'
+        )
+    no_reason = "（brief：勿输出 reasoning 字段）" if brief else ""
 
     return f"""（运行时拼接，非独立文件）
 
@@ -77,7 +85,7 @@ def _seg_user_prompt_template(ensemble_top_k: int, ensemble_enabled: bool) -> st
 {{formatted_predictions_json}}
 
 {question}
-只输出纯JSON。格式：{fmt}
+只输出纯JSON。{no_reason}格式：{fmt}
 ```
 
 `formatted_predictions_json` 由 `SegmentationAgent.format_predictions_for_agent()` 生成，
@@ -169,31 +177,47 @@ def main() -> None:
             "",
         ]
 
+    brief_seg = bool(seg_cfg.get("brief_routing_prompt", False))
+    brief_cls = bool(cls_cfg.get("brief_routing_prompt", False))
+
     lines += [
         "### 1.2 System prompt — append Path A (classification consensus)",
         "",
-        "Appended when independent classifiers agree (`classification_anchor` set).",
+        "Appended at runtime when independent classifiers agree (`classification_anchor` set).",
         "Example anchor shown as `恶性`:",
         "",
         "```",
-        seg_llm_system_append("恶性"),
+        seg_agent._seg_llm_system_append_runtime("恶性") if brief_seg else seg_llm_system_append("恶性"),
         "```",
         "",
-        "### 1.3 System prompt — append Path B (no classification consensus)",
+        "### 1.3 System prompt — append when no classification consensus",
         "",
         "```",
-        seg_llm_system_append(None),
+        seg_agent._seg_llm_system_append_runtime(None) if brief_seg else seg_llm_system_append(None),
         "```",
         "",
         "### 1.4 User message template",
         "",
-        _seg_user_prompt_template(ens_top_k, ens_enabled),
+        _seg_user_prompt_template(ens_top_k, ens_enabled, brief=brief_seg),
         "",
         "### 1.5 LLM output JSON schema",
         "",
     ]
 
-    if ens_enabled and ens_top_k > 1:
+    if brief_seg:
+        if ens_enabled and ens_top_k > 1:
+            lines.append(
+                f'- Ensemble (LLM JSON): `{{"selected_models": ["<name>", ...] (length {ens_top_k}), '
+                '"weights": [...], "confidence": 0.0-1.0}}` — no `reasoning` key.'
+            )
+        else:
+            lines.append(
+                '- Single mask (LLM JSON): `{"selected_model": "<name>", "confidence": 0.0-1.0}` — no `reasoning` key.'
+            )
+        lines.append(
+            "- `routing_log.jsonl` still stores `reasoning: \"-\"` for successful LLM routes (filled by the pipeline)."
+        )
+    elif ens_enabled and ens_top_k > 1:
         lines.append(
             f'- Ensemble: `{{"selected_models": ["<name>", ...] (length {ens_top_k}), '
             '"weights": [...], "confidence": 0.0-1.0, "reasoning": "..."}}`'
@@ -245,22 +269,39 @@ def main() -> None:
         "",
         "### 2.4 LLM output JSON schema",
         "",
-        "- Single: `{\"selected_model\": \"...\", \"selected_class\": \"良性|恶性\", "
-        "\"confidence\": 0.0-1.0, \"reasoning\": \"...\"}`",
-        "- Top-k: `{\"selected_models\": [\"...\", ...], \"reasoning\": \"...\"}` "
-        "(no `selected_class` / `confidence` in multi mode).",
-        "",
+    ]
+    if brief_cls:
+        lines += [
+            "- Single (LLM JSON): "
+            '`{"selected_model": "...", "selected_class": "良性|恶性", "confidence": 0.0-1.0}` — no `reasoning` key.',
+            "- Top-k (LLM JSON): "
+            '`{"selected_models": ["...", ...]}` — no `reasoning` / `selected_class` / `confidence`.',
+            '- Log field `reasoning` may still be `"-"` or empty for LLM rows (pipeline default).',
+            "",
+        ]
+    else:
+        lines += [
+            "- Single: `{\"selected_model\": \"...\", \"selected_class\": \"良性|恶性\", "
+            "\"confidence\": 0.0-1.0, \"reasoning\": \"...\"}`",
+            "- Top-k: `{\"selected_models\": [\"...\", ...], \"reasoning\": \"...\"}` "
+            "(no `selected_class` / `confidence` in multi mode).",
+            "",
+        ]
+
+    path_b_sys = PATH_B_LLM_SYSTEM_PROMPT_BRIEF if brief_cls else PATH_B_LLM_SYSTEM_PROMPT
+    lines += [
         "---",
         "",
-        "## 3. Classification — Path B (`resolve_path_b`, Phase 5, no consensus)",
+        "## 3. Classification — LLM arbitration when classifiers disagree (`resolve_path_b`)",
         "",
         f"- Invoked when `classification_consensus == false` and `enable_agent: true`.",
         f"- Current config `enable_agent`: `{cls_cfg.get('enable_agent')}`",
+        f"- `brief_routing_prompt`: `{brief_cls}`",
         "",
         "### 3.1 System prompt",
         "",
         "```",
-        PATH_B_LLM_SYSTEM_PROMPT,
+        path_b_sys,
         "```",
         "",
         "### 3.2 User message",
@@ -275,11 +316,24 @@ def main() -> None:
         "",
         "### 3.3 LLM output JSON schema",
         "",
-        '`{"selected_class": "良性|恶性", "confidence": 0.0-1.0, "reasoning": "..."}`',
-        "",
-        "(No `selected_model`; stored decision uses `selected_model: agent_path_b_llm`.)",
-        "",
-        "### 3.4 Path B without LLM",
+    ]
+    if brief_cls:
+        lines += [
+            '`{"selected_class": "良性|恶性", "confidence": 0.0-1.0}` — no `reasoning` key.',
+            "",
+            "(No `selected_model`; stored decision uses `selected_model: agent_path_b_llm`.)",
+            "",
+        ]
+    else:
+        lines += [
+            '`{"selected_class": "良性|恶性", "confidence": 0.0-1.0, "reasoning": "..."}`',
+            "",
+            "(No `selected_model`; stored decision uses `selected_model: agent_path_b_llm`.)",
+            "",
+        ]
+
+    lines += [
+        "### 3.4 Arbitration without LLM",
         "",
         "- `enable_agent: false` → weighted soft vote (`method: path_b_static_softvote`).",
         "",

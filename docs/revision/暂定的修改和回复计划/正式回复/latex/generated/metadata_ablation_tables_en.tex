@@ -1,7 +1,7 @@
 % LLM metadata ablation (tab_metadata_ablation_seg / cls); TN5K
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_metadata_ablation_seg}{LLM router metadata ablation --- nodule segmentation (TN5K test set; point estimates and 95\% CIs)}}
+\caption{\responsetabletitle{tab_metadata_ablation_seg}{LLM router metadata ablation --- nodule segmentation}}
 \label{tab_metadata_ablation_seg}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l l l@{}}
@@ -19,8 +19,9 @@ Quality/disagreement only & 0.8228 (0.8010--0.8419) & 7.60 (5.79--9.50) \\
 \responsetablenote{Fixed expert pool with TN5K external-test shared upstream expert outputs; segmentation uses LLM routing with only prompt-visible metadata changed (Appendix A1). Device/source/both-withheld and quality/disagreement-only conditions use cluster-bootstrap 95\% CIs (1000 resamples, seed 42).}
 \end{responsetable}
 
+% [SYNC] tab_metadata_ablation_cls: TN5K split, expert pool, and metadata tiers match tab_metadata_ablation_seg.
 \begin{responsetable}
-\caption{\responsetabletitle{tab_metadata_ablation_cls}{LLM router metadata ablation --- malignancy classification (TN5K; point estimates and 95\% CIs)}}
+\caption{\responsetabletitle{tab_metadata_ablation_cls}{LLM router metadata ablation --- malignancy classification}}
 \label{tab_metadata_ablation_cls}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l l l@{}}
@@ -35,5 +36,5 @@ Quality/disagreement only & 0.9404 (0.9038--0.9700) & 0.9740 (0.9556--0.9878) \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Same conditions as \responsetableref{tab_metadata_ablation_seg}. Under the four ablation conditions, when all three classifiers agree we use deterministic consensus without invoking the LLM; when they disagree, classification is resolved by LLM arbitration---interpret metadata effects for the latter. LLM arbitration \textbf{inputs} when classifiers disagree were not separately metadata-ablated (only prompt-visible fields varied).}
+\responsetablenote{Fixed expert pool with TN5K external-test shared upstream expert outputs; classification uses LLM routing with only prompt-visible metadata changed (Appendix A1). When all independent classification experts agree we use deterministic consensus without invoking the LLM; when they disagree, classification routing uses the LLM. Classification routing inputs when the LLM is invoked were not separately metadata-ablated (only prompt-visible fields varied).}
 \end{responsetable}

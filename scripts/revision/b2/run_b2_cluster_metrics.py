@@ -25,6 +25,7 @@ from pathlib import Path
 
 import argparse
 import json
+import math
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -38,6 +39,7 @@ if str(_REPO) not in sys.path:
     sys.path.insert(0, str(_REPO))
 
 from shared.image_io import ImageIO
+from segmentation.metrics import compute_hd95
 
 
 def _label_to_binary(label) -> Optional[int]:
@@ -240,11 +242,12 @@ def _cluster_bootstrap_mean(
         by_c[row["cluster_id"]].append(float(row[value_key]))
 
     if per_cluster_aggregate:
-        units = [{"cluster_id": c, "value": float(np.mean(vs))} for c, vs in by_c.items()]
-        point = float(np.mean([u["value"] for u in units]))
+        units = [{"cluster_id": c, "value": float(np.nanmean(vs))} for c, vs in by_c.items()]
+        point = float(np.nanmean([u["value"] for u in units]))
         clusters = units
     else:
-        point = float(np.mean([row[value_key] for row in rows]))
+        vals_all = [float(row[value_key]) for row in rows]
+        point = float(np.nanmean(vals_all))
         clusters = [{"cluster_id": c, "values": vs} for c, vs in by_c.items()]
 
     rng = np.random.RandomState(seed)
@@ -253,12 +256,12 @@ def _cluster_bootstrap_mean(
     for _ in range(n_bootstrap):
         idx = rng.randint(0, n_c, size=n_c)
         if per_cluster_aggregate:
-            boot.append(float(np.mean([clusters[i]["value"] for i in idx])))
+            boot.append(float(np.nanmean([clusters[i]["value"] for i in idx])))
         else:
             vals: list[float] = []
             for i in idx:
                 vals.extend(clusters[i]["values"])
-            boot.append(float(np.mean(vals)))
+            boot.append(float(np.nanmean(vals)))
 
     boot_arr = np.array(boot)
     lo, hi = np.percentile(boot_arr, [2.5, 97.5])
@@ -288,9 +291,13 @@ def _seg_rows(
         if gt_path is None or not gt_path.exists():
             continue
         gt = io.binarize_mask(io.load_mask(gt_path))
-        dice = _compute_dice(pred.astype(bool), gt)
+        pred_bin = pred.astype(bool)
+        dice = _compute_dice(pred_bin, gt)
+        hd95 = compute_hd95(pred_bin, gt)
+        if math.isinf(hd95):
+            hd95 = float("nan")
         cid = (cluster_map or {}).get(img_name, img_name)
-        rows.append({"image_name": img_name, "cluster_id": cid, "dice": dice})
+        rows.append({"image_name": img_name, "cluster_id": cid, "dice": dice, "hd95": hd95})
     return rows
 
 
@@ -365,12 +372,26 @@ def build_segmentation_report_from_dice_rows(
             "dice": {"mean": d_mean, "ci_lower": d_lo, "ci_upper": d_hi},
         },
     }
+    if rows and "hd95" in rows[0]:
+        h_mean, h_lo, h_hi, _ = _cluster_bootstrap_mean(rows, "hd95", n_bootstrap, seed, False)
+        out["image_level_cluster_bootstrap"]["hd95"] = {
+            "mean": h_mean,
+            "ci_lower": h_lo,
+            "ci_upper": h_hi,
+        }
     if patient_level and cluster_map and n_clusters < len(rows):
         pd_mean, pd_lo, pd_hi, _ = _cluster_bootstrap_mean(rows, "dice", n_bootstrap, seed, True)
         out["patient_level"] = {
             "n_patients": n_clusters,
             "dice": {"mean": pd_mean, "ci_lower": pd_lo, "ci_upper": pd_hi},
         }
+        if rows and "hd95" in rows[0]:
+            ph_mean, ph_lo, ph_hi, _ = _cluster_bootstrap_mean(rows, "hd95", n_bootstrap, seed, True)
+            out["patient_level"]["hd95"] = {
+                "mean": ph_mean,
+                "ci_lower": ph_lo,
+                "ci_upper": ph_hi,
+            }
     return out
 
 
@@ -439,7 +460,10 @@ def seg_dice_rows_from_jsonl(
     for rec in records:
         img = rec["image_name"]
         cid = (cluster_map or {}).get(img, img)
-        rows.append({"image_name": img, "cluster_id": cid, "dice": float(rec["dice"])})
+        row = {"image_name": img, "cluster_id": cid, "dice": float(rec["dice"])}
+        if rec.get("hd95") is not None:
+            row["hd95"] = float(rec["hd95"])
+        rows.append(row)
     return rows
 
 

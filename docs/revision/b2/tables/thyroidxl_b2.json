@@ -1,6 +1,6 @@
 {
-  "results": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/output/ThyroidXL/pipeline_run/results.json",
-  "cluster_map": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/cluster_maps/thyroidxl_test.json",
+  "results": "output/ThyroidXL/pipeline_run/results.json",
+  "cluster_map": "docs/revision/b2/cluster_maps/thyroidxl_test.json",
   "bootstrap": {
     "n": 1000,
     "seed": 42
@@ -44,6 +44,11 @@
         "mean": 0.8764659646817463,
         "ci_lower": 0.8689513983701191,
         "ci_upper": 0.883195777855582
+      },
+      "hd95": {
+        "mean": 5.6207019935739195,
+        "ci_lower": 5.050307845057922,
+        "ci_upper": 6.306925667098274
       }
     },
     "patient_level": {
@@ -52,6 +57,11 @@
         "mean": 0.8748934918585871,
         "ci_lower": 0.8675344688224856,
         "ci_upper": 0.8816179225088661
+      },
+      "hd95": {
+        "mean": 5.675159157058406,
+        "ci_lower": 5.12882515510223,
+        "ci_upper": 6.297847023985259
       }
     }
   }

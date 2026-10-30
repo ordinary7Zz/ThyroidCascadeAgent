@@ -156,7 +156,8 @@ def analyze(
         "n_gt_foreground_area_below_min_component_disk": len(tiny_gt),
         "note": (
             "Radiomics path has no extra CCA; Dice uses selected_masks. "
-            "d_mm requires --mm-per-pixel (cohort-specific; confirm with B1/clinical spacing)."
+            "Primary small-nodule subset: GT equivalent diameter < min_component_px (default 50 px). "
+            "Optional d_mm in JSON rows requires --mm-per-pixel (not used for Table R11 in the response letter)."
         ),
     }
     return {"summary": summary, "rows": rows, "small_subset": small, "small_failures": failed}

@@ -39,6 +39,7 @@ from pipeline.revision.b8.abstention import (
     risk_coverage_curve,
     save_thresholds,
     summarize_abstention_by_group,
+    _accuracy_on_retained,
 )
 from pipeline.revision.b8.calibration import calibration_from_results
 from pipeline.revision.b8.plot_calibration import plot_reliability_diagram
@@ -49,6 +50,9 @@ COHORT_RESULTS: dict[str, str] = {
     "thyroidxl": "output/ThyroidXL/pipeline_run/results.json",
     "zjh8k": "output/ZJH-8K/pipeline_run/results.json",
     "ddti_cls": "output/DDTI_cls/pipeline_run/results.json",
+    "ddti_seg": "output/DDTI_seg/pipeline_run/results.json",
+    "pktn": "output/PKTN/pipeline_run/results.json",
+    "rjh7k": "output/RJH-7K/pipeline_run/results.json",
 }
 
 # 送复核比例目标（约 5%–15% 带内，各队列略有差异）
@@ -58,7 +62,23 @@ DEFAULT_TARGET_FLAG_RATE: dict[str, float] = {
     "thyroidxl": 0.10,
     "zjh8k": 0.075,
     "ddti_cls": 0.05,
+    "ddti_seg": 0.05,
+    "pktn": 0.12,
+    "rjh7k": 0.143,
 }
+
+
+def _accuracy_all(results: list[dict]) -> float | None:
+    ok = n = 0
+    for r in results:
+        tb = _label_to_binary(r.get("true_label"))
+        pb = _label_to_binary(r.get("final_label"))
+        if tb is None or pb is None:
+            continue
+        n += 1
+        if int(tb) == int(pb):
+            ok += 1
+    return ok / n if n else None
 
 
 def _flag_rate_thresholds(data: list[dict], th: AbstentionThresholds) -> float:
@@ -114,6 +134,11 @@ def run_one(
     quantile: float | None,
     target_flag_rate: float | None,
     n_grid: int = 72,
+    *,
+    abstention_eval_name: str = "abstention_eval.json",
+    calibration_test_name: str = "calibration_test.json",
+    results_flagged_name: str = "results_flagged.json",
+    reliability_png_name: str = "reliability_test.png",
 ) -> dict:
     data = json.loads(results_path.read_text(encoding="utf-8"))
     q_gt: float | None = None
@@ -146,6 +171,8 @@ def run_one(
     curve = risk_coverage_curve(flagged)
     by_center = summarize_abstention_by_group(flagged, group_key="center_id")
     n_flagged = sum(1 for r in flagged if r.get("flagged_for_review"))
+    acc_all = _accuracy_all(flagged)
+    acc_retained = _accuracy_on_retained(flagged)
     payload = {
         "calibration": cal,
         "risk_coverage": curve,
@@ -158,16 +185,19 @@ def run_one(
         "quantile_lt": q_lt,
         "target_flag_rate": target_flag_rate,
     }
-    (out_dir / "abstention_eval.json").write_text(
+    (out_dir / abstention_eval_name).write_text(
         json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    (out_dir / "calibration_test.json").write_text(
+    (out_dir / calibration_test_name).write_text(
         json.dumps(cal, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    (out_dir / results_flagged_name).write_text(
+        json.dumps(flagged, ensure_ascii=False, indent=2), encoding="utf-8"
     )
     label = cohort.upper() if cohort != "ddti_cls" else "DDTI"
     plot_reliability_diagram(
         cal.get("bins", []),
-        out_dir / "reliability_test.png",
+        out_dir / reliability_png_name,
         title=f"{label}: Test calibration (per-cohort thresholds)",
     )
     pct = 100.0 * n_flagged / len(flagged) if flagged else 0.0
@@ -179,6 +209,8 @@ def run_one(
         "brier": cal.get("brier"),
         "flagged_pct": pct,
         "flagged_pct_1dp": round(pct, 1),
+        "acc_all": acc_all,
+        "acc_retained": acc_retained,
         "quantile": quantile,
         "quantile_gt": q_gt,
         "quantile_lt": q_lt,
@@ -246,9 +278,11 @@ def main() -> None:
             if s.get("quantile_gt") is not None
             else f"q={s['quantile']:.4f}"
         )
+        ece_s = "---" if s["ece"] is None else f"{s['ece']:.4f}"
+        brier_s = "---" if s["brier"] is None else f"{s['brier']:.4f}"
         print(
             f"    n={s['n']} flagged={s['n_flagged']} ({s['flagged_pct_1dp']:.1f}%) "
-            f"{q_info} ECE={s['ece']:.4f} Brier={s['brier']:.4f}"
+            f"{q_info} ECE={ece_s} Brier={brier_s}"
         )
     print("✓ done:", args.out_root)
 
