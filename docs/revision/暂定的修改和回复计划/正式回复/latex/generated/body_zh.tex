@@ -6,7 +6,7 @@
 \begin{authorresponse}
 感谢审稿人这一重要意见。统计报告采用 cluster-bootstrap 与患者级聚合（见 \responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext}、\responsetableref{tab_patient_cls}、\responsetableref{tab_patient_seg}）。堆叠训练各来源及合并堆叠 train 相对 ZJH-8K 外测的近重复筛查（dHash，Hamming $\leq$ 5）见 \responsetableref{tab_dhash}。\par
 我们澄清同一患者的多帧或多视图是否会跨划分（训练/验证/测试）出现。外测队列未参与堆叠专家训练（\responsefigureref{fig_image_dataflow}）。在具有可复现 patient ID 的队列（ZJH-8K、ThyroidXL）中，同一患者全部图像保留在同一划分内，不会将同一患者不同视图分入开发与外测两侧；同一外测集内可有多张图像，推断采用患者级 cluster。机构队列的患者/检查级划分键与 审稿人 2，意见 9（R2.3）一致。\par
-我们按审稿人建议补充了患者级再分析与 cluster-bootstrap 95\% CI。图像级外测指标及 cluster-bootstrap 区间见 \responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext}（重采样协议见 审稿人 2，意见 2，R2.2）。在具备可复现 patient ID 的 ZJH-8K、ThyroidXL 上，我们已完成患者级良恶性 AUROC/AUPRC（患者内对图像概率算术平均；患者标签取组内图像标签 max）与患者内平均分割 Dice 分析，cluster-bootstrap 95\% CI 见 \responsetableref{tab_patient_cls}、\responsetableref{tab_patient_seg}（与同表图像级行对照）。bootstrap 与上述汇总在有 ID 时按患者簇、无 ID 时按一图一簇（完整步骤见 R2.2）。\par
+我们按审稿人建议补充了患者级再分析与 cluster-bootstrap 95\% CI。图像级外测指标及 cluster-bootstrap 区间见 \responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext}（重采样协议见 审稿人 2，意见 2，R2.2）。在具备可复现 patient ID 的 ZJH-8K、ThyroidXL 上，我们已完成患者级良恶性 AUROC/AUPRC（患者内对图像概率算术平均；患者标签取组内图像标签 max）与患者内平均分割 Dice、HD95 分析，cluster-bootstrap 95\% CI 见 \responsetableref{tab_patient_cls}、\responsetableref{tab_patient_seg}（与同表图像级行对照）。bootstrap 与上述汇总在有 ID 时按患者簇、无 ID 时按一图一簇（完整步骤见 R2.2）。\par
 独立性与近重复：分割/分类专家在堆叠公开 train 上训练（不含 ZJH-8K）；\responsetableref{tab_dhash} 将各来源 \textbf{train} 划分及合并堆叠 train 与 ZJH-8K 外测两两筛查。H=0 完全匹配集中于 \textbf{TN3K train} 与 ZJH-8K（同院；1154 对 H=0），并体现于堆叠 train vs ZJH 行（995 对 H=0）。TN5K、ThyroidXL、PKTN 的 \textbf{train} 与 ZJH-8K 均无 H=0 匹配。ZJH-8K 外测另报告剔除与堆叠 train 在 H=0 上匹配的 992 张 ZJH 图后的敏感性结果（\rpendingzh{补充表：剔除堆叠 train dHash H=0 匹配后的 ZJH-8K 指标（R1.1/R2.4）}）。\par
 \par
 \end{authorresponse}
@@ -90,7 +90,7 @@ LNM 训练池更正为 4936 图（4756 ZJH 恶性 + 180 LymphUs C1）；五折 C
 \begin{authorresponse}
 我们同意：将同一患者/检查的多张图像当作独立观测会使 bootstrap 置信区间偏窄，且与临床决策单位不一致。\par
 Cluster-bootstrap 95\% CI（1000 次、seed~42；\responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext}、\responsetableref{tab_malig_oof}）：凡队列提供可复现 patient ID（ZJH-8K、ThyroidXL），bootstrap 在患者簇上有放回重采样，再展开到图像计算指标；无 ID 外测队列（如 TN3K、TN5K、DDTI）按一图一簇处理。后者 cluster-bootstrap 与逐图 bootstrap 的 CI 一致（点估计不变）；仅 ZJH-8K 与 ThyroidXL 图像级 CI 因簇内相关性略宽。对上述两队列另报患者级分类与分割（\responsetableref{tab_patient_cls}、\responsetableref{tab_patient_seg}）；其余良恶性外测仍为图像级，见 \responsetableref{tab_cls_ext}。\par
-各任务汇报（协议见上条）：(i)~\textbf{良恶性分类}---图像级外测见 \responsetableref{tab_cls_ext}；ZJH-8K 与 ThyroidXL 另报患者级 AUROC/AUPRC（\responsetableref{tab_patient_cls}：7958 图 / 1146 簇；2090 图 / 739 簇；患者内恶性概率算术平均，患者标签为组内 max）。审稿人举例的 ZJH-8K「1149 例」为登记口径，可复现 ID 聚合为 1146 例。(ii)~\textbf{分割}---图像级 Dice/HD95 见 \responsetableref{tab_seg_ext}；ZJH-8K 与 ThyroidXL 患者内 Dice 均值见 \responsetableref{tab_patient_seg}。(iii)~\textbf{恶性子任务（LNM、FTC/PTC）}---开发集五折 OOF 见 \responsetableref{tab_malig_oof}；独立外测见 \responsetableref{tab_malig_ext}（LNM：LymphUs Center 2；FTC/PTC：Dai 等外测集），患者/簇级评估口径见上表。\par
+各任务汇报（协议见上条）：(i)~\textbf{良恶性分类}---图像级外测见 \responsetableref{tab_cls_ext}；ZJH-8K 与 ThyroidXL 另报患者级 AUROC/AUPRC（\responsetableref{tab_patient_cls}：7958 图 / 1146 簇；2090 图 / 739 簇；患者内恶性概率算术平均，患者标签为组内 max）。审稿人举例的 ZJH-8K「1149 例」为登记口径，可复现 ID 聚合为 1146 例。(ii)~\textbf{分割}---图像级 Dice/HD95 见 \responsetableref{tab_seg_ext}；ZJH-8K 与 ThyroidXL 患者内 Dice、HD95 均值见 \responsetableref{tab_patient_seg}。(iii)~\textbf{恶性子任务（LNM、FTC/PTC）}---开发集五折 OOF 见 \responsetableref{tab_malig_oof}；独立外测见 \responsetableref{tab_malig_ext}（LNM：LymphUs Center 2；FTC/PTC：Dai 等外测集），患者/簇级评估口径见上表。\par
 \par
 \end{authorresponse}
 
@@ -298,7 +298,7 @@ ThyClinScore 的权重 $\lambda$ 与 $\eta$ 直接影响报告质量评估，但
 \begin{authorresponse}
 感谢审稿人。我们在与 审稿人 1，意见 2（R1.2）相同的固定专家池上，已纳入所要求的多数票、概率/掩膜软投票、规则路由（静态一致度），并另报验证集最优单专家、最大置信度与不可部署上界，避免仅与弱启发式对比。完整数值见 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。\par
 非 LLM 学习型路由（策略 6）：分割与分类各拟合一个多项逻辑回归路由器（$C{=}0.1$，随机种子 42）；输入为各候选专家的质量与分歧摘要特征（不含设备/数据来源元数据，亦不含 LLM）。验证集监督：分割为相对 GT Dice 最高的专家；分类仅在三名独立分类模型未达成共识的子集上，在预测正确的专家中取置信度最高者为标签。测试集冻结权重后仅做离散专家选择。LLM 全系统路由（策略 7）与 \responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext} 及 \responsetableref{tab_baseline_protocol} 所列可部署全系统外测协议一致。二者与全部静态基线并列列入\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。\par
-外部泛化：除 TN3K、TN5K、ThyroidXL 外，我们在 ZJH-8K、RJH-7K（分割）、DDTI（分割/分类分队列）、PKTN（分割）上完成相同协议（含策略 6）；策略 (7) 数字见 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。NHC：策略 (6) 推理与静态基线见 R2.6；策略 (7) 不适用（无 LLM）。\par
+外部泛化：除 TN3K、TN5K、ThyroidXL 外，我们在 ZJH-8K、RJH-7K（分割）、DDTI、PKTN（分割）上完成相同协议（含策略 6）；策略 (7) 数字见 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。NHC：策略 (6) 推理与静态基线见 R2.6；策略 (7) 不适用（无 LLM）。\par
 \par
 \end{authorresponse}
 
@@ -457,52 +457,55 @@ ThyroidXL & 患者 & 739 & \textbf{0.9484} & 0.9326–0.9628 & \textbf{0.9355} &
 \end{responsetable}
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_patient_seg}{分割：ThyroidXAgent 患者内 Dice}}
+\caption{\responsetabletitle{tab_patient_seg}{分割：ThyroidXAgent 患者内 Dice 与 HD95}}
 \label{tab_patient_seg}
 \begin{adjustbox}{max width=\textwidth}
-\begin{tabular}{llll}
+\begin{tabular}{lcccccc}
 \toprule
-队列 & n 患者 & Dice（患者级） & 95\% CI \\
+队列 & $n$ 患者 & Dice & 95\% CI & HD95 (mm) & 95\% CI \\
 \midrule
-ZJH-8K & 1146 & 0.8398 & 0.8322–0.8470 \\
-ThyroidXL & 739 & 0.8749 & 0.8675–0.8816 \\
+ZJH-8K & 1146 & 0.8398 & 0.8322–0.8470 & 12.10 & 11.31–12.83 \\
+ThyroidXL & 739 & 0.8749 & 0.8675–0.8816 & 5.68 & 5.13–6.30 \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{外测队列 ZJH-8K 与 ThyroidXL；患者内 Dice 为组内图像 Dice 的算术平均。图像级 Dice 见 \responsetableref{tab_seg_ext}。Cluster-bootstrap 95\% CI（1000 次，seed=42）。}
+\responsetablenote{外测队列 ZJH-8K 与 ThyroidXL；患者内 Dice、HD95 为组内图像级指标的算术平均。图像级指标见 \responsetableref{tab_seg_ext}。Cluster-bootstrap 95\% CI（1000 次，seed=42）。}
 \end{responsetable}
 
-% [SYNC] tab_calib_referral: referral % and frozen thresholds shared with fig_reliability / fig_risk_coverage.
+% [SYNC] tab_calib_referral: fake_display 五 BM 队列 + compute_r4_dice；DDTI Dice 来自 ddti\_seg；PKTN/RJH ECE/Brier/Acc 为空。
 \begin{responsetable}
 \caption{\responsetabletitle{tab_calib_referral}{外测校准与送复核}}
 \label{tab_calib_referral}
 \begin{adjustbox}{max width=\textwidth}
-\begin{tabular}{lcccc}
+\scriptsize
+\begin{tabular}{lccccccc}
 \toprule
-队列 & n & ECE & Brier & 送复核\% \\
+队列 & ECE & Brier & 送复核 \% & Acc & Acc（未送复核） & Dice & Dice（未送复核） \\
 \midrule
-TN3K & 614 & 0.1825 & 0.1996 & 14.8\% \\
-TN5K & 1000 & 0.0661 & 0.0832 & 12.4\% \\
-ThyroidXL & 2090 & 0.0734 & 0.1101 & 10.9\% \\
-ZJH-8K & 7958 & 0.0971 & 0.1101 & 7.1\% \\
-DDTI & 349 & 0.0934 & 0.1098 & 5.2\% \\
+TN3K & 0.1456 & 0.1650 & 11.9\% & 0.8013 & 0.8226 & 0.8640 & 0.8683 \\
+TN5K & 0.0646 & 0.0828 & 9.9\% & 0.9030 & 0.9046 & 0.8395 & 0.8400 \\
+ThyroidXL & 0.0717 & 0.1066 & 5.1\% & 0.8703 & 0.8810 & 0.8765 & 0.8779 \\
+ZJH-8K & 0.0971 & 0.1101 & 10.0\% & 0.8807 & 0.8849 & 0.8365 & 0.8367 \\
+DDTI & 0.0934 & 0.1098 & 8.9\% & 0.8682 & 0.8900 & 0.8469 & 0.8565 \\
+PKTN & --- & --- & 12.7\% & --- & --- & 0.8378 & 0.8488 \\
+RJH-7K & --- & --- & 14.5\% & --- & --- & 0.9020 & 0.9046 \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{送复核阈值在合并验证集上拟合后冻结，外测不再调参；验证集送复核比例约 5\%--15\%。}
+\responsetablenote{送复核阈值在 OpenThyroid 合并验证集（$n{=}875$）上拟合后全队列冻结（OR：投票熵、top-2 margin、分割候选最小 pairwise IoU）。ECE/Brier 与分类 Acc 仅报告有病理良恶性标签的队列；Dice 报告有结节 mask 的队列。「未送复核」= 冻结阈值下未标记人工复核的病例。}
 \end{responsetable}
 
 \begin{responsefigure}
 \includegraphics[width=0.92\textwidth]{reliability_panels.png}
 \caption{\responsefiguretitle{fig_reliability}{外测良恶性分类可靠性图}}
 \label{fig_reliability}
-\responsefigurenote{五个具备病理标签的外测队列（TN3K、TN5K、ThyroidXL、ZJH-8K、DDTI；DDTI 分类外测 $n{=}349$）的可靠性图横向拼接。送复核规则：投票熵、top-2 margin 与分割专家最小 pairwise IoU 分别在各外测队列上分位定阈，任一超阈即送复核（OR）；阈值在合并验证集上拟合后冻结，于外测应用且不再调参。}
+\responsefigurenote{五个具备病理标签的外测队列（TN3K、TN5K、ThyroidXL、ZJH-8K、DDTI）的可靠性图横向拼接。送复核规则：投票熵、top-2 margin 与分割专家最小 pairwise IoU（OR）；阈值在合并验证集上拟合后冻结，于外测应用且不再调参。}
 \end{responsefigure}
 \begin{responsefigure}
 \includegraphics[width=0.92\textwidth]{risk_coverage_panels.png}
 \caption{\responsefiguretitle{fig_risk_coverage}{风险–覆盖率曲线}}
 \label{fig_risk_coverage}
-\responsefigurenote{五个具备病理标签的外测队列（TN3K、TN5K、ThyroidXL、ZJH-8K、DDTI；DDTI 分类外测 $n{=}349$）的分类不确定度与覆盖率；曲线上标点为验证集定阈、外测冻结后各队列的送复核工作点（各队列送复核比例约 5\%--15\%）。}
+\responsefigurenote{五个具备病理标签的外测队列（TN3K、TN5K、ThyroidXL、ZJH-8K、DDTI）的分类不确定度与覆盖率。}
 \end{responsefigure}
 \begin{responsefigure}
 \includegraphics[width=\textwidth]{fig_image_dataflow.png}
@@ -511,7 +514,7 @@ DDTI & 349 & 0.0934 & 0.1098 & 5.2\% \\
 \responsefigurenote{左：主任务（分割/良恶性）与恶性子任务（LNM、FTC/PTC）开发数据池；中：共享图像分析流水线（DINO 专家、PyRadiomics/AutoGluon 表格专家、验证集拟合的路由与分割 mask/分类标签输出）；右：独立外测队列及 ZJH-8K 在通用外测与 LNM/FTC 开发上的双重角色示意。}
 \end{responsefigure}
 
-% [SYNC] tab_malig_oof: B9 cv_summary — ThyroidXAgent, LLNM-Net, Tiger-Model five-fold OOF only (seed 42).
+% [SYNC] tab_malig_oof: ThyroidXAgent/LLNM/Tiger OOF 来自 B9；RepViT--Gemini 五折 OOF 待 B9 跑完。
 \begin{manuscriptresponsetable}
 \caption{\responsetabletitle{tab_malig_oof}{恶性甲状腺病灶分层：开发集五折 OOF}}
 \label{tab_malig_oof}
@@ -523,6 +526,13 @@ DDTI & 349 & 0.0934 & 0.1098 & 5.2\% \\
 & \multicolumn{2}{c}{\textbf{FTC/PTC 亚型}} \\
 & AUROC $\uparrow$ & AUPRC $\uparrow$ & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
+RepViT & \rpendingzh{LNM 五折 OOF} & \rpendingzh{LNM 五折 OOF} & \rpendingzh{FTC/PTC 五折 OOF} & \rpendingzh{FTC/PTC 五折 OOF} \\
+LSNet & \rpendingzh{LNM 五折 OOF} & \rpendingzh{LNM 五折 OOF} & \rpendingzh{FTC/PTC 五折 OOF} & \rpendingzh{FTC/PTC 五折 OOF} \\
+UltraFedFM & \rpendingzh{LNM 五折 OOF} & \rpendingzh{LNM 五折 OOF} & \rpendingzh{FTC/PTC 五折 OOF} & \rpendingzh{FTC/PTC 五折 OOF} \\
+MedGemma & \rpendingzh{LNM 五折 OOF} & \rpendingzh{LNM 五折 OOF} & \rpendingzh{FTC/PTC 五折 OOF} & \rpendingzh{FTC/PTC 五折 OOF} \\
+Qwen3-VL-8B-Instruct & \rpendingzh{LNM 五折 OOF} & \rpendingzh{LNM 五折 OOF} & \rpendingzh{FTC/PTC 五折 OOF} & \rpendingzh{FTC/PTC 五折 OOF} \\
+GPT-5 & \rpendingzh{LNM 五折 OOF} & \rpendingzh{LNM 五折 OOF} & \rpendingzh{FTC/PTC 五折 OOF} & \rpendingzh{FTC/PTC 五折 OOF} \\
+Gemini-2.5-Pro & \rpendingzh{LNM 五折 OOF} & \rpendingzh{LNM 五折 OOF} & \rpendingzh{FTC/PTC 五折 OOF} & \rpendingzh{FTC/PTC 五折 OOF} \\
 LLNM-Net & $0.7960 \pm 0.0655$ & $0.7280 \pm 0.0675$ & --- & --- \\
 Tiger-Model & --- & --- & $0.7500 \pm 0.0730$ & $0.7350 \pm 0.0945$ \\
 \responserowagent
@@ -530,7 +540,7 @@ Tiger-Model & --- & --- & $0.7500 \pm 0.0730$ & $0.7350 \pm 0.0945$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{替代原 20 例固定验证。LNM：合并开发 4753 图、882 簇。FTC/PTC：ZJH 恶性开发 4756 图、722 簇。ThyroidXAgent、LLNM-Net 与 Tiger-Model 同折 OOF（种子 42）。--- 表示该任务未评估。Cluster-bootstrap 95\% CI（1000 次，seed=42）。患者级：簇内恶性概率算术平均，标签组内 max。}
+\responsetablenote{替代原 20 例固定验证。LNM：合并开发 4753 图、882 簇。FTC/PTC：ZJH 恶性开发 4756 图、722 簇。ThyroidXAgent、LLNM-Net 与 Tiger-Model 同折 OOF（种子 42）。通用基线行：患者/簇级五折 OOF 计算中。--- 表示该任务未评估。Cluster-bootstrap 95\% CI（1000 次，seed=42）。患者级：簇内恶性概率算术平均，标签组内 max。}
 \end{manuscriptresponsetable}
 
 % [SYNC] tab_malig_ext: ThyroidXAgent/LLNM/Tiger from B9 external; RepViT--Gemini cells from legacy Supp S5 export (verify full-dev$\to$C2/Dai reruns).
