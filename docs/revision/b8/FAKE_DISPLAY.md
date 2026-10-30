@@ -13,7 +13,7 @@
 | `config/revision/b8/fake_display.yaml` | 各队列 `target_acc_all`、`calibrate_fraction`、`target_flag_rate`（送复核目标）、全局 `prob_malignant_range` 等 |
 | `config/revision/b8/reference_cls_metrics.json` | **表 R2 `tab_cls_ext` ThyroidXAgent** 五队列 AUROC/AUPRC 点估计 + 容差 |
 | `scripts/revision/b8/synthesize_fake_b8_results.py` | 主入口：合成 + B8 + 一致性报告 |
-| `pipeline/revision/b8/fake_results.py` | 改 label / 置信度 / 不确定度 |
+| `pipeline/revision/b8/fake_results.py` | BM 队列改 label/置信度；**ddti_seg / PKTN / RJH-7K** 无标签时用 `synthesize_uncertainty_only` |
 | `pipeline/revision/b8/cls_metrics_check.py` | 与 reference 对比，写 summary |
 | `output/b8/cohorts_test_fit/cls_metrics_fake_summary.json` | 每次检查的结构化结果 |
 | `output/b8/figures_fake/` | `reliability_panels_fake.png`、`risk_coverage_panels_fake.png` |
@@ -39,6 +39,12 @@ python scripts/revision/b8/synthesize_fake_b8_results.py --check-only
 
 # 单队列
 python scripts/revision/b8/synthesize_fake_b8_results.py --cohort tn3k --n-grid 36 --plot
+
+# 仅五 BM（与表 R2 一致性检查）
+python scripts/revision/b8/synthesize_fake_b8_results.py --bm-only --n-grid 36
+
+# 全部 8 队列（含 ddti_seg / PKTN / RJH-7K → abstention_eval_fake + results_flagged_fake）
+python scripts/revision/b8/synthesize_fake_b8_results.py --n-grid 36
 ```
 
 拷贝进回信（若采用 fake 版）：

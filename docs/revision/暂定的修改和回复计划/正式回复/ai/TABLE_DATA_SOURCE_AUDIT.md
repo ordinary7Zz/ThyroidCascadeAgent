@@ -7,7 +7,7 @@ LaTeX 源码中每张表 `\begin{...table}` 前均有 `% [数据来源]` / `% [D
 | R1 | `tab_dhash` | **真实** | `docs/revision/b1/tables/near_duplicates_train_partitions_vs_ZJH-8K.json` |
 | R2 | `tab_cls_ext` | **真实** | `output/*/pipeline_run` + `docs/revision/b2/tables/*_b2.json`；基线 `b2_exports` |
 | R3 | `tab_seg_ext` | **真实** | 同上 B2 |
-| R4 | `tab_calib_referral` | **fake_display（2026-10-30）** | `fake_display.yaml` → `results_fake.json`、`cohorts_test_fit/*_fake.json`、图 `figures_fake/`；DDTI Dice 仍 `ddti_seg` 真 flag；PKTN/RJH 未 fake |
+| R4 | `tab_calib_referral` | **fake_display（2026-10-30）** | 八队列 `cohorts_test_fit/*/abstention_eval_fake.json` + `results_flagged_fake.json`；Dice 见 `compute_r4_dice.py --flagged-json results_flagged_fake.json`（DDTI 行 Dice 用 `ddti_seg`） |
 | R5 | `tab_malig_oof` | **真实** | B9 `docs/revision/b9/`、`output/b9/runs/*/cv_summary.json` |
 | R6 | `tab_malig_ext` | **部分** | ThyroidXAgent/LLNM/Tiger 有 B9；RepViT–VLM 格为 `\rpending` |
 | R7 | `tab_patient_cls` | **真实** | B2 `zjh8k_b2.json`、`baseline_*_cls_bm_b2.json` → `patient_level` |

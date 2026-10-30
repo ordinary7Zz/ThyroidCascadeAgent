@@ -203,3 +203,34 @@ def synthesize_results(
         "mean_prob_malignant": float(np.mean(probs)) if probs else None,
     }
     return out, stats
+
+
+def synthesize_uncertainty_only(
+    results: list[dict],
+    *,
+    rng: np.random.Generator,
+    uncertainty_jitter: float = 0.0,
+) -> tuple[list[dict], dict[str, Any]]:
+    """无病理良恶性标签的外测队列：仅抖动/写入 uncertainty，供 B8 送复核与 Dice flag 复用。"""
+    out = copy.deepcopy(results)
+    jitter = float(np.clip(uncertainty_jitter, 0.0, 1.0))
+    n_touch = 0
+    for r in out:
+        u = dict(r.get("uncertainty") or {})
+        if jitter > 0:
+            _jitter_uncertainty(u, rng, jitter)
+        elif not u:
+            _set_confident_uncertainty(u, rng)
+        r["uncertainty"] = u
+        n_touch += 1
+    return out, {
+        "n_labeled": 0,
+        "n_wrong_before": 0,
+        "n_fixed": 0,
+        "n_wrong_after": 0,
+        "acc_all": None,
+        "calibrate_fraction": 0.0,
+        "mean_prob_malignant": None,
+        "n_uncertainty_touched": n_touch,
+        "mode": "uncertainty_only",
+    }

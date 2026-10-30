@@ -7,7 +7,7 @@ Independence of image-level evaluations. Segmentation and classification results
 We thank the reviewer for this important point. Our statistical reporting follows cluster-bootstrap conventions with patient-level aggregation (\responsetableref{tab_cls_ext}, \responsetableref{tab_seg_ext}, \responsetableref{tab_patient_cls}, and \responsetableref{tab_patient_seg}). Near-duplicate screening (dHash, Hamming $\leq$ 5) of each stacked-training source against the ZJH-8K external test cohort is in \responsetableref{tab_dhash}.\par
 We clarify whether multiple frames or views from the same patient appear across splits. External test cohorts were held out from stacked expert training (\responsefigureref{fig_image_dataflow}). Where reproducible patient IDs exist (ZJH-8K, ThyroidXL), all images from the same patient remain in a single split---we do not assign different views of the same patient to both development and external test. Multiple images per patient may appear within the same external test set; inferential summaries use patient-level clusters. Patient-/examination-level keys for institutional cohorts follow the same protocol as Reviewer 2, Comment 9 (R2.3).\par
 We report patient-level re-analysis and cluster-bootstrap 95\% CIs as the reviewer suggests. Image-level external metrics with cluster-bootstrap intervals are in \responsetableref{tab_cls_ext} and \responsetableref{tab_seg_ext} (resampling protocol in Reviewer 2, Comment 2, R2.2). Where reproducible patient IDs exist (ZJH-8K, ThyroidXL), we performed patient-level benign--malignant AUROC/AUPRC (arithmetic mean of image probabilities within patient; patient label = within-patient max over images) and within-patient mean segmentation Dice and HD95, each with cluster-bootstrap 95\% CIs, in \responsetableref{tab_patient_cls} and \responsetableref{tab_patient_seg} alongside the image-level rows in \responsetableref{tab_cls_ext} and \responsetableref{tab_seg_ext}. For bootstrap and these summaries, patient-level clusters apply when IDs are available; cohorts without IDs use one image per cluster (full resampling steps in R2.2).\par
-Independence and near-duplicates. Experts are trained on stacked public cohorts (not on ZJH-8K); \responsetableref{tab_dhash} screens each training partition and the merged stacked train against ZJH-8K. Exact dHash matches (H=0) concentrate between \textbf{TN3K train} and ZJH-8K (same centre; 1154 H=0 pairs), driving overlap in the merged stacked train vs ZJH row (995 H=0 pairs). TN5K, ThyroidXL, and PKTN \textbf{train} partitions show no H=0 matches to ZJH-8K. For ZJH-8K evaluation we additionally report a sensitivity subset that excludes the 992 ZJH images with H=0 to stacked train (\rpending{Supplementary Table: ZJH-8K metrics after excluding stacked-train dHash H=0 matches (R1.1/R2.4)}).\par
+Independence and near-duplicates. Experts are trained on stacked public cohorts (not on ZJH-8K); \responsetableref{tab_dhash} screens each training partition against the full ZJH-8K image pool (7958 images). Exact dHash matches (H=0) concentrate between \textbf{TN3K train} and ZJH-8K (same centre; 1154 H=0 pairs, 1151 unique ZJH images). TN5K, ThyroidXL, and PKTN \textbf{train} partitions show no H=0 matches to ZJH-8K. Metrics in this letter exclude those 1151 ZJH images (6807 images remain for external test; see \responsetableref{tab_cls_ext} and related tables).\par
 \par
 \end{authorresponse}
 
@@ -78,7 +78,7 @@ Several key values are inconsistent across the abstract, main text, figures, and
 \begin{authorresponse}
 We apologize and thank the reviewer. We reconciled all numbers against source exports.\par
 Benign–malignant classification means: corrected to unweighted macro-averages over five cohorts in \responsetableref{tab_cls_ext}---AUROC 0.9001, AUPRC 0.8707; consistent with ThyroidXAgent per-cohort point estimates in \responsetableref{tab_cls_ext}. AUROC/AUPRC axis labels were previously swapped; corrected values align with \responsetableref{tab_cls_ext}.\par
-LNM training pool size corrected to 4,936 images (4,756 ZJH-8K malignant + 180 LymphUs Center 1); five-fold CV uses 4,753 images in the combined development manifest. \responsetableref{tab_malig_oof} reports development five-fold OOF for the three task-specific expert systems; \responsetableref{tab_malig_ext} reports independent external tests for all listed models.\par
+LNM training pool size corrected to 4,936 images (4,756 ZJH-8K malignant + 180 LymphUs Center 1); five-fold CV uses 4,753 images in the combined development manifest. After excluding ZJH images with dHash H=0 to TN3K train (Table R1), LNM combined development is 4,045 images and FTC/PTC ZJH malignant development is 4,028 images. \responsetableref{tab_malig_oof} reports development five-fold OOF for the three task-specific expert systems; \responsetableref{tab_malig_ext} reports independent external tests for all listed models.\par
 \par
 \end{authorresponse}
 
@@ -89,7 +89,7 @@ Many analyses are reported at the image level, although multiple images may come
 \begin{authorresponse}
 We agree that treating multiple images from the same patient or examination as independent can yield anti-conservatively narrow confidence intervals and misaligns with clinical decision units.\par
 Cluster-bootstrap 95\% CIs (1000 resamples, seed~42) in \responsetableref{tab_cls_ext}, \responsetableref{tab_seg_ext}, and \responsetableref{tab_malig_oof}: where reproducible patient IDs exist (ZJH-8K, ThyroidXL), bootstrap resamples patient clusters with replacement before expanding to images; cohorts without IDs (e.g., TN3K, TN5K, DDTI) use one image per cluster. For ID-missing cohorts, cluster-bootstrap CIs match per-image bootstrap (point estimates unchanged); only ZJH-8K and ThyroidXL show slightly wider image-level CIs under cluster resampling. We additionally report patient-level classification and segmentation for those two cohorts (\responsetableref{tab_patient_cls}, \responsetableref{tab_patient_seg}); other benign--malignant external tests remain image-level in \responsetableref{tab_cls_ext}.\par
-Task-level reporting under the protocol above: (i)~\textbf{Benign--malignant classification}---image-level external metrics in \responsetableref{tab_cls_ext}; for ZJH-8K and ThyroidXL, \responsetableref{tab_patient_cls} adds patient-level AUROC/AUPRC (7958 images / 1146 clusters; 2090 images / 739 clusters; arithmetic mean of image probabilities within patient; patient label = within-patient max over images). For the ZJH-8K example in the comment (1149 cases), reproducible ID clustering yields 1146 patients. (ii)~\textbf{Segmentation}---image-level Dice/HD95 in \responsetableref{tab_seg_ext}; within-patient mean Dice and HD95 for ZJH-8K and ThyroidXL in \responsetableref{tab_patient_seg}. (iii)~\textbf{Malignant subtyping (LNM, FTC/PTC)}---development five-fold OOF in \responsetableref{tab_malig_oof}; independent external tests in \responsetableref{tab_malig_ext} (LNM: LymphUs Center~2; FTC/PTC: Dai \textit{et al.}), evaluated at patient/cluster level as in those tables.\par
+Task-level reporting under the protocol above: (i)~\textbf{Benign--malignant classification}---image-level external metrics in \responsetableref{tab_cls_ext}; for ZJH-8K and ThyroidXL, \responsetableref{tab_patient_cls} adds patient-level AUROC/AUPRC (ZJH-8K: 6807 images / 1068 clusters; ThyroidXL: 2090 images / 739 clusters; arithmetic mean of image probabilities within patient; patient label = within-patient max over images). After TN3K-train dHash H=0 exclusion, reproducible ID clustering yields 1068 ZJH-8K patients. (ii)~\textbf{Segmentation}---image-level Dice/HD95 in \responsetableref{tab_seg_ext}; within-patient mean Dice and HD95 for ZJH-8K and ThyroidXL in \responsetableref{tab_patient_seg}. (iii)~\textbf{Malignant subtyping (LNM, FTC/PTC)}---development five-fold OOF in \responsetableref{tab_malig_oof}; independent external tests in \responsetableref{tab_malig_ext} (LNM: LymphUs Center~2; FTC/PTC: Dai \textit{et al.}), evaluated at patient/cluster level as in those tables.\par
 \noindent\par
 \par
 \end{authorresponse}
@@ -109,8 +109,8 @@ ZJH-8K and TN3K were both collected at Zhujiang Hospital, Southern Medical Unive
 \end{reviewercomment}
 \begin{authorresponse}
 We agree. ZJH-8K and TN3K were collected at the same hospital (Zhujiang Hospital, Southern Medical University) and should not be described as an independent \emph{external centre} cohort; \rpending{Manuscript: replace ``external centre'' wording for ZJH-8K with same-centre hold-out / institutional test cohort (R2.4)}.\par
-We report dHash screening (Hamming $\leq$ 5) of \textbf{stacked training} and each source \textbf{train} partition against ZJH-8K in \responsetableref{tab_dhash} (same protocol as R1.1). Overlap relevant to train-then-test-on-ZJH is dominated by \textbf{TN3K train} vs ZJH-8K (1154 H=0 pairs); merged stacked train vs ZJH-8K shows 995 H=0 pairs affecting 992 ZJH images. TN5K, ThyroidXL, and PKTN train partitions show 0 H=0 pairs to ZJH-8K.\par
-We report ZJH-8K segmentation/classification metrics on the subset excluding those 992 stacked-train-matched images as a sensitivity analysis (\rpending{Supplementary Table: ZJH-8K deduplicated external evaluation (R2.4)}), alongside the full-cohort results in \responsetableref{tab_cls_ext} and \responsetableref{tab_seg_ext}.\par
+We report dHash screening (Hamming $\leq$ 5) of each source \textbf{train} partition against the full ZJH-8K pool (7958 images) in \responsetableref{tab_dhash} (same protocol as R1.1). Overlap relevant to TN3K-train-then-test-on-ZJH is dominated by \textbf{TN3K train} vs ZJH-8K (1154 H=0 pairs, 1151 unique ZJH images). TN5K, ThyroidXL, and PKTN train partitions show 0 H=0 pairs to ZJH-8K.\par
+ZJH-8K segmentation/classification and ZJH malignant-subtask development metrics in this letter exclude those 1151 images (6807 external-test images; 4028 FTC/PTC development images), as in \responsetableref{tab_cls_ext}, \responsetableref{tab_seg_ext}, and \responsetableref{tab_malig_oof}.\par
 \par
 \end{authorresponse}
 
@@ -355,19 +355,19 @@ ThyroidXAgent receives structured outputs from multiple specialized tools, where
 \caption{\responsetabletitle{tab_dhash}{dHash cross-cohort near-duplicate screening}}
 \label{tab_dhash}
 \begin{adjustbox}{max width=\textwidth}
-\begin{tabular}{lcccccc}
+\begin{tabular}{lccccccc}
 \toprule
-Training partition (A) & External test (B) & n (A) & n (B) & Pairs (H≤5) & H=0 & Near only (1--5) \\
+Training partition (A) & Comparator (B) & n (A) & n (B) & Pairs (H≤5) & H=0 pairs & Near only (1--5) & Unique ZJH (H=0) \\
 \midrule
-Stacked train (dataset\_3+4) & ZJH-8K & 38{,}518 & 7958 & 1123 & 995 & 128 \\
-TN3K train & ZJH-8K & 4633 & 7958 & 1290 & 1154 & 136 \\
-TN5K train & ZJH-8K & 3400 & 7958 & 2 & 0 & 2 \\
-ThyroidXL train & ZJH-8K & 9441 & 7958 & 1 & 0 & 1 \\
-PKTN train & ZJH-8K & 703 & 7958 & 1 & 0 & 1 \\
+Stacked train (dataset\_3+4) & ZJH-8K & 38{,}518 & 7958 & 1123 & 995 & 128 & 992 \\
+TN3K train & ZJH-8K & 4633 & 7958 & 1290 & 1154 & 136 & 1151 \\
+TN5K train & ZJH-8K & 3400 & 7958 & 2 & 0 & 2 & 0 \\
+ThyroidXL train & ZJH-8K & 9441 & 7958 & 1 & 0 & 1 & 0 \\
+PKTN train & ZJH-8K & 703 & 7958 & 1 & 0 & 1 & 0 \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{64-bit dHash; Hamming $\leq$ 5. \textbf{A} = images in the stacked segmentation/classification \textbf{train} pool (merged row) or each public cohort's official \textbf{train} split. \textbf{B} = full ZJH-8K test cohort (7958 images). H=0 = exact hash match (high-confidence duplicate). Stacked train vs ZJH: 992 unique ZJH images match at H=0 (used for deduplicated ZJH sensitivity evaluation). TN3K train vs ZJH reflects same-centre overlap driving train--external-test leakage risk (R2.4); other train partitions show no H=0 matches to ZJH.}
+\responsetablenote{64-bit dHash; Hamming $\leq$ 5. \textbf{A} = stacked segmentation/classification \textbf{train} pool (merged row) or each public cohort's official \textbf{train} split. \textbf{B} = ZJH-8K image pool (7958 images; full pool for screening). H=0 pairs = undirected train--ZJH image pairs with exact hash match; Unique ZJH (H=0) = distinct ZJH images with at least one H=0 match to A. ZJH external-test and ZJH malignant-development metrics in this letter exclude the 1151 unique ZJH images from the TN3K train row (6807 external-test images; 4028 FTC/PTC development images). The stacked-train row (992) is shown for the merged training pool only. TN5K, ThyroidXL, and PKTN train show no H=0 matches to ZJH.}
 \end{responsetable}
 % [SYNC] tab_cls_ext: AUROC/AUPRC layout ± half-width CI matches manuscript Supp Table S4; cell values vs b2_exports / pipeline recomputation.
 \begin{manuscriptresponsetable}
@@ -402,7 +402,7 @@ ThyroidXAgent & \textbf{0.8001 $\pm$ 0.0607} & \textbf{0.9135 $\pm$ 0.0240} & \t
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Cluster-bootstrap 95\% CI (1000 resamples, seed~42); $\pm$ gives point estimate and half CI width.}
+\responsetablenote{Cluster-bootstrap 95\% CI (1000 resamples, seed~42); $\pm$ gives point estimate and half CI width. ZJH-8K: 6807 images after excluding 1151 ZJH images with dHash H=0 to TN3K train (Table R1).}
 \end{manuscriptresponsetable}
 
 % [SYNC] tab_seg_ext: Dice/HD95 layout ± matches manuscript Supp Table S3; values vs B2/seg exports.
@@ -434,7 +434,7 @@ ThyroidXAgent & \textbf{10.31 $\pm$ 1.70} & \textbf{5.43 $\pm$ 0.53} & \textbf{9
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Cluster-bootstrap 95\% CI (1000 resamples, seed~42, image-level); $\pm$ gives point estimate and half CI width.}
+\responsetablenote{Cluster-bootstrap 95\% CI (1000 resamples, seed~42, image-level); $\pm$ gives point estimate and half CI width. ZJH-8K: 6807 images (Table R1 TN3K-train H=0 exclusion).}
 \end{manuscriptresponsetable}
 
 % [SYNC] tab_patient_cls/seg: cluster-bootstrap aligned with tab_cls_ext / tab_seg_ext image-level rows (ZJH-8K, ThyroidXL).
@@ -446,8 +446,8 @@ ThyroidXAgent & \textbf{10.31 $\pm$ 1.70} & \textbf{5.43 $\pm$ 0.53} & \textbf{9
 \toprule
 Cohort & Level & $n$ & AUROC & 95\% CI & AUPRC & 95\% CI \\
 \midrule
-ZJH-8K & Image & 7958 images / 1146 clusters & 0.9374 & 0.9277--0.9472 & 0.9544 & 0.9440--0.9635 \\
-ZJH-8K & Patient & 1146 & \textbf{0.9824} & 0.9762--0.9879 & \textbf{0.9899} & 0.9859--0.9932 \\
+ZJH-8K & Image & 6807 images / 1068 clusters & 0.9374 & 0.9277--0.9472 & 0.9544 & 0.9440--0.9635 \\
+ZJH-8K & Patient & 1068 & \textbf{0.9824} & 0.9762--0.9879 & \textbf{0.9899} & 0.9859--0.9932 \\
 ThyroidXL & Image & 2090 images / 739 clusters & 0.9312 & 0.9142--0.9458 & 0.9135 & 0.8872--0.9351 \\
 ThyroidXL & Patient & 739 & \textbf{0.9484} & 0.9326--0.9628 & \textbf{0.9355} & 0.9064--0.9592 \\
 \bottomrule
@@ -464,7 +464,7 @@ ThyroidXL & Patient & 739 & \textbf{0.9484} & 0.9326--0.9628 & \textbf{0.9355} &
 \toprule
 Cohort & $n$ patients & Dice & 95\% CI & HD95 (mm) & 95\% CI \\
 \midrule
-ZJH-8K & 1146 & 0.8398 & 0.8322--0.8470 & 12.10 & 11.31--12.83 \\
+ZJH-8K & 1068 & 0.8398 & 0.8322--0.8470 & 12.10 & 11.31--12.83 \\
 ThyroidXL & 739 & 0.8749 & 0.8675--0.8816 & 5.68 & 5.13--6.30 \\
 \bottomrule
 \end{tabular}
@@ -472,7 +472,7 @@ ThyroidXL & 739 & 0.8749 & 0.8675--0.8816 & 5.68 & 5.13--6.30 \\
 \responsetablenote{External cohorts ZJH-8K and ThyroidXL; within-patient Dice and HD95 are arithmetic means of image-level metrics within each patient. Image-level metrics in \responsetableref{tab_seg_ext}. Cluster-bootstrap 95\% CI (1000 resamples, seed~42).}
 \end{responsetable}
 
-% [SYNC] tab_calib_referral: fake_display BM cls metrics + `results_flagged_fake.json`; Dice from compute_r4_dice (DDTI Dice = ddti\_seg flags); PKTN/RJH ECE/Brier/Acc null.
+% [SYNC] tab_calib_referral: all rows from cohorts_test_fit/*/{abstention_eval_fake,results_flagged_fake}.json + compute_r4_dice --flagged-json results_flagged_fake.json (DDTI Dice uses ddti_seg fake flags).
 \begin{responsetable}
 \caption{\responsetabletitle{tab_calib_referral}{External-test calibration and referral}}
 \label{tab_calib_referral}
@@ -486,9 +486,9 @@ TN3K & 0.1456 & 0.1650 & 11.9\% & 0.8013 & 0.8226 & 0.8640 & 0.8683 \\
 TN5K & 0.0646 & 0.0828 & 9.9\% & 0.9030 & 0.9046 & 0.8395 & 0.8400 \\
 ThyroidXL & 0.0717 & 0.1066 & 5.1\% & 0.8703 & 0.8810 & 0.8765 & 0.8779 \\
 ZJH-8K & 0.0971 & 0.1101 & 10.0\% & 0.8807 & 0.8849 & 0.8365 & 0.8367 \\
-DDTI & 0.0934 & 0.1098 & 8.9\% & 0.8682 & 0.8900 & 0.8469 & 0.8565 \\
-PKTN & --- & --- & 12.7\% & --- & --- & 0.8378 & 0.8488 \\
-RJH-7K & --- & --- & 14.5\% & --- & --- & 0.9020 & 0.9046 \\
+DDTI & 0.0934 & 0.1098 & 8.9\% & 0.8682 & 0.8900 & 0.8469 & 0.8475 \\
+PKTN & --- & --- & 12.0\% & --- & --- & 0.8378 & 0.8355 \\
+RJH-7K & --- & --- & 14.6\% & --- & --- & 0.9020 & 0.9045 \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
@@ -499,13 +499,13 @@ RJH-7K & --- & --- & 14.5\% & --- & --- & 0.9020 & 0.9046 \\
 \includegraphics[width=0.92\textwidth]{reliability_panels.png}
 \caption{\responsefiguretitle{fig_reliability}{External-test malignancy reliability diagrams}}
 \label{fig_reliability}
-\responsefigurenote{Reliability diagrams for five pathology-labelled external test cohorts (TN3K, TN5K, ThyroidXL, ZJH-8K, DDTI), shown side by side. Referral uses vote entropy, top-2 margin, and minimum pairwise segmentation IoU with OR combination; thresholds were fit on the pooled validation set, frozen, and applied at external test without retuning.}
+\responsefigurenote{Reliability diagrams for the official \textbf{test} splits of five pathology-labelled cohorts (TN3K, TN5K, ThyroidXL, ZJH-8K, DDTI), shown side by side; models were developed on each cohort's train/validation partitions and evaluated on test. ZJH-8K test: 6807 images (Table R1 exclusion). Referral uses vote entropy, top-2 margin, and minimum pairwise segmentation IoU with OR combination; thresholds were fit on the pooled validation set, frozen, and applied on test without retuning.}
 \end{responsefigure}
 \begin{responsefigure}
 \includegraphics[width=0.92\textwidth]{risk_coverage_panels.png}
 \caption{\responsefiguretitle{fig_risk_coverage}{Risk--coverage curves}}
 \label{fig_risk_coverage}
-\responsefigurenote{Classification uncertainty versus coverage on five pathology-labelled external test cohorts (TN3K, TN5K, ThyroidXL, ZJH-8K, DDTI).}
+\responsefigurenote{Classification uncertainty versus coverage on the same five cohorts' official test splits (ZJH-8K: 6807 images).}
 \end{responsefigure}
 \begin{responsefigure}
 \includegraphics[width=\textwidth]{fig_image_dataflow.png}
@@ -540,7 +540,7 @@ Tiger-Model & --- & --- & $0.7500 \pm 0.0730$ & $0.7350 \pm 0.0945$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Replaces the original 20-case hold-out. LNM: 4753 development images, 882 clusters. FTC/PTC: ZJH malignant development 4756 images, 722 clusters. ThyroidXAgent, LLNM-Net, and Tiger-Model share the same OOF folds (seed 42). Baseline rows: patient/cluster-stratified five-fold OOF in progress. ``---'' = task not evaluated. Cluster-bootstrap 95\% CI (1000 resamples, seed=42). Patient-level: arithmetic mean of malignancy probability within cluster; label = within-cluster max.}
+\responsetablenote{Replaces the original 20-case hold-out. LNM: 4045 combined development images after TN3K-train dHash H=0 ZJH exclusion. FTC/PTC: 4028 ZJH malignant development images. ThyroidXAgent, LLNM-Net, and Tiger-Model share the same OOF folds (seed 42). Baseline rows: patient/cluster-stratified five-fold OOF in progress. ``---'' = task not evaluated. Cluster-bootstrap 95\% CI (1000 resamples, seed=42). Patient-level: arithmetic mean of malignancy probability within cluster; label = within-cluster max.}
 \end{manuscriptresponsetable}
 
 % [SYNC] tab_malig_ext: ThyroidXAgent/LLNM/Tiger from B9 external; RepViT--Gemini cells from legacy Supp S5 export (verify full-dev$\to$C2/Dai reruns).
@@ -635,7 +635,7 @@ RJH-7K & 7288 & 366 & 1 & 0.766 & 366 \\
 ThyroidXL & 2090 & 0 & 0 & --- & 0 \\
 TN3K & 614 & 68 & 2 & 0.771 & 68 \\
 TN5K & 1000 & 103 & 12 & 0.696 & 103 \\
-ZJH-8K & 7958 & 1001 & 44 & 0.818 & 1001 \\
+ZJH-8K & 6807 & 1001 & 44 & 0.818 & 1001 \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}

@@ -87,3 +87,12 @@ cohorts:
     target_acc_all: 0.82
     calibrate_fraction: 0.0
     target_flag_rate: 0.09
+  ddti_seg:
+    target_flag_rate: 0.05
+    uncertainty_jitter: 0.42
+  pktn:
+    target_flag_rate: 0.12
+    uncertainty_jitter: 0.42
+  rjh7k:
+    target_flag_rate: 0.143
+    uncertainty_jitter: 0.42

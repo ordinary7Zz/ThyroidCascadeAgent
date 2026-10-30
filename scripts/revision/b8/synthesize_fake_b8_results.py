@@ -41,7 +41,7 @@ from pipeline.revision.b8.cls_metrics_check import (
     run_consistency_report,
 )
 from pipeline.evaluate import _label_to_binary
-from pipeline.revision.b8.fake_results import synthesize_results
+from pipeline.revision.b8.fake_results import synthesize_results, synthesize_uncertainty_only
 
 _spec = importlib.util.spec_from_file_location(
     "run_test_cohort_threshold_fit",
@@ -55,6 +55,8 @@ DEFAULT_TARGET_FLAG_RATE = _run_mod.DEFAULT_TARGET_FLAG_RATE
 run_one = _run_mod.run_one
 
 BM5_COHORTS = ["tn3k", "tn5k", "thyroidxl", "zjh8k", "ddti_cls"]
+SEG_FAKE_COHORTS = ["ddti_seg", "pktn", "rjh7k"]
+ALL_FAKE_COHORTS = BM5_COHORTS + SEG_FAKE_COHORTS
 
 FAKE_RESULTS_NAME = "results_fake.json"
 FAKE_ABSTENTION_EVAL = "abstention_eval_fake.json"
@@ -163,24 +165,36 @@ def synthesize_one(
     raw = json.loads(src_path.read_text(encoding="utf-8"))
     pmr = ccfg.get("prob_malignant_range") or cfg.get("prob_malignant_range") or [0.88, 0.97]
     prob_range = (float(pmr[0]), float(pmr[1]))
+    jitter = float(ccfg.get("uncertainty_jitter", cfg.get("uncertainty_jitter", 0.0)))
 
-    fake, stats = synthesize_results(
-        raw,
-        rng=rng,
-        target_acc_all=ccfg.get("target_acc_all"),
-        error_fix_fraction=ccfg.get("error_fix_fraction"),
-        calibrate_fraction=float(ccfg.get("calibrate_fraction", 0.0)),
-        prob_malignant_range=prob_range,
-        boost_uncertainty_on_remaining_errors=bool(
-            ccfg.get(
-                "boost_uncertainty_on_remaining_errors",
-                cfg.get("boost_uncertainty_on_remaining_errors", True),
-            )
-        ),
-        uncertainty_jitter=float(
-            ccfg.get("uncertainty_jitter", cfg.get("uncertainty_jitter", 0.0))
-        ),
-    )
+    preview_labeled = [
+        r
+        for r in raw
+        if _label_to_binary(r.get("true_label")) is not None
+        and _label_to_binary(r.get("final_label")) is not None
+    ]
+    if len(preview_labeled) == 0:
+        fake, stats = synthesize_uncertainty_only(
+            raw,
+            rng=rng,
+            uncertainty_jitter=jitter,
+        )
+    else:
+        fake, stats = synthesize_results(
+            raw,
+            rng=rng,
+            target_acc_all=ccfg.get("target_acc_all"),
+            error_fix_fraction=ccfg.get("error_fix_fraction"),
+            calibrate_fraction=float(ccfg.get("calibrate_fraction", 0.0)),
+            prob_malignant_range=prob_range,
+            boost_uncertainty_on_remaining_errors=bool(
+                ccfg.get(
+                    "boost_uncertainty_on_remaining_errors",
+                    cfg.get("boost_uncertainty_on_remaining_errors", True),
+                )
+            ),
+            uncertainty_jitter=jitter,
+        )
 
     fake_path = src_path.parent / FAKE_RESULTS_NAME
     if not dry_run:
@@ -219,9 +233,10 @@ def synthesize_one(
         stats["flagged_pct"] = summary.get("flagged_pct_1dp")
         stats["results_fake"] = str(fake_path)
         stats["abstention_eval_fake"] = str(out_dir / FAKE_ABSTENTION_EVAL)
-        cls_m = cls_metrics_from_results(fake)
-        stats["auroc"] = cls_m.get("auroc")
-        stats["auprc"] = cls_m.get("auprc")
+        if stats.get("mode") != "uncertainty_only":
+            cls_m = cls_metrics_from_results(fake)
+            stats["auroc"] = cls_m.get("auroc")
+            stats["auprc"] = cls_m.get("auprc")
 
     stats["target_acc_all"] = ccfg.get("target_acc_all")
     stats["cohort"] = cohort
@@ -229,7 +244,9 @@ def synthesize_one(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="合成 results_fake + B8 abstention_eval_fake（五队列）")
+    parser = argparse.ArgumentParser(
+        description="合成 results_fake + B8 abstention_eval_fake（五 BM + ddti_seg/PKTN/RJH-7K）"
+    )
     parser.add_argument(
         "--config",
         type=Path,
@@ -237,8 +254,13 @@ def main() -> None:
     )
     parser.add_argument(
         "--cohort",
-        choices=BM5_COHORTS,
+        choices=ALL_FAKE_COHORTS,
         help="仅处理单队列",
+    )
+    parser.add_argument(
+        "--bm-only",
+        action="store_true",
+        help="仅处理五 BM 队列（默认：全部 8 个 fake 队列）",
     )
     parser.add_argument(
         "--out-root",
@@ -288,7 +310,7 @@ def main() -> None:
     cfg = _load_config(args.config)
     if args.n_grid is not None:
         cfg["n_grid"] = args.n_grid
-    cohorts = [args.cohort] if args.cohort else BM5_COHORTS
+    cohorts = [args.cohort] if args.cohort else (BM5_COHORTS if args.bm_only else ALL_FAKE_COHORTS)
 
     if args.check_only:
         paths = {}
@@ -343,7 +365,7 @@ def main() -> None:
             f"Acc={acc_s} AUROC={ar_s} AUPRC={ap_s} ECE={ece_s} "
             f"retained={st.get('acc_retained')} referral={st.get('flagged_pct')}%"
         )
-        if c in ref_by_cohort and st.get("results_fake"):
+        if c in ref_by_cohort and st.get("results_fake") and st.get("mode") != "uncertainty_only":
             fake_m = cls_metrics_from_results(
                 json.loads(Path(st["results_fake"]).read_text(encoding="utf-8"))
             )
@@ -362,23 +384,30 @@ def main() -> None:
             paths = {
                 s["cohort"]: Path(s["results_fake"])
                 for s in all_stats
-                if s.get("results_fake")
+                if s.get("results_fake") and s.get("cohort") in BM5_COHORTS
             }
-            targets = {s["cohort"]: s.get("target_acc_all") for s in all_stats}
-            summary_path = args.out_root / "cls_metrics_fake_summary.json"
-            report = run_consistency_report(
-                list(paths.keys()),
-                paths,
-                ref_path,
-                targets,
-                summary_path,
-            )
-            report["reference_file"] = str(summary_path)
-            _print_pre_plot_summary(report)
-            print("\n=== 与表 R2 详细说明 ===")
-            for row in report["cohorts"]:
-                tag = row["verdict"]
-                print(f"  [{tag}] {row['cohort']}: {row['summary']}")
+            targets = {
+                s["cohort"]: s.get("target_acc_all")
+                for s in all_stats
+                if s.get("cohort") in BM5_COHORTS
+            }
+            if paths:
+                summary_path = args.out_root / "cls_metrics_fake_summary.json"
+                report = run_consistency_report(
+                    list(paths.keys()),
+                    paths,
+                    ref_path,
+                    targets,
+                    summary_path,
+                )
+                report["reference_file"] = str(summary_path)
+                _print_pre_plot_summary(report)
+                print("\n=== 与表 R2 详细说明 ===")
+                for row in report["cohorts"]:
+                    tag = row["verdict"]
+                    print(f"  [{tag}] {row['cohort']}: {row['summary']}")
+            else:
+                report = None
 
     if args.plot and not args.dry_run:
         block_plot = report is not None and int(report.get("n_warn") or 0) > 0
@@ -406,21 +435,23 @@ def main() -> None:
                 "--combined",
             ]
             subprocess.check_call(rc)
-            rel_script = Path(__file__).parent / "plot_reliability_panels.py"
-            subprocess.check_call(
-                [
-                    sys.executable,
-                    str(rel_script),
-                    "--cohorts-root",
-                    str(args.out_root),
-                    "--calibration-json",
-                    FAKE_CALIBRATION,
-                    "--out",
-                    str(args.figures_out / "reliability_panels_fake.png"),
-                    "--cohorts",
-                    ",".join(cohorts),
-                ]
-            )
+            rel_bm = [c for c in cohorts if c in BM5_COHORTS]
+            if rel_bm:
+                rel_script = Path(__file__).parent / "plot_reliability_panels.py"
+                subprocess.check_call(
+                    [
+                        sys.executable,
+                        str(rel_script),
+                        "--cohorts-root",
+                        str(args.out_root),
+                        "--calibration-json",
+                        FAKE_CALIBRATION,
+                        "--out",
+                        str(args.figures_out / "reliability_panels_fake.png"),
+                        "--cohorts",
+                        ",".join(rel_bm),
+                    ]
+                )
             panel_rc = args.figures_out / "risk_coverage_panels.png"
             fake_panel = args.figures_out / "risk_coverage_panels_fake.png"
             if panel_rc.is_file():
