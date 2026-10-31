@@ -22,7 +22,7 @@
 
 | 包 | 审稿/稿面侧重 | 仓库入口 | 当前阻塞 |
 |----|---------------|----------|----------|
-| **B5** | **R3.2**；prompt 元数据五 mode 消融（**仅 TN5K**） | `../b5/`；**§14**；`REVIEWER` **B5 专项**；**正式回信 R17–R18** | **回信已定稿**；稿面 Supp. 统稿；**NHC 不跑 B5**（见 **§17.5**） |
+| **B5** | **R3.2**；prompt 元数据五 mode 消融（**仅 TN5K**） | `../b5/`；**§14**；`REVIEWER` **B5 专项**；**正式回信 `tab_metadata_ablation_*`** | **回信已定稿**；稿面 Supp. 统稿；**NHC 不跑 B5**（见 **§17.5**） |
 | **B7** | **R1.3** NHC 异质性 + **R2.6** | `../b7/`；**§17**；`output/b7/nhc_sample_canonical/` | 示例 **10 图 / 2 中心** 已填入三计划；定稿换全量 NHC + **G3** |
 
 其余 **B1–B4、B6、B8–B12** 均已 **归档**（见下表）；统稿时按各包真源与 `MANUSCRIPT` **§7–§16** 并入稿件即可。
@@ -35,14 +35,14 @@
 |----|--------------|------------------------------|------------|
 | **B1** | R1.1, R2.2, R2.4, R3.3 | `../b1/B1_结论与回复素材.md` | `MANUSCRIPT` §2.1、§3、§4；`REVIEWER` B1+B2 专项 |
 | **B2** | R1.1, R2.2, R2.14（CI） | `../b2/conclusions/B2_结论与回复素材.md` | 同上；`b2/tables/` |
-| **B3** | R1.2, R2.8, R3.1 | `../b3/B3_WAVE1_RESULTS.md`；`REVIEWER_RESPONSE_SNIPPETS_B3.md` | **§13**；`REVIEWER` **B3 专项**；正式回复 R13–R14 |
-| **B4** | R2.8 | `../b4/B4_STATUS_ZH.md`；L3 → `../b3/manuscript_llm_metrics.yaml` | **§15**；`REVIEWER` **B4 专项**；正式回复 R15–R16 |
+| **B3** | R1.2, R2.8, R3.1 | `../b3/B3_WAVE1_RESULTS.md`；`REVIEWER_RESPONSE_SNIPPETS_B3.md` | **§13**；`REVIEWER` **B3 专项**；正式回复 `tab_routing_ablation_*` |
+| **B4** | R2.8 | `../b4/B4_STATUS_ZH.md`；L3 → `../b3/manuscript_llm_metrics.yaml` | **§15**；`REVIEWER` **B4 专项**；正式回复 `tab_component_ablation_*` |
 | **B6** | R2.9 | `../b6/B6_ROUTING_STABILITY_CONCLUSIONS.md`；`docs/supplementary/router_spec.md` | **§11**；`REVIEWER` **B6 专项** |
 | **B8** | R1.3（校准/拒答，不含 NHC） | `../b8/`；`output/b8/` | **§12**；`REVIEWER` **B8 专项** |
 | **B9** | R2.10–12；S5 灰底 | [`../b9/B9_ThyroidXAgent_修改与回复计划.md`](../b9/B9_ThyroidXAgent_修改与回复计划.md) | **§16**；`REVIEWER` **B9 专项** |
 | **B10** | R2.14 | `../b10/B10_结论与回复素材.md` | **§10**；`REVIEWER` **B10 专项** |
 | **B11** | R2.20–21 | `../b11_b12/`；`docs/reproducibility_radiomics.md` | **§8.3–§8.4** |
-| **B12** | R2.7, R2.1, R2.3, R1.4 | `../b11_b12/README.md`；回信 **图 R3** `正式回复/figures/fig_image_dataflow.png` | **§8–§9**；`REVIEWER` B12 专项 |
+| **B12** | R2.7, R2.1, R2.3, R1.4 | `../b11_b12/README.md`；回信 **`fig_image_dataflow`** `正式回复/figures/fig_image_dataflow.png` | **§8–§9**；`REVIEWER` B12 专项 |
 
 **修改/回复计划中的对应位置**：进行中 **B5** → **§14** + **B5 专项**（TN5K；**无 NHC 热图**—托管机无 LLM）；进行中 **B7** → **§17** + **B7 专项** + R1.3/R2.6（B8 校准/拒答与 NHC 异质性分条）。
 

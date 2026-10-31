@@ -39,7 +39,7 @@
 
 - `\rpending{…}` 中若需内部跟踪，投稿前仍应改成审稿人可读表述或删除。
 
-NHC 表 R18–R20 另遵守下文「待定与修订稿承诺」中的 NHC 条款（与本节一致，不重复写路径/脚本）。
+NHC 表 `tab_nhc_center_descriptive` / `tab_nhc_center_performance` / `tab_nhc_heterogeneity` 另遵守下文「待定与修订稿承诺」中的 NHC 条款（与本节一致，不重复写路径/脚本）。
 
 ## 版式要点
 
@@ -51,13 +51,13 @@ NHC 表 R18–R20 另遵守下文「待定与修订稿承诺」中的 NHC 条款
 - 正文引用：`\responsetableref` / `\responsefigureref` / `\responsetablerefrange` 嵌入句子；**勿** `（见表 R*）`、**勿**「见信末」/ “at the end of this letter”、**勿**每条末尾重复表号清单。
 - **只引用表/图，不单独引用「表注/图注」**：Nature 系回复信与正文一样，交叉引用对象是 **Table/Figure**（本信用 `\responsetableref`）；表注 `\responsetablenote` 是表的一部分，读者跟表号即可。**勿**写 “in Table~R12 **notes**” /「见 \responsetableref{…} **表注**」——除非正文刻意不写细节、且细节**仅**在表注（此时也只写 `\responsetableref{…}`，不必点「表注」二字）。同一句里已写清操作定义时，**删除**再指向表注的尾巴（避免重复）。
 - 信内表、图各有一套 **R1, R2, …** 序号，按 `\responsetabletitle` / `\responsefiguretitle` **在 PDF 中首次出现的顺序**自动编号（见 `reviewer_response.sty`）；**不复用**稿件 Supplementary Table S* 序号。
-- 图：先 `\includegraphics`，再 `\caption{\responsefiguretitle{键}{短标题}}`，图例正文用 `\responsefigurenote{…}`（题注在图下方）。
+- 图：先 `\includegraphics`，再 `\caption{\responsefiguretitle{键}{整段图注}}`（与常规论文相同：**一条 caption**，`Figure R*` 编号由宏自动生成；**不用** `\responsefigurelegend` 或 `\caption` 外的 `\responsefigurenote`）。
 
 ## 表图注册与命名
 
 1. **勿**再在 `response_asset_registry.tex` 里写 `\responsetableregister{…}{R*}`（已废弃；保留文件仅用于 `\responsetablesetcontinued{…}` 等标记）。
 2. 表/图题：` \caption{\responsetabletitle{tab_example}{短标题}}` 或 `\responsefiguretitle{fig_example}{…}`；宏内已 `\label{键}`，**勿**在下一行重复 `\label{tab_example}`。
-3. 交叉引用：`\responsetableref{tab_example}` / `\responsefigureref{fig_example}` / `\responsetablerefrange{…}{…}`；**勿**手写「表 R12」（除非 `\rpending` 占位且尚未定稿）。
+3. 交叉引用：`\responsetableref{tab_example}` / `\responsefigureref{fig_example}` / `\responsetablerefrange{…}{…}`；**勿**手写「表 R12」或注释里硬编码 R*（`\rpending` 内也用 `\responsetableref` / `\responsetablerefrange`）。
 4. 续表页眉（`longtable`）：`\responsetablecontinuedrow{tab_…}`（用 `\ref`，需编译两次）。正文引用续表可加 `\responsetablesetcontinued{tab_…}` 以显示「(continued)」。
 5. 长表分页：`\begin{responsepaginatedtable}…\end{responsepaginatedtable}`；单页浮动表：`\begin{responsetable}…\end{responsetable}`（含 `\centering`）。
 6. 与投稿主表版式一致的复现块：`manuscriptresponsetable`（AUROC/AUPRC 或 Dice/HD95 分节、± 半宽 CI、灰底 ThyroidXAgent 行，见 `docs/ThyroidXAgent.md` 表标签）。
@@ -65,7 +65,7 @@ NHC 表 R18–R20 另遵守下文「待定与修订稿承诺」中的 NHC 条款
 8. **附录 / 表 R* / 图 R***：题注与正文按补充材料写法自洽表述，**不写**审稿意见编号；表图在蓝色回复正文中嵌入引用，信末 `\responseappendix` 集中复现。
 9. **附录少用加粗**：小节用 `\noindent 1.~标题`；prompt 说明用普通「System / User / 模型输出」标签；A2 表内版本号用 `\texttt`，数值与术语不必 `\textbf`（表题仍由 `\responseinlinetablecaption` 加粗）。
 
-### 长表 `longtable` 版式陷阱（路由消融表 R12 / R13 等）
+### 长表 `longtable` 版式陷阱（`tab_routing_ablation_seg` / `tab_routing_ablation_cls`）
 
 信内仅 `generated/routing_ablation_tables_*.tex` 使用 `responsepaginatedtable` + `longtable`。该表**多次**因续页页眉或边距宏被改坏版式，修改时请对照本节。
 
@@ -82,7 +82,7 @@ NHC 表 R18–R20 另遵守下文「待定与修订稿承诺」中的 NHC 条款
 - `\rpendingzh{…}` / `\rpending{…}`：红色 `[待补充：…]` / `[PENDING: …]`。**两类用途**：（1）实验/表数字尚未定稿；（2）**必须在投稿正文中改写的句子**——前缀建议 `Manuscript:` / `正文：`，便于你后续全文扫描 pending。
 - **回复信蓝色正文默认不写「修订稿」「将在 Methods 中…」**；直接写协议与结果，用 `\responsetableref` / `\responsefigureref` 锚定证据，勿加「(本回复)」「(this letter)」类括号说明。对**送审稿**的事实性对照（如 layout 与投稿补充表一致）可保留，但不要承诺「修订稿将…」。
 - 确需改正文时：**本回复已给出的实质内容 + 一句 `\rpending{Manuscript: …}`**，勿在蓝色段落展开未来稿面全文。
-- **NHC（表 R18--R20）**：遵守上文「审稿人可读性」；暂行子集（10 图）数字定稿后替换为全量 8721 图。院方元数据用 `\rpending` 标出。NHC **无** 策略 7 / LLM 全系统层 / 元数据热图（托管政策，正文写 N/A）。
+- **NHC（`tab_nhc_*`）**：遵守上文「审稿人可读性」；暂行子集（10 图）数字定稿后替换为全量 8721 图。院方元数据用 `\rpending` 标出。NHC **无** 策略 7 / LLM 全系统层 / 元数据热图（托管政策，正文写 N/A）。
 
 ## 性能表加粗规则
 

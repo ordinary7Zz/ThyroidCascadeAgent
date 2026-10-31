@@ -57,7 +57,7 @@
 
 **Prefer（简）**
 
-> Segmentation and classification results under the metadata ablation are in Tables R*–R*; per-cohort LLM expert-selection shares are in Tables R* and R*.
+> Segmentation and classification results under the metadata ablation are in `\responsetablerefrange{tab_metadata_ablation_seg}{tab_metadata_ablation_cls}`; per-cohort LLM expert-selection shares are in `\responsetableref{tab_expert_selection_seg}` and `\responsetableref{tab_expert_selection_cls}`.
 
 **Avoid**
 

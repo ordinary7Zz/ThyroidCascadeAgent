@@ -14,16 +14,16 @@
 |---|:---:|:---:|:---:|:---:|:---:|:---:|---|
 | B1 | ⬜ | ⬜ | ✅ | ✅ | ✅ | R1.1, R2.2, R2.4, R3.3 | **已归档** → `b1/B1_结论与回复素材.md` |
 | B2 | ⬜ | ⬜ | ✅ | ✅ | ✅ | R1.1, R2.2, R2.14 | **已归档** → `b2/conclusions/` |
-| B3 | 🟡 | 🟡 | 🟡 | ✅ | ✅ | R1.2, R2.8, R3.1 | **已归档** → `b3/`；回信 R13–R14 |
-| B4 | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 | R2.8 | **已归档** → `b4/B4_STATUS_ZH.md`；回信 R15–R16 |
-| B5 | ⬜ | ⬜ | ✅ | 🟡 | 🟡 | R3.2 | **回信已定稿**（R17–R18 + body）；稿面 Supp. / NHC 热图待 |
+| B3 | 🟡 | 🟡 | 🟡 | ✅ | ✅ | R1.2, R2.8, R3.1 | **已归档** → `b3/`；回信 `tab_routing_ablation_*` |
+| B4 | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 | R2.8 | **已归档** → `b4/B4_STATUS_ZH.md`；回信 `tab_component_ablation_*` |
+| B5 | ⬜ | ⬜ | ✅ | 🟡 | 🟡 | R3.2 | **回信已定稿**（`tab_metadata_ablation_*` + body）；稿面 Supp. / NHC 热图待 |
 | B6 | ⬜ | ⬜ | 🟡 | ✅ | 🟡 | R2.9 | **已归档** → `b6/`；§11 |
 | B7 | ⬜ | ⬜ | ⬜ | 🟡 | ⬜ | R1.3, R2.6 | **进行中**；🔒 G3 中心元数据 |
 | B8 | ⬜ | 🟡 | 🟡 | ✅ | 🟡 | R1.3 | **已归档**（校准/拒答；不含 NHC）→ `b8/` |
 | B9 | ⬜ | ⬜ | ✅ | ✅ | ✅ | R2.10–12 | **已归档** → `b9/B9_ThyroidXAgent_修改与回复计划.md` |
 | B10 | ⬜ | ⬜ | ✅ | ✅ | 🟡 | R2.14 | **已归档** → `b10/B10_结论与回复素材.md` |
 | B11 | ⬜ | ⬜ | 🟡 | ✅ | 🟡 | R2.20–21 | **已归档** → `b11_b12/` |
-| B12 | 🟡 | ✅ | ⬜ | 🟡 | ✅ | R1.4, R2.1, R2.3, R2.7 | **图像数据流图已定稿**（回信 **图 R3**）；宏平均等见 `b11_b12/README.md` |
+| B12 | 🟡 | ✅ | ⬜ | 🟡 | ✅ | R1.4, R2.1, R2.3, R2.7 | **图像数据流图已定稿**（回信 **`fig_image_dataflow`**）；宏平均等见 `b11_b12/README.md` |
 
 ---
 
@@ -65,7 +65,7 @@
 
 | 类别 | 必交付项 | 稿内位置 | 仓库入口 | 状态 |
 |------|----------|----------|----------|------|
-| **表或图** | 8 策略 × 分割/分类 × 九队列测试集；Oracle 上界 | Results + Supp. | `../b3/B3_WAVE1_RESULTS.md`；回信 R13–R14 | ✅ **已归档**（learned/NHC 若补数在 `b3/` 维护） |
+| **表或图** | 8 策略 × 分割/分类 × 九队列测试集；Oracle 上界 | Results + Supp. | `../b3/B3_WAVE1_RESULTS.md`；回信 `tab_routing_ablation_*` | ✅ **已归档**（learned/NHC 若补数在 `b3/` 维护） |
 | **文** | Methods 4.3 八策略；static_rule 口径；NHC 待纳入或 Limitation | Methods + Limitations | `REVISION_B3_B4_PLAN.md` | 🟡 |
 | **统计** | **cluster bootstrap CI**（与 B2 同脚本逻辑）；**配对**策略差分 CI | 表注 / Methods | `recompute_b3_cluster_ci.py` | 🟡 CI **已对齐**；配对差分仍 ⬜ |
 | **回** | R1.2、R2.8、R3.1 | 回复信 | `REVIEWER_RESPONSE_SNIPPETS_B3.md`；`REVIEWER_RESPONSE_PLAN` **B3 专项** | 🟡 **可起草**（6/7 占位） |
@@ -81,7 +81,7 @@
 | **补表** | L1/L2/L3 主表 | Supp. + Results | `../b4/B4_STATUS_ZH.md`；**§15** | ✅ **已归档**（Path B 附录可选，在 `b4/`） |
 | **文** | S6 vs S4 对账 | Results / Discussion | `B4_S6_S4_reconciliation.md`（可选） | 🟡 可选 |
 | **图** | 非必须 | — | — | — |
-| **回** | R2.8 | 回复信 | `正式回复/latex` **R15–R16** | ✅ |
+| **回** | R2.8 | 回复信 | `正式回复/latex` **`tab_component_ablation_*`** | ✅ |
 
 ---
 
@@ -89,7 +89,7 @@
 
 | 类别 | 必交付项 | 稿内位置 | 仓库入口 | 状态 |
 |------|----------|----------|----------|------|
-| **补表** | TN5K × 五 `metadata_mode`（与回信 **R17–R18** 一致） | Supp. + 回复信 **R17–R18** | `正式回复/latex/generated/metadata_ablation_tables_*.tex` | ✅ 回信；🟡 稿面 Supp. |
+| **补表** | TN5K × 五 `metadata_mode`（与回信 **`tab_metadata_ablation_*`** 一致） | Supp. + 回复信 **`tab_metadata_ablation_*`** | `正式回复/latex/generated/metadata_ablation_tables_*.tex` | ✅ 回信；🟡 稿面 Supp. |
 | **补图** | NHC **中心 × 专家**（`full`） | Supp. Fig. | `routing_log.jsonl`；与 B7 分条 | ⬜ |
 | **文/回** | R3.2 段落 + **full→quality_only** Δ | Results + 回复信 | `body_{zh,en}.tex` R3.2 | ✅ |
 
@@ -175,7 +175,7 @@
 
 | 类别 | 必交付项 | 稿内位置 | 仓库入口 | 状态 |
 |------|----------|----------|----------|------|
-| **主图/补图** | **图像臂**数据流（train/val/test 按组件；阈值在哪定） | **Fig.1** / Supp.（修订稿）；回信 **图 R3** | `正式回复/figures/fig_image_dataflow.png`；`../b11_b12/DATAFLOW_*` | ✅ 回信已定稿；修订稿统稿待 |
+| **主图/补图** | **图像臂**数据流（train/val/test 按组件；阈值在哪定） | **Fig.1** / Supp.（修订稿）；回信 **`fig_image_dataflow`** | `正式回复/figures/fig_image_dataflow.png`；`../b11_b12/DATAFLOW_*` | ✅ 回信已定稿；修订稿统稿待 |
 | **文** | 五队列 **无权重宏平均** AUROC/AUPRC；修正摘要/§2.2 旧「均值」 | Abstract；Results §2.2 | `../b11_b12/README.md` | ✅ 数字 |
 | **文** | 28,458 **分层计数**（图像侧能写的先写） | Abstract；§2.1 | B1 + B12 计划 | 🟡 |
 | **回** | R1.4、R2.1、R2.3、R2.7 | 回复信 | b11_b12 | 🟡 |

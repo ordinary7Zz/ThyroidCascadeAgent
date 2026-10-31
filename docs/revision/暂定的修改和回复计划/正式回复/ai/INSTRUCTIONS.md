@@ -30,7 +30,7 @@
 - **待定内容**：用 `\rpending{...}`（英文）、`\rpendingzh{...}`（中文），与 `reviewer_response.sty` 一致。
 - **少提修订稿（必守）**：勿写「将在修订稿 Methods…」；直接陈述已做分析与表图入口，**不要**在条目标题后加 `(this letter)` / `（本回复）` 等括号。必须在投稿正文改写的处，用 `\rpending{Manuscript: …}` / `\rpendingzh{正文：…}`（见 `latex/README.md` →「待定与正文修订」）。
 - **同一条意见内**：避免 `below` / `as detailed below` /「如下」「见下条」等**段内跳转**（用 `\par` 分段 + `\responsetableref` / `\responsefigureref` 或直接写内容即可）。**勿**在蓝色正文写「表注/图注/table note」——只引用表/图号（见 `latex/README.md`）。跨意见交叉引用（如 R2.2）可以保留。
-- **Cluster-bootstrap CI**：**仅 R2.2** 写全 resampling 协议（含 1000、seed~42）。其它意见正文只写 **follow R2.2** + 表号即可，**不要**再写 table captions/notes 或重复参数；各表 `\responsetablenote` 仍可保留 1000/seed 供单独读表。
+- **Cluster-bootstrap CI**：**仅 R2.2** 写全 resampling 协议（含 1000、seed~42）。其它意见正文只写 **follow R2.2** + `\responsetableref{…}` / `\responsetablerefrange{…}{…}` 即可，**不要**再写 table captions/notes 或重复参数；各表 `\responsetablenote` 仍可保留 1000/seed 供单独读表。
 - **路由消融策略 (1)--(8)**：向审稿人写**可执行规则**（如何算分歧、如何选 mask/分类器），勿以「不含 radiomics 级联 / agreement-only」等内部实现细节作主句；完整系统与消融的差异放在 Methods/附录，不在 R1.2 用级联名词当对比重点。
 - **审稿人可读性（必守）**：全文 PDF 叙述遵守 `latex/README.md` 专节「审稿人可读性：禁止内部/机器命名」——不写 Path A/B、Phase、路径/脚本/函数名、日志文件名等；附录 A1 小标题用自然语言（如「分类路由」）。
 - **不要**恢复已删除的 latex-viewer「注释 / current.json / history.jsonl」流程。

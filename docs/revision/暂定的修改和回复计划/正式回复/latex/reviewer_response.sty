@@ -95,7 +95,12 @@
 \newcommand{\responsefiguretitle}[2]{%
   \ResponseFigureName~\theresponsefigureno.\nobreakspace #2%
 }
-% Routing ablation tables R12--R13: rank highlighting (print-safe)
+% Legacy: prefer a single \responsefiguretitle{key}{full caption} inside \caption{...}
+\newcommand{\responsefigurelegend}[1]{%
+  \par\vspace{0.45em}%
+  {\footnotesize\normalfont #1\par}%
+}
+% Routing ablation (tab_routing_ablation_seg / tab_routing_ablation_cls): rank highlighting (print-safe)
 \newcommand{\routingbest}[1]{\textbf{#1}}
 \newcommand{\routingsecond}[1]{\underline{#1}}
 \makeatother
@@ -264,9 +269,9 @@
   {\footnotesize #1\par}%
 }
 
-% Figure legend text below the bold ``Figure R*. short title'' line (Nature-style legend body)
+% Legacy: use one \caption{\responsefiguretitle{key}{full caption text}} instead
 \newcommand{\responsefigurenote}[1]{%
-  \par\vspace{0.35em}%
+  \par\vspace{0.45em}%
   {\footnotesize\normalfont #1\par}%
   \vspace{0.5em}%
 }

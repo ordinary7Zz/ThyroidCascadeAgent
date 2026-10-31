@@ -12,12 +12,12 @@
 **回复：**
 
 - 感谢审稿人。我们已按下列方式修订统计报告。
-- 独立性与近重复：在 **TN3K、TN5K、ThyroidXL、DDTI、PKTN、ZJH-8K** 等**各来源队列之间**做感知哈希（dHash，Hamming ≤ 5）筛查（见文末 **表 R1**）。其中与 **审稿人 2 — 意见 4**（ZJH 与 TN3K 关系）最相关的是：TN3K（官方 train+val+test）与 ZJH-8K 共 **1156** 对 H=0 图像对；若仅看 TN3K **官方 test** 与 ZJH-8K，则为 **2** 对 H=0。
+- 独立性与近重复：在 **TN3K、TN5K、ThyroidXL、DDTI、PKTN、ZJH-8K** 等**各来源队列之间**做感知哈希（dHash，Hamming ≤ 5）筛查（见文末 **`tab_dhash`**）。其中与 **审稿人 2 — 意见 4**（ZJH 与 TN3K 关系）最相关的是：TN3K（官方 train+val+test）与 ZJH-8K 共 **1156** 对 H=0 图像对；若仅看 TN3K **官方 test** 与 ZJH-8K，则为 **2** 对 H=0。
 - 聚类定义：ZJH-8K、ThyroidXL 使用可复现 patient ID；无 ID 队列 **一图一簇**。Bootstrap **1000** 次、**seed=42**，CI 为 cluster-aware。
 - 患者级分类：ZJH-8K、ThyroidXL 对图像概率 **簇内/患者内算术平均** 后报告 AUROC/AUPRC。
-- 聚类 bootstrap 置信区间：均用 **1000** 次聚类 bootstrap（**seed=42**）重算 **95% CI**。完整结果见文末 **表 R2–R3**（**Table S4**）（良恶性分类，**7** 方法 × **5** 外测队列）与文末 **表 R4**（**Table S3**）（结节分割，**5** 方法 × **7** 外测队列；Dice 与 HD95）。**DDTI** 分类外测 **n=349**；分割 **DDTI** 为 **637** 图。
+- 聚类 bootstrap 置信区间：均用 **1000** 次聚类 bootstrap（**seed=42**）重算 **95% CI**。完整结果见文末 **`tab_cls_ext`**（**Table S4**）（良恶性分类，**7** 方法 × **5** 外测队列）与文末 **`tab_seg_ext`**（**Table S3**）（结节分割，**5** 方法 × **7** 外测队列；Dice 与 HD95）。**DDTI** 分类外测 **n=349**；分割 **DDTI** 为 **637** 图。
 
-**支撑材料：** 见文末 **表 R1**（dHash 近重复筛查）、**表 R2–R3**（Supplementary Table S4，AUROC/AUPRC）、**表 R4**（Supplementary Table S3，分割 Dice/HD95）。
+**支撑材料：** 见文末 **`tab_dhash`**（dHash 近重复筛查）、**`tab_cls_ext`**（Supplementary Table S4，AUROC/AUPRC）、**`tab_seg_ext`**（Supplementary Table S3，分割 Dice/HD95）。
 
 ---
 
@@ -29,11 +29,11 @@
 **回复：**
 
 - 我们同意中心异质性重要。NHC-MISD-TUS 中心级分析（审稿人 2 意见 6）待中心元数据齐备后单独报告（见对审稿人 2 意见 6 的回复）。此处就五个有良恶性病理标签的外测队列报告校准与送复核策略。
-- 在五个有病理标签的外测队列上，以投票熵、top-2 margin、分割专家最小 pairwise IoU 定义不确定度（与主文测试协议一致）；**在每个外测队列自身**上按分位数定阈（熵与 margin/IoU 分别取分位），**任一**超阈即送复核（OR 组合），并调节分位使各队列送复核比例落在约 **5%–15%**（**表 R4**，一位小数）。
-- **表 R4** 中 ECE/Brier 为各外测全集上的校准指标（图像级预测，与 Table S4 同口径）。文末 **图 R1–R2** 均基于 **表 R4** **同一套各队列自身分位定阈**结果；风险–覆盖率曲线上**工作点**与 **表 R4** 送复核%一致。各队列保留子集上的分类表现见补充材料。
+- 在五个有病理标签的外测队列上，以投票熵、top-2 margin、分割专家最小 pairwise IoU 定义不确定度（与主文测试协议一致）；**在每个外测队列自身**上按分位数定阈（熵与 margin/IoU 分别取分位），**任一**超阈即送复核（OR 组合），并调节分位使各队列送复核比例落在约 **5%–15%**（**`tab_seg_ext`**，一位小数）。
+- **`tab_seg_ext`** 中 ECE/Brier 为各外测全集上的校准指标（图像级预测，与 Table S4 同口径）。文末 **`fig_reliability`、`fig_risk_coverage`** 均基于 **`tab_seg_ext`** **同一套各队列自身分位定阈**结果；风险–覆盖率曲线上**工作点**与 **`tab_seg_ext`** 送复核%一致。各队列保留子集上的分类表现见补充材料。
 - 我们将其表述为回顾性工作流：低不确定度病例可自动采纳模型输出，高不确定度病例送人工复核。Methods 中已说明阈值拟合与评估划分；送复核病例的临床处置边界在 Limitations 与讨论中说明。
 
-**支撑材料：** 见文末 **表 R4**（外测校准与送复核）、**图 R1**（可靠性图）、**图 R2**（风险–覆盖率曲线）。
+**支撑材料：** 见文末 **`tab_seg_ext`**（外测校准与送复核）、**`fig_reliability`**（可靠性图）、**`fig_risk_coverage`**（风险–覆盖率曲线）。
 
 ---
 
@@ -44,9 +44,9 @@ ZJH-8K 被描述为分割与良恶性分类的外部测试集，而它的恶性�
 
 **回复：**
 
-- 分割与通用良恶性专家 **未在 ZJH-8K 训练**；ZJH 恶性子集仅用于 LNM/FTC 任务开发，外测分别为 LymphUs Center 2 与 FangDai。图像侧各组件的训练、验证与外测数据划分见文末 **图 R3**。
+- 分割与通用良恶性专家 **未在 ZJH-8K 训练**；ZJH 恶性子集仅用于 LNM/FTC 任务开发，外测分别为 LymphUs Center 2 与 FangDai。图像侧各组件的训练、验证与外测数据划分见文末 **`fig_image_dataflow`**。
 
-**支撑材料：** **图 R3**（图像侧数据流图）。
+**支撑材料：** **`fig_image_dataflow`**（图像侧数据流图）。
 
 ---
 
@@ -69,11 +69,11 @@ ZJH-8K 被描述为分割与良恶性分类的外部测试集，而它的恶性�
 **回复：**
 
 - 我们致歉并已按源结果逐项核对。
-- 良恶性分类「均值」（摘要、§2.2）：更正为 Table S4 **五队列等权宏平均** AUROC **0.9001**、AUPRC **0.8707**（见文末 **表 R6**）；按测试图像数加权 AUROC **0.9286**、AUPRC **0.9533**（与 **表 R2–R3** 中 ThyroidXAgent 五队列点估计一致）。
-- Fig.3b：AUROC/AUPRC 轴标签标反，已与 **Table S4** 及 **表 R6** 宏平均对齐。
-- LNM 训练池更正为 **4936** 图（4756 ZJH 恶性 + 180 LymphUs C1）；五折 CV 合并 manifest **4753** 图。**Table S5** 分 **独立外测（S5a）** 与 **开发集五折 OOF（S5b）**；通用基线行仅在 S5b 中与投稿 Supplementary Table S5 一致（见文末 **表 R7**）。
+- 良恶性分类「均值」（摘要、§2.2）：更正为 Table S4 **五队列等权宏平均** AUROC **0.9001**、AUPRC **0.8707**（见文末 **`fig_image_dataflow`**）；按测试图像数加权 AUROC **0.9286**、AUPRC **0.9533**（与 **`tab_cls_ext`** 中 ThyroidXAgent 五队列点估计一致）。
+- Fig.3b：AUROC/AUPRC 轴标签标反，已与 **Table S4** 及 **`fig_image_dataflow`** 宏平均对齐。
+- LNM 训练池更正为 **4936** 图（4756 ZJH 恶性 + 180 LymphUs C1）；五折 CV 合并 manifest **4753** 图。**Table S5** 分 **独立外测（S5a）** 与 **开发集五折 OOF（S5b）**；通用基线行仅在 S5b 中与投稿 Supplementary Table S5 一致（见文末 **`tab_cls_ext`**）。
 
-**支撑材料：** 见文末 **表 R6**（五队列汇总均值）、**表 R7**（Supplementary Table S5a/S5b）。
+**支撑材料：** 见文末 **`fig_image_dataflow`**（五队列汇总均值）、**`tab_cls_ext`**（Supplementary Table S5a/S5b）。
 
 ---
 
@@ -86,14 +86,14 @@ ZJH-8K 被描述为分割与良恶性分类的外部测试集，而它的恶性�
 
 - 我们同意：将同一患者/检查的多张图像当作独立观测会使 bootstrap 置信区间偏窄，且与临床决策单位不一致。
 - **统计协议（Methods）**：凡队列提供可复现 **patient ID**（ZJH-8K、ThyroidXL），bootstrap 在 **患者簇** 上有放回重采样（**1000** 次，**seed=42**），再展开到图像计算指标；无 ID 外测队列（如 TN3K、TN5K、DDTI）按 **一图一簇** 处理。**Tables S3–S5** 中 AUROC/AUPRC/Dice 的 **95% CI** 均按此 cluster-bootstrap 协议报告。
-- **哪些队列 CI 会变**：**TN3K、TN5K、DDTI** 等无患者 ID 外测队列因一图一簇，cluster-bootstrap **95% CI 与逐图 bootstrap 一致**（点估计不变）。**仅 ZJH-8K 与 ThyroidXL** 图像级 CI 因簇内相关性而略宽，并 **另报患者级**分类与分割（**表 R8**、**表 R9**）；其余良恶性外测队列见文末 **表 R2–R3**。
+- **哪些队列 CI 会变**：**TN3K、TN5K、DDTI** 等无患者 ID 外测队列因一图一簇，cluster-bootstrap **95% CI 与逐图 bootstrap 一致**（点估计不变）。**仅 ZJH-8K 与 ThyroidXL** 图像级 CI 因簇内相关性而略宽，并 **另报患者级**分类与分割（**`tab_malig_ext`**、**`tab_patient_cls`**）；其余良恶性外测队列见文末 **`tab_cls_ext`**。
 - **ZJH 患者簇（全稿一致）**：对 ZJH 图像采用同一 **患者级 cluster** 规则（基于可复现患者 ID / 姓名映射，与恶性子任务开发集同一规则）。**1146** 簇（全外测）与 Table S5 恶性开发池簇数不同，仅因 **纳入图像子集**不同，而非两套划分键。
-- **良恶性分类（患者级，主分析补充）**：对 ZJH-8K、ThyroidXL，在图像级恶性概率基础上，于患者内 **算术平均** 得到患者分数；患者标签为组内图像标签的 **max**（任一张恶性→恶性），再报告患者级 AUROC/AUPRC 及 cluster-bootstrap CI（**表 R8**、**表 R9**）。正文/补充材料在图像级 Table S4 之外增加患者级一行或附表。
-- **分割**：图像级 Dice 仍为逐图计算；完整 **Table S3** 见文末 **表 R4**；ZJH-8K、ThyroidXL **患者内 Dice 均值**见文末 **表 R9**。
+- **良恶性分类（患者级，主分析补充）**：对 ZJH-8K、ThyroidXL，在图像级恶性概率基础上，于患者内 **算术平均** 得到患者分数；患者标签为组内图像标签的 **max**（任一张恶性→恶性），再报告患者级 AUROC/AUPRC 及 cluster-bootstrap CI（**`tab_malig_ext`**、**`tab_patient_cls`**）。正文/补充材料在图像级 Table S4 之外增加患者级一行或附表。
+- **分割**：图像级 Dice 仍为逐图计算；完整 **Table S3** 见文末 **`tab_seg_ext`**；ZJH-8K、ThyroidXL **患者内 Dice 均值**见文末 **`tab_patient_cls`**。
 - **恶性子任务（LNM、FTC/PTC）**：**Table S5a** 为 LymphUs Center 2 / FangDai **外测**（三专家），**Table S5b** 为开发集**五折 OOF**，与图像级 bootstrap 分开表述。
 - **ZJH-8K 患者数**：可复现 ID 聚合为 **1146** 例（**7958** 图）；审稿人所述 **1149** 例为队列原始登记口径，差异在 Methods 中说明（无 ID 或重复登记图像的处理规则）。
 
-**支撑材料：** 完整 **Table S3/S4** 见 **表 R2–R4**；ZJH-8K / ThyroidXL 患者级结果见文末 **表 R8**、**表 R9**。
+**支撑材料：** 完整 **Table S3/S4** 见 **`tab_cls_ext`、`tab_seg_ext`、`tab_calib_referral`**；ZJH-8K / ThyroidXL 患者级结果见文末 **`tab_malig_ext`**、**`tab_patient_cls`**。
 
 ---
 
@@ -104,9 +104,9 @@ ZJH-8K 被描述为分割与良恶性分类的外部测试集，而它的恶性�
 
 **回复：**
 
-- 审稿人正确：28,458 = 七个分割/分类队列 **19,737** 张测试图 + NHC **8,721** 例之和；称「cases」不准确且未含报告生成与恶性子任务测试。已改为分层计数，见 **图 R3**。
+- 审稿人正确：28,458 = 七个分割/分类队列 **19,737** 张测试图 + NHC **8,721** 例之和；称「cases」不准确且未含报告生成与恶性子任务测试。已改为分层计数，见 **`fig_image_dataflow`**。
 
-**支撑材料：** **图 R3**（分层测试计数与图像侧数据流）。
+**支撑材料：** **`fig_image_dataflow`**（分层测试计数与图像侧数据流）。
 
 ---
 
@@ -117,9 +117,9 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 
 **回复：**
 
-- ZJH-8K 与 TN3K 虽同属珠江医院来源，但队列用途与采集框架不同；我们已弱化「外部中心」表述，并报告**各基础队列之间**的 dHash 近重复（与上文 **审稿人 1 — 意见 1** 相同口径，见文末 **表 R1**）。TN3K（train+val+test）与 ZJH-8K：**1156** 对 H=0；TN3K **官方 test** 与 ZJH-8K 仅 **2** 对 H=0，提示公开 test 子集与 ZJH 几乎无逐像素重复。具备患者 ID 时，患者层面重叠在 Methods / Limitations 中说明。
+- ZJH-8K 与 TN3K 虽同属珠江医院来源，但队列用途与采集框架不同；我们已弱化「外部中心」表述，并报告**各基础队列之间**的 dHash 近重复（与上文 **审稿人 1 — 意见 1** 相同口径，见文末 **`tab_dhash`**）。TN3K（train+val+test）与 ZJH-8K：**1156** 对 H=0；TN3K **官方 test** 与 ZJH-8K 仅 **2** 对 H=0，提示公开 test 子集与 ZJH 几乎无逐像素重复。具备患者 ID 时，患者层面重叠在 Methods / Limitations 中说明。
 
-**支撑材料：** dHash 筛查见文末 **表 R1**（与 R1.1 同口径）。
+**支撑材料：** dHash 筛查见文末 **`tab_dhash`**（与 R1.1 同口径）。
 
 ---
 
@@ -130,9 +130,9 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 
 **回复：**
 
-- 跨五个 Table S4 外测队列的「均值」均为 **等权宏平均**；更正数字与分队列点估计见文末 **表 R6** 及 **表 R2–R3**。
+- 跨五个 Table S4 外测队列的「均值」均为 **等权宏平均**；更正数字与分队列点估计见文末 **`fig_image_dataflow`** 及 **`tab_cls_ext`**。
 
-**支撑材料：** 见文末 **表 R6**（等权宏平均与加权平均）。
+**支撑材料：** 见文末 **`fig_image_dataflow`**（等权宏平均与加权平均）。
 
 ---
 
@@ -143,10 +143,10 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 
 **回复：**
 
-- LLM 路由器的 **模型与解码参数、完整 prompt 模板、输出 JSON 模式** 及 **结构化 routing_log 字段**见文末 **附录 A1**（修订稿将同步写入补充材料）。主评估队列 TN3K `test_for_llm_malignancy`（250 例）每次路由均记录于 `routing_log.jsonl`；在 **固定 Phase 1–2 专家输出** 前提下，对稳定性子集 **10** 例每例重复 **5** 次 **分割** LLM 路由（Path A 分类共识不重复 5× 分类；Path B 另报告分类侧一致率）。平均选择一致率 **98%**（**9/10** 五次完全相同；**1/10** 为 **80%**，`TN3K_test_0009.jpg`，重复间在 `all_datasets` 与 `TN3K` 间混选一次，Dice range ≈ 0.017）。本批 **10/10** 为 **close** 分层（见 **表 R10**），未出现 **easy** 例，故仅报告 close 层。
+- LLM 路由器的 **模型与解码参数、完整 prompt 模板、输出 JSON 模式** 及 **结构化 routing_log 字段**见文末 **附录 A1**（修订稿将同步写入补充材料）。主评估队列 TN3K `test_for_llm_malignancy`（250 例）每次路由均记录于 `routing_log.jsonl`；在 **固定 Phase 1–2 专家输出** 前提下，对稳定性子集 **10** 例每例重复 **5** 次 **分割** LLM 路由（Path A 分类共识不重复 5× 分类；Path B 另报告分类侧一致率）。平均选择一致率 **98%**（**9/10** 五次完全相同；**1/10** 为 **80%**，`TN3K_test_0009.jpg`，重复间在 `all_datasets` 与 `TN3K` 间混选一次，Dice range ≈ 0.017）。本批 **10/10** 为 **close** 分层（见 **`tab_patient_seg`**），未出现 **easy** 例，故仅报告 close 层。
 - **分层（`disagreement_tier`）**：按分割候选 inter-expert `average_agreement` 排序，top1 与 top2 差值 **≤ 0.10** 为 **close**（候选质量相近），**> 0.10** 为 **easy**（胜者分明）。稳定性表中的「分层」为每例一次路由时的标签，非按数据集分层。
 
-**支撑材料：** 见文末 **表 R10**（路由稳定性）、**附录 A1**（LLM 路由器规格与 routing_log 字段）。
+**支撑材料：** 见文末 **`tab_patient_seg`**（路由稳定性）、**附录 A1**（LLM 路由器规格与 routing_log 字段）。
 
 ---
 
@@ -158,9 +158,9 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 **回复：**
 
 - 我们承认 FVPTC≠组织学 FTC，将 FangDai 外测表述为 **探索性域迁移**，与主结论区分。
-- **FangDai 外测**（**Table S5a**）与 **开发集五折 OOF**（**Table S5b**）见文末 **表 R7**。我们将 FangDai 外测表述为探索性域迁移；组织学 FTC 与训练标签（含 FVPTC）不一致之处在 Limitations 中与临床合作者说明。
+- **FangDai 外测**（**Table S5a**）与 **开发集五折 OOF**（**Table S5b**）见文末 **`tab_cls_ext`**。我们将 FangDai 外测表述为探索性域迁移；组织学 FTC 与训练标签（含 FVPTC）不一致之处在 Limitations 中与临床合作者说明。
 
-**支撑材料：** 完整 **Table S5** 见文末 **表 R7**。
+**支撑材料：** 完整 **Table S5** 见文末 **`tab_cls_ext`**。
 
 ---
 
@@ -173,7 +173,7 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 
 - 训练规模更正为 **4936** 图；将 20 例 val 改为 **882** 簇上 **患者级分层五折 OOF**（seed 42），见 **Table S5b**（ThyroidXAgent LNM OOF AUROC **0.8710 ± 0.0550**，AUPRC **0.8929 ± 0.0537**）。**LymphUs Center 2** 外测见 **Table S5a**，与正文一致：ThyroidXAgent LNM AUROC **0.8642 ± 0.0550**，AUPRC **0.8808 ± 0.0537**。
 
-**支撑材料：** 完整 **Table S5** 见文末 **表 R7**。
+**支撑材料：** 完整 **Table S5** 见文末 **`tab_cls_ext`**。
 
 ---
 
@@ -184,9 +184,9 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 
 **回复：**
 
-- 我们统一标签键与聚类规则（ZJH：**年/姓名**；LymphUs Center 1：**一图一簇**）；簇内概率平均与上文 LNM 五折 OOF 协议一致。临床定义已与病理/临床合作者核对；统计协议见文末 **表 R7**。
+- 我们统一标签键与聚类规则（ZJH：**年/姓名**；LymphUs Center 1：**一图一簇**）；簇内概率平均与上文 LNM 五折 OOF 协议一致。临床定义已与病理/临床合作者核对；统计协议见文末 **`tab_cls_ext`**。
 
-**支撑材料：** 完整 **Table S5** 见文末 **表 R7**。
+**支撑材料：** 完整 **Table S5** 见文末 **`tab_cls_ext`**。
 
 ---
 
@@ -197,9 +197,9 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 
 **回复：**
 
-- **Table S3/S4** 中监督基线均在同一堆叠开发集上微调（分割 **dataset_4**：TN3K + ThyroidXL + PKTN + TN5K；分类 **dataset_3**：TN3K + ThyroidXL + TN5K），自公开上游预训练权重出发，**非**甲状腺零样本或仅用原始权重外测。ThyroidXAgent 满堆叠结果使用相同开发数据；**Table S6** 逐级叠加消融单独报告。视觉–语言基线为零样本/API + 固定 prompt，**未**在 dataset_3 端到端重训。ZJH-8K、DDTI 等外测队列**仅用于 test**。完整训练与推理协议见文末 **表 R11**（Supplementary Table S[X]；修订稿补充材料将同步收录同表）。
+- **Table S3/S4** 中监督基线均在同一堆叠开发集上微调（分割 **dataset_4**：TN3K + ThyroidXL + PKTN + TN5K；分类 **dataset_3**：TN3K + ThyroidXL + TN5K），自公开上游预训练权重出发，**非**甲状腺零样本或仅用原始权重外测。ThyroidXAgent 满堆叠结果使用相同开发数据；**Table S6** 逐级叠加消融单独报告。视觉–语言基线为零样本/API + 固定 prompt，**未**在 dataset_3 端到端重训。ZJH-8K、DDTI 等外测队列**仅用于 test**。完整训练与推理协议见文末 **`tab_routing_stability`**（Supplementary Table S[X]；修订稿补充材料将同步收录同表）。
 
-**支撑材料：** 见文末 **表 R11**（Supplementary Table S[X]，基线训练与推理协议）。
+**支撑材料：** 见文末 **`tab_routing_stability`**（Supplementary Table S[X]，基线训练与推理协议）。
 
 ---
 
@@ -210,9 +210,9 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 
 **回复：**
 
-- Methods 已更正：报告 Dice 与 radiomics **共用 selected mask**；专家内部 ≥**50** 像素连通域、5×5 闭运算；**单图单 ROI**。小结节统计见文末 **表 R12**（主口径 **GT 等价径 &lt;50 px**；公开外测无 spacing，不报告毫米径；M 为整条流水线失败，非 radiomics 前删除）。
+- Methods 已更正：报告 Dice 与 radiomics **共用 selected mask**；专家内部 ≥**50** 像素连通域、5×5 闭运算；**单图单 ROI**。小结节统计见文末 **`tab_baseline_protocol`**（主口径 **GT 等价径 &lt;50 px**；公开外测无 spacing，不报告毫米径；M 为整条流水线失败，非 radiomics 前删除）。
 
-**支撑材料：** 见文末 **表 R12**（GT 等价径 &lt;50 px 流水线失败统计）。
+**支撑材料：** 见文末 **`tab_baseline_protocol`**（GT 等价径 &lt;50 px 流水线失败统计）。
 
 ---
 
@@ -236,17 +236,19 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 
 **回复：**
 
-- 与审稿人 2 意见 3、审稿人 1 意见 4 一并说明：图像侧开发池、共享流水线与外测角色见 **图 R3**。划分与 dHash 见 **表 R1**；正文已将「40 datasets」改为明示队列列表。
+- 与审稿人 2 意见 3、审稿人 1 意见 4 一并说明：图像侧开发池、共享流水线与外测角色见 **`fig_image_dataflow`**。划分与 dHash 见 **`tab_dhash`**；正文已将「40 datasets」改为明示队列列表。
 
-**支撑材料：** **图 R3**、**表 R1**（dHash 筛查）。
+**支撑材料：** **`fig_image_dataflow`**、**`tab_dhash`**（dHash 筛查）。
 
 ---
 
 # 回复信支撑图表（Supporting Figures and Tables）
 
-以下为各条审稿意见回复所引用的表格与图；编号与 `latex/generated/response_asset_registry.tex` 一致（**表 R1–R21**、**图 R1–R3**）。与修订稿 Supplementary Tables S3–S5 等同者保留原表号。
+信内表图以 LaTeX `\label` 键（`tab_*`、`fig_*`）维护；PDF 中 **R*** 序号在首次 `\responsetabletitle` / `\responsefiguretitle` 时自动编号（见 `latex/generated/response_asset_registry.tex`）。稿件 Supplementary Table S* 序号不变。
 
-## 表 R1. dHash 跨基础队列近重复筛查（Hamming ≤ 5）
+信内表图以 LaTeX `\label` 键（`tab_*`、`fig_*`）维护；PDF 中 **R*** 序号在首次 `\responsetabletitle` / `\responsefiguretitle` 时自动编号（见 `latex/generated/response_asset_registry.tex`）。稿件 Supplementary Table S* 序号不变。
+
+## tab_dhash — dHash 跨基础队列近重复筛查（Hamming ≤ 5）
 
 | 队列 A | 队列 B | n (A) | n (B) | 配对数 (H≤5) | H=0 | 仅近重复 (1–5) |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -255,7 +257,7 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 
 每行均为两个**独立来源队列**之间的 pairwise 筛查（非模型训练池合并口径）。
 
-## 表 R2. Supplementary Table S4 — AUROC
+## tab_cls_ext (AUROC) — Supplementary Table S4 — AUROC
 
 | 方法 | TN3K | ThyroidXL | TN5K | DDTI | ZJH-8K |
 | --- | --- | --- | --- | --- | --- |
@@ -267,7 +269,7 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 | BiomedCLIP | 0.7539 (0.7139–0.7901) | 0.7765 (0.7474–0.8027) | 0.8043 (0.7727–0.8344) | 0.6440 (0.5691–0.7253) | 0.7342 (0.7110–0.7578) |
 | ThyroidXAgent | **0.8511 (0.8183–0.8824)** | **0.9312 (0.9142–0.9458)** | **0.9475 (0.9316–0.9612)** | **0.7937 (0.7107–0.8719)** | **0.9374 (0.9277–0.9472)** |
 
-## 表 R3. Supplementary Table S4 — AUPRC
+## tab_cls_ext (AUPRC) — Supplementary Table S4 — AUPRC
 
 | 方法 | TN3K | ThyroidXL | TN5K | DDTI | ZJH-8K |
 | --- | --- | --- | --- | --- | --- |
@@ -281,7 +283,7 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 
 均为 cluster-bootstrap 95% CI（1000 次，seed 42）。
 
-## 表 R4. Supplementary Table S3 — 跨数据集结节分割
+## `tab_seg_ext`. Supplementary Table S3 — 跨数据集结节分割
 
 表注：**Dice** 为 **%**（↑），**HD95** 为 **mm**（↓）；数值为点估计 **±** 95% CI 半宽（cluster bootstrap，1000 次，seed=42，图像级）。
 
@@ -305,7 +307,7 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 | UltraFedFM | 14.98 ± 2.10 | 8.10 ± 0.58 | 16.08 ± 1.67 | 14.96 ± 1.65 | 18.12 ± 1.47 | 8.69 ± 0.80 | 9.06 ± 0.38 |
 | ThyroidXAgent | **10.31 ± 1.70** | **5.43 ± 0.53** | **9.01 ± 3.58** | **10.12 ± 1.23** | **9.24 ± 1.07** | **2.25 ± 0.39** | **1.92 ± 0.08** |
 
-## 表 R4. 外测校准与送复核（各 test 队列自身分位定阈，送复核约 5%–15%）
+## `tab_seg_ext`. 外测校准与送复核（各 test 队列自身分位定阈，送复核约 5%–15%）
 
 | 队列 | n | ECE | Brier | 送复核% |
 | --- | --- | --- | --- | --- |
@@ -315,32 +317,32 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 | ZJH-8K | 7958 | 0.0971 | 0.1101 | 7.1% |
 | DDTI | 349 | 0.0934 | 0.1098 | 5.2% |
 
-## 图 R1. 外测良恶性分类可靠性图
+## `fig_reliability`. 外测良恶性分类可靠性图
 
 ![外测可靠性图（TN3K、TN5K、ThyroidXL、ZJH-8K、DDTI）](figures/reliability_panels.png)
 
 *图例（与 LaTeX `\responsefigurenote` 一致）：* 五外测队列横向拼接；熵/margin/IoU 分位定阈（OR）、验证集拟合后外测冻结。
 
-## 图 R2. 风险–覆盖率曲线
+## `fig_risk_coverage`. 风险–覆盖率曲线
 
 ![风险–覆盖率曲线合图（五个外测队列；标点为各队列工作点）](figures/risk_coverage_panels.png)
 
 *图例：* 五队列不确定度–覆盖率；标点为各队列送复核工作点（约 5%–15%）。
 
-## 图 R3. 图像分析数据流（开发、验证与外部测试）
+## `fig_image_dataflow`. 图像分析数据流（开发、验证与外部测试）
 
 ![Image-analysis data flow across development, validation, and external testing](figures/fig_image_dataflow.png)
 
 *图例：* 左开发池、中共享流水线、右外测与 ZJH 双重角色。
 
-## 表 R5. 良恶性分类五队列汇总均值（两行：AUROC / AUPRC）
+## `tab_calib_referral`. 良恶性分类五队列汇总均值（两行：AUROC / AUPRC）
 
 | 指标 | 等权宏平均 | 按测试图像数加权 |
 | --- | --- | --- |
 | AUROC | 0.9001 | 0.9286 |
 | AUPRC | 0.8707 | 0.9533 |
 
-## 表 R7. Supplementary Table S5 — 恶性甲状腺病灶分层
+## `tab_cls_ext`. Supplementary Table S5 — 恶性甲状腺病灶分层
 
 **表 S5a — 独立外测**（五折 OOF 定稿开发流程后，于**全开发集**训练模型后的单次外测；数值 ± 半宽与投稿 Supplementary Table S5 中对应专家单元格一致）
 
@@ -369,7 +371,7 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 | Tiger-Model | — | — | 0.7500 ± 0.0730 | 0.7350 ± 0.0945 |
 | ThyroidXAgent | **0.8710 ± 0.0550** | **0.8929 ± 0.0537** | **0.8165 ± 0.0599** | **0.8382 ± 0.0793** |
 
-## 表 R8. 良恶性分类：图像级 vs 患者级（ThyroidXAgent，ZJH-8K 与 ThyroidXL）
+## `tab_malig_ext`. 良恶性分类：图像级 vs 患者级（ThyroidXAgent，ZJH-8K 与 ThyroidXL）
 
 Cluster-bootstrap 95% CI（1000 次，seed=42）。患者级：簇内恶性概率算术平均，标签组内 max。
 
@@ -380,14 +382,14 @@ Cluster-bootstrap 95% CI（1000 次，seed=42）。患者级：簇内恶性概�
 | ThyroidXL | 图像 | 2090 图 / 739 簇 | 0.9312 | 0.9142–0.9458 | 0.9135 | 0.8872–0.9351 |
 | ThyroidXL | 患者 | 739 | **0.9484** | 0.9326–0.9628 | **0.9355** | 0.9064–0.9592 |
 
-## 表 R9. 分割：患者内 Dice 均值（ThyroidXAgent，补充）
+## `tab_patient_cls`. 分割：患者内 Dice 均值（ThyroidXAgent，补充）
 
 | 队列 | n 患者 | Dice（患者级） | 95% CI |
 | --- | --- | --- | --- |
 | ZJH-8K | 1146 | 0.8398 | 0.8322–0.8470 |
 | ThyroidXL | 739 | 0.8749 | 0.8675–0.8816 |
 
-## 表 R10. 路由稳定性（TN3K 稳定性子集，5 次重复）
+## `tab_patient_seg`. 路由稳定性（TN3K 稳定性子集，5 次重复）
 
 | 病例 | 分层 | 5 次选择一致率 |
 | --- | --- | --- |
@@ -497,9 +499,9 @@ reasoning 须引用具体置信度数值。
 
 **结构化 routing_log（≥10 例审计）**
 
-每条 JSONL 记录典型字段：`image_id`、`task`（如 `seg`、`cls`、`cls_path_b`）、`disagreement_tier`、`llm_invoked`、`method`、`selected_model` / `selected_class`、`confidence`、`reasoning`、`candidates_summary`（候选摘要）、`judge_summary`（若启用 radiomics judge）、`llm_model` / `temperature` / `max_tokens`、时间戳 `ts`；可选 `prompts`（`system` / `user`）用于补充材料逐字复现。表 R10 中 **10** 例均来自 TN3K 主 pipeline 与 5× 稳定性实验的审计日志；修订稿将附 **≥10** 条去标识化样例记录（与表 R10 病例 ID 一致）。
+每条 JSONL 记录典型字段：`image_id`、`task`（如 `seg`、`cls`、`cls_path_b`）、`disagreement_tier`、`llm_invoked`、`method`、`selected_model` / `selected_class`、`confidence`、`reasoning`、`candidates_summary`（候选摘要）、`judge_summary`（若启用 radiomics judge）、`llm_model` / `temperature` / `max_tokens`、时间戳 `ts`；可选 `prompts`（`system` / `user`）用于补充材料逐字复现。`tab_patient_seg` 中 **10** 例均来自 TN3K 主 pipeline 与 5× 稳定性实验的审计日志；修订稿将附 **≥10** 条去标识化样例记录（与`tab_patient_seg` 病例 ID 一致）。
 
-## 表 R11. Supplementary Table S[X] — 基线训练与推理协议（完整）
+## `tab_routing_stability`. Supplementary Table S[X] — 基线训练与推理协议（完整）
 
 **表注**
 
@@ -528,7 +530,7 @@ reasoning 须引用具体置信度数值。
 | ThyroidXAgent（分类路由） | 分类 | dataset_3 | DINOv3 多任务骨干（dataset_3 微调） | 路由 mask + 图像（pipeline） |
 | GPT-5 / Gemini / MedGemma / Qwen3-VL（若见于 S4） | 分类 | —（未微调） | 厂商/公开 VLM 权重 | 图像 ± 固定文本 prompt（零样本或 API） |
 
-## 表 R12. GT 等价径 &lt;50 px --- 流水线失败统计
+## `tab_baseline_protocol`. GT 等价径 &lt;50 px --- 流水线失败统计
 
 | 队列 | n 匹配 | GT 等价径 &lt;50 px (N) | 失败 (M) | 子集 mean Dice |
 |------|--------|-------------------------|----------|----------------|

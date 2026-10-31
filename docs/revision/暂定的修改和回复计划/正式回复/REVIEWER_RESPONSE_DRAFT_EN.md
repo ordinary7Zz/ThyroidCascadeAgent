@@ -12,11 +12,11 @@ Segmentation and classification results are largely reported at the image level.
 **Response:**
 
 - We thank the reviewer for this important point. We revised our statistical reporting as follows.
-- Independence and near-duplicates. We screened **pairwise across source cohorts** (TN3K, TN5K, ThyroidXL, DDTI, PKTN, ZJH-8K, etc.) using dHash (Hamming ≤ 5; **Table R1** at the end of this letter). For the ZJH–TN3K question (R2.4): TN3K (official train+val+test) vs ZJH-8K shows **1156** H=0 pairs; TN3K **official test** vs ZJH-8K shows **2** H=0 pairs. Cluster definitions. Where patient IDs are available (ZJH-8K, ThyroidXL), we use patient-level clusters; for cohorts without IDs, we use one image per cluster. Bootstrap CIs (1000 resamples, seed 42) are cluster-aware.
+- Independence and near-duplicates. We screened **pairwise across source cohorts** (TN3K, TN5K, ThyroidXL, DDTI, PKTN, ZJH-8K, etc.) using dHash (Hamming ≤ 5; **`tab_dhash`** at the end of this letter). For the ZJH–TN3K question (R2.4): TN3K (official train+val+test) vs ZJH-8K shows **1156** H=0 pairs; TN3K **official test** vs ZJH-8K shows **2** H=0 pairs. Cluster definitions. Where patient IDs are available (ZJH-8K, ThyroidXL), we use patient-level clusters; for cohorts without IDs, we use one image per cluster. Bootstrap CIs (1000 resamples, seed 42) are cluster-aware.
 - Patient-level classification. For ZJH-8K and ThyroidXL we report patient-level AUROC/AUPRC after aggregating image probabilities (arithmetic mean within patient).
-- Cluster-bootstrap confidence intervals. We recomputed 95% CIs using 1000 cluster bootstrap resamples (seed 42). **Table S4** (benign–malignant classification: seven methods × five test cohorts) and **Table S3** (nodule segmentation: five methods × seven test cohorts; Dice and HD95) are in **Tables R2–R4** at the end of this letter. DDTI classification uses **n=349**; segmentation **DDTI** uses **637** images.
+- Cluster-bootstrap confidence intervals. We recomputed 95% CIs using 1000 cluster bootstrap resamples (seed 42). **Table S4** (benign–malignant classification: seven methods × five test cohorts) and **Table S3** (nodule segmentation: five methods × seven test cohorts; Dice and HD95) are in **`tab_cls_ext`, `tab_seg_ext`, `tab_calib_referral`** at the end of this letter. DDTI classification uses **n=349**; segmentation **DDTI** uses **637** images.
 
-**Supporting material:** See **Table R1** (dHash near-duplicate screening), **Tables R2–R3** (Supplementary Table S4, AUROC/AUPRC), and **Table R4** (Supplementary Table S3, segmentation Dice/HD95) at the end of this letter.
+**Supporting material:** See **`tab_dhash`** (dHash near-duplicate screening), **`tab_cls_ext`** (Supplementary Table S4, AUROC/AUPRC), and **`tab_seg_ext`** (Supplementary Table S3, segmentation Dice/HD95) at the end of this letter.
 
 ---
 
@@ -28,11 +28,11 @@ Although overall performance on the private multi-center cohort is encouraging, 
 **Response:**
 
 - We agree that center heterogeneity matters. Center-level meta-analyses for NHC-MISD-TUS (Reviewer 2, Comment 6) will be reported separately when center metadata are finalized (see our response to Reviewer 2, Comment 6). Here we address calibration and abstention for the five benign–malignant classification test cohorts with pathology labels.
-- For the five pathology-labeled test cohorts we use vote entropy, top-2 margin, and minimum pairwise segmentation IoU (same protocol as testing). **On each test cohort separately**, we set percentile thresholds (separate quantiles for entropy vs. margin/IoU), flag if **any** rule fires (OR), and tune quantiles so flagged rates fall in roughly **5%–15%** per cohort (one decimal place in **Table R5**). Thresholds were fit on each cohort’s test scores without re-running inference.
-- ECE/Brier in **Table R5** are on the **full test set** with flags applied. The **reliability diagrams** and **risk–coverage** **Figures R1–R2** use the **same per-cohort percentile thresholds** as in **Table R5**; **operating points** on the risk–coverage plots match the flagged rates in **Table R5**. Retained-subset accuracy is summarized in the supplement.
+- For the five pathology-labeled test cohorts we use vote entropy, top-2 margin, and minimum pairwise segmentation IoU (same protocol as testing). **On each test cohort separately**, we set percentile thresholds (separate quantiles for entropy vs. margin/IoU), flag if **any** rule fires (OR), and tune quantiles so flagged rates fall in roughly **5%–15%** per cohort (one decimal place in **`tab_calib_referral`**). Thresholds were fit on each cohort’s test scores without re-running inference.
+- ECE/Brier in **`tab_calib_referral`** are on the **full test set** with flags applied. The **reliability diagrams** and **risk–coverage** **`fig_reliability`, `fig_risk_coverage`** use the **same per-cohort percentile thresholds** as in **`tab_calib_referral`**; **operating points** on the risk–coverage plots match the flagged rates in **`tab_calib_referral`**. Retained-subset accuracy is summarized in the supplement.
 - We describe this as retrospective automation with human review for high-uncertainty cases; Methods will state the threshold-fitting set vs evaluation. Clinical handling of flagged cases is noted in Limitations/Discussion.
 
-**Supporting material:** See **Table R5** (external-test calibration and referral), **Figure R1** (reliability diagrams), and **Figure R2** (risk–coverage curves) at the end of this letter.
+**Supporting material:** See **`tab_calib_referral`** (external-test calibration and referral), **`fig_reliability`** (reliability diagrams), and **`fig_risk_coverage`** (risk–coverage curves) at the end of this letter.
 
 ---
 
@@ -44,9 +44,9 @@ ZJH-8K is described as an external test set for segmentation and benign–malign
 **Response:**
 
 - We agree. Segmentation and generic benign–malignant experts were not trained on ZJH-8K. The malignant subset of ZJH-8K is used only for task-specific LNM and FTC/PTC development, with external testing on LymphUs Center 2 and FangDai, respectively.
-- The image-arm data-flow figure is **to be supplied**; the tabular summary is in **Table R6** summarizes splits in the interim.
+- The image-arm data-flow figure is **to be supplied**; the tabular summary is in **`fig_image_dataflow`** summarizes splits in the interim.
 
-**Supporting material:** Patient–examination–image–task dataflow figure (to be supplied); tabular summary in **Table R6** at the end of this letter.
+**Supporting material:** Patient–examination–image–task dataflow figure (to be supplied); tabular summary in **`fig_image_dataflow`** at the end of this letter.
 
 ---
 
@@ -69,10 +69,10 @@ Several key numbers are inconsistent across the abstract, main text, figures, an
 **Response:**
 
 - We apologize and thank the reviewer. We reconciled all numbers against source exports.
-- Benign–malignant classification means (abstract, §2.2): corrected to unweighted macro-averages over five Table S4 cohorts—AUROC **0.9001**, AUPRC **0.8707** (**Table R7** at the end of this letter); weighted by test image count—AUROC **0.9286**, AUPRC **0.9533** (consistent with ThyroidXAgent per-cohort point estimates in Table S4). Figure 3b axis labels were swapped and are corrected to match **Table S4** and the **Table R7** at the end of this letter.
-- LNM training pool size corrected to 4,936 images (4,756 ZJH-8K malignant + 180 LymphUs Center 1); five-fold CV uses 4,753 images in the combined development manifest. **Table S5** is split into **external test (S5a)** and **development five-fold OOF (S5b)** blocks (three expert systems); general baseline rows match the submitted Supplementary Table S5 (**Table R8** at the end of this letter).
+- Benign–malignant classification means (abstract, §2.2): corrected to unweighted macro-averages over five Table S4 cohorts—AUROC **0.9001**, AUPRC **0.8707** (**`tab_cls_ext`** at the end of this letter); weighted by test image count—AUROC **0.9286**, AUPRC **0.9533** (consistent with ThyroidXAgent per-cohort point estimates in Table S4). Figure 3b axis labels were swapped and are corrected to match **Table S4** and the **`tab_cls_ext`** at the end of this letter.
+- LNM training pool size corrected to 4,936 images (4,756 ZJH-8K malignant + 180 LymphUs Center 1); five-fold CV uses 4,753 images in the combined development manifest. **Table S5** is split into **external test (S5a)** and **development five-fold OOF (S5b)** blocks (three expert systems); general baseline rows match the submitted Supplementary Table S5 (**`tab_malig_ext`** at the end of this letter).
 
-**Supporting material:** See **Table R7** (five-cohort summary means) and **Table R8** (Supplementary Table S5a/S5b) at the end of this letter.
+**Supporting material:** See **`tab_cls_ext`** (five-cohort summary means) and **`tab_malig_ext`** (Supplementary Table S5a/S5b) at the end of this letter.
 
 ---
 
@@ -85,14 +85,14 @@ Many analyses are reported at the image level although the same patient, examina
 
 - We agree that treating multiple images from the same patient or examination as independent can yield anti-conservatively narrow confidence intervals and misaligns with clinical decision units.
 - **Statistical protocol (Methods):** Where reproducible **patient IDs** exist (ZJH-8K, ThyroidXL), bootstrap resamples **patient clusters** with replacement (1000 resamples, seed 42) before expanding to images; cohorts without IDs (e.g., TN3K, TN5K, DDTI) use **one image per cluster**. All **95% CIs** in **Tables S3–S5** are reported under this cluster-bootstrap convention.
-- **Which cohorts change:** For **TN3K, TN5K, DDTI**, one image per cluster implies cluster-bootstrap **95% CIs match per-image bootstrap** (point estimates unchanged). **Only ZJH-8K and ThyroidXL** show **slightly wider** image-level CIs under cluster resampling, plus **patient-level** classification and segmentation (**Tables R9** and **R10** at the end of this letter); other benign–malignant cohorts are in **Tables R2–R3** at the end of this letter.
+- **Which cohorts change:** For **TN3K, TN5K, DDTI**, one image per cluster implies cluster-bootstrap **95% CIs match per-image bootstrap** (point estimates unchanged). **Only ZJH-8K and ThyroidXL** show **slightly wider** image-level CIs under cluster resampling, plus **patient-level** classification and segmentation (**`tab_patient_cls`** and **`tab_patient_seg`**); other benign–malignant cohorts are in **`tab_cls_ext`** at the end of this letter.
 - **ZJH clustering (manuscript-wide):** We use one **patient-level cluster** rule for ZJH images (name/`patient_id` mapping; malignant-task development manifests share the same patient-ID construction). **1146** clusters on the full test set versus fewer clusters in the malignant development pool reflect **different image subsets**, not different clustering keys.
-- **Benign–malignant classification (patient-level supplement):** For ZJH-8K and ThyroidXL we **arithmetically average** image-level malignancy probabilities within patient, assign patient labels by the **within-patient max** over images, and report patient-level AUROC/AUPRC with cluster-bootstrap CIs (**Table R7** at the end of this letter), in addition to image-level Table S4.
-- **Segmentation:** Image-level Dice remains per-image; the revised full **Table S3** (all baselines × seven cohorts, Dice/HD95 layout) is **Table R4** at the end of this letter; **mean within-patient Dice** for ZJH-8K and ThyroidXL is **Table R10** at the end of this letter.
+- **Benign–malignant classification (patient-level supplement):** For ZJH-8K and ThyroidXL we **arithmetically average** image-level malignancy probabilities within patient, assign patient labels by the **within-patient max** over images, and report patient-level AUROC/AUPRC with cluster-bootstrap CIs (**`tab_cls_ext`** at the end of this letter), in addition to image-level Table S4.
+- **Segmentation:** Image-level Dice remains per-image; the revised full **Table S3** (all baselines × seven cohorts, Dice/HD95 layout) is **`tab_seg_ext`** at the end of this letter; **mean within-patient Dice** for ZJH-8K and ThyroidXL is **`tab_patient_seg`** at the end of this letter.
 - **Malignant subtyping (LNM, FTC/PTC):** **Table S5a** reports LymphUs Center 2 / FangDai **external** tests; **Table S5b** reports development five-fold **OOF** for the three expert systems, separate from image-level bootstrap summaries where applicable.
 - **ZJH-8K patient count:** Reproducible ID clustering yields **1146** patients (**7958** images); the **1149** cases cited by the reviewer reflect the cohort’s original registration field—we clarify mapping and exclusions in Methods.
 
-**Supporting material:** Full **Tables S3/S4** are **Tables R2–R4**; patient-level ZJH-8K / ThyroidXL results are **Tables R9** and **R10** at the end of this letter.
+**Supporting material:** Full **Tables S3/S4** are **`tab_cls_ext`, `tab_seg_ext`, `tab_calib_referral`**; patient-level ZJH-8K / ThyroidXL results are in **`tab_patient_cls`** and **`tab_patient_seg`**.
 
 ---
 
@@ -103,9 +103,9 @@ Please clarify why 28,458 observations are described as "non-overlapping test ca
 
 **Response:**
 
-- The reviewer is correct: 28,458 sums 19,737 test images from seven segmentation/classification cohorts and 8,721 NHC-MISD-TUS cases. We replaced this phrase with stratified counts; the image-arm data-flow **Table R6** summarizes (figure to be supplied) splits.
+- The reviewer is correct: 28,458 sums 19,737 test images from seven segmentation/classification cohorts and 8,721 NHC-MISD-TUS cases. We replaced this phrase with stratified counts; the image-arm data-flow **`fig_image_dataflow`** summarizes (figure to be supplied) splits.
 
-**Supporting material:** Dataflow figure (to be supplied); tabular summary in **Table R6** at the end of this letter.
+**Supporting material:** Dataflow figure (to be supplied); tabular summary in **`fig_image_dataflow`** at the end of this letter.
 
 ---
 
@@ -116,9 +116,9 @@ ZJH-8K and TN3K were both collected at Nanfang Hospital, Southern Medical Univer
 
 **Response:**
 
-- ZJH-8K and TN3K were collected at the same hospital but serve different study roles; we softened “external center” wording and report **pairwise dHash screens between standalone source cohorts** (same protocol as R1.1 (**Table R1** at the end of this letter)). TN3K (train+val+test) vs ZJH-8K: **1156** H=0 pairs; TN3K **official test** vs ZJH-8K: **2** H=0 pairs. Patient-level overlap is discussed in Methods/Limitations where IDs exist.
+- ZJH-8K and TN3K were collected at the same hospital but serve different study roles; we softened “external center” wording and report **pairwise dHash screens between standalone source cohorts** (same protocol as R1.1 (**`tab_dhash`** at the end of this letter)). TN3K (train+val+test) vs ZJH-8K: **1156** H=0 pairs; TN3K **official test** vs ZJH-8K: **2** H=0 pairs. Patient-level overlap is discussed in Methods/Limitations where IDs exist.
 
-**Supporting material:** dHash screening in **Table R1** at the end of this letter (same protocol as R1.1).
+**Supporting material:** dHash screening in **`tab_dhash`** at the end of this letter (same protocol as R1.1).
 
 ---
 
@@ -129,9 +129,9 @@ The authors should clarify whether reported "means" are unweighted macro-average
 
 **Response:**
 
-- All cross-cohort “means” for benign–malignant classification are unweighted macro-averages over five Table S4 test cohorts. Corrected values and per-cohort point estimates are in **Table R7** and **Tables R2–R3** at the end of this letter.
+- All cross-cohort “means” for benign–malignant classification are unweighted macro-averages over five Table S4 test cohorts. Corrected values and per-cohort point estimates are in **`tab_cls_ext`** and **`tab_cls_ext`** at the end of this letter.
 
-**Supporting material:** See **Table R7** at the end of this letter.
+**Supporting material:** See **`tab_cls_ext`** at the end of this letter.
 
 ---
 
@@ -142,10 +142,10 @@ The manuscript states that the LLM router "reasons" to select the best expert ou
 
 **Response:**
 
-- We provide **model and decoding parameters, full prompt templates, JSON output schemas, and structured routing-log fields** at the end of this letter (**Table R11**, **Appendix A1**) (the revised Supplementary Information will contain the same content). On the TN3K `test_for_llm_malignancy` cohort (*N* = 250), every routing call is logged in `routing_log.jsonl`. With **frozen Phase 1–2 expert outputs**, we repeated LLM **segmentation** routing five times per case on a stability subset (*n* = **10**; Path A classification consensus is not re-run five times; Path B reports classification agreement separately). Mean selection agreement was **98%** (**9/10** cases identical across five repeats; **1/10** at **80%**, `TN3K_test_0009.jpg`, one repeat switching between `all_datasets` and `TN3K`, Dice range ≈ 0.017). All **10/10** cases were **close** tier (**Table R11**); no **easy** cases appeared in this subset, so we report the close stratum only.
+- We provide **model and decoding parameters, full prompt templates, JSON output schemas, and structured routing-log fields** at the end of this letter (**`tab_routing_stability`**, **Appendix A1**) (the revised Supplementary Information will contain the same content). On the TN3K `test_for_llm_malignancy` cohort (*N* = 250), every routing call is logged in `routing_log.jsonl`. With **frozen Phase 1–2 expert outputs**, we repeated LLM **segmentation** routing five times per case on a stability subset (*n* = **10**; Path A classification consensus is not re-run five times; Path B reports classification agreement separately). Mean selection agreement was **98%** (**9/10** cases identical across five repeats; **1/10** at **80%**, `TN3K_test_0009.jpg`, one repeat switching between `all_datasets` and `TN3K`, Dice range ≈ 0.017). All **10/10** cases were **close** tier (**`tab_routing_stability`**); no **easy** cases appeared in this subset, so we report the close stratum only.
 - **Tier (`disagreement_tier`)**: for segmentation, candidates are ranked by inter-expert `average_agreement`; top1 minus top2 **≤ 0.10** → **close** (similar-quality candidates), **> 0.10** → **easy** (clear winner). The tier column in the stability table is **per-case routing difficulty**, not per-dataset stratification.
 
-**Supporting material:** See **Table R11** (routing stability) and **Appendix A1** (LLM router specification and routing_log fields) at the end of this letter.
+**Supporting material:** See **`tab_routing_stability`** (routing stability) and **Appendix A1** (LLM router specification and routing_log fields) at the end of this letter.
 
 ---
 
@@ -156,9 +156,9 @@ For FTC/PTC classification, the training cohort consists of classic PTC versus f
 
 **Response:**
 
-- We describe FangDai evaluation as exploratory domain shift. **FangDai external** (**Table S5a**) and **five-fold OOF** (**Table S5b**) are as **Table R8** at the end of this letter. Label mismatch (FVPTC vs histologic FTC) is discussed in Limitations with clinical co-authors.
+- We describe FangDai evaluation as exploratory domain shift. **FangDai external** (**Table S5a**) and **five-fold OOF** (**Table S5b**) are as **`tab_malig_ext`** at the end of this letter. Label mismatch (FVPTC vs histologic FTC) is discussed in Limitations with clinical co-authors.
 
-**Supporting material:** Full **Table S5** is **Table R8** at the end of this letter.
+**Supporting material:** Full **Table S5** is **`tab_malig_ext`** at the end of this letter.
 
 ---
 
@@ -171,7 +171,7 @@ The LNM task used only 4,753 malignant images, while Table S5 shows validation w
 
 - We replaced the 20-case hold-out with patient-level stratified five-fold CV (4,753 images, 882 clusters; seed 42); OOF metrics are in **Table S5b** (ThyroidXAgent LNM AUROC **0.8710 ± 0.0550**, AUPRC **0.8929 ± 0.0537**). **LymphUs Center 2** external test is in **Table S5a** (ThyroidXAgent LNM AUROC **0.8642 ± 0.0550**, AUPRC **0.8808 ± 0.0537**).
 
-**Supporting material:** Full **Table S5** is **Table R8** at the end of this letter.
+**Supporting material:** Full **Table S5** is **`tab_malig_ext`** at the end of this letter.
 
 ---
 
@@ -182,9 +182,9 @@ For lymph-node metastasis prediction, the manuscript inconsistently uses overall
 
 **Response:**
 
-- We harmonized terminology and clustering rules (ZJH by year/name; LymphUs Center 1 one image per cluster). Clinical definitions were checked with pathology/clinical co-authors; statistical protocol is in **Table R8** at the end of this letter.
+- We harmonized terminology and clustering rules (ZJH by year/name; LymphUs Center 1 one image per cluster). Clinical definitions were checked with pathology/clinical co-authors; statistical protocol is in **`tab_malig_ext`** at the end of this letter.
 
-**Supporting material:** Full **Table S5** is **Table R8** at the end of this letter.
+**Supporting material:** Full **Table S5** is **`tab_malig_ext`** at the end of this letter.
 
 ---
 
@@ -197,7 +197,7 @@ It is unclear whether all expert baselines were retrained on the same developmen
 
 - All **supervised** baselines in **Tables S3/S4** were fine-tuned on the same stacked development sets (segmentation **dataset_4**: TN3K + ThyroidXL + PKTN + TN5K; classification **dataset_3**: TN3K + ThyroidXL + TN5K) from publicly available upstream weights—not thyroid zero-shot or off-the-shelf evaluation only. ThyroidXAgent full-stack results use the same development data; progressive stacking ablations are in **Table S6** separately. Vision–language baselines were zero-shot/API with fixed prompts and were not end-to-end trained on dataset_3. External cohorts (e.g. ZJH-8K, DDTI) were used **for testing only**. The complete training and inference protocol is in **Supplementary Table S[X]** at the end of this letter (to be reproduced in the revised SI).
 
-**Supporting material:** See **Table R12** (Supplementary Table S[X], baseline training and inference protocol) at the end of this letter.
+**Supporting material:** See **`tab_baseline_protocol`** (Supplementary Table S[X], baseline training and inference protocol) at the end of this letter.
 
 ---
 
@@ -208,9 +208,9 @@ Thresholds for connected-component post-processing are not specified, including:
 
 **Response:**
 
-- Methods now state ≥50 px components inside experts; reported Dice and radiomics use the same selected mask. Small-nodule statistics are in **Table R13** (**GT equivalent diameter &lt;50 px**; no per-image spacing on public external cohorts; illustrative 0.1 mm/px ≈ 5 mm mapping only to relate to the reviewer's wording).
+- Methods now state ≥50 px components inside experts; reported Dice and radiomics use the same selected mask. Small-nodule statistics are in **`tab_small_nodule_fail`** (**GT equivalent diameter &lt;50 px**; no per-image spacing on public external cohorts; illustrative 0.1 mm/px ≈ 5 mm mapping only to relate to the reviewer's wording).
 
-**Supporting material:** See **Table R13** (GT equiv. diameter &lt;50 px — pipeline failure statistics) at the end of this letter.
+**Supporting material:** See **`tab_small_nodule_fail`** (GT equiv. diameter &lt;50 px — pipeline failure statistics) at the end of this letter.
 
 ---
 
@@ -234,17 +234,19 @@ The definition of "28,458 non-overlapping test cases" is unclear. Please describ
 
 **Response:**
 
-- We address this together with **Reviewer 2 — Comment 3** and **Reviewer 1 — Comment 4** using the data-flow figure and cross-cohort **Table R6** and **Table R1** at the end of this letter.
+- We address this together with **Reviewer 2 — Comment 3** and **Reviewer 1 — Comment 4** using the data-flow figure and cross-cohort **`fig_image_dataflow`** and **`tab_dhash`** at the end of this letter.
 
-**Supporting material:** See **Table R6** (dataflow) and **Table R1** (dHash screening) at the end of this letter.
+**Supporting material:** See **`fig_image_dataflow`** (dataflow) and **`tab_dhash`** (dHash screening) at the end of this letter.
 
 ---
 
 # Supporting Figures and Tables for This Response
 
-Tables and figures cited in the point-by-point responses above.；编号 **R1–R13**、**图 R1–R2** 与正文交叉引用一致。与修订稿 Supplementary Tables S3–S5 等同者保留原表号。
+Assets use LaTeX `\label` keys (`tab_*`, `fig_*`); PDF Table/Figure **R*** numbers are assigned automatically at first `\responsetabletitle` / `\responsefiguretitle` (see `latex/generated/response_asset_registry.tex`). Manuscript Supplementary Table S* numbers are unchanged.
 
-## Table R1. dHash 跨基础队列近重复筛查（Hamming ≤ 5）
+Tables and figures cited in the point-by-point responses above use those `\label` keys in `latex/generated/body_*.tex` (cross-ref via `\responsetableref` / `\responsefigureref`).
+
+## `tab_dhash`. dHash 跨基础队列近重复筛查（Hamming ≤ 5）
 
 | Cohort A | Cohort B | n (A) | n (B) | Pairs (H≤5) | H=0 | Near-dup only (1–5) |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -253,7 +255,7 @@ Tables and figures cited in the point-by-point responses above.；编号 **R1–
 
 Each row is pairwise screening between two **source cohorts** (not a merged training-pool definition).
 
-## Table R2. Supplementary Table S4 — AUROC
+## `tab_cls_ext`. Supplementary Table S4 — AUROC
 
 | 方法 | TN3K | ThyroidXL | TN5K | DDTI | ZJH-8K |
 | --- | --- | --- | --- | --- | --- |
@@ -265,7 +267,7 @@ Each row is pairwise screening between two **source cohorts** (not a merged trai
 | BiomedCLIP | 0.7539 (0.7139–0.7901) | 0.7765 (0.7474–0.8027) | 0.8043 (0.7727–0.8344) | 0.6440 (0.5691–0.7253) | 0.7342 (0.7110–0.7578) |
 | ThyroidXAgent | **0.8511 (0.8183–0.8824)** | **0.9312 (0.9142–0.9458)** | **0.9475 (0.9316–0.9612)** | **0.7937 (0.7107–0.8719)** | **0.9374 (0.9277–0.9472)** |
 
-## Table R3. Supplementary Table S4 — AUPRC
+## `tab_cls_ext`. Supplementary Table S4 — AUPRC
 
 | 方法 | TN3K | ThyroidXL | TN5K | DDTI | ZJH-8K |
 | --- | --- | --- | --- | --- | --- |
@@ -279,7 +281,7 @@ Each row is pairwise screening between two **source cohorts** (not a merged trai
 
 Cluster-bootstrap 95% CIs (1000 resamples, seed 42).
 
-## Table R4. Supplementary Table S3 — Cross-dataset nodule segmentation
+## `tab_seg_ext`. Supplementary Table S3 — Cross-dataset nodule segmentation
 
 Note: **Dice** 为 **%**（↑），**HD95** 为 **mm**（↓）；数值为点估计 **±** 95% CI 半宽（cluster bootstrap，1000 次，seed=42，图像级）。
 
@@ -303,7 +305,7 @@ Note: **Dice** 为 **%**（↑），**HD95** 为 **mm**（↓）；数值为点�
 | UltraFedFM | 14.98 ± 2.10 | 8.10 ± 0.58 | 16.08 ± 1.67 | 14.96 ± 1.65 | 18.12 ± 1.47 | 8.69 ± 0.80 | 9.06 ± 0.38 |
 | ThyroidXAgent | **10.31 ± 1.70** | **5.43 ± 0.53** | **9.01 ± 3.58** | **10.12 ± 1.23** | **9.24 ± 1.07** | **2.25 ± 0.39** | **1.92 ± 0.08** |
 
-## Table R5. External-test calibration and referral（各 test 队列自身分位定阈，送复核约 5%–15%）
+## `tab_calib_referral`. External-test calibration and referral（各 test 队列自身分位定阈，送复核约 5%–15%）
 
 | 队列 | n | ECE | Brier | Referral % |
 | --- | --- | --- | --- | --- |
@@ -313,15 +315,15 @@ Note: **Dice** 为 **%**（↑），**HD95** 为 **mm**（↓）；数值为点�
 | ZJH-8K | 7958 | 0.0971 | 0.1101 | 7.1% |
 | DDTI | 349 | 0.0934 | 0.1098 | 5.2% |
 
-## Figure R1. External-test reliability diagrams（五队列拼接；各队列自身分位定阈）
+## `fig_reliability`. External-test reliability diagrams（五队列拼接；各队列自身分位定阈）
 
 ![External-test reliability diagrams（TN3K、TN5K、ThyroidXL、ZJH-8K、DDTI）](figures/reliability_panels.png)
 
-## Figure R2. Risk–coverage（Operating points = referral % in Table R5）
+## `fig_risk_coverage`. Risk–coverage（Operating points = referral % in `tab_calib_referral`）
 
 ![Risk–coverage曲线合图（五个外测队列；标点为各队列工作点）](figures/risk_coverage_panels.png)
 
-## Table R6. Image-level dataflow (tabular)
+## `fig_image_dataflow`. Image-level dataflow (tabular)
 
 **Dataflow figure (patient–examination–image–task): to be supplied.**
 
@@ -334,14 +336,14 @@ Note: **Dice** 为 **%**（↑），**HD95** 为 **mm**（↓）；数值为点�
 | LNM / FTC-PTC | ZJH 恶性子集 + LymphUs；外测 LymphUs C2 / FangDai |
 | ZJH-8K 角色 | 良恶性/分割外测；专家未在 ZJH 训练；恶性子集仅用于 LNM/FTC 开发 |
 
-## Table R7. Five-cohort malignancy summary means（两行：AUROC / AUPRC）
+## `tab_cls_ext`. Five-cohort malignancy summary means（两行：AUROC / AUPRC）
 
 | 指标 | Unweighted macro mean | Weighted by test images |
 | --- | --- | --- |
 | AUROC | 0.9001 | 0.9286 |
 | AUPRC | 0.8707 | 0.9533 |
 
-## Table R8. Supplementary Table S5 — Malignant thyroid lesion subtasks
+## `tab_malig_ext`. Supplementary Table S5 — Malignant thyroid lesion subtasks
 
 **表 S5a — Independent external test**（五折 OOF 定稿开发流程后，于**全开发集**训练模型后的单次外测；数值 ± 半宽与投稿 Supplementary Table S5 中对应专家单元格一致）
 
@@ -370,7 +372,7 @@ Note: **Dice** 为 **%**（↑），**HD95** 为 **mm**（↓）；数值为点�
 | Tiger-Model | — | — | 0.7500 ± 0.0730 | 0.7350 ± 0.0945 |
 | ThyroidXAgent | **0.8710 ± 0.0550** | **0.8929 ± 0.0537** | **0.8165 ± 0.0599** | **0.8382 ± 0.0793** |
 
-## Table R9. Malignancy: image-level vs patient-level（ThyroidXAgent，ZJH-8K 与 ThyroidXL）
+## `tab_patient_cls`. Malignancy: image-level vs patient-level（ThyroidXAgent，ZJH-8K 与 ThyroidXL）
 
 Cluster-bootstrap 95% CI（1000 次，seed=42）。患者级：簇内恶性概率算术平均，标签组内 max。
 
@@ -381,14 +383,14 @@ Cluster-bootstrap 95% CI（1000 次，seed=42）。患者级：簇内恶性概�
 | ThyroidXL | 图像 | 2090 图 / 739 簇 | 0.9312 | 0.9142–0.9458 | 0.9135 | 0.8872–0.9351 |
 | ThyroidXL | 患者 | 739 | **0.9484** | 0.9326–0.9628 | **0.9355** | 0.9064–0.9592 |
 
-## Table R10. Segmentation: within-patient mean Dice（ThyroidXAgent，补充）
+## `tab_patient_seg`. Segmentation: within-patient mean Dice（ThyroidXAgent，补充）
 
 | 队列 | n 患者 | Dice（患者级） | 95% CI |
 | --- | --- | --- | --- |
 | ZJH-8K | 1146 | 0.8398 | 0.8322–0.8470 |
 | ThyroidXL | 739 | 0.8749 | 0.8675–0.8816 |
 
-## Table R11. Routing stability（TN3K 稳定性子集，5 次重复）
+## `tab_routing_stability`. Routing stability（TN3K 稳定性子集，5 次重复）
 
 | 病例 | Tier | 5 Choice agreement (5 runs) |
 | --- | --- | --- |
@@ -500,9 +502,9 @@ Reasoning must cite specific confidence values. (Deployed labels use Chinese str
 
 **Structured routing_log (audit, ≥10 cases)**
 
-Typical JSONL fields: `image_id`, `task` (e.g. `seg`, `cls`, `cls_path_b`), `disagreement_tier`, `llm_invoked`, `method`, `selected_model` / `selected_class`, `confidence`, `reasoning`, `candidates_summary`, `judge_summary` (if radiomics judge enabled), `llm_model` / `temperature` / `max_tokens`, timestamp `ts`; optional `prompts` (`system` / `user`) for verbatim reproduction in SI. The **10** cases in **Table R11** are drawn from the TN3K main pipeline and 5× stability audit logs; the revision will attach **≥10** de-identified exemplar records (same case IDs as Table R11).
+Typical JSONL fields: `image_id`, `task` (e.g. `seg`, `cls`, `cls_path_b`), `disagreement_tier`, `llm_invoked`, `method`, `selected_model` / `selected_class`, `confidence`, `reasoning`, `candidates_summary`, `judge_summary` (if radiomics judge enabled), `llm_model` / `temperature` / `max_tokens`, timestamp `ts`; optional `prompts` (`system` / `user`) for verbatim reproduction in SI. The **10** cases in **`tab_routing_stability`** are drawn from the TN3K main pipeline and 5× stability audit logs; the revision will attach **≥10** de-identified exemplar records (same case IDs as `tab_routing_stability`).
 
-## Table R12. Supplementary Table S[X] — Baseline training and inference protocol (complete)
+## `tab_baseline_protocol`. Supplementary Table S[X] — Baseline training and inference protocol (complete)
 
 **表注**
 
@@ -531,7 +533,7 @@ Typical JSONL fields: `image_id`, `task` (e.g. `seg`, `cls`, `cls_path_b`), `dis
 | ThyroidXAgent（分类路由） | 分类 | dataset_3 | DINOv3 多任务骨干（dataset_3 微调） | 路由 mask + 图像（pipeline） |
 | GPT-5 / Gemini / MedGemma / Qwen3-VL（若见于 S4） | 分类 | —（未微调） | 厂商/公开 VLM 权重 | 图像 ± 固定文本 prompt（零样本或 API） |
 
-## Table R13. GT equivalent diameter &lt;50 px — Pipeline failure statistics
+## `tab_small_nodule_fail`. GT equivalent diameter &lt;50 px — Pipeline failure statistics
 
 | Cohort | n matched | GT equiv. diam. &lt;50 px (N) | Failures (M) | Mean Dice (subset) |
 |--------|-----------|-------------------------------|--------------|-------------------|
