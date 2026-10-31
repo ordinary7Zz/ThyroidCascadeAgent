@@ -30,7 +30,7 @@
 
 - 用稿件/Methods 已有概念或本信已定义术语（ThyroidXAgent、策略 (1)–(8)、三独立分类器一致/不一致、LLM 路由、确定性共识、冻结的上游专家输出等）。
 - 附录 A1：小节标题与 bullet 用自然语言（例：**分类路由**、**分割 LLM 路由**）；`promptverbatim` 内保留 API 实际措辞；叙述性 wrap 用「程序拼接」「结构化路由记录」，不写日志文件名。
-- 附录 A2 / 表 A2：版本号用 `\texttt{包名 版本}` 即可；不必写训练环境配置文件名（可写「与训练环境配置一致」）。
+- 附录 A2 / 表 A2：版本号用 `\texttt{包名 版本}` 即可；表 A2-1 已列完整 PyRadiomics 参数，不必再写「与训练环境/配置文件一致」等套话。
 
 **允许例外**
 
@@ -90,9 +90,19 @@ NHC 表 R18–R20 另遵守下文「待定与修订稿承诺」中的 NHC 条款
 
 ## 编辑约定
 
-回信 **LaTeX 为唯一编辑源**：直接改 `generated/body_*.tex`、`generated/*_tables_*.tex`、`reviewer_response.sty` 等；实验指标见 `docs/revision/b3/`、`output/ablation/` 的 CSV/JSON，**不再**用脚本覆盖 `generated/*.tex`。信末 `\input` 顺序须与正文 `\responsetableref` 一致。
+回信 **LaTeX 为唯一编辑源**：直接改 `generated/body_*.tex`、`generated/*_tables_*.tex`、`reviewer_response.sty` 等；实验指标见 `docs/revision/b3/`、`output/ablation/` 的 CSV/JSON 作核对，**默认不用脚本覆盖 `generated/*.tex`**。
 
-改稿前对照 **`latex/README.md` →「审稿人可读性：禁止内部/机器命名」**；`ai/INSTRUCTIONS.md` 与之同步。
+### 脚本边界（与用户约定）
+
+| 用途 | 做法 |
+|------|------|
+| **审稿意见原文** | 仅 `latex/scripts/patch_reviewer_comments.py` 内嵌的固定审稿句 + 已有 `\authorresponse` 保留块；重建正文前段时用它，**勿**手改 `patch_*.py` 里的审稿原文除非用户要求 |
+| **作者回复、表数字、表题表注** | **只改 TeX** |
+| **已删除（勿再引用）** | 曾整段/批量写 `generated/*.tex` 的 `scripts/revision/b6/export_routing_audit_appendix_tex.py`、`scripts/revision/b3/bold_routing_ablation_top2.py`、`scripts/revision/b3/sync_routing_ablation_zh_from_en.py` — 附录 A1 与路由消融表请在 `generated/routing_audit_appendix_*.tex`、`routing_ablation_tables_*.tex` 手改 |
+
+信末 `\input` 顺序须与正文 `\responsetableref` 一致。
+
+改稿前对照 **`latex/README.md` →「审稿人可读性：禁止内部/机器命名」**；正文语气见 **`ai/WRITING_STYLE.md`**（Nature 子刊口径）；`ai/INSTRUCTIONS.md` 与之同步。
 
 ## 编译与预览
 

@@ -444,3 +444,25 @@
 **做了什么：** 去掉 spacing 定稿后更新 R11 与 pending；表 R11 主列小于 50 px，表注写明无 DICOM spacing、不报告 mm；0.1 mm/px 仅说明性衔接审稿人 5 mm。
 
 **教训 / 避免重犯：** 无 spacing 时勿把 0.1 mm/px 当主结论；N/M 与旧 JSON 不变（该假设下小于 5 mm 与小于 50 px 计数相同）。
+
+## 2026-10-31 — 回信 LaTeX 真源：勿用 py 覆盖 generated tex
+
+**文件：** `latex/README.md`、`ai/INSTRUCTIONS.md`、`ai/PENDING.md`；`expert_selection_tables_{zh,en}.tex`（表注去路径/脚本）；`body_{en,zh}.tex` R3.2 段；`docs/revision/b5/README.md`；B5 summarize/export 脚本文档串
+
+**做了什么：** 约定回信 **只手改 TeX**；`patch_reviewer_comments.py` 为唯一固定审稿原文输入；B5 汇总/导出脚本仅可选参考，AI 改稿不跑 export 覆盖表片段。
+
+**教训 / 避免重犯：** 改表题/表注/待补/叙事时**直接改 tex**；需要占比数字时可跑 summarize 抄 JSON，**不要**默认 export 回写 `generated/`。
+
+## 2026-10-31 — 删除 R3.2 专家占比 py 工具链
+
+**删除：** `summarize_expert_selection.py`、`export_expert_selection_tables_tex.py`、`pipeline/revision/b5/expert_selection.py`、`test_expert_selection.py`、`expert_selection_manifest.yaml`、相关 `artifacts/b5/*` 汇总文件。
+
+**保留：** `expert_selection_tables_{zh,en}.tex` 手改真源；文档改为仅 TeX + `patch_reviewer_comments.py`。
+
+## 2026-10-31 — 沉淀 Nature 子刊回信写作风格（`ai/WRITING_STYLE.md`）
+
+**文件：** `ai/WRITING_STYLE.md`（新建）；`ai/INSTRUCTIONS.md`、`ai/README.md`、`latex/README.md`
+
+**做了什么：** 将 R3.2 改稿中形成的口径写入专文：禁止「以表为准/不对齐/占位」等 meta、避免 `\textbf{小标题。}` 清单体、表引用不复述数字、段落衔接、BM vs NHC 举例分工等；改稿前必读链入 INSTRUCTIONS / README。
+
+**教训 / 避免重犯：** 回信正文像 **Response letter 正文**，不像编辑备注；新风格点优先写入 `WRITING_STYLE.md` 再改 TeX。

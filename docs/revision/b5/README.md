@@ -36,3 +36,7 @@ output/ablation/b5/<cohort>/<metadata_mode>/
 ```
 
 汇总：`python scripts/revision/b5/build_b5_tables.py --root output/ablation/b5`
+
+## R3.2 专家选择占比表（队列 × 专家）
+
+**真源**：手改 `docs/revision/…/正式回复/latex/generated/expert_selection_tables_{zh,en}.tex`（`\label{tab_expert_selection_seg}` / `_cls`）。

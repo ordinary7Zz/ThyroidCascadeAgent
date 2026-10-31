@@ -1,27 +1,115 @@
-% [DATA-SOURCE] Table A1-3 tab_A1_audit_exemplars | Reproducible (de-identified) | TN3K routing_log samples as Rec-01--Rec-12.
-\begin{responseinlinetable}
-\responseinlinetablecaption{Table A1-3. De-identified structured routing-record exemplars (TN3K external testing; fields aligned with Table A1-2)}
-\label{tab_A1_audit_exemplars}
-\begin{adjustbox}{max width=\textwidth}
-\footnotesize
-\begin{tabular}{llllllccp{0.30\textwidth}}
-\toprule
-\textbf{Rec.} & \textbf{Task} & \textbf{Tier} & \textbf{LLM} & \textbf{Decision mode} & \textbf{Outcome} & \textbf{Conf.} & \textbf{Candidate sketch} \\
-\midrule
-Rec-01 & Classification routing & Similar & Yes & LLM arbitration & Benign & 0.72 & 4 classifiers: Malignant (0.66), Benign (0.78), Benign (0.99) \\
-Rec-02 & Segmentation routing & Similar & Yes & LLM mask selection & TN3K-specific & 0.84 & 5 candidates; Multi-cohort joint (0.82), TN3K-specific (0.82) \\
-Rec-03 & Classification routing & Similar & Yes & LLM arbitration & Malignant & 0.65 & 4 classifiers: Malignant (0.64), Malignant (1.00), Benign (0.96) \\
-Rec-04 & Segmentation routing & Similar & Yes & LLM mask selection & TN3K-specific & 0.68 & 5 candidates; TN3K-specific (0.37), Multi-cohort joint (0.35) \\
-Rec-05 & Classification routing & Similar & Yes & LLM arbitration & Malignant & 0.60 & 4 classifiers: Malignant (1.00), Malignant (1.00), Benign (0.81) \\
-Rec-06 & Segmentation routing & Similar & Yes & LLM mask selection & PKTN-specific & 0.86 & 5 candidates; PKTN-specific (0.92), TN3K-specific (0.92) \\
-\textbf{Rec-07} & Segmentation routing & Similar & Yes & LLM mask selection & Multi-cohort joint & 0.86 & 5 candidates; PKTN-specific (0.80), TN3K-specific (0.80) \\
-Rec-08 & Classification routing & Similar & Yes & LLM arbitration & Malignant & 0.60 & 4 classifiers: Benign (0.97), Malignant (0.83), Benign (0.93) \\
-Rec-09 & Classification routing & Similar & Yes & LLM arbitration & Malignant & 0.83 & 4 classifiers: Malignant (1.00), Malignant (1.00), Malignant (0.93) \\
-Rec-10 & Classification routing & Easy & No & Deterministic consensus & Benign (consensus) & 1.00 & 4 classifiers: Benign (0.95), Benign (1.00), Benign (0.99) \\
-Rec-11 & Classification routing & Similar & Yes & Weighted soft vote (LLM unavailable) & Benign & 0.58 & 4 classifiers: Malignant (0.64), Malignant (1.00), Benign (0.96) \\
-Rec-12 & Segmentation routing & Similar & Yes & Rule fallback (LLM parse/API failure) & PKTN-specific & 0.78 & 5 candidates; PKTN-specific (0.78), TN3K-specific (0.77) \\
-\bottomrule
-\end{tabular}
-\end{adjustbox}
-\end{responseinlinetable}
-\par\smallskip\noindent\footnotesize Exemplars are balanced across segmentation LLM routing and classification routing (LLM-invoked routes, deterministic consensus, soft vote, and rule fallback); rows are labelled Rec-01--Rec-12 without original image filenames. On this TN3K primary pass, segmentation LLM routes were all ``similar'' tier (top-two candidate agreement gap $\leq 0.10$).
+% [DATA-SOURCE] Rec-01..Rec-10 | TN3K routing_log.jsonl de-identified exemplars
+\noindent\textbf{De-identified routing-record exemplars (Rec-01--Rec-10).}
+\label{sec_A1_routing_exemplars}
+\par\smallskip
+\noindent\textbf{Rec-01.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item Case ID: Rec-01
+\item Task type: Classification routing (LLM arbitration when classifiers disagree)
+\item Candidate similarity tier: Similar
+\item LLM invoked: Yes
+\item Decision mode: LLM arbitration
+\item Final benign/malignant class: Benign
+\item Confidence: 0.720
+\item Decision note: Independent classifiers: 4 independent classifiers: Malignant (0.66), Benign (0.78), Benign (0.99), Benign (1.00); AutoGluon (selected mask): Malignant (0.587)
+\end{itemize}
+\noindent\textbf{Rec-02.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item Case ID: Rec-02
+\item Task type: Segmentation routing
+\item Candidate similarity tier: Similar
+\item LLM invoked: Yes
+\item Decision mode: LLM mask selection
+\item Selected segmentation expert: TN3K-specific
+\item Confidence: 0.840
+\item Decision note: Candidates: Multi-cohort joint (agreement 0.820); TN3K-specific [selected] (agreement 0.819); ThyroidXL-specific (agreement 0.733); PKTN-specific (agreement 0.772); TN5K-specific (agreement 0.664); Classification anchor: Benign
+\end{itemize}
+\noindent\textbf{Rec-03.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item Case ID: Rec-03
+\item Task type: Classification routing (LLM arbitration when classifiers disagree)
+\item Candidate similarity tier: Similar
+\item LLM invoked: Yes
+\item Decision mode: LLM arbitration
+\item Final benign/malignant class: Malignant
+\item Confidence: 0.650
+\item Decision note: Independent classifiers: 4 independent classifiers: Malignant (0.64), Malignant (1.00), Benign (0.96), Benign (1.00); AutoGluon (selected mask): Malignant (0.766)
+\end{itemize}
+\noindent\textbf{Rec-04.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item Case ID: Rec-04
+\item Task type: Segmentation routing
+\item Candidate similarity tier: Similar
+\item LLM invoked: Yes
+\item Decision mode: LLM mask selection
+\item Selected segmentation expert: TN3K-specific
+\item Confidence: 0.680
+\item Decision note: Candidates: Multi-cohort joint (agreement 0.355); TN3K-specific [selected] (agreement 0.369); ThyroidXL-specific (agreement 0.317); PKTN-specific (agreement 0.301); TN5K-specific (agreement 0.090)
+\end{itemize}
+\noindent\textbf{Rec-05.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item Case ID: Rec-05
+\item Task type: Classification routing (LLM arbitration when classifiers disagree)
+\item Candidate similarity tier: Similar
+\item LLM invoked: Yes
+\item Decision mode: LLM arbitration
+\item Final benign/malignant class: Malignant
+\item Confidence: 0.600
+\item Decision note: Independent classifiers: 4 independent classifiers: Malignant (1.00), Malignant (1.00), Benign (0.81), Benign (1.00); AutoGluon (selected mask): Malignant (0.661)
+\end{itemize}
+\noindent\textbf{Rec-06.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item Case ID: Rec-06
+\item Task type: Segmentation routing
+\item Candidate similarity tier: Similar
+\item LLM invoked: Yes
+\item Decision mode: LLM mask selection
+\item Selected segmentation expert: PKTN-specific
+\item Confidence: 0.860
+\item Decision note: Candidates: Multi-cohort joint (agreement 0.886); TN3K-specific (agreement 0.916); ThyroidXL-specific (agreement 0.893); PKTN-specific [selected] (agreement 0.917); TN5K-specific (agreement 0.856); Classification anchor: Malignant
+\end{itemize}
+\noindent\textbf{\textbf{Rec-07}.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item Case ID: Rec-07
+\item Task type: Segmentation routing
+\item Candidate similarity tier: Similar
+\item LLM invoked: Yes
+\item Decision mode: LLM mask selection
+\item Selected segmentation expert: Multi-cohort joint
+\item Confidence: 0.860
+\item Decision note: Candidates: Multi-cohort joint [selected] (agreement 0.795); TN3K-specific (agreement 0.796); ThyroidXL-specific (agreement 0.776); PKTN-specific (agreement 0.803); TN5K-specific (agreement 0.499); Classification anchor: Benign
+\end{itemize}
+\noindent\textbf{Rec-08.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item Case ID: Rec-08
+\item Task type: Classification routing (LLM arbitration when classifiers disagree)
+\item Candidate similarity tier: Similar
+\item LLM invoked: Yes
+\item Decision mode: LLM arbitration
+\item Final benign/malignant class: Malignant
+\item Confidence: 0.600
+\item Decision note: Independent classifiers: 4 independent classifiers: Benign (0.97), Malignant (0.83), Benign (0.93), Benign (1.00); AutoGluon (selected mask): Malignant (0.768)
+\end{itemize}
+\noindent\textbf{Rec-09.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item Case ID: Rec-09
+\item Task type: Classification routing (LLM arbitration when classifiers disagree)
+\item Candidate similarity tier: Similar
+\item LLM invoked: Yes
+\item Decision mode: LLM arbitration
+\item Final benign/malignant class: Malignant
+\item Confidence: 0.830
+\item Decision note: Independent classifiers: 4 independent classifiers: Malignant (1.00), Malignant (1.00), Malignant (0.93), Benign (1.00); AutoGluon (selected mask): Malignant (0.779)
+\end{itemize}
+\noindent\textbf{Rec-10.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item Case ID: Rec-10
+\item Task type: Classification routing (deterministic consensus)
+\item Candidate similarity tier: Easy
+\item LLM invoked: No
+\item Decision mode: Deterministic consensus
+\item Final benign/malignant class: Benign (consensus)
+\item Confidence: 0.998
+\item Decision note: Programmatic consensus (Benign (consensus)); adopted without LLM.
+\end{itemize}
+\par\smallskip\noindent\footnotesize The ten de-identified exemplars above (Rec-01--Rec-10) balance segmentation LLM routing and classification routing (LLM-invoked routes and deterministic consensus, among others). Listed segmentation LLM routes were all ``similar'' tier (top-two candidate agreement gap $\leq 0.10$). Exemplar fields follow Table~A1-2.

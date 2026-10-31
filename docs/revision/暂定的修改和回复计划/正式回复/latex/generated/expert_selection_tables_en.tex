@@ -1,0 +1,39 @@
+% Source of truth: edit by hand
+% [DATA-SOURCE] tab_expert_selection_seg
+\begin{responsetable}
+\caption{\responsetabletitle{tab_expert_selection_seg}{Per-case share of LLM-selected segmentation experts on each external test cohort}}
+\label{tab_expert_selection_seg}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{@{}l r r r r r@{}}
+\toprule
+Cohort & Multi-cohort joint & TN3K & TN5K & ThyroidXL & PKTN \\
+\midrule
+TN3K & 7.8\% & 9.4\% & 0.5\% & 66.4\% & 15.8\% \\
+TN5K & 0.6\% & 5.7\% & 0.9\% & 83.9\% & 8.9\% \\
+ThyroidXL & 40.0\% & 6.8\% & 0.6\% & 42.4\% & 10.2\% \\
+ZJH-8K & 8.7\% & 9.8\% & 1.0\% & 65.5\% & 15.0\% \\
+DDTI & 17.6\% & 9.1\% & 0.6\% & 59.7\% & 13.0\% \\
+RJH-7K & 9.3\% & 8.6\% & 1.2\% & 71.6\% & 9.2\% \\
+PKTN & 6.7\% & 13.3\% & 0.0\% & 68.7\% & 11.3\% \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{responsetable}
+% [DATA-SOURCE] tab_expert_selection_cls
+\begin{responsetable}
+\caption{\responsetabletitle{tab_expert_selection_cls}{Per-case share of LLM-selected independent classifiers on each external test cohort}}
+\label{tab_expert_selection_cls}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{@{}l r r r r@{}}
+\toprule
+Cohort & Multi-cohort joint & TN3K & TN5K & ThyroidXL \\
+\midrule
+TN3K & 35.1\% & 16.5\% & 12.9\% & 35.5\% \\
+TN5K & 56.4\% & 16.6\% & 11.1\% & 15.8\% \\
+ThyroidXL & 55.0\% & 7.5\% & 30.0\% & 7.5\% \\
+ZJH-8K & 74.6\% & 7.7\% & 5.4\% & 12.3\% \\
+DDTI & 97.3\% & 0.0\% & 2.2\% & 0.4\% \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{responsetable}

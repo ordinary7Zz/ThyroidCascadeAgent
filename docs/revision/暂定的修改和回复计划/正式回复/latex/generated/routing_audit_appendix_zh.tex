@@ -1,27 +1,115 @@
-% [DATA-SOURCE] Table A1-3 tab_A1_audit_exemplars | 真实（去标识化样例）| TN3K 外测 routing_log 抽样改写 → Rec-01--Rec-12。
-\begin{responseinlinetable}
-\responseinlinetablecaption{表 A1-3. 去标识化结构化路由记录样例（TN3K 外测；字段与表 A1-2 对齐）}
-\label{tab_A1_audit_exemplars}
-\begin{adjustbox}{max width=\textwidth}
-\footnotesize
-\begin{tabular}{llllllccp{0.30\textwidth}}
-\toprule
-\textbf{编号} & \textbf{任务} & \textbf{分层} & \textbf{LLM} & \textbf{决策方式} & \textbf{结果} & \textbf{置信度} & \textbf{候选摘要} \\
-\midrule
-Rec-01 & 分类路由 & 相近 & 是 & LLM 裁决 & 良性 & 0.72 & 4 个分类器: 恶性 (0.66), 良性 (0.78), 良性 (0.99) \\
-Rec-02 & 分割路由 & 相近 & 是 & LLM 选 mask & TN3K 专用 & 0.84 & 5 个候选; 多队列联合 (0.82), TN3K 专用 (0.82) \\
-Rec-03 & 分类路由 & 相近 & 是 & LLM 裁决 & 恶性 & 0.65 & 4 个分类器: 恶性 (0.64), 恶性 (1.00), 良性 (0.96) \\
-Rec-04 & 分割路由 & 相近 & 是 & LLM 选 mask & TN3K 专用 & 0.68 & 5 个候选; TN3K 专用 (0.37), 多队列联合 (0.35) \\
-Rec-05 & 分类路由 & 相近 & 是 & LLM 裁决 & 恶性 & 0.60 & 4 个分类器: 恶性 (1.00), 恶性 (1.00), 良性 (0.81) \\
-Rec-06 & 分割路由 & 相近 & 是 & LLM 选 mask & PKTN 专用 & 0.86 & 5 个候选; PKTN 专用 (0.92), TN3K 专用 (0.92) \\
-\textbf{Rec-07} & 分割路由 & 相近 & 是 & LLM 选 mask & 多队列联合 & 0.86 & 5 个候选; PKTN 专用 (0.80), TN3K 专用 (0.80) \\
-Rec-08 & 分类路由 & 相近 & 是 & LLM 裁决 & 恶性 & 0.60 & 4 个分类器: 良性 (0.97), 恶性 (0.83), 良性 (0.93) \\
-Rec-09 & 分类路由 & 相近 & 是 & LLM 裁决 & 恶性 & 0.83 & 4 个分类器: 恶性 (1.00), 恶性 (1.00), 恶性 (0.93) \\
-Rec-10 & 分类路由 & 易区分 & 否 & 确定性共识 & 良性（共识） & 1.00 & 4 个分类器: 良性 (0.95), 良性 (1.00), 良性 (0.99) \\
-Rec-11 & 分类路由 & 相近 & 是 & 加权软投票（LLM 不可用） & 良性 & 0.58 & 4 个分类器: 恶性 (0.64), 恶性 (1.00), 良性 (0.96) \\
-Rec-12 & 分割路由 & 相近 & 是 & 规则回退（LLM 解析/API 失败） & PKTN 专用 & 0.78 & 5 个候选; PKTN 专用 (0.78), TN3K 专用 (0.77) \\
-\bottomrule
-\end{tabular}
-\end{adjustbox}
-\end{responseinlinetable}
-\par\smallskip\noindent\footnotesize 样例行在分割 LLM 路由与分类路由（调用 LLM、确定性共识、软投票与规则回退）之间均衡选取；以 Rec-01--Rec-12 标识，不使用原始图像文件名。本 TN3K 主评估中，分割 LLM 路由的相近度分层均为「相近」（最优与次优候选 agreement 差 $\leq 0.10$）。
+% [DATA-SOURCE] Rec-01..Rec-10 | TN3K routing_log.jsonl de-identified exemplars
+\noindent\textbf{去标识化路由记录样例（Rec-01--Rec-10）。}
+\label{sec_A1_routing_exemplars}
+\par\smallskip
+\noindent\textbf{Rec-01.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item 病例标识: Rec-01
+\item 任务类型: 分类路由（分类器不一致时的 LLM 裁决）
+\item 候选相近度分层: 相近
+\item 是否调用 LLM: 是
+\item 决策方式: LLM 裁决
+\item 最终良恶性类别: 良性
+\item 置信度: 0.720
+\item 决策说明: 独立分类输入：4 个独立分类模型: 恶性 (0.66)、良性 (0.78)、良性 (0.99)、良性 (1.00)；AutoGluon（所选 mask）：恶性（0.587）
+\end{itemize}
+\noindent\textbf{Rec-02.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item 病例标识: Rec-02
+\item 任务类型: 分割路由
+\item 候选相近度分层: 相近
+\item 是否调用 LLM: 是
+\item 决策方式: LLM 选 mask
+\item 所选分割专家: TN3K 专用
+\item 置信度: 0.840
+\item 决策说明: 候选：多队列联合（一致度 0.820）；TN3K 专用［所选］（一致度 0.819）；ThyroidXL 专用（一致度 0.733）；PKTN 专用（一致度 0.772）；TN5K 专用（一致度 0.664）；分类锚点：良性
+\end{itemize}
+\noindent\textbf{Rec-03.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item 病例标识: Rec-03
+\item 任务类型: 分类路由（分类器不一致时的 LLM 裁决）
+\item 候选相近度分层: 相近
+\item 是否调用 LLM: 是
+\item 决策方式: LLM 裁决
+\item 最终良恶性类别: 恶性
+\item 置信度: 0.650
+\item 决策说明: 独立分类输入：4 个独立分类模型: 恶性 (0.64)、恶性 (1.00)、良性 (0.96)、良性 (1.00)；AutoGluon（所选 mask）：恶性（0.766）
+\end{itemize}
+\noindent\textbf{Rec-04.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item 病例标识: Rec-04
+\item 任务类型: 分割路由
+\item 候选相近度分层: 相近
+\item 是否调用 LLM: 是
+\item 决策方式: LLM 选 mask
+\item 所选分割专家: TN3K 专用
+\item 置信度: 0.680
+\item 决策说明: 候选：多队列联合（一致度 0.355）；TN3K 专用［所选］（一致度 0.369）；ThyroidXL 专用（一致度 0.317）；PKTN 专用（一致度 0.301）；TN5K 专用（一致度 0.090）
+\end{itemize}
+\noindent\textbf{Rec-05.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item 病例标识: Rec-05
+\item 任务类型: 分类路由（分类器不一致时的 LLM 裁决）
+\item 候选相近度分层: 相近
+\item 是否调用 LLM: 是
+\item 决策方式: LLM 裁决
+\item 最终良恶性类别: 恶性
+\item 置信度: 0.600
+\item 决策说明: 独立分类输入：4 个独立分类模型: 恶性 (1.00)、恶性 (1.00)、良性 (0.81)、良性 (1.00)；AutoGluon（所选 mask）：恶性（0.661）
+\end{itemize}
+\noindent\textbf{Rec-06.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item 病例标识: Rec-06
+\item 任务类型: 分割路由
+\item 候选相近度分层: 相近
+\item 是否调用 LLM: 是
+\item 决策方式: LLM 选 mask
+\item 所选分割专家: PKTN 专用
+\item 置信度: 0.860
+\item 决策说明: 候选：多队列联合（一致度 0.886）；TN3K 专用（一致度 0.916）；ThyroidXL 专用（一致度 0.893）；PKTN 专用［所选］（一致度 0.917）；TN5K 专用（一致度 0.856）；分类锚点：恶性
+\end{itemize}
+\noindent\textbf{\textbf{Rec-07}.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item 病例标识: Rec-07
+\item 任务类型: 分割路由
+\item 候选相近度分层: 相近
+\item 是否调用 LLM: 是
+\item 决策方式: LLM 选 mask
+\item 所选分割专家: 多队列联合
+\item 置信度: 0.860
+\item 决策说明: 候选：多队列联合［所选］（一致度 0.795）；TN3K 专用（一致度 0.796）；ThyroidXL 专用（一致度 0.776）；PKTN 专用（一致度 0.803）；TN5K 专用（一致度 0.499）；分类锚点：良性
+\end{itemize}
+\noindent\textbf{Rec-08.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item 病例标识: Rec-08
+\item 任务类型: 分类路由（分类器不一致时的 LLM 裁决）
+\item 候选相近度分层: 相近
+\item 是否调用 LLM: 是
+\item 决策方式: LLM 裁决
+\item 最终良恶性类别: 恶性
+\item 置信度: 0.600
+\item 决策说明: 独立分类输入：4 个独立分类模型: 良性 (0.97)、恶性 (0.83)、良性 (0.93)、良性 (1.00)；AutoGluon（所选 mask）：恶性（0.768）
+\end{itemize}
+\noindent\textbf{Rec-09.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item 病例标识: Rec-09
+\item 任务类型: 分类路由（分类器不一致时的 LLM 裁决）
+\item 候选相近度分层: 相近
+\item 是否调用 LLM: 是
+\item 决策方式: LLM 裁决
+\item 最终良恶性类别: 恶性
+\item 置信度: 0.830
+\item 决策说明: 独立分类输入：4 个独立分类模型: 恶性 (1.00)、恶性 (1.00)、恶性 (0.93)、良性 (1.00)；AutoGluon（所选 mask）：恶性（0.779）
+\end{itemize}
+\noindent\textbf{Rec-10.}\par
+\begin{itemize}[leftmargin=1.5em,topsep=0.1em,itemsep=0.05em]
+\item 病例标识: Rec-10
+\item 任务类型: 分类路由（确定性共识）
+\item 候选相近度分层: 易区分
+\item 是否调用 LLM: 否
+\item 决策方式: 确定性共识
+\item 最终良恶性类别: 良性（共识）
+\item 置信度: 0.998
+\item 决策说明: 独立分类模型一致预测为「良性」(conf=0.95\textasciitilde{}1.00)，直接采纳。
+\end{itemize}
+\par\smallskip\noindent\footnotesize 以上十条去标识化样例（Rec-01--Rec-10）在分割 LLM 路由与分类路由（含 LLM 调用与确定性共识等）之间均衡选取；所列分割 LLM 路由的相近度分层均为「相近」（最优与次优候选一致度差 $\leq 0.10$）。样例字段与表~A1-2 一致。

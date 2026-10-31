@@ -21,6 +21,6 @@ LaTeX 源码中每张表 `\begin{...table}` 前均有 `% [数据来源]` / `% [D
 | R18–20 | `tab_nhc_*` | **部分** | B7 暂行 10 图/2 中心；大量 `\rpending`；全量 8721 待 G3 |
 | A1-1 | `tab_A1_decode` | **配置快照** | `router_spec.md`、agent 配置 |
 | A1-2 | `tab_A1_log_fields` | **Schema** | `routing_log` / `export_router_spec.py` |
-| A1-3 | `tab_A1_audit_exemplars` | **真实（去标识）** | TN3K 路由记录样例 |
+| Rec-01--Rec-10 | `sec_A1_routing_exemplars` | **真实（去标识）** | TN3K 路由记录样例（十条完整字段摘录） |
 
 **非表内数字：** 真 pipeline 复现见 `run_test_cohort_threshold_fit.py`；**当前回复信 R4 与图 R1–R2 已切换为 fake_display 管线**（见 `docs/revision/b8/FAKE_DISPLAY.md`）。
