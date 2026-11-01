@@ -26,21 +26,21 @@ export RUN_TAG=zjh20261101
 
 每个 `run_<model>.sh` **按同一顺序**执行：
 
-| 步骤 | 内容 | 例外 |
-|------|------|------|
-| **1** | 全量 `zjh_train` 训练 → **ZJH hold-out** 评测（LNM + FTC 两任务，若模型只做 LNM 则仅 LNM） | — |
-| **2** | **FTC/PTC** 在 **FangDai** 外测（复用步骤 1 的 FTC 权重，`--skip_train`） | LLNM 无 FTC；ThyroidXAgent / GPT / Gemini 见下 |
-| **3** | **五折 OOF**（LNM + FTC，共用 `01_export_shared_folds.sh`） | **MedGemma、Qwen3 跳过** |
+| 步骤        | 内容                                                                                                | 例外                                           |
+| ----------- | --------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| **1** | 全量 `zjh_train` 训练 → **ZJH hold-out** 评测（LNM + FTC 两任务，若模型只做 LNM 则仅 LNM） | —                                             |
+| **2** | **FTC/PTC** 在 **FangDai** 外测（复用步骤 1 的 FTC 权重，`--skip_train`）             | LLNM 无 FTC；ThyroidXAgent / GPT / Gemini 见下 |
+| **3** | **五折 OOF**（LNM + FTC，共用 `01_export_shared_folds.sh`）                                 | **MedGemma、Qwen3 跳过**                 |
 
-| 脚本 | 说明 |
-|------|------|
-| `run_repvit.sh` / `run_lsnet.sh` / `run_ultrafedfm.sh` | 步骤 1–3 |
-| `run_medgemma.sh` / `run_qwen3.sh` | 步骤 1–2 |
-| `run_llnm_net.sh` | 步骤 1 + 3（LNM） |
-| `run_tiger_model.sh` | 步骤 1–3（FTC；Tiger ResNet 流水线） |
-| `run_thyroidxagent.sh` | 步骤 3（DINO OOF）；步骤 1–2 为 Cascade 全栈占位说明 |
-| `run_gpt5.sh` / `run_gemini.sh` | API 占位（无本地训练 / 无 OOF） |
-| `run_all_models.sh` | `MODELS="repvit lsnet"` 过滤批量跑 |
+| 脚本                                                         | 说明                                                  |
+| ------------------------------------------------------------ | ----------------------------------------------------- |
+| `run_repvit.sh` / `run_lsnet.sh` / `run_ultrafedfm.sh` | 步骤 1–3                                             |
+| `run_medgemma.sh` / `run_qwen3.sh`                       | 步骤 1–2                                             |
+| `run_llnm_net.sh`                                          | 步骤 1 + 3（LNM）                                     |
+| `run_tiger_model.sh`                                       | 步骤 1–3（FTC；Tiger ResNet 流水线）                 |
+| `run_thyroidxagent.sh`                                     | 步骤 3（DINO OOF）；步骤 1–2 为 Cascade 全栈占位说明 |
+| `run_gpt5.sh` / `run_gemini.sh`                          | API 占位（无本地训练 / 无 OOF）                       |
+| `run_all_models.sh`                                        | `MODELS="repvit lsnet"` 过滤批量跑                  |
 
 输出根目录：`docs/revision/b9/runs/models_${RUN_TAG}/`（见 `_lib.sh` 中 `OUT_ROOT`）。
 
@@ -48,13 +48,13 @@ export RUN_TAG=zjh20261101
 
 在 `env_malig_b9.sh` 中定义，各 `run_<model>.sh` 通过 `_lib.sh` 生效：
 
-| 脚本 | 默认 epoch/次 | 环境变量 |
-|------|----------------|----------|
-| `run_repvit.sh` / `run_lsnet.sh` / `run_ultrafedfm.sh` | **10** | `BASELINE_EPOCHS`；RepViT/LSNet：`Classification_Models/{RepViT,lsnet}/scripts/mytrain_{LNMCN01,FTCPTC}.sh`；UltraFedFM：`UltraFedFM/scripts/my_class_pretrain_{LNMCN01,FTCPTC}.sh`（LNM、FTC 均为 10） |
-| `run_medgemma.sh` / `run_qwen3.sh` | **3** | `VLM_EPOCHS`（与 `medgemma_thyroid_binary_train.py` / `qwen3_vl_thyroid_binary_train.py` 默认一致） |
-| `run_llnm_net.sh` | **30** | `EPOCHS` 或 `SPECIALIST_EPOCHS`（全量 + OOF 各折） |
-| `run_tiger_model.sh` | **30** | `NUM_EPOCHS` 或 `SPECIALIST_EPOCHS`（全量 ResNet + OOF 各折） |
-| `run_thyroidxagent.sh` | **30** | `EPOCHS` 或 `SPECIALIST_EPOCHS`（DINO 五折 OOF，每任务 5 折） |
+| 脚本                                                         | 默认 epoch/次 | 环境变量                                                                                                                                                                                                      |
+| ------------------------------------------------------------ | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `run_repvit.sh` / `run_lsnet.sh` / `run_ultrafedfm.sh` | **10**  | `BASELINE_EPOCHS`；RepViT/LSNet：`Classification_Models/{RepViT,lsnet}/scripts/mytrain_{LNMCN01,FTCPTC}.sh`；UltraFedFM：`UltraFedFM/scripts/my_class_pretrain_{LNMCN01,FTCPTC}.sh`（LNM、FTC 均为 10） |
+| `run_medgemma.sh` / `run_qwen3.sh`                       | **3**   | `VLM_EPOCHS`（与 `medgemma_thyroid_binary_train.py` / `qwen3_vl_thyroid_binary_train.py` 默认一致）                                                                                                     |
+| `run_llnm_net.sh`                                          | **30**  | `EPOCHS` 或 `SPECIALIST_EPOCHS`（全量 + OOF 各折）                                                                                                                                                        |
+| `run_tiger_model.sh`                                       | **30**  | `NUM_EPOCHS` 或 `SPECIALIST_EPOCHS`（全量 ResNet + OOF 各折）                                                                                                                                             |
+| `run_thyroidxagent.sh`                                     | **30**  | `EPOCHS` 或 `SPECIALIST_EPOCHS`（DINO 五折 OOF，每任务 5 折）                                                                                                                                             |
 
 ### 各模型运行命令
 
@@ -86,17 +86,17 @@ MODELS="repvit lsnet" bash scripts/revision/b9/models/run_all_models.sh
 
 ## 底层分步脚本（`scripts/revision/b9/`）
 
-| 脚本 | 作用 |
-|------|------|
-| `env_malig_b9.sh` | 路径与 manifest 环境变量 |
-| `01_export_shared_folds.sh` | 导出 RepViT 系共用五折（OOF 前自动调用） |
-| `02_run_baselines_oof.sh` | 旧版：仅 RepViT / LSNet / UltraFedFM 五折 OOF |
-| `03_run_dino_multitask_oof.sh` | ThyroidXAgent DINO 五折 OOF |
-| `04_run_llnm_zjh_b9.sh` | LLNM 五折 + 全量 + zjh_test（与 `run_llnm_net.sh` 等价编排） |
-| `05_run_tiger_ftc_b9.sh` | Tiger FTC 五折 OOF |
-| `06_run_tiger_ftc_external.sh` | Tiger 全量外测；`EXTERNAL_STEP=zjh\|dai\|both` |
-| `run_baseline_full_external.py` | CNN/ViT/VLM 全量 + ZJH + 可选 Dai |
-| `run_all_malig_rerun.sh` | 旧版串联（默认 01+02） |
+| 脚本                              | 作用                                                           |
+| --------------------------------- | -------------------------------------------------------------- |
+| `env_malig_b9.sh`               | 路径与 manifest 环境变量                                       |
+| `01_export_shared_folds.sh`     | 导出 RepViT 系共用五折（OOF 前自动调用）                       |
+| `02_run_baselines_oof.sh`       | 旧版：仅 RepViT / LSNet / UltraFedFM 五折 OOF                  |
+| `03_run_dino_multitask_oof.sh`  | ThyroidXAgent DINO 五折 OOF                                    |
+| `04_run_llnm_zjh_b9.sh`         | LLNM 五折 + 全量 + zjh_test（与 `run_llnm_net.sh` 等价编排） |
+| `05_run_tiger_ftc_b9.sh`        | Tiger FTC 五折 OOF                                             |
+| `06_run_tiger_ftc_external.sh`  | Tiger 全量外测；`EXTERNAL_STEP=zjh\|dai\|both`                 |
+| `run_baseline_full_external.py` | CNN/ViT/VLM 全量 + ZJH + 可选 Dai                              |
+| `run_all_malig_rerun.sh`        | 旧版串联（默认 01+02）                                         |
 
 ## 仍缺 / 待补
 
