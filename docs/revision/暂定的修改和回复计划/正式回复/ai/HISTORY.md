@@ -564,3 +564,71 @@
 **做了什么：** 去掉 `\responsefigurelegend` / `\caption` 外 `\responsefigurenote`；每图 `\caption{\responsefiguretitle{键}{整段图注}}`，与常规论文一条 caption 一致。
 
 **教训 / 避免重犯：** 图不要拆「短标题 + 小号图例」；表仍可短 caption + `\responsetablenote`。
+
+---
+
+## 2026-11-01 — R1.2 Main findings：去 pending，表引用为主（方案 A）
+
+**文件：** `body_en.tex`、`body_zh.tex`
+
+**做了什么：** 路由消融表已锁（`tab_routing_ablation_*` 无 pending）后，删除 R1.2「主要发现」段内 3 处 `\rpending` / `\rpendingzh`（分割/分类例证数字、(6)(7) 对比）；保留 (i)--(iv) 定性结论，在 (iii)(iv) 补 `\responsetablerefrange` 以满足「删表号仍可证已回应」。
+
+**对意图的理解：** 用户选 WRITING_STYLE 方案 A：不在正文复述点估计与 CI，证据留在消融表。
+
+**教训 / 避免重犯：** `tab_routing_ablation_*` 定稿后勿再在 R1.2 正文堆 illustrative 数字；Main findings 定性 + 表号即可，与 R3.1 路由解读一致。
+
+---
+
+## 2026-11-01 — ZJH 恶性 hold-out：TN3K dHash 剔除后再划分（非 4756 全池）
+
+**文件：** `scripts/revision/b9/split_zjh_malignant_train_test.py`、`scripts/revision/b1/export_zjh_excl_tn3k_train_dhash0.py`、`docs/revision/b9/zjh_malignant_patient_split.json`；LNM/FTC pack 下 `zjh_train/test/dev_all` manifests
+
+**做了什么：** 划分前先按 `tab_dhash` 的 1151 张 TN3K train H=0 唯一 ZJH 文件名剔除；患者级 80/20（seed 42，LNM+FTCPTC 同 patient_id）；LymphUs 不再写入 train_combined。
+
+**对意图的理解：** 用户要求按 R1/`tab_dhash` 口径在剔除 TN3K 后的 ZJH 恶性池上划分，而不是 4756 全池。
+
+**数字口径（待与信稿统一）：** 全 4756 恶性标注剔除 TN3K 命中 **728** 张 → **4028** 图（train 3227 + test 801）。回复信中的 **3865** = 旧「先扣 20 例 val 患者得 4573，再扣 TN3K」或算术 **4045−180**，与「全恶性标注 + 新 hold-out 替代 val」不一致；若采用新策略，信稿应改 **4028 / 3407+621** 等，勿继续写 3865+4045 除非仍排除原 val 患者。
+
+**教训 / 避免重犯：** 恶性子任务划分勿用未剔除 TN3K 的 `zjh_all_labeled`；勿把 4045−180 当 TN3K 剔除后的 ZJH 数；改 hold-out 后核对是否仍隐含旧 val 183 图 carve-out。
+
+---
+
+## 2026-11-01 — R1 / tab_dhash / tab_malig_oof：3865/4045 → 4028/4208
+
+**文件：** `latex/generated/body_en.tex`、`body_zh.tex`
+
+**做了什么：** 全文替换恶性 ZJH 开发规模：4028（4756 恶性标注扣 TN3K H=0 后，含原 20 例 val 图像）；LNM 合并 4208（+180 LymphUs C1）。`tab_dhash` 与 `tab_malig_oof` 表注补充「原 hold-out 已并入五折 OOF 池」。
+
+**教训 / 避免重犯：** 3865 = 旧「4573 train 扣 TN3K」或 4045−180 算术；与五折 OOF 全池开发不一致，勿再写回信。
+
+---
+
+## 2026-11-01 — R2.10 / R2.12：诚实任务定义 + ZJH hold-out 主外测
+
+**文件：** `body_en.tex`、`body_zh.tex`（R2.10/R2.12、R2.2(iii)、R1 数据流一句、R2.11 外测表述）；`tab_malig_ext` 表体与表注
+
+**做了什么：** R2.10 承认 FVPTC/FTC 误读风险，澄清目标为组织学 PTC vs FTC（`\rpending` 合作者确认）；主外测改为共享 ZJH 患者 hold-out（130/801）；Dai 仅补充 FTC 外测。R2.12 说明 LymphUs（LN 超声+FNA）≠ ZJH 原发灶 CN0/CN1，撤 LymphUs C2 作 LNM 主外测。`tab_malig_ext` LNM/TXAgent hold-out 标 pending；通用模型 FTC 列暂留 Dai 旧数并表注标明。
+
+**教训 / 避免重犯：** 勿再写「LNM 外测 = LymphUs C2」与「ZJH/Dai 标签已等价」；合作者未确认前保留 `\rpending`，外测数字需 hold-out 重跑后再填。
+
+---
+
+## 2026-11-01 — 恶性子任务重跑编排脚本
+
+**文件：** `scripts/revision/b9/env_malig_b9.sh`、`01`–`07_*.sh`、`run_all_malig_rerun.sh`；`docs/revision/b9/README_MALIG_RERUN.md`；`dino_unet_multitask/.../task_specs.py`（默认 `zjh_train.json`）
+
+**做了什么：** 统一 TN3K 剔除 + hold-out 后的 manifest 路径；导出共用五折、CNN/ViT/DINO/LLNM/Tiger 启动脚本；Tiger/LLNM 含 zjh_test + Dai 外测步骤。
+
+**仍缺：** b9_oof 基线 **全 dev → zjh_test + Dai** 脚本；ThyroidXAgent 全栈外测。
+
+---
+
+## 2026-11-01 — R2.23 本回复信从略（报告/TI-RADS 体系）
+
+**文件：** `body_en.tex`、`body_zh.tex`
+
+**做了什么：** 删除 R2.23 三段 C-TIRADS / `\rpending` / R1.5 交叉说明；与 R2.22 等同用「与分割分类无关、本信从略」模板，保留 `\reviewercomment` 原文。
+
+**对意图的理解：** 图像分析回复信不涵盖报告生成与 ThyClinScore；TI-RADS 体系澄清留主稿 Methods/F8 或报告专项回复，不在本信逐条答。
+
+**教训 / 避免重犯：** 从略条仍保留审稿原文；勿在本信 R2.23 再写 C-TIRADS 长段 unless 用户改回需要回应。

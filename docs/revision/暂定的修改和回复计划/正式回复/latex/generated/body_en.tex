@@ -19,7 +19,7 @@ Causal contribution of the agentic router. The system combines expert ensembles,
 We thank the reviewer for this important suggestion. On a fixed pool of trained segmentation/classification experts, we added a systematic routing ablation on each expert's candidate masks and malignancy probabilities, changing only downstream expert selection, fusion/arbitration, and in the full system LLM routing and evidence fusion. Full numbers are in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}.\par
 Eight comparison strategies (numbered as in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}): (1)~validation-selected best single expert: on the validation split, select the pool member with highest mean mask Dice versus reference masks for segmentation and highest AUROC for classification; segmentation and classification may select different experts; on each external test set, always use that expert's frozen candidate outputs without retraining underlying experts; (2)~soft voting: on frozen candidates, segmentation uses equal-weight averaging of candidate masks with threshold 0.5; classification uses the arithmetic average of independent classifiers' class probabilities; (3)~majority vote: segmentation uses per-pixel majority among candidate masks; classification uses majority vote over independent classifiers' discrete labels; (4)~static rule (segmentation: for each expert, compute the mean pairwise mask IoU between its candidate and every other candidate, and select that expert's mask; classification: among independent classifiers, take the highest malignancy confidence, tie-break lower prediction entropy); (5)~max-confidence: segmentation selects the single expert with the highest mean mask confidence; classification selects the single independent classifier with the highest malignancy confidence; (6)~non-LLM multinomial logistic routers fit separately for segmentation and classification on validation quality and disagreement features, with weights frozen on test (details in Reviewer 3, Comment 1); (7)~deployable full ThyroidXAgent (external-test protocol in \responsetableref{tab_baseline_protocol} and ThyroidXAgent rows in \responsetableref{tab_cls_ext} and \responsetableref{tab_seg_ext}; strategy (7) numbers in \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}); (8)~non-deployable oracle upper bound: on each test case, segmentation selects the pool expert with highest mask Dice versus reference masks; classification selects the highest-confidence independent classifier among those correct against ground-truth labels.\par
 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} report all eight strategies (1)--(8) on each cohort's test set. These IDs are for this ablation only. 95\% CIs follow Reviewer 2, Comment 2 (R2.2).\par
-Main findings: (i) No single static strategy dominates all cohorts and tasks; interpret with 95\% CIs (overlap is common). (ii) Segmentation: max-confidence can underperform mask/probability ensembling on several cohorts; non-deployable oracle upper bounds exceed best deployable static routes (\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}). \rpending{One or two cohort-level segmentation contrasts with point estimates and CIs from \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}, e.g.\ max-confidence vs soft voting on TN3K/TN5K}. (iii) Classification: the best static strategy differs by cohort. \rpending{Illustrative classification contrasts with CIs from \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} where static rankings diverge across cohorts}. (iv) Learned routing (6) and full ThyroidXAgent (7) are evaluated under the same fixed-pool protocol as static strategies (1)--(5) and oracle (8). \rpending{Representative (6) vs best static and (7) vs (6) comparisons on primary cohorts once \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} are locked}. On large external cohorts, qualitative routing trade-offs align with the OpenThyroid test sets (TN3K, TN5K, ThyroidXL).\par
+Main findings: (i) No single static strategy dominates all cohorts and tasks; interpret with 95\% CIs (overlap is common). (ii) Segmentation: max-confidence can underperform mask/probability ensembling on several cohorts; non-deployable oracle upper bounds exceed best deployable static routes (\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}). (iii) Classification: the best static strategy differs by cohort (\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}). (iv) Learned routing (6) and full ThyroidXAgent (7) are evaluated under the same fixed-pool protocol as static strategies (1)--(5) and oracle (8) (\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}). On large external cohorts, qualitative routing trade-offs align with the OpenThyroid test sets (TN3K, TN5K, ThyroidXL).\par
 \par
 \end{authorresponse}
 
@@ -42,7 +42,7 @@ We describe this as retrospective workflow automation: low-uncertainty cases may
 Data boundaries across tasks. ZJH-8K is described as an external test set for segmentation and benign-malignant classification, while its malignant images are used for development of LNM and FTC/PTC tasks. This may be acceptable because the tasks differ, but the manuscript should provide a complete data-flow diagram showing which data were used for training, validation, threshold selection, and testing for each component.
 \end{reviewercomment}
 \begin{authorresponse}
-We agree. Segmentation and generic benign–malignant experts were not trained on ZJH-8K. The malignant subset of ZJH-8K is used only for task-specific LNM and FTC/PTC development, with external testing on LymphUs Center~2 and the Dai \textit{et al.} external test set, respectively. Training, validation, and external-test data for each image-arm component are shown in \responsefigureref{fig_image_dataflow}.\par
+We agree. Segmentation and generic benign–malignant experts were not trained on ZJH-8K. The malignant subset of ZJH-8K is used only for task-specific LNM and FTC/PTC development, with primary independent external testing on a patient-level ZJH hold-out (\responsetableref{tab_malig_ext}); an additional cross-site FTC/PTC external test on the Dai \textit{et al.} cohort is reported separately (\responsetableref{tab_ftcptc_ext_dai}). Training, validation, and external-test roles for each image-arm component are shown in \responsefigureref{fig_image_dataflow}.\par
 \par
 \end{authorresponse}
 
@@ -78,7 +78,7 @@ Several key values are inconsistent across the abstract, main text, figures, and
 \begin{authorresponse}
 We apologize and thank the reviewer. We reconciled all numbers against source exports.\par
 Benign–malignant classification means: corrected to unweighted macro-averages over five cohorts in \responsetableref{tab_cls_ext}---AUROC 0.9001, AUPRC 0.8707; consistent with ThyroidXAgent per-cohort point estimates in \responsetableref{tab_cls_ext}. AUROC/AUPRC axis labels were previously swapped; corrected values align with \responsetableref{tab_cls_ext}.\par
-LNM and FTC/PTC malignant-subtask development metrics in this letter exclude the 1151 ZJH images with dHash H=0 to TN3K train (\responsetableref{tab_dhash}): LNM combined development 4,045 images (3,865 ZJH primary lesions + 180 LymphUs Center~1); FTC/PTC development uses the same post-exclusion ZJH primary-lesion subset only (3,865 images; no LymphUs Center~1). The manuscript previously mis-stated the LNM combined manifest as 4,753 images with a 20-case hold-out; we now report patient/cluster-stratified five-fold OOF on each task's post-exclusion manifest (\responsetableref{tab_malig_oof}, three task-specific expert systems); \responsetableref{tab_malig_ext} reports independent external tests for all listed models.\par
+LNM and FTC/PTC malignant-subtask development metrics in this letter exclude the 1151 ZJH images with dHash H=0 to TN3K train (\responsetableref{tab_dhash}): LNM combined development 4,208 images (4,028 ZJH primary lesions + 180 LymphUs Center~1); FTC/PTC development uses the same post-exclusion ZJH primary-lesion subset only (4,028 images; no LymphUs Center~1). The manuscript previously mis-stated the LNM combined manifest as 4,753 images with a 20-case hold-out; we now report patient/cluster-stratified five-fold OOF on each task's post-exclusion manifest (\responsetableref{tab_malig_oof}, three task-specific expert systems); \responsetableref{tab_malig_ext} reports independent external tests for all listed models.\par
 \par
 \end{authorresponse}
 
@@ -89,7 +89,7 @@ Many analyses are reported at the image level, although multiple images may come
 \begin{authorresponse}
 We agree that treating multiple images from the same patient or examination as independent can yield anti-conservatively narrow confidence intervals and misaligns with clinical decision units.\par
 Cluster-bootstrap 95\% CIs (1000 resamples, seed~42) in \responsetableref{tab_cls_ext}, \responsetableref{tab_seg_ext}, and \responsetableref{tab_malig_oof}: where reproducible patient IDs exist (ZJH-8K, ThyroidXL), bootstrap resamples patient clusters with replacement before expanding to images; cohorts without IDs (e.g., TN3K, TN5K, DDTI) use one image per cluster. For ID-missing cohorts, cluster-bootstrap CIs match per-image bootstrap (point estimates unchanged); only ZJH-8K and ThyroidXL show slightly wider image-level CIs under cluster resampling. We additionally report patient-level classification and segmentation for those two cohorts (\responsetableref{tab_patient_cls}); other benign--malignant external tests remain image-level in \responsetableref{tab_cls_ext}.\par
-Task-level reporting under the protocol above: (i)~\textbf{Benign--malignant classification}---image-level external metrics in \responsetableref{tab_cls_ext}; patient-level ThyroidXAgent for ZJH-8K and ThyroidXL in \responsetableref{tab_patient_cls} (same table includes segmentation metrics; 1068 and 739 patients). (ii)~\textbf{Segmentation}---image-level Dice/HD95 in \responsetableref{tab_seg_ext}; patient-level metrics in \responsetableref{tab_patient_cls}. (iii)~\textbf{Malignant subtyping (LNM, FTC/PTC)}---development five-fold OOF in \responsetableref{tab_malig_oof}; independent external tests in \responsetableref{tab_malig_ext} (LNM: LymphUs Center~2; FTC/PTC: Dai \textit{et al.}), evaluated at patient/cluster level as in those tables.\par
+Task-level reporting under the protocol above: (i)~\textbf{Benign--malignant classification}---image-level external metrics in \responsetableref{tab_cls_ext}; patient-level ThyroidXAgent for ZJH-8K and ThyroidXL in \responsetableref{tab_patient_cls} (same table includes segmentation metrics; 1068 and 739 patients). (ii)~\textbf{Segmentation}---image-level Dice/HD95 in \responsetableref{tab_seg_ext}; patient-level metrics in \responsetableref{tab_patient_cls}. (iii)~\textbf{Malignant subtyping (LNM, FTC/PTC)}---development five-fold OOF in \responsetableref{tab_malig_oof}; primary independent external tests in \responsetableref{tab_malig_ext} on the shared ZJH malignant patient hold-out (R2.10, R2.12); additional FTC/PTC external test on Dai \textit{et al.} in \responsetableref{tab_ftcptc_ext_dai}, evaluated at patient/cluster level as in those tables.\par
 \noindent\par
 \par
 \end{authorresponse}
@@ -110,7 +110,7 @@ ZJH-8K and TN3K were both collected at Zhujiang Hospital, Southern Medical Unive
 \begin{authorresponse}
 We agree. ZJH-8K and TN3K were collected at the same hospital (Zhujiang Hospital, Southern Medical University) and should not be described as an independent \emph{external centre} cohort; \rpending{Manuscript: replace ``external centre'' wording for ZJH-8K with same-centre hold-out / institutional test cohort (R2.4)}.\par
 We report dHash screening (Hamming $\leq$ 5) of each source \textbf{train} partition against the full ZJH-8K pool (7958 images) in \responsetableref{tab_dhash} (same protocol as R1.1). Overlap relevant to TN3K-train-then-test-on-ZJH is dominated by \textbf{TN3K train} vs ZJH-8K (1154 H=0 pairs, 1151 unique ZJH images). TN5K, ThyroidXL, and PKTN train partitions show 0 H=0 pairs to ZJH-8K.\par
-ZJH-8K segmentation/classification and ZJH malignant-subtask development metrics in this letter exclude those 1151 images (6807 external-test images; 4045 LNM combined development images; 3865 FTC/PTC ZJH primary-lesion development images), as in \responsetableref{tab_cls_ext}, \responsetableref{tab_seg_ext}, and \responsetableref{tab_malig_oof}.\par
+ZJH-8K segmentation/classification and ZJH malignant-subtask development metrics in this letter exclude those 1151 images (6807 external-test images; 4208 LNM combined development images; 4028 FTC/PTC ZJH primary-lesion development images), as in \responsetableref{tab_cls_ext}, \responsetableref{tab_seg_ext}, and \responsetableref{tab_malig_oof}.\par
 \par
 \end{authorresponse}
 
@@ -169,8 +169,8 @@ De-identified routing-record exemplars Rec-01--Rec-10 are at the end of Appendix
 For FTC/PTC classification, the training cohort comprised classic PTC and follicular-variant PTC, whereas the external test set comprised FTC and PTC. Because follicular-variant PTC is not equivalent to FTC, the target definition differs between training and testing. Unless this is justified as a clinically valid domain-transfer task, the reported performance may not be valid.
 \end{reviewercomment}
 \begin{authorresponse}
-We thank the reviewer. The concern follows from prior wording that listed ZJH malignant-subtype counts as ``classic PTC \emph{vs.} follicular variant,'' which readers may interpret as classic PTC \emph{vs.} follicular-variant PTC (FVPTC) trained against the histologic PTC \emph{vs.} FTC labels on the Dai \textit{et al.} external test set. After re-audit with pathology/clinical co-authors of the histologic definitions used for the FTC/PTC subtask on the ZJH malignant cohort (post-surgical pathology reports), development and the Dai \textit{et al.} external test set target the same binary task: histologic PTC \emph{vs.} FTC; FVPTC was not used as a surrogate for FTC. \rpending{Written co-author confirmation and ZJH PTC/FTC inclusion rules}\par
-In this letter: (i)~FTC/PTC histologic definitions align with the Dai \textit{et al.} external test set (\responsetableref{tab_malig_ext}); (ii)~primary internal validation is patient/cluster-stratified five-fold OOF (\responsetableref{tab_malig_oof}); (iii)~independent external tests for the two malignant subtasks are reported in parallel in \responsetableref{tab_malig_ext} (LNM: LymphUs Center~2; FTC/PTC: Dai \textit{et al.}); (iv)~residual cohort/scanner differences reflect distribution shift, not label-definition mismatch.\par
+We thank the reviewer. The concern arose from manuscript wording (``classic PTC \emph{vs.} follicular variant'') that can be misread as classic PTC \emph{vs.} follicular-variant PTC (FVPTC) rather than histologic PTC \emph{vs.} FTC.\par
+We clarify that the ZJH-8K malignant cohort and the Dai \textit{et al.} external cohort use the **same binary label definition** for the FTC/PTC subtask: postoperative **histologic PTC \emph{vs.} FTC** (ZJH field \texttt{FTCPTC}; not FVPTC as a surrogate for FTC). We hold out a **patient-level ZJH test split** after TN3K dHash exclusion (130 patients, 801 primary-lesion images; seed~42) as the primary independent external test for LNM and FTC/PTC on primary thyroid ultrasound (\responsetableref{tab_malig_ext}). The Dai \textit{et al.} set ($n{=}199$) is an **additional** cross-institutional external test for FTC/PTC only (\responsetableref{tab_ftcptc_ext_dai}).\par
 \par
 \end{authorresponse}
 
@@ -179,10 +179,10 @@ In this letter: (i)~FTC/PTC histologic definitions align with the Dai \textit{et
 The LNM task uses only 4,753 malignant images, and Table S5 indicates only 20 cases for validation---sample sizes far too small for training reliable deep learning classifiers. Please clarify: (a) whether transfer learning or multi-task learning was employed; (b) whether data augmentation was applied; (c) how overfitting is avoided given the wide confidence intervals in Table S5 that reflect inadequate sample size.
 \end{reviewercomment}
 \begin{authorresponse}
-We clarify the LNM development pool and validation design. \responsetableref{tab_malig_oof} reports patient/cluster-stratified five-fold OOF (seed 42) on the post-exclusion LNM combined development manifest (4,045 images), replacing the original 20-case hold-out; independent external tests are in \responsetableref{tab_malig_ext} (ThyroidXAgent LNM OOF AUROC 0.8710 $\pm$ 0.0550, AUPRC 0.8929 $\pm$ 0.0537; LymphUs Center~2 external AUROC 0.8642 $\pm$ 0.0550, AUPRC 0.8808 $\pm$ 0.0537).\par
-(a) Transfer or multitask learning. We did not transfer weights from the generic benign--malignant segmentation/classification stack to LNM; LNM is trained on a dedicated combined development manifest (ZJH-8K malignant primary lesions plus LymphUs Center~1 lymph-node images) with a task-specific binary classifier and evaluation protocol separate from the main image arm (\responsetableref{tab_malig_oof}, \responsetableref{tab_malig_ext}).\par
+We clarify the LNM development pool and validation design. \responsetableref{tab_malig_oof} reports patient/cluster-stratified five-fold OOF (seed 42) on the post-exclusion ZJH malignant development manifest, replacing the original 20-case hold-out; primary independent external tests are in \responsetableref{tab_malig_ext} on the shared ZJH patient hold-out (R2.12). ThyroidXAgent LNM development OOF: AUROC 0.8710 $\pm$ 0.0550, AUPRC 0.8929 $\pm$ 0.0537 (\responsetableref{tab_malig_oof}).\par
+(a) Transfer or multitask learning. We did not transfer weights from the generic benign--malignant segmentation/classification stack to LNM; LNM uses a task-specific binary classifier on ZJH-8K malignant **primary-lesion** ultrasound with evaluation separate from the main image arm (\responsetableref{tab_malig_oof}, \responsetableref{tab_malig_ext}).\par
 (b) Data augmentation. LNM expert training uses the same stochastic augmentation policy as our other supervised thyroid classification experts; we did not add LNM-only augmentation beyond that pipeline. \rpending{Manuscript Methods: full augmentation policy prose (R2.11)}\par
-(c) Overfitting mitigation. We report patient/cluster-stratified five-fold OOF on the development set (not a single small validation split), cluster-bootstrap CIs (R2.2), and a held-out lymph-node external test on LymphUs Center~2 (\responsetableref{tab_malig_oof}, \responsetableref{tab_malig_ext}).\par
+(c) Overfitting mitigation. We report patient/cluster-stratified five-fold OOF on the development set (not a single small validation split), cluster-bootstrap CIs (R2.2), and a held-out **ZJH patient external test** on primary-lesion ultrasound (\responsetableref{tab_malig_oof}, \responsetableref{tab_malig_ext}).\par
 \par
 \end{authorresponse}
 
@@ -191,8 +191,9 @@ We clarify the LNM development pool and validation design. \responsetableref{tab
 For lymph-node metastasis prediction, the manuscript inconsistently refers to overall LNM, lateral LNM, and CN0/CN1 labels. The authors should clarify whether CN denotes central-compartment nodal status, whether the target is central, lateral, or any cervical LNM, whether the inputs include primary thyroid lesions, lymph nodes, or both, and how image-level predictions are aggregated at the patient level.
 \end{reviewercomment}
 \begin{authorresponse}
-In this letter we harmonize the clinical LNM binary label (CN0/CN1 convention), data sources (primary lesions on the ZJH-8K malignant subset vs.\ lymph-node images on LymphUs), and separate lateral-LNM wording from CN0/CN1 terminology in \responsetableref{tab_malig_oof} and \responsetableref{tab_malig_ext}. \rpending{Written LNM clinical-definition confirmation with pathology/clinical co-authors}\par
-Statistical and evaluation protocol matches Reviewer 2, Comment 11 (R2.11): ZJH clustered by patient (reproducible patient ID, as in R1.1/R2.2); LymphUs Center~1 (lymph-node images) for development with one image per cluster; arithmetic mean of malignancy probability within cluster; patient/cluster-stratified five-fold OOF on the development set (seed 42); cluster-bootstrap CIs per Reviewer 2, Comment 2 (R2.2) in \responsetableref{tab_malig_oof}. \responsetableref{tab_malig_oof} reports development five-fold OOF for task-specific systems and fine-tuned CNN/ViT baselines; \responsetableref{tab_malig_ext} reports independent external tests (including VLMs) on LNM (LymphUs Center~2) and FTC/PTC (Dai \textit{et al.}) in parallel.\par
+We agree that LNM terminology and task definition must be explicit. On ZJH-8K malignant **primary thyroid ultrasound**, the binary label (\texttt{LNM\_CN01}; CN0/CN1 convention) reflects pathologic nodal metastasis status from operative/pathology records tied to the case; exact central \emph{vs.} lateral compartment scope is \rpending{Written co-author confirmation (R2.12)}. Inputs are primary-lesion images only; image-level scores are aggregated at patient level by arithmetic mean within patient clusters (R2.2, R2.11).\par
+**LymphUs** images are **cervical lymph-node ultrasound** with **FNA-based** metastatic \emph{vs.} reactive labels on indexed nodes; they are not the same imaging target or reference standard as ZJH primary-lesion CN0/CN1 LNM. We therefore no longer report LymphUs Center~2 as the primary LNM external test. Independent LNM external evaluation uses the same ZJH patient hold-out as FTC/PTC on primary-lesion ultrasound (\responsetableref{tab_malig_ext}; R2.10). We removed manuscript wording that mixed ``lateral LNM'' with CN0/CN1 where the terms were not co-defined.\par
+Development five-fold OOF and external-test protocols are in \responsetableref{tab_malig_oof} and \responsetableref{tab_malig_ext}.\par
 \par
 \end{authorresponse}
 
@@ -286,10 +287,7 @@ Please check the manuscript for grammatical errors, such as "ThyroidXAgent impro
 Please specify whether TI-RADS refers to ACR TI-RADS, C-TIRADS, or another system, as categories such as "TI-RADS 4b" are system-specific.
 \end{reviewercomment}
 \begin{authorresponse}
-We thank the reviewer. ACR TI-RADS uses TR1--TR5; Chinese C-TIRADS (2020 guideline) uses a different category set that includes subdivisions such as 4a and 4b---these strings are not interchangeable with ACR levels.\par
-The segmentation and benign--malignant classification results reported in this letter (\responsetableref{tab_seg_ext}, \responsetableref{tab_cls_ext}, and related routing tables) use binary malignancy labels or task-specific pathology labels, not TI-RADS categories; none of these tables score TI-RADS class prediction. Where TI-RADS appears in structured report fields, ThyClinScore lesion attributes, or prespecified reader-study directional rules, institutional Chinese hospital reports (SMU-HMC and ZJH-series cohorts) follow C-TIRADS wording as in routine clinical documentation, including 4a/4b when recorded; we do not relabel those reports as ACR TR1--TR5 for the image models evaluated here. \rpending{Manuscript: Methods sentences citing C-TIRADS (2020) versus ACR TI-RADS; per-cohort TI-RADS taxonomy and any cross-cohort normalization for KMVE and other report test sets (task F8).}\par
-Report-template construction and KMVE-specific category handling are addressed under Reviewer 1, Comment 5 (R1.5). For this image-analysis letter we state the taxonomy distinction above so that TI-RADS 4b in Chinese reports is read as C-TIRADS, not ACR TI-RADS.
-\par
+\noindent\textit{This comment does not concern nodule segmentation or benign--malignant classification; no point-by-point response is provided in this letter.}
 \end{authorresponse}
 
 \responsetoreviewer{Response to Reviewer 3}
@@ -367,7 +365,7 @@ PKTN train & ZJH-8K & 703 & 7958 & 1 & 0 & 1 & 0 \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{64-bit dHash; Hamming $\leq$ 5. A = each foundational public cohort's official train split. B = ZJH-8K image pool (7958 images; full pool for screening). H=0 pairs = undirected train--ZJH image pairs with exact hash match; Unique ZJH (H=0) = distinct ZJH images with at least one H=0 match to A. ZJH external-test and ZJH malignant-development metrics in this letter exclude the 1151 unique ZJH images from the TN3K train row (6807 external-test images; 4045 LNM combined development images = 3865 ZJH primary lesions + 180 LymphUs Center~1; 3865 FTC/PTC ZJH primary-lesion development images, excluding LymphUs). TN5K, ThyroidXL, and PKTN train show no H=0 matches to ZJH.}
+\responsetablenote{64-bit dHash; Hamming $\leq$ 5. A = each foundational public cohort's official train split. B = ZJH-8K image pool (7958 images; full pool for screening). H=0 pairs = undirected train--ZJH image pairs with exact hash match; Unique ZJH (H=0) = distinct ZJH images with at least one H=0 match to A. ZJH external-test and ZJH malignant-development metrics in this letter exclude the 1151 unique ZJH images from the TN3K train row (6807 external-test images; 4208 LNM combined development images = 4028 ZJH primary lesions + 180 LymphUs Center~1; 4028 FTC/PTC ZJH primary-lesion development images, excluding LymphUs). ZJH malignant development counts use the full labeled malignant pool after TN3K exclusion (4028 images), including images formerly in the 20-patient hold-out now merged into five-fold OOF. TN5K, ThyroidXL, and PKTN train show no H=0 matches to ZJH.}
 \end{responsetable}
 % [SYNC] tab_cls_ext: AUROC/AUPRC layout ± half-width CI matches manuscript Supp Table S4; cell values vs b2_exports / pipeline recomputation.
 \begin{manuscriptresponsetable}
@@ -517,7 +515,7 @@ Tiger-Model & --- & --- & $0.7500 \pm 0.0730$ & $0.7350 \pm 0.0945$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Replaces the original 20-case hold-out. Five-fold development OOF is reported after excluding ZJH images with dHash H=0 to TN3K train (\responsetableref{tab_dhash}): LNM combined development 4045 images (3865 ZJH primary lesions + 180 LymphUs Center~1 lymph-node images); FTC/PTC development 3865 images (same ZJH primary-lesion subset as in LNM, excluding LymphUs Center~1). ThyroidXAgent, LLNM-Net, Tiger-Model, and RepViT/LSNet/UltraFedFM use task-specific post-exclusion manifests with shared fold splits (seed 42). Closed/open VLMs are not listed here (no malignant-subtask five-fold OOF); generic-model external tests remain in \responsetableref{tab_malig_ext}. ``---'' = task not evaluated. Cluster-bootstrap 95\% CI (1000 resamples, seed=42). Patient-level: arithmetic mean of malignancy probability within cluster; label = within-cluster max.}
+\responsetablenote{Replaces the original 20-case hold-out. Five-fold development OOF is reported after excluding ZJH images with dHash H=0 to TN3K train (\responsetableref{tab_dhash}): LNM combined development 4208 images (4028 ZJH primary lesions + 180 LymphUs Center~1 lymph-node images); FTC/PTC development 4028 images (same ZJH primary-lesion subset as in LNM, excluding LymphUs Center~1). The former 20-patient validation images are included in these development counts (not withheld). ThyroidXAgent, LLNM-Net, Tiger-Model, and RepViT/LSNet/UltraFedFM use task-specific post-exclusion manifests with shared fold splits (seed 42). Closed/open VLMs are not listed here (no malignant-subtask five-fold OOF); generic-model external tests remain in \responsetableref{tab_malig_ext}. ``---'' = task not evaluated. Cluster-bootstrap 95\% CI (1000 resamples, seed=42). Patient-level: arithmetic mean of malignancy probability within cluster; label = within-cluster max.}
 \end{manuscriptresponsetable}
 
 % [SYNC] tab_malig_ext: ThyroidXAgent/LLNM/Tiger from B9 external; RepViT--Gemini cells from legacy Supp S5 export (verify full-dev$\to$C2/Dai reruns).
@@ -532,21 +530,46 @@ Tiger-Model & --- & --- & $0.7500 \pm 0.0730$ & $0.7350 \pm 0.0945$ \\
 & \multicolumn{2}{c}{\textbf{FTC/PTC subtype}} \\
 & AUROC $\uparrow$ & AUPRC $\uparrow$ & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
-RepViT & $0.7905 \pm 0.0676$ & $0.8152 \pm 0.0638$ & $0.6419 \pm 0.0839$ & $0.6297 \pm 0.0942$ \\
-LSNet & $0.5878 \pm 0.0865$ & $0.6301 \pm 0.0875$ & $0.4858 \pm 0.0925$ & $0.4845 \pm 0.0908$ \\
-UltraFedFM & $0.7757 \pm 0.0731$ & $0.7902 \pm 0.0845$ & $0.7365 \pm 0.0744$ & $0.7582 \pm 0.0824$ \\
-MedGemma & $0.8403 \pm 0.0461$ & $0.8585 \pm 0.0566$ & $0.6598 \pm 0.0824$ & $0.6142 \pm 0.1056$ \\
-Qwen3-VL-8B-Instruct & $0.8070 \pm 0.0632$ & $0.8055 \pm 0.0800$ & $0.6056 \pm 0.0866$ & $0.5539 \pm 0.1118$ \\
-GPT-5 & $0.8410 \pm 0.0575$ & $0.8629 \pm 0.0533$ & $0.1604 \pm 0.0706$ & $0.3638 \pm 0.0847$ \\
-Gemini-2.5-Pro & $0.5414 \pm 0.0736$ & $0.5492 \pm 0.0915$ & $0.3324 \pm 0.0872$ & $0.4687 \pm 0.0837$ \\
-LLNM-Net & $0.7665 \pm 0.0692$ & $0.7363 \pm 0.0849$ & --- & --- \\
-Tiger-Model & --- & --- & $0.7136 \pm 0.0814$ & $0.7117 \pm 0.1101$ \\
+RepViT & \rpending{LNM ZJH hold-out rerun} & \rpending{LNM ZJH hold-out rerun} & \rpending{FTC ZJH hold-out rerun} & \rpending{FTC ZJH hold-out rerun} \\
+LSNet & \rpending{LNM ZJH hold-out rerun} & \rpending{LNM ZJH hold-out rerun} & \rpending{FTC ZJH hold-out rerun} & \rpending{FTC ZJH hold-out rerun} \\
+UltraFedFM & \rpending{LNM ZJH hold-out rerun} & \rpending{LNM ZJH hold-out rerun} & \rpending{FTC ZJH hold-out rerun} & \rpending{FTC ZJH hold-out rerun} \\
+MedGemma & \rpending{LNM ZJH hold-out rerun} & \rpending{LNM ZJH hold-out rerun} & \rpending{FTC ZJH hold-out rerun} & \rpending{FTC ZJH hold-out rerun} \\
+Qwen3-VL-8B-Instruct & \rpending{LNM ZJH hold-out rerun} & \rpending{LNM ZJH hold-out rerun} & \rpending{FTC ZJH hold-out rerun} & \rpending{FTC ZJH hold-out rerun} \\
+GPT-5 & \rpending{LNM ZJH hold-out rerun} & \rpending{LNM ZJH hold-out rerun} & \rpending{FTC ZJH hold-out rerun} & \rpending{FTC ZJH hold-out rerun} \\
+Gemini-2.5-Pro & \rpending{LNM ZJH hold-out rerun} & \rpending{LNM ZJH hold-out rerun} & \rpending{FTC ZJH hold-out rerun} & \rpending{FTC ZJH hold-out rerun} \\
+LLNM-Net & \rpending{LNM ZJH hold-out rerun} & \rpending{LNM ZJH hold-out rerun} & --- & --- \\
+Tiger-Model & --- & --- & \rpending{FTC ZJH hold-out rerun} & \rpending{FTC ZJH hold-out rerun} \\
 \responserowagent
-\textbf{ThyroidXAgent} & \textbf{$0.8642 \pm 0.0550$} & \textbf{$0.8808 \pm 0.0537$} & \textbf{$0.8053 \pm 0.0599$} & \textbf{$0.7863 \pm 0.0793$} \\
+\textbf{ThyroidXAgent} & \textbf{\rpending{LNM ZJH hold-out rerun}} & \textbf{\rpending{LNM ZJH hold-out rerun}} & \textbf{\rpending{FTC ZJH hold-out rerun}} & \textbf{\rpending{FTC ZJH hold-out rerun}} \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Each model is trained on the full development manifest after the five-fold OOF protocol is fixed, then evaluated once on independent external cohorts (cluster-bootstrap 95\% CI, 1000 resamples, seed=42). LNM: LymphUs Center~2 ($n$=158). FTC/PTC: Dai \textit{et al.} public external test set ($n\approx$200). ``---'' = task not evaluated.}
+\responsetablenote{Each model is trained on the full task development manifest after the five-fold OOF protocol is fixed, then evaluated once on the shared ZJH malignant **primary-lesion** patient hold-out after TN3K dHash exclusion ($n{=}130$ patients, 801 images; seed~42; cluster-bootstrap 95\% CI, 1000 resamples, seed=42; patient-level aggregation as in R2.2/R2.12). LymphUs Center~2 is not used as an LNM external test (R2.12). Additional cross-site FTC/PTC external results on the Dai \textit{et al.} cohort are in \responsetableref{tab_ftcptc_ext_dai}. ``---'' = task not evaluated.}
+\end{manuscriptresponsetable}
+
+% [SYNC] tab_ftcptc_ext_dai: full development train -> Dai et al. external (n=199); cells TBD.
+\begin{manuscriptresponsetable}
+\caption{\responsetabletitle{tab_ftcptc_ext_dai}{FTC/PTC subtype: additional external test (Dai \textit{et al.})}}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Method} & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
+\midrule
+RepViT & --- & --- \\
+LSNet & --- & --- \\
+UltraFedFM & --- & --- \\
+MedGemma & --- & --- \\
+Qwen3-VL-8B-Instruct & --- & --- \\
+GPT-5 & --- & --- \\
+Gemini-2.5-Pro & --- & --- \\
+LLNM-Net & --- & --- \\
+Tiger-Model & --- & --- \\
+\responserowagent
+\textbf{ThyroidXAgent} & --- & --- \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{Additional cross-institutional external test for the FTC/PTC subtask only (histologic PTC \emph{vs.} FTC; same label definition as ZJH-8K malignant development data; R2.10). Each model is trained on the full ZJH FTC/PTC development manifest after the five-fold OOF protocol is fixed, then evaluated once on the Dai \textit{et al.} public external test set ($n{=}199$). Cluster-bootstrap 95\% CI (1000 resamples, seed=42). Metrics to be inserted after rerun. ``---'' = pending.}
 \end{manuscriptresponsetable}
 
 % [SYNC] tab_routing_stability: seg_selection_agreement from output/b6/{tn3k,tn5k,thyroidxl,zjh8k,ddti_seg}/pipeline_run/stability_summary.json (n=10, seed 42, 5 repeats).

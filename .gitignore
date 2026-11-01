@@ -19,6 +19,7 @@ env/
 
 # 运行产物
 artifacts/b3/
+docs/revision/b9/runs/
 output/*
 !output/shared_output/
 !output/shared_output/**
