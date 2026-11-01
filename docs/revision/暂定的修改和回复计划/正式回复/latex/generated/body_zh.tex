@@ -77,7 +77,7 @@ ThyClinScore 的动机很好，但其验证主要依赖于与 LLM 评委的相�
 \end{reviewercomment}
 \begin{authorresponse}
 我们致歉并已按源结果逐项核对。\par
-良恶性分类「均值」：更正为本回复 \responsetableref{tab_cls_ext} 五队列等权宏平均 AUROC 0.9001、AUPRC 0.8707，与 \responsetableref{tab_cls_ext} 中 ThyroidXAgent 各队列点估计一致。\par
+良恶性分类「均值」：更正为本回复 \responsetableref{tab_cls_ext} 五队列等权宏平均 AUROC 0.9117、AUPRC 0.8983，与 \responsetableref{tab_cls_ext} 中 ThyroidXAgent 各队列点估计一致。\par
 AUROC/AUPRC 轴标签先前标反，已与 \responsetableref{tab_cls_ext} 对齐。\par
 本回复信 LNM/FTC 恶性子任务开发指标在剔除与 TN3K train dHash H=0 匹配的 1151 张 ZJH 图后报告：LNM 合并开发 4208 图（4028 ZJH 原发灶 + 180 LymphUs C1）；FTC/PTC 仅在同一剔除后 ZJH 原发灶子集上开发（4028 图，不含 LymphUs C1，口径见 \responsetableref{tab_dhash}）。原稿曾误将 LNM 合并 manifest 记为 4753 图并以 20 例 hold-out 验证；现以 \responsetableref{tab_malig_oof} 中各任务剔除后 manifest 上的患者/簇级分层五折 OOF 为准（三专家系统），\responsetableref{tab_malig_ext} 为各模型独立外测。\par
 \par
@@ -139,7 +139,7 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 作者应澄清所报告的「均值」是跨队列的无权重宏平均、按样本量加权的平均，还是其他计算方式。
 \end{reviewercomment}
 \begin{authorresponse}
-感谢审稿人。良恶性分类与结节分割的跨队列「均值」采用同一口径：等权宏平均——先在各外测队列上计算该任务的队列级点估计，再对队列作不加权算术平均（不按各队列测试图像数加权）。各队列指标见 \responsetableref{tab_cls_ext}（分类）与 \responsetableref{tab_seg_ext}（分割）；分类宏平均 AUROC 0.9001、AUPRC 0.8707 由 \responsetableref{tab_cls_ext} 五队列 ThyroidXAgent 点估计得出，与 审稿人 2，意见 1（R2.1） 不一致处已按上表对账。\par
+感谢审稿人。良恶性分类与结节分割的跨队列「均值」采用同一口径：等权宏平均——先在各外测队列上计算该任务的队列级点估计，再对队列作不加权算术平均（不按各队列测试图像数加权）。各队列指标见 \responsetableref{tab_cls_ext}（分类）与 \responsetableref{tab_seg_ext}（分割）；分类宏平均 AUROC 0.9117、AUPRC 0.8983 由 \responsetableref{tab_cls_ext} 五队列 ThyroidXAgent 点估计得出，与 审稿人 2，意见 1（R2.1） 不一致处已按上表对账。\par
 \par
 \end{authorresponse}
 
@@ -148,7 +148,7 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 关键创新是智能体证据工作流，但观察到的增益可能在很大程度上来自 DINOv3 专家池、多队列训练、放射组学分类器或基于模板的报告，而不是智能体路由本身。由于静态流程对比主要限于报告生成，LLM 路由对分割与分类的独立价值仍不清楚。
 \end{reviewercomment}
 \begin{authorresponse}
-我们同意须区分各模块贡献。完整八策略路由消融见 审稿人 1，意见 2（\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}）；策略 (7) 为可部署全系统 ThyroidXAgent（外测协议见 \responsetableref{tab_baseline_protocol}），监督基线见 审稿人 2，意见 14（\responsetableref{tab_baseline_protocol}）。在固定专家池与冻结候选上，可部署全系统 (7) 与静态策略 (1)(2) 并列比较；集成并非普适最优，不宜将增益仅归因于专家池或解读为「静态单专家优于 ThyroidXAgent」。各队列点估计与 95\% CI 见 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。所列分割/分类评测队列上，策略 (1)(2)(7) 点估计的未加权算术平均分别为：分割 Dice 0.8576、0.8487、0.8721；分类 AUROC 0.8781、0.8787、0.9001（无合并 CI）。可审计 LLM 路由与重复调用稳定性见 审稿人 2，意见 9（\responsetableref{tab_routing_stability}）。
+我们同意须区分各模块贡献。完整八策略路由消融见 审稿人 1，意见 2（\responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}）；策略 (7) 为可部署全系统 ThyroidXAgent（外测协议见 \responsetableref{tab_baseline_protocol}），监督基线见 审稿人 2，意见 14（\responsetableref{tab_baseline_protocol}）。在固定专家池与冻结候选上，可部署全系统 (7) 与静态策略 (1)(2) 并列比较；集成并非普适最优，不宜将增益仅归因于专家池或解读为「静态单专家优于 ThyroidXAgent」。各队列点估计与 95\% CI 见 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。所列分割/分类评测队列上，策略 (1)(2)(7) 点估计的未加权算术平均分别为：分割 Dice 0.8576、0.8487、0.8701；分类 AUROC 0.8781、0.8787、0.9001（无合并 CI）。可审计 LLM 路由与重复调用稳定性见 审稿人 2，意见 9（\responsetableref{tab_routing_stability}）。
 \par
 \end{authorresponse}
 
@@ -380,29 +380,34 @@ PKTN train & ZJH-8K & 703 & 7958 & 1 & 0 & 1 & 0 \\
 \midrule
 \multicolumn{6}{l}{\textit{AUROC $\uparrow$}} \\
 \midrule
-ResNet-50 & 0.7681 $\pm$ 0.0399 & 0.9029 $\pm$ 0.0181 & 0.9321 $\pm$ 0.0173 & 0.6155 $\pm$ 0.0824 & 0.9125 $\pm$ 0.0149 \\
-RepViT & 0.8298 $\pm$ 0.0314 & 0.9087 $\pm$ 0.0183 & 0.8981 $\pm$ 0.0222 & 0.7631 $\pm$ 0.0636 & 0.8332 $\pm$ 0.0211 \\
-LSNet & 0.8094 $\pm$ 0.0346 & 0.9178 $\pm$ 0.0177 & 0.9091 $\pm$ 0.0213 & 0.7749 $\pm$ 0.0670 & 0.8455 $\pm$ 0.0197 \\
-UltraFedFM & 0.8474 $\pm$ 0.0313 & 0.9231 $\pm$ 0.0158 & 0.9277 $\pm$ 0.0183 & 0.7819 $\pm$ 0.0719 & 0.8718 $\pm$ 0.0177 \\
-MedSigLIP & 0.8293 $\pm$ 0.0325 & 0.9122 $\pm$ 0.0171 & 0.9084 $\pm$ 0.0210 & 0.7486 $\pm$ 0.0816 & 0.8481 $\pm$ 0.0181 \\
-BiomedCLIP & 0.7539 $\pm$ 0.0381 & 0.7765 $\pm$ 0.0277 & 0.8043 $\pm$ 0.0308 & 0.6440 $\pm$ 0.0781 & 0.7342 $\pm$ 0.0234 \\
+ResNet-50 & 0.7674 $\pm$ 0.0394 & 0.9044 $\pm$ 0.0118 & 0.9322 $\pm$ 0.0168 & 0.6704 $\pm$ 0.0842 & 0.9125 $\pm$ 0.0149 \\
+RepViT & 0.5556 $\pm$ 0.0463 & 0.7774 $\pm$ 0.0188 & 0.6603 $\pm$ 0.0375 & 0.6162 $\pm$ 0.0804 & 0.8332 $\pm$ 0.0211 \\
+LSNet & 0.8095 $\pm$ 0.0333 & 0.9178 $\pm$ 0.0114 & 0.9091 $\pm$ 0.0201 & 0.7581 $\pm$ 0.0658 & 0.8455 $\pm$ 0.0197 \\
+UltraFedFM & 0.8461 $\pm$ 0.0697 & 0.9239 $\pm$ 0.0104 & 0.9298 $\pm$ 0.0175 & 0.7518 $\pm$ 0.1712 & 0.8718 $\pm$ 0.0177 \\
+MedGemma & 0.8492 $\pm$ 0.0305 & 0.9371 $\pm$ 0.0095 & 0.9442 $\pm$ 0.0156 & \textbf{0.8255 $\pm$ 0.0650} & 0.8976 $\pm$ 0.0166 \\
+Qwen3-VL-8B-Instruct & 0.8237 $\pm$ 0.0328 & 0.9050 $\pm$ 0.0115 & 0.9214 $\pm$ 0.0187 & 0.7361 $\pm$ 0.0692 & 0.8659 $\pm$ 0.0189 \\
+GPT-5 & 0.6924 $\pm$ 0.0421 & 0.7059 $\pm$ 0.0469 & 0.7737 $\pm$ 0.0996 & 0.6346 $\pm$ 0.0914 & 0.6109 $\pm$ 0.0515 \\
+Gemini-2.5-Pro & 0.6587 $\pm$ 0.0455 & 0.6246 $\pm$ 0.0640 & 0.6873 $\pm$ 0.0691 & 0.6156 $\pm$ 0.1308 & 0.6493 $\pm$ 0.0516 \\
 \responserowagent
-ThyroidXAgent & \textbf{0.8511 $\pm$ 0.0320} & \textbf{0.9312 $\pm$ 0.0158} & \textbf{0.9475 $\pm$ 0.0148} & \textbf{0.7937 $\pm$ 0.0806} & \textbf{0.9374 $\pm$ 0.0098} \\
+ThyroidXAgent & \textbf{0.8714 $\pm$ 0.0299} & \textbf{0.9680 $\pm$ 0.0066} & \textbf{0.9584 $\pm$ 0.0152} & 0.8032 $\pm$ 0.0641 & \textbf{0.9575 $\pm$ 0.0167} \\
 \midrule
 \multicolumn{6}{l}{\textit{AUPRC $\uparrow$}} \\
 \midrule
-ResNet-50 & 0.6900 $\pm$ 0.0594 & 0.8863 $\pm$ 0.0242 & 0.9677 $\pm$ 0.0124 & 0.5312 $\pm$ 0.1081 & 0.9160 $\pm$ 0.0181 \\
-RepViT & 0.7518 $\pm$ 0.0554 & 0.8851 $\pm$ 0.0286 & 0.9525 $\pm$ 0.0172 & 0.6133 $\pm$ 0.1202 & 0.8790 $\pm$ 0.0207 \\
-LSNet & 0.7580 $\pm$ 0.0505 & 0.9039 $\pm$ 0.0247 & 0.9551 $\pm$ 0.0163 & 0.6178 $\pm$ 0.1232 & 0.8742 $\pm$ 0.0216 \\
-UltraFedFM & 0.7954 $\pm$ 0.0473 & 0.9086 $\pm$ 0.0220 & 0.9687 $\pm$ 0.0102 & 0.6938 $\pm$ 0.1406 & 0.9115 $\pm$ 0.0169 \\
-MedSigLIP & 0.7403 $\pm$ 0.0590 & 0.8899 $\pm$ 0.0259 & 0.9596 $\pm$ 0.0119 & 0.6302 $\pm$ 0.1341 & 0.8804 $\pm$ 0.0227 \\
-BiomedCLIP & 0.6439 $\pm$ 0.0665 & 0.7224 $\pm$ 0.0464 & 0.9095 $\pm$ 0.0214 & 0.5452 $\pm$ 0.1024 & 0.8014 $\pm$ 0.0282 \\
+ResNet-50 & 0.6882 $\pm$ 0.0632 & 0.8882 $\pm$ 0.0174 & 0.9674 $\pm$ 0.0268 & 0.3755 $\pm$ 0.1176 & 0.9160 $\pm$ 0.0181 \\
+RepViT & 0.4275 $\pm$ 0.0528 & 0.7161 $\pm$ 0.0276 & 0.8403 $\pm$ 0.0216 & 0.3924 $\pm$ 0.0933 & 0.8790 $\pm$ 0.0207 \\
+LSNet & 0.7581 $\pm$ 0.0452 & 0.9040 $\pm$ 0.0142 & 0.9551 $\pm$ 0.0134 & 0.4180 $\pm$ 0.1410 & 0.8742 $\pm$ 0.0216 \\
+UltraFedFM & 0.8531 $\pm$ 0.0284 & 0.9354 $\pm$ 0.0114 & 0.8422 $\pm$ 0.0421 & 0.4487 $\pm$ 0.1452 & 0.9115 $\pm$ 0.0169 \\
+MedGemma & 0.8047 $\pm$ 0.0430 & 0.9201 $\pm$ 0.0139 & 0.9747 $\pm$ 0.0084 & 0.5537 $\pm$ 0.1663 & 0.9589 $\pm$ 0.0096 \\
+Qwen3-VL-8B-Instruct & 0.7617 $\pm$ 0.0511 & 0.8787 $\pm$ 0.0379 & 0.9636 $\pm$ 0.0106 & 0.4112 $\pm$ 0.1415 & 0.9498 $\pm$ 0.0096 \\
+GPT-5 & 0.6627 $\pm$ 0.0633 & 0.6237 $\pm$ 0.0666 & 0.8920 $\pm$ 0.0316 & 0.3578 $\pm$ 0.1089 & 0.8311 $\pm$ 0.0377 \\
+Gemini-2.5-Pro & 0.6205 $\pm$ 0.0587 & 0.4914 $\pm$ 0.0841 & 0.8462 $\pm$ 0.0446 & 0.3924 $\pm$ 0.1527 & 0.8403 $\pm$ 0.0362 \\
 \responserowagent
-ThyroidXAgent & \textbf{0.8001 $\pm$ 0.0607} & \textbf{0.9135 $\pm$ 0.0240} & \textbf{0.9786 $\pm$ 0.0074} & \textbf{0.7070 $\pm$ 0.1330} & \textbf{0.9544 $\pm$ 0.0098} \\
+ThyroidXAgent & \textbf{0.8544 $\pm$ 0.0415} & \textbf{0.9432 $\pm$ 0.0268} & \textbf{0.9763 $\pm$ 0.0079} & \textbf{0.7463 $\pm$ 0.1080} & \textbf{0.9711 $\pm$ 0.0006} \\
+
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{AUROC 与 AUPRC，cluster-bootstrap 95\% CI（1000 次，seed=42）；$\pm$ 为点估计与区间半宽。ZJH-8K 评估集（6807 张）定义见 \responsetableref{tab_dhash}。}
+\responsetablenote{AUROC 与 AUPRC，cluster-bootstrap 95\% CI（1000 次，seed=42）；$\pm$ 为点估计与区间半宽。TN3K--DDTI 列与稿件 Supplementary Table S4 一致；ZJH-8K 为 \responsetableref{tab_dhash} 定义的 6807 张评估集（ResNet-50 至 ThyroidXAgent 为重算；ZJH 上 VLM 行暂沿用 S4，待在相同子集上重算）。}
 \end{manuscriptresponsetable}
 
 % [SYNC] tab_seg_ext: Dice/HD95 blocks and ± layout match manuscript Supp Table S3; values vs B2/seg exports.
@@ -417,24 +422,25 @@ ThyroidXAgent & \textbf{0.8001 $\pm$ 0.0607} & \textbf{0.9135 $\pm$ 0.0240} & \t
 \multicolumn{8}{l}{\textit{Dice (\%) $\uparrow$}} \\
 \midrule
 TransUnet & 81.84 $\pm$ 1.62 & 85.75 $\pm$ 0.57 & 76.89 $\pm$ 3.56 & 78.54 $\pm$ 1.51 & 76.58 $\pm$ 1.67 & 80.72 $\pm$ 0.97 & 84.83 $\pm$ 0.37 \\
-MedSegX & 83.93 $\pm$ 0.79 & 83.67 $\pm$ 0.92 & 80.63 $\pm$ 0.42 & 83.10 $\pm$ 0.48 & 75.12 $\pm$ 1.68 & 84.06 $\pm$ 0.39 & 85.40 $\pm$ 0.18 \\
-MedSAM2 & 85.52 $\pm$ 1.43 & \textbf{87.94 $\pm$ 0.76} & 83.46 $\pm$ 2.60 & \textbf{86.30 $\pm$ 1.38} & 84.72 $\pm$ 1.26 & 86.29 $\pm$ 0.73 & 90.72 $\pm$ 0.21 \\
-UltraFedFM & 81.18 $\pm$ 1.46 & 84.70 $\pm$ 0.53 & 75.31 $\pm$ 1.12 & 77.15 $\pm$ 1.40 & 75.57 $\pm$ 1.67 & 80.64 $\pm$ 0.84 & 83.12 $\pm$ 0.33 \\
+MedSegX & 83.93 $\pm$ 0.79 & 79.98 $\pm$ 0.36 & 80.63 $\pm$ 0.42 & 83.10 $\pm$ 0.48 & 75.12 $\pm$ 1.68 & 84.06 $\pm$ 0.39 & 85.40 $\pm$ 0.18 \\
+MedSAM2 & 84.47 $\pm$ 1.02 & 86.94 $\pm$ 0.36 & 83.46 $\pm$ 2.60 & 83.03 $\pm$ 1.29 & 84.72 $\pm$ 1.26 & 86.29 $\pm$ 0.73 & 90.72 $\pm$ 0.21 \\
+UltraFedFM & 81.18 $\pm$ 1.46 & 84.70 $\pm$ 0.53 & 75.31 $\pm$ 1.12 & 77.13 $\pm$ 1.38 & 75.57 $\pm$ 1.67 & 80.64 $\pm$ 0.84 & 83.10 $\pm$ 0.33 \\
 \responserowagent
-ThyroidXAgent & \textbf{86.40 $\pm$ 1.25} & 87.65 $\pm$ 0.75 & \textbf{83.78 $\pm$ 2.18} & 83.95 $\pm$ 1.34 & \textbf{85.62 $\pm$ 1.07} & \textbf{94.30 $\pm$ 0.38} & \textbf{91.46 $\pm$ 0.14} \\
+ThyroidXAgent & \textbf{85.69 $\pm$ 1.17} & \textbf{88.53 $\pm$ 0.42} & \textbf{85.18 $\pm$ 2.03} & \textbf{83.88 $\pm$ 1.28} & \textbf{85.73 $\pm$ 1.10} & \textbf{88.30 $\pm$ 0.34} & \textbf{91.77 $\pm$ 0.32} \\
 \midrule
 \multicolumn{8}{l}{\textit{HD95 (mm) $\downarrow$}} \\
 \midrule
 TransUnet & 27.27 $\pm$ 5.52 & 22.42 $\pm$ 1.34 & 26.88 $\pm$ 9.66 & 22.32 $\pm$ 3.43 & 17.12 $\pm$ 1.55 & 18.37 $\pm$ 0.75 & 18.81 $\pm$ 0.74 \\
 MedSegX & 10.95 $\pm$ 0.64 & 11.07 $\pm$ 0.32 & 10.83 $\pm$ 0.70 & 11.76 $\pm$ 0.76 & 18.39 $\pm$ 1.65 & 10.96 $\pm$ 0.35 & 9.37 $\pm$ 0.18 \\
-MedSAM2 & 11.51 $\pm$ 1.53 & 5.46 $\pm$ 0.44 & 10.56 $\pm$ 3.64 & 10.94 $\pm$ 1.12 & 10.06 $\pm$ 1.21 & 6.79 $\pm$ 0.57 & 2.92 $\pm$ 0.17 \\
+MedSAM2 & 11.51 $\pm$ 1.53 & 5.46 $\pm$ 0.44 & 10.56 $\pm$ 3.64 & 10.94 $\pm$ 1.12 & 10.06 $\pm$ 1.21 & \textbf{6.79 $\pm$ 0.57} & 2.92 $\pm$ 0.17 \\
 UltraFedFM & 14.98 $\pm$ 2.10 & 8.10 $\pm$ 0.58 & 16.08 $\pm$ 1.67 & 14.96 $\pm$ 1.65 & 18.12 $\pm$ 1.47 & 8.69 $\pm$ 0.80 & 9.06 $\pm$ 0.38 \\
 \responserowagent
-ThyroidXAgent & \textbf{10.31 $\pm$ 1.70} & \textbf{5.43 $\pm$ 0.53} & \textbf{9.01 $\pm$ 3.58} & \textbf{10.12 $\pm$ 1.23} & \textbf{9.24 $\pm$ 1.07} & \textbf{2.25 $\pm$ 0.39} & \textbf{1.92 $\pm$ 0.08} \\
+ThyroidXAgent & \textbf{9.42 $\pm$ 1.45} & \textbf{5.16 $\pm$ 0.53} & \textbf{9.15 $\pm$ 3.28} & \textbf{8.14 $\pm$ 1.23} & \textbf{9.24 $\pm$ 1.06} & 10.25 $\pm$ 0.39 & \textbf{1.88 $\pm$ 0.09} \\
+
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Dice 与 95 百分位 Hausdorff 距离（HD95），cluster-bootstrap 95\% CI（1000 次，seed=42，图像级）；$\pm$ 为点估计与区间半宽。ZJH-8K 评估集（6807 张）定义见 \responsetableref{tab_dhash}。}
+\responsetablenote{Dice 与 95\% Hausdorff 距离（HD95），cluster-bootstrap 95\% CI（1000 次，seed=42，图像级）；$\pm$ 为点估计与区间半宽。非 ZJH-8K 列与稿件 Supplementary Table S3 一致；ZJH-8K（6807 张）见 \responsetableref{tab_dhash}。}
 \end{manuscriptresponsetable}
 
 % [SYNC] tab_patient_cls (+ tab_patient_seg label alias): patient-level ThyroidXAgent cls+seg; image-level in tab_cls_ext / tab_seg_ext.

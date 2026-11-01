@@ -632,3 +632,57 @@
 **对意图的理解：** 图像分析回复信不涵盖报告生成与 ThyClinScore；TI-RADS 体系澄清留主稿 Methods/F8 或报告专项回复，不在本信逐条答。
 
 **教训 / 避免重犯：** 从略条仍保留审稿原文；勿在本信 R2.23 再写 C-TIRADS 长段 unless 用户改回需要回应。
+
+---
+
+## 2026-11-01 — `tab_cls_ext` / `tab_seg_ext` 对齐稿件 S4 / S3
+
+**文件：** `body_en.tex`、`body_zh.tex`（`tab_cls_ext`、`tab_seg_ext`、`tab_baseline_protocol`）；R2.1 宏平均句
+
+**做了什么：** 分类表去掉 MedSigLIP/BiomedCLIP，改 MedGemma、Qwen3-VL-8B-Instruct、GPT-5、Gemini-2.5-Pro（数值来自 `ThyroidXAgent.md` Supp Table S4）；TN3K--DDTI 与 S4 一致，ZJH-8K 监督基线/ThyroidXAgent 保留 6807 子集 b2 重算。分割表非 ZJH 列对齐 S3（MedSegX ThyroidXL、MedSAM2、ThyroidXAgent 等）；HD95 块已与 S3 一致未改。R2.1 宏平均 AUROC/AUPRC 更新为 0.9041 / 0.8671。基线协议表删除 BiomedCLIP/MedSigLIP 行。
+
+**教训 / 避免重犯：** 回信跨数据集表 roster 以稿件 S3/S4 为准，勿混入未入稿 CLIP 基线；ZJH 列可与稿件不同但须在表注说明 6807 子集。
+
+---
+
+## 2026-11-01 — R12/R13 策略 (7) 恢复 B3 消融口径（≠ R2/R3 稿面 S3/S4）
+
+**文件：** `routing_ablation_tables_{en,zh}.tex`、`component_ablation_tables_{en,zh}.tex`；`body_{en,zh}.tex` R2.8 段 (1)(2)(7) 未加权均值
+
+**做了什么：** 撤销误将 R12/R13 策略 (7) 对齐 `tab_cls_ext`/`tab_seg_ext`（稿面 ThyroidXAgent）的改动；从 git `HEAD` 恢复固定专家池 + 共享 intermediate 的 B3 表。TN3K 分割 (7) Dice 为 **0.8568 (0.8440--0.8696)**（非稿面 0.8528）。R2/R3 内联表仍为 S4/S3；R2.8 路由均值更新为分割 (7) **0.8693**、分类 (7) **0.9101**。
+
+**教训 / 避免重犯：** `tab_routing_ablation_*` 策略 (7) 跟 B3/`manuscript_llm_metrics.yaml` 或 intermediate 栈口径，不要与 R2/R3 外测主表混贴；若需与稿面一致，改 yaml/表注说明而非直接抄 R3 ± 半宽。
+
+---
+
+## 2026-11-01 — R12/R13 策略 (7) → R2/R3 + 四表冠亚军重算
+
+**文件：** `routing_ablation_tables_{en,zh}.tex`；`body_{en,zh}.tex`（`tab_cls_ext`、`tab_seg_ext`）；`component_ablation_tables_{en,zh}.tex`；R2.1/R2.8 宏平均句
+
+**做了什么：** 自 R12/R13 策略 (7) 的 `(点估计--CI)` 换算 ± 半宽，更新 R2/R3 中 ThyroidXAgent 各行；R2 五队列宏平均 AUROC **0.9117**、AUPRC **0.8937**。路由消融四表（seg/cls × 中英文）按点估计重算 `\routingbest`/`\routingsecond`；R2/R3 四表（`tab_cls_ext`/`tab_seg_ext` × 中英文）按列重算 `\textbf` 最优（含基线行；`\responserowagent` 与 ThyroidXAgent 同块参与比较）。R2.8 组件摘要表 (7) 列与路由表对齐，未加权均值 seg **0.8701**、cls **0.9117**。
+
+**教训 / 避免重犯：** 重算 R2/R3 加粗时勿在 `\responserowagent` 处 flush，否则 ThyroidXAgent 单独成块会整行误加粗。
+
+---
+
+## 2026-11-01 — R2/R3 表式澄清（≠ R12/R13 冠亚军）
+
+**文件：** `body_en.tex`、`body_zh.tex`（`tab_cls_ext`、`tab_seg_ext`）
+
+**做了什么：** 按用户口径重排并重算：`tab_cls_ext` / `tab_seg_ext` 每个指标块为「基线行 → `\responserowagent` → ThyroidXAgent」；**每列仅点估计最优者** `\textbf`（HD95 为最小），**无** `\underline` / `\routingsecond`；`\responserowagent` **仅**为 ThyroidXAgent 灰色行标识，**不是**名次标记。R12/R13 路由四表仍用 `\routingbest` / `\routingsecond`。修复误替换产生的 `\r\responsetableref` 宏。
+
+---
+
+## 2026-11-01 — R12/R13 EN 更新 → ZH / R2/R3 四表同步
+
+**文件：** `routing_ablation_tables_{en,zh}.tex`；`body_{en,zh}.tex`（`tab_cls_ext`、`tab_seg_ext`）
+
+**做了什么：** 以 `routing_ablation_tables_en.tex` 为源重算各队列 `\routingbest`/`\routingsecond`（点估计；Dice/AUROC/AUPRC↑，HD95↓）；`routing_ablation_tables_zh.tex` 数值与装饰与 EN 一致、仅策略名与表注中文化。策略 (7) 换算 ± 半宽写入 R2/R3 ThyroidXAgent 行并重算列冠军 `\textbf`（无亚军）；分类宏平均 AUPRC 随 TN3K/ThyroidXL (7) 更新为 **0.8983**（AUROC **0.9117** 不变）。（当时曾用临时脚本；已删除，见下条。）
+
+**教训 / 避免重犯：** 勿对 `body_*.tex` 误 `git checkout`（会回退至 MedSigLIP 旧表）。
+
+---
+
+## 2026-11-01 — 回信 LaTeX：禁止用 Python 批量改 generated tex
+
+**偏好（小路）：** R12/R13、R2/R3、路由/组件表等 **`latex/generated/*.tex` 一律手改**；不要新增或依赖脚本自动写回 tex。中英文同步、策略 (7)→外测表、冠亚军/冠军标注均在编辑器里直接改。已删除 `scripts/revision/sync_r12_r23_from_routing_en.py`。
