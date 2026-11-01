@@ -1,0 +1,73 @@
+{
+  "results": "output/ZJH-8K/pipeline_run/results.json",
+  "cluster_map": "docs/revision/b2/cluster_maps/zjh8k.json",
+  "bootstrap": {
+    "n": 1000,
+    "seed": 42
+  },
+  "exclusion": {
+    "exclude_images": "docs/revision/b1/tables/zjh_excl_tn3k_train_dhash0_manifest.json",
+    "n_listed": 1151,
+    "criterion": "image_name in exclude list (sensitivity analysis)"
+  },
+  "classification": {
+    "task": "classification",
+    "n_images": 6807,
+    "n_clusters": 1068,
+    "image_level_cluster_bootstrap": {
+      "auroc": {
+        "mean": 0.9260005885394538,
+        "ci_lower": 0.9131812767902755,
+        "ci_upper": 0.937334160222215
+      },
+      "auprc": {
+        "mean": 0.9456804481500225,
+        "ci_lower": 0.9334918304408647,
+        "ci_upper": 0.9564046509190024
+      }
+    },
+    "patient_level": {
+      "n_patients": 1068,
+      "auroc": {
+        "mean": 0.9570592576003994,
+        "ci_lower": 0.9440084727964833,
+        "ci_upper": 0.9689737584933914
+      },
+      "auprc": {
+        "mean": 0.9688503740199651,
+        "ci_lower": 0.9573079544059678,
+        "ci_upper": 0.9792402512580946
+      }
+    }
+  },
+  "segmentation": {
+    "task": "segmentation",
+    "n_images": 6807,
+    "n_clusters": 1068,
+    "image_level_cluster_bootstrap": {
+      "dice": {
+        "mean": 0.8313402259230398,
+        "ci_lower": 0.8240915185932116,
+        "ci_upper": 0.8384751256444453
+      },
+      "hd95": {
+        "mean": 13.087837215734087,
+        "ci_lower": 12.297885129102687,
+        "ci_upper": 13.909545704862701
+      }
+    },
+    "patient_level": {
+      "n_patients": 1068,
+      "dice": {
+        "mean": 0.8269607474869853,
+        "ci_lower": 0.8179082554769294,
+        "ci_upper": 0.8353091250417176
+      },
+      "hd95": {
+        "mean": 13.142733838158254,
+        "ci_lower": 12.303803307328934,
+        "ci_upper": 14.037928032231333
+      }
+    }
+  }
+}

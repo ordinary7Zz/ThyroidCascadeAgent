@@ -4,15 +4,15 @@
 \refstepcounter{responsetableno}
 \captionof{table}{\responsetabletitle{tab_routing_ablation_seg}{Routing ablation --- nodule segmentation}}
 \label{tab_routing_ablation_seg}
-\begin{longtable}{@{}lllll@{}}
+\begin{longtable}{@{}llll@{}}
 \toprule
-Cohort & $n$ & Routing strategy & Dice $\uparrow$ & HD95 $\downarrow$ (mm) \\
+Cohort & Routing strategy & Dice $\uparrow$ & HD95 $\downarrow$ (mm) \\
 \midrule
 \endfirsthead
 
 \responsetablecontinuedrow{tab_routing_ablation_seg}
 \toprule
-Cohort & $n$ & Routing strategy & Dice $\uparrow$ & HD95 $\downarrow$ (mm) \\
+Cohort & Routing strategy & Dice $\uparrow$ & HD95 $\downarrow$ (mm) \\
 \midrule
 \endhead
 
@@ -21,68 +21,68 @@ Cohort & $n$ & Routing strategy & Dice $\uparrow$ & HD95 $\downarrow$ (mm) \\
 \endfoot
 \bottomrule
 \endlastfoot
-TN3K & 614 & Best single (1) & 0.8566 (0.8438--0.8685) & 9.9932 (8.5618--11.4815) \\
- &  & Soft voting (2) & 0.8559 (0.8427--0.8681) & 9.9860 (8.4369--11.5305) \\
- &  & Majority (3) & 0.8559 (0.8427--0.8681) & 9.9860 (8.4369--11.5305) \\
- &  & Static rule (4) & 0.8489 (0.8355--0.8616) & 10.8463 (9.2872--12.5189) \\
- &  & Max-confidence (5) & 0.7641 (0.7468--0.7810) & 16.4895 (14.6214--18.4612) \\
- &  & Learned router (6) & 0.8452 (0.8315--0.8572) & 10.5189 (9.1745--12.2149) \\
- &  & Full ThyroidXAgent (7) & \routingsecond{0.8569 (0.8452--0.8686)} & \routingsecond{9.4210 (7.9210--10.8210)} \\
- &  & Oracle (8) & \routingbest{0.8949 (0.8847--0.9039)} & \routingbest{5.6989 (4.7957--6.7717)} \\
+TN3K & Best single (1) & 0.8566 (0.8438--0.8685) & 9.9932 (8.5618--11.4815) \\
+ & Soft voting (2) & 0.8559 (0.8427--0.8681) & 9.9860 (8.4369--11.5305) \\
+ & Majority (3) & 0.8559 (0.8427--0.8681) & 9.9860 (8.4369--11.5305) \\
+ & Static rule (4) & 0.8489 (0.8355--0.8616) & 10.8463 (9.2872--12.5189) \\
+ & Max-confidence (5) & 0.7641 (0.7468--0.7810) & 16.4895 (14.6214--18.4612) \\
+ & Learned router (6) & 0.8452 (0.8315--0.8572) & 10.5189 (9.1745--12.2149) \\
+ & Full ThyroidXAgent (7) & \routingsecond{0.8569 (0.8452--0.8686)} & \routingsecond{9.4210 (7.9210--10.8210)} \\
+ & Oracle (8) & \routingbest{0.8949 (0.8847--0.9039)} & \routingbest{5.6989 (4.7957--6.7717)} \\
 \midrule
-TN5K & 1000 & Best single (1) & 0.8303 (0.8168--0.8436) & 8.5112 (7.4194--9.5991) \\
- &  & Soft voting (2) & 0.8097 (0.7969--0.8221) & 8.9359 (7.8500--10.0557) \\
- &  & Majority (3) & 0.8097 (0.7969--0.8221) & 8.9359 (7.8500--10.0557) \\
- &  & Static rule (4) & 0.8042 (0.7914--0.8168) & 9.2729 (8.1579--10.4430) \\
- &  & Max-confidence (5) & 0.6309 (0.6168--0.6461) & 20.5273 (18.9662--22.1221) \\
- &  & Learned router (6) & 0.8309 (0.8168--0.8442) & 8.4157 (7.4267--9.4981) \\
- &  & Full ThyroidXAgent (7) & \routingsecond{0.8388 (0.8260--0.8516)} & \routingsecond{8.1430 (6.9130--9.3730)} \\
- &  & Oracle (8) & \routingbest{0.8776 (0.8679--0.8863)} & \routingbest{5.2434 (4.3792--6.1976)} \\
+TN5K & Best single (1) & 0.8303 (0.8168--0.8436) & 8.5112 (7.4194--9.5991) \\
+ & Soft voting (2) & 0.8097 (0.7969--0.8221) & 8.9359 (7.8500--10.0557) \\
+ & Majority (3) & 0.8097 (0.7969--0.8221) & 8.9359 (7.8500--10.0557) \\
+ & Static rule (4) & 0.8042 (0.7914--0.8168) & 9.2729 (8.1579--10.4430) \\
+ & Max-confidence (5) & 0.6309 (0.6168--0.6461) & 20.5273 (18.9662--22.1221) \\
+ & Learned router (6) & 0.8309 (0.8168--0.8442) & 8.4157 (7.4267--9.4981) \\
+ & Full ThyroidXAgent (7) & \routingsecond{0.8388 (0.8260--0.8516)} & \routingsecond{8.1430 (6.9130--9.3730)} \\
+ & Oracle (8) & \routingbest{0.8776 (0.8679--0.8863)} & \routingbest{5.2434 (4.3792--6.1976)} \\
 \midrule
-ThyroidXL & 2090 & Best single (1) & 0.8779 (0.8706--0.8837) & 5.2841 (4.7478--5.9753) \\
- &  & Soft voting (2) & 0.8640 (0.8559--0.8708) & 6.1273 (5.6160--6.7607) \\
- &  & Majority (3) & 0.8640 (0.8559--0.8708) & 6.1273 (5.6160--6.7607) \\
- &  & Static rule (4) & 0.8596 (0.8515--0.8668) & 6.3825 (5.8344--7.0652) \\
- &  & Max-confidence (5) & 0.8640 (0.8555--0.8714) & 6.9273 (6.2205--7.7892) \\
- &  & Learned router (6) & 0.8618 (0.8534--0.8689) & 6.5732 (5.9289--7.3309) \\
- &  & Full ThyroidXAgent (7) & \routingsecond{0.8853 (0.8811--0.8895)} & \routingsecond{5.1600 (4.6290--5.6910)} \\
- &  & Oracle (8) & \routingbest{0.9033 (0.8971--0.9077)} & \routingbest{3.6082 (3.1967--4.2143)} \\
+ThyroidXL & Best single (1) & 0.8779 (0.8706--0.8837) & 5.2841 (4.7478--5.9753) \\
+ & Soft voting (2) & 0.8640 (0.8559--0.8708) & 6.1273 (5.6160--6.7607) \\
+ & Majority (3) & 0.8640 (0.8559--0.8708) & 6.1273 (5.6160--6.7607) \\
+ & Static rule (4) & 0.8596 (0.8515--0.8668) & 6.3825 (5.8344--7.0652) \\
+ & Max-confidence (5) & 0.8640 (0.8555--0.8714) & 6.9273 (6.2205--7.7892) \\
+ & Learned router (6) & 0.8618 (0.8534--0.8689) & 6.5732 (5.9289--7.3309) \\
+ & Full ThyroidXAgent (7) & \routingsecond{0.8853 (0.8811--0.8895)} & \routingsecond{5.1600 (4.6290--5.6910)} \\
+ & Oracle (8) & \routingbest{0.9033 (0.8971--0.9077)} & \routingbest{3.6082 (3.1967--4.2143)} \\
 \midrule
-PKTN & 150 & Best single (1) & 0.8388 (0.8127--0.8592) & 9.6793 (6.8614--13.1380) \\
- &  & Soft voting (2) & 0.8376 (0.8145--0.8583) & 9.4591 (6.6751--12.7585) \\
- &  & Majority (3) & 0.8376 (0.8145--0.8583) & 9.4591 (6.6751--12.7585) \\
- &  & Static rule (4) & 0.8378 (0.8160--0.8569) & 9.6248 (6.6881--13.1477) \\
- &  & Max-confidence (5) & 0.7309 (0.6920--0.7634) & 17.1431 (12.9441--22.1825) \\
- &  & Learned router (6) & 0.8136 (0.7793--0.8411) & 9.8351 (7.0586--13.1820) \\
- &  & Full ThyroidXAgent (7) & \routingsecond{0.8518 (0.8315--0.8721)} & \routingsecond{9.1500 (5.8720--12.4280)} \\
- &  & Oracle (8) & \routingbest{0.8776 (0.8589--0.8935)} & \routingbest{5.5712 (3.5843--7.8737)} \\
+PKTN & Best single (1) & 0.8388 (0.8127--0.8592) & 9.6793 (6.8614--13.1380) \\
+ & Soft voting (2) & 0.8376 (0.8145--0.8583) & 9.4591 (6.6751--12.7585) \\
+ & Majority (3) & 0.8376 (0.8145--0.8583) & 9.4591 (6.6751--12.7585) \\
+ & Static rule (4) & 0.8378 (0.8160--0.8569) & 9.6248 (6.6881--13.1477) \\
+ & Max-confidence (5) & 0.7309 (0.6920--0.7634) & 17.1431 (12.9441--22.1825) \\
+ & Learned router (6) & 0.8136 (0.7793--0.8411) & 9.8351 (7.0586--13.1820) \\
+ & Full ThyroidXAgent (7) & \routingsecond{0.8518 (0.8315--0.8721)} & \routingsecond{9.1500 (5.8720--12.4280)} \\
+ & Oracle (8) & \routingbest{0.8776 (0.8589--0.8935)} & \routingbest{5.5712 (3.5843--7.8737)} \\
 \midrule
-DDTI & 637 & Best single (1) & 0.8492 (0.8369--0.8596) & 9.5556 (8.5949--10.7538) \\
- &  & Soft voting (2) & 0.8451 (0.8313--0.8559) & 9.7469 (8.7598--10.9371) \\
- &  & Majority (3) & 0.8451 (0.8313--0.8559) & 9.7469 (8.7598--10.9371) \\
- &  & Static rule (4) & 0.8469 (0.8342--0.8577) & 9.8615 (8.8698--11.1374) \\
- &  & Max-confidence (5) & 0.7773 (0.7622--0.7910) & 17.4599 (15.9063--19.1119) \\
- &  & Learned router (6) & 0.8535 (0.8422--0.8635) & \routingsecond{8.7226 (7.7636--9.8345)} \\
- &  & Full ThyroidXAgent (7) & \routingsecond{0.8573 (0.8463--0.8683)} & 9.2400 (8.1820--10.3020) \\
- &  & Oracle (8) & \routingbest{0.8950 (0.8876--0.9019)} & \routingbest{5.3343 (4.7165--6.0751)} \\
+DDTI & Best single (1) & 0.8492 (0.8369--0.8596) & 9.5556 (8.5949--10.7538) \\
+ & Soft voting (2) & 0.8451 (0.8313--0.8559) & 9.7469 (8.7598--10.9371) \\
+ & Majority (3) & 0.8451 (0.8313--0.8559) & 9.7469 (8.7598--10.9371) \\
+ & Static rule (4) & 0.8469 (0.8342--0.8577) & 9.8615 (8.8698--11.1374) \\
+ & Max-confidence (5) & 0.7773 (0.7622--0.7910) & 17.4599 (15.9063--19.1119) \\
+ & Learned router (6) & 0.8535 (0.8422--0.8635) & \routingsecond{8.7226 (7.7636--9.8345)} \\
+ & Full ThyroidXAgent (7) & \routingsecond{0.8573 (0.8463--0.8683)} & 9.2400 (8.1820--10.3020) \\
+ & Oracle (8) & \routingbest{0.8950 (0.8876--0.9019)} & \routingbest{5.3343 (4.7165--6.0751)} \\
 \midrule
-ZJH-8K & 6807 & Best single (1) & 0.8376 (0.8331--0.8418) & 12.7771 (12.3014--13.2998) \\
- &  & Soft voting (2) & 0.8356 (0.8286--0.8423) & 12.4292 (11.7195--13.1264) \\
- &  & Majority (3) & 0.8356 (0.8311--0.8399) & 12.4292 (11.9746--12.9226) \\
- &  & Static rule (4) & 0.8404 (0.8362--0.8445) & 12.1798 (11.6915--12.6547) \\
- &  & Max-confidence (5) & 0.7534 (0.7487--0.7579) & 20.3989 (19.8158--21.0169) \\
- &  & Learned router (6) & 0.8392 (0.8323--0.8459) & 13.0973 (12.2670--13.8631) \\
- &  & Full ThyroidXAgent (7) & \routingsecond{0.8830 (0.8796--0.8864)} & \routingsecond{10.2500 (9.8600--10.6400)} \\
- &  & Oracle (8) & \routingbest{0.8937 (0.8906--0.8968)} & \routingbest{7.2119 (6.8392--7.5625)} \\
+ZJH-8K & Best single (1) & 0.8376 (0.8331--0.8418) & 12.7771 (12.3014--13.2998) \\
+ & Soft voting (2) & 0.8356 (0.8286--0.8423) & 12.4292 (11.7195--13.1264) \\
+ & Majority (3) & 0.8356 (0.8311--0.8399) & 12.4292 (11.9746--12.9226) \\
+ & Static rule (4) & 0.8404 (0.8362--0.8445) & 12.1798 (11.6915--12.6547) \\
+ & Max-confidence (5) & 0.7534 (0.7487--0.7579) & 20.3989 (19.8158--21.0169) \\
+ & Learned router (6) & 0.8392 (0.8323--0.8459) & 13.0973 (12.2670--13.8631) \\
+ & Full ThyroidXAgent (7) & \routingsecond{0.8830 (0.8796--0.8864)} & \routingsecond{10.2500 (9.8600--10.6400)} \\
+ & Oracle (8) & \routingbest{0.8937 (0.8906--0.8968)} & \routingbest{7.2119 (6.8392--7.5625)} \\
 \midrule
-RJH-7K & 7288 & Best single (1) & 0.9128 (0.9113--0.9143) & 1.9676 (1.8965--2.0424) \\
- &  & Soft voting (2) & 0.8931 (0.8905--0.8955) & 3.8953 (3.6806--4.1147) \\
- &  & Majority (3) & 0.8931 (0.8905--0.8955) & 3.8953 (3.6806--4.1147) \\
- &  & Static rule (4) & 0.9009 (0.8985--0.9031) & 3.0392 (2.8631--3.2267) \\
- &  & Max-confidence (5) & 0.7627 (0.7577--0.7675) & 14.1566 (13.6502--14.6310) \\
- &  & Learned router (6) & 0.9086 (0.9063--0.9109) & 2.6545 (2.4865--2.8439) \\
- &  & Full ThyroidXAgent (7) & \routingsecond{0.9177 (0.9149--0.9205)} & \routingsecond{1.8803 (1.7889--1.9712)} \\
- &  & Oracle (8) & \routingbest{0.9283 (0.9271--0.9293)} & \routingbest{1.4098 (1.3707--1.4543)} \\
+RJH-7K & Best single (1) & 0.9128 (0.9113--0.9143) & 1.9676 (1.8965--2.0424) \\
+ & Soft voting (2) & 0.8931 (0.8905--0.8955) & 3.8953 (3.6806--4.1147) \\
+ & Majority (3) & 0.8931 (0.8905--0.8955) & 3.8953 (3.6806--4.1147) \\
+ & Static rule (4) & 0.9009 (0.8985--0.9031) & 3.0392 (2.8631--3.2267) \\
+ & Max-confidence (5) & 0.7627 (0.7577--0.7675) & 14.1566 (13.6502--14.6310) \\
+ & Learned router (6) & 0.9086 (0.9063--0.9109) & 2.6545 (2.4865--2.8439) \\
+ & Full ThyroidXAgent (7) & \routingsecond{0.9177 (0.9149--0.9205)} & \routingsecond{1.8803 (1.7889--1.9712)} \\
+ & Oracle (8) & \routingbest{0.9283 (0.9271--0.9293)} & \routingbest{1.4098 (1.3707--1.4543)} \\
 \end{longtable}
 \responsetablenote{Fixed expert pool; point estimates and 95\% CIs; cluster bootstrap (1000 resamples, seed=42). Per cohort and metric: bold = best, underline = runner-up (point estimates). Soft voting (2) and majority (3) are case-wise equivalent in every cohort listed, so the entries match. Static rule (4), segmentation: select the expert whose candidate mask has the highest mean pairwise IoU with all other candidates' masks. Strategies (1)--(5): operational definitions in Reviewer 1, Comment 2. Oracle (8): non-deployable per-case upper bound (Reviewer 1, Comment 2).}
 \end{responsepaginatedtable}
@@ -90,15 +90,15 @@ RJH-7K & 7288 & Best single (1) & 0.9128 (0.9113--0.9143) & 1.9676 (1.8965--2.04
 \begin{responsepaginatedtable}
 \refstepcounter{responsetableno}
 \captionof{table}{\responsetabletitle{tab_routing_ablation_cls}{Routing ablation --- benign--malignant classification}}\label{tab_routing_ablation_cls}
-\begin{longtable}{@{}lllll@{}}
+\begin{longtable}{@{}llll@{}}
 \toprule
-Cohort & $n$ & Routing strategy & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
+Cohort & Routing strategy & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
 \endfirsthead
 
 \responsetablecontinuedrow{tab_routing_ablation_cls}
 \toprule
-Cohort & $n$ & Routing strategy & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
+Cohort & Routing strategy & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
 \endhead
 
@@ -107,50 +107,50 @@ Cohort & $n$ & Routing strategy & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \endfoot
 \bottomrule
 \endlastfoot
-TN3K & 614 & Best single (1) & 0.8010 (0.7636--0.8372) & 0.7261 (0.6593--0.7825) \\
- &  & Soft voting (2) & 0.8282 (0.7939--0.8633) & 0.7705 (0.7140--0.8220) \\
- &  & Majority (3) & 0.8144 (0.7791--0.8493) & 0.7571 (0.7016--0.8066) \\
- &  & Static rule (4) & 0.8113 (0.7758--0.8471) & 0.7375 (0.6724--0.7942) \\
- &  & Max-confidence (5) & 0.8113 (0.7758--0.8471) & 0.7375 (0.6724--0.7942) \\
- &  & Learned router (6) & 0.8141 (0.7782--0.8479) & 0.7591 (0.7019--0.8114) \\
- &  & Full ThyroidXAgent (7) & \routingsecond{0.8714 (0.8365--0.8963)} & \routingsecond{0.8544 (0.8014--0.8844)} \\
- &  & Oracle (8) & \routingbest{0.9015 (0.8716--0.9291)} & \routingbest{0.8622 (0.8113--0.9041)} \\
+TN3K & Best single (1) & 0.8010 (0.7636--0.8372) & 0.7261 (0.6593--0.7825) \\
+ & Soft voting (2) & 0.8282 (0.7939--0.8633) & 0.7705 (0.7140--0.8220) \\
+ & Majority (3) & 0.8144 (0.7791--0.8493) & 0.7571 (0.7016--0.8066) \\
+ & Static rule (4) & 0.8113 (0.7758--0.8471) & 0.7375 (0.6724--0.7942) \\
+ & Max-confidence (5) & 0.8113 (0.7758--0.8471) & 0.7375 (0.6724--0.7942) \\
+ & Learned router (6) & 0.8141 (0.7782--0.8479) & 0.7591 (0.7019--0.8114) \\
+ & Full ThyroidXAgent (7) & \routingsecond{0.8714 (0.8365--0.8963)} & \routingsecond{0.8544 (0.8014--0.8844)} \\
+ & Oracle (8) & \routingbest{0.9015 (0.8716--0.9291)} & \routingbest{0.8622 (0.8113--0.9041)} \\
 \midrule
-TN5K & 1000 & Best single (1) & 0.9509 (0.9352--0.9643) & 0.9800 (0.9726--0.9865) \\
- &  & Soft voting (2) & 0.9437 (0.9278--0.9589) & 0.9762 (0.9678--0.9838) \\
- &  & Majority (3) & 0.9462 (0.9306--0.9611) & 0.9772 (0.9691--0.9844) \\
- &  & Static rule (4) & 0.9512 (0.9362--0.9645) & \routingsecond{0.9801 (0.9725--0.9866)} \\
- &  & Max-confidence (5) & 0.9512 (0.9362--0.9645) & 0.9801 (0.9725--0.9866) \\
- &  & Learned router (6) & 0.9509 (0.9352--0.9643) & 0.9800 (0.9726--0.9865) \\
- &  & Full ThyroidXAgent (7) & \routingsecond{0.9584 (0.9432--0.9736)} & 0.9763 (0.9674--0.9832) \\
- &  & Oracle (8) & \routingbest{0.9800 (0.9694--0.9895)} & \routingbest{0.9909 (0.9852--0.9956)} \\
+TN5K & Best single (1) & 0.9509 (0.9352--0.9643) & 0.9800 (0.9726--0.9865) \\
+ & Soft voting (2) & 0.9437 (0.9278--0.9589) & 0.9762 (0.9678--0.9838) \\
+ & Majority (3) & 0.9462 (0.9306--0.9611) & 0.9772 (0.9691--0.9844) \\
+ & Static rule (4) & 0.9512 (0.9362--0.9645) & \routingsecond{0.9801 (0.9725--0.9866)} \\
+ & Max-confidence (5) & 0.9512 (0.9362--0.9645) & 0.9801 (0.9725--0.9866) \\
+ & Learned router (6) & 0.9509 (0.9352--0.9643) & 0.9800 (0.9726--0.9865) \\
+ & Full ThyroidXAgent (7) & \routingsecond{0.9584 (0.9432--0.9736)} & 0.9763 (0.9674--0.9832) \\
+ & Oracle (8) & \routingbest{0.9800 (0.9694--0.9895)} & \routingbest{0.9909 (0.9852--0.9956)} \\
 \midrule
-ThyroidXL & 2090 & Best single (1) & 0.9309 (0.9137--0.9455) & 0.9172 (0.8927--0.9394) \\
- &  & Soft voting (2) & 0.9359 (0.9202--0.9500) & 0.9199 (0.8957--0.9415) \\
- &  & Majority (3) & 0.9298 (0.9126--0.9440) & 0.9160 (0.8908--0.9380) \\
- &  & Static rule (4) & 0.9259 (0.9086--0.9415) & 0.9105 (0.8848--0.9335) \\
- &  & Max-confidence (5) & 0.9259 (0.9086--0.9415) & 0.9105 (0.8848--0.9335) \\
- &  & Learned router (6) & 0.9158 (0.8980--0.9319) & 0.8994 (0.8733--0.9226) \\
- &  & Full ThyroidXAgent (7) & \routingsecond{0.9680 (0.9614--0.9746)} & \routingsecond{0.9432 (0.9155--0.9691)} \\
- &  & Oracle (8) & \routingbest{0.9753 (0.9646--0.9844)} & \routingbest{0.9583 (0.9369--0.9767)} \\
+ThyroidXL & Best single (1) & 0.9309 (0.9137--0.9455) & 0.9172 (0.8927--0.9394) \\
+ & Soft voting (2) & 0.9359 (0.9202--0.9500) & 0.9199 (0.8957--0.9415) \\
+ & Majority (3) & 0.9298 (0.9126--0.9440) & 0.9160 (0.8908--0.9380) \\
+ & Static rule (4) & 0.9259 (0.9086--0.9415) & 0.9105 (0.8848--0.9335) \\
+ & Max-confidence (5) & 0.9259 (0.9086--0.9415) & 0.9105 (0.8848--0.9335) \\
+ & Learned router (6) & 0.9158 (0.8980--0.9319) & 0.8994 (0.8733--0.9226) \\
+ & Full ThyroidXAgent (7) & \routingsecond{0.9680 (0.9614--0.9746)} & \routingsecond{0.9432 (0.9155--0.9691)} \\
+ & Oracle (8) & \routingbest{0.9753 (0.9646--0.9844)} & \routingbest{0.9583 (0.9369--0.9767)} \\
 \midrule
-DDTI & 349 & Best single (1) & 0.7506 (0.6700--0.8257) & 0.6166 (0.5155--0.7686) \\
- &  & Soft voting (2) & 0.7537 (0.6707--0.8319) & 0.6470 (0.5389--0.8049) \\
- &  & Majority (3) & 0.6343 (0.5569--0.7176) & 0.4899 (0.4305--0.7020) \\
- &  & Static rule (4) & 0.7504 (0.6696--0.8254) & 0.7106 (0.6103--0.8636) \\
- &  & Max-confidence (5) & 0.7504 (0.6696--0.8254) & 0.7106 (0.6103--0.8636) \\
- &  & Learned router (6) & 0.7506 (0.6700--0.8257) & 0.7166 (0.6155--0.8686) \\
- &  & Full ThyroidXAgent (7) & \routingsecond{0.8032 (0.7391--0.8673)} & \routingsecond{0.7463 (0.6383--0.8543)} \\
- &  & Oracle (8) & \routingbest{0.9302 (0.8624--0.9855)} & \routingbest{0.9019 (0.8146--0.9716)} \\
+DDTI & Best single (1) & 0.7506 (0.6700--0.8257) & 0.6166 (0.5155--0.7686) \\
+ & Soft voting (2) & 0.7537 (0.6707--0.8319) & 0.6470 (0.5389--0.8049) \\
+ & Majority (3) & 0.6343 (0.5569--0.7176) & 0.4899 (0.4305--0.7020) \\
+ & Static rule (4) & 0.7504 (0.6696--0.8254) & 0.7106 (0.6103--0.8636) \\
+ & Max-confidence (5) & 0.7504 (0.6696--0.8254) & 0.7106 (0.6103--0.8636) \\
+ & Learned router (6) & 0.7506 (0.6700--0.8257) & 0.7166 (0.6155--0.8686) \\
+ & Full ThyroidXAgent (7) & \routingsecond{0.8032 (0.7391--0.8673)} & \routingsecond{0.7463 (0.6383--0.8543)} \\
+ & Oracle (8) & \routingbest{0.9302 (0.8624--0.9855)} & \routingbest{0.9019 (0.8146--0.9716)} \\
 \midrule
-ZJH-8K & 6807 & Best single (1) & 0.9572 (0.9529--0.9613) & 0.9671 (0.9628--0.9712) \\
- &  & Soft voting (2) & 0.9322 (0.9208--0.9423) & 0.9466 (0.9341--0.9576) \\
- &  & Majority (3) & 0.9460 (0.9408--0.9509) & 0.9581 (0.9531--0.9624) \\
- &  & Static rule (4) & 0.9544 (0.9502--0.9587) & 0.9656 (0.9614--0.9697) \\
- &  & Max-confidence (5) & 0.9544 (0.9502--0.9587) & 0.9656 (0.9614--0.9697) \\
- &  & Learned router (6) & 0.9572 (0.9496--0.9646) & 0.9671 (0.9590--0.9746) \\
- &  & Full ThyroidXAgent (7) & \routingsecond{0.9575 (0.9408--0.9742)} & \routingsecond{0.9711 (0.9705--0.9717)} \\
- &  & Oracle (8) & \routingbest{0.9863 (0.9839--0.9885)} & \routingbest{0.9896 (0.9874--0.9916)} \\
+ZJH-8K & Best single (1) & 0.9572 (0.9529--0.9613) & 0.9671 (0.9628--0.9712) \\
+ & Soft voting (2) & 0.9322 (0.9208--0.9423) & 0.9466 (0.9341--0.9576) \\
+ & Majority (3) & 0.9460 (0.9408--0.9509) & 0.9581 (0.9531--0.9624) \\
+ & Static rule (4) & 0.9544 (0.9502--0.9587) & 0.9656 (0.9614--0.9697) \\
+ & Max-confidence (5) & 0.9544 (0.9502--0.9587) & 0.9656 (0.9614--0.9697) \\
+ & Learned router (6) & 0.9572 (0.9496--0.9646) & 0.9671 (0.9590--0.9746) \\
+ & Full ThyroidXAgent (7) & \routingsecond{0.9575 (0.9408--0.9742)} & \routingsecond{0.9711 (0.9705--0.9717)} \\
+ & Oracle (8) & \routingbest{0.9863 (0.9839--0.9885)} & \routingbest{0.9896 (0.9874--0.9916)} \\
 \end{longtable}
 \responsetablenote{Fixed expert pool; AUROC / AUPRC point estimates and 95\% CIs; cluster bootstrap (1000 resamples, seed=42). Per cohort and metric: bold = best, underline = runner-up. Static rule (4) and max-confidence (5) are case-wise equivalent in every cohort listed, so the entries match. Static rule (4), classification: highest malignancy confidence among independent classifiers; tie-break lower prediction entropy. Strategies (1)--(5): operational definitions in Reviewer 1, Comment 2. Oracle (8): non-deployable per-case upper bound (Reviewer 1, Comment 2).}
 \end{responsepaginatedtable}

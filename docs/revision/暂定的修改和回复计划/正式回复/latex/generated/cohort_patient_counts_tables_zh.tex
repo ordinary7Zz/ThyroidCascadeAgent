@@ -1,0 +1,25 @@
+% Cohort image/patient counts (tab_cohort_patient_counts); sources: b2/cluster_maps, b1 excl manifest, b9/zjh_malignant_patient_split.json, ZJH-8K_BM_labels.json
+
+\begin{responsetable}
+\caption{\responsetabletitle{tab_cohort_patient_counts}{ZJH-8K 与 ThyroidXL 图像及患者规模}}
+\label{tab_cohort_patient_counts}
+\begin{adjustbox}{max width=\textwidth,center}
+\small
+\begin{tabular}{@{}llrrl@{}}
+\toprule
+队列 & 划分 / 子集 & 图像 & 患者 & 本回复用途 \\
+\midrule
+ZJH-8K & 全库（dHash 筛查） & 7958 & 1146 & \responsetableref{tab_dhash} \\
+ZJH-8K & 外测（剔除 TN3K train H=0） & 6807 & 1068 & \responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext}、\responsetableref{tab_patient_cls} \\
+ZJH-8K & 外测子集，患者标签良性 & 2774 & 421 & \responsetableref{tab_patient_cls} \\
+ZJH-8K & 外测子集，患者标签恶性 & 4033 & 647 & \responsetableref{tab_patient_cls} \\
+ZJH-8K & 恶性原发灶开发（LNM/FTC 共用） & 3227 & 517 & \responsetableref{tab_malig_oof} 五折 OOF \\
+ZJH-8K & 恶性原发灶 hold-out & 801 & 130 & \responsetableref{tab_malig_ext} \\
+\midrule
+ThyroidXL & train（OpenThyroid 开发） & 9441 & 3353 & 堆叠专家微调；非 R4 外测 \\
+ThyroidXL & test（官方外测） & 2090 & 739 & \responsetableref{tab_patient_cls} \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{ZJH 外测子集按患者标签良/恶性两行：患者标签 = 簇内各图像恶性标签 max，该患者全部图像计入对应行（与 \responsetableref{tab_patient_cls} 一致）。ZJH-8K 使用机构提供的可复现 patient ID（\texttt{P####}）；稿面登记 1149 例与可分析 map 1146 例之差在 Methods 说明（去标识/排除例）。外测 6807 图 = 全库剔除 \responsetableref{tab_dhash} 中 TN3K train 行 1151 张唯一 ZJH 图（2774+4033=6807）。恶性 hold-out 为 seed 42 按患者 20\% 划分（与 LNM、FTC/PTC 共用）；不含 LymphUs 淋巴结图。ThyroidXL train 患者数由官方 train 划分文件名解析。}
+\end{responsetable}

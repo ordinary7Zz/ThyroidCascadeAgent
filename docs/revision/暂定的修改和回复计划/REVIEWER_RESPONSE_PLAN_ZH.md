@@ -30,7 +30,7 @@
 | **R1.1** | 划分、去重、cluster CI、患者级 | **是**（图像侧） | ① **独立性**：**dHash** 筛查；堆叠 train↔ZJH **995** 对 H=0、TN5K test **38** 对、TN3K test↔ZJH **2** 对；② 仅 **ZJH、ThyroidXL** 可复现 patient ID；无 ID 队列 **一图一簇**；③ **患者级** AUROC/AUPRC（ZJH/ThyroidXL）；④ S3/S4 **cluster CI**（主系统 8 队列 + 基线 **58/58**，**DDTI_cls n=349**）；⑤ ZJH **敏感性**（剔除 992 train-matched 图）见 Supp. | `b1/B1_结论与回复素材.md` §三；`b2/conclusions/B2_结论与回复素材.md` | F6 **患者**重叠（可选）；近重复 **spot check** 10–20 对；1149 vs 1146 一句；**NHC** 未纳入 B2 |
 | **R1.2** | 路由消融 | **接近定稿** | OpenThyroid：**九队列**波次 1 + **策略 6 learned** 已齐。**NHC**：静态 1–5、8 + **learned 推理**（不在 NHC fit）；**策略 7 LLM = N/A**（托管机禁止 API，**非待补**） | `../b3/`；NHC 示例 `output/ablation/b3/nhc_prepared_sample/` | 全量 NHC 并入主表；配对差分 CI（可选） |
 | **R1.3** | NHC 异质性、校准、拒答 | **部分** | **B8（五 BM）**：validation **n=875**、95 分位定阈；外测 ECE/Brier + 送复核 **~44–48%**（**§12**）。**NHC 拒答**：同一 `abstention_thresholds.json` **eval only**（示例 0/10 flagged，*n*=10）。**B7**：示例 2 中心表 + *I*²（结节 Dice **98.5%**）见 **B7 专项**；全量 + G3 待替换 | `../b8/`；`eval_formal/`；**§17** | G3；全量 NHC；B8 结论文档刷新 |
-| **R1.4** | 数据流图、ZJH 用于 LNM/FTC | **是** | 专家未在 ZJH 训练；恶性子集仅 LNM/FTC；正式回信 **`fig_image_dataflow`**（`fig_image_dataflow.png`） | `正式回复/figures/fig_image_dataflow.png`；`b11_b12/DATAFLOW_*` | 修订稿 Supp. Fig. 编号；ZJH/TN3K 脚注可引 B1/F6 |
+| **R1.4** | 数据流图、ZJH 用于 LNM/FTC | **是** | 专家未在 ZJH 训练；恶性子集仅 LNM/FTC；正式回信 **`fig_image_dataflow`**（`image_analysis_dataflow.png`） | `正式回复/figures/image_analysis_dataflow.png`；`b11_b12/DATAFLOW_*` | 修订稿 Supp. Fig. 编号；ZJH/TN3K 脚注可引 B1/F6 |
 | **R1 代码** | 回顾性、可部署性（**图像侧主张**） | **部分** | 弱化「广泛可部署」；强调回顾性与可审计统计（B1/B2） | B1/B2 叙事 | 全文代码发布（G4，非 B 包） |
 
 ---

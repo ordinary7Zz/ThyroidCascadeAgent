@@ -44,6 +44,18 @@ export RUN_TAG=zjh20261101
 
 输出根目录：`docs/revision/b9/runs/models_${RUN_TAG}/`（见 `_lib.sh` 中 `OUT_ROOT`）。
 
+### 默认训练 epoch（每次 `fit`）
+
+在 `env_malig_b9.sh` 中定义，各 `run_<model>.sh` 通过 `_lib.sh` 生效：
+
+| 脚本 | 默认 epoch/次 | 环境变量 |
+|------|----------------|----------|
+| `run_repvit.sh` / `run_lsnet.sh` / `run_ultrafedfm.sh` | **10** | `BASELINE_EPOCHS`；RepViT/LSNet：`Classification_Models/{RepViT,lsnet}/scripts/mytrain_{LNMCN01,FTCPTC}.sh`；UltraFedFM：`UltraFedFM/scripts/my_class_pretrain_{LNMCN01,FTCPTC}.sh`（LNM、FTC 均为 10） |
+| `run_medgemma.sh` / `run_qwen3.sh` | **3** | `VLM_EPOCHS`（与 `medgemma_thyroid_binary_train.py` / `qwen3_vl_thyroid_binary_train.py` 默认一致） |
+| `run_llnm_net.sh` | **30** | `EPOCHS` 或 `SPECIALIST_EPOCHS`（全量 + OOF 各折） |
+| `run_tiger_model.sh` | **30** | `NUM_EPOCHS` 或 `SPECIALIST_EPOCHS`（全量 ResNet + OOF 各折） |
+| `run_thyroidxagent.sh` | **30** | `EPOCHS` 或 `SPECIALIST_EPOCHS`（DINO 五折 OOF，每任务 5 折） |
+
 ### 各模型运行命令
 
 在仓库根目录 `ThyroidCascadeAgent` 下执行（先设置 `CUDA_VISIBLE_DEVICES`、`RUN_TAG`）：

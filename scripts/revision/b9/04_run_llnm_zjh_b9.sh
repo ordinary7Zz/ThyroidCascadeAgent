@@ -14,7 +14,7 @@ for arg in "$@"; do
   [[ "$arg" == "--smoke" ]] && SMOKE=1
 done
 
-EPOCHS="${EPOCHS:-50}"
+EPOCHS="${EPOCHS:-${SPECIALIST_EPOCHS:-30}}"
 N_SPLITS="${N_SPLITS:-5}"
 BATCH_SIZE="${BATCH_SIZE:-4}"
 LR="${LEARNING_RATE:-1e-5}"

@@ -11,6 +11,14 @@ CV_PY="$B9_SCRIPT_DIR/run_baseline_cv.py"
 
 OUT_ROOT="${OUT_ROOT:-$REPO_ROOT/docs/revision/b9/runs/models_${RUN_TAG}}"
 
+baseline_epochs_for_model() {
+  local model="$1"
+  case "$model" in
+    medgemma | qwen3) echo "${VLM_EPOCHS:-3}" ;;
+    *) echo "${BASELINE_EPOCHS:-10}" ;;
+  esac
+}
+
 ensure_shared_folds() {
   if [[ -f "$SHARED_LNM/fold_manifest.json" && -f "$SHARED_FTC/fold_manifest.json" ]]; then
     return 0
@@ -28,8 +36,9 @@ run_baseline_full_task() {
   local dai_manifest="${6:-}"
   local skip_train="${7:-0}"
   local out_dir="$OUT_ROOT/$model/$task/full_external"
-  echo ""
-  echo ">>> [$model/$task] full train + ZJH hold-out${dai_manifest:+ + Dai}$([[ "$skip_train" == "1" ]] && echo ' (skip_train)')"
+  local ep
+  ep="$(baseline_epochs_for_model "$model")"
+  echo ">>> [$model/$task] full train + ZJH hold-out${dai_manifest:+ + Dai}$([[ "$skip_train" == "1" ]] && echo ' (skip_train)') epochs=$ep"
   mkdir -p "$out_dir"
   local -a dai_args=()
   if [[ -n "$dai_manifest" && -f "$dai_manifest" ]]; then
@@ -46,6 +55,7 @@ run_baseline_full_task() {
     --train_manifest "$train_manifest" \
     --zjh_test_manifest "$test_manifest" \
     --output_dir "$out_dir" \
+    --epochs "$ep" \
     --cuda_device "$CUDA_DEVICE" \
     --seed "$CV_SEED" \
     "${skip_args[@]}" \
@@ -74,10 +84,11 @@ run_baseline_oof_both_tasks() {
   export MODELS="$model"
   export TASKS="lnm ftcptc"
   export CUDA_DEVICE
+  export EPOCHS="${BASELINE_EPOCHS:-10}"
   export PHASE="${PHASE:-all}"
   export SKIP_IF_CV_SUMMARY="${SKIP_IF_CV_SUMMARY:-0}"
   echo ""
-  echo ">>> [$model] 5-fold OOF (LNM + FTC/PTC)"
+  echo ">>> [$model] 5-fold OOF (LNM + FTC/PTC), EPOCHS=$EPOCHS"
   mkdir -p "$RUNS_ROOT"
   cd "$B9_OOF_ROOT"
   bash scripts/run_all_baselines_cv.sh
@@ -94,7 +105,7 @@ run_llnm_full_zjh() {
     --image_roots_json "$LNM_PACK/image_roots.json" \
     --output_dir "$out" \
     --batch_size "${BATCH_SIZE:-4}" \
-    --epochs "${EPOCHS:-50}" \
+    --epochs "${EPOCHS:-${SPECIALIST_EPOCHS:-30}}" \
     --learning_rate "${LEARNING_RATE:-1e-5}" \
     --device "${DEVICE:-cuda}"
   "$PYTHON" new_code/evaluate.py \
@@ -117,15 +128,16 @@ run_llnm_oof() {
     --output_dir "$out" \
     --n_splits "$N_SPLITS" \
     --batch_size "${BATCH_SIZE:-4}" \
-    --epochs "${EPOCHS:-50}" \
+    --epochs "${EPOCHS:-${SPECIALIST_EPOCHS:-30}}" \
     --learning_rate "${LEARNING_RATE:-1e-5}" \
     --device "${DEVICE:-cuda}"
 }
 
 run_tiger_full_zjh() {
   echo ""
-  echo ">>> [Tiger-Model/FTC] step 1: full train + ZJH hold-out"
+  echo ">>> [Tiger-Model/FTC] step 1: full train + ZJH hold-out (NUM_EPOCHS=${NUM_EPOCHS:-${SPECIALIST_EPOCHS:-30}})"
   cd "$TIGER_ROOT"
+  NUM_EPOCHS="${NUM_EPOCHS:-${SPECIALIST_EPOCHS:-30}}" \
   EXPORT_ZJH="$OUT_ROOT/tiger_model/ftcptc/full_external/zjh_test" \
   EXTERNAL_STEP=zjh \
   bash "$B9_SCRIPT_DIR/06_run_tiger_ftc_external.sh"
@@ -143,8 +155,9 @@ run_tiger_dai_only() {
 
 run_tiger_oof() {
   echo ""
-  echo ">>> [Tiger-Model/FTC] 5-fold OOF"
+  echo ">>> [Tiger-Model/FTC] 5-fold OOF (NUM_EPOCHS=${NUM_EPOCHS:-${SPECIALIST_EPOCHS:-30}})"
   cd "$TIGER_ROOT"
+  NUM_EPOCHS="${NUM_EPOCHS:-${SPECIALIST_EPOCHS:-30}}" \
   OUTPUT_DIR="$OUT_ROOT/tiger_model/ftcptc/oof" \
   JSON_PATH="$MANIFEST_ZJH_TRAIN_FTC" \
   bash "$B9_SCRIPT_DIR/05_run_tiger_ftc_b9.sh"
@@ -152,8 +165,8 @@ run_tiger_oof() {
 
 run_txagent_oof_both() {
   echo ""
-  echo ">>> [ThyroidXAgent] DINO multitask 5-fold OOF (LNM + FTC)"
-  RUN_TAG="$RUN_TAG" TASKS="lnm ftcptc" \
+  echo ">>> [ThyroidXAgent] DINO multitask 5-fold OOF (LNM + FTC), EPOCHS=${EPOCHS:-${SPECIALIST_EPOCHS:-30}}"
+  RUN_TAG="$RUN_TAG" TASKS="lnm ftcptc" EPOCHS="${EPOCHS:-${SPECIALIST_EPOCHS:-30}}" \
   bash "$B9_SCRIPT_DIR/03_run_dino_multitask_oof.sh"
 }
 

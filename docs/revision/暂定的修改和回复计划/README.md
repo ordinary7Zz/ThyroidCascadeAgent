@@ -42,7 +42,7 @@
 | **B9** | R2.10–12；S5 灰底 | [`../b9/B9_ThyroidXAgent_修改与回复计划.md`](../b9/B9_ThyroidXAgent_修改与回复计划.md) | **§16**；`REVIEWER` **B9 专项** |
 | **B10** | R2.14 | `../b10/B10_结论与回复素材.md` | **§10**；`REVIEWER` **B10 专项** |
 | **B11** | R2.20–21 | `../b11_b12/`；`docs/reproducibility_radiomics.md` | **§8.3–§8.4** |
-| **B12** | R2.7, R2.1, R2.3, R1.4 | `../b11_b12/README.md`；回信 **`fig_image_dataflow`** `正式回复/figures/fig_image_dataflow.png` | **§8–§9**；`REVIEWER` B12 专项 |
+| **B12** | R2.7, R2.1, R2.3, R1.4 | `../b11_b12/README.md`；回信 **`fig_image_dataflow`** `正式回复/figures/image_analysis_dataflow.png` | **§8–§9**；`REVIEWER` B12 专项 |
 
 **修改/回复计划中的对应位置**：进行中 **B5** → **§14** + **B5 专项**（TN5K；**无 NHC 热图**—托管机无 LLM）；进行中 **B7** → **§17** + **B7 专项** + R1.3/R2.6（B8 校准/拒答与 NHC 异质性分条）。
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# MedGemma: (1) full+ZJH both tasks, (2) Dai FTC — no step 3 (5-fold OOF)
+# MedGemma: (1) full+ZJH both tasks, (2) Dai FTC — no step 3; VLM_EPOCHS=3
 set -euo pipefail
 source "$(dirname "$0")/_lib.sh"
-
+export VLM_EPOCHS="${VLM_EPOCHS:-3}"
 run_baseline_full_zjh_both_tasks medgemma
 run_baseline_dai_ftc medgemma
 

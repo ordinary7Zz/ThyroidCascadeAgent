@@ -44,6 +44,12 @@ DEV_CLS = (
     "(ResNet-50 / DINO multitask: dataset_3 with JSON, same image count)"
 )
 
+INFERENCE_INPUT_LABELS = {
+    "image_only": "US image only (reference masks for metric evaluation only)",
+    "image_full_box_prompt": "US image + full-image box prompt (no GT at inference)",
+    "gt_mask": "US image + GT box/mask for expert (gt_mask)",  # legacy manifests
+}
+
 UPSTREAM: dict[tuple[str, str], str] = {
     ("TransUNet", "segmentation"): "ImageNet-21k ViT-B/16 (TransUNet default)",
     ("MedSAM2", "segmentation"): "SAM2.1 Hiera pretrained",
@@ -141,9 +147,19 @@ def load_export_rows() -> list[dict]:
         dev = DEV_SEG if task == "segmentation" else DEV_CLS
         inf = m.get("inference_input", "")
         if task == "segmentation":
-            inf_note = "US image + GT box/mask for expert (gt_mask)" if inf == "gt_mask" else inf
+            inf_note = INFERENCE_INPUT_LABELS.get(inf, inf)
+            if inf == "gt_mask":
+                model = m.get("model_id", "")
+                if model in ("MedSAM2", "MedSegX"):
+                    inf_note = INFERENCE_INPUT_LABELS["image_full_box_prompt"]
+                elif model in ("TransUNet", "UltraFedFM"):
+                    inf_note = INFERENCE_INPUT_LABELS["image_only"]
         else:
-            inf_note = "US image (image_only)" if inf == "image_only" else inf
+            inf_note = (
+                INFERENCE_INPUT_LABELS["image_only"]
+                if inf == "image_only"
+                else inf
+            )
         rows.append(
             {
                 "model": model,

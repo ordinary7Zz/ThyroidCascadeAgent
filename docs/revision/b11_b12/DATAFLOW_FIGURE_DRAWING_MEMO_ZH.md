@@ -2,7 +2,7 @@
 
 > 整理自返修讨论（R1.4 / R3.3 / R2.3、版式、风格、分工）。  
 > 与 [`DATAFLOW_FIGURE_PLAN.md`](DATAFLOW_FIGURE_PLAN.md)（Mermaid 五泳道、队列数字）互补：本文侧重**审稿人意图、双 panel 策略、视觉风格、组件定义、协作边界**。  
-> 回信：**图 R3**（`fig_image_dataflow`）；原文字版表 `tab_dataflow` 已删除。真源 PNG：`暂定的修改和回复计划/pictures/` 与 `正式回复/figures/fig_image_dataflow.png`。
+> 回信：**图 R3**（`fig_image_dataflow`）；原文字版表 `tab_dataflow` 已删除。真源 PNG：`正式回复/figures/image_analysis_dataflow.png`（设计稿可另存于 `暂定的修改和回复计划/pictures/`）。
 
 ---
 

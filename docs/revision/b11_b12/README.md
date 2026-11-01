@@ -76,7 +76,7 @@ python scripts/revision/b11/analyze_r2_20_small_nodules.py \
 - [ ] **S9**：SMU-HMC、KMVE、ZJH-TS、TNVideo、模板库划分。
 - [ ] **B8**：拒答阈值 `abstention_thresholds.json`（验证集 fit）→ 图中标注。
 - [ ] **主结果 config 快照**：投稿 LLM 路由 vs `nhc_no_llm_primary` 需在图中区分 S4 与 NHC 部署假设。
-- [x] **正式回信图 R3**（`暂定的修改和回复计划/正式回复/figures/fig_image_dataflow.png`；LaTeX `fig_image_dataflow`）。
+- [x] **正式回信图 R3**（`暂定的修改和回复计划/正式回复/figures/image_analysis_dataflow.png`；LaTeX `fig_image_dataflow`）。
 - [ ] **修订稿 Fig.1 / Supp. 数据流** 最终版式与编号（G2；可与 S9 合并）。
 
 ## 回复信素材

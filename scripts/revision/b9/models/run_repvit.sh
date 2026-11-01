@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-# RepViT: (1) full+ZJH LNM & FTC, (2) Dai FTC, (3) 5-fold OOF both tasks
+# RepViT LNM + FTC/PTC: (1) full+ZJH, (2) Dai, (3) 5-fold OOF
+# Train hparams: Classification_Models/RepViT/scripts/mytrain_LNMCN01.sh &
+#   mytrain_FTCPTC.sh → --epochs 10, batch-size 16
 set -euo pipefail
 # shellcheck source=_lib.sh
 source "$(dirname "$0")/_lib.sh"
+export BASELINE_EPOCHS="${BASELINE_EPOCHS:-10}"
 
 run_baseline_full_zjh_both_tasks repvit
 run_baseline_dai_ftc repvit

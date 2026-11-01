@@ -50,7 +50,7 @@
 
 | 修改点 | 建议 | 依据 | 就绪度 |
 |--------|------|------|--------|
-| 数据层级与流程图（**图像侧，B12**） | Fig.1 / Supp. 需按组件划分 train/val/test | 手绘定稿已入正式回信 **`fig_image_dataflow`**（`正式回复/figures/fig_image_dataflow.png`）；Mermaid 见 `b11_b12/` | **统稿**（修订稿 Supp. 编号与图注；B1 节点待 F6） |
+| 数据层级与流程图（**图像侧，B12**） | Fig.1 / Supp. 需按组件划分 train/val/test | 手绘定稿已入正式回信 **`fig_image_dataflow`**（`正式回复/figures/image_analysis_dataflow.png`）；Mermaid 见 `b11_b12/` | **统稿**（修订稿 Supp. 编号与图注；B1 节点待 F6） |
 | ZJH-8K 定位 | **主结果**全量 **7958 图 / 1146 患者**；同院 TN3K 用 **dHash 图级重复** 表述（train↔ZJH **995** 对 H=0；TN3K test↔ZJH **2** 对 H=0）；**患者交集**仍待 F6（可选 Limitation） | `b1/B1_结论与回复素材.md`；`b1/tables/near_duplicates.json` | **可改**+**待协作**（F6 可选） |
 | DDTI_cls 规模 | 分类外测 **n=349**（`DDTI_Classification/all/` + 标签 JSON）；勿与 `test/` 子目录 ~53 图混用；与 **DDTI_seg 637** 分任务叙述 | B1；`b2/tables/ddti_cls_b2.json` | **可改** |
 | 训练–外测独立性（B1） | **主审计：dHash**（64-bit，H≤5）；**勿**写 stem=0 证明无泄漏（跨库命名无鉴别力）；stem JSON 仅仓库自检 | `scripts/revision/b1/audit_near_duplicates.py`；`b1/tables/train_test_overlap.json` | **可改** |
@@ -267,7 +267,7 @@
 
 | 项目 | 动作 | 就绪度 |
 |------|------|--------|
-| 图像侧数据流 | **回信`fig_image_dataflow` 已定稿**（`正式回复/figures/fig_image_dataflow.png`）；设计见 `DATAFLOW_FIGURE_PLAN.md` / `DATAFLOW_FIGURE_DRAWING_MEMO_ZH.md` | **统稿**（修订稿 Supp. Fig. 编号与图注） |
+| 图像侧数据流 | **回信`fig_image_dataflow` 已定稿**（`正式回复/figures/image_analysis_dataflow.png`）；设计见 `DATAFLOW_FIGURE_PLAN.md` / `DATAFLOW_FIGURE_DRAWING_MEMO_ZH.md` | **统稿**（修订稿 Supp. Fig. 编号与图注） |
 | 与 S9 合并全文 Fig.1 | 共同作者协调；**不阻塞** B12 文字条目 | 可选 |
 
 ### 8.6 回复信策略（R2.20，含 5 mm）— 不写英文全文，仅逻辑

@@ -82,6 +82,7 @@ if [[ "$EXTERNAL_STEP" == "zjh" || "$EXTERNAL_STEP" == "both" ]]; then
   SKIP_DATA="${SKIP_DATA:-0}" \
   SKIP_EVAL="${SKIP_EVAL:-0}" \
   SEED="$CV_SEED" \
+  NUM_EPOCHS="${NUM_EPOCHS:-${SPECIALIST_EPOCHS:-30}}" \
   bash new_code/run_ftcptc_paper_pipeline.sh
 fi
 

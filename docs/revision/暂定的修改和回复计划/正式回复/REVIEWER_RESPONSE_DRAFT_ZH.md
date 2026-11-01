@@ -331,7 +331,7 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 
 ## `fig_image_dataflow`. 图像分析数据流（开发、验证与外部测试）
 
-![Image-analysis data flow across development, validation, and external testing](figures/fig_image_dataflow.png)
+![Image-analysis data flow across development, validation, and external testing](figures/image_analysis_dataflow.png)
 
 *图例：* 左开发池、中共享流水线、右外测与 ZJH 双重角色。
 

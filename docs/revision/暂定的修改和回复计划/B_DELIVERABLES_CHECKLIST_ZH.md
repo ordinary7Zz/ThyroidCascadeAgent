@@ -175,7 +175,7 @@
 
 | 类别 | 必交付项 | 稿内位置 | 仓库入口 | 状态 |
 |------|----------|----------|----------|------|
-| **主图/补图** | **图像臂**数据流（train/val/test 按组件；阈值在哪定） | **Fig.1** / Supp.（修订稿）；回信 **`fig_image_dataflow`** | `正式回复/figures/fig_image_dataflow.png`；`../b11_b12/DATAFLOW_*` | ✅ 回信已定稿；修订稿统稿待 |
+| **主图/补图** | **图像臂**数据流（train/val/test 按组件；阈值在哪定） | **Fig.1** / Supp.（修订稿）；回信 **`fig_image_dataflow`** | `正式回复/figures/image_analysis_dataflow.png`；`../b11_b12/DATAFLOW_*` | ✅ 回信已定稿；修订稿统稿待 |
 | **文** | 五队列 **无权重宏平均** AUROC/AUPRC；修正摘要/§2.2 旧「均值」 | Abstract；Results §2.2 | `../b11_b12/README.md` | ✅ 数字 |
 | **文** | 28,458 **分层计数**（图像侧能写的先写） | Abstract；§2.1 | B1 + B12 计划 | 🟡 |
 | **回** | R1.4、R2.1、R2.3、R2.7 | 回复信 | b11_b12 | 🟡 |

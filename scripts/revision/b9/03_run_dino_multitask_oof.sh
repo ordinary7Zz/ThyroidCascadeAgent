@@ -10,7 +10,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/env_malig_b9.sh"
 
 TASKS="${TASKS:-lnm ftcptc}"
-EPOCHS="${EPOCHS:-100}"
+EPOCHS="${EPOCHS:-${SPECIALIST_EPOCHS:-30}}"
 MAX_FOLDS="${MAX_FOLDS:-}"
 DRY_RUN="${DRY_RUN:-0}"
 

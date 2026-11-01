@@ -36,7 +36,7 @@
       "thyroid_development_set": "OpenThyroid stacked seg development: dataset_4 (TN3K + ThyroidXL + PKTN + TN5K); train under train_val_test/Superimposed_experiment/dataset_4/train",
       "model_selection_split": "Publisher train/val within stacked dev (per model script)",
       "checkpoint_for_tables": "./infer_medsam2/checkpoints/Nodule/checkpoint_15.pt",
-      "inference_input": "US image + GT box/mask for expert (gt_mask)",
+      "inference_input": "US image + full-image box prompt (no GT at inference)",
       "notes": "Exported eval: my_Thyroid_Infer; metrics in b2_exports/MedSAM2/",
       "in_s3_s4_baseline_export": true,
       "manifest_example": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/MedSAM2/ddti_seg_seg_nodule/manifest.json"
@@ -49,7 +49,7 @@
       "thyroid_development_set": "OpenThyroid stacked seg development: dataset_4 (TN3K + ThyroidXL + PKTN + TN5K); train under train_val_test/Superimposed_experiment/dataset_4/train",
       "model_selection_split": "Publisher train/val within stacked dev (per model script)",
       "checkpoint_for_tables": "./infer_medsegx/checkpoints/Nodule/model_best.pth",
-      "inference_input": "US image + GT box/mask for expert (gt_mask)",
+      "inference_input": "US image + full-image box prompt (no GT at inference)",
       "notes": "Exported eval: my_Thyroid_Infer; metrics in b2_exports/MedSegX/",
       "in_s3_s4_baseline_export": true,
       "manifest_example": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/MedSegX/ddti_seg_seg_nodule/manifest.json"
@@ -101,7 +101,7 @@
       "thyroid_development_set": "OpenThyroid stacked seg development: dataset_4 (TN3K + ThyroidXL + PKTN + TN5K); train under train_val_test/Superimposed_experiment/dataset_4/train",
       "model_selection_split": "Publisher train/val within stacked dev (per model script)",
       "checkpoint_for_tables": "./infer_transunet/checkpoints/Nodule/epoch_49.pth",
-      "inference_input": "US image + GT box/mask for expert (gt_mask)",
+      "inference_input": "US image only (reference masks for metric evaluation only)",
       "notes": "Exported eval: my_Thyroid_Infer; metrics in b2_exports/TransUNet/",
       "in_s3_s4_baseline_export": true,
       "manifest_example": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/TransUNet/ddti_seg_seg_nodule/manifest.json"
@@ -127,7 +127,7 @@
       "thyroid_development_set": "OpenThyroid stacked seg development: dataset_4 (TN3K + ThyroidXL + PKTN + TN5K); train under train_val_test/Superimposed_experiment/dataset_4/train",
       "model_selection_split": "Publisher train/val within stacked dev (per model script)",
       "checkpoint_for_tables": "./infer_ultrafedfm/checkpoints/Nodule/epoch_bestDice.pth",
-      "inference_input": "US image + GT box/mask for expert (gt_mask)",
+      "inference_input": "US image only (reference masks for metric evaluation only)",
       "notes": "Exported eval: my_Thyroid_Infer; metrics in b2_exports/UltraFedFM/",
       "in_s3_s4_baseline_export": true,
       "manifest_example": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/UltraFedFM/ddti_seg_seg_nodule/manifest.json"

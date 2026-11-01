@@ -33,3 +33,9 @@ CUDA_DEVICE="${CUDA_DEVICE:-0}"
 PYTHON="${PYTHON:-python3}"
 
 RUN_TAG="${RUN_TAG:-zjh20261101}"
+
+# Training epochs (override per run: export BASELINE_EPOCHS=… / VLM_EPOCHS=… / …)
+# RepViT/LSNet/UltraFedFM B9: 10 — see Classification_Models/.../mytrain_*.sh & UltraFedFM/scripts/my_class_pretrain_*.sh
+BASELINE_EPOCHS="${BASELINE_EPOCHS:-10}"   # RepViT, LSNet, UltraFedFM
+VLM_EPOCHS="${VLM_EPOCHS:-3}"             # MedGemma, Qwen3-VL (matches train.py default)
+SPECIALIST_EPOCHS="${SPECIALIST_EPOCHS:-30}"  # LLNM-Net, Tiger-Model, ThyroidXAgent DINO

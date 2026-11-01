@@ -9,7 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=../env_malig_b9.sh
 source "$SCRIPT_DIR/../env_malig_b9.sh"
 
-NUM_EPOCHS="${NUM_EPOCHS:-50}"
+NUM_EPOCHS="${NUM_EPOCHS:-${SPECIALIST_EPOCHS:-30}}"
 EXPORT_DAI="${EXPORT_DAI:-$TIGER_ROOT/export_results/revision_${RUN_TAG}_fangdai}"
 EXPORT_ZJH="${EXPORT_ZJH:-$TIGER_ROOT/export_results/revision_${RUN_TAG}_zjh_test}"
 OUT_CV="$TIGER_ROOT/new_code/runs/revision_${RUN_TAG}_ftc_cv"
