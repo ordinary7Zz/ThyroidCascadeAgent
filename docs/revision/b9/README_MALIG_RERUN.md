@@ -36,7 +36,7 @@ export RUN_TAG=zjh20261101
 | ------------------------------------------------------------ | ----------------------------------------------------- |
 | `run_repvit.sh` / `run_lsnet.sh` / `run_ultrafedfm.sh` | 步骤 1–3                                             |
 | `run_medgemma.sh` / `run_qwen3.sh`                       | 步骤 1–2                                             |
-| `run_llnm_net.sh`                                          | 步骤 1 + 3（LNM）                                     |
+| `run_llnm_net.sh`                                          | 步骤 1 + 3（LNM）；可选 `SKIP_STEP1` / `SKIP_FULL_TRAIN` / `SKIP_ZJH_EVAL` / `SKIP_OOF` / `SKIP_IF_CV_SUMMARY` |
 | `run_tiger_model.sh`                                       | 步骤 1–3（FTC；Tiger ResNet 流水线）                 |
 | `run_thyroidxagent.sh`                                     | 步骤 3（DINO OOF）；步骤 1–2 为 Cascade 全栈占位说明 |
 | `run_gpt5.sh` / `run_gemini.sh`                          | API 占位（无本地训练 / 无 OOF）                       |
@@ -72,6 +72,8 @@ bash scripts/revision/b9/models/run_qwen3.sh
 
 # 专用模型
 bash scripts/revision/b9/models/run_llnm_net.sh
+# 全量已训完，只补五折 OOF：
+SKIP_STEP1=1 bash scripts/revision/b9/models/run_llnm_net.sh
 bash scripts/revision/b9/models/run_tiger_model.sh
 bash scripts/revision/b9/models/run_thyroidxagent.sh
 

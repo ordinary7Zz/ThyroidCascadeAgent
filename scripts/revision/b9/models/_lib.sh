@@ -96,18 +96,44 @@ run_baseline_oof_both_tasks() {
 
 run_llnm_full_zjh() {
   local out="$OUT_ROOT/llnm_net/lnm/full_train"
-  echo ""
-  echo ">>> [LLNM-Net/LNM] full train + ZJH hold-out"
+  local skip_step1="${SKIP_STEP1:-0}"
+  local skip_train="${SKIP_FULL_TRAIN:-0}"
+  local skip_eval="${SKIP_ZJH_EVAL:-0}"
+
+  if [[ "$skip_step1" == "1" ]]; then
+    echo ""
+    echo ">>> [LLNM-Net/LNM] step 1 skipped (SKIP_STEP1=1)"
+    return 0
+  fi
+
   cd "$LLNM_ROOT"
-  "$PYTHON" new_code/train.py \
-    --train_json "$MANIFEST_ZJH_TRAIN_LNM" \
-    --test_json "$MANIFEST_ZJH_TEST_LNM" \
-    --image_roots_json "$LNM_PACK/image_roots.json" \
-    --output_dir "$out" \
-    --batch_size "${BATCH_SIZE:-4}" \
-    --epochs "${EPOCHS:-${SPECIALIST_EPOCHS:-30}}" \
-    --learning_rate "${LEARNING_RATE:-1e-5}" \
-    --device "${DEVICE:-cuda}"
+  if [[ "$skip_train" != "1" ]]; then
+    echo ""
+    echo ">>> [LLNM-Net/LNM] full train + ZJH hold-out (monitor zjh_test during training)"
+    "$PYTHON" new_code/train.py \
+      --train_json "$MANIFEST_ZJH_TRAIN_LNM" \
+      --test_json "$MANIFEST_ZJH_TEST_LNM" \
+      --image_roots_json "$LNM_PACK/image_roots.json" \
+      --output_dir "$out" \
+      --batch_size "${BATCH_SIZE:-4}" \
+      --epochs "${EPOCHS:-${SPECIALIST_EPOCHS:-30}}" \
+      --learning_rate "${LEARNING_RATE:-1e-5}" \
+      --device "${DEVICE:-cuda}"
+  else
+    echo ""
+    echo ">>> [LLNM-Net/LNM] full train skipped (SKIP_FULL_TRAIN=1)"
+    if [[ ! -f "$out/best_model.pth" || ! -f "$out/train_norm_stats.pkl" ]]; then
+      echo "ERROR: missing $out/best_model.pth or train_norm_stats.pkl (cannot skip train)" >&2
+      exit 1
+    fi
+  fi
+
+  if [[ "$skip_eval" == "1" ]]; then
+    echo ">>> [LLNM-Net/LNM] ZJH hold-out eval skipped (SKIP_ZJH_EVAL=1)"
+    return 0
+  fi
+
+  echo ">>> [LLNM-Net/LNM] ZJH hold-out eval"
   "$PYTHON" new_code/evaluate.py \
     --test_json "$MANIFEST_ZJH_TEST_LNM" \
     --image_roots_json "$LNM_PACK/image_roots.json" \
@@ -119,8 +145,18 @@ run_llnm_full_zjh() {
 
 run_llnm_oof() {
   local out="$OUT_ROOT/llnm_net/lnm/oof"
+  if [[ "${SKIP_OOF:-0}" == "1" ]]; then
+    echo ""
+    echo ">>> [LLNM-Net/LNM] 5-fold OOF skipped (SKIP_OOF=1)"
+    return 0
+  fi
+  if [[ "${SKIP_IF_CV_SUMMARY:-0}" == "1" && -f "$out/cv_summary.json" ]]; then
+    echo ""
+    echo ">>> [LLNM-Net/LNM] 5-fold OOF skipped (existing $out/cv_summary.json, SKIP_IF_CV_SUMMARY=1)"
+    return 0
+  fi
   echo ""
-  echo ">>> [LLNM-Net/LNM] 5-fold OOF"
+  echo ">>> [LLNM-Net/LNM] 5-fold OOF → $out"
   cd "$LLNM_ROOT"
   "$PYTHON" new_code/run_b9_patient_cv.py \
     --train_manifest "$MANIFEST_ZJH_TRAIN_LNM" \

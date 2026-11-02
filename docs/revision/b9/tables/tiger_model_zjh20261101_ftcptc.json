@@ -1,0 +1,79 @@
+{
+  "model": "Tiger-Model",
+  "run_tag": "zjh20261101",
+  "task": "ftcptc",
+  "sources": {
+    "oof_cv_summary": "/mnt/wangbd8/workspace/ThyroidAgent/Tiger-Model/new_code/runs/revision_zjh20261101_ftc_cv/cv_summary.json",
+    "zjh_predictions": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b9/runs/models_zjh20261101/tiger_model/ftcptc/full_external/zjh_test/zjh_test_predictions.json",
+    "dai_predictions": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b9/runs/models_zjh20261101/tiger_model/ftcptc/full_external/dai/fangdai_external_test_predictions.json",
+    "canonical_out_root": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b9/runs/models_zjh20261101/tiger_model"
+  },
+  "tab_malig_oof": {
+    "level": "patient",
+    "AUROC": {
+      "point": 0.4997896154169822,
+      "ci95": [
+        0.41175813235092157,
+        0.5918392491664989
+      ]
+    },
+    "AUPRC": {
+      "point": 0.10971263702298045,
+      "ci95": [
+        0.07537479622358859,
+        0.17018738685768933
+      ]
+    }
+  },
+  "tab_malig_ext_zjh": {
+    "level": "patient",
+    "aggregation": "mean_prob",
+    "AUROC": {
+      "point": 0.4608809993425378,
+      "ci95": [
+        0.2957980225988701,
+        0.6329901967784315
+      ]
+    },
+    "AUPRC": {
+      "point": 0.16580668980684368,
+      "ci95": [
+        0.055026056351817856,
+        0.3499676642659373
+      ]
+    }
+  },
+  "tab_ftcptc_ext_dai": {
+    "level": "patient",
+    "aggregation": "fangdai::B_<id> case cluster (B9 patient_id_from_record); Tiger recomputed from predictions",
+    "AUROC": {
+      "point": 0.9336959336959336,
+      "ci95": [
+        0.8886254769583078,
+        0.9711517000123228
+      ]
+    },
+    "AUPRC": {
+      "point": 0.8651552187479019,
+      "ci95": [
+        0.7691558145403342,
+        0.9457072352796035
+      ]
+    },
+    "note": "Baselines from external_summary dai_test.patient_level; Tiger was wrongly image-level in export — aligned to B9 clustering (138 patients)."
+  },
+  "latex_cells": {
+    "tab_malig_oof_tiger_ftc": {
+      "AUROC": "$0.4998 \\pm 0.092$",
+      "AUPRC": "$0.1097 \\pm 0.0605$"
+    },
+    "tab_malig_ext_tiger_ftc": {
+      "AUROC": "$0.4609 \\pm 0.1721$",
+      "AUPRC": "$0.1658 \\pm 0.1842$"
+    },
+    "tab_ftcptc_ext_dai_tiger": {
+      "AUROC": "$0.9337 \\pm 0.0451$",
+      "AUPRC": "$0.8652 \\pm 0.096$"
+    }
+  }
+}
