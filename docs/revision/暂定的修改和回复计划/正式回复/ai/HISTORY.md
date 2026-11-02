@@ -686,3 +686,13 @@
 ## 2026-11-01 — 回信 LaTeX：禁止用 Python 批量改 generated tex
 
 **偏好（小路）：** R12/R13、R2/R3、路由/组件表等 **`latex/generated/*.tex` 一律手改**；不要新增或依赖脚本自动写回 tex。中英文同步、策略 (7)→外测表、冠亚军/冠军标注均在编辑器里直接改。已删除 `scripts/revision/sync_r12_r23_from_routing_en.py`。
+
+---
+
+## 2026-11-02 — R2.11 (b)：删除无内容 `\rpending{(R2.11)}`
+
+**文件：** `body_en.tex`、`body_zh.tex`
+
+**做了什么：** (b) 数据增强段已完整陈述协议并指 `tab_baseline_protocol`；去掉仅含 `(R2.11)` 的红色 pending（PDF 只显示「待补充」却无具体项）。
+
+**教训 / 避免重犯：** 勿用 `\rpending{(R*编号)}` 占位；稿面待改须 `\rpending{Manuscript: …}` 或删 pending，Methods 同步在统稿计划里跟踪即可。

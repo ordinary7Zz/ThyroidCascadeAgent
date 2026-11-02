@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Export patient-level 5-fold splits (seed=42) for RepViT/LSNet/UltraFedFM/MedGemma/Qwen OOF.
+# Export image-level 5-fold splits (seed=42) for RepViT/LSNet/UltraFedFM/MedGemma/Qwen OOF.
 #
-# Prerequisite: manifests from split_zjh_malignant_train_test.py (zjh_train.json on each pack).
+# Prerequisite: bash scripts/revision/b9/build_my_run_manifests.sh
 #
 # Usage:
 #   bash scripts/revision/b9/01_export_shared_folds.sh
@@ -18,27 +18,31 @@ for task in $TASKS; do
   case "$task" in
     lnm)
       out="$SHARED_LNM"
-      manifest="$MANIFEST_ZJH_TRAIN_LNM"
+      manifest="$MANIFEST_LNM_TRAIN"
       packed="$LNM_PACK"
+      roots="$IMAGE_ROOTS_LNM"
       ;;
     ftcptc)
       out="$SHARED_FTC"
-      manifest="$MANIFEST_ZJH_TRAIN_FTC"
+      manifest="$MANIFEST_FTC_TRAIN"
       packed="$FTC_PACK"
+      roots="$IMAGE_ROOTS_FTC"
       ;;
     *)
       echo "Unknown task: $task" >&2
       exit 1
       ;;
   esac
-  echo ">>> export_folds task=$task manifest=$manifest -> $out"
+  echo ">>> export_folds task=$task cv_cluster=$B9_CV_CLUSTER_PY manifest=$manifest -> $out"
   "$PYTHON" "$EXPORT" \
     --task "$task" \
     --packed_root "$packed" \
     --train_manifest "$manifest" \
+    --image_roots_json "$roots" \
     --output_dir "$out" \
     --n_splits "$N_SPLITS" \
-    --cv_seed "$CV_SEED"
+    --cv_seed "$CV_SEED" \
+    --cv_cluster "$B9_CV_CLUSTER_PY"
 done
 
 echo "Done. Fold roots:"

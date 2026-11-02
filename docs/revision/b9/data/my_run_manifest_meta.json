@@ -1,0 +1,7 @@
+{
+  "source_doc": "dino_unet_multitask/pyradiomics_train/binary_class/my_run.md",
+  "lnm_train_n": 220,
+  "lnm_test_n": 158,
+  "ftc_train_n": 532,
+  "ftc_test_n": 164
+}

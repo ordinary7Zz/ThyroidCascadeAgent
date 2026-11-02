@@ -27,16 +27,24 @@ _b9_packed_for_task() {
 
 _b9_train_manifest() {
   case "$1" in
-    lnm) echo "$MANIFEST_ZJH_TRAIN_LNM" ;;
-    ftcptc) echo "$MANIFEST_ZJH_TRAIN_FTC" ;;
+    lnm) echo "$MANIFEST_LNM_TRAIN" ;;
+    ftcptc) echo "$MANIFEST_FTC_TRAIN" ;;
     *) return 1 ;;
   esac
 }
 
 _b9_test_manifest() {
   case "$1" in
-    lnm) echo "$MANIFEST_ZJH_TEST_LNM" ;;
-    ftcptc) echo "$MANIFEST_ZJH_TEST_FTC" ;;
+    lnm) echo "$MANIFEST_LNM_TEST" ;;
+    ftcptc) echo "$MANIFEST_FTC_TEST" ;;
+    *) return 1 ;;
+  esac
+}
+
+_b9_image_roots_for_task() {
+  case "$1" in
+    lnm) echo "$IMAGE_ROOTS_LNM" ;;
+    ftcptc) echo "$IMAGE_ROOTS_FTC" ;;
     *) return 1 ;;
   esac
 }
@@ -45,12 +53,13 @@ _b9_test_manifest() {
 b9_baseline_full_external() {
   local model="$1"
   local task="$2"
-  local runs_root out_dir packed train test
+  local runs_root out_dir packed train test roots
   runs_root="$(_b9_runs_root)"
   out_dir="$runs_root/${model}/${task}/full_external"
   packed="$(_b9_packed_for_task "$task")"
   train="$(_b9_train_manifest "$task")"
   test="$(_b9_test_manifest "$task")"
+  roots="$(_b9_image_roots_for_task "$task")"
 
   local -a extra=()
   if [[ -n "${EPOCHS:-}" ]]; then
@@ -63,7 +72,10 @@ b9_baseline_full_external() {
     extra+=(--dry_run)
   fi
 
-  echo ">>> [$model/$task] Step 1–2: full train + zjh_test (+ Dai if FTC)"
+  echo ">>> [$model/$task] Step 1–2: full train + hold-out test (+ Dai if FTC)"
+  echo "    train_manifest=$train"
+  echo "    test_manifest=$test"
+  echo "    image_roots=$roots"
   echo "    output: $out_dir/external_summary.json"
   cd "$B9_OOF_ROOT"
   "$PYTHON" run_baseline_full_external.py \
@@ -72,6 +84,7 @@ b9_baseline_full_external() {
     --packed_root "$packed" \
     --train_manifest "$train" \
     --zjh_test_manifest "$test" \
+    --image_roots_json "$roots" \
     --output_dir "$out_dir" \
     --cuda_device "$CUDA_DEVICE" \
     --seed "$CV_SEED" \

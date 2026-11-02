@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# LLNM-Net (LNM only): (1) full train + zjh_test, (2) no Dai, (3) 5-fold OOF.
+# LLNM-Net (LNM only): (1) full train + hold-out test, (2) no Dai, (3) 5-fold OOF.
 #
 # Usage:
 #   CUDA_VISIBLE_DEVICES=0 bash scripts/revision/b9/models/llnm.sh
@@ -31,39 +31,40 @@ OUT_FT="$LLNM_ROOT/new_code/runs/revision_${RUN_TAG}_lnm_fulltrain"
 
 cd "$LLNM_ROOT"
 
-echo ">>> [LLNM] Step 1: full train on zjh_train + monitor zjh_test"
+echo ">>> [LLNM] Step 1: full train on LymphUs train + monitor hold-out test"
 "$PYTHON" new_code/train.py \
-  --train_json "$MANIFEST_ZJH_TRAIN_LNM" \
-  --test_json "$MANIFEST_ZJH_TEST_LNM" \
-  --image_roots_json "$LNM_PACK/image_roots.json" \
+  --train_json "$MANIFEST_LNM_TRAIN" \
+  --test_json "$MANIFEST_LNM_TEST" \
+  --image_roots_json "$IMAGE_ROOTS_LNM" \
   --output_dir "$OUT_FT" \
   --batch_size "$BATCH_SIZE" \
   --epochs "$EPOCHS" \
   --learning_rate "$LR" \
   --device "$DEVICE"
 
-echo ">>> [LLNM] Step 1 cont.: eval zjh_test (hold-out)"
+echo ">>> [LLNM] Step 1 cont.: hold-out test eval"
 "$PYTHON" new_code/evaluate.py \
-  --test_json "$MANIFEST_ZJH_TEST_LNM" \
-  --image_roots_json "$LNM_PACK/image_roots.json" \
+  --test_json "$MANIFEST_LNM_TEST" \
+  --image_roots_json "$IMAGE_ROOTS_LNM" \
   --weights "$OUT_FT/best_model.pth" \
   --norm_stats "$OUT_FT/train_norm_stats.pkl" \
-  --output "$OUT_FT/zjh_test_eval.json" \
+  --output "$OUT_FT/holdout_test_eval.json" \
   --device "$DEVICE"
 
 echo ">>> [LLNM] Step 2: Dai — N/A (LNM task)"
 
-echo ">>> [LLNM] Step 3: 5-fold patient OOF"
+echo ">>> [LLNM] Step 3: 5-fold OOF (cluster=$LLNM_CLUSTER_KEY)"
 "$PYTHON" new_code/run_b9_patient_cv.py \
-  --train_manifest "$MANIFEST_ZJH_TRAIN_LNM" \
-  --image_roots_json "$LNM_PACK/image_roots.json" \
+  --train_manifest "$MANIFEST_LNM_TRAIN" \
+  --image_roots_json "$IMAGE_ROOTS_LNM" \
   --output_dir "$OUT_CV" \
   --n_splits "$N_SPLITS" \
+  --cluster_key "$LLNM_CLUSTER_KEY" \
   --batch_size "$BATCH_SIZE" \
   --epochs "$EPOCHS" \
   --learning_rate "$LR" \
   --device "$DEVICE"
 
 echo "Done."
-echo "  ZJH test:  $OUT_FT/zjh_test_eval.json"
+echo "  Hold-out:  $OUT_FT/holdout_test_eval.json"
 echo "  OOF:       $OUT_CV/cv_summary.json"

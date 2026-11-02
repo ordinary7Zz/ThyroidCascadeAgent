@@ -82,6 +82,12 @@ def main() -> None:
         default=None,
         help="覆盖 config pipeline.ablation.task（seg / cls / both）",
     )
+    parser.add_argument(
+        "--fit-split",
+        choices=("val", "test"),
+        default=None,
+        help="val=验证集(val_list/val_intermediate)；test=测试集(shared_intermediate 内全部或 test_list)",
+    )
     args = parser.parse_args()
 
     with open(args.config, "r", encoding="utf-8") as f:
@@ -93,11 +99,35 @@ def main() -> None:
         return
 
     ab = config.get("pipeline", {}).get("ablation", {}) or {}
-    intermediate = args.intermediate or ab.get("val_intermediate")
-    if not intermediate:
-        parser.error("拟合 val 须指定 --intermediate 或在 yaml 配置 ablation.val_intermediate")
+    fit_split = args.fit_split or ab.get("learned_fit_split") or "val"
+    fit_split = str(fit_split).strip().lower()
+    if fit_split not in ("val", "test"):
+        parser.error(f"未知 fit_split: {fit_split}")
+
+    if fit_split == "test":
+        intermediate = (
+            args.intermediate
+            or ab.get("test_intermediate")
+            or ab.get("shared_intermediate")
+        )
+        if not intermediate:
+            parser.error(
+                "test 拟合须 --intermediate 或 yaml 中 ablation.test_intermediate / shared_intermediate"
+            )
+    else:
+        intermediate = args.intermediate or ab.get("val_intermediate")
+        if not intermediate:
+            parser.error("拟合 val 须指定 --intermediate 或在 yaml 配置 ablation.val_intermediate")
 
     gt_mask_dir, label_file, label_key = resolve_val_fit_paths(config)
+    if fit_split == "test":
+        data = config.get("pipeline", {}).get("data", {}) or {}
+        if data.get("gt_mask_dir"):
+            gt_mask_dir = Path(data["gt_mask_dir"])
+        if data.get("label_file"):
+            label_file = str(data["label_file"])
+        label_key = str(data.get("label_key", label_key))
+
     payload = fit_learned_on_val(
         config,
         Path(intermediate),
@@ -105,6 +135,7 @@ def main() -> None:
         label_file=label_file,
         label_key=label_key,
         task=args.task,
+        fit_split=fit_split,
     )
     print(json.dumps(payload, ensure_ascii=False, indent=2))
 

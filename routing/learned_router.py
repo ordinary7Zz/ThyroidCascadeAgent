@@ -626,8 +626,9 @@ def fit_learned_on_val(
     seg_artifact: Optional[Path] = None,
     cls_artifact: Optional[Path] = None,
     task: Optional[str] = None,
+    fit_split: str = "val",
 ) -> dict[str, Any]:
-    from routing.best_single_expert import _resolve_val_stems
+    from routing.best_single_expert import resolve_learned_fit_stems
     from pipeline.compare_models import load_seg_model_masks
 
     task = task or ablation_task(config)
@@ -649,7 +650,7 @@ def fit_learned_on_val(
         _, img_map = _load_cls_predictions_by_image(sample_cls)
         img_names = sorted(img_map.keys())
 
-    val_stems = _resolve_val_stems(config, img_names)
+    val_stems = resolve_learned_fit_stems(config, img_names, fit_split=fit_split)
 
     cls_cfg = config.get("classification", {}).get("agent", {})
     consensus_th = float(cls_cfg.get("consensus_min_confidence", 0.6))
@@ -686,6 +687,7 @@ def fit_learned_on_val(
 
     out: dict[str, Any] = {
         "task": task,
+        "fit_split": fit_split,
         "val_stems": val_stems,
         "n_val_stems": len(val_stems),
         "seg_artifact": str(seg_path) if seg_router is not None and seg_path else None,

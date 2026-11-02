@@ -38,7 +38,7 @@ export RUN_TAG=zjh20261101
 | `run_medgemma.sh` / `run_qwen3.sh`                       | 步骤 1–2                                             |
 | `run_llnm_net.sh`                                          | 步骤 1 + 3（LNM）；可选 `SKIP_STEP1` / `SKIP_FULL_TRAIN` / `SKIP_ZJH_EVAL` / `SKIP_OOF` / `SKIP_IF_CV_SUMMARY` |
 | `run_tiger_model.sh`                                       | 步骤 1–3（FTC；Tiger ResNet 流水线）                 |
-| `run_thyroidxagent.sh`                                     | 步骤 3（DINO OOF）；步骤 1–2 为 Cascade 全栈占位说明 |
+| `run_thyroidxagent.sh`                                     | 步骤 **1**（DINO 全量 → ZJH + FTC Dai）；默认 **跳过** 步骤 3 OOF（`SKIP_TX_OOF=0` 重跑 OOF）；全栈 Cascade 仍待补 |
 | `run_gpt5.sh` / `run_gemini.sh`                          | API 占位（无本地训练 / 无 OOF）                       |
 | `run_all_models.sh`                                        | `MODELS="repvit lsnet"` 过滤批量跑                  |
 
@@ -54,7 +54,7 @@ export RUN_TAG=zjh20261101
 | `run_medgemma.sh` / `run_qwen3.sh`                       | **3**   | `VLM_EPOCHS`（与 `medgemma_thyroid_binary_train.py` / `qwen3_vl_thyroid_binary_train.py` 默认一致）                                                                                                     |
 | `run_llnm_net.sh`                                          | **30**  | `EPOCHS` 或 `SPECIALIST_EPOCHS`（全量 + OOF 各折）                                                                                                                                                        |
 | `run_tiger_model.sh`                                       | **30**  | `NUM_EPOCHS` 或 `SPECIALIST_EPOCHS`（全量 ResNet + OOF 各折）                                                                                                                                             |
-| `run_thyroidxagent.sh`                                     | **30**  | `EPOCHS` 或 `SPECIALIST_EPOCHS`（DINO 五折 OOF，每任务 5 折）                                                                                                                                             |
+| `run_thyroidxagent.sh`                                     | **30**  | `EPOCHS` / `SPECIALIST_EPOCHS`（全量外测 1 次/任务；OOF 另加 5 折×2 任务） |
 
 ### 各模型运行命令
 
@@ -75,7 +75,12 @@ bash scripts/revision/b9/models/run_llnm_net.sh
 # 全量已训完，只补五折 OOF：
 SKIP_STEP1=1 bash scripts/revision/b9/models/run_llnm_net.sh
 bash scripts/revision/b9/models/run_tiger_model.sh
+# ThyroidXAgent：DINO 全量外测（默认不重跑 OOF）
 bash scripts/revision/b9/models/run_thyroidxagent.sh
+# 仅 DINO 外测底层脚本：
+# bash scripts/revision/b9/08_run_dino_full_external.sh
+# OOF + 外测一起：
+# SKIP_TX_OOF=0 bash scripts/revision/b9/models/run_thyroidxagent.sh
 
 # 闭源 API 占位（无本地训练 / 无 OOF）
 bash scripts/revision/b9/models/run_gpt5.sh
@@ -94,6 +99,7 @@ MODELS="repvit lsnet" bash scripts/revision/b9/models/run_all_models.sh
 | `01_export_shared_folds.sh`     | 导出 RepViT 系共用五折（OOF 前自动调用）                       |
 | `02_run_baselines_oof.sh`       | 旧版：仅 RepViT / LSNet / UltraFedFM 五折 OOF                  |
 | `03_run_dino_multitask_oof.sh`  | ThyroidXAgent DINO 五折 OOF                                    |
+| `08_run_dino_full_external.sh`  | DINO 全量 `zjh_train` → `zjh_test`（FTC 含 Dai）；`dino_unet_multitask/.../run_full_external.py` |
 | `04_run_llnm_zjh_b9.sh`         | LLNM 五折 + 全量 + zjh_test（与 `run_llnm_net.sh` 等价编排） |
 | `05_run_tiger_ftc_b9.sh`        | Tiger FTC 五折 OOF                                             |
 | `06_run_tiger_ftc_external.sh`  | Tiger 全量外测；`EXTERNAL_STEP=zjh\|dai\|both`                 |
@@ -102,6 +108,6 @@ MODELS="repvit lsnet" bash scripts/revision/b9/models/run_all_models.sh
 
 ## 仍缺 / 待补
 
-- **ThyroidXAgent 全栈**（DINO + AutoGluon + 路由）步骤 1–2：见 `Malignant_Cls_Model/b9/README.md` D2。
+- **ThyroidXAgent 全栈**（DINO + AutoGluon + 路由）外测：见 `B9_ThyroidXAgent_补充实验计划.md`；回信 **`tab_malig_ext`  interim** 用 `08_run_dino_full_external.sh` 的 DINO 专家结果（表注需说明非全栈融合）。
 - **GPT / Gemini**：API 评测脚本。
 - 跑完后将 metrics 写入 LaTeX 表并去掉 `\rpending`。

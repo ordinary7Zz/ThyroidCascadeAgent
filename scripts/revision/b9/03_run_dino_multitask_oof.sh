@@ -18,16 +18,18 @@ cd "$DINO_ROOT"
 
 run_task() {
   local task="$1"
-  local packed manifest out_dir
+  local packed manifest roots out_dir
   case "$task" in
     lnm)
       packed="$LNM_PACK"
-      manifest="$MANIFEST_ZJH_TRAIN_LNM"
+      manifest="$MANIFEST_LNM_TRAIN"
+      roots="$IMAGE_ROOTS_LNM"
       out_dir="Malignant_Cls_Model/b9/runs/revision_${RUN_TAG}/lnm_cv"
       ;;
     ftcptc)
       packed="$FTC_PACK"
-      manifest="$MANIFEST_ZJH_TRAIN_FTC"
+      manifest="$MANIFEST_FTC_TRAIN"
+      roots="$IMAGE_ROOTS_FTC"
       out_dir="Malignant_Cls_Model/b9/runs/revision_${RUN_TAG}/ftcptc_cv"
       ;;
     *)
@@ -40,14 +42,16 @@ run_task() {
   [[ -n "$MAX_FOLDS" ]] && extra+=(--max_folds "$MAX_FOLDS")
   [[ "$DRY_RUN" == "1" ]] && extra+=(--dry_run)
 
-  echo ">>> DINO CV task=$task manifest=$manifest"
+  echo ">>> DINO CV task=$task cv_cluster=$B9_CV_CLUSTER_PY manifest=$manifest"
   CUDA_VISIBLE_DEVICES="$CUDA_DEVICE" "$PYTHON" Malignant_Cls_Model/b9/run_patient_cv.py \
     --task "$task" \
     --packed_root "$packed" \
     --train_manifest "$manifest" \
+    --image_roots_json "$roots" \
     --output_dir "$out_dir" \
     --n_splits "$N_SPLITS" \
     --cv_seed "$CV_SEED" \
+    --cv_cluster "$B9_CV_CLUSTER_PY" \
     --epochs "$EPOCHS" \
     --cuda_device 0 \
     "${extra[@]}"

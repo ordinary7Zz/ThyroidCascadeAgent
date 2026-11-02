@@ -829,6 +829,8 @@ class CascadePipeline:
             img_names = [p.name for p in image_paths]
             print(f"级联推理: {len(img_names)} 张图像 (start={start_index})")
 
+        self.last_batch_image_count = len(img_names)
+
         # 获取配置
         seg_cfg_full = self.config.get("segmentation", {})
         cls_cfg_full = self.config.get("classification", {})
@@ -960,6 +962,7 @@ class CascadePipeline:
 
         if self.config.get("pipeline", {}).get("stop_after_phase2", False):
             print("  ⏭ stop_after_phase2=True，跳过 Phase 3–5（仅保留 intermediate 供 B3 等）")
+            print(f"  ✓ Phase 1–2 intermediate 对应 {len(img_names)} 张图像")
             return []
 
         # ===== Phase 3: 分类共识 + 分割 Agent（从缓存加载，CPU 运行）=====

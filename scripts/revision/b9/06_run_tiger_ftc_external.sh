@@ -32,9 +32,9 @@ export_zjh_test() {
   mkdir -p "$EXPORT_ZJH"
   python new_code/test_model_export.py \
     --pth_path "$pth" \
-    --test_json_path "$MANIFEST_ZJH_TEST_FTC" \
-    --valid_json_path "$MANIFEST_ZJH_TRAIN_FTC" \
-    --image_base_path "$FTC_PACK" \
+    --test_json_path "$MANIFEST_FTC_TEST" \
+    --valid_json_path "$MANIFEST_FTC_TRAIN" \
+    --image_base_path "$FTC_IMAGE_BASE" \
     --filename_key filename \
     --label_key FTCPTC \
     --ignore_labels -1 \
@@ -55,8 +55,8 @@ export_dai() {
   python new_code/test_model_export.py \
     --pth_path "$pth" \
     --test_json_path "$MANIFEST_DAI_FTC" \
-    --valid_json_path "$MANIFEST_ZJH_TRAIN_FTC" \
-    --image_base_path "$FTC_PACK" \
+    --valid_json_path "$MANIFEST_FTC_TRAIN" \
+    --image_base_path "$FTC_DAI_IMAGE_BASE" \
     --filename_key filename \
     --label_key FTCPTC \
     --ignore_labels -1 \
@@ -72,11 +72,12 @@ export_dai() {
 }
 
 if [[ "$EXTERNAL_STEP" == "zjh" || "$EXTERNAL_STEP" == "both" ]]; then
-  echo ">>> Tiger full train + ZJH hold-out"
-  PACK="$FTC_PACK" \
-  TRAIN_JSON="$MANIFEST_ZJH_TRAIN_FTC" \
-  VALID_JSON="$MANIFEST_ZJH_TRAIN_FTC" \
-  TEST_JSON="$MANIFEST_ZJH_TEST_FTC" \
+  echo ">>> Tiger full train + filtered hold-out test"
+  PACK="$FTC_DAI_IMAGE_BASE" \
+  BASE_DIR="$FTC_IMAGE_BASE" \
+  TRAIN_JSON="$MANIFEST_FTC_TRAIN" \
+  VALID_JSON="$MANIFEST_FTC_TRAIN" \
+  TEST_JSON="$MANIFEST_FTC_TEST" \
   EXPORT_DIR="$EXPORT_ZJH" \
   SKIP_TRAIN="${SKIP_TRAIN:-0}" \
   SKIP_DATA="${SKIP_DATA:-0}" \

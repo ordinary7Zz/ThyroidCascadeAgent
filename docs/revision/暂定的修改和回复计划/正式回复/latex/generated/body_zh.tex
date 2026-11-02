@@ -79,7 +79,7 @@ ThyClinScore 的动机很好，但其验证主要依赖于与 LLM 评委的相�
 我们致歉，并已对照本回复文末表格核对稿面不一致处；修订稿摘要将与 \responsetableref{tab_seg_ext}、\responsetableref{tab_cls_ext}、\responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext} 及 \responsetableref{tab_ftcptc_ext_dai} 对齐（\rpendingzh{…}）。\par
 \textbf{（1）良恶性分类跨队列「均值」。}摘要与 Results~§2.2 写 mean AUROC 0.9466、mean AUPRC 0.8361（主文 Fig.~2d--e）。按 R2.7 口径（五外测队列等权宏平均，不对测试图像数加权），\responsetableref{tab_cls_ext} 五队列 ThyroidXAgent 点估计的宏平均为 AUROC **0.9117**、AUPRC **0.8983**（ZJH 外测 6807 张；\responsetableref{tab_dhash}）。\rpendingzh{摘要/§2.2 与 \responsetableref{tab_cls_ext} 同步。}\par
 \textbf{（2）结节分割跨队列「均值」。}摘要与 §2.2 写 mean Dice 87.21\%、mean HD95 6.90~mm。按 R2.7 相同口径，\responsetableref{tab_seg_ext} 七队列 ThyroidXAgent 点估计的宏平均为 Dice **87.01\%**、HD95 **7.46~mm**（6807 张 ZJH 子集；\responsetableref{tab_dhash}）。\rpendingzh{摘要/§2.2 与 \responsetableref{tab_seg_ext} 同步。}\par
-\textbf{（3）LNM / FTC/PTC。}\textit{(a)~开发规模与验证：}原稿 Methods 记 LNM 训练合计 4753 图并以 20 例 hold-out 验证；本回复为 LNM 合并开发 **4208** 图、FTC/PTC ZJH 原发灶开发 **4028** 图（\responsetableref{tab_dhash}），开发集五折 OOF 见 \responsetableref{tab_malig_oof}（ThyroidXAgent：LNM AUROC **0.8710**、AUPRC **0.8929**；FTC/PTC AUROC **0.8165**、AUPRC **0.8382**）。\textit{(b)~独立外测：}原稿摘要/§2.4 以 LymphUs Center~2 LNM（AUROC 0.864）与 Dai 队列 FTC/PTC（0.805）为主叙事；本回复 LNM 与 FTC/PTC 的**主**独立外测为共享 ZJH 原发灶患者 hold-out（**130** 例、**801** 张；\responsetableref{tab_malig_ext}），FTC/PTC **额外**跨机构外测见 \responsetableref{tab_ftcptc_ext_dai}（$n{=}199$）。主文 Fig.~3b 将与上述表一并定稿。\rpendingzh{Methods/摘要/§2.4/Fig.~3b 与 \responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}、\responsetableref{tab_ftcptc_ext_dai} 对齐。}\par
+\textbf{（3）LNM / FTC/PTC。}\textit{(a)~开发规模与验证：}原稿 Methods 记 LNM 训练合计 4753 图并以 20 例 hold-out 验证；本回复为 LNM 合并开发 **4208** 图、FTC/PTC ZJH 原发灶开发 **4028** 图（\responsetableref{tab_dhash}），开发集五折 OOF 见 \responsetableref{tab_malig_oof}（ThyroidXAgent：LNM AUROC **0.6363**、AUPRC **0.3867**；FTC/PTC AUROC **0.5168**、AUPRC **0.1223**）。\textit{(b)~独立外测：}原稿摘要/§2.4 以 LymphUs Center~2 LNM（AUROC 0.864）与 Dai 队列 FTC/PTC（0.805）为主叙事；本回复 LNM 与 FTC/PTC 的**主**独立外测为共享 ZJH 原发灶患者 hold-out（**130** 例、**801** 张；\responsetableref{tab_malig_ext}），FTC/PTC **额外**跨机构外测见 \responsetableref{tab_ftcptc_ext_dai}（$n{=}199$）。主文 Fig.~3b 将与上述表一并定稿。\rpendingzh{Methods/摘要/§2.4/Fig.~3b 与 \responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}、\responsetableref{tab_ftcptc_ext_dai} 对齐。}\par
 \par
 \end{authorresponse}
 
@@ -119,7 +119,13 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 方法部分应说明结节分割与良恶性分类的参考标准、标注流程、标注者资质与分歧裁决、患者层面去重以及缺失数据的处理。
 \end{reviewercomment}
 \begin{authorresponse}
-我们同意：Methods 须写清各分割/良恶性分类队列的参考标准、标注流程、标注者资质与分歧裁决、患者层面去重及缺失数据处理。\rpendingzh{R2.5 / F5：待与临床及标注合作者确认后写入---机构队列（如 ZJH-8K、ZJH-TS、TNVideo、SMU-HMC）Methods 正文；公开队列按原数据集文献引用；补充表列出各队列因缺失或无效 mask/标签而排除的图像数（不插补）。患者划分与 cluster-bootstrap 叙述在 Methods 定稿后与 R1.1、R2.2 交叉引用。}\par
+我们同意 Methods 须写清分割/良恶性分类各队列的参考标准、标注流程、标注者资质与分歧裁决、患者层面去重及缺失数据处理。\par
+\textbf{（1）参考标准、标注流程、标注者资质与分歧裁决。} 公开 OpenThyroid 队列（TN3K、TN5K、ThyroidXL、PKTN、DDTI、RJH-7K 等）的分割 mask 与良恶性标签定义及原始划分，Methods 中按各数据集发表文献与官方 release 引用，不在本回复重复标注室细节。\rpendingzh{正文 Methods：逐队列引用与 ZJH-8K 机构段落（F5）}。本队列中**仅 ZJH-8K** 为机构自建分割/分类外测库：术后病理/细胞学等与 mask 勾画流程、标注者资质及分歧裁决 \rpendingzh{F5 / 临床与标注合作者确认后写入 Methods（R2.5）}。\par
+\textbf{（2）患者层面去重（各分割/分类队列）。} 数据流与 train/val/test 角色见 \responsefigureref{fig_image_dataflow}；ZJH-8K 与 ThyroidXL 规模及划分见 \responsetableref{tab_cohort_patient_counts}。\par
+\textit{划分内互斥：} 凡队列提供可复现 patient ID（ZJH-8K、ThyroidXL），同一 patient ID 的全部图像/视图只保留在同一官方或预定义划分内，**不会**将同一患者分入堆叠训练与外测两侧（R1.1）。ZJH-8K 恶性子任务在 TN3K dHash 剔除后另按 patient ID 分层 hold-out（130 例、801 图；seed 42；与 LNM/FTC 共用），开发五折 OOF 仅在 train 患者上进行（\responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}）。\par
+\textit{跨来源去重：} 堆叠专家训练仅用公开队列 **train**；外测队列（含 ZJH-8K、DDTI、RJH-7K、NHC-MISD-TUS 等）未参与该训练。各公开 **train** 与 ZJH-8K 全库（7958 图）做 dHash 近重复筛查（Hamming $\leq$ 5；\responsetableref{tab_dhash}）；本回复信主外测在剔除与 TN3K train 精确重复（H=0）的 **1151** 张唯一 ZJH 图后报告（6807 图、1068 患者；R1.1、R2.4）。\par
+\textit{无 patient ID 的队列：} TN3K、TN5K、DDTI 等外测按官方 **图像级** test 列表评估；bootstrap 与 cluster 定义按 R2.2 **一图一簇**（不假定图像间独立患者）。患者级再分析与 cluster-bootstrap 汇总见 R1.1、R2.2 与 \responsetableref{tab_patient_cls}。\par
+\textbf{（3）缺失数据处理（各分割/分类队列）。} 对 mask 与标签**不做插补**。构建各任务 manifest 时：结节分割仅纳入具有有效参考 mask 的图像；良恶性分类仅纳入具有有效二分类标签的图像；不满足者**排除**，不代入缺省标签或合成 mask。任务—队列不匹配时按任务省略：例如 DDTI 外测共 637 图，其中 **349** 张具良恶性标签，分类指标仅在该子集上计算；RJH-7K 仅参与分割外测、不提供本研究的良恶性分类标签。图像损坏、mask 与图像无法配对或标签字段缺失的条目在入池前剔除。\rpendingzh{补充表：各队列因缺失/无效 mask 或标签排除的图像数（R2.5）；Methods 与 \responsetableref{tab_cohort_patient_counts} 交叉引用}。\par
 \par
 \end{authorresponse}
 
@@ -179,9 +185,9 @@ LLM 决策稳定性（多队列、相近候选）：在固定上游专家输出�
 LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 20 例——样本量远不足以训练可靠的深度学习分类器。请澄清：(a) 是否使用了迁移学习或多任务学习；(b) 是否做了数据增强；(c) 在 Table S5 置信区间很宽、反映样本量不足的情况下如何避免过拟合。
 \end{reviewercomment}
 \begin{authorresponse}
-我们澄清 LNM 开发池与验证设计：\responsetableref{tab_malig_oof} 在 TN3K 剔除后 ZJH 恶性开发 manifest 上报告患者/簇级分层五折 OOF（seed 42），替代原 20 例 hold-out；**主**独立外测见 \responsetableref{tab_malig_ext}（共享 ZJH 患者 hold-out；R2.12）。ThyroidXAgent LNM 开发 OOF：AUROC 0.8710 $\pm$ 0.0550，AUPRC 0.8929 $\pm$ 0.0537（\responsetableref{tab_malig_oof}）。\par
+我们澄清 LNM 开发池与验证设计：\responsetableref{tab_malig_oof} 在 TN3K 剔除后 ZJH 恶性开发 manifest 上报告患者/簇级分层五折 OOF（seed 42），替代原 20 例 hold-out；**主**独立外测见 \responsetableref{tab_malig_ext}（共享 ZJH 患者 hold-out；R2.12）。ThyroidXAgent LNM 开发 OOF：AUROC 0.6363 $\pm$ 0.0550，AUPRC 0.3867 $\pm$ 0.0868（\responsetableref{tab_malig_oof}）。\par
 (a) 迁移或多任务学习。未从通用良恶性分割/分类堆叠向 LNM 迁移权重；LNM 在 ZJH-8K 恶性**原发灶**超声上使用任务专用二分类器，评估协议与主图像臂分开（见 \responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}）。\par
-(b) 数据增强。LNM 任务专用 DINOv3 图像专家与 OpenThyroid 堆叠开发集上其他监督分类专家共用同一训练时随机增强：图像（及训练用结节 mask）缩放到专家输入边长，以 $p{=}0.5$ 同步随机水平/垂直翻转，再经 ImageNet 均值与方差归一化；未另设 LNM 专用增强。开发数据与微调协议见 审稿人 2，意见 14（\responsetableref{tab_baseline_protocol}）；Methods 完整表述 \rpendingzh{（R2.11）}。\par
+(b) 数据增强。LNM 任务专用 DINOv3 图像专家与 OpenThyroid 堆叠开发集上其他监督分类专家共用同一训练时随机增强：图像（及训练用结节 mask）缩放到专家输入边长，以 $p{=}0.5$ 同步随机水平/垂直翻转，再经 ImageNet 均值与方差归一化；未另设 LNM 专用增强。开发数据与微调协议见 审稿人 2，意见 14（\responsetableref{tab_baseline_protocol}）。\par
 (c) 过拟合控制。开发集采用患者/簇级分层五折 OOF（非小样本单次验证），CI 遵循 R2.2，并在 **ZJH 患者外测**（原发灶超声）上保留 hold-out（\responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}）。\par
 \par
 \end{authorresponse}
@@ -525,10 +531,10 @@ Tiger-Model & --- & --- & $0.4998 \pm 0.092$ & $0.1097 \pm 0.0605$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{替代原 20 例固定验证。开发集五折 OOF 均在剔除与 TN3K train dHash H=0 匹配的 ZJH 图之后报告（口径见 \responsetableref{tab_dhash}）：LNM 合并开发 4208 图（4028 ZJH 原发灶 + 180 LymphUs C1 淋巴结）；FTC/PTC 开发 4028 图（与 LNM 中 ZJH 原发灶子集相同，不含 LymphUs C1）。原 20 例验证患者图像计入上述开发规模（不再 withheld）。ThyroidXAgent、LLNM-Net、Tiger-Model 与 RepViT、LSNet、UltraFedFM 在各自任务剔除后 manifest 上共用同折划分（种子 42）。闭源/开源 VLM 不列入本表（无恶性子任务五折 OOF）；通用模型外测见 \responsetableref{tab_malig_ext}。--- 表示该任务未评估。Cluster-bootstrap 95\% CI（1000 次，seed=42）。患者级：簇内恶性概率算术平均，标签组内 max。}
+\responsetablenote{替代原 20 例固定验证。开发集五折 OOF 均在剔除与 TN3K train dHash H=0 匹配的 ZJH 图之后报告（口径见 \responsetableref{tab_dhash}）：LNM 合并开发 4208 图（4028 ZJH 原发灶 + 180 LymphUs C1 淋巴结）；FTC/PTC 开发 4028 图（与 LNM 中 ZJH 原发灶子集相同，不含 LymphUs C1）。原 20 例验证患者图像计入上述开发规模（不再 withheld）。\textbf{ThyroidXAgent} 行 OOF 为任务专用 DINO multitask 专家（与 \responsetableref{tab_malig_ext} 外测 interim 同源架构；全栈融合 OOF 定稿后替换）。LLNM-Net、Tiger-Model 与 RepViT、LSNet、UltraFedFM 在各自任务剔除后 manifest 上共用同折划分（种子 42）。闭源/开源 VLM 不列入本表（无恶性子任务五折 OOF）；通用模型外测见 \responsetableref{tab_malig_ext}。--- 表示该任务未评估。Cluster-bootstrap 95\% CI（1000 次，seed=42）。患者级：簇内恶性概率算术平均，标签组内 max。}
 \end{manuscriptresponsetable}
 
-% [SYNC] tab_malig_ext: models_zjh20261101 external_summary; Tiger ZJH patient-level from tiger_model_zjh20261101_ftcptc.json (2026-11-02).
+% [SYNC] tab_malig_ext: models_zjh20261101 external_summary; ThyroidXAgent ZJH from thyroidxagent/*/full_external (DINO 2026-11-02). LLNM/GPT/Gemini pending.
 \begin{manuscriptresponsetable}
 \caption{\responsetabletitle{tab_malig_ext}{恶性甲状腺病灶分层：独立外测（患者级）}}
 \label{tab_malig_ext}
@@ -543,21 +549,21 @@ Tiger-Model & --- & --- & $0.4998 \pm 0.092$ & $0.1097 \pm 0.0605$ \\
 RepViT & $0.5164 \pm 0.1144$ & $0.3704 \pm 0.1469$ & $0.5122 \pm 0.1874$ & $0.1350 \pm 0.1848$ \\
 LSNet & $0.5035 \pm 0.1156$ & $0.3283 \pm 0.1482$ & $0.5641 \pm 0.1913$ & $0.1683 \pm 0.2134$ \\
 UltraFedFM & $0.4072 \pm 0.1219$ & $0.2761 \pm 0.1591$ & $0.5529 \pm 0.1663$ & $0.1157 \pm 0.1078$ \\
-MedGemma & $0.4976 \pm 0.1229$ & $0.3351 \pm 0.1476$ & \rpendingzh{FTC ZJH hold-out 重跑} & \rpendingzh{FTC ZJH hold-out 重跑} \\
-Qwen3-VL-8B-Instruct & $0.5229 \pm 0.1199$ & $0.2986 \pm 0.1582$ & \rpendingzh{FTC ZJH hold-out 重跑} & \rpendingzh{FTC ZJH hold-out 重跑} \\
+MedGemma & $0.4976 \pm 0.1229$ & $0.3351 \pm 0.1476$ & $0.4905 \pm 0.202$ & $0.1104 \pm 0.1047$ \\
+Qwen3-VL-8B-Instruct & $0.5229 \pm 0.1199$ & $0.2986 \pm 0.1582$ & $0.5030 \pm 0.1907$ & $0.1391 \pm 0.1871$ \\
 GPT-5 & \rpendingzh{LNM ZJH hold-out 重跑} & \rpendingzh{LNM ZJH hold-out 重跑} & \rpendingzh{FTC ZJH hold-out 重跑} & \rpendingzh{FTC ZJH hold-out 重跑} \\
 Gemini-2.5-Pro & \rpendingzh{LNM ZJH hold-out 重跑} & \rpendingzh{LNM ZJH hold-out 重跑} & \rpendingzh{FTC ZJH hold-out 重跑} & \rpendingzh{FTC ZJH hold-out 重跑} \\
 LLNM-Net & \rpendingzh{LNM ZJH hold-out 重跑} & \rpendingzh{LNM ZJH hold-out 重跑} & --- & --- \\
 Tiger-Model & --- & --- & $0.4609 \pm 0.1721$ & $0.1658 \pm 0.1842$ \\
 \responserowagent
-\textbf{ThyroidXAgent} & \textbf{\rpendingzh{LNM ZJH hold-out 重跑}} & \textbf{\rpendingzh{LNM ZJH hold-out 重跑}} & \textbf{\rpendingzh{FTC ZJH hold-out 重跑}} & \textbf{\rpendingzh{FTC ZJH hold-out 重跑}} \\
+\textbf{ThyroidXAgent} & \textbf{$0.4677 \pm 0.1050$} & \textbf{$0.2443 \pm 0.1079$} & \textbf{$0.4872 \pm 0.1597$} & \textbf{$0.1051 \pm 0.1028$} \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{定稿开发流程后于各任务全开发集训练，在共享 TN3K 剔除后 ZJH 恶性**原发灶**患者 hold-out 上单次评估（130 例、801 张；seed 42；cluster-bootstrap 95\% CI，1000 次，seed=42；患者级聚合见 R2.2/R2.12）。LymphUs Center 2 不作 LNM 外测（R2.12）。FTC/PTC 在 Dai 等队列上的**额外**跨机构外测见 \responsetableref{tab_ftcptc_ext_dai}。--- 表示该任务未评估。}
+\responsetablenote{定稿开发流程后于各任务全开发集训练，在共享 TN3K 剔除后 ZJH 恶性**原发灶**患者 hold-out 上单次评估（130 例、801 张；seed 42；cluster-bootstrap 95\% CI，1000 次，seed=42；患者级聚合见 R2.2/R2.12）。\textbf{ThyroidXAgent} 行 interim 为任务专用 DINO multitask 专家（ZJH \texttt{zjh\_train} 全量 3227 图；2026-11-02 重跑）；全栈（AutoGluon+路由）外测定稿后整行替换。LymphUs Center 2 不作 LNM 外测（R2.12）。FTC/PTC 在 Dai 等队列上的**额外**跨机构外测见 \responsetableref{tab_ftcptc_ext_dai}。--- 表示该任务未评估。}
 \end{manuscriptresponsetable}
 
-% [SYNC] tab_ftcptc_ext_dai: RepViT/LSNet/UltraFedFM dai_test patient-level from external_summary; Tiger image-level (Dai export); tiger_model_zjh20261101_ftcptc.json (2026-11-02).
+% [SYNC] tab_ftcptc_ext_dai: + ThyroidXAgent dai_test from thyroidxagent/ftcptc/full_external (DINO 2026-11-02). VLM/GPT/Gemini pending.
 \begin{manuscriptresponsetable}
 \caption{\responsetabletitle{tab_ftcptc_ext_dai}{FTC/PTC 亚型：额外外测（Dai 等）}}
 \label{tab_ftcptc_ext_dai}
@@ -576,11 +582,11 @@ Gemini-2.5-Pro & --- & --- \\
 LLNM-Net & --- & --- \\
 Tiger-Model & $0.9337 \pm 0.0451$ & $0.8652 \pm 0.096$ \\
 \responserowagent
-\textbf{ThyroidXAgent} & --- & --- \\
+\textbf{ThyroidXAgent} & \textbf{$0.8436 \pm 0.0819$} & \textbf{$0.6769 \pm 0.1730$} \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{FTC/PTC 子任务**额外**跨机构外测（组织学 PTC \emph{vs.} FTC；与 ZJH-8K 恶性开发数据标签定义一致；R2.10）。各模型在 ZJH FTC/PTC 全开发集训练（五折 OOF 协议固定后）于 Dai 等公开外测集（$n{=}199$ 图、138 病例簇）上单次评估。Cluster-bootstrap 95\% CI（1000 次，seed=42）。**患者/簇级**：FangDai 按 \texttt{fangdai::B\_<case>} 病例 ID 聚类、簇内概率算术平均（与 R2.12 一致）；RepViT/LSNet/UltraFedFM 与 Tiger-Model 均按此口径。--- 表示待填。}
+\responsetablenote{FTC/PTC 子任务**额外**跨机构外测（组织学 PTC \emph{vs.} FTC；与 ZJH-8K 恶性开发数据标签定义一致；R2.10）。各模型在 ZJH FTC/PTC 全开发集训练（五折 OOF 协议固定后）于 Dai 等公开外测集（$n{=}199$ 图、138 病例簇）上单次评估。Cluster-bootstrap 95\% CI（1000 次，seed=42）。**患者/簇级**：FangDai 按 \texttt{fangdai::B\_<case>} 病例 ID 聚类、簇内概率算术平均（与 R2.12 一致）；RepViT/LSNet/UltraFedFM 与 Tiger-Model 均按此口径。\textbf{ThyroidXAgent} 行 interim 为同一 DINO FTC/PTC 权重（见 \responsetableref{tab_malig_ext} 表注）。--- 表示待填。}
 \end{manuscriptresponsetable}
 
 % [SYNC] tab_routing_stability: per-cohort seg_selection_agreement from output/b6/{tn3k,tn5k,thyroidxl,zjh8k,ddti_seg}/pipeline_run/stability_summary.json (n=10, seed 42, 5 repeats).

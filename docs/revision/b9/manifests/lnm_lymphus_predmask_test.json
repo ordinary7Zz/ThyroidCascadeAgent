@@ -1,0 +1,950 @@
+[
+  {
+    "filename": "10_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "10_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "11_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "11_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "12_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "12_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "13_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "13_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "14_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "14_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "15_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "15_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "16_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "16_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "17_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "17_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "18_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "18_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "19_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "19_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "1_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "1_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "20_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "20_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "21_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "21_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "22_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "22_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "23_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "23_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "24_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "24_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "25_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "25_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "26_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "26_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "27_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "27_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "28_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "28_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "29_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "29_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "2_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "2_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "30_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "30_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "31_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "31_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "32_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "32_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "33_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "33_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "34_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "34_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "35_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "35_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "36_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "36_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "37_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "37_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "38_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "38_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "39_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "39_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "3_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "3_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "40_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "40_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "41_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "41_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "42_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "42_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "43_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "43_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "44_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "44_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "45_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "45_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "46_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "46_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "47_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "47_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "48_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "48_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "49_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "49_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "4_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "4_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "50_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "50_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "51_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "51_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "52_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "52_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "53_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "53_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "54_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "54_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "55_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "55_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "56_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "56_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "57_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "57_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "58_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "58_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "59_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "59_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "5_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "5_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "60_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "60_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "61_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "61_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "62_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "62_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "63_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "63_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "64_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "64_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "65_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "65_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "66_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "66_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "67_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "67_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "68_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "68_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "69_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "69_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "6_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "6_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "70_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "70_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "71_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "71_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "72_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "72_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "73_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "73_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "74_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "74_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "75_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "75_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "76_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "76_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "77_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "78_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "79_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "7_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "7_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "80_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "81_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "82_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "8_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "8_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "9_Benign_center2.png",
+    "LNM_CN01": 0,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  },
+  {
+    "filename": "9_Malignant_center2.png",
+    "LNM_CN01": 1,
+    "image_root_key": "lymphus",
+    "source": "lymphus_predmask"
+  }
+]

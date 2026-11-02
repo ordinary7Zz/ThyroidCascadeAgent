@@ -52,6 +52,26 @@ def resolve_val_fit_paths(config: dict) -> tuple[Path, str, str]:
     return gt_mask_dir, label_file, label_key
 
 
+def _stems_from_list_file(
+    item_list,
+    stems_from_names: set[str],
+) -> list[str]:
+    if isinstance(item_list, str):
+        path = Path(item_list)
+        if path.is_file():
+            with open(path, "r", encoding="utf-8") as f:
+                item_list = json.load(f)
+    out: list[str] = []
+    for item in item_list:
+        if isinstance(item, str):
+            s = Path(item).stem
+        else:
+            s = str(item)
+        if s in stems_from_names:
+            out.append(s)
+    return sorted(set(out))
+
+
 def _resolve_val_stems(
     config: dict,
     all_image_names: list[str],
@@ -64,21 +84,9 @@ def _resolve_val_stems(
     stems_from_names = {Path(n).stem for n in all_image_names}
 
     if val_list:
-        if isinstance(val_list, str):
-            path = Path(val_list)
-            if path.is_file():
-                with open(path, "r", encoding="utf-8") as f:
-                    val_list = json.load(f)
-        out = []
-        for item in val_list:
-            if isinstance(item, str):
-                s = Path(item).stem
-            else:
-                s = str(item)
-            if s in stems_from_names:
-                out.append(s)
+        out = _stems_from_list_file(val_list, stems_from_names)
         if out:
-            return sorted(set(out))
+            return out
 
     if val_ratio is not None and 0 < float(val_ratio) < 1:
         names = sorted(stems_from_names)
@@ -87,6 +95,39 @@ def _resolve_val_stems(
 
     # 无划分时：用全部图像（仅适合 sample 调试；正式实验须在 yaml 写明 val_list）
     return sorted(stems_from_names)
+
+
+def resolve_learned_fit_stems(
+    config: dict,
+    all_image_names: list[str],
+    *,
+    fit_split: str = "val",
+) -> list[str]:
+    """
+    Learned 路由拟合用的 stem 列表。
+
+    - ``val``：``val_list`` / ``val_ratio``，否则 intermediate 内全部（与旧行为一致）
+    - ``test``：``test_list`` 若配置；否则 intermediate 内全部（用于 **测试集** Phase 1–2 缓存上拟合）
+    """
+    fit_split = (fit_split or "val").strip().lower()
+    stems_from_names = {Path(n).stem for n in all_image_names}
+    ab = config.get("pipeline", {}).get("ablation", {}) or {}
+
+    if fit_split == "test":
+        test_list = ab.get("test_list")
+        if test_list:
+            out = _stems_from_list_file(test_list, stems_from_names)
+            if out:
+                return out
+        return sorted(stems_from_names)
+
+    if fit_split == "val":
+        yaml_split = ab.get("learned_fit_split")
+        if yaml_split and str(yaml_split).strip().lower() == "test":
+            return resolve_learned_fit_stems(config, all_image_names, fit_split="test")
+        return _resolve_val_stems(config, all_image_names)
+
+    raise ValueError(f"未知 fit_split: {fit_split!r}（支持 val, test）")
 
 
 def _image_names_for_stems(all_names: list[str], stems: Iterable[str]) -> list[str]:

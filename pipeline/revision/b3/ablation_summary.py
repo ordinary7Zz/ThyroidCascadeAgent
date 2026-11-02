@@ -157,7 +157,13 @@ def main():
     args = parser.parse_args()
     root = Path(args.root)
     summary = Path(args.out) if args.out else root / "_summary"
-    dirs = [p for p in root.iterdir() if p.is_dir() and p.name != "_summary"]
+    dirs = [
+        p
+        for p in root.iterdir()
+        if p.is_dir()
+        and p.name != "_summary"
+        and not p.name.startswith(".")
+    ]
     ref = Path(args.reference_manifest) if args.reference_manifest else None
     paired = None
     if args.paired:

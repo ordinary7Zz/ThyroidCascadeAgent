@@ -226,11 +226,17 @@ def main():
         image_paths=image_paths_subset,
     )
 
-    print(f"\nPipeline 完成: {len(results)} 张图像")
-
+    n_batch = getattr(pipeline, "last_batch_image_count", None)
     if stop_after_phase2:
+        n = n_batch if n_batch is not None else len(results)
+        print(
+            f"\nPipeline 完成: Phase 1–2 覆盖 {n} 张图像"
+            "（stop_after_phase2；Phase 3–5 未运行，results 为空列表）"
+        )
         print("✓ stop_after_phase2：跳过 evaluate / compare_models")
         return
+
+    print(f"\nPipeline 完成: {len(results)} 张图像")
 
     # 评估指标
     from pipeline.evaluate import evaluate_pipeline

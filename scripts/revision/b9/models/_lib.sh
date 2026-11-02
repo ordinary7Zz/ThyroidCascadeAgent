@@ -35,10 +35,12 @@ run_baseline_full_task() {
   local test_manifest="$5"
   local dai_manifest="${6:-}"
   local skip_train="${7:-0}"
+  local roots="$IMAGE_ROOTS_LNM"
+  [[ "$task" == "ftcptc" ]] && roots="$IMAGE_ROOTS_FTC"
   local out_dir="$OUT_ROOT/$model/$task/full_external"
   local ep
   ep="$(baseline_epochs_for_model "$model")"
-  echo ">>> [$model/$task] full train + ZJH hold-out${dai_manifest:+ + Dai}$([[ "$skip_train" == "1" ]] && echo ' (skip_train)') epochs=$ep"
+  echo ">>> [$model/$task] full train + hold-out test${dai_manifest:+ + Dai}$([[ "$skip_train" == "1" ]] && echo ' (skip_train)') epochs=$ep"
   mkdir -p "$out_dir"
   local -a dai_args=()
   if [[ -n "$dai_manifest" && -f "$dai_manifest" ]]; then
@@ -54,6 +56,7 @@ run_baseline_full_task() {
     --packed_root "$packed" \
     --train_manifest "$train_manifest" \
     --zjh_test_manifest "$test_manifest" \
+    --image_roots_json "$roots" \
     --output_dir "$out_dir" \
     --epochs "$ep" \
     --cuda_device "$CUDA_DEVICE" \
@@ -64,8 +67,8 @@ run_baseline_full_task() {
 
 run_baseline_full_zjh_both_tasks() {
   local model="$1"
-  run_baseline_full_task "$model" lnm "$LNM_PACK" "$MANIFEST_ZJH_TRAIN_LNM" "$MANIFEST_ZJH_TEST_LNM"
-  run_baseline_full_task "$model" ftcptc "$FTC_PACK" "$MANIFEST_ZJH_TRAIN_FTC" "$MANIFEST_ZJH_TEST_FTC"
+  run_baseline_full_task "$model" lnm "$LNM_PACK" "$MANIFEST_LNM_TRAIN" "$MANIFEST_LNM_TEST"
+  run_baseline_full_task "$model" ftcptc "$FTC_PACK" "$MANIFEST_FTC_TRAIN" "$MANIFEST_FTC_TEST"
 }
 
 run_baseline_dai_ftc() {
@@ -73,7 +76,7 @@ run_baseline_dai_ftc() {
   echo ""
   echo ">>> [$model/ftcptc] Dai external (reuse FTC checkpoint)"
   run_baseline_full_task "$model" ftcptc "$FTC_PACK" \
-    "$MANIFEST_ZJH_TRAIN_FTC" "$MANIFEST_ZJH_TEST_FTC" "$MANIFEST_DAI_FTC" 1
+    "$MANIFEST_FTC_TRAIN" "$MANIFEST_FTC_TEST" "$MANIFEST_DAI_FTC" 1
 }
 
 run_baseline_oof_both_tasks() {
@@ -109,11 +112,11 @@ run_llnm_full_zjh() {
   cd "$LLNM_ROOT"
   if [[ "$skip_train" != "1" ]]; then
     echo ""
-    echo ">>> [LLNM-Net/LNM] full train + ZJH hold-out (monitor zjh_test during training)"
+    echo ">>> [LLNM-Net/LNM] full train + hold-out test (monitor test during training)"
     "$PYTHON" new_code/train.py \
-      --train_json "$MANIFEST_ZJH_TRAIN_LNM" \
-      --test_json "$MANIFEST_ZJH_TEST_LNM" \
-      --image_roots_json "$LNM_PACK/image_roots.json" \
+      --train_json "$MANIFEST_LNM_TRAIN" \
+      --test_json "$MANIFEST_LNM_TEST" \
+      --image_roots_json "$IMAGE_ROOTS_LNM" \
       --output_dir "$out" \
       --batch_size "${BATCH_SIZE:-4}" \
       --epochs "${EPOCHS:-${SPECIALIST_EPOCHS:-30}}" \
@@ -133,10 +136,10 @@ run_llnm_full_zjh() {
     return 0
   fi
 
-  echo ">>> [LLNM-Net/LNM] ZJH hold-out eval"
+  echo ">>> [LLNM-Net/LNM] hold-out test eval"
   "$PYTHON" new_code/evaluate.py \
-    --test_json "$MANIFEST_ZJH_TEST_LNM" \
-    --image_roots_json "$LNM_PACK/image_roots.json" \
+    --test_json "$MANIFEST_LNM_TEST" \
+    --image_roots_json "$IMAGE_ROOTS_LNM" \
     --weights "$out/best_model.pth" \
     --norm_stats "$out/train_norm_stats.pkl" \
     --output "$out/zjh_test_eval.json" \
@@ -159,10 +162,11 @@ run_llnm_oof() {
   echo ">>> [LLNM-Net/LNM] 5-fold OOF → $out"
   cd "$LLNM_ROOT"
   "$PYTHON" new_code/run_b9_patient_cv.py \
-    --train_manifest "$MANIFEST_ZJH_TRAIN_LNM" \
-    --image_roots_json "$LNM_PACK/image_roots.json" \
+    --train_manifest "$MANIFEST_LNM_TRAIN" \
+    --image_roots_json "$IMAGE_ROOTS_LNM" \
     --output_dir "$out" \
     --n_splits "$N_SPLITS" \
+    --cluster_key "$LLNM_CLUSTER_KEY" \
     --batch_size "${BATCH_SIZE:-4}" \
     --epochs "${EPOCHS:-${SPECIALIST_EPOCHS:-30}}" \
     --learning_rate "${LEARNING_RATE:-1e-5}" \
@@ -195,7 +199,7 @@ run_tiger_oof() {
   cd "$TIGER_ROOT"
   NUM_EPOCHS="${NUM_EPOCHS:-${SPECIALIST_EPOCHS:-30}}" \
   OUTPUT_DIR="$OUT_ROOT/tiger_model/ftcptc/oof" \
-  JSON_PATH="$MANIFEST_ZJH_TRAIN_FTC" \
+  JSON_PATH="$MANIFEST_FTC_TRAIN" \
   bash "$B9_SCRIPT_DIR/05_run_tiger_ftc_b9.sh"
 }
 
@@ -206,11 +210,18 @@ run_txagent_oof_both() {
   bash "$B9_SCRIPT_DIR/03_run_dino_multitask_oof.sh"
 }
 
+run_txagent_full_external() {
+  echo ""
+  echo ">>> [ThyroidXAgent] DINO full train + ZJH hold-out (+ FTC Dai); EPOCHS=${EPOCHS:-${SPECIALIST_EPOCHS:-30}}"
+  OUT_ROOT="$OUT_ROOT" RUN_TAG="$RUN_TAG" TASKS="${TX_FULL_TASKS:-lnm ftcptc}" \
+    EPOCHS="${EPOCHS:-${SPECIALIST_EPOCHS:-30}}" \
+    bash "$B9_SCRIPT_DIR/08_run_dino_full_external.sh"
+}
+
 run_txagent_full_note() {
   echo ""
-  echo ">>> [ThyroidXAgent] steps 1–2 (full ZJH + Dai): run Cascade E1–E4 after DINO checkpoints exist."
-  echo "    Output target: $OUT_ROOT/thyroidxagent/"
-  echo "    See Malignant_Cls_Model/b9/README.md and B9_ThyroidXAgent_补充实验计划.md"
+  echo ">>> [ThyroidXAgent] Full stack (DINO+AutoGluon+router) external: not in B9 scripts yet."
+  echo "    Interim tab_malig_ext: DINO specialist via run_txagent_full_external → $OUT_ROOT/thyroidxagent/"
 }
 
 run_vlm_api_note() {
