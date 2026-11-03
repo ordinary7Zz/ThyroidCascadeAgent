@@ -154,7 +154,7 @@ bash scripts/revision/b7/run_b7_sample_canonical.sh
 | 文档 | NHC 相关更新 |
 |------|----------------|
 | `docs/revision/暂定的修改和回复计划/MANUSCRIPT_REVISION_PLAN_ZH.md` | **§17 B7** — 政策、示例数字、B3/B4/B5/B8 交叉、checklist |
-| `docs/revision/暂定的修改和回复计划/REVIEWER_RESPONSE_PLAN_ZH.md` | B7 专项、与 B8 分条 |
+| `docs/revision/暂定的修改和回复计划/正式回复/latex/` | 回信 LaTeX（R2.6 表 `tab_nhc_*` 等） |
 | `docs/revision/暂定的修改和回复计划/README.md` | 归档表 B7 状态 |
 | `docs/revision/nhc_sample/README.md` | B3/B4/B8/B2/infer 示例命令 |
 

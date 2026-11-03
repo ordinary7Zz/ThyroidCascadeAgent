@@ -1,9 +1,7 @@
 % Routing ablation (tab_routing_ablation_seg / tab_routing_ablation_cls); metrics: docs/revision/b3/, output/ablation/b3/
 
 \begin{responsepaginatedtable}
-\refstepcounter{responsetableno}
-\captionof{table}{\responsetabletitle{tab_routing_ablation_seg}{Routing ablation --- nodule segmentation}}
-\label{tab_routing_ablation_seg}
+\captionof*{table}{\responsetabletitle{tab_routing_ablation_seg}{Routing ablation --- nodule segmentation}}
 \begin{longtable}{@{}llll@{}}
 \toprule
 Cohort & Routing strategy & Dice $\uparrow$ & HD95 $\downarrow$ (mm) \\
@@ -88,8 +86,7 @@ RJH-7K & Best single (1) & 0.9128 (0.9113--0.9143) & 1.9676 (1.8965--2.0424) \\
 \end{responsepaginatedtable}
 
 \begin{responsepaginatedtable}
-\refstepcounter{responsetableno}
-\captionof{table}{\responsetabletitle{tab_routing_ablation_cls}{Routing ablation --- benign--malignant classification}}\label{tab_routing_ablation_cls}
+\captionof*{table}{\responsetabletitle{tab_routing_ablation_cls}{Routing ablation --- benign--malignant classification}}
 \begin{longtable}{@{}llll@{}}
 \toprule
 Cohort & Routing strategy & AUROC $\uparrow$ & AUPRC $\uparrow$ \\

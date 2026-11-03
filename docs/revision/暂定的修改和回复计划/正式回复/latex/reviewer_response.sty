@@ -79,9 +79,13 @@
 \newcommand{\responsetablerefrange}[2]{%
   \ResponseTablesName~\ref{#1}--\ref{#2}%
 }
+\makeatletter
 \newcommand{\responsetabletitle}[2]{%
+  \refstepcounter{responsetableno}%
   \ResponseTableName~\theresponsetableno.\nobreakspace #2%
+  \label{#1}%
 }
+\makeatother
 % Longtable page header only (plain text; avoid hyperref/link boxes in \multicolumn width calc)
 \newcommand{\responsetablecontinuedrow}[1]{%
   \multicolumn{4}{@{}r@{}}{\footnotesize\emph{\ResponseTableName~\ref{#1}\responsecontinuedsuffix}} \\%
@@ -164,9 +168,18 @@
   \noindent\textbf{\SupportingLabel}\par\vspace{0.25em}
 }{}
 
-% Float captions: full text in \caption{Table R1. ...} (no extra "Table 1:" prefix)
-\captionsetup[table]{position=above,skip=6pt,font=small,labelfont=normal,singlelinecheck=false,labelformat=empty,labelsep=none}
-\captionsetup[figure]{position=below,skip=6pt,font=small,labelfont=normal,singlelinecheck=false,labelformat=empty,labelsep=none}
+% Float captions: full text in \caption{Table R1. ...} (no extra "Table 1:" prefix).
+% Nature-style: left-aligned caption block at \textwidth (not centered short lines).
+\captionsetup{
+  justification=raggedright,
+  singlelinecheck=false,
+  font=small,
+  labelfont=normal,
+  labelformat=empty,
+  labelsep=none,
+}
+\captionsetup[table]{position=above,skip=6pt}
+\captionsetup[figure]{position=below,skip=6pt}
 \captionsetup[sub]{font=footnotesize,labelfont=normal}
 
 \newcommand{\responseappendix}{%
@@ -203,16 +216,35 @@
 }
 \newcommand{\responserowagent}{\rowcolor{ResponseTableGray}}
 
+\makeatletter
 \newenvironment{responsetable}{%
-  \refstepcounter{responsetableno}%
   \begin{table}[H]
-  \centering
   \footnotesize
   \setlength{\tabcolsep}{4pt}
   \renewcommand{\arraystretch}{1.15}
+  \let\responsetable@savedcaption\caption
+  \def\caption##1{%
+    \responsetable@savedcaption*{##1}%
+    \centering
+  }%
 }{%
+  \let\caption\responsetable@savedcaption
   \end{table}
 }
+\newenvironment{manuscriptresponsetable}{%
+  \begin{table}[H]
+  \footnotesize
+  \responsetablemanuscriptsetup
+  \let\responsetable@savedcaption\caption
+  \def\caption##1{%
+    \responsetable@savedcaption*{##1}%
+    \centering
+  }%
+}{%
+  \let\caption\responsetable@savedcaption
+  \end{table}
+}
+\makeatother
 
 % Multi-page ablation tables (longtable + repeated header; not a float)
 \newenvironment{responsepaginatedtable}{%
@@ -223,21 +255,11 @@
   \setlength{\LTpre}{0.4em}
   \setlength{\LTpost}{0.6em}
   \setlength{\LTcapwidth}{\textwidth}
-  % Center the table when natural width < \textwidth (see longtable.pdf)
   \setlength{\LTleft}{0pt plus 1fill}
   \setlength{\LTright}{0pt plus 1fill}
+  \captionsetup{position=above,skip=6pt,justification=raggedright,singlelinecheck=false}%
 }{%
   \par\medskip
-}
-
-\newenvironment{manuscriptresponsetable}{%
-  \refstepcounter{responsetableno}%
-  \begin{table}[H]
-  \centering
-  \footnotesize
-  \responsetablemanuscriptsetup
-}{%
-  \end{table}
 }
 
 \newenvironment{responsefigure}{%
@@ -260,13 +282,13 @@
 
 \newcommand{\responseinlinetablecaption}[1]{%
   \par\vspace{0.15em}%
-  {\small #1\par}%
+  {\small\raggedright #1\par}%
   \vspace{0.35em}%
 }
 
 \newcommand{\responsetablenote}[1]{%
   \par\vspace{0.4em}%
-  {\footnotesize #1\par}%
+  {\footnotesize\raggedright #1\par}%
 }
 
 % Legacy: use one \caption{\responsefiguretitle{key}{full caption text}} instead

@@ -2,7 +2,7 @@
 
 > **用途**：排工与验收；勾选「必交付」项，避免只做实验不写稿/不回信。  
 > **范围**：仅 B1–B12（不含 Shiyu S1–S10）。  
-> **关联**：[REVIEWER_RESPONSE_PLAN_ZH.md](./REVIEWER_RESPONSE_PLAN_ZH.md)、[MANUSCRIPT_REVISION_PLAN_ZH.md](./MANUSCRIPT_REVISION_PLAN_ZH.md)、`docs/ThyroidXAgent_返修计划与回复_中文.md` Part A。
+> **关联**：[正式回复/latex/](./正式回复/latex/)（回信唯一稿本）、[MANUSCRIPT_REVISION_PLAN_ZH.md](./MANUSCRIPT_REVISION_PLAN_ZH.md)、`docs/ThyroidXAgent_返修计划与回复_中文.md` Part A。
 
 **图例**：✅ 已有可引用素材　🟡 部分/占位　⬜ 未做　🔒 依赖协作方
 
@@ -68,7 +68,7 @@
 | **表或图** | 8 策略 × 分割/分类 × 九队列测试集；Oracle 上界 | Results + Supp. | `../b3/B3_WAVE1_RESULTS.md`；回信 `tab_routing_ablation_*` | ✅ **已归档**（learned/NHC 若补数在 `b3/` 维护） |
 | **文** | Methods 4.3 八策略；static_rule 口径；NHC 待纳入或 Limitation | Methods + Limitations | `REVISION_B3_B4_PLAN.md` | 🟡 |
 | **统计** | **cluster bootstrap CI**（与 B2 同脚本逻辑）；**配对**策略差分 CI | 表注 / Methods | `recompute_b3_cluster_ci.py` | 🟡 CI **已对齐**；配对差分仍 ⬜ |
-| **回** | R1.2、R2.8、R3.1 | 回复信 | `REVIEWER_RESPONSE_SNIPPETS_B3.md`；`REVIEWER_RESPONSE_PLAN` **B3 专项** | 🟡 **可起草**（6/7 占位） |
+| **回** | R1.2、R2.8、R3.1 | 回复信 | `REVIEWER_RESPONSE_SNIPPETS_B3.md`；`正式回复/latex/` **B3 专项** | 🟡 **可起草**（6/7 占位） |
 
 **验收**：波次 1 主论点与九队列 CSV **可统稿**；策略 **6/7 性能** 与 **NHC** 勿写死；learned/LLM 跑完后只换表行与回信一句。
 
@@ -103,7 +103,7 @@
 | **补表** | 每例 **5×** 路由一致率；按候选质量分层波动 | Supp. | `../b6/B6_ROUTING_STABILITY_CONCLUSIONS.md`；`output/sample/.../stability_summary.json` | 🟡 sample *n*=10；TN3K 换数 |
 | **数据** | ≥10 条结构化 **routing log** 样例 | Supp. 或 GitHub | `output/sample/pipeline_run/routing_log.jsonl` | ✅ |
 | **图** | 可选（一致率条形图） | Supp. | — | ⬜ |
-| **回** | R2.9 | 回复信 | `../b6/REVIEWER_RESPONSE_SNIPPETS_B6.md`；`REVIEWER_RESPONSE_PLAN_ZH.md` B6 专项 | 🟡 可起草；统稿入信 |
+| **回** | R2.9 | 回复信 | `../b6/REVIEWER_RESPONSE_SNIPPETS_B6.md`；`正式回复/latex/` B6 专项 | 🟡 可起草；统稿入信 |
 
 ---
 
@@ -127,7 +127,7 @@
 | **补表** | ECE、Brier；五 BM 队列 **送复核比例** | Supp. | `output/b8/fit/` + `cohorts/*/`（**不含** RJH/DDTI_seg/PKTN） | 🟡 JSON 已齐；制表待做 |
 | **文** | 触发规则；**validation 95 分位** 定阈 | Methods 4.x | `MANUSCRIPT` **§12**；`REVISION_B7_B8_PLAN.md` | 🟡 计划已写；入 LaTeX 待统稿 |
 | **非稿面** | `abstention_thresholds.json` 供 **F4** | — | `output/b8/fit/abstention_thresholds.json` | ✅ |
-| **回** | R1.3（校准/拒答）；R1.6 临床句 mainly F4 | 回复信 | `REVIEWER_RESPONSE_PLAN` **B8 专项** | 🟡 可起草；B7 NHC 段另补 |
+| **回** | R1.3（校准/拒答）；R1.6 临床句 mainly F4 | 回复信 | `正式回复/latex/` **B8 专项** | 🟡 可起草；B7 NHC 段另补 |
 
 **验收**：**勿用** `smoke_test_as_val`；结论文档刷新 q95 后 **零句 smoke 进稿**。
 
@@ -200,7 +200,7 @@
 
 ## 除文图表外的通用要求（勿漏）
 
-- [ ] 回复信每条：**引用审稿原文一句** + 对应 B 包结论（见 `REVIEWER_RESPONSE_PLAN_ZH.md`）。  
+- [ ] 回复信每条：**引用审稿原文一句** + 对应 B 包结论（见 `正式回复/latex/`）。  
 - [ ] 改 Supp. 表时同步改 **正文一句 + 摘要**（尤其 B2、B9、B12）。  
 - [ ] 新实验：**配置与 `results.json` 路径**可归档（G4 代码发布前）。  
 - [ ] NHC：**LLM 消融 vs 主表 no-LLM** 在 Methods/Limitations 写清（B3/B7/B8）。  

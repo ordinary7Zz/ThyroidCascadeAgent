@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import re
 import subprocess
 import threading
 import time
@@ -78,9 +79,16 @@ def _latex_log_errors(main_tex: Path) -> list[str]:
         text = log_path.read_text(encoding="utf-8", errors="replace")
     except OSError:
         return []
+    err_re = re.compile(
+        r"^! |"
+        r": Undefined control sequence\.|"
+        r": Extra , or forgotten \\endgroup\.|"
+        r": You can't use `macro parameter character #'|"
+        r"Emergency stop"
+    )
     hits: list[str] = []
     for line in text.splitlines():
-        if line.startswith("! ") or "Emergency stop" in line:
+        if err_re.search(line):
             hits.append(line)
     return hits[:20]
 
@@ -94,7 +102,8 @@ def compile_lang(lang: str, runs: int = 2) -> tuple[bool, str]:
     figures = BASE / "figures"
     env["TEXINPUTS"] = f".:{figures}:{LATEX_DIR}:"
     logs: list[str] = []
-    ok = True
+    last_code = 0
+    last_log_errors: list[str] = []
     for pass_no in range(1, runs + 1):
         code, log = _run(
             [
@@ -106,15 +115,20 @@ def compile_lang(lang: str, runs: int = 2) -> tuple[bool, str]:
             LATEX_DIR,
             env=env,
         )
-        logs.append(f"=== xelatex pass {pass_no} ({lang}) ===\n{log[-12000:]}")
-        log_errors = _latex_log_errors(main_tex)
-        if log_errors:
-            logs.append("=== LaTeX errors (.log) ===\n" + "\n".join(log_errors))
-        if code != 0 or log_errors:
-            ok = False
-            break
+        last_code = code
+        logs.append(f"=== xelatex pass {pass_no}/{runs} ({lang}) exit={code} ===\n{log[-8000:]}")
+        last_log_errors = _latex_log_errors(main_tex)
+        if last_log_errors:
+            logs.append("=== LaTeX errors (.log) ===\n" + "\n".join(last_log_errors))
     pdf_ok = cfg["pdf"].exists() and cfg["pdf"].stat().st_size > 10_000
-    return ok and pdf_ok, "\n".join(logs)
+    ok = last_code == 0 and not last_log_errors and pdf_ok
+    if ok:
+        logs.append(f"=== OK ({lang}): PDF {cfg['pdf'].name} ===\n")
+    else:
+        logs.append(
+            f"=== FAILED ({lang}): exit={last_code}, log_errors={len(last_log_errors)}, pdf_ok={pdf_ok} ===\n"
+        )
+    return ok, "\n".join(logs)
 
 
 def full_build(reason: str = "manual") -> dict:

@@ -149,7 +149,7 @@
 
 **对意图的理解：** 规范应集中、可检索；Path B 等仅存在于旧 draft MD，正式 `generated/*.tex` 附录叙述改用「分类器不一致时的 LLM 裁决」。
 
-**教训 / 避免重犯：** 改稿前先读 `latex/README.md` 专节；`REVIEWER_RESPONSE_DRAFT_*.md` 不同步，勿从 draft 复制内部名。
+**教训 / 避免重犯：** 改稿前先读 `latex/README.md`；回信**只改** `latex/generated/body_*.tex`（已删除 MD draft/plan，勿从 Markdown 复制 `**` 等语法）。
 
 ---
 
@@ -255,7 +255,7 @@
 
 ## 2026-10-29 — R2.23 TI-RADS 体系回复
 
-**文件：** `body_en.tex`、`body_zh.tex`、`REVIEWER_RESPONSE_PLAN_ZH.md`
+**文件：** `body_en.tex`、`body_zh.tex`（唯一回信源）
 
 **做了什么：** R2.23 由「从略」改为三段 prose：ACR vs C-TIRADS（含 4b）；本信分割/分类与 TI-RADS 无关；机构中文报告用 C-TIRADS；KMVE/模板细节 `\rpending` + 合并稿指 R1.5。
 
@@ -499,7 +499,7 @@
 
 ## 2026-10-31 — 维护文档信内表图：R* → `\label` 键
 
-**文件：** `generated/*_tables_*.tex` 文件头；`body_{en,zh}.tex`；`ai/TABLE_DATA_SOURCE_AUDIT.md`、`PENDING.md`、`WRITING_STYLE.md`、`INSTRUCTIONS.md`；`REVIEWER_RESPONSE_DRAFT_{en,zh}.md`；`../REVIEWER_RESPONSE_PLAN_ZH.md`、`../MANUSCRIPT_REVISION_PLAN_ZH.md`、`../README.md`、`../B_DELIVERABLES_CHECKLIST_ZH.md`；`latex/README.md`、`latex/scripts/decouple_manuscript_pending.py`
+**文件：** `generated/*_tables_*.tex` 文件头；`body_{en,zh}.tex`；`ai/TABLE_DATA_SOURCE_AUDIT.md`、`PENDING.md`、`WRITING_STYLE.md`、`INSTRUCTIONS.md`；`../MANUSCRIPT_REVISION_PLAN_ZH.md`、`../README.md`、`../B_DELIVERABLES_CHECKLIST_ZH.md`；`latex/README.md`、`latex/scripts/decouple_manuscript_pending.py`
 
 **做了什么：** 维护/草稿/计划中的信内 **Table/Figure R*** 硬编码改为 `tab_*` / `fig_*`（与 `\responsetabletitle` 键一致）；PDF 自动 R 序号说明保留在 `response_asset_registry.tex` 与 README 反例。审稿意见 **R1.1** 等编号不变。
 

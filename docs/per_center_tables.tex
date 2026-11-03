@@ -1,0 +1,348 @@
+% Auto-generated per-center performance tables
+% Required packages (add to document preamble):
+%   \usepackage{booktabs}
+%   \usepackage{multirow}
+
+% ============================================================
+% Supplementary Table S1: Gland segmentation — Dice
+% ============================================================
+
+\begin{table}[p]
+\centering
+\caption{Per-centre Dice similarity coefficient (\%) for thyroid gland segmentation on the NHC-MISD-TUS external test set. Values are reported as point estimates with 95\% confidence intervals. Bold indicates the best result in each row.}
+\label{tab:gland_dice}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrrrr}
+\toprule
+\multirow{2}{*}{Center} & \multirow{2}{*}{$N$} & \multicolumn{1}{c}{ThyroidXAgent} & \multicolumn{1}{c}{MedSAM2} & \multicolumn{1}{c}{MedSegX} & \multicolumn{1}{c}{TransUNet} & \multicolumn{1}{c}{UltraFedFM} \\
+\cmidrule(lr){3-3} \cmidrule(lr){4-4} \cmidrule(lr){5-5} \cmidrule(lr){6-6} \cmidrule(lr){7-7}
+ & & Dice (\%) $\uparrow$ & Dice (\%) $\uparrow$ & Dice (\%) $\uparrow$ & Dice (\%) $\uparrow$ & Dice (\%) $\uparrow$ \\
+\midrule
+\textit{Overall} & 8,721 & 59.28\textsubscript{(58.70, 59.86)} & 56.80\textsubscript{(56.35, 57.24)} & 54.98\textsubscript{(54.57, 55.39)} & 53.56\textsubscript{(53.06, 54.12)} & 33.30\textsubscript{(32.73, 33.88)} \\
+\midrule
+THYB\_S\_ZJ24 & 1,174 & \textbf{80.64}\textsubscript{(79.84, 81.40)} & 52.96\textsubscript{(51.96, 54.03)} & 50.32\textsubscript{(49.25, 51.42)} & 72.91\textsubscript{(72.03, 73.79)} & 8.49\textsubscript{(7.59, 9.42)} \\
+THYB\_S\_EN04 & 949 & \textbf{65.30}\textsubscript{(63.82, 66.78)} & 51.05\textsubscript{(49.46, 52.51)} & 59.83\textsubscript{(58.66, 60.96)} & 59.65\textsubscript{(58.11, 61.15)} & 35.33\textsubscript{(33.81, 36.91)} \\
+THYB\_S\_BJ01 & 876 & 61.05\textsubscript{(59.14, 62.88)} & \textbf{61.22}\textsubscript{(59.93, 62.48)} & 51.36\textsubscript{(49.83, 52.83)} & 56.68\textsubscript{(54.95, 58.35)} & 27.42\textsubscript{(25.73, 29.23)} \\
+THYB\_S\_SH01 & 832 & 43.33\textsubscript{(41.36, 45.33)} & \textbf{64.88}\textsubscript{(63.37, 66.28)} & 55.60\textsubscript{(54.14, 56.95)} & 42.72\textsubscript{(40.94, 44.52)} & 49.82\textsubscript{(48.11, 51.48)} \\
+THYB\_S\_ZJ05 & 694 & \textbf{55.25}\textsubscript{(53.12, 57.40)} & 54.83\textsubscript{(53.19, 56.51)} & 53.77\textsubscript{(52.33, 55.13)} & 50.71\textsubscript{(48.70, 52.55)} & 30.49\textsubscript{(28.66, 32.35)} \\
+THYB\_S\_SH05 & 669 & \textbf{61.58}\textsubscript{(59.74, 63.48)} & 59.92\textsubscript{(58.52, 61.38)} & 56.63\textsubscript{(55.27, 57.98)} & 50.26\textsubscript{(48.46, 52.13)} & 34.59\textsubscript{(32.66, 36.40)} \\
+THYB\_S\_NX01 & 582 & 52.69\textsubscript{(50.28, 54.89)} & 45.59\textsubscript{(44.00, 47.18)} & 52.80\textsubscript{(51.32, 54.40)} & \textbf{54.11}\textsubscript{(51.83, 56.22)} & 32.64\textsubscript{(30.64, 34.63)} \\
+THYB\_S\_ZJ06 & 460 & 48.58\textsubscript{(46.12, 50.98)} & \textbf{62.74}\textsubscript{(60.83, 64.42)} & 55.20\textsubscript{(53.35, 56.97)} & 42.03\textsubscript{(39.70, 44.34)} & 35.19\textsubscript{(32.95, 37.35)} \\
+THYB\_S\_QX07 & 289 & \textbf{66.05}\textsubscript{(63.24, 68.91)} & 50.61\textsubscript{(48.09, 53.10)} & 59.57\textsubscript{(57.62, 61.64)} & 62.24\textsubscript{(59.24, 65.06)} & 46.38\textsubscript{(43.64, 49.40)} \\
+THYB\_S\_AN01 & 243 & 36.90\textsubscript{(33.32, 40.25)} & \textbf{74.15}\textsubscript{(71.96, 76.34)} & 56.14\textsubscript{(53.14, 59.07)} & 36.30\textsubscript{(33.35, 39.72)} & 60.76\textsubscript{(57.91, 63.56)} \\
+THYB\_S\_CQ03 & 238 & \textbf{63.69}\textsubscript{(60.50, 66.62)} & 55.01\textsubscript{(52.63, 57.49)} & 58.52\textsubscript{(56.01, 60.89)} & 46.06\textsubscript{(42.68, 49.56)} & 33.93\textsubscript{(30.82, 37.30)} \\
+THYB\_S\_GZ02 & 233 & 59.92\textsubscript{(56.20, 63.38)} & \textbf{62.23}\textsubscript{(60.11, 64.35)} & 55.84\textsubscript{(53.35, 58.40)} & 54.40\textsubscript{(51.00, 58.00)} & 37.71\textsubscript{(34.20, 41.27)} \\
+THYB\_S\_JX06 & 215 & 54.16\textsubscript{(50.51, 58.01)} & \textbf{63.46}\textsubscript{(60.77, 65.99)} & 55.71\textsubscript{(52.48, 58.52)} & 45.96\textsubscript{(42.07, 49.54)} & 46.71\textsubscript{(43.30, 50.23)} \\
+THYB\_S\_JS02 & 190 & 36.44\textsubscript{(32.39, 40.43)} & \textbf{64.41}\textsubscript{(61.96, 66.78)} & 56.60\textsubscript{(54.36, 58.91)} & 34.57\textsubscript{(31.09, 38.09)} & 50.48\textsubscript{(46.08, 54.64)} \\
+THYB\_S\_YN05 & 137 & 55.44\textsubscript{(50.24, 60.32)} & 52.03\textsubscript{(48.59, 55.63)} & \textbf{63.75}\textsubscript{(60.52, 66.75)} & 63.10\textsubscript{(58.34, 67.44)} & 14.28\textsubscript{(10.73, 18.14)} \\
+THYB\_S\_EN02 & 120 & \textbf{55.75}\textsubscript{(50.96, 60.59)} & 39.06\textsubscript{(36.22, 42.01)} & 51.87\textsubscript{(48.88, 54.83)} & 38.76\textsubscript{(33.77, 43.55)} & 40.34\textsubscript{(35.64, 44.90)} \\
+THYB\_S\_AH04 & 101 & \textbf{65.76}\textsubscript{(59.94, 70.88)} & 52.92\textsubscript{(49.38, 56.65)} & 61.94\textsubscript{(58.10, 65.51)} & 56.38\textsubscript{(50.58, 61.47)} & 47.68\textsubscript{(41.39, 54.39)} \\
+THYB\_S\_GS03 & 94 & 50.96\textsubscript{(45.22, 56.84)} & \textbf{59.17}\textsubscript{(54.56, 63.60)} & 51.74\textsubscript{(47.42, 55.76)} & 48.24\textsubscript{(42.53, 53.76)} & 40.09\textsubscript{(34.46, 45.45)} \\
+THYB\_S\_FJ03 & 85 & \textbf{66.63}\textsubscript{(60.76, 72.05)} & 46.90\textsubscript{(43.13, 50.64)} & 54.13\textsubscript{(50.57, 57.52)} & 50.83\textsubscript{(44.94, 56.45)} & 36.40\textsubscript{(30.87, 41.92)} \\
+THYB\_S\_SD12 & 75 & \textbf{69.59}\textsubscript{(64.15, 74.62)} & 64.10\textsubscript{(60.34, 67.84)} & 59.41\textsubscript{(55.70, 63.10)} & 58.28\textsubscript{(52.76, 63.56)} & 33.57\textsubscript{(27.12, 39.83)} \\
+THYB\_S\_JS01 & 72 & \textbf{56.33}\textsubscript{(49.82, 62.97)} & 49.38\textsubscript{(45.18, 53.56)} & 54.34\textsubscript{(50.59, 58.03)} & 49.09\textsubscript{(42.61, 55.51)} & 28.27\textsubscript{(23.18, 33.88)} \\
+THYB\_S\_NM02 & 66 & \textbf{57.71}\textsubscript{(52.20, 63.08)} & 52.72\textsubscript{(47.87, 57.77)} & 52.81\textsubscript{(47.81, 57.29)} & 46.24\textsubscript{(40.41, 52.18)} & 36.74\textsubscript{(30.84, 42.37)} \\
+THYB\_S\_JL04 & 54 & 43.92\textsubscript{(34.91, 52.81)} & \textbf{56.22}\textsubscript{(50.23, 62.17)} & 55.83\textsubscript{(50.74, 61.29)} & 40.85\textsubscript{(32.13, 49.16)} & 42.49\textsubscript{(34.52, 50.97)} \\
+THYB\_S\_SH06 & 43 & 49.75\textsubscript{(41.79, 57.64)} & \textbf{51.33}\textsubscript{(45.78, 56.54)} & 45.09\textsubscript{(37.42, 51.92)} & 46.30\textsubscript{(37.76, 54.02)} & 22.32\textsubscript{(15.88, 29.32)} \\
+THYB\_S\_BJ09 & 41 & 54.80\textsubscript{(46.03, 63.29)} & \textbf{55.54}\textsubscript{(49.59, 61.66)} & 55.00\textsubscript{(50.40, 59.85)} & 39.65\textsubscript{(31.89, 47.97)} & 52.67\textsubscript{(44.89, 60.73)} \\
+THYB\_S\_SX04 & 41 & \textbf{61.37}\textsubscript{(55.03, 67.56)} & 56.50\textsubscript{(50.56, 62.42)} & 48.79\textsubscript{(42.56, 54.12)} & 44.04\textsubscript{(34.60, 52.15)} & 42.36\textsubscript{(33.90, 51.28)} \\
+THYB\_S\_SC06 & 29 & 38.63\textsubscript{(29.91, 48.19)} & \textbf{69.92}\textsubscript{(62.86, 76.12)} & 58.20\textsubscript{(49.69, 65.60)} & 32.00\textsubscript{(25.56, 38.77)} & 59.45\textsubscript{(50.88, 67.48)} \\
+THYB\_S\_XJ01 & 25 & \textbf{68.57}\textsubscript{(58.62, 77.48)} & 55.07\textsubscript{(48.48, 61.59)} & 57.03\textsubscript{(50.98, 62.37)} & 60.51\textsubscript{(51.17, 68.75)} & 14.00\textsubscript{(7.83, 21.61)} \\
+THYB\_S\_YN01 & 25 & 55.83\textsubscript{(43.67, 66.82)} & \textbf{58.55}\textsubscript{(51.86, 65.06)} & 56.48\textsubscript{(48.32, 64.21)} & 46.59\textsubscript{(35.73, 57.93)} & 29.32\textsubscript{(19.14, 40.82)} \\
+THYB\_S\_SD13 & 22 & 69.21\textsubscript{(57.84, 80.57)} & \textbf{72.83}\textsubscript{(63.53, 80.86)} & 63.22\textsubscript{(55.37, 71.01)} & 41.87\textsubscript{(31.62, 52.02)} & 46.04\textsubscript{(34.90, 56.40)} \\
+THYB\_S\_GX01 & 19 & \textbf{64.80}\textsubscript{(52.35, 75.87)} & 53.73\textsubscript{(46.83, 61.09)} & 60.04\textsubscript{(51.68, 67.03)} & 61.17\textsubscript{(48.99, 71.80)} & 24.77\textsubscript{(12.11, 38.80)} \\
+THYB\_S\_ZJ29 & 16 & \textbf{85.21}\textsubscript{(82.65, 87.63)} & 52.40\textsubscript{(43.77, 61.90)} & 67.08\textsubscript{(59.58, 74.31)} & 47.06\textsubscript{(32.00, 61.91)} & 3.30\textsubscript{(0.48, 7.60)} \\
+THYB\_S\_HB07 & 8 & 31.68\textsubscript{(9.84, 58.05)} & \textbf{69.62}\textsubscript{(56.11, 82.55)} & 52.10\textsubscript{(37.92, 62.81)} & 19.55\textsubscript{(0.08, 43.94)} & 29.09\textsubscript{(16.83, 41.56)} \\
+THYB\_S\_FJ01 & 2 & \textbf{67.14}\textsubscript{(64.04, 70.23)} & 44.00\textsubscript{(38.25, 49.75)} & 49.95\textsubscript{(43.08, 56.82)} & 45.18\textsubscript{(32.48, 57.89)} & 39.20\textsubscript{(29.38, 49.01)} \\
+THYB\_S\_SD14 & 2 & 3.13\textsubscript{(2.55, 3.71)} & 46.73\textsubscript{(36.29, 57.18)} & \textbf{58.38}\textsubscript{(54.22, 62.54)} & 44.78\textsubscript{(31.59, 57.97)} & 37.57\textsubscript{(31.23, 43.91)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+\clearpage
+
+% ============================================================
+% Supplementary Table S2: Gland segmentation — HD95
+% ============================================================
+
+\begin{table}[p]
+\centering
+\caption{Per-centre 95\% Hausdorff distance (HD95, mm) for thyroid gland segmentation on the NHC-MISD-TUS external test set. Values are reported as point estimates with 95\% confidence intervals. Bold indicates the best result in each row.}
+\label{tab:gland_hd95}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrrrr}
+\toprule
+\multirow{2}{*}{Center} & \multirow{2}{*}{$N$} & \multicolumn{1}{c}{ThyroidXAgent} & \multicolumn{1}{c}{MedSAM2} & \multicolumn{1}{c}{MedSegX} & \multicolumn{1}{c}{TransUNet} & \multicolumn{1}{c}{UltraFedFM} \\
+\cmidrule(lr){3-3} \cmidrule(lr){4-4} \cmidrule(lr){5-5} \cmidrule(lr){6-6} \cmidrule(lr){7-7}
+ & & HD95 (mm) $\downarrow$ & HD95 (mm) $\downarrow$ & HD95 (mm) $\downarrow$ & HD95 (mm) $\downarrow$ & HD95 (mm) $\downarrow$ \\
+\midrule
+\textit{Overall} & 8,721 & 35.83\textsubscript{(35.14, 36.49)} & 65.71\textsubscript{(65.07, 66.38)} & 45.87\textsubscript{(45.36, 46.37)} & 40.65\textsubscript{(39.95, 41.35)} & 58.17\textsubscript{(57.35, 58.99)} \\
+\midrule
+THYB\_S\_ZJ24 & 1,174 & \textbf{14.74}\textsubscript{(13.90, 15.63)} & 75.31\textsubscript{(73.88, 76.74)} & 64.28\textsubscript{(62.83, 65.85)} & 22.39\textsubscript{(21.43, 23.43)} & 53.71\textsubscript{(50.40, 56.90)} \\
+THYB\_S\_EN04 & 949 & \textbf{30.01}\textsubscript{(28.39, 31.72)} & 73.59\textsubscript{(71.54, 75.87)} & 42.31\textsubscript{(40.95, 43.81)} & 34.27\textsubscript{(32.43, 36.13)} & 63.80\textsubscript{(61.88, 65.55)} \\
+THYB\_S\_BJ01 & 876 & \textbf{36.67}\textsubscript{(34.70, 38.76)} & 55.12\textsubscript{(53.38, 56.96)} & 41.33\textsubscript{(40.11, 42.83)} & 40.85\textsubscript{(38.94, 43.05)} & 60.27\textsubscript{(57.54, 63.41)} \\
+THYB\_S\_SH01 & 832 & 50.89\textsubscript{(48.25, 53.54)} & 55.08\textsubscript{(52.59, 57.51)} & \textbf{39.63}\textsubscript{(38.18, 41.11)} & 51.90\textsubscript{(49.43, 54.61)} & 51.25\textsubscript{(49.37, 53.41)} \\
+THYB\_S\_ZJ05 & 694 & \textbf{37.22}\textsubscript{(34.87, 39.57)} & 70.81\textsubscript{(68.16, 73.22)} & 49.93\textsubscript{(48.19, 51.64)} & 40.86\textsubscript{(38.46, 43.25)} & 64.30\textsubscript{(61.86, 67.00)} \\
+THYB\_S\_SH05 & 669 & \textbf{36.52}\textsubscript{(34.23, 39.01)} & 58.39\textsubscript{(56.18, 60.42)} & 43.68\textsubscript{(42.20, 45.23)} & 44.98\textsubscript{(42.65, 47.48)} & 67.24\textsubscript{(64.77, 69.87)} \\
+THYB\_S\_NX01 & 582 & 39.66\textsubscript{(37.22, 42.54)} & 82.07\textsubscript{(79.47, 84.56)} & 51.93\textsubscript{(49.68, 54.07)} & \textbf{39.06}\textsubscript{(36.74, 41.62)} & 57.51\textsubscript{(54.52, 60.33)} \\
+THYB\_S\_ZJ06 & 460 & \textbf{43.86}\textsubscript{(40.98, 47.06)} & 53.93\textsubscript{(51.41, 56.72)} & 44.67\textsubscript{(42.75, 46.81)} & 48.71\textsubscript{(45.68, 51.91)} & 62.98\textsubscript{(60.17, 65.91)} \\
+THYB\_S\_QX07 & 289 & \textbf{30.43}\textsubscript{(27.06, 33.67)} & 84.32\textsubscript{(81.13, 87.54)} & 37.11\textsubscript{(35.21, 39.31)} & 34.16\textsubscript{(30.75, 37.53)} & 58.07\textsubscript{(53.90, 61.53)} \\
+THYB\_S\_AN01 & 243 & 59.89\textsubscript{(54.84, 65.27)} & 39.11\textsubscript{(35.71, 42.69)} & \textbf{36.76}\textsubscript{(34.09, 39.70)} & 57.02\textsubscript{(52.09, 61.87)} & 42.73\textsubscript{(39.24, 46.33)} \\
+THYB\_S\_CQ03 & 238 & \textbf{36.80}\textsubscript{(33.17, 40.64)} & 67.69\textsubscript{(64.19, 71.21)} & 39.40\textsubscript{(36.37, 42.33)} & 49.95\textsubscript{(45.43, 54.40)} & 63.03\textsubscript{(58.68, 67.50)} \\
+THYB\_S\_GZ02 & 233 & \textbf{37.00}\textsubscript{(33.22, 40.65)} & 50.49\textsubscript{(47.63, 53.64)} & 39.41\textsubscript{(37.30, 41.67)} & 40.19\textsubscript{(35.91, 44.49)} & 57.61\textsubscript{(53.08, 62.19)} \\
+THYB\_S\_JX06 & 215 & 42.43\textsubscript{(38.02, 47.27)} & 54.75\textsubscript{(50.60, 59.00)} & \textbf{37.59}\textsubscript{(35.11, 40.19)} & 48.81\textsubscript{(44.42, 53.58)} & 52.03\textsubscript{(47.75, 56.31)} \\
+THYB\_S\_JS02 & 190 & \textbf{49.35}\textsubscript{(44.19, 55.17)} & 52.35\textsubscript{(48.11, 56.54)} & 53.87\textsubscript{(50.49, 57.35)} & 56.88\textsubscript{(51.46, 62.82)} & 52.07\textsubscript{(47.01, 57.13)} \\
+THYB\_S\_YN05 & 137 & 37.57\textsubscript{(32.03, 43.12)} & 73.49\textsubscript{(68.84, 77.86)} & \textbf{35.07}\textsubscript{(31.77, 38.50)} & 39.92\textsubscript{(34.22, 46.49)} & 50.39\textsubscript{(41.86, 58.71)} \\
+THYB\_S\_EN02 & 120 & \textbf{37.62}\textsubscript{(32.53, 42.62)} & 100.8\textsubscript{(95.9, 105.8)} & 45.67\textsubscript{(42.65, 48.58)} & 44.64\textsubscript{(39.27, 50.38)} & 54.04\textsubscript{(48.46, 59.63)} \\
+THYB\_S\_AH04 & 101 & \textbf{25.82}\textsubscript{(20.55, 31.83)} & 70.36\textsubscript{(64.77, 75.45)} & 33.52\textsubscript{(29.78, 37.56)} & 35.53\textsubscript{(29.34, 42.79)} & 52.02\textsubscript{(44.23, 60.59)} \\
+THYB\_S\_GS03 & 94 & 44.87\textsubscript{(37.84, 51.56)} & 61.22\textsubscript{(54.74, 67.47)} & \textbf{44.51}\textsubscript{(40.21, 49.25)} & 48.16\textsubscript{(40.83, 55.61)} & 52.29\textsubscript{(45.50, 59.13)} \\
+THYB\_S\_FJ03 & 85 & \textbf{27.04}\textsubscript{(21.49, 33.08)} & 83.26\textsubscript{(77.91, 88.32)} & 48.29\textsubscript{(43.55, 53.23)} & 40.21\textsubscript{(34.71, 46.20)} & 57.81\textsubscript{(51.88, 63.89)} \\
+THYB\_S\_SD12 & 75 & \textbf{23.80}\textsubscript{(19.40, 28.64)} & 57.62\textsubscript{(52.08, 62.79)} & 36.03\textsubscript{(32.04, 39.97)} & 35.69\textsubscript{(30.37, 41.96)} & 51.62\textsubscript{(43.29, 59.76)} \\
+THYB\_S\_JS01 & 72 & \textbf{40.00}\textsubscript{(32.29, 47.62)} & 79.39\textsubscript{(72.78, 85.69)} & 45.34\textsubscript{(40.63, 50.53)} & 40.73\textsubscript{(33.99, 47.88)} & 64.43\textsubscript{(55.62, 73.62)} \\
+THYB\_S\_NM02 & 66 & 45.94\textsubscript{(38.55, 53.94)} & 63.04\textsubscript{(56.60, 69.43)} & \textbf{44.14}\textsubscript{(39.41, 49.57)} & 51.02\textsubscript{(42.31, 59.30)} & 62.80\textsubscript{(54.21, 70.52)} \\
+THYB\_S\_JL04 & 54 & 53.99\textsubscript{(42.73, 65.60)} & 67.66\textsubscript{(59.00, 76.78)} & \textbf{39.38}\textsubscript{(34.57, 44.49)} & 50.55\textsubscript{(39.81, 61.07)} & 57.53\textsubscript{(46.74, 67.69)} \\
+THYB\_S\_SH06 & 43 & 45.77\textsubscript{(34.95, 57.09)} & 63.35\textsubscript{(55.55, 71.99)} & 45.14\textsubscript{(38.78, 51.03)} & \textbf{41.91}\textsubscript{(30.31, 53.31)} & 63.26\textsubscript{(50.44, 76.60)} \\
+THYB\_S\_BJ09 & 41 & \textbf{36.63}\textsubscript{(27.94, 47.32)} & 63.20\textsubscript{(55.22, 70.78)} & 42.93\textsubscript{(36.63, 49.75)} & 41.72\textsubscript{(31.74, 52.87)} & 44.38\textsubscript{(34.57, 53.98)} \\
+THYB\_S\_SX04 & 41 & \textbf{38.80}\textsubscript{(31.32, 47.14)} & 66.23\textsubscript{(57.04, 75.13)} & 48.62\textsubscript{(44.02, 53.56)} & 53.31\textsubscript{(42.58, 66.15)} & 68.42\textsubscript{(55.93, 82.59)} \\
+THYB\_S\_SC06 & 29 & 51.99\textsubscript{(36.85, 66.32)} & 45.67\textsubscript{(35.65, 56.18)} & \textbf{38.52}\textsubscript{(30.69, 46.92)} & 56.62\textsubscript{(43.06, 70.35)} & 43.15\textsubscript{(33.11, 53.56)} \\
+THYB\_S\_XJ01 & 25 & \textbf{29.06}\textsubscript{(21.16, 38.25)} & 54.51\textsubscript{(46.58, 63.05)} & 44.52\textsubscript{(37.28, 52.45)} & 44.96\textsubscript{(34.41, 56.69)} & 52.44\textsubscript{(36.21, 68.45)} \\
+THYB\_S\_YN01 & 25 & \textbf{35.59}\textsubscript{(22.18, 54.31)} & 62.96\textsubscript{(52.87, 73.71)} & 38.48\textsubscript{(32.35, 44.59)} & 54.30\textsubscript{(37.89, 71.41)} & 66.12\textsubscript{(49.33, 83.02)} \\
+THYB\_S\_SD13 & 22 & \textbf{23.75}\textsubscript{(12.47, 36.80)} & 43.51\textsubscript{(30.68, 58.21)} & 36.56\textsubscript{(28.65, 44.41)} & 52.16\textsubscript{(38.57, 65.81)} & 66.39\textsubscript{(52.20, 84.55)} \\
+THYB\_S\_GX01 & 19 & 33.19\textsubscript{(22.74, 43.33)} & 78.95\textsubscript{(67.13, 88.94)} & \textbf{29.49}\textsubscript{(22.85, 36.30)} & 38.98\textsubscript{(26.03, 54.00)} & 38.20\textsubscript{(20.84, 60.52)} \\
+THYB\_S\_ZJ29 & 16 & \textbf{12.12}\textsubscript{(6.47, 20.65)} & 65.31\textsubscript{(54.30, 76.11)} & 22.34\textsubscript{(17.11, 28.07)} & 38.17\textsubscript{(22.88, 54.66)} & 45.26\textsubscript{(21.23, 69.87)} \\
+THYB\_S\_HB07 & 8 & \textbf{30.47}\textsubscript{(7.26, 58.20)} & 44.74\textsubscript{(23.64, 68.97)} & 32.40\textsubscript{(23.17, 45.39)} & 39.33\textsubscript{(7.94, 74.12)} & 80.20\textsubscript{(66.41, 92.63)} \\
+THYB\_S\_FJ01 & 2 & 58.89\textsubscript{(23.60, 94.19)} & 75.44\textsubscript{(66.29, 84.60)} & \textbf{33.92}\textsubscript{(27.53, 40.31)} & 47.04\textsubscript{(34.00, 60.08)} & 49.86\textsubscript{(33.24, 66.48)} \\
+THYB\_S\_SD14 & 2 & 78.47\textsubscript{(78.16, 78.77)} & 98.68\textsubscript{(81.39, 115.97)} & 55.96\textsubscript{(43.32, 68.59)} & \textbf{34.84}\textsubscript{(19.69, 50.00)} & 40.44\textsubscript{(36.06, 44.82)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+\clearpage
+
+% ============================================================
+% Supplementary Table S3: Nodule segmentation — Dice
+% ============================================================
+
+\begin{table}[p]
+\centering
+\caption{Per-centre Dice similarity coefficient (\%) for thyroid nodule segmentation on the NHC-MISD-TUS external test set. Values are reported as point estimates with 95\% confidence intervals. Bold indicates the best result in each row.}
+\label{tab:nodule_dice}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrrrr}
+\toprule
+\multirow{2}{*}{Center} & \multirow{2}{*}{$N$} & \multicolumn{1}{c}{ThyroidXAgent} & \multicolumn{1}{c}{MedSAM2} & \multicolumn{1}{c}{MedSegX} & \multicolumn{1}{c}{TransUNet} & \multicolumn{1}{c}{UltraFedFM} \\
+\cmidrule(lr){3-3} \cmidrule(lr){4-4} \cmidrule(lr){5-5} \cmidrule(lr){6-6} \cmidrule(lr){7-7}
+ & & Dice (\%) $\uparrow$ & Dice (\%) $\uparrow$ & Dice (\%) $\uparrow$ & Dice (\%) $\uparrow$ & Dice (\%) $\uparrow$ \\
+\midrule
+\textit{Overall} & 6,384 & 82.31\textsubscript{(81.78, 82.83)} & 23.20\textsubscript{(22.58, 23.86)} & 28.82\textsubscript{(28.11, 29.53)} & 72.99\textsubscript{(72.29, 73.68)} & 58.87\textsubscript{(58.04, 59.68)} \\
+\midrule
+THYB\_S\_EN04 & 946 & \textbf{82.92}\textsubscript{(81.77, 84.00)} & 15.54\textsubscript{(14.29, 16.78)} & 22.25\textsubscript{(20.68, 23.66)} & 74.43\textsubscript{(72.85, 75.95)} & 56.67\textsubscript{(54.69, 58.62)} \\
+THYB\_S\_SH01 & 834 & \textbf{88.78}\textsubscript{(88.01, 89.61)} & 39.13\textsubscript{(37.10, 41.01)} & 46.16\textsubscript{(44.13, 48.29)} & 84.48\textsubscript{(83.49, 85.58)} & 71.64\textsubscript{(69.99, 73.33)} \\
+THYB\_S\_ZJ05 & 690 & \textbf{82.45}\textsubscript{(81.21, 83.64)} & 15.47\textsubscript{(13.92, 17.01)} & 16.32\textsubscript{(14.69, 17.96)} & 67.34\textsubscript{(65.14, 69.41)} & 55.66\textsubscript{(52.98, 58.07)} \\
+THYB\_S\_SH05 & 665 & \textbf{85.53}\textsubscript{(84.17, 86.86)} & 20.11\textsubscript{(18.43, 21.73)} & 29.48\textsubscript{(27.34, 31.47)} & 75.56\textsubscript{(73.63, 77.41)} & 60.40\textsubscript{(57.93, 62.74)} \\
+THYB\_S\_NX01 & 557 & \textbf{77.41}\textsubscript{(75.39, 79.40)} & 16.92\textsubscript{(15.32, 18.56)} & 23.51\textsubscript{(21.59, 25.42)} & 68.50\textsubscript{(66.26, 70.91)} & 47.56\textsubscript{(44.76, 50.35)} \\
+THYB\_S\_ZJ06 & 460 & \textbf{84.52}\textsubscript{(82.82, 86.14)} & 25.61\textsubscript{(23.25, 27.95)} & 28.94\textsubscript{(26.49, 31.44)} & 75.20\textsubscript{(73.03, 77.38)} & 61.29\textsubscript{(58.63, 63.89)} \\
+THYB\_S\_ZJ24 & 321 & \textbf{45.53}\textsubscript{(41.66, 48.73)} & 5.47\textsubscript{(4.61, 6.45)} & 4.17\textsubscript{(3.42, 5.08)} & 20.51\textsubscript{(17.52, 23.78)} & 14.92\textsubscript{(12.15, 17.89)} \\
+THYB\_S\_QX07 & 280 & \textbf{85.51}\textsubscript{(83.52, 87.35)} & 22.27\textsubscript{(19.68, 24.88)} & 28.59\textsubscript{(25.55, 31.77)} & 77.89\textsubscript{(74.95, 80.54)} & 68.19\textsubscript{(65.16, 71.49)} \\
+THYB\_S\_AN01 & 243 & \textbf{91.60}\textsubscript{(89.81, 92.94)} & 53.29\textsubscript{(49.81, 56.91)} & 61.68\textsubscript{(58.00, 65.00)} & 88.34\textsubscript{(86.28, 90.14)} & 78.19\textsubscript{(75.20, 81.15)} \\
+THYB\_S\_CQ03 & 186 & \textbf{82.72}\textsubscript{(79.86, 85.39)} & 18.16\textsubscript{(15.15, 21.46)} & 27.06\textsubscript{(23.17, 31.10)} & 72.57\textsubscript{(68.81, 76.37)} & 55.25\textsubscript{(50.23, 60.01)} \\
+THYB\_S\_JS02 & 184 & \textbf{87.67}\textsubscript{(85.58, 89.59)} & 34.39\textsubscript{(30.61, 38.22)} & 35.40\textsubscript{(30.90, 39.94)} & 82.96\textsubscript{(80.24, 85.39)} & 71.70\textsubscript{(67.73, 75.66)} \\
+THYB\_S\_JX06 & 167 & \textbf{87.50}\textsubscript{(84.81, 89.82)} & 35.52\textsubscript{(31.67, 39.88)} & 45.33\textsubscript{(40.68, 50.25)} & 83.78\textsubscript{(80.89, 86.39)} & 73.76\textsubscript{(70.40, 77.15)} \\
+THYB\_S\_BJ01 & 142 & \textbf{69.73}\textsubscript{(64.15, 74.65)} & 16.56\textsubscript{(13.36, 19.94)} & 21.83\textsubscript{(17.92, 25.72)} & 58.88\textsubscript{(53.18, 64.45)} & 46.92\textsubscript{(41.12, 52.74)} \\
+THYB\_S\_EN02 & 107 & \textbf{84.38}\textsubscript{(81.60, 86.98)} & 11.99\textsubscript{(9.13, 15.33)} & 19.36\textsubscript{(15.55, 23.76)} & 73.29\textsubscript{(69.08, 77.46)} & 50.71\textsubscript{(44.52, 57.00)} \\
+THYB\_S\_GZ02 & 92 & \textbf{89.21}\textsubscript{(87.74, 90.46)} & 27.23\textsubscript{(22.31, 32.19)} & 30.27\textsubscript{(24.62, 36.27)} & 84.00\textsubscript{(81.49, 86.01)} & 73.15\textsubscript{(68.35, 77.38)} \\
+THYB\_S\_GS03 & 91 & \textbf{85.66}\textsubscript{(81.56, 88.93)} & 28.49\textsubscript{(22.48, 34.72)} & 35.22\textsubscript{(28.72, 41.50)} & 78.93\textsubscript{(74.06, 83.12)} & 64.75\textsubscript{(58.31, 70.89)} \\
+THYB\_S\_JS01 & 66 & \textbf{85.58}\textsubscript{(81.87, 88.54)} & 13.65\textsubscript{(10.66, 16.77)} & 18.99\textsubscript{(15.28, 23.17)} & 76.18\textsubscript{(70.10, 81.21)} & 58.55\textsubscript{(50.67, 65.99)} \\
+THYB\_S\_FJ03 & 64 & \textbf{79.73}\textsubscript{(74.98, 83.85)} & 10.49\textsubscript{(7.58, 13.92)} & 14.62\textsubscript{(10.01, 20.30)} & 64.17\textsubscript{(55.49, 71.69)} & 50.24\textsubscript{(41.88, 59.00)} \\
+THYB\_S\_NM02 & 50 & \textbf{83.34}\textsubscript{(75.81, 89.18)} & 21.78\textsubscript{(15.16, 29.35)} & 27.11\textsubscript{(20.14, 34.56)} & 76.31\textsubscript{(67.18, 83.75)} & 61.40\textsubscript{(52.34, 69.28)} \\
+THYB\_S\_SH06 & 31 & \textbf{70.85}\textsubscript{(59.24, 79.88)} & 4.60\textsubscript{(3.47, 5.86)} & 8.28\textsubscript{(5.59, 11.59)} & 55.16\textsubscript{(39.98, 68.39)} & 46.54\textsubscript{(33.59, 59.77)} \\
+THYB\_S\_AH04 & 30 & \textbf{91.71}\textsubscript{(89.82, 93.31)} & 39.78\textsubscript{(30.88, 48.49)} & 48.60\textsubscript{(37.90, 58.61)} & 84.52\textsubscript{(77.22, 89.78)} & 79.09\textsubscript{(70.70, 84.79)} \\
+THYB\_S\_SC06 & 29 & \textbf{90.16}\textsubscript{(88.07, 91.95)} & 44.20\textsubscript{(32.95, 53.60)} & 49.38\textsubscript{(38.45, 58.61)} & 88.29\textsubscript{(85.51, 90.65)} & 76.57\textsubscript{(67.27, 84.35)} \\
+THYB\_S\_SX04 & 27 & \textbf{89.20}\textsubscript{(86.29, 91.70)} & 17.84\textsubscript{(12.89, 22.84)} & 16.51\textsubscript{(11.20, 23.50)} & 87.47\textsubscript{(84.52, 89.90)} & 68.19\textsubscript{(57.72, 77.31)} \\
+THYB\_S\_BJ09 & 22 & \textbf{86.20}\textsubscript{(81.55, 90.25)} & 30.06\textsubscript{(19.75, 40.78)} & 34.98\textsubscript{(22.71, 47.67)} & 81.62\textsubscript{(74.86, 87.53)} & 70.13\textsubscript{(63.36, 77.01)} \\
+THYB\_S\_YN01 & 22 & \textbf{87.24}\textsubscript{(79.41, 92.13)} & 23.20\textsubscript{(13.43, 34.02)} & 28.13\textsubscript{(18.31, 39.88)} & 80.58\textsubscript{(70.28, 87.54)} & 44.07\textsubscript{(29.99, 57.81)} \\
+THYB\_S\_SD13 & 18 & \textbf{92.74}\textsubscript{(91.15, 94.06)} & 52.54\textsubscript{(39.34, 64.38)} & 61.58\textsubscript{(48.47, 73.53)} & 90.83\textsubscript{(88.24, 92.78)} & 77.31\textsubscript{(70.93, 82.80)} \\
+THYB\_S\_JL04 & 16 & \textbf{81.27}\textsubscript{(67.59, 93.13)} & 36.60\textsubscript{(22.73, 50.94)} & 48.61\textsubscript{(31.53, 65.36)} & 76.87\textsubscript{(62.21, 89.36)} & 70.49\textsubscript{(53.00, 86.26)} \\
+THYB\_S\_SD12 & 16 & \textbf{83.71}\textsubscript{(69.71, 93.91)} & 53.71\textsubscript{(39.32, 67.16)} & 62.86\textsubscript{(47.03, 78.03)} & 79.72\textsubscript{(62.56, 93.40)} & 74.86\textsubscript{(58.02, 88.45)} \\
+THYB\_S\_YN05 & 12 & \textbf{91.81}\textsubscript{(88.17, 94.81)} & 59.02\textsubscript{(42.58, 71.76)} & 70.91\textsubscript{(51.90, 85.39)} & 91.01\textsubscript{(87.57, 93.88)} & 68.71\textsubscript{(47.83, 85.32)} \\
+THYB\_S\_XJ01 & 8 & \textbf{82.71}\textsubscript{(73.69, 90.34)} & 13.18\textsubscript{(4.03, 24.95)} & 14.95\textsubscript{(4.71, 29.10)} & 56.32\textsubscript{(33.11, 79.31)} & 45.53\textsubscript{(20.28, 71.40)} \\
+THYB\_S\_GX01 & 4 & \textbf{85.84}\textsubscript{(83.15, 88.54)} & 20.06\textsubscript{(9.70, 30.41)} & 38.09\textsubscript{(22.52, 49.68)} & 84.85\textsubscript{(78.42, 89.87)} & 70.97\textsubscript{(60.58, 83.12)} \\
+THYB\_S\_FJ01 & 2 & 79.74\textsubscript{(78.18, 81.31)} & 6.47\textsubscript{(4.46, 8.48)} & 12.32\textsubscript{(8.26, 16.37)} & \textbf{81.94}\textsubscript{(77.73, 86.14)} & 46.04\textsubscript{(36.60, 55.49)} \\
+THYB\_S\_HB07 & 2 & 21.28\textsubscript{(18.58, 23.99)} & 1.90\textsubscript{(1.48, 2.31)} & 1.86\textsubscript{(1.61, 2.11)} & \textbf{23.49}\textsubscript{(0.00, 46.97)} & 17.79\textsubscript{(11.76, 23.82)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+\clearpage
+
+% ============================================================
+% Supplementary Table S4: Nodule segmentation — HD95
+% ============================================================
+
+\begin{table}[p]
+\centering
+\caption{Per-centre 95\% Hausdorff distance (HD95, mm) for thyroid nodule segmentation on the NHC-MISD-TUS external test set. Values are reported as point estimates with 95\% confidence intervals. Bold indicates the best result in each row.}
+\label{tab:nodule_hd95}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrrrr}
+\toprule
+\multirow{2}{*}{Center} & \multirow{2}{*}{$N$} & \multicolumn{1}{c}{ThyroidXAgent} & \multicolumn{1}{c}{MedSAM2} & \multicolumn{1}{c}{MedSegX} & \multicolumn{1}{c}{TransUNet} & \multicolumn{1}{c}{UltraFedFM} \\
+\cmidrule(lr){3-3} \cmidrule(lr){4-4} \cmidrule(lr){5-5} \cmidrule(lr){6-6} \cmidrule(lr){7-7}
+ & & HD95 (mm) $\downarrow$ & HD95 (mm) $\downarrow$ & HD95 (mm) $\downarrow$ & HD95 (mm) $\downarrow$ & HD95 (mm) $\downarrow$ \\
+\midrule
+\textit{Overall} & 6,384 & 9.41\textsubscript{(8.89, 9.93)} & 101.2\textsubscript{(100.2, 102.0)} & 86.96\textsubscript{(86.08, 87.84)} & 10.62\textsubscript{(10.14, 11.12)} & 27.04\textsubscript{(26.28, 27.75)} \\
+\midrule
+THYB\_S\_EN04 & 946 & \textbf{6.95}\textsubscript{(6.05, 7.91)} & 113.0\textsubscript{(111.0, 114.9)} & 91.23\textsubscript{(89.41, 92.99)} & 9.27\textsubscript{(8.31, 10.37)} & 33.50\textsubscript{(31.47, 35.76)} \\
+THYB\_S\_SH01 & 834 & \textbf{6.41}\textsubscript{(5.50, 7.36)} & 79.94\textsubscript{(77.11, 82.81)} & 65.42\textsubscript{(63.21, 67.68)} & 8.32\textsubscript{(7.35, 9.27)} & 21.31\textsubscript{(19.64, 22.92)} \\
+THYB\_S\_ZJ05 & 690 & \textbf{5.00}\textsubscript{(4.31, 5.76)} & 108.5\textsubscript{(106.1, 110.6)} & 106.8\textsubscript{(104.6, 109.0)} & 7.73\textsubscript{(6.88, 8.61)} & 21.22\textsubscript{(19.59, 23.13)} \\
+THYB\_S\_SH05 & 665 & \textbf{7.60}\textsubscript{(6.34, 8.89)} & 101.8\textsubscript{(99.4, 104.1)} & 81.02\textsubscript{(78.74, 83.33)} & 10.17\textsubscript{(8.84, 11.51)} & 28.23\textsubscript{(25.93, 30.37)} \\
+THYB\_S\_NX01 & 557 & \textbf{12.95}\textsubscript{(10.96, 14.86)} & 112.7\textsubscript{(110.1, 115.1)} & 92.51\textsubscript{(89.99, 94.97)} & 13.02\textsubscript{(11.18, 14.80)} & 30.17\textsubscript{(27.56, 32.82)} \\
+THYB\_S\_ZJ06 & 460 & \textbf{7.62}\textsubscript{(6.22, 9.24)} & 92.99\textsubscript{(90.07, 95.87)} & 88.02\textsubscript{(85.09, 91.28)} & 10.88\textsubscript{(9.34, 12.66)} & 26.09\textsubscript{(23.54, 28.75)} \\
+THYB\_S\_ZJ24 & 321 & 45.03\textsubscript{(39.74, 50.67)} & 142.9\textsubscript{(139.7, 145.9)} & 140.9\textsubscript{(137.7, 143.8)} & \textbf{30.45}\textsubscript{(26.09, 34.77)} & 45.71\textsubscript{(40.11, 51.74)} \\
+THYB\_S\_QX07 & 280 & \textbf{6.69}\textsubscript{(5.08, 8.55)} & 110.2\textsubscript{(106.4, 113.9)} & 85.79\textsubscript{(82.50, 89.13)} & 8.11\textsubscript{(6.54, 10.16)} & 22.53\textsubscript{(19.71, 25.68)} \\
+THYB\_S\_AN01 & 243 & \textbf{4.70}\textsubscript{(3.51, 6.11)} & 60.30\textsubscript{(55.67, 64.85)} & 49.32\textsubscript{(45.45, 53.68)} & 7.19\textsubscript{(5.65, 9.00)} & 16.62\textsubscript{(14.15, 19.21)} \\
+THYB\_S\_CQ03 & 186 & \textbf{8.81}\textsubscript{(5.97, 12.38)} & 105.0\textsubscript{(100.0, 109.4)} & 81.35\textsubscript{(77.26, 85.23)} & 12.51\textsubscript{(9.28, 16.26)} & 33.57\textsubscript{(28.12, 38.94)} \\
+THYB\_S\_JS02 & 184 & \textbf{6.68}\textsubscript{(4.75, 8.90)} & 80.55\textsubscript{(75.49, 85.50)} & 84.81\textsubscript{(78.76, 90.71)} & 8.78\textsubscript{(6.74, 10.90)} & 24.40\textsubscript{(20.23, 28.77)} \\
+THYB\_S\_JX06 & 167 & \textbf{7.25}\textsubscript{(5.01, 9.88)} & 82.29\textsubscript{(76.67, 87.66)} & 63.70\textsubscript{(58.48, 68.68)} & 9.18\textsubscript{(6.44, 12.50)} & 20.12\textsubscript{(16.76, 23.56)} \\
+THYB\_S\_BJ01 & 142 & 20.72\textsubscript{(15.43, 26.10)} & 101.8\textsubscript{(96.3, 107.7)} & 92.30\textsubscript{(87.28, 97.40)} & \textbf{20.10}\textsubscript{(15.47, 25.01)} & 34.87\textsubscript{(29.55, 40.13)} \\
+THYB\_S\_EN02 & 107 & \textbf{4.49}\textsubscript{(3.07, 6.59)} & 128.9\textsubscript{(123.9, 133.4)} & 92.21\textsubscript{(87.64, 96.59)} & 8.45\textsubscript{(6.20, 11.49)} & 29.38\textsubscript{(24.47, 34.60)} \\
+THYB\_S\_GZ02 & 92 & \textbf{4.51}\textsubscript{(3.43, 5.77)} & 84.00\textsubscript{(78.53, 89.58)} & 81.50\textsubscript{(74.63, 88.26)} & 7.53\textsubscript{(5.65, 9.73)} & 17.57\textsubscript{(13.41, 22.16)} \\
+THYB\_S\_GS03 & 91 & \textbf{7.80}\textsubscript{(4.49, 11.81)} & 89.69\textsubscript{(81.70, 97.29)} & 75.21\textsubscript{(68.30, 82.38)} & 8.70\textsubscript{(5.54, 12.57)} & 24.98\textsubscript{(19.70, 31.13)} \\
+THYB\_S\_JS01 & 66 & \textbf{5.69}\textsubscript{(3.49, 8.71)} & 111.8\textsubscript{(106.2, 117.2)} & 94.67\textsubscript{(89.47, 99.84)} & 9.84\textsubscript{(6.27, 14.06)} & 27.35\textsubscript{(19.68, 35.58)} \\
+THYB\_S\_FJ03 & 64 & \textbf{6.99}\textsubscript{(3.86, 10.72)} & 115.9\textsubscript{(109.6, 122.4)} & 107.7\textsubscript{(100.0, 115.2)} & 8.87\textsubscript{(5.71, 12.92)} & 22.36\textsubscript{(16.53, 28.70)} \\
+THYB\_S\_NM02 & 50 & 6.75\textsubscript{(3.95, 10.41)} & 95.61\textsubscript{(85.83, 104.48)} & 82.78\textsubscript{(75.37, 90.43)} & \textbf{6.49}\textsubscript{(4.04, 9.79)} & 21.73\textsubscript{(16.43, 27.52)} \\
+THYB\_S\_SH06 & 31 & 16.01\textsubscript{(6.79, 25.90)} & 115.0\textsubscript{(110.3, 120.7)} & 94.85\textsubscript{(88.68, 100.91)} & \textbf{7.08}\textsubscript{(3.20, 12.90)} & 28.90\textsubscript{(17.04, 42.21)} \\
+THYB\_S\_AH04 & 30 & \textbf{3.09}\textsubscript{(2.14, 4.32)} & 81.37\textsubscript{(70.67, 92.67)} & 66.34\textsubscript{(54.18, 78.80)} & 9.13\textsubscript{(4.11, 16.74)} & 18.64\textsubscript{(11.53, 27.65)} \\
+THYB\_S\_SC06 & 29 & \textbf{4.72}\textsubscript{(2.94, 6.80)} & 71.23\textsubscript{(58.43, 85.23)} & 61.37\textsubscript{(51.00, 72.75)} & 5.60\textsubscript{(3.63, 7.90)} & 20.14\textsubscript{(10.14, 31.55)} \\
+THYB\_S\_SX04 & 27 & \textbf{3.54}\textsubscript{(2.39, 4.80)} & 106.5\textsubscript{(98.0, 114.6)} & 108.8\textsubscript{(98.9, 118.0)} & 4.05\textsubscript{(3.12, 5.09)} & 25.37\textsubscript{(14.31, 39.60)} \\
+THYB\_S\_BJ09 & 22 & \textbf{5.56}\textsubscript{(3.29, 8.33)} & 85.51\textsubscript{(71.97, 98.12)} & 77.91\textsubscript{(63.39, 92.08)} & 7.06\textsubscript{(3.88, 11.19)} & 18.84\textsubscript{(11.45, 26.82)} \\
+THYB\_S\_YN01 & 22 & \textbf{4.61}\textsubscript{(2.12, 8.49)} & 96.72\textsubscript{(83.10, 109.97)} & 73.60\textsubscript{(64.25, 81.65)} & 4.98\textsubscript{(3.42, 6.90)} & 40.06\textsubscript{(27.32, 54.75)} \\
+THYB\_S\_SD13 & 18 & \textbf{3.32}\textsubscript{(2.22, 4.57)} & 61.73\textsubscript{(47.66, 76.68)} & 45.00\textsubscript{(32.04, 58.04)} & 4.51\textsubscript{(2.74, 6.60)} & 21.77\textsubscript{(15.46, 28.42)} \\
+THYB\_S\_JL04 & 16 & 14.24\textsubscript{(2.17, 31.43)} & 88.05\textsubscript{(70.97, 104.04)} & 58.06\textsubscript{(41.17, 75.76)} & \textbf{12.51}\textsubscript{(3.43, 23.13)} & 16.36\textsubscript{(6.05, 28.72)} \\
+THYB\_S\_SD12 & 16 & 9.76\textsubscript{(3.28, 17.71)} & 57.71\textsubscript{(38.35, 78.90)} & 50.35\textsubscript{(31.21, 71.00)} & \textbf{8.08}\textsubscript{(2.22, 15.94)} & 18.16\textsubscript{(7.70, 30.26)} \\
+THYB\_S\_YN05 & 12 & \textbf{3.22}\textsubscript{(2.05, 4.34)} & 61.17\textsubscript{(44.75, 80.17)} & 38.97\textsubscript{(24.66, 57.04)} & 4.86\textsubscript{(2.25, 9.08)} & 13.71\textsubscript{(6.45, 21.71)} \\
+THYB\_S\_XJ01 & 8 & \textbf{6.99}\textsubscript{(1.71, 16.39)} & 111.3\textsubscript{(92.8, 131.6)} & 99.22\textsubscript{(85.22, 115.90)} & 20.73\textsubscript{(4.35, 42.34)} & 24.55\textsubscript{(5.64, 47.07)} \\
+THYB\_S\_GX01 & 4 & 5.57\textsubscript{(3.00, 8.47)} & 101.0\textsubscript{(81.2, 123.7)} & 78.07\textsubscript{(56.31, 92.33)} & \textbf{5.12}\textsubscript{(2.62, 8.46)} & 15.24\textsubscript{(6.58, 25.12)} \\
+THYB\_S\_FJ01 & 2 & 8.32\textsubscript{(4.00, 12.65)} & 112.3\textsubscript{(104.0, 120.7)} & 86.49\textsubscript{(73.93, 99.04)} & \textbf{4.41}\textsubscript{(2.83, 6.00)} & 56.71\textsubscript{(26.29, 87.13)} \\
+THYB\_S\_HB07 & 2 & 30.80\textsubscript{(18.03, 43.57)} & 109.0\textsubscript{(98.6, 119.4)} & 104.4\textsubscript{(95.2, 113.5)} & \textbf{4.70}\textsubscript{(0.00, 9.39)} & 19.30\textsubscript{(8.60, 30.00)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+\clearpage
+
+% ============================================================
+% Supplementary Table S5: Binary classification — AUROC
+% ============================================================
+
+\begin{table}[p]
+\centering
+\caption{Per-centre AUROC for benign versus malignant thyroid nodule classification on the NHC-MISD-TUS external test set. Values are reported as point estimates with 95\% confidence intervals. Bold indicates the best result in each row.}
+\label{tab:binary_auroc}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrrr}
+\toprule
+\multirow{2}{*}{Center} & \multirow{2}{*}{$N$} & \multicolumn{1}{c}{ThyroidXAgent} & \multicolumn{1}{c}{BiomedCLIP} & \multicolumn{1}{c}{MedSigLIP} & \multicolumn{1}{c}{UltraFedFM} \\
+\cmidrule(lr){3-3} \cmidrule(lr){4-4} \cmidrule(lr){5-5} \cmidrule(lr){6-6}
+ & & AUROC $\uparrow$ & AUROC $\uparrow$ & AUROC $\uparrow$ & AUROC $\uparrow$ \\
+\midrule
+\textit{Overall} & 4,999 & 0.819\textsubscript{(0.808, 0.831)} & 0.434\textsubscript{(0.418, 0.450)} & 0.520\textsubscript{(0.503, 0.535)} & 0.436\textsubscript{(0.420, 0.452)} \\
+\midrule
+THYB\_S\_SH01 & 792 & \textbf{0.896}\textsubscript{(0.873, 0.916)} & 0.327\textsubscript{(0.290, 0.368)} & 0.552\textsubscript{(0.517, 0.594)} & 0.331\textsubscript{(0.295, 0.368)} \\
+THYB\_S\_ZJ05 & 647 & \textbf{0.811}\textsubscript{(0.773, 0.844)} & 0.526\textsubscript{(0.480, 0.576)} & 0.586\textsubscript{(0.546, 0.627)} & 0.494\textsubscript{(0.455, 0.533)} \\
+THYB\_S\_EN04 & 626 & \textbf{0.846}\textsubscript{(0.808, 0.876)} & 0.345\textsubscript{(0.289, 0.404)} & 0.538\textsubscript{(0.472, 0.597)} & 0.528\textsubscript{(0.476, 0.584)} \\
+THYB\_S\_SH05 & 539 & \textbf{0.719}\textsubscript{(0.672, 0.758)} & 0.331\textsubscript{(0.280, 0.381)} & 0.543\textsubscript{(0.492, 0.595)} & 0.370\textsubscript{(0.324, 0.423)} \\
+THYB\_S\_ZJ06 & 452 & \textbf{0.811}\textsubscript{(0.768, 0.849)} & 0.468\textsubscript{(0.412, 0.520)} & 0.594\textsubscript{(0.541, 0.651)} & 0.539\textsubscript{(0.486, 0.592)} \\
+THYB\_S\_QX07 & 279 & \textbf{0.870}\textsubscript{(0.814, 0.917)} & 0.457\textsubscript{(0.381, 0.537)} & 0.630\textsubscript{(0.534, 0.711)} & 0.428\textsubscript{(0.338, 0.520)} \\
+THYB\_S\_ZJ24 & 269 & 0.590\textsubscript{(0.346, 0.832)} & 0.412\textsubscript{(0.270, 0.544)} & \textbf{0.673}\textsubscript{(0.493, 0.823)} & 0.463\textsubscript{(0.255, 0.678)} \\
+THYB\_S\_AN01 & 236 & \textbf{0.862}\textsubscript{(0.784, 0.923)} & 0.241\textsubscript{(0.165, 0.319)} & 0.601\textsubscript{(0.519, 0.687)} & 0.292\textsubscript{(0.202, 0.390)} \\
+THYB\_S\_CQ03 & 172 & \textbf{0.784}\textsubscript{(0.716, 0.849)} & 0.452\textsubscript{(0.366, 0.550)} & 0.521\textsubscript{(0.431, 0.608)} & 0.440\textsubscript{(0.350, 0.532)} \\
+THYB\_S\_JS02 & 171 & \textbf{0.746}\textsubscript{(0.667, 0.815)} & 0.504\textsubscript{(0.417, 0.596)} & 0.675\textsubscript{(0.599, 0.750)} & 0.415\textsubscript{(0.328, 0.501)} \\
+THYB\_S\_JX06 & 153 & \textbf{0.903}\textsubscript{(0.853, 0.951)} & 0.399\textsubscript{(0.315, 0.487)} & 0.616\textsubscript{(0.524, 0.702)} & 0.480\textsubscript{(0.390, 0.575)} \\
+THYB\_S\_EN02 & 99 & \textbf{0.851}\textsubscript{(0.741, 0.941)} & 0.383\textsubscript{(0.248, 0.543)} & 0.749\textsubscript{(0.602, 0.878)} & 0.329\textsubscript{(0.166, 0.488)} \\
+THYB\_S\_BJ01 & 93 & \textbf{0.749}\textsubscript{(0.635, 0.851)} & 0.245\textsubscript{(0.154, 0.345)} & 0.400\textsubscript{(0.235, 0.562)} & 0.460\textsubscript{(0.319, 0.609)} \\
+THYB\_S\_GZ02 & 90 & \textbf{0.693}\textsubscript{(0.578, 0.795)} & 0.325\textsubscript{(0.198, 0.471)} & 0.499\textsubscript{(0.374, 0.614)} & 0.366\textsubscript{(0.223, 0.530)} \\
+THYB\_S\_GS03 & 84 & \textbf{0.838}\textsubscript{(0.735, 0.924)} & 0.244\textsubscript{(0.125, 0.373)} & 0.443\textsubscript{(0.311, 0.566)} & 0.470\textsubscript{(0.328, 0.607)} \\
+THYB\_S\_JS01 & 59 & \textbf{0.781}\textsubscript{(0.491, 1.000)} & 0.509\textsubscript{(0.069, 0.947)} & 0.281\textsubscript{(0.035, 0.552)} & 0.070\textsubscript{(0.017, 0.500)} \\
+THYB\_S\_NM02 & 49 & 0.653\textsubscript{(0.497, 0.800)} & 0.408\textsubscript{(0.253, 0.567)} & \textbf{0.719}\textsubscript{(0.549, 0.875)} & 0.393\textsubscript{(0.202, 0.595)} \\
+THYB\_S\_SX04 & 27 & \textbf{0.860}\textsubscript{(0.500, 1.000)} & 0.640\textsubscript{(0.231, 0.962)} & 0.500\textsubscript{(0.077, 0.924)} & 0.620\textsubscript{(0.400, 0.846)} \\
+THYB\_S\_AH04 & 24 & \textbf{0.844}\textsubscript{(0.663, 0.979)} & 0.617\textsubscript{(0.368, 0.838)} & 0.586\textsubscript{(0.305, 0.838)} & 0.266\textsubscript{(0.076, 0.523)} \\
+THYB\_S\_SC06 & 22 & \textbf{0.876}\textsubscript{(0.702, 1.000)} & 0.256\textsubscript{(0.050, 0.484)} & 0.612\textsubscript{(0.350, 0.839)} & 0.141\textsubscript{(0.009, 0.325)} \\
+THYB\_S\_YN01 & 21 & \textbf{0.853}\textsubscript{(0.618, 1.000)} & 0.353\textsubscript{(0.000, 0.778)} & 0.500\textsubscript{(0.105, 0.895)} & 0.176\textsubscript{(0.000, 0.400)} \\
+THYB\_S\_BJ09 & 20 & 0.586\textsubscript{(0.319, 0.849)} & 0.505\textsubscript{(0.213, 0.798)} & \textbf{0.636}\textsubscript{(0.341, 0.885)} & 0.404\textsubscript{(0.150, 0.687)} \\
+THYB\_S\_SD13 & 18 & \textbf{0.875}\textsubscript{(0.636, 1.000)} & 0.536\textsubscript{(0.125, 1.000)} & 0.714\textsubscript{(0.415, 0.956)} & 0.304\textsubscript{(0.000, 0.623)} \\
+THYB\_S\_SD12 & 15 & \textbf{0.929}\textsubscript{(0.500, 1.000)} & 0.143\textsubscript{(0.000, 0.500)} & 0.571\textsubscript{(0.356, 0.786)} & 0.071\textsubscript{(0.000, 0.500)} \\
+THYB\_S\_JL04 & 12 & \textbf{0.407}\textsubscript{(0.000, 1.000)} & 0.074\textsubscript{(0.000, 0.446)} & 0.148\textsubscript{(0.000, 0.500)} & 0.296\textsubscript{(0.000, 0.727)} \\
+THYB\_S\_YN05 & 12 & \textbf{0.500}\textsubscript{(0.500, 0.500)} & 0.500\textsubscript{(0.500, 0.500)} & 0.500\textsubscript{(0.500, 0.500)} & 0.500\textsubscript{(0.500, 0.500)} \\
+THYB\_S\_XJ01 & 5 & \textbf{1.000}\textsubscript{(0.500, 1.000)} & 0.667\textsubscript{(0.000, 1.000)} & 0.333\textsubscript{(0.000, 1.000)} & 0.833\textsubscript{(0.250, 1.000)} \\
+THYB\_S\_GX01 & 4 & \textbf{0.500}\textsubscript{(0.500, 0.500)} & 0.500\textsubscript{(0.500, 0.500)} & 0.500\textsubscript{(0.500, 0.500)} & 0.500\textsubscript{(0.500, 0.500)} \\
+THYB\_S\_SH06 & 4 & \textbf{1.000}\textsubscript{(0.500, 1.000)} & 0.000\textsubscript{(0.000, 0.500)} & 0.000\textsubscript{(0.000, 0.500)} & 0.500\textsubscript{(0.000, 1.000)} \\
+THYB\_S\_FJ01 & 2 & \textbf{0.500}\textsubscript{(0.500, 0.500)} & 0.500\textsubscript{(0.500, 0.500)} & 0.500\textsubscript{(0.500, 0.500)} & 0.500\textsubscript{(0.500, 0.500)} \\
+THYB\_S\_FJ03 & 2 & \textbf{0.500}\textsubscript{(0.500, 0.500)} & 0.500\textsubscript{(0.500, 0.500)} & 0.500\textsubscript{(0.500, 0.500)} & 0.500\textsubscript{(0.500, 0.500)} \\
+THYB\_S\_NX01 & 1 & \textbf{0.500}\textsubscript{(0.500, 0.500)} & 0.500\textsubscript{(0.500, 0.500)} & 0.500\textsubscript{(0.500, 0.500)} & 0.500\textsubscript{(0.500, 0.500)} \\
+THYB\_S\_HB07 & 0 & -- & -- & -- & -- \\
+THYB\_S\_SD14 & 0 & -- & -- & -- & -- \\
+THYB\_S\_ZJ29 & 0 & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+\clearpage
+
+% ============================================================
+% Supplementary Table S6: Binary classification — AUPRC
+% ============================================================
+
+\begin{table}[p]
+\centering
+\caption{Per-centre AUPRC for benign versus malignant thyroid nodule classification on the NHC-MISD-TUS external test set. Values are reported as point estimates with 95\% confidence intervals. Bold indicates the best result in each row.}
+\label{tab:binary_auprc}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrrr}
+\toprule
+\multirow{2}{*}{Center} & \multirow{2}{*}{$N$} & \multicolumn{1}{c}{ThyroidXAgent} & \multicolumn{1}{c}{BiomedCLIP} & \multicolumn{1}{c}{MedSigLIP} & \multicolumn{1}{c}{UltraFedFM} \\
+\cmidrule(lr){3-3} \cmidrule(lr){4-4} \cmidrule(lr){5-5} \cmidrule(lr){6-6}
+ & & AUPRC $\uparrow$ & AUPRC $\uparrow$ & AUPRC $\uparrow$ & AUPRC $\uparrow$ \\
+\midrule
+\textit{Overall} & 4,999 & 0.823\textsubscript{(0.807, 0.838)} & 0.450\textsubscript{(0.433, 0.467)} & 0.519\textsubscript{(0.499, 0.539)} & 0.465\textsubscript{(0.447, 0.483)} \\
+\midrule
+THYB\_S\_SH01 & 792 & \textbf{0.859}\textsubscript{(0.817, 0.893)} & 0.323\textsubscript{(0.290, 0.356)} & 0.450\textsubscript{(0.404, 0.504)} & 0.340\textsubscript{(0.304, 0.380)} \\
+THYB\_S\_ZJ05 & 647 & \textbf{0.746}\textsubscript{(0.690, 0.798)} & 0.460\textsubscript{(0.412, 0.518)} & 0.519\textsubscript{(0.469, 0.580)} & 0.445\textsubscript{(0.393, 0.504)} \\
+THYB\_S\_EN04 & 626 & \textbf{0.969}\textsubscript{(0.957, 0.978)} & 0.796\textsubscript{(0.758, 0.840)} & 0.851\textsubscript{(0.812, 0.888)} & 0.871\textsubscript{(0.837, 0.904)} \\
+THYB\_S\_SH05 & 539 & \textbf{0.832}\textsubscript{(0.787, 0.865)} & 0.539\textsubscript{(0.496, 0.589)} & 0.680\textsubscript{(0.630, 0.734)} & 0.555\textsubscript{(0.509, 0.610)} \\
+THYB\_S\_ZJ06 & 452 & \textbf{0.811}\textsubscript{(0.752, 0.864)} & 0.502\textsubscript{(0.442, 0.573)} & 0.597\textsubscript{(0.526, 0.670)} & 0.554\textsubscript{(0.490, 0.626)} \\
+THYB\_S\_QX07 & 279 & \textbf{0.575}\textsubscript{(0.432, 0.706)} & 0.163\textsubscript{(0.107, 0.235)} & 0.270\textsubscript{(0.173, 0.385)} & 0.158\textsubscript{(0.107, 0.245)} \\
+THYB\_S\_ZJ24 & 269 & \textbf{0.164}\textsubscript{(0.026, 0.423)} & 0.032\textsubscript{(0.014, 0.054)} & 0.068\textsubscript{(0.027, 0.137)} & 0.051\textsubscript{(0.017, 0.137)} \\
+THYB\_S\_AN01 & 236 & \textbf{0.588}\textsubscript{(0.430, 0.756)} & 0.110\textsubscript{(0.082, 0.147)} & 0.195\textsubscript{(0.141, 0.261)} & 0.121\textsubscript{(0.087, 0.172)} \\
+THYB\_S\_CQ03 & 172 & \textbf{0.876}\textsubscript{(0.819, 0.922)} & 0.603\textsubscript{(0.510, 0.706)} & 0.637\textsubscript{(0.544, 0.735)} & 0.559\textsubscript{(0.474, 0.651)} \\
+THYB\_S\_JS02 & 171 & \textbf{0.734}\textsubscript{(0.629, 0.822)} & 0.502\textsubscript{(0.414, 0.621)} & 0.649\textsubscript{(0.544, 0.750)} & 0.459\textsubscript{(0.369, 0.561)} \\
+THYB\_S\_JX06 & 153 & \textbf{0.897}\textsubscript{(0.839, 0.946)} & 0.351\textsubscript{(0.276, 0.438)} & 0.545\textsubscript{(0.422, 0.671)} & 0.409\textsubscript{(0.314, 0.522)} \\
+THYB\_S\_EN02 & 99 & \textbf{0.969}\textsubscript{(0.937, 0.992)} & 0.812\textsubscript{(0.710, 0.908)} & 0.939\textsubscript{(0.888, 0.983)} & 0.775\textsubscript{(0.669, 0.899)} \\
+THYB\_S\_BJ01 & 93 & \textbf{0.930}\textsubscript{(0.880, 0.970)} & 0.692\textsubscript{(0.583, 0.825)} & 0.743\textsubscript{(0.634, 0.858)} & 0.764\textsubscript{(0.661, 0.884)} \\
+THYB\_S\_GZ02 & 90 & \textbf{0.850}\textsubscript{(0.760, 0.921)} & 0.558\textsubscript{(0.460, 0.695)} & 0.702\textsubscript{(0.581, 0.825)} & 0.569\textsubscript{(0.457, 0.697)} \\
+THYB\_S\_GS03 & 84 & \textbf{0.921}\textsubscript{(0.847, 0.970)} & 0.578\textsubscript{(0.459, 0.706)} & 0.692\textsubscript{(0.559, 0.816)} & 0.674\textsubscript{(0.553, 0.808)} \\
+THYB\_S\_JS01 & 59 & \textbf{0.990}\textsubscript{(0.966, 1.000)} & 0.964\textsubscript{(0.885, 1.000)} & 0.950\textsubscript{(0.862, 1.000)} & 0.921\textsubscript{(0.808, 1.000)} \\
+THYB\_S\_NM02 & 49 & \textbf{0.810}\textsubscript{(0.662, 0.920)} & 0.594\textsubscript{(0.441, 0.781)} & 0.777\textsubscript{(0.611, 0.941)} & 0.562\textsubscript{(0.420, 0.729)} \\
+THYB\_S\_SX04 & 27 & \textbf{0.988}\textsubscript{(0.959, 1.000)} & 0.960\textsubscript{(0.873, 1.000)} & 0.931\textsubscript{(0.792, 1.000)} & 0.965\textsubscript{(0.895, 1.000)} \\
+THYB\_S\_AH04 & 24 & \textbf{0.746}\textsubscript{(0.430, 0.967)} & 0.463\textsubscript{(0.222, 0.800)} & 0.547\textsubscript{(0.203, 0.819)} & 0.258\textsubscript{(0.130, 0.450)} \\
+THYB\_S\_SC06 & 22 & \textbf{0.873}\textsubscript{(0.653, 1.000)} & 0.390\textsubscript{(0.229, 0.609)} & 0.704\textsubscript{(0.409, 0.898)} & 0.356\textsubscript{(0.209, 0.573)} \\
+THYB\_S\_YN01 & 21 & \textbf{0.968}\textsubscript{(0.901, 1.000)} & 0.748\textsubscript{(0.537, 0.990)} & 0.832\textsubscript{(0.615, 0.993)} & 0.737\textsubscript{(0.498, 0.947)} \\
+THYB\_S\_BJ09 & 20 & 0.683\textsubscript{(0.415, 0.910)} & 0.687\textsubscript{(0.406, 0.895)} & \textbf{0.699}\textsubscript{(0.431, 0.925)} & 0.559\textsubscript{(0.292, 0.806)} \\
+THYB\_S\_SD13 & 18 & \textbf{0.567}\textsubscript{(0.200, 1.000)} & 0.446\textsubscript{(0.059, 1.000)} & 0.415\textsubscript{(0.111, 0.900)} & 0.196\textsubscript{(0.056, 0.415)} \\
+THYB\_S\_SD12 & 15 & \textbf{0.500}\textsubscript{(0.000, 1.000)} & 0.077\textsubscript{(0.000, 0.177)} & 0.143\textsubscript{(0.000, 0.365)} & 0.071\textsubscript{(0.000, 0.150)} \\
+THYB\_S\_JL04 & 12 & \textbf{0.491}\textsubscript{(0.083, 1.000)} & 0.187\textsubscript{(0.083, 0.379)} & 0.199\textsubscript{(0.083, 0.404)} & 0.241\textsubscript{(0.083, 0.610)} \\
+THYB\_S\_YN05 & 12 & \textbf{0.000}\textsubscript{(0.000, 0.000)} & 0.000\textsubscript{(0.000, 0.000)} & 0.000\textsubscript{(0.000, 0.000)} & 0.000\textsubscript{(0.000, 0.000)} \\
+THYB\_S\_XJ01 & 5 & \textbf{1.000}\textsubscript{(1.000, 1.000)} & 0.806\textsubscript{(0.333, 1.000)} & 0.589\textsubscript{(0.200, 1.000)} & 0.917\textsubscript{(0.417, 1.000)} \\
+THYB\_S\_GX01 & 4 & \textbf{1.000}\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} \\
+THYB\_S\_SH06 & 4 & \textbf{1.000}\textsubscript{(0.000, 1.000)} & 0.417\textsubscript{(0.000, 1.000)} & 0.417\textsubscript{(0.000, 1.000)} & 0.583\textsubscript{(0.000, 1.000)} \\
+THYB\_S\_FJ01 & 2 & \textbf{1.000}\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} \\
+THYB\_S\_FJ03 & 2 & \textbf{1.000}\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} \\
+THYB\_S\_NX01 & 1 & \textbf{1.000}\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} \\
+THYB\_S\_HB07 & 0 & -- & -- & -- & -- \\
+THYB\_S\_SD14 & 0 & -- & -- & -- & -- \\
+THYB\_S\_ZJ29 & 0 & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+\clearpage

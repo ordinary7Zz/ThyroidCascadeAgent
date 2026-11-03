@@ -1,6 +1,6 @@
 # 审稿回复 LaTeX（正式编辑源）
 
-请在此目录维护回复信；**不要**用 `REVIEWER_RESPONSE_DRAFT_*.md` 与正式稿双向同步。
+请在此目录维护回复信；**回信唯一编辑源**（勿再维护已删除的 MD 草稿/plan）。
 
 ## 文件结构
 
@@ -51,6 +51,7 @@ NHC 表 `tab_nhc_center_descriptive` / `tab_nhc_center_performance` / `tab_nhc_h
 - 正文引用：`\responsetableref` / `\responsefigureref` / `\responsetablerefrange` 嵌入句子；**勿** `（见表 R*）`、**勿**「见信末」/ “at the end of this letter”、**勿**每条末尾重复表号清单。
 - **只引用表/图，不单独引用「表注/图注」**：Nature 系回复信与正文一样，交叉引用对象是 **Table/Figure**（本信用 `\responsetableref`）；表注 `\responsetablenote` 是表的一部分，读者跟表号即可。**勿**写 “in Table~R12 **notes**” /「见 \responsetableref{…} **表注**」——除非正文刻意不写细节、且细节**仅**在表注（此时也只写 `\responsetableref{…}`，不必点「表注」二字）。同一句里已写清操作定义时，**删除**再指向表注的尾巴（避免重复）。
 - 信内表、图各有一套 **R1, R2, …** 序号，按 `\responsetabletitle` / `\responsefiguretitle` **在 PDF 中首次出现的顺序**自动编号（见 `reviewer_response.sty`）；**不复用**稿件 Supplementary Table S* 序号。
+- **表题/图注版式**：与 Nature 系正文一致，**左对齐**、占满 `\textwidth`（`captionsetup` 的 `justification=raggedright`，`singlelinecheck=false`）；**表体、图**在版心内**居中**（浮动表在 `\caption` 之后 `\centering`；longtable 用 `\LTleft`/`\LTright`；图用 `responsefigure` 的 `\centering`）。表注 `\responsetablenote` 在表下**左对齐**（不受表体居中影响）。
 - 图：先 `\includegraphics`，再 `\caption{\responsefiguretitle{键}{整段图注}}`（与常规论文相同：**一条 caption**，`Figure R*` 编号由宏自动生成；**不用** `\responsefigurelegend` 或 `\caption` 外的 `\responsefigurenote`）。
 
 ## 表图注册与命名
@@ -117,3 +118,5 @@ cd ../latex-viewer && python3 app.py
 ```
 
 修改 `body_*.tex` 表顺序或增删 `\responsetabletitle` 后请 **XeLaTeX 编译两次** 以稳定 `\ref`。
+
+**与 `latex-viewer` 网页状态**：页眉「编译失败」看的是 **viewer 最后一次 `full_build`（EN+ZH 各两遍）** 的 `ok`，不是你在终端里单独跑一遍 `xelatex` 时 `.log` 末尾那几行。TeX 在 `nonstopmode` 下常有 Warning 仍写出 PDF；仅 **Font Warning** 不算失败。改完 TeX 后请在 viewer 点 **编译**，或重启 `python3 app.py` 触发 startup build。

@@ -4,17 +4,16 @@
 
 \begin{responsetable}
 \caption{\responsetabletitle{tab_metadata_ablation_seg}{LLM 路由元数据消融 --- 结节分割}}
-\label{tab_metadata_ablation_seg}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l l l@{}}
 \toprule
 元数据条件 & Dice $\uparrow$ & HD95 $\downarrow$ \\
 \midrule
-完整元数据 & 0.8388 (0.8260--0.8516) & 7.1430 (5.9130--8.3730) \\
 隐去设备信息 & 0.8242 (0.8020--0.8446) & 7.8131 (5.9222--9.8453) \\
 隐去数据来源 & 0.8179 (0.7950--0.8365) & 7.8435 (6.0382--9.7338) \\
 两者均隐去 & 0.8179 (0.7945--0.8380) & 7.4440 (5.7012--9.2961) \\
 仅质量与分歧信号 & 0.8228 (0.8010--0.8419) & 7.6001 (5.7902--9.5043) \\
+完整元数据 & \textbf{0.8388 (0.8260--0.8516)} & \textbf{7.1430 (5.9130--8.3730)} \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
@@ -24,17 +23,16 @@
 % [SYNC] tab_metadata_ablation_cls: TN5K split, expert pool, and metadata tiers match tab_metadata_ablation_seg.
 \begin{responsetable}
 \caption{\responsetabletitle{tab_metadata_ablation_cls}{LLM 路由元数据消融 --- 良恶性分类}}
-\label{tab_metadata_ablation_cls}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l l l@{}}
 \toprule
 元数据条件 & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
-完整元数据 & 0.9584 (0.9432--0.9736) & 0.9763 (0.9674--0.9832) \\
 隐去设备信息 & 0.9403 (0.9048--0.9699) & 0.9733 (0.9549--0.9877) \\
 隐去数据来源 & 0.9400 (0.9040--0.9690) & 0.9741 (0.9555--0.9878) \\
 两者均隐去 & 0.9392 (0.9038--0.9679) & 0.9737 (0.9563--0.9873) \\
 仅质量与分歧信号 & 0.9404 (0.9038--0.9700) & 0.9740 (0.9556--0.9878) \\
+完整元数据 & \textbf{0.9584 (0.9432--0.9736)} & \textbf{0.9763 (0.9674--0.9832)} \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}

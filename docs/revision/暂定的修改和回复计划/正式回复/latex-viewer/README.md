@@ -12,7 +12,7 @@
 | `../latex/REVIEWER_RESPONSE_ZH.tex` | 中文导言区 |
 | `../latex/reviewer_response.sty` | 版式、表格环境、图表路径 |
 
-上级目录中的 `REVIEWER_RESPONSE_DRAFT_*.md` 仅作历史备份；**预览服务不会读取或覆盖 TeX**。
+回信只维护 `../latex/`；预览服务不会读取 MD 计划/草稿。
 
 ## 依赖
 

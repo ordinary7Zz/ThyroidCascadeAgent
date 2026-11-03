@@ -12,9 +12,9 @@ xelatex_run() {
     tail -n 40 "${base}.log" 2>/dev/null || tail -n 40 "${base}.compile.stdout" >&2
     return 1
   fi
-  if grep -q '^! ' "${base}.log" 2>/dev/null; then
+  if grep -qE '^! |: Undefined control sequence\.|: Extra , or forgotten|: You can.t use `macro parameter character #' "${base}.log" 2>/dev/null; then
     echo "FAILED: $tex (LaTeX errors in ${base}.log)" >&2
-    grep '^! ' "${base}.log" | head -5 >&2
+    grep -E '^! |: Undefined control sequence\.|: Extra , or forgotten|: You can.t use `macro parameter character #' "${base}.log" | head -8 >&2
     tail -n 30 "${base}.log" >&2
     return 1
   fi

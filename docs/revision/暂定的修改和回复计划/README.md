@@ -14,7 +14,7 @@
 |------|--------|
 | 1 | 从下表 **进行中** 挪入 **已归档**（或反向，少见） |
 | 2 | 同步 [`B_DELIVERABLES_CHECKLIST_ZH.md`](./B_DELIVERABLES_CHECKLIST_ZH.md) 总览行 |
-| 3 | 更新 `MANUSCRIPT_REVISION_PLAN_ZH.md` / `REVIEWER_RESPONSE_PLAN_ZH.md` 页眉一句；**已归档包**在本目录只保留 **§/专项索引**（长表留在 `b*/` 或 `正式回复/latex`） |
+| 3 | 更新 `MANUSCRIPT_REVISION_PLAN_ZH.md` 页眉一句；**已归档包**在本目录只保留 **§/专项索引**（长表留在 `b*/` 或 `正式回复/latex`）；**回信正文**只改 `正式回复/latex/` |
 
 **不要**：为单个 B 包在本 README 里另开二级标题、长表格或实验状态说明。
 
@@ -63,9 +63,8 @@
 
 | 文件 | 说明 |
 |------|------|
-| [MANUSCRIPT_REVISION_PLAN_ZH.md](./MANUSCRIPT_REVISION_PLAN_ZH.md) | 稿件修改计划（中文，**唯一稿本**） |
-| [REVIEWER_RESPONSE_PLAN_ZH.md](./REVIEWER_RESPONSE_PLAN_ZH.md) | 审稿意见回复就绪度（中文，R1–R3，**唯一稿本**） |
-| [REVIEWER_RESPONSE_DRAFT_EN.md](./REVIEWER_RESPONSE_DRAFT_EN.md) / [REVIEWER_RESPONSE_DRAFT_ZH.md](./REVIEWER_RESPONSE_DRAFT_ZH.md) | 历史 MD 稿本；**正式回信**以 `正式回复/latex/generated/body_*.tex` 为准 |
+| [MANUSCRIPT_REVISION_PLAN_ZH.md](./MANUSCRIPT_REVISION_PLAN_ZH.md) | 稿件修改计划（中文） |
+| [正式回复/latex/](./正式回复/latex/) | **审稿意见回复唯一稿本**（`generated/body_{en,zh}.tex` + 信末表图；`latex/README.md`） |
 | [B_DELIVERABLES_CHECKLIST_ZH.md](./B_DELIVERABLES_CHECKLIST_ZH.md) | **B1–B12 交付清单**（文/图/表 + 稿面位置 + 仓库路径 + 状态） |
 | [../../scripts/README_REVISION.md](../../scripts/README_REVISION.md) | **返修脚本 / pipeline 模块索引**（按 B 包归类） |
 

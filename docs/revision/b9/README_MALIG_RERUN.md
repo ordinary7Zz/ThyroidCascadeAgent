@@ -36,9 +36,9 @@ export RUN_TAG=zjh20261101
 | ------------------------------------------------------------ | ----------------------------------------------------- |
 | `run_repvit.sh` / `run_lsnet.sh` / `run_ultrafedfm.sh` | 步骤 1–3                                             |
 | `run_medgemma.sh` / `run_qwen3.sh`                       | 步骤 1–2                                             |
-| `run_llnm_net.sh`                                          | 步骤 1 + 3（LNM）；可选 `SKIP_STEP1` / `SKIP_FULL_TRAIN` / `SKIP_ZJH_EVAL` / `SKIP_OOF` / `SKIP_IF_CV_SUMMARY` |
+| `run_llnm_net.sh`                                          | 步骤 **1 + 3**（LNM 全量 + hold-out eval + 五折 OOF）；已有 my_run 全量（220/158）或 OOF（220 图）时自动跳过对应部分（`SKIP_IF_LLNM_*`）；`SKIP_OOF=1` 仅刷 step1 |
 | `run_tiger_model.sh`                                       | 步骤 1–3（FTC；Tiger ResNet 流水线）                 |
-| `run_thyroidxagent.sh`                                     | 步骤 **1**（DINO 全量 → ZJH + FTC Dai）；默认 **跳过** 步骤 3 OOF（`SKIP_TX_OOF=0` 重跑 OOF）；全栈 Cascade 仍待补 |
+| `run_thyroidxagent.sh`                                     | 步骤 **1 + 3**（DINO 全量外测 + 五折 OOF）；已有 `external_summary.json` / my_run OOF（220·532 图）时自动跳过对应步骤（`SKIP_IF_TX_*`）；`SKIP_TX_OOF=1` 仅刷外测；全栈 Cascade 仍待补 |
 | `run_gpt5.sh` / `run_gemini.sh`                          | API 占位（无本地训练 / 无 OOF）                       |
 | `run_all_models.sh`                                        | `MODELS="repvit lsnet"` 过滤批量跑                  |
 
@@ -72,15 +72,20 @@ bash scripts/revision/b9/models/run_qwen3.sh
 
 # 专用模型
 bash scripts/revision/b9/models/run_llnm_net.sh
-# 全量已训完，只补五折 OOF：
-SKIP_STEP1=1 bash scripts/revision/b9/models/run_llnm_net.sh
+# 全量已训完、只补 eval + OOF（会自动跳过 30-epoch 重训）：
+# bash scripts/revision/b9/models/run_llnm_net.sh
+# 清掉旧 OOF（3227 图 cv_config）后重跑五折：
+# rm -rf docs/revision/b9/runs/models_${RUN_TAG}/llnm_net/lnm/oof
+# SKIP_IF_LLNM_OOF=0 bash scripts/revision/b9/models/run_llnm_net.sh
 bash scripts/revision/b9/models/run_tiger_model.sh
-# ThyroidXAgent：DINO 全量外测（默认不重跑 OOF）
+# ThyroidXAgent：DINO 全量外测 + 五折 OOF（已有结果则跳过，避免重复全量训练）
 bash scripts/revision/b9/models/run_thyroidxagent.sh
-# 仅 DINO 外测底层脚本：
-# bash scripts/revision/b9/08_run_dino_full_external.sh
-# OOF + 外测一起：
-# SKIP_TX_OOF=0 bash scripts/revision/b9/models/run_thyroidxagent.sh
+# 仅补 OOF（外测已存在）：
+# SKIP_IF_TX_FULL=1 bash scripts/revision/b9/models/run_thyroidxagent.sh
+# 仅刷外测、不做 OOF：
+# SKIP_TX_OOF=1 bash scripts/revision/b9/models/run_thyroidxagent.sh
+# 强制重跑全量外测：
+# SKIP_IF_TX_FULL=0 bash scripts/revision/b9/models/run_thyroidxagent.sh
 
 # 闭源 API 占位（无本地训练 / 无 OOF）
 bash scripts/revision/b9/models/run_gpt5.sh

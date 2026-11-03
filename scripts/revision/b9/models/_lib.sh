@@ -97,6 +97,40 @@ run_baseline_oof_both_tasks() {
   bash scripts/run_all_baselines_cv.sh
 }
 
+llnm_full_train_dir() {
+  echo "$OUT_ROOT/llnm_net/lnm/full_train"
+}
+
+llnm_oof_dir() {
+  echo "$OUT_ROOT/llnm_net/lnm/oof"
+}
+
+llnm_full_train_ready() {
+  local out
+  out="$(llnm_full_train_dir)"
+  [[ -f "$out/best_model.pth" && -f "$out/train_norm_stats.pkl" && -f "$out/summary.json" ]] || return 1
+  "$PYTHON" -c "import json,sys; s=json.load(open(sys.argv[1])); ok=(s.get('train_samples')==220 and s.get('test_samples')==158); sys.exit(0 if ok else 1)" "$out/summary.json"
+}
+
+llnm_zjh_eval_ready() {
+  [[ -f "$(llnm_full_train_dir)/zjh_test_eval.json" ]]
+}
+
+llnm_step1_ready() {
+  llnm_full_train_ready && llnm_zjh_eval_ready
+}
+
+llnm_oof_cv_ready() {
+  local cv
+  cv="$(llnm_oof_dir)/cv_summary.json"
+  [[ -f "$cv" ]] || return 1
+  "$PYTHON" -c "import json,sys; d=json.load(open(sys.argv[1])); n=int(d.get('oof_n_images',0)); sys.exit(0 if n==220 else 1)" "$cv"
+}
+
+llnm_default_image_root() {
+  "$PYTHON" -c "import json,sys; r=json.load(open(sys.argv[1])); k=next((x for x in ('lymphus','lymphus_fake','lymphus_c2','zjh') if x in r), None); print(r[k] if k else next(iter(r.values())))" "$IMAGE_ROOTS_LNM"
+}
+
 run_llnm_full_zjh() {
   local out="$OUT_ROOT/llnm_net/lnm/full_train"
   local skip_step1="${SKIP_STEP1:-0}"
@@ -137,8 +171,11 @@ run_llnm_full_zjh() {
   fi
 
   echo ">>> [LLNM-Net/LNM] hold-out test eval"
+  local llnm_root
+  llnm_root="$(llnm_default_image_root)"
   "$PYTHON" new_code/evaluate.py \
     --test_json "$MANIFEST_LNM_TEST" \
+    --image_root "$llnm_root" \
     --image_roots_json "$IMAGE_ROOTS_LNM" \
     --weights "$out/best_model.pth" \
     --norm_stats "$out/train_norm_stats.pkl" \
@@ -156,6 +193,12 @@ run_llnm_oof() {
   if [[ "${SKIP_IF_CV_SUMMARY:-0}" == "1" && -f "$out/cv_summary.json" ]]; then
     echo ""
     echo ">>> [LLNM-Net/LNM] 5-fold OOF skipped (existing $out/cv_summary.json, SKIP_IF_CV_SUMMARY=1)"
+    return 0
+  fi
+  if [[ "${SKIP_IF_LLNM_OOF:-0}" == "1" ]] && llnm_oof_cv_ready; then
+    echo ""
+    echo ">>> [LLNM-Net/LNM] 5-fold OOF skipped (existing my_run cv_summary, oof_n_images=220)"
+    echo "    Force rerun: SKIP_IF_LLNM_OOF=0 or remove $out/"
     return 0
   fi
   echo ""
@@ -201,6 +244,43 @@ run_tiger_oof() {
   OUTPUT_DIR="$OUT_ROOT/tiger_model/ftcptc/oof" \
   JSON_PATH="$MANIFEST_FTC_TRAIN" \
   bash "$B9_SCRIPT_DIR/05_run_tiger_ftc_b9.sh"
+}
+
+_tx_external_summary_path() {
+  echo "$OUT_ROOT/thyroidxagent/$1/full_external/external_summary.json"
+}
+
+_tx_dino_cv_summary_path() {
+  echo "$DINO_ROOT/Malignant_Cls_Model/b9/runs/revision_${RUN_TAG}/$1_cv/cv_summary.json"
+}
+
+# Expected my_run OOF pool sizes (shared_folds); used to ignore stale 3227-image cv_summary.
+_tx_oof_expected_n() {
+  case "$1" in
+    lnm) echo 220 ;;
+    ftcptc) echo 532 ;;
+    *) echo 0 ;;
+  esac
+}
+
+tx_full_external_ready() {
+  local tasks="${TX_FULL_TASKS:-lnm ftcptc}" task
+  for task in $tasks; do
+    [[ -f "$(_tx_external_summary_path "$task")" ]] || return 1
+  done
+  return 0
+}
+
+tx_oof_cv_ready() {
+  local task expected n cv
+  for task in lnm ftcptc; do
+    expected="$(_tx_oof_expected_n "$task")"
+    cv="$(_tx_dino_cv_summary_path "$task")"
+    [[ -f "$cv" && "$expected" != "0" ]] || return 1
+    n="$("$PYTHON" -c "import json,sys; d=json.load(open(sys.argv[1])); print(int(d.get('oof_image_level',{}).get('n',0)))" "$cv")"
+    [[ "$n" == "$expected" ]] || return 1
+  done
+  return 0
 }
 
 run_txagent_oof_both() {

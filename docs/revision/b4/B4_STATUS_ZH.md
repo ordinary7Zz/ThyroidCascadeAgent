@@ -85,7 +85,7 @@
 | zjh8k | 0.9430 | 0.9175 | +0.1074 | −0.0147 |
 | rjh7k | 0.9146 | — | +0.0215 | — |
 
-**勿用** `b3/sample/llm`（*n*=10）作正式 L3。详情与回复要点 → `docs/revision/暂定的修改和回复计划/REVIEWER_RESPONSE_PLAN_ZH.md` **B4 专项**。
+**勿用** `b3/sample/llm`（*n*=10）作正式 L3。详情与回复要点 → `正式回复/latex/generated/body_zh.tex`（R2.8 组件消融表 `tab_component_ablation_*`）。
 
 ---
 

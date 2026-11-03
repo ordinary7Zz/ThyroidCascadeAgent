@@ -9,7 +9,7 @@
 | 文档 | 内容 |
 |------|------|
 | [MANUSCRIPT_REVISION_PLAN_ZH.md](./暂定的修改和回复计划/MANUSCRIPT_REVISION_PLAN_ZH.md) | 针对 `ThyroidXAgent.md` 的修改计划（B11 §8、B12 §9） |
-| [REVIEWER_RESPONSE_PLAN_ZH.md](./暂定的修改和回复计划/REVIEWER_RESPONSE_PLAN_ZH.md) | 审稿回复就绪度（含 B11/B12 专项） |
+| [正式回复/latex/](./暂定的修改和回复计划/正式回复/latex/) | 审稿意见回复（`body_{en,zh}.tex`；唯一稿本） |
 | [B_DELIVERABLES_CHECKLIST_ZH.md](./暂定的修改和回复计划/B_DELIVERABLES_CHECKLIST_ZH.md) | B1–B12 交付勾选 |
 
 审稿原文：`docs/Nature Communications Reviews.pdf`  
