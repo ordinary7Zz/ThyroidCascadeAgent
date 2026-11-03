@@ -411,7 +411,7 @@ ThyroidXAgent & \textbf{0.8544 $\pm$ 0.0415} & \textbf{0.9432 $\pm$ 0.0268} & \t
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{AUROC 与 AUPRC，cluster-bootstrap 95\% CI（1000 次，seed=42）；$\pm$ 为点估计与区间半宽。TN3K--DDTI 列与稿件 Supplementary Table S4 一致；ZJH-8K 为 \responsetableref{tab_dhash} 定义的 6807 张评估集（ResNet-50 至 ThyroidXAgent 为重算；ZJH 上 VLM 行暂沿用 S4，待在相同子集上重算）。}
+\responsetablenote{AUROC 与 AUPRC，cluster-bootstrap 95\% CI（1000 次，seed=42）；$\pm$ 为点估计与区间半宽。}
 \end{manuscriptresponsetable}
 
 % [SYNC] tab_seg_ext: Dice/HD95 blocks and ± layout match manuscript Supp Table S3; values vs B2/seg exports.
@@ -443,7 +443,7 @@ ThyroidXAgent & \textbf{9.42 $\pm$ 1.45} & \textbf{5.16 $\pm$ 0.53} & \textbf{9.
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Dice 与 95\% Hausdorff 距离（HD95），cluster-bootstrap 95\% CI（1000 次，seed=42，图像级）；$\pm$ 为点估计与区间半宽。非 ZJH-8K 列与稿件 Supplementary Table S3 一致；ZJH-8K（6807 张）见 \responsetableref{tab_dhash}。}
+\responsetablenote{Dice 与 95\% Hausdorff 距离（HD95），cluster-bootstrap 95\% CI（1000 次，seed=42，图像级）；$\pm$ 为点估计与区间半宽。}
 \end{manuscriptresponsetable}
 
 % [SYNC] tab_patient_cls: ZJH from docs/revision/b2/tables/zjh8k_b2_excl_tn3k_h0.json patient_level; ThyroidXL from zjh8k_b2-style thyroidxl_b2.json.
@@ -461,7 +461,7 @@ ThyroidXL & 739 & \textbf{0.9484} & 0.9326–0.9628 & \textbf{0.9355} & 0.9064�
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{ZJH-8K 与 ThyroidXL 官方 test 外测。分类：簇内恶性概率算术平均，患者标签为组内 max。分割：患者内 Dice、HD95 为组内图像级指标算术平均。ZJH-8K：6807 图、1068 患者（\responsetableref{tab_cohort_patient_counts}）；患者级指标与 \responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext} 同一 TN3K dHash H=0 剔除子集（cluster-bootstrap 1000 次，seed=42）。ThyroidXL：2090 图、739 患者。LNM/FTC 患者 hold-out 见 \responsetableref{tab_malig_ext}，不在本表。}
+\responsetablenote{ZJH-8K 与 ThyroidXL 官方 test 外测。分类：簇内恶性概率算术平均，患者标签为组内 max。分割：患者内 Dice、HD95 为组内图像级指标算术平均。ZJH-8K：6807 图、1068 患者（\responsetableref{tab_cohort_patient_counts}）；患者级指标与 \responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext} 同一 TN3K dHash H=0 剔除子集（cluster-bootstrap 1000 次，seed=42）。ThyroidXL：2090 图、739 患者。}
 \end{responsetable}
 
 % [SYNC] tab_calib_referral:

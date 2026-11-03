@@ -1,0 +1,59 @@
+# ZJH-8K 外测刷新（表 R3/R4 ThyroidXAgent 行）：仅 DINO 分割 + DINO 多任务分类（all_datasets），无 LLM / 无 radiomics。
+# 推理在全库 7958 图上进行；B2 报告 6807 子集时用 --exclude-images（TN3K train H=0 manifest）。
+#
+#   python run_pipeline.py --config config/revision/b2/zjh8k_dino_primary.yaml
+#
+shared:
+  agent_llm:
+    api_key_env: DASHSCOPE_API_KEY
+    base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    model_name: qwen3.8-omni-flash
+    temperature: 0.3
+    max_tokens: 768
+    enable_thinking: false
+
+segmentation:
+  models:
+    - type: dinov3_unet
+      name: all_datasets
+      model_path: ../Segmentation_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth
+      input_size: [224, 224]
+      threshold: 0.5
+  agent:
+    enable_agent: false
+    routing_mode: static_rule
+    ensemble:
+      enabled: true
+      top_k: 1
+      method: weighted_average
+      threshold: 0.5
+
+classification:
+  models:
+    - type: dinov3_unet_multitask
+      name: all_datasets
+      model_path: ../Classification_Agent/weights/all_datasets/dino_unet_train_all_datasets_epoch_40.pth
+      use_tirads: false
+  agent:
+    enable_agent: false
+    routing_mode: soft_voting
+    top_k: 1
+    consensus_min_confidence: 0.6
+
+radiomics_judge:
+  enabled: false
+
+pipeline:
+  preload_workers: 1
+  run_segmentation: true
+  run_classification: true
+  data:
+    image_input: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/ZJH-8K/images
+    gt_mask_dir: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/ZJH-8K/masks
+    label_file: /mnt/wangbd8/workspace/DataSets/ThyroidAgent/train_val_test/ZJH-8K/ZJH-8K_BM_labels.json
+    label_key: malignancy
+    device_info: [GE Logiq E9, GE S7]
+    start_index: 0
+    max_images: null
+  output:
+    output_dir: output/ZJH-8K/pipeline_run

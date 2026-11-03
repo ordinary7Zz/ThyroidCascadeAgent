@@ -410,7 +410,7 @@ ThyroidXAgent & \textbf{0.8544 $\pm$ 0.0415} & \textbf{0.9432 $\pm$ 0.0268} & \t
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{AUROC and AUPRC with cluster-bootstrap 95\% CIs (1000 resamples, seed~42); $\pm$ gives point estimate and half CI width. TN3K--DDTI columns match manuscript Supplementary Table~S4; ZJH-8K uses the 6807-image evaluation set in \responsetableref{tab_dhash} (ResNet-50 through ThyroidXAgent recomputed; VLM rows on ZJH-8K follow S4 until recomputed on the same subset).}
+\responsetablenote{AUROC and AUPRC with cluster-bootstrap 95\% CIs (1000 resamples, seed~42); $\pm$ gives point estimate and half CI width.}
 \end{manuscriptresponsetable}
 
 % [SYNC] tab_seg_ext: Dice/HD95 layout ± matches manuscript Supp Table S3; values vs B2/seg exports.
@@ -442,7 +442,7 @@ ThyroidXAgent & \textbf{9.42 $\pm$ 1.45} & \textbf{5.16 $\pm$ 0.53} & \textbf{9.
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Dice and 95th-percentile Hausdorff distance (HD95) with cluster-bootstrap 95\% CIs (1000 resamples, seed~42, image-level); $\pm$ gives point estimate and half CI width. Non--ZJH-8K columns match manuscript Supplementary Table~S3; ZJH-8K ($n{=}6807$) is defined in \responsetableref{tab_dhash}.}
+\responsetablenote{Dice and 95th-percentile Hausdorff distance (HD95) with cluster-bootstrap 95\% CIs (1000 resamples, seed~42, image-level); $\pm$ gives point estimate and half CI width.}
 \end{manuscriptresponsetable}
 
 % [SYNC] tab_patient_cls: ZJH from docs/revision/b2/tables/zjh8k_b2_excl_tn3k_h0.json patient_level; ThyroidXL from thyroidxl_b2.json.
@@ -460,7 +460,7 @@ ThyroidXL & 739 & \textbf{0.9484} & 0.9326--0.9628 & \textbf{0.9355} & 0.9064--0
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{ZJH-8K and ThyroidXL official test splits. Classification: arithmetic mean of malignancy probability within cluster; patient label = within-cluster max. Segmentation: within-patient arithmetic mean of image-level Dice and HD95. ZJH-8K: 6807 images, 1068 patients (\responsetableref{tab_cohort_patient_counts}); patient-level metrics on the same TN3K dHash H=0 exclusion subset as \responsetableref{tab_cls_ext} and \responsetableref{tab_seg_ext} (cluster-bootstrap 1000 resamples, seed=42). ThyroidXL: 2090 images, 739 patients. LNM/FTC patient hold-out is in \responsetableref{tab_malig_ext}, not this table.}
+\responsetablenote{ZJH-8K and ThyroidXL official test splits. Classification: arithmetic mean of malignancy probability within cluster; patient label = within-cluster max. Segmentation: within-patient arithmetic mean of image-level Dice and HD95. ZJH-8K: 6807 images, 1068 patients (\responsetableref{tab_cohort_patient_counts}); patient-level metrics on the same TN3K dHash H=0 exclusion subset as \responsetableref{tab_cls_ext} and \responsetableref{tab_seg_ext} (cluster-bootstrap 1000 resamples, seed=42). ThyroidXL: 2090 images, 739 patients.}
 \end{responsetable}
 
 % [SYNC] tab_calib_referral: all rows from cohorts_test_fit/*/{abstention_eval_fake,results_flagged_fake}.json + compute_r4_dice --flagged-json results_flagged_fake.json (DDTI Dice uses ddti_seg fake flags).
