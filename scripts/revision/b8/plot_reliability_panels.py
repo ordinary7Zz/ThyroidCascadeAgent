@@ -29,6 +29,8 @@ import repo_path
 
 repo_path.install()
 
+from pipeline.revision.b8.plot_export import save_figure_notext_svg
+
 DEFAULT_COHORTS = ["tn3k", "tn5k", "thyroidxl", "zjh8k", "ddti_cls"]
 COHORT_LABELS = {
     "tn3k": "TN3K",
@@ -131,14 +133,61 @@ def _draw_bins_on_ax(ax, bins: list, *, title: str) -> None:
     ax.grid(True, alpha=0.25)
 
 
+def _save_reliability_notext_svg(bins: list, out_svg: Path) -> Path | None:
+    try:
+        import matplotlib.pyplot as plt
+    except ImportError:
+        return None
+
+    fig, ax = plt.subplots(figsize=(4.2, 3.6))
+    _draw_bins_on_ax(ax, bins, title="_")
+    save_figure_notext_svg(fig, out_svg)
+    plt.close(fig)
+    return out_svg
+
+
+def export_reliability_cohort_notext_svgs(
+    cohorts_root: Path,
+    cohorts: list[str],
+    out_dir: Path,
+    *,
+    calibration_json_name: str = "calibration_test.json",
+) -> list[Path]:
+    """Per-cohort reliability panels without text (for custom figure layout)."""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    written: list[Path] = []
+    for cohort in cohorts:
+        cal_path = cohorts_root / cohort / calibration_json_name
+        if not cal_path.is_file():
+            continue
+        cal = json.loads(cal_path.read_text(encoding="utf-8"))
+        bins = cal.get("bins") or []
+        p = _save_reliability_notext_svg(bins, out_dir / f"reliability_{cohort}_notext.svg")
+        if p:
+            written.append(p)
+    return written
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--cohorts-root", type=Path, default=Path("output/b8/cohorts_test_fit"))
     parser.add_argument("--calibration-json", default="calibration_test.json")
     parser.add_argument("--out", type=Path, default=Path("output/b8/figures/reliability_panels.png"))
     parser.add_argument("--cohorts", default=",".join(DEFAULT_COHORTS))
+    parser.add_argument(
+        "--no-notext-svg",
+        action="store_true",
+        help="不输出各队列无文字 SVG（默认写入 --out 同目录下 svg_notext/）",
+    )
+    parser.add_argument(
+        "--notext-svg-dir",
+        type=Path,
+        default=None,
+        help="无文字 SVG 目录（默认 <out 父目录>/svg_notext）",
+    )
     args = parser.parse_args()
     cohorts = [c.strip() for c in args.cohorts.split(",") if c.strip()]
+    svg_dir: Path | None | bool = False if args.no_notext_svg else (args.notext_svg_dir or args.out.parent / "svg_notext")
     p = plot_combined(
         args.cohorts_root,
         cohorts,
@@ -147,6 +196,14 @@ def main() -> None:
     )
     if p:
         print(f"✓ {p}")
+    if svg_dir is not False:
+        for sp in export_reliability_cohort_notext_svgs(
+            args.cohorts_root,
+            cohorts,
+            Path(svg_dir),
+            calibration_json_name=args.calibration_json,
+        ):
+            print(f"✓ {sp}")
 
 
 if __name__ == "__main__":

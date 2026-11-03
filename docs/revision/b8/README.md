@@ -14,4 +14,5 @@
 export PYTHON=/mnt/wangbd8/workspace/envs/thyroid_infer/bin/python
 python scripts/revision/b8/plot_risk_coverage.py --mark-operating-point --combined
 # 输出：output/b8/figures/risk_coverage_<cohort>.png、risk_coverage_panels.png
+#       output/b8/figures/svg_notext/risk_coverage_<cohort>_notext.svg（默认，可用 --no-notext-svg 关闭）
 ```

@@ -7,7 +7,7 @@
 ## 待办
 
 - [x] **R2.9 / `tab_routing_stability`**：多队列分割+分类 LLM 路由稳定性已填入（B6 `stability_summary`）
-- [ ] **R2.5 / F5**：与合作者确认后写 Methods + 各队列缺失/无效标注补充表；回信 `\rpending` 整块替换（见 `docs/需要确认.md` R2.5 行）
+- [ ] **R2.5 / F5**：与合作者确认后写 Methods（F5 标注/ZJH 段落）；**超声黑边**检测/裁剪流程 `\rpending` 定稿后替换；**不**另做各队列缺失 mask/标签排除计数补充表
 - [ ] **R1.3 / R2.6**：NHC 全量 35 中心 + scanner/case-mix 关联分析（正文 `\rpending`）
 - [ ] **R2.10 / R2.12**：回信已写 ZJH 与 Dai **FTC/PTC 标签一致** + ZJH hold-out 主外测；CN0/CN1 细节仍 `\rpending`（R2.12）；`docs/需要确认.md` 合作者核实后可收紧 Methods
 - [ ] **`tab_malig_ext`** / **`tab_ftcptc_ext_dai`**：按 `docs/revision/b9/README_MALIG_RERUN.md` 跑编排脚本后填表

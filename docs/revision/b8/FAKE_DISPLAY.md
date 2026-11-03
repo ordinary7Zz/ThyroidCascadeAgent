@@ -54,6 +54,8 @@ python scripts/revision/b8/synthesize_fake_b8_results.py --n-grid 36
   单队列 `reliability_test_fake.png` → `figures/reliability_<cohort>_test.png`  
   **（已于 2026-10-30 写入正式回复 `body_{zh,en}.tex` 表 R4。）**
 
+**矢量重排版（无文字子图）：** 跑 `--plot` 或单独调用 `plot_*` 时，默认在输出目录下生成 `svg_notext/reliability_<cohort>_notext.svg`、`risk_coverage_<cohort>_notext.svg`（无标题/轴标签/刻度/图例，仅曲线与网格）。关闭：`--no-notext-svg`；目录：`--notext-svg-dir`。
+
 ---
 
 ## 调参速查

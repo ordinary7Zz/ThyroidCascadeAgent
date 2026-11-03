@@ -29,9 +29,8 @@
 \end{reviewercomment}
 \begin{authorresponse}
 我们同意私有多中心队列存在显著的中心间差异。NHC-MISD-TUS 的队列描述、按中心分割/分类表现及 $I^2$ 见 审稿人 2，意见 6（R2.6） 及 \responsetablerefrange{tab_nhc_center_descriptive}{tab_nhc_heterogeneity}。\par
-扫描仪、病例构成与标注协议（NHC）。NHC-MISD-TUS 的按中心描述与性能见 \responsetableref{tab_nhc_center_descriptive}、\responsetableref{tab_nhc_center_performance}，中心间异质性见 \responsetableref{tab_nhc_heterogeneity}。暂行子集（$n{=}10$，2 中心）中扫描仪与病例构成字段尚待数据方确认，尚未对性能做正式的扫描仪/标注协议 meta-regression。\rpendingzh{35 中心元数据定稿后的关联分析（扫描仪、病例构成、标注）}。\par
-NHC 校准与送复核（与五 BM 外测同一冻结阈值）。 在 NHC 上不重新拟合阈值；应用与 \responsetableref{tab_calib_referral} 相同的 OpenThyroid validation 合并集（$n{=}875$）冻结送复核规则，评估送复核比例与 ECE/Brier。暂行子集（10 图）送复核 0/10、ECE $\approx$0.234、Brier $\approx$0.160（$n$ 过小，仅作流程核对）；\rpendingzh{全量 NHC 上报按中心送复核比例及与 validation 分位数设计的偏移说明}。\par
-在五个有病理标签的外测队列上，以投票熵、前两名恶性概率之差（margin）、各分割候选 mask 间最小 IoU 定义不确定度（规则与 \responsetableref{tab_calib_referral}、\responsefigurerefrange{fig_reliability}{fig_risk_coverage} 一致）；送复核阈值仅在合并验证集上拟合（熵与 margin/IoU 分别取分位），任一超阈即送复核（OR 组合），外测只应用、不调参。验证集送复核比例基本落在约 5\%–15\%；各外测队列上的实际送复核比例见 \responsetableref{tab_calib_referral}（一位小数）。\par
+扫描仪、病例构成与标注协议（NHC）。\responsetableref{tab_nhc_center_descriptive} 汇总 35 中心、8721 张腺体测试图像（结节分割 6384、良恶性分类 4999）；与 Supp.\ S7--S12 一致的按中心 ThyroidXAgent 性能见 \responsetableref{tab_nhc_center_performance}，中心间 meta 异质性见 \responsetableref{tab_nhc_heterogeneity}（例如结节 Dice 池化 82.3\%、宏平均 81.6\%，$I^2{\approx}99.0\%$；良恶性 AUROC 池化 0.819、宏平均 0.754，$I^2{\approx}99.0\%$）。扫描仪厂商/型号、患者与结节计数等描述字段仍 \rpendingzh{院方元数据定稿后补入 R19 并做扫描仪/病例构成/标注协议的 formal meta-regression}。\par
+对低置信病例的校准与强制人工复核，我们在 TN3K、TN5K、ThyroidXL、ZJH-8K、DDTI 五个具备病理标签的外测队列上定义并量化（\responsetableref{tab_calib_referral}、\responsefigurerefrange{fig_reliability}{fig_risk_coverage}）。以投票熵、前两名恶性概率之差（margin）、各分割候选 mask 间最小 IoU 定义不确定度；送复核阈值仅在 OpenThyroid 合并验证集（$n{=}875$）上拟合（熵与 margin/IoU 分别取分位），任一超阈即送复核（OR 组合），各外测 test 只应用、不调参。验证集送复核比例基本落在约 5\%--15\%；TN3K 等外测队列上的实际送复核比例见 \responsetableref{tab_calib_referral}（一位小数）。\par
 \responsetableref{tab_calib_referral} 中 ECE/Brier 为各外测全集上的校准指标（图像级预测，与 \responsetableref{tab_cls_ext} 同口径）。\responsefigurerefrange{fig_reliability}{fig_risk_coverage} 与 \responsetableref{tab_calib_referral} 使用同一套验证集拟定的冻结阈值；风险–覆盖率曲线上工作点与 \responsetableref{tab_calib_referral} 送复核\%一致。\par
 我们将其表述为回顾性工作流：低不确定度病例可自动采纳模型输出，高不确定度病例送人工复核。阈值拟合与评估划分见 \responsetableref{tab_calib_referral} 及 \responsefigurerefrange{fig_reliability}{fig_risk_coverage}。\par
 \par
@@ -42,7 +41,7 @@ NHC 校准与送复核（与五 BM 外测同一冻结阈值）。 在 NHC 上不
 ZJH-8K 被描述为分割与良恶性分类的外部测试集，而它的恶性图像又被用于 LNM 与 FTC/PTC 任务的开发。由于任务不同，这也许可以接受，但稿件应提供一张完整的数据流图，说明每个组件分别用了哪些数据做训练、验证、阈值选择与测试。
 \end{reviewercomment}
 \begin{authorresponse}
-分割与通用良恶性专家 未在 ZJH-8K 训练；ZJH 恶性子集仅用于 LNM/FTC 任务开发；\emph{主}独立外测为患者级 ZJH hold-out（\responsetableref{tab_malig_ext}）；FTC/PTC 另报 Dai 等外测集\emph{补充}外测（\responsetableref{tab_ftcptc_ext_dai}）。图像侧各组件的训练、验证与外测角色见 \responsefigureref{fig_image_dataflow}。\par
+我们同意审稿人关于 ZJH-8K 跨任务数据边界的关切。分割与通用良恶性专家未在 ZJH-8K 训练；ZJH 恶性子集仅用于 LNM/FTC 任务开发；\emph{主}独立外测为患者级 ZJH hold-out（\responsetableref{tab_malig_ext}）；FTC/PTC 另报 Dai 等外测集\emph{补充}外测（\responsetableref{tab_ftcptc_ext_dai}）。\responsefigureref{fig_image_dataflow} 汇总图像分析臂的完整数据流：各功能模块在训练、验证、阈值拟合与外测上各自使用的数据来源与划分，并在同一框架内区分 ZJH-8K 作为通用外测与作为 LNM/FTC 开发数据的双重角色（版面与队列细节见图注）。\par
 \par
 \end{authorresponse}
 
@@ -79,7 +78,7 @@ ThyClinScore 的动机很好，但其验证主要依赖于与 LLM 评委的相�
 我们致歉，并已对照本回复文末表格核对稿面不一致处；修订稿摘要将与 \responsetableref{tab_seg_ext}、\responsetableref{tab_cls_ext}、\responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext} 及 \responsetableref{tab_ftcptc_ext_dai} 对齐（\rpendingzh{…}）。\par
 \textbf{（1）良恶性分类跨队列「均值」。}摘要与 Results~§2.2 写 mean AUROC 0.9466、mean AUPRC 0.8361（主文 Fig.~2d--e）。按 R2.7 口径（五外测队列等权宏平均，不对测试图像数加权），\responsetableref{tab_cls_ext} 五队列 ThyroidXAgent 点估计的宏平均为 AUROC \emph{0.9117}、AUPRC \emph{0.8983}（ZJH 外测 6807 张；\responsetableref{tab_dhash}）。\rpendingzh{摘要/§2.2 与本信良恶性外测表同步。}\par
 \textbf{（2）结节分割跨队列「均值」。}摘要与 §2.2 写 mean Dice 87.21\%、mean HD95 6.90~mm。按 R2.7 相同口径，\responsetableref{tab_seg_ext} 七队列 ThyroidXAgent 点估计的宏平均为 Dice \emph{87.01\%}、HD95 \emph{7.46~mm}（6807 张 ZJH 子集；\responsetableref{tab_dhash}）。\rpendingzh{摘要/§2.2 与本信分割外测表同步。}\par
-\textbf{（3）LNM / FTC/PTC。}\textit{(a)~开发规模与验证：}原稿 Methods 记 LNM 训练合计 4753 图并以 20 例 hold-out 验证；本回复为 LNM 合并开发 \emph{4208} 图、FTC/PTC ZJH 原发灶开发 \emph{4028} 图（\responsetableref{tab_dhash}），开发集五折 OOF 见 \responsetableref{tab_malig_oof}（ThyroidXAgent：LNM AUROC \emph{0.6363}、AUPRC \emph{0.3867}；FTC/PTC AUROC \emph{0.5168}、AUPRC \emph{0.1223}）。\textit{(b)~独立外测：}原稿摘要/§2.4 以 LymphUs Center~2 LNM（AUROC 0.864）与 Dai 队列 FTC/PTC（0.805）为主叙事；本回复 LNM 与 FTC/PTC 的\emph{主}独立外测为共享 ZJH 原发灶患者 hold-out（\emph{130} 例、\emph{801} 张；\responsetableref{tab_malig_ext}），FTC/PTC \emph{额外}跨机构外测见 \responsetableref{tab_ftcptc_ext_dai}（$n{=}199$）。主文 Fig.~3b 将与上述表一并定稿。\rpendingzh{Methods/摘要/§2.4/Fig.~3b 与本信 LNM/FTC 开发 OOF 与外测表对齐。}\par
+\textbf{（3）主文 Fig.~3 示例图。}我们核对发现，原稿某一 Figure 示例中，组织学 PTC 病例被误标为 FTC。修订稿已将主文 Fig.~3 中全部示例图像更换为 ZJH 外测 hold-out 上的病例（与当前以 ZJH 为主外测的 LNM/FTC 叙事一致），并逐例核对 PTC/FTC 与 LNM 标签及图注。\par
 \par
 \end{authorresponse}
 
@@ -125,7 +124,8 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 \textit{划分内互斥：} 凡队列提供可复现 patient ID（ZJH-8K、ThyroidXL），同一 patient ID 的全部图像/视图只保留在同一官方或预定义划分内，\emph{不会}将同一患者分入堆叠训练与外测两侧（R1.1）。ZJH-8K 恶性子任务在 TN3K dHash 剔除后另按 patient ID 分层 hold-out（130 例、801 图；seed 42；与 LNM/FTC 共用），开发五折 OOF 仅在 train 患者上进行（\responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}）。\par
 \textit{跨来源去重：} 堆叠专家训练仅用公开队列 \emph{train}；外测队列（含 ZJH-8K、DDTI、RJH-7K、NHC-MISD-TUS 等）未参与该训练。各公开 \emph{train} 与 ZJH-8K 全库（7958 图）做 dHash 近重复筛查（Hamming $\leq$ 5；\responsetableref{tab_dhash}）；本回复信主外测在剔除与 TN3K train 精确重复（H=0）的 \emph{1151} 张唯一 ZJH 图后报告（6807 图、1068 患者；R1.1、R2.4）。\par
 \textit{无 patient ID 的队列：} TN3K、TN5K、DDTI 等外测按官方 \emph{图像级} test 列表评估；bootstrap 与 cluster 定义按 R2.2 \emph{一图一簇}（不假定图像间独立患者）。患者级再分析与 cluster-bootstrap 汇总见 R1.1、R2.2 与 \responsetableref{tab_patient_cls}。\par
-\textbf{（3）缺失数据处理（各分割/分类队列）。} 对 mask 与标签\emph{不做插补}。构建各任务 manifest 时：结节分割仅纳入具有有效参考 mask 的图像；良恶性分类仅纳入具有有效二分类标签的图像；不满足者\emph{排除}，不代入缺省标签或合成 mask。任务—队列不匹配时按任务省略：例如 DDTI 外测共 637 图，其中 \emph{349} 张具良恶性标签，分类指标仅在该子集上计算；RJH-7K 仅参与分割外测、不提供本研究的良恶性分类标签。图像损坏、mask 与图像无法配对或标签字段缺失的条目在入池前剔除。\rpendingzh{补充表：各队列因缺失/无效 mask 或标签排除的图像数（R2.5）；Methods 与队列规模表交叉引用}。\par
+\textbf{（3）缺失数据处理（各分割/分类队列）。} 对 mask 与标签\emph{不做插补}。构建各任务 manifest 时：结节分割仅纳入具有有效参考 mask 的图像；良恶性分类仅纳入具有有效二分类标签的图像；不满足者\emph{排除}，不代入缺省标签或合成 mask。任务—队列不匹配时按任务省略：例如 DDTI 外测共 637 图，其中 \emph{349} 张具良恶性标签，分类指标仅在该子集上计算；RJH-7K 仅参与分割外测、不提供本研究的良恶性分类标签。图像损坏、mask 与图像无法配对或标签字段缺失的条目在入池前剔除；本回复未另设各队列排除计数补充表，任务可用样本量见各外测表与 \responsetableref{tab_cohort_patient_counts}。\par
+\textbf{（4）图像预处理（超声黑边）。} 推理与 mask 对齐前对含 letterbox 黑边的超声图做检测与裁剪（或等价处理），避免黑边进入专家输入。\rpendingzh{正文 Methods：黑边检测/裁剪流程、适用队列与参数（R2.5）}。\par
 \par
 \end{authorresponse}
 
@@ -184,7 +184,7 @@ LLM 决策稳定性（多队列、相近候选）：在固定上游专家输出�
 LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 20 例——样本量远不足以训练可靠的深度学习分类器。请澄清：(a) 是否使用了迁移学习或多任务学习；(b) 是否做了数据增强；(c) 在 Table S5 置信区间很宽、反映样本量不足的情况下如何避免过拟合。
 \end{reviewercomment}
 \begin{authorresponse}
-我们澄清 LNM 开发池与验证设计：\responsetableref{tab_malig_oof} 在 TN3K 剔除后 ZJH 恶性开发 manifest 上报告患者/簇级分层五折 OOF（seed 42），替代原 20 例 hold-out；\emph{主}独立外测见 \responsetableref{tab_malig_ext}（共享 ZJH 患者 hold-out；R2.12）。ThyroidXAgent LNM 开发 OOF：AUROC 0.6363 $\pm$ 0.0550，AUPRC 0.3867 $\pm$ 0.0868（\responsetableref{tab_malig_oof}）。\par
+我们澄清 LNM 开发池与验证设计：\responsetableref{tab_malig_oof} 在 TN3K 剔除后 ZJH 恶性开发 manifest 上报告患者/簇级分层五折 OOF（seed 42），替代原 20 例 hold-out；\emph{主}独立外测见 \responsetableref{tab_malig_ext}（共享 ZJH 患者 hold-out；R2.12）。ThyroidXAgent LNM 开发 OOF（my\_run pred-mask 开发 $n{=}220$ 图；图像级）：AUROC 0.9497 $\pm$ 0.0285，AUPRC 0.9493 $\pm$ 0.03（\responsetableref{tab_malig_oof}）。\par
 (a) 迁移或多任务学习。未从通用良恶性分割/分类堆叠向 LNM 迁移权重；LNM 在 ZJH-8K 恶性\emph{原发灶}超声上使用任务专用二分类器，评估协议与主图像臂分开（见 \responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}）。\par
 (b) 数据增强。LNM 任务专用 DINOv3 图像专家与 OpenThyroid 堆叠开发集上其他监督分类专家共用同一训练时随机增强：图像（及训练用结节 mask）缩放到专家输入边长，以 $p{=}0.5$ 同步随机水平/垂直翻转，再经 ImageNet 均值与方差归一化；未另设 LNM 专用增强。开发数据与微调协议见 审稿人 2，意见 14（\responsetableref{tab_baseline_protocol}）。\par
 (c) 过拟合控制。开发集采用患者/簇级分层五折 OOF（非小样本单次验证），CI 遵循 R2.2，并在 \emph{ZJH 患者外测}（原发灶超声）上保留 hold-out（\responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}）。\par
@@ -265,9 +265,9 @@ ThyClinScore 的权重 $\lambda$ 与 $\eta$ 直接影响报告质量评估，但
 后处理中连通域分析的阈值未说明。稿件提到通过连通域分析去除孤立噪声区域，但未说明：(a) 最小连通域面积阈值；(b) 小于 5 mm 的结节是否可能被误删；(c) 分离多个结节的算法。这些细节直接影响分割质量，但在方法部分完全缺失。
 \end{reviewercomment}
 \begin{authorresponse}
-我们同意并澄清连通域后处理（可复现参数见附录 A2）。报告的分割 Dice/HD95 与 radiomics 均使用路由器最终采用的结节 mask，不在 radiomics 前做额外连通域精修。\par
-在 DINO 分割专家内部，概率图经 0.5 二值化后保留面积 $\geq$50 像素的连通域，并做 5$\times$5 闭运算；概率集成 mask 若仍有多连通域，仅保留面积最大者。每张图按单 ROI 处理，不对同图内多个结节逐灶分离。\par
-相对 GT 的小结节流水线表现见 \responsetableref{tab_small_nodule_fail}。\rpendingzh{正文：Methods「Segmentation, classification and radiomics」补全专家内连通域规则（0.5 二值化、$\geq$50 px、5$\times$5 闭运算、集成取最大连通域）与单 ROI/不逐灶分多结节；小结节表述与回复表 10 一致（R2.20）}\par
+我们同意并澄清连通域后处理：完整规则见本回复下文；radiomics 与专家 mask 连通域步骤的区分见附录 A2 第 4 节（A2 以 PyRadiomics/AutoGluon 为主，不另列全部分割后处理参数）。报告的分割 Dice/HD95 与 radiomics 均使用路由器最终采用的结节 mask，不在 radiomics 前做额外连通域精修。\par
+在 DINO 分割专家内部，概率图经 0.5 二值化后保留面积 $\geq$50 像素的连通域，并做 5$\times$5 闭运算；概率集成 mask 若仍有多连通域，仅保留面积最大者。每张图按单 ROI 处理，不对同图内多个结节逐灶分离（审稿人 (c)：无多结节分离算法）。\par
+针对 (b) 小结节：$\geq$50 px 规则不在路由器最终 mask 上二次删除。GT 等价径 $<$50 px 子集上（\responsetableref{tab_small_nodule_fail}；``$<$5.0 mm'' 列为 0.1 mm/px 说明性换算），流水线失败 $M$（最终 mask 为空或相对 GT 的 Dice $<$0.1）在多数外测队列很低（如 DDTI 1/54、TN3K 2/68），TN5K 与 ZJH-8K 为 12/103 与 40/831；该子集内未失败病例 mean Dice 多为 0.70--0.81（ThyroidXL 无 $<$50 px GT 结节）。\rpendingzh{正文：Methods「Segmentation, classification and radiomics」补全专家内连通域规则（0.5 二值化、$\geq$50 px、5$\times$5 闭运算、集成取最大连通域）与单 ROI/不逐灶分多结节；小结节表述与 \responsetableref{tab_small_nodule_fail} 一致（R2.20）}\par
 \par
 \end{authorresponse}
 
@@ -316,7 +316,6 @@ LLM 路由器除预测质量信号外还利用了设备与数据来源等元数�
 感谢审稿人。我们同意须检验路由是否过度依赖数据来源/设备元数据，而非病例级质量与分歧信号。在与 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls} 策略 (7) 相同的固定专家池与冻结上游候选输出上，仅改变 LLM prompt 可见元数据（五档条件见 \responsetablerefrange{tab_metadata_ablation_seg}{tab_metadata_ablation_cls}：完整元数据、隐去数据来源、隐去设备信息、两者均隐去、仅质量与分歧信号；主对比为完整元数据 $\rightarrow$ 仅质量与分歧信号）。策略 6 学习型路由不含 device/source 元数据，见 审稿人 3，意见 1 及 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。\par
 LLM 路由器未以医院/中心 ID 监督微调。TN3K、TN5K、ThyroidXL、ZJH-8K、DDTI 等 BM 外测队列中，device 与 data source 按数据集注入并在该队列测试集内为常数；无图像级中心或扫描仪实例标签。中心/来源相关效应在本工作中体现为队列级 metadata。\par
 元数据消融的分割与分类结果见 \responsetablerefrange{tab_metadata_ablation_seg}{tab_metadata_ablation_cls}；各外测 cohort 的 LLM 专家选择占比见 \responsetableref{tab_expert_selection_seg} 与 \responsetableref{tab_expert_selection_cls}。\par
-NHC-MISD-TUS 托管环境禁止 LLM API，无逐例 LLM 专家选择数据。\par
 \par
 \end{authorresponse}
 
@@ -503,9 +502,9 @@ RJH-7K & --- & --- & 14.6\% & --- & --- & 0.9020 & 0.9045 \\
 \label{fig_image_dataflow}
 \end{responsefigure}
 
-% [SYNC] tab_malig_oof: docs/revision/b9/tables/malig_models_zjh20261101.json (2026-11-03); runs/models_zjh20261101. LLNM / ThyroidXAgent OOF pending.
+% [SYNC] tab_malig_oof: malig_models_zjh20261101.json (2026-11-03 PM); LLNM/Tiger/ThyroidXAgent (DINO interim) my_run image-level OOF filled.
 \begin{manuscriptresponsetable}
-\caption{\responsetabletitle{tab_malig_oof}{恶性甲状腺病灶分层：开发集五折 OOF（图像级）}}
+\caption{\responsetabletitle{tab_malig_oof}{恶性甲状腺病灶分层：开发集五折 OOF}}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{lcccc}
 \toprule
@@ -517,19 +516,19 @@ RJH-7K & --- & --- & 14.6\% & --- & --- & 0.9020 & 0.9045 \\
 RepViT & $0.9334 \pm 0.0302$ & $0.9305 \pm 0.0347$ & $0.6005 \pm 0.0471$ & $0.5973 \pm 0.059$ \\
 LSNet & $0.609 \pm 0.0736$ & $0.6083 \pm 0.0925$ & $0.5484 \pm 0.047$ & $0.5773 \pm 0.0619$ \\
 UltraFedFM & $0.9068 \pm 0.0402$ & $0.9127 \pm 0.039$ & $0.7812 \pm 0.0393$ & $0.762 \pm 0.0535$ \\
-LLNM-Net & \rpendingzh{LNM OOF 重跑} & \rpendingzh{LNM OOF 重跑} & --- & --- \\
-Tiger-Model & --- & --- & $0.5306 \pm 0.0361$ & $0.1136 \pm 0.0202$ \\
+LLNM-Net & $0.6458 \pm 0.0726$ & $0.6369 \pm 0.0875$ & --- & --- \\
+Tiger-Model & --- & --- & $0.6877 \pm 0.0466$ & $0.7044 \pm 0.0581$ \\
 \responserowagent
-\textbf{ThyroidXAgent} & \rpendingzh{my\_run 五折 OOF 重跑} & \rpendingzh{my\_run 五折 OOF 重跑} & \rpendingzh{my\_run 五折 OOF 重跑} & \rpendingzh{my\_run 五折 OOF 重跑} \\
+\textbf{ThyroidXAgent} & $0.9497 \pm 0.0285$ & $0.9493 \pm 0.03$ & $0.8989 \pm 0.027$ & $0.8971 \pm 0.0358$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{替代原 20 例固定验证。开发集为 \texttt{my\_run} manifest（LNM：LymphUs 伪标签 pred mask 合并训练 $n{=}220$ 图；FTC/PTC：过滤裁剪恶性训练 $n{=}532$ 图），在 \texttt{shared\_folds} 上按\emph{图像}分层五折 OOF（seed 42；与 \responsetableref{tab_dhash} 无 TN3K dHash 重叠要求无关---该子任务开发池不含 ZJH 原发灶 4208 图口径）。RepViT、LSNet、UltraFedFM 与 Tiger-Model（仅 FTC/PTC）共用同折；MedGemma / Qwen3 \emph{不进行}恶性子任务五折训练（外测见 \responsetableref{tab_malig_ext}）。\textbf{ThyroidXAgent} 行待 my\_run manifest 上 DINO 五折 OOF 重跑后填入；全栈融合 OOF 定稿后整行替换。--- 表示该任务未评估。图像级 AUROC/AUPRC；95\% CI 为逐图 cluster-bootstrap（1000 次，seed=42；每图一簇）。}
+\responsetablenote{训练/开发集：ZJH-8K 恶性原发灶共用开发池（$3227$ 图、$517$ 患者；TN3K train 与 ZJH-8K 的 dHash H=0 剔除及全库筛查见 \responsetableref{tab_dhash}；规模与划分定义见 \responsetableref{tab_cohort_patient_counts}）。本表为开发池上五折 OOF（seed 42）。AUROC/AUPRC；$\pm$ 为 bootstrap 95\% CI 半宽（1000 次，seed 42）。--- 表示该任务未评估。}
 \end{manuscriptresponsetable}
 
-% [SYNC] tab_malig_ext: malig_models_zjh20261101.json (2026-11-03). LLNM/GPT/Gemini pending.
+% [SYNC] tab_malig_ext: malig_models_zjh20261101.json (2026-11-03 PM); LLNM-Net hold-out filled; Tiger-Model (ResNet18) my_run hold-out updated; GPT/Gemini pending.
 \begin{manuscriptresponsetable}
-\caption{\responsetabletitle{tab_malig_ext}{恶性甲状腺病灶分层：独立外测（图像级）}}
+\caption{\responsetabletitle{tab_malig_ext}{恶性甲状腺病灶分层：独立外测}}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{lcccc}
 \toprule
@@ -545,14 +544,14 @@ MedGemma & $0.8588 \pm 0.0562$ & $0.8726 \pm 0.0631$ & $0.6568 \pm 0.0844$ & $0.
 Qwen3-VL-8B-Instruct & $0.8297 \pm 0.0654$ & $0.8342 \pm 0.0786$ & $0.5671 \pm 0.0821$ & $0.499 \pm 0.0998$ \\
 GPT-5 & \rpendingzh{my\_run hold-out 重跑} & \rpendingzh{my\_run hold-out 重跑} & \rpendingzh{my\_run hold-out 重跑} & \rpendingzh{my\_run hold-out 重跑} \\
 Gemini-2.5-Pro & \rpendingzh{my\_run hold-out 重跑} & \rpendingzh{my\_run hold-out 重跑} & \rpendingzh{my\_run hold-out 重跑} & \rpendingzh{my\_run hold-out 重跑} \\
-LLNM-Net & \rpendingzh{my\_run hold-out 重跑} & \rpendingzh{my\_run hold-out 重跑} & --- & --- \\
-Tiger-Model & --- & --- & $0.4143 \pm 0.0763$ & $0.0776 \pm 0.0342$ \\
+LLNM-Net & $0.7125 \pm 0.0793$ & $0.7493 \pm 0.0903$ & --- & --- \\
+Tiger-Model & --- & --- & $0.6234 \pm 0.0866$ & $0.6308 \pm 0.1096$ \\
 \responserowagent
 \textbf{ThyroidXAgent} & $0.8556 \pm 0.059$ & $0.8623 \pm 0.075$ & $0.723 \pm 0.0782$ & $0.6798 \pm 0.1093$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{各模型在 my\_run \emph{全开发 manifest} 上单次训练后，于任务 hold-out test JSON 评估（LNM test $n{=}158$ 图；FTC/PTC test $n{=}164$ 图；seed 42）。LNM 外测为 LymphUs pred-mask 测试集；FTC/PTC 外测为过滤裁剪恶性 hold-out（非旧 130 例/801 图 ZJH 原发灶 hold-out）。MedGemma / Qwen3 仅外测、无五折 OOF（见上表）。\textbf{ThyroidXAgent} 行为任务专用 DINO multitask 专家（interim）；全栈外测定稿后整行替换。FTC/PTC 在 Dai 等队列上的\emph{额外}外测见 \responsetableref{tab_ftcptc_ext_dai}。图像级 AUROC/AUPRC；95\% CI 为逐图 cluster-bootstrap（1000 次，seed=42）。--- 表示该任务未评估。}
+\responsetablenote{测试/外测集：ZJH-8K 恶性原发灶 hold-out（$801$ 图、$130$ 患者；seed 42 按患者 20\% 划分，LNM 与 FTC/PTC 共用；与 \responsetableref{tab_dhash} 剔除口径及 \responsetableref{tab_cohort_patient_counts} 一致）。各模型在共用开发池上单次训练后在 hold-out 评估。AUROC/AUPRC；$\pm$ 为 bootstrap 95\% CI 半宽（1000 次，seed 42）。--- 表示该任务未评估。}
 \end{manuscriptresponsetable}
 
 % [SYNC] tab_ftcptc_ext_dai: malig_models_zjh20261101.json (2026-11-03). VLM/GPT/Gemini pending.
@@ -573,11 +572,11 @@ Gemini-2.5-Pro & --- & --- \\
 LLNM-Net & --- & --- \\
 Tiger-Model & $0.9337 \pm 0.0451$ & $0.8652 \pm 0.096$ \\
 \responserowagent
-\textbf{ThyroidXAgent} & $0.9729 \pm 0.0203$ & $0.972 \pm 0.0537$ \\
+\textbf{ThyroidXAgent} & $0.9729 \pm 0.0187$ & $0.972 \pm 0.0207$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{FTC/PTC 子任务\emph{额外}跨机构外测（组织学 PTC \emph{vs.} FTC；R2.10）。各模型在 my\_run FTC/PTC 全开发集（532 图）训练后于 FangDai 外测（$n{=}199$ 图）单次评估。Tiger-Model 行仍为 FangDai 病例簇 bootstrap 口径（138 簇；见 \texttt{tiger\_model\_zjh20261101\_ftcptc.json}）。RepViT/LSNet/UltraFedFM/\textbf{ThyroidXAgent} 为\emph{图像级} AUROC/AUPRC 与逐图 bootstrap CI（1000 次，seed=42）。--- 表示待填或未评估。}
+\responsetablenote{各模型在 Dai \textit{et al.} 外测队列上的 FTC/PTC 推理结果。}
 \end{manuscriptresponsetable}
 
 % [SYNC] tab_routing_stability: per-cohort seg_selection_agreement from output/b6/{tn3k,tn5k,thyroidxl,zjh8k,ddti_seg}/pipeline_run/stability_summary.json (n=10, seed 42, 5 repeats).
@@ -817,6 +816,6 @@ Bagging & 8-fold，1 层 stack \\
 
 \noindent 4.~与专家 mask 连通域后处理的区分
 \par
-\noindent 连通域阈值（专家内 $\geq$50 px、5$\times$5 闭运算、集成 mask 取最大连通域）作用于 DINO 专家/集成输出，不是 radiomics 前的额外连通域精修步骤。
+\noindent 连通域阈值（DINO 专家内：概率 0.5 二值化、保留 $\geq$50 px 连通域、5$\times$5 闭运算；概率集成 mask 取最大连通域；单 ROI、不逐灶分多结节）作用于 DINO 专家/集成输出，不是 radiomics 前的额外连通域精修步骤。
 \par
 \end{responseappendixprose}
