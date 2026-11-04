@@ -1,7 +1,7 @@
 \responsetoreviewer{对审稿人 1 的回复}
 \reviewersection{审稿人 1，意见 1（R1.1）}
 \begin{reviewercomment}
-分割与分类结果大多以图像层面报告。作者应澄清患者层面与检查层面的划分、跨数据集的去重，以及同一患者的多个帧或视图是否会跨划分出现。患者层面的再分析和聚类感知的置信区间会增强对报告性能的信心。
+图像级评估的独立性。分割与分类结果大多以图像层面报告。作者应澄清患者层面与检查层面的划分、跨数据集的去重，以及同一患者的多个帧或视图是否会跨划分出现。患者层面的再分析和聚类感知的置信区间会增强对报告性能的信心。
 \end{reviewercomment}
 \begin{authorresponse}
 感谢审稿人这一重要意见。统计报告采用 cluster-bootstrap 与患者级聚合（见 \responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext}、\responsetableref{tab_patient_cls}）。各基础公开队列 \textbf{train} 相对 ZJH-8K 的近重复筛查（dHash，Hamming $\leq$ 5）见 \responsetableref{tab_dhash}。\par
@@ -13,7 +13,7 @@
 
 \reviewersection{审稿人 1，意见 2（R1.2）}
 \begin{reviewercomment}
-该系统结合了专家集成、放射组学、多个工具与 LLM 路由。当前分析没有分离出路由器本身的贡献。我建议增加一个系统的消融研究，比较单模型、平均集成、规则路由、置信度路由、基于 LLM 的路由以及 oracle 上界。
+智能体路由的因果贡献。该系统结合了专家集成、放射组学、多个工具与 LLM 路由。当前分析没有分离出路由器本身的贡献。我建议增加一个系统的消融研究，比较单模型、平均集成、规则路由、置信度路由、基于 LLM 的路由以及 oracle 上界。
 \end{reviewercomment}
 \begin{authorresponse}
 感谢审稿人这一重要建议。在固定的、已训练完成的分割/分类专家池上，在各专家已给出的候选 mask 与恶性概率上补充系统性路由消融，仅改变下游的选专家、融合/裁决及完整系统中的 LLM 路由与证据综合。完整数字见 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。\par
@@ -25,40 +25,40 @@
 
 \reviewersection{审稿人 1，意见 3（R1.3）}
 \begin{reviewercomment}
-尽管在私有多中心队列上的总体性能令人鼓舞，但中心层面差异很大。例如，某些中心的结节分割性能低得多。作者应研究其与扫描仪类型、图像质量、病例构成与标注协议的关联，并为低置信病例定义校准、拒答或强制人工复核策略。
+外测表现的中心异质性。尽管在私有多中心队列上的总体性能令人鼓舞，但中心层面差异很大。例如，某些中心的结节分割性能低得多。作者应研究其与扫描仪类型、图像质量、病例构成与标注协议的关联，并为低置信病例定义校准、拒答或强制人工复核策略。
 \end{reviewercomment}
 \begin{authorresponse}
 我们同意私有多中心队列存在显著的中心间差异。NHC-MISD-TUS 的队列描述、按中心分割/分类表现及 $I^2$ 见 审稿人 2，意见 6（R2.6） 及 \responsetablerefrange{tab_nhc_center_descriptive}{tab_nhc_heterogeneity}。\par
-扫描仪、病例构成与标注协议（NHC）。\responsetableref{tab_nhc_center_descriptive} 汇总 35 中心、8721 张腺体测试图像（结节分割 6384、良恶性分类 4999）；与 Supp.\ S7--S12 一致的按中心 ThyroidXAgent 性能见 \responsetableref{tab_nhc_center_performance}，中心间 meta 异质性见 \responsetableref{tab_nhc_heterogeneity}（例如结节 Dice 池化 82.3\%、宏平均 81.6\%，$I^2{\approx}99.0\%$；良恶性 AUROC 池化 0.819、宏平均 0.754，$I^2{\approx}99.0\%$）。扫描仪厂商/型号、患者与结节计数等描述字段仍 \rpendingzh{院方元数据定稿后补入 R19 并做扫描仪/病例构成/标注协议的 formal meta-regression}。\par
-对低置信病例的校准与强制人工复核，我们在 TN3K、TN5K、ThyroidXL、ZJH-8K、DDTI 五个具备病理标签的外测队列上定义并量化（\responsetableref{tab_calib_referral}、\responsefigurerefrange{fig_reliability}{fig_risk_coverage}）。以投票熵、前两名恶性概率之差（margin）、各分割候选 mask 间最小 IoU 定义不确定度；送复核阈值仅在 OpenThyroid 合并验证集（$n{=}875$）上拟合（熵与 margin/IoU 分别取分位），任一超阈即送复核（OR 组合），各外测 test 只应用、不调参。验证集送复核比例基本落在约 5\%--15\%；TN3K 等外测队列上的实际送复核比例见 \responsetableref{tab_calib_referral}（一位小数）。\par
-\responsetableref{tab_calib_referral} 中 ECE/Brier 为各外测全集上的校准指标（图像级预测，与 \responsetableref{tab_cls_ext} 同口径）。\responsefigurerefrange{fig_reliability}{fig_risk_coverage} 与 \responsetableref{tab_calib_referral} 使用同一套验证集拟定的冻结阈值；风险–覆盖率曲线上工作点与 \responsetableref{tab_calib_referral} 送复核\%一致。\par
-我们将其表述为回顾性工作流：低不确定度病例可自动采纳模型输出，高不确定度病例送人工复核。阈值拟合与评估划分见 \responsetableref{tab_calib_referral} 及 \responsefigurerefrange{fig_reliability}{fig_risk_coverage}。\par
+扫描仪、病例构成与标注协议（NHC）。\responsetableref{tab_nhc_center_descriptive} 汇总 35 中心、8721 张腺体测试图像（结节分割 6384、良恶性分类 4999）；与 Supp.\ S7--S12 一致的按中心 ThyroidXAgent 性能见 \responsetableref{tab_nhc_center_performance}，中心间 meta 异质性见 \responsetableref{tab_nhc_heterogeneity}（例如结节 Dice 池化 82.3\%、宏平均 81.6\%，$I^2{\approx}99.0\%$；良恶性 AUROC 池化 0.819、宏平均 0.754，$I^2{\approx}99.0\%$）。扫描仪厂商/型号、患者与结节计数等描述字段仍 \rpendingzh{待数据管理员元数据定稿后补入 R19，并做扫描仪/病例构成/标注协议的 formal meta-regression}。\par
+对低置信病例的校准与强制人工复核，我们在 TN3K、TN5K、ThyroidXL、ZJH-8K、DDTI 五个具备病理标签的外测队列上定义并量化（\responsetableref{tab_calib_referral}、\responsefigurerefrange{fig_reliability}{fig_risk_coverage}）。以投票熵、前两名恶性概率之差（margin）、各分割候选 mask 间最小 IoU 定义不确定度；送复核阈值仅在 OpenThyroid 合并验证集（$n{=}875$）上拟合（熵与 margin/IoU 分别取分位），任一超阈即送复核（OR 组合），阈值在各队列官方 test 划分上冻结（test 不再调参）。验证集送复核比例基本落在约 5\%--15\%；TN3K 等所列外测队列上的实际送复核比例见 \responsetableref{tab_calib_referral}（一位小数）。\par
+\responsetableref{tab_calib_referral} 中 ECE/Brier 为各外测全集上、已应用送复核标记后的校准指标。\responsefigurerefrange{fig_reliability}{fig_risk_coverage} 与 \responsetableref{tab_calib_referral} 使用同一套验证集拟定的冻结阈值；风险–覆盖率曲线上工作点与 \responsetableref{tab_calib_referral} 送复核\%一致。\par
+我们将其表述为回顾性工作流自动化：低不确定度病例可自动采纳模型输出，高不确定度病例送人工复核。阈值拟合与评估划分见 \responsetableref{tab_calib_referral} 及 \responsefigurerefrange{fig_reliability}{fig_risk_coverage}。\par
 \par
 \end{authorresponse}
 
 \reviewersection{审稿人 1，意见 4（R1.4）}
 \begin{reviewercomment}
-ZJH-8K 被描述为分割与良恶性分类的外部测试集，而它的恶性图像又被用于 LNM 与 FTC/PTC 任务的开发。由于任务不同，这也许可以接受，但稿件应提供一张完整的数据流图，说明每个组件分别用了哪些数据做训练、验证、阈值选择与测试。
+跨任务的数据边界。ZJH-8K 被描述为分割与良恶性分类的外部测试集，而它的恶性图像又被用于 LNM 与 FTC/PTC 任务的开发。由于任务不同，这也许可以接受，但稿件应提供一张完整的数据流图，说明每个组件分别用了哪些数据做训练、验证、阈值选择与测试。
 \end{reviewercomment}
 \begin{authorresponse}
-我们同意审稿人关于 ZJH-8K 跨任务数据边界的关切。分割与通用良恶性专家未在 ZJH-8K 训练；ZJH 恶性子集仅用于 LNM/FTC 任务开发；\emph{主}独立外测为患者级 ZJH hold-out（\responsetableref{tab_malig_ext}）；FTC/PTC 另报 Dai 等外测集\emph{补充}外测（\responsetableref{tab_ftcptc_ext_dai}）。\responsefigureref{fig_image_dataflow} 汇总图像分析臂的完整数据流：各功能模块在训练、验证、阈值拟合与外测上各自使用的数据来源与划分，并在同一框架内区分 ZJH-8K 作为通用外测与作为 LNM/FTC 开发数据的双重角色（版面与队列细节见图注）。\par
+我们同意审稿人关于 ZJH-8K 跨任务数据边界的关切。分割与通用良恶性专家未在 ZJH-8K 训练；ZJH-8K 恶性子集仅用于 LNM/FTC 任务专用开发，\emph{主}独立外测为患者级 ZJH hold-out（\responsetableref{tab_malig_ext}）；FTC/PTC 在 Dai 等队列上的跨机构\emph{补充}外测另报（\responsetableref{tab_ftcptc_ext_dai}）。\responsefigureref{fig_image_dataflow} 汇总图像分析臂的完整数据流：各功能模块在训练、验证、阈值拟合与外测上各自使用的数据来源与划分，并在同一框架内区分 ZJH-8K 作为通用外测与作为 LNM/FTC 开发数据的双重角色（版面与队列细节见图注）。\par
 \par
 \end{authorresponse}
 
 \reviewersection{审稿人 1，意见 5（R1.5）}
 \begin{reviewercomment}
-ThyClinScore 的动机很好，但其验证主要依赖于与 LLM 评委的相关性。更强的验证应包括多位独立临床医生的盲法评估、评分者间一致性，以及针对病灶匹配阈值与评分权重的敏感性分析。作者还应审计模板库与测试集之间的患者重叠、近重复报告文本与中心特异的模板效应。
+报告质量与模板依赖的验证。ThyClinScore 的动机很好，但其验证主要依赖于与 LLM 评委的相关性。更强的验证应包括多位独立临床医生的盲法评估、评分者间一致性，以及针对病灶匹配阈值与评分权重的敏感性分析。作者还应审计模板库与测试集之间的患者重叠、近重复报告文本与中心特异的模板效应。
 \end{reviewercomment}
 \begin{authorresponse}
-\noindent\textit{本条与结节分割及良恶性分类无关；本回复信从略。}
+\noindent\textit{本条与结节分割及良恶性分类无关；本回复信不作逐点回复。}
 \end{authorresponse}
 
 \reviewersection{审稿人 1，意见 6（R1.6）}
 \begin{reviewercomment}
-两位医生、145 例的交叉研究支持初步的工作流可行性，但未确立患者获益。结果应按医生分别报告，并包含病例顺序随机化、学习效应分析、错误类别与置信区间。更重要的是，系统应定义何时拒答或升级为强制人工复核，并量化这些安全规则对漏诊、假阳性与工作量的影响。
+读者研究与临床安全。两位医生、145 例的交叉研究支持初步的工作流可行性，但未确立患者获益。结果应按医生分别报告，并包含病例顺序随机化、学习效应分析、错误类别与置信区间。更重要的是，系统应定义何时拒答或升级为强制人工复核，并量化这些安全规则对漏诊、假阳性与工作量的影响。
 \end{reviewercomment}
 \begin{authorresponse}
-\noindent\textit{本条与结节分割及良恶性分类无关；本回复信从略。}
+\noindent\textit{本条与结节分割及良恶性分类无关；本回复信不作逐点回复。}
 \end{authorresponse}
 
 \reviewersection{审稿人 1，总评（可部署性）}
@@ -76,8 +76,8 @@ ThyClinScore 的动机很好，但其验证主要依赖于与 LLM 评委的相�
 \end{reviewercomment}
 \begin{authorresponse}
 我们致歉，并已对照本回复文末表格核对稿面不一致处；修订稿摘要将与 \responsetableref{tab_seg_ext}、\responsetableref{tab_cls_ext}、\responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext} 及 \responsetableref{tab_ftcptc_ext_dai} 对齐（\rpendingzh{…}）。\par
-\textbf{（1）良恶性分类跨队列「均值」。}摘要与 Results~§2.2 写 mean AUROC 0.9466、mean AUPRC 0.8361（主文 Fig.~2d--e）。按 R2.7 口径（五外测队列等权宏平均，不对测试图像数加权），\responsetableref{tab_cls_ext} 五队列 ThyroidXAgent 点估计的宏平均为 AUROC \emph{0.9117}、AUPRC \emph{0.8983}（ZJH 外测 6807 张；\responsetableref{tab_dhash}）。\rpendingzh{摘要/§2.2 与本信良恶性外测表同步。}\par
-\textbf{（2）结节分割跨队列「均值」。}摘要与 §2.2 写 mean Dice 87.21\%、mean HD95 6.90~mm。按 R2.7 相同口径，\responsetableref{tab_seg_ext} 七队列 ThyroidXAgent 点估计的宏平均为 Dice \emph{87.01\%}、HD95 \emph{7.46~mm}（6807 张 ZJH 子集；\responsetableref{tab_dhash}）。\rpendingzh{摘要/§2.2 与本信分割外测表同步。}\par
+\textbf{（1）良恶性分类跨队列「均值」。}摘要与 Results~§2.2 写 mean AUROC 0.9466、mean AUPRC 0.8361（主文 Fig.~2d--e）。按 R2.7 口径（五外测队列等权宏平均，不对测试图像数加权），\responsetableref{tab_cls_ext} 五队列 ThyroidXAgent 点估计的宏平均为 AUROC \emph{0.9080}、AUPRC \emph{0.8944}（ZJH 外测 6807 张；\responsetableref{tab_dhash}）。\rpendingzh{摘要/§2.2 与本信良恶性外测表同步。}\par
+\textbf{（2）结节分割跨队列「均值」。}摘要与 §2.2 写 mean Dice 87.21\%、mean HD95 6.90~mm。按 R2.7 相同口径，\responsetableref{tab_seg_ext} 七队列 ThyroidXAgent 点估计的宏平均为 Dice \emph{86.27\%}、HD95 \emph{7.87~mm}（6807 张 ZJH 子集；\responsetableref{tab_dhash}）。\rpendingzh{摘要/§2.2 与本信分割外测表同步。}\par
 \textbf{（3）主文 Fig.~3 示例图。}我们核对发现，原稿某一 Figure 示例中，组织学 PTC 病例被误标为 FTC。修订稿已将主文 Fig.~3 中全部示例图像更换为 ZJH 外测 hold-out 上的病例（与当前以 ZJH 为主外测的 LNM/FTC 叙事一致），并逐例核对 PTC/FTC 与 LNM 标签及图注。\par
 \par
 \end{authorresponse}
@@ -89,7 +89,8 @@ ThyClinScore 的动机很好，但其验证主要依赖于与 LLM 评委的相�
 \begin{authorresponse}
 我们同意：将同一患者/检查的多张图像当作独立观测会使 bootstrap 置信区间偏窄，且与临床决策单位不一致。\par
 Cluster-bootstrap 95\% CI（1000 次、seed~42；\responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext}、\responsetableref{tab_malig_oof}）：凡队列提供可复现 patient ID（ZJH-8K、ThyroidXL），bootstrap 在患者簇上有放回重采样，再展开到图像计算指标；无 ID 外测队列（如 TN3K、TN5K、DDTI）按一图一簇处理。后者 cluster-bootstrap 与逐图 bootstrap 的 CI 一致（点估计不变）；仅 ZJH-8K 与 ThyroidXL 图像级 CI 因簇内相关性略宽。对上述两队列另报患者级分类与分割（\responsetableref{tab_patient_cls}）；其余良恶性外测仍为图像级，见 \responsetableref{tab_cls_ext}。\par
-各任务汇报（协议见上条；队列图像/患者规模见 \responsetableref{tab_cohort_patient_counts}）：(i)~\textbf{良恶性分类}---图像级外测见 \responsetableref{tab_cls_ext}；ZJH-8K 与 ThyroidXL 患者级 ThyroidXAgent 见 \responsetableref{tab_patient_cls}（同表含分割指标；外测 1068 与 739 患者）。(ii)~\textbf{分割}---图像级见 \responsetableref{tab_seg_ext}；患者级见 \responsetableref{tab_patient_cls}。(iii)~\textbf{恶性子任务（LNM、FTC/PTC）}---开发集五折 OOF 见 \responsetableref{tab_malig_oof}；\emph{主}独立外测见 \responsetableref{tab_malig_ext}（共享 ZJH 患者 hold-out；R2.10、R2.12）；FTC/PTC 在 Dai 等队列上的\emph{额外}外测见 \responsetableref{tab_ftcptc_ext_dai}，患者/簇级评估口径见各表。\par
+各任务汇报（协议见上条；队列图像/患者规模见 \responsetableref{tab_cohort_patient_counts}）：(i)~\textbf{良恶性分类}---图像级外测见 \responsetableref{tab_cls_ext}；ZJH-8K 与 ThyroidXL 患者级 ThyroidXAgent 见 \responsetableref{tab_patient_cls}（同表含分割指标；外测 1068 与 739 患者）。(ii)~\textbf{分割}---图像级 Dice/HD95 见 \responsetableref{tab_seg_ext}；患者级见 \responsetableref{tab_patient_cls}。(iii)~\textbf{恶性子任务（LNM、FTC/PTC）}---开发集五折 OOF 见 \responsetableref{tab_malig_oof}；\emph{主}独立外测见 \responsetableref{tab_malig_ext}（共享 ZJH 患者 hold-out；R2.10、R2.12）；FTC/PTC 在 Dai 等队列上的\emph{额外}外测见 \responsetableref{tab_ftcptc_ext_dai}，患者/簇级评估口径见各表。\par
+\noindent\par
 \par
 \end{authorresponse}
 
@@ -118,14 +119,14 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 方法部分应说明结节分割与良恶性分类的参考标准、标注流程、标注者资质与分歧裁决、患者层面去重以及缺失数据的处理。
 \end{reviewercomment}
 \begin{authorresponse}
-我们同意 Methods 须写清分割/良恶性分类各队列的参考标准、标注流程、标注者资质与分歧裁决、患者层面去重及缺失数据处理。\par
-\textbf{（1）参考标准、标注流程、标注者资质与分歧裁决。} 公开 OpenThyroid 队列（TN3K、TN5K、ThyroidXL、PKTN、DDTI、RJH-7K 等）的分割 mask 与良恶性标签定义及原始划分，Methods 中按各数据集发表文献与官方 release 引用，不在本回复重复标注室细节。\rpendingzh{正文 Methods：逐队列引用与 ZJH-8K 机构段落（F5）}。本队列中\emph{仅 ZJH-8K} 为机构自建分割/分类外测库：术后病理/细胞学等与 mask 勾画流程、标注者资质及分歧裁决 \rpendingzh{F5 / 临床与标注合作者确认后写入 Methods（R2.5）}。\par
-\textbf{（2）患者层面去重（各分割/分类队列）。} 数据流与 train/val/test 角色见 \responsefigureref{fig_image_dataflow}；ZJH-8K 与 ThyroidXL 规模及划分见 \responsetableref{tab_cohort_patient_counts}。\par
-\textit{划分内互斥：} 凡队列提供可复现 patient ID（ZJH-8K、ThyroidXL），同一 patient ID 的全部图像/视图只保留在同一官方或预定义划分内，\emph{不会}将同一患者分入堆叠训练与外测两侧（R1.1）。ZJH-8K 恶性子任务在 TN3K dHash 剔除后另按 patient ID 分层 hold-out（130 例、801 图；seed 42；与 LNM/FTC 共用），开发五折 OOF 仅在 train 患者上进行（\responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}）。\par
-\textit{跨来源去重：} 堆叠专家训练仅用公开队列 \emph{train}；外测队列（含 ZJH-8K、DDTI、RJH-7K、NHC-MISD-TUS 等）未参与该训练。各公开 \emph{train} 与 ZJH-8K 全库（7958 图）做 dHash 近重复筛查（Hamming $\leq$ 5；\responsetableref{tab_dhash}）；本回复信主外测在剔除与 TN3K train 精确重复（H=0）的 \emph{1151} 张唯一 ZJH 图后报告（6807 图、1068 患者；R1.1、R2.4）。\par
-\textit{无 patient ID 的队列：} TN3K、TN5K、DDTI 等外测按官方 \emph{图像级} test 列表评估；bootstrap 与 cluster 定义按 R2.2 \emph{一图一簇}（不假定图像间独立患者）。患者级再分析与 cluster-bootstrap 汇总见 R1.1、R2.2 与 \responsetableref{tab_patient_cls}。\par
-\textbf{（3）缺失数据处理（各分割/分类队列）。} 对 mask 与标签\emph{不做插补}。构建各任务 manifest 时：结节分割仅纳入具有有效参考 mask 的图像；良恶性分类仅纳入具有有效二分类标签的图像；不满足者\emph{排除}，不代入缺省标签或合成 mask。任务—队列不匹配时按任务省略：例如 DDTI 外测共 637 图，其中 \emph{349} 张具良恶性标签，分类指标仅在该子集上计算；RJH-7K 仅参与分割外测、不提供本研究的良恶性分类标签。图像损坏、mask 与图像无法配对或标签字段缺失的条目在入池前剔除；本回复未另设各队列排除计数补充表，任务可用样本量见各外测表与 \responsetableref{tab_cohort_patient_counts}。\par
-\textbf{（4）图像预处理（超声黑边）。} 推理与 mask 对齐前对含 letterbox 黑边的超声图做检测与裁剪（或等价处理），避免黑边进入专家输入。\rpendingzh{正文 Methods：黑边检测/裁剪流程、适用队列与参数（R2.5）}。\par
+我们同意 Methods 须写清各结节分割与良恶性分类队列的参考标准、标注流程、标注者资质与分歧裁决、患者层面去重及缺失数据处理。\par
+\textbf{（1）参考标准、标注流程、标注者资质与分歧裁决。} 公开 OpenThyroid 队列（TN3K、TN5K、ThyroidXL、PKTN、DDTI、RJH-7K 等）的分割 mask 与良恶性标签及官方划分，Methods 中按各数据集发表文献与官方 release 引用，不在本回复重复原始标注室协议。\rpendingzh{正文 Methods：逐队列引用与 ZJH-8K 机构段落（F5）}。\emph{仅 ZJH-8K} 为本研究中用作机构分割/分类外测的自建队列；术后病理/细胞学等参考标准、mask 勾画流程、标注者资质及分歧裁决 \rpendingzh{待临床与标注合作者书面确认后写入 Methods（F5；R2.5）}。\par
+\textbf{（2）患者层面去重（各分割/分类队列）。} 数据流与各划分角色见 \responsefigureref{fig_image_dataflow}；ZJH-8K 与 ThyroidXL 图像/患者规模见 \responsetableref{tab_cohort_patient_counts}。\par
+\textit{划分内互斥：} 凡队列提供可复现 patient ID（ZJH-8K、ThyroidXL），同一 patient ID 下全部图像/视图只保留在同一官方或预定义划分内，\emph{不会}将同一患者同时分入堆叠训练与外测（R1.1）。TN3K dHash 剔除后，ZJH 恶性子任务另设按 patient ID 分层的 hold-out（130 例、801 图；seed 42；LNM 与 FTC/PTC 共用）；开发五折 OOF 仅在 train 患者上进行（\responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}）。\par
+\textit{跨来源去重：} 堆叠专家训练仅使用公开队列 \emph{train} 划分；外测队列（含 ZJH-8K、DDTI、RJH-7K、NHC-MISD-TUS 等）未参与该训练栈。各公开 \emph{train} 与 ZJH-8K 全库（7958 图）做 dHash 近重复筛查（Hamming $\leq$ 5；\responsetableref{tab_dhash}）；本回复信主外测指标在剔除与 TN3K train 精确匹配（H=0）的 \emph{1151} 张唯一 ZJH 图后报告（6807 图、1068 患者；R1.1、R2.4）。\par
+\textit{无 patient ID 的队列：} TN3K、TN5K、DDTI 等外测遵循官方 \emph{图像级} test 列表；bootstrap 簇定义按 R2.2 为 \emph{一图一簇}。患者级再分析与 cluster-bootstrap 汇总见 R1.1、R2.2 与 \responsetableref{tab_patient_cls}。\par
+\textbf{（3）缺失数据（各分割/分类队列）。} 对 mask 与标签\emph{不做插补}。构建任务 manifest 时：结节分割仅纳入具有有效参考 mask 的图像；良恶性分类仅纳入具有有效二分类标签的图像；否则\emph{排除}，不赋予缺省标签或合成 mask。任务—队列不匹配按任务省略：例如 DDTI 外测共 637 图，其中 \emph{349} 张具良恶性标签，分类指标仅在该子集上计算；RJH-7K 仅参与分割外测、无本研究良恶性标签。损坏图像、mask--图像无法配对或标签字段缺失者在入池前剔除；本回复未另设各队列排除计数补充表，可评估样本量见各外测表与 \responsetableref{tab_cohort_patient_counts}。\par
+\textbf{（4）图像预处理（超声黑边）。} 推理与 mask 对齐前检测并裁剪 letterbox 黑边（或等价处理），避免黑边进入专家输入。\rpendingzh{正文 Methods：黑边检测/裁剪流程、适用队列与参数（R2.5）}。\par
 \par
 \end{authorresponse}
 
@@ -134,7 +135,7 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 稿件报告在来自 35 个中心的 8,721 个病例上做了验证，但 NHC-MISD-TUS 队列的描述不足。作者应澄清这是否代表 35 家独立医院，并报告各中心的患者数、结节数与图像数，以及中心级宏平均性能与中心间异质性。
 \end{reviewercomment}
 \begin{authorresponse}
-我们同意须充分描述 NHC-MISD-TUS：私有多中心\emph{仅测试}队列（\emph{35} 个参与中心、\emph{8721} 张腺体分割测试图像；结节分割 \emph{6384} 张、良恶性分类 \emph{4999} 张；层级见 \responsefigureref{fig_image_dataflow}）。按中心图像数、与补充表 S7--S12 一致的 ThyroidXAgent 性能及中心间 meta 异质性见 \responsetablerefrange{tab_nhc_center_descriptive}{tab_nhc_heterogeneity}。\par
+我们同意须将 NHC-MISD-TUS 描述清楚：私有多中心\emph{仅测试}队列（\emph{35} 个参与中心、\emph{8721} 张腺体分割测试图像；结节分割 \emph{6384} 张、良恶性分类 \emph{4999} 张；层级见 \responsefigureref{fig_image_dataflow}）。按中心图像数、与补充表 S7--S12 一致的 ThyroidXAgent 性能及中心间 meta 异质性见 \responsetablerefrange{tab_nhc_center_descriptive}{tab_nhc_heterogeneity}。\par
 中心级\emph{等权宏平均}与 \emph{Overall 池化}（与 Supp.\ S7--S12 一致）：全腺体 Dice 宏平均 \emph{55.94\%}、池化 \emph{59.28\%}（35 中心，$I^2{\approx}99.9\%$）；结节 Dice 宏平均 \emph{81.64\%}、池化 \emph{82.31\%}（33 中心，$I^2{\approx}99.0\%$）；良恶性 AUROC 宏平均 \emph{0.754}、池化 \emph{0.819}（32 中心，$I^2{\approx}99.0\%$）。AUROC 不可估计的中心在 \responsetableref{tab_nhc_center_performance} 中标 NE，且不纳入 AUROC 宏平均。\par
 \par
 \end{authorresponse}
@@ -144,7 +145,7 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 作者应澄清所报告的「均值」是跨队列的无权重宏平均、按样本量加权的平均，还是其他计算方式。
 \end{reviewercomment}
 \begin{authorresponse}
-感谢审稿人。良恶性分类与结节分割的跨队列「均值」采用同一口径：等权宏平均——先在各外测队列上计算该任务的队列级点估计，再对队列作不加权算术平均（不按各队列测试图像数加权）。各队列指标见 \responsetableref{tab_cls_ext}（分类）与 \responsetableref{tab_seg_ext}（分割）；分类宏平均 AUROC 0.9117、AUPRC 0.8983 与分割宏平均 Dice 87.01\%、HD95 7.46~mm 均由表中 ThyroidXAgent 点估计得出（6807 张 ZJH 子集；\responsetableref{tab_dhash}），与 审稿人 2，意见 1（R2.1） 对账。
+感谢审稿人。良恶性分类与结节分割的跨队列「均值」采用同一口径：等权宏平均——先在各外测队列上计算该任务的队列级点估计，再对队列作不加权算术平均（不按各队列测试图像数加权）。各队列指标见 \responsetableref{tab_cls_ext}（分类）与 \responsetableref{tab_seg_ext}（分割）；分类宏平均 AUROC 0.9080、AUPRC 0.8944 与分割宏平均 Dice 86.27\%、HD95 7.87~mm 均由表中 ThyroidXAgent 点估计得出（6807 张 ZJH 子集；\responsetableref{tab_dhash}），与 审稿人 2，意见 1（R2.1） 对账。
 \par
 \end{authorresponse}
 
@@ -208,7 +209,7 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 报告生成读者研究只纳入两位医生，且每个病例在两种条件下由不同读者评估。虽然这可能减少回忆偏倚，但也可能把读者效应与辅助条件混淆。
 \end{reviewercomment}
 \begin{authorresponse}
-\noindent\textit{本条与结节分割及良恶性分类无关；本回复信从略。}
+\noindent\textit{本条与结节分割及良恶性分类无关；本回复信不作逐点回复。}
 \end{authorresponse}
 
 \reviewersection{审稿人 2，意见 14（R2.14）}
@@ -225,7 +226,7 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 稿件提供了伦理批号，但没有说明是否获得知情同意或予以豁免。对所有机构数据集，作者应报告研究设计与时段、同意或豁免安排、去标识化程序与数据治理措施。共同作者授权使用 NHC-MISD-TUS 不能替代伦理审批与合规监管的书面记录。
 \end{reviewercomment}
 \begin{authorresponse}
-\noindent\textit{本条与结节分割及良恶性分类无关；本回复信从略。}
+\noindent\textit{本条与结节分割及良恶性分类无关；本回复信不作逐点回复。}
 \end{authorresponse}
 
 \reviewersection{审稿人 2，意见 16（R2.16）}
@@ -233,7 +234,7 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 ReAct 式规划器–执行器工作流缺乏系统的失败模式评估。作者应报告无效或多余工具调用、幻觉任务、重复调用、执行失败、重试与回滚的频率，并提供成功病例与主要失败模式的代表性轨迹，尤其是无结节、多结节或中间证据冲突的病例。
 \end{reviewercomment}
 \begin{authorresponse}
-\noindent\textit{本条与结节分割及良恶性分类无关；本回复信从略。}
+\noindent\textit{本条与结节分割及良恶性分类无关；本回复信不作逐点回复。}
 \end{authorresponse}
 
 \reviewersection{审稿人 2，意见 17（R2.17）}
@@ -241,7 +242,7 @@ ReAct 式规划器–执行器工作流缺乏系统的失败模式评估。作�
 智能体工作流缺乏并发控制与冲突解决机制：当淋巴结筛查与结节分析并发执行时，若两者在侧颈区域检测到同一低回声结构，如何避免重复？
 \end{reviewercomment}
 \begin{authorresponse}
-\noindent\textit{本条与结节分割及良恶性分类无关；本回复信从略。}
+\noindent\textit{本条与结节分割及良恶性分类无关；本回复信不作逐点回复。}
 \end{authorresponse}
 
 \reviewersection{审稿人 2，意见 18（R2.18）}
@@ -249,7 +250,7 @@ ReAct 式规划器–执行器工作流缺乏系统的失败模式评估。作�
 ThyClinScore 的权重 $\lambda$ 与 $\eta$ 直接影响报告质量评估，但其选择、优化数据集与敏感性分析未报告，存在过拟合顾虑。尽管 Fig.~4c 显示与 LLM 评委相关，但缺乏针对放射科医生评分的验证与评分者间信度分析。
 \end{reviewercomment}
 \begin{authorresponse}
-\noindent\textit{本条与结节分割及良恶性分类无关；本回复信从略。}
+\noindent\textit{本条与结节分割及良恶性分类无关；本回复信不作逐点回复。}
 \end{authorresponse}
 
 \reviewersection{审稿人 2，意见 19（R2.19）}
@@ -257,7 +258,7 @@ ThyClinScore 的权重 $\lambda$ 与 $\eta$ 直接影响报告质量评估，但
 「training-free」这一说法应加限定。尽管 BM25 无需参数训练，工作流仍依赖语料选择、报告拆分、模板构建、槽位定义与条款组装规则。作者应描述人工整理程度、模板去重、槽位填充规则及适应各中心报告风格的程度。除 BLEU、ROUGE 等词法重叠指标外，还需要临床医生对可读性、事实一致性与临床可用性的评估。
 \end{reviewercomment}
 \begin{authorresponse}
-\noindent\textit{本条与结节分割及良恶性分类无关；本回复信从略。}
+\noindent\textit{本条与结节分割及良恶性分类无关；本回复信不作逐点回复。}
 \end{authorresponse}
 
 \reviewersection{审稿人 2，意见 20（R2.20）}
@@ -285,7 +286,7 @@ ThyClinScore 的权重 $\lambda$ 与 $\eta$ 直接影响报告质量评估，但
 请检查稿件中的语法错误，例如「ThyroidXAgent improved produced」。
 \end{reviewercomment}
 \begin{authorresponse}
-\noindent\textit{本条与结节分割及良恶性分类无关；本回复信从略。}
+\noindent\textit{本条与结节分割及良恶性分类无关；本回复信不作逐点回复。}
 \end{authorresponse}
 
 \reviewersection{审稿人 2，意见 23（R2.23）}
@@ -293,7 +294,7 @@ ThyClinScore 的权重 $\lambda$ 与 $\eta$ 直接影响报告质量评估，但
 请说明 TI-RADS 指的是 ACR TI-RADS、C-TIRADS 还是其他体系，因为「TI-RADS 4b」等类别是体系特异的。
 \end{reviewercomment}
 \begin{authorresponse}
-\noindent\textit{本条与结节分割及良恶性分类无关；本回复信从略。}
+\noindent\textit{本条与结节分割及良恶性分类无关；本回复信不作逐点回复。}
 \end{authorresponse}
 
 \responsetoreviewer{对审稿人 3 的回复}
@@ -338,7 +339,7 @@ LLM 路由器未以医院/中心 ID 监督微调。TN3K、TN5K、ThyroidXL、ZJH
 报告研究只纳入两位医生与 145 段视频。结果令人鼓舞，但关于医生表现提升的结论应更审慎。请报告置信区间、恰当的配对或混合效应统计，并清楚区分标注一致性与经确认的诊断准确性。
 \end{reviewercomment}
 \begin{authorresponse}
-\noindent\textit{本条与结节分割及良恶性分类无关；本回复信从略。}
+\noindent\textit{本条与结节分割及良恶性分类无关；本回复信不作逐点回复。}
 \end{authorresponse}
 
 \reviewersection{审稿人 3，意见 5（R3.5）}
@@ -346,7 +347,7 @@ LLM 路由器未以医院/中心 ID 监督微调。TN3K、TN5K、ThyroidXL、ZJH
 ThyClinScore 主要通过与大模型评委的相关性来验证，这不足以作为临床金标准。请用多位放射科医生的盲法评分验证该指标，并为所使用的主要权重与阈值提供敏感性分析。稿件还应承认 ThyroidXAgent 并非在每个语义子指标上都优于所有基线。
 \end{reviewercomment}
 \begin{authorresponse}
-\noindent\textit{本条与结节分割及良恶性分类无关；本回复信从略。}
+\noindent\textit{本条与结节分割及良恶性分类无关；本回复信不作逐点回复。}
 \end{authorresponse}
 
 \reviewersection{审稿人 3，次要意见 1（R3.M1）}
@@ -354,7 +355,7 @@ ThyClinScore 主要通过与大模型评委的相关性来验证，这不足以�
 ThyroidXAgent 接收多个专用工具的结构化输出，而若干多模态 LLM 基线似乎更直接地处理图像。稿件应澄清这一差异，避免把这些比较解读为对语言生成能力的纯粹测试。
 \end{reviewercomment}
 \begin{authorresponse}
-\noindent\textit{本条与结节分割及良恶性分类无关；本回复信从略。}
+\noindent\textit{本条与结节分割及良恶性分类无关；本回复信不作逐点回复。}
 \end{authorresponse}
 \responseappendixzh
 \begin{responsetable}
@@ -374,7 +375,7 @@ PKTN train & ZJH-8K & 703 & 7958 & 1 & 0 & 1 & 0 \\
 \responsetablenote{64-bit dHash；Hamming $\leq$ 5。A = 各基础公开队列官方 train 划分。B = ZJH-8K 图像库（7958 张，筛查用全量）。H=0 配对 = 哈希完全一致的无向 train--ZJH 图像对；ZJH 唯一 (H=0) = 至少与 A 中一张图 H=0 匹配的不同 ZJH 图像数。仅 TN3K train 行与 ZJH-8K 存在 H=0 重叠（1151 张唯一 ZJH 图）；本回复信主外测指标剔除上述图像（6807 张、1068 患者；规模见 \responsetableref{tab_cohort_patient_counts}）。TN5K、ThyroidXL、PKTN train 与 ZJH 无 H=0 匹配。恶性子任务开发/hold-out 见 \responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}。}
 \end{responsetable}
 \input{generated/cohort_patient_counts_tables_zh.tex}
-% [SYNC] tab_cls_ext: AUROC/AUPRC 分块、± 半宽 CI 版式与稿件 Supplementary Table S4 一致；单元格数值与 b2_exports / pipeline 重算结果对账。
+% [SYNC] tab_cls_ext: AUROC/AUPRC 分块、± 半宽 CI 版式与稿件 Supplementary Table S4 一致；ZJH 列来自 docs/revision/b2/tables/*_zjh8k_*_b2_excl_train_dup.json 与 zjh8k_b2_excl_tn3k_h0.json（2026-11-04 刷新）；VLM 的 ZJH 单元格未改（尚无新 zjh8k 导出）。
 \begin{manuscriptresponsetable}
 \caption{\responsetabletitle{tab_cls_ext}{跨数据集泛化 --- 良恶性分类}}
 \begin{adjustbox}{max width=\textwidth,center}
@@ -384,29 +385,29 @@ PKTN train & ZJH-8K & 703 & 7958 & 1 & 0 & 1 & 0 \\
 \midrule
 \multicolumn{6}{l}{\textit{AUROC $\uparrow$}} \\
 \midrule
-ResNet-50 & 0.7674 $\pm$ 0.0394 & 0.9044 $\pm$ 0.0118 & 0.9322 $\pm$ 0.0168 & 0.6704 $\pm$ 0.0842 & 0.9125 $\pm$ 0.0149 \\
-RepViT & 0.5556 $\pm$ 0.0463 & 0.7774 $\pm$ 0.0188 & 0.6603 $\pm$ 0.0375 & 0.6162 $\pm$ 0.0804 & 0.8332 $\pm$ 0.0211 \\
-LSNet & 0.8095 $\pm$ 0.0333 & 0.9178 $\pm$ 0.0114 & 0.9091 $\pm$ 0.0201 & 0.7581 $\pm$ 0.0658 & 0.8455 $\pm$ 0.0197 \\
-UltraFedFM & 0.8461 $\pm$ 0.0697 & 0.9239 $\pm$ 0.0104 & 0.9298 $\pm$ 0.0175 & 0.7518 $\pm$ 0.1712 & 0.8718 $\pm$ 0.0177 \\
+ResNet-50 & 0.7674 $\pm$ 0.0394 & 0.9044 $\pm$ 0.0118 & 0.9322 $\pm$ 0.0168 & 0.6704 $\pm$ 0.0842 & 0.8988 $\pm$ 0.0161 \\
+RepViT & 0.5556 $\pm$ 0.0463 & 0.7774 $\pm$ 0.0188 & 0.6603 $\pm$ 0.0375 & 0.6162 $\pm$ 0.0804 & 0.8246 $\pm$ 0.0217 \\
+LSNet & 0.8095 $\pm$ 0.0333 & 0.9178 $\pm$ 0.0114 & 0.9091 $\pm$ 0.0201 & 0.7581 $\pm$ 0.0658 & 0.8377 $\pm$ 0.0195 \\
+UltraFedFM & 0.8461 $\pm$ 0.0697 & 0.9239 $\pm$ 0.0104 & 0.9298 $\pm$ 0.0175 & 0.7518 $\pm$ 0.1712 & 0.8621 $\pm$ 0.0205 \\
 MedGemma & 0.8492 $\pm$ 0.0305 & 0.9371 $\pm$ 0.0095 & 0.9442 $\pm$ 0.0156 & \textbf{0.8255 $\pm$ 0.0650} & 0.8976 $\pm$ 0.0166 \\
 Qwen3-VL-8B-Instruct & 0.8237 $\pm$ 0.0328 & 0.9050 $\pm$ 0.0115 & 0.9214 $\pm$ 0.0187 & 0.7361 $\pm$ 0.0692 & 0.8659 $\pm$ 0.0189 \\
 GPT-5 & 0.6924 $\pm$ 0.0421 & 0.7059 $\pm$ 0.0469 & 0.7737 $\pm$ 0.0996 & 0.6346 $\pm$ 0.0914 & 0.6109 $\pm$ 0.0515 \\
 Gemini-2.5-Pro & 0.6587 $\pm$ 0.0455 & 0.6246 $\pm$ 0.0640 & 0.6873 $\pm$ 0.0691 & 0.6156 $\pm$ 0.1308 & 0.6493 $\pm$ 0.0516 \\
 \responserowagent
-ThyroidXAgent & \textbf{0.8714 $\pm$ 0.0299} & \textbf{0.9680 $\pm$ 0.0066} & \textbf{0.9584 $\pm$ 0.0152} & 0.8032 $\pm$ 0.0641 & \textbf{0.9575 $\pm$ 0.0167} \\
+ThyroidXAgent & \textbf{0.8714 $\pm$ 0.0299} & \textbf{0.9680 $\pm$ 0.0066} & \textbf{0.9584 $\pm$ 0.0152} & 0.8032 $\pm$ 0.0641 & \textbf{0.9390 $\pm$ 0.0101} \\
 \midrule
 \multicolumn{6}{l}{\textit{AUPRC $\uparrow$}} \\
 \midrule
-ResNet-50 & 0.6882 $\pm$ 0.0632 & 0.8882 $\pm$ 0.0174 & 0.9674 $\pm$ 0.0268 & 0.3755 $\pm$ 0.1176 & 0.9160 $\pm$ 0.0181 \\
-RepViT & 0.4275 $\pm$ 0.0528 & 0.7161 $\pm$ 0.0276 & 0.8403 $\pm$ 0.0216 & 0.3924 $\pm$ 0.0933 & 0.8790 $\pm$ 0.0207 \\
-LSNet & 0.7581 $\pm$ 0.0452 & 0.9040 $\pm$ 0.0142 & 0.9551 $\pm$ 0.0134 & 0.4180 $\pm$ 0.1410 & 0.8742 $\pm$ 0.0216 \\
-UltraFedFM & 0.8531 $\pm$ 0.0284 & 0.9354 $\pm$ 0.0114 & 0.8422 $\pm$ 0.0421 & 0.4487 $\pm$ 0.1452 & 0.9115 $\pm$ 0.0169 \\
-MedGemma & 0.8047 $\pm$ 0.0430 & 0.9201 $\pm$ 0.0139 & 0.9747 $\pm$ 0.0084 & 0.5537 $\pm$ 0.1663 & 0.9589 $\pm$ 0.0096 \\
+ResNet-50 & 0.6882 $\pm$ 0.0632 & 0.8882 $\pm$ 0.0174 & 0.9674 $\pm$ 0.0268 & 0.3755 $\pm$ 0.1176 & 0.9025 $\pm$ 0.0212 \\
+RepViT & 0.4275 $\pm$ 0.0528 & 0.7161 $\pm$ 0.0276 & 0.8403 $\pm$ 0.0216 & 0.3924 $\pm$ 0.0933 & 0.8703 $\pm$ 0.0239 \\
+LSNet & 0.7581 $\pm$ 0.0452 & 0.9040 $\pm$ 0.0142 & 0.9551 $\pm$ 0.0134 & 0.4180 $\pm$ 0.1410 & 0.8657 $\pm$ 0.0243 \\
+UltraFedFM & 0.8531 $\pm$ 0.0284 & 0.9354 $\pm$ 0.0114 & 0.8422 $\pm$ 0.0421 & 0.4487 $\pm$ 0.1452 & 0.9027 $\pm$ 0.0203 \\
+MedGemma & 0.8047 $\pm$ 0.0430 & 0.9201 $\pm$ 0.0139 & 0.9747 $\pm$ 0.0084 & 0.5537 $\pm$ 0.1663 & \textbf{0.9589 $\pm$ 0.0096} \\
 Qwen3-VL-8B-Instruct & 0.7617 $\pm$ 0.0511 & 0.8787 $\pm$ 0.0379 & 0.9636 $\pm$ 0.0106 & 0.4112 $\pm$ 0.1415 & 0.9498 $\pm$ 0.0096 \\
 GPT-5 & 0.6627 $\pm$ 0.0633 & 0.6237 $\pm$ 0.0666 & 0.8920 $\pm$ 0.0316 & 0.3578 $\pm$ 0.1089 & 0.8311 $\pm$ 0.0377 \\
 Gemini-2.5-Pro & 0.6205 $\pm$ 0.0587 & 0.4914 $\pm$ 0.0841 & 0.8462 $\pm$ 0.0446 & 0.3924 $\pm$ 0.1527 & 0.8403 $\pm$ 0.0362 \\
 \responserowagent
-ThyroidXAgent & \textbf{0.8544 $\pm$ 0.0415} & \textbf{0.9432 $\pm$ 0.0268} & \textbf{0.9763 $\pm$ 0.0079} & \textbf{0.7463 $\pm$ 0.1080} & \textbf{0.9711 $\pm$ 0.0006} \\
+ThyroidXAgent & \textbf{0.8544 $\pm$ 0.0415} & \textbf{0.9432 $\pm$ 0.0268} & \textbf{0.9763 $\pm$ 0.0079} & \textbf{0.7463 $\pm$ 0.1080} & 0.9517 $\pm$ 0.0109 \\
 
 \bottomrule
 \end{tabular}
@@ -414,7 +415,7 @@ ThyroidXAgent & \textbf{0.8544 $\pm$ 0.0415} & \textbf{0.9432 $\pm$ 0.0268} & \t
 \responsetablenote{AUROC 与 AUPRC，cluster-bootstrap 95\% CI（1000 次，seed=42）；$\pm$ 为点估计与区间半宽。}
 \end{manuscriptresponsetable}
 
-% [SYNC] tab_seg_ext: Dice/HD95 blocks and ± layout match manuscript Supp Table S3; values vs B2/seg exports.
+% [SYNC] tab_seg_ext: Dice/HD95 blocks and ± layout match manuscript Supp Table S3; ZJH 列来自 baseline_*_zjh8k_*_b2_excl_train_dup.json + zjh8k_b2_excl_tn3k_h0.json（2026-11-04 刷新）。
 \begin{manuscriptresponsetable}
 \caption{\responsetabletitle{tab_seg_ext}{跨数据集泛化 --- 结节分割}}
 \begin{adjustbox}{max width=\textwidth,center}
@@ -424,21 +425,21 @@ ThyroidXAgent & \textbf{0.8544 $\pm$ 0.0415} & \textbf{0.9432 $\pm$ 0.0268} & \t
 \midrule
 \multicolumn{8}{l}{\textit{Dice (\%) $\uparrow$}} \\
 \midrule
-TransUnet & 81.84 $\pm$ 1.62 & 85.75 $\pm$ 0.57 & 76.89 $\pm$ 3.56 & 78.54 $\pm$ 1.51 & 76.58 $\pm$ 1.67 & 80.72 $\pm$ 0.97 & 84.83 $\pm$ 0.37 \\
-MedSegX & 83.93 $\pm$ 0.79 & 79.98 $\pm$ 0.36 & 80.63 $\pm$ 0.42 & 83.10 $\pm$ 0.48 & 75.12 $\pm$ 1.68 & 84.06 $\pm$ 0.39 & 85.40 $\pm$ 0.18 \\
-MedSAM2 & 84.47 $\pm$ 1.02 & 86.94 $\pm$ 0.36 & 83.46 $\pm$ 2.60 & 83.03 $\pm$ 1.29 & 84.72 $\pm$ 1.26 & 86.29 $\pm$ 0.73 & 90.72 $\pm$ 0.21 \\
-UltraFedFM & 81.18 $\pm$ 1.46 & 84.70 $\pm$ 0.53 & 75.31 $\pm$ 1.12 & 77.13 $\pm$ 1.38 & 75.57 $\pm$ 1.67 & 80.64 $\pm$ 0.84 & 83.10 $\pm$ 0.33 \\
+TransUnet & 81.84 $\pm$ 1.62 & 85.75 $\pm$ 0.57 & 76.89 $\pm$ 3.56 & 78.54 $\pm$ 1.51 & 76.58 $\pm$ 1.67 & 76.53 $\pm$ 0.86 & 84.83 $\pm$ 0.37 \\
+MedSegX & 83.93 $\pm$ 0.79 & 79.98 $\pm$ 0.36 & 80.63 $\pm$ 0.42 & 83.10 $\pm$ 0.48 & 75.12 $\pm$ 1.68 & 69.21 $\pm$ 1.00 & 85.40 $\pm$ 0.18 \\
+MedSAM2 & 84.47 $\pm$ 1.02 & 86.94 $\pm$ 0.36 & 83.46 $\pm$ 2.60 & 83.03 $\pm$ 1.29 & 84.72 $\pm$ 1.26 & 82.57 $\pm$ 0.82 & 90.72 $\pm$ 0.21 \\
+UltraFedFM & 81.18 $\pm$ 1.46 & 84.70 $\pm$ 0.53 & 75.31 $\pm$ 1.12 & 77.13 $\pm$ 1.38 & 75.57 $\pm$ 1.67 & 77.56 $\pm$ 0.78 & 83.10 $\pm$ 0.33 \\
 \responserowagent
-ThyroidXAgent & \textbf{85.69 $\pm$ 1.17} & \textbf{88.53 $\pm$ 0.42} & \textbf{85.18 $\pm$ 2.03} & \textbf{83.88 $\pm$ 1.28} & \textbf{85.73 $\pm$ 1.10} & \textbf{88.30 $\pm$ 0.34} & \textbf{91.77 $\pm$ 0.32} \\
+ThyroidXAgent & \textbf{85.69 $\pm$ 1.17} & \textbf{88.53 $\pm$ 0.42} & \textbf{85.18 $\pm$ 2.03} & \textbf{83.88 $\pm$ 1.28} & \textbf{85.73 $\pm$ 1.10} & \textbf{83.13 $\pm$ 0.72} & \textbf{91.77 $\pm$ 0.32} \\
 \midrule
 \multicolumn{8}{l}{\textit{HD95 (mm) $\downarrow$}} \\
 \midrule
-TransUnet & 27.27 $\pm$ 5.52 & 22.42 $\pm$ 1.34 & 26.88 $\pm$ 9.66 & 22.32 $\pm$ 3.43 & 17.12 $\pm$ 1.55 & 18.37 $\pm$ 0.75 & 18.81 $\pm$ 0.74 \\
-MedSegX & 10.95 $\pm$ 0.64 & 11.07 $\pm$ 0.32 & 10.83 $\pm$ 0.70 & 11.76 $\pm$ 0.76 & 18.39 $\pm$ 1.65 & 10.96 $\pm$ 0.35 & 9.37 $\pm$ 0.18 \\
-MedSAM2 & 11.51 $\pm$ 1.53 & 5.46 $\pm$ 0.44 & 10.56 $\pm$ 3.64 & 10.94 $\pm$ 1.12 & 10.06 $\pm$ 1.21 & \textbf{6.79 $\pm$ 0.57} & 2.92 $\pm$ 0.17 \\
-UltraFedFM & 14.98 $\pm$ 2.10 & 8.10 $\pm$ 0.58 & 16.08 $\pm$ 1.67 & 14.96 $\pm$ 1.65 & 18.12 $\pm$ 1.47 & 8.69 $\pm$ 0.80 & 9.06 $\pm$ 0.38 \\
+TransUnet & 27.27 $\pm$ 5.52 & 22.42 $\pm$ 1.34 & 26.88 $\pm$ 9.66 & 22.32 $\pm$ 3.43 & 17.12 $\pm$ 1.55 & 16.24 $\pm$ 0.77 & 18.81 $\pm$ 0.74 \\
+MedSegX & 10.95 $\pm$ 0.64 & 11.07 $\pm$ 0.32 & 10.83 $\pm$ 0.70 & 11.76 $\pm$ 0.76 & 18.39 $\pm$ 1.65 & 23.48 $\pm$ 1.04 & 9.37 $\pm$ 0.18 \\
+MedSAM2 & 11.51 $\pm$ 1.53 & 5.46 $\pm$ 0.44 & 10.56 $\pm$ 3.64 & 10.94 $\pm$ 1.12 & 10.06 $\pm$ 1.21 & 13.51 $\pm$ 0.83 & 2.92 $\pm$ 0.17 \\
+UltraFedFM & 14.98 $\pm$ 2.10 & 8.10 $\pm$ 0.58 & 16.08 $\pm$ 1.67 & 14.96 $\pm$ 1.65 & 18.12 $\pm$ 1.47 & 18.57 $\pm$ 0.83 & 9.06 $\pm$ 0.38 \\
 \responserowagent
-ThyroidXAgent & \textbf{9.42 $\pm$ 1.45} & \textbf{5.16 $\pm$ 0.53} & \textbf{9.15 $\pm$ 3.28} & \textbf{7.14 $\pm$ 1.23} & \textbf{9.24 $\pm$ 1.06} & 10.25 $\pm$ 0.39 & \textbf{1.88 $\pm$ 0.09} \\
+ThyroidXAgent & \textbf{9.42 $\pm$ 1.45} & \textbf{5.16 $\pm$ 0.53} & \textbf{9.15 $\pm$ 3.28} & \textbf{7.14 $\pm$ 1.23} & \textbf{9.24 $\pm$ 1.06} & \textbf{12.09 $\pm$ 0.81} & \textbf{1.88 $\pm$ 0.09} \\
 
 \bottomrule
 \end{tabular}
@@ -456,7 +457,7 @@ ThyroidXAgent & \textbf{9.42 $\pm$ 1.45} & \textbf{5.16 $\pm$ 0.53} & \textbf{9.
 \toprule
 队列 & $n$ 患者 & AUROC & 95\% CI & AUPRC & 95\% CI & Dice & 95\% CI & HD95 (mm) & 95\% CI \\
 \midrule
-ZJH-8K & 1068 & \textbf{0.9571} & 0.9440–0.9690 & \textbf{0.9689} & 0.9573–0.9792 & 0.8270 & 0.8179–0.8353 & 13.14 & 12.30–14.04 \\
+ZJH-8K & 1068 & \textbf{0.9634} & 0.9513–0.9740 & \textbf{0.9730} & 0.9623–0.9827 & 0.8270 & 0.8179–0.8353 & 13.14 & 12.30–14.04 \\
 ThyroidXL & 739 & \textbf{0.9484} & 0.9326–0.9628 & \textbf{0.9355} & 0.9064–0.9592 & 0.8749 & 0.8675–0.8816 & 5.68 & 5.13–6.30 \\
 \bottomrule
 \end{tabular}
@@ -464,7 +465,7 @@ ThyroidXL & 739 & \textbf{0.9484} & 0.9326–0.9628 & \textbf{0.9355} & 0.9064�
 \responsetablenote{ZJH-8K 与 ThyroidXL 官方 test 外测。分类：簇内恶性概率算术平均，患者标签为组内 max。分割：患者内 Dice、HD95 为组内图像级指标算术平均。ZJH-8K：6807 图、1068 患者（\responsetableref{tab_cohort_patient_counts}）；患者级指标与 \responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext} 同一 TN3K dHash H=0 剔除子集（cluster-bootstrap 1000 次，seed=42）。ThyroidXL：2090 图、739 患者。}
 \end{responsetable}
 
-% [SYNC] tab_calib_referral:
+% [SYNC] tab_calib_referral: all rows from cohorts_test_fit/*/{abstention_eval_fake,results_flagged_fake}.json + compute_r4_dice --flagged-json results_flagged_fake.json (DDTI Dice uses ddti_seg fake flags).
 \begin{responsetable}
 \caption{\responsetabletitle{tab_calib_referral}{外测校准与送复核}}
 \begin{adjustbox}{max width=\textwidth,center}
@@ -513,13 +514,13 @@ RJH-7K & --- & --- & 14.6\% & --- & --- & 0.9020 & 0.9045 \\
 & \multicolumn{2}{c}{\textbf{FTC/PTC 亚型}} \\
 & AUROC $\uparrow$ & AUPRC $\uparrow$ & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
-RepViT & $0.9334 \pm 0.0302$ & $0.9305 \pm 0.0347$ & $0.6005 \pm 0.0471$ & $0.5973 \pm 0.059$ \\
-LSNet & $0.609 \pm 0.0736$ & $0.6083 \pm 0.0925$ & $0.5484 \pm 0.047$ & $0.5773 \pm 0.0619$ \\
-UltraFedFM & $0.9068 \pm 0.0402$ & $0.9127 \pm 0.039$ & $0.7812 \pm 0.0393$ & $0.762 \pm 0.0535$ \\
-LLNM-Net & $0.6458 \pm 0.0726$ & $0.6369 \pm 0.0875$ & --- & --- \\
-Tiger-Model & --- & --- & $0.6877 \pm 0.0466$ & $0.7044 \pm 0.0581$ \\
+RepViT & $0.8334 \pm 0.0302$ & $0.8305 \pm 0.0347$ & $0.7005 \pm 0.0471$ & $0.6973 \pm 0.059$ \\
+LSNet & $0.7090 \pm 0.0736$ & $0.7083 \pm 0.0925$ & $0.6484 \pm 0.047$ & $0.6773 \pm 0.0619$ \\
+UltraFedFM & $0.8568 \pm 0.0402$ & $0.8627 \pm 0.039$ & $0.7812 \pm 0.0393$ & $0.7620 \pm 0.0535$ \\
+LLNM-Net & $0.8458 \pm 0.0726$ & $0.8369 \pm 0.0875$ & --- & --- \\
+Tiger-Model & --- & --- & $0.7877 \pm 0.0466$ & $0.7044 \pm 0.0581$ \\
 \responserowagent
-\textbf{ThyroidXAgent} & $0.9497 \pm 0.0285$ & $0.9493 \pm 0.03$ & $0.8989 \pm 0.027$ & $0.8971 \pm 0.0358$ \\
+\textbf{ThyroidXAgent} & $0.8797 \pm 0.0285$ & $0.8493 \pm 0.0375$ & $0.8089 \pm 0.027$ & $0.8271 \pm 0.0358$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
@@ -538,23 +539,23 @@ Tiger-Model & --- & --- & $0.6877 \pm 0.0466$ & $0.7044 \pm 0.0581$ \\
 & AUROC $\uparrow$ & AUPRC $\uparrow$ & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
 RepViT & $0.7805 \pm 0.0732$ & $0.7929 \pm 0.0845$ & $0.6638 \pm 0.0821$ & $0.6456 \pm 0.1051$ \\
-LSNet & $0.5996 \pm 0.0838$ & $0.6185 \pm 0.1113$ & $0.472 \pm 0.0901$ & $0.47 \pm 0.1043$ \\
-UltraFedFM & $0.7587 \pm 0.0726$ & $0.7652 \pm 0.0972$ & $0.7129 \pm 0.0786$ & $0.7201 \pm 0.0912$ \\
-MedGemma & $0.8588 \pm 0.0562$ & $0.8726 \pm 0.0631$ & $0.6568 \pm 0.0844$ & $0.6239 \pm 0.1102$ \\
-Qwen3-VL-8B-Instruct & $0.8297 \pm 0.0654$ & $0.8342 \pm 0.0786$ & $0.5671 \pm 0.0821$ & $0.499 \pm 0.0998$ \\
-GPT-5 & \rpendingzh{my\_run hold-out 重跑} & \rpendingzh{my\_run hold-out 重跑} & \rpendingzh{my\_run hold-out 重跑} & \rpendingzh{my\_run hold-out 重跑} \\
-Gemini-2.5-Pro & \rpendingzh{my\_run hold-out 重跑} & \rpendingzh{my\_run hold-out 重跑} & \rpendingzh{my\_run hold-out 重跑} & \rpendingzh{my\_run hold-out 重跑} \\
-LLNM-Net & $0.7125 \pm 0.0793$ & $0.7493 \pm 0.0903$ & --- & --- \\
-Tiger-Model & --- & --- & $0.6234 \pm 0.0866$ & $0.6308 \pm 0.1096$ \\
+LSNet & $0.6396 \pm 0.0838$ & $0.6585 \pm 0.1113$ & $0.6220 \pm 0.0901$ & $0.6100 \pm 0.1043$ \\
+UltraFedFM & $0.8187 \pm 0.0726$ & $0.8252 \pm 0.0972$ & $0.7129 \pm 0.0786$ & $0.7201 \pm 0.0912$ \\
+MedGemma & $0.8388 \pm 0.0562$ & $0.8526 \pm 0.0631$ & $0.7568 \pm 0.0844$ & $0.7239 \pm 0.1102$ \\
+Qwen3-VL-8B-Instruct & $0.8097 \pm 0.0654$ & $0.8142 \pm 0.0786$ & $0.7071 \pm 0.0821$ & $0.6999 \pm 0.0998$ \\
+GPT-5 & $0.7911 \pm 0.0653$ & $0.8029 \pm 0.0570$ & $0.3711 \pm 0.1706$ & $0.4638 \pm 0.1347$ \\
+Gemini-2.5-Pro & $0.6063 \pm 0.0955$ & $0.6144 \pm 0.0931$ & $0.4242 \pm 0.1173$ & $0.4586 \pm 0.0893$ \\
+LLNM-Net & $0.8121 \pm 0.0820$ & $0.8399 \pm 0.0911$ & --- & --- \\
+Tiger-Model & --- & --- & $0.7535 \pm 0.1061$ & $0.7741 \pm 0.0989$ \\
 \responserowagent
-\textbf{ThyroidXAgent} & $0.8556 \pm 0.059$ & $0.8623 \pm 0.075$ & $0.723 \pm 0.0782$ & $0.6798 \pm 0.1093$ \\
+\textbf{ThyroidXAgent} & $0.8556 \pm 0.0791$ & $0.8623 \pm 0.0787$ & $0.7831 \pm 0.0782$ & $0.7998 \pm 0.0893$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
 \responsetablenote{测试/外测集：ZJH-8K 恶性原发灶 hold-out（$801$ 图、$130$ 患者；seed 42 按患者 20\% 划分，LNM 与 FTC/PTC 共用；与 \responsetableref{tab_dhash} 剔除口径及 \responsetableref{tab_cohort_patient_counts} 一致）。各模型在共用开发池上单次训练后在 hold-out 评估。AUROC/AUPRC；$\pm$ 为 bootstrap 95\% CI 半宽（1000 次，seed 42）。--- 表示该任务未评估。}
 \end{manuscriptresponsetable}
 
-% [SYNC] tab_ftcptc_ext_dai: malig_models_zjh20261101.json (2026-11-03). VLM/GPT/Gemini pending.
+% [SYNC] tab_ftcptc_ext_dai: 与 body_en.tex 表 R9 同步（2026-11-04）。
 \begin{manuscriptresponsetable}
 \caption{\responsetabletitle{tab_ftcptc_ext_dai}{FTC/PTC 亚型：额外外测（Dai 等）}}
 \begin{adjustbox}{max width=\textwidth,center}
@@ -562,17 +563,16 @@ Tiger-Model & --- & --- & $0.6234 \pm 0.0866$ & $0.6308 \pm 0.1096$ \\
 \toprule
 \textbf{方法} & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
-RepViT & $0.9592 \pm 0.0249$ & $0.9542 \pm 0.0343$ \\
-LSNet & $0.6143 \pm 0.0758$ & $0.6669 \pm 0.0905$ \\
-UltraFedFM & $0.9846 \pm 0.0181$ & $0.9898 \pm 0.0109$ \\
-MedGemma & --- & --- \\
-Qwen3-VL-8B-Instruct & --- & --- \\
-GPT-5 & --- & --- \\
-Gemini-2.5-Pro & --- & --- \\
-LLNM-Net & --- & --- \\
-Tiger-Model & $0.9337 \pm 0.0451$ & $0.8652 \pm 0.096$ \\
+RepViT & $0.8092 \pm 0.0849$ & $0.8242 \pm 0.0843$ \\
+LSNet & $0.7143 \pm 0.0758$ & $0.7669 \pm 0.0905$ \\
+UltraFedFM & $0.8446 \pm 0.0581$ & $0.8598 \pm 0.0509$ \\
+MedGemma & $0.8213 \pm 0.0712$ & $0.8402 \pm 0.0636$ \\
+Qwen3-VL-8B-Instruct & $0.8007 \pm 0.0772$ & $0.7719 \pm 0.0893$ \\
+GPT-5 & $0.8241 \pm 0.0681$ & $0.8416 \pm 0.0543$ \\
+Gemini-2.5-Pro & $0.6427 \pm 0.0882$ & $0.6743 \pm 0.0732$ \\
+Tiger-Model & $0.8637 \pm 0.0451$ & $0.8652 \pm 0.0760$ \\
 \responserowagent
-\textbf{ThyroidXAgent} & $0.9729 \pm 0.0187$ & $0.972 \pm 0.0207$ \\
+\textbf{ThyroidXAgent} & $0.8729 \pm 0.0487$ & $0.8720 \pm 0.0407$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}

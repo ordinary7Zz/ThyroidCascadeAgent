@@ -5,7 +5,9 @@
 # 用法（先激活 GPU 环境，见 docs/revision/b7/NHC_GPU_AND_WEIGHTS_ZH.md）:
 #   python run_pipeline.py --config config/revision/nhc_prepared_sample.yaml
 #
-# 数据默认: ThyroidCascadeAgent/output/b7/nhc_prepared_smoke
+# 数据: 新建文件夹 → prepare + cross_expand（20 图，两中心均有良/恶性，可估 AUROC）
+#   output/b7/nhc_prepared_crosscenter_30
+# 旧 10 图 smoke: output/b7/nhc_prepared_smoke（保留，改回路径即可）
 shared:
   agent_llm:
     api_key_env: DASHSCOPE_API_KEY
@@ -59,14 +61,14 @@ pipeline:
   run_segmentation: true
   run_classification: true
   revision:
-    nhc_primary_results_dir: output/b7/nhc_cascade_sample
-    center_manifest: output/b7/nhc_prepared_smoke/center_manifest.json
+    nhc_primary_results_dir: output/b7/nhc_cascade_crosscenter_30
+    center_manifest: output/b7/nhc_prepared_crosscenter_30/center_manifest.json
   data:
-    image_input: output/b7/nhc_prepared_smoke/images
-    gt_mask_dir: output/b7/nhc_prepared_smoke/nodule_masks
-    label_file: output/b7/nhc_prepared_smoke/labels.json
+    image_input: output/b7/nhc_prepared_crosscenter_30/images
+    gt_mask_dir: output/b7/nhc_prepared_crosscenter_30/nodule_masks
+    label_file: output/b7/nhc_prepared_crosscenter_30/labels.json
     label_key: malignancy
     start_index: 0
-    max_images: 10
+    max_images: null
   output:
-    output_dir: output/b7/nhc_cascade_sample
+    output_dir: output/b7/nhc_cascade_crosscenter_30

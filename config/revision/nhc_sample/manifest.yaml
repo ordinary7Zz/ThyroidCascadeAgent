@@ -1,15 +1,18 @@
-# NHC 示例数据（10 图）返修任务路径索引 — 仅配置与目录约定，不含 G3 元数据。
+# NHC 示例数据返修任务路径索引 — 仅配置与目录约定，不含 G3 元数据。
+# 当前主 sample：新建文件夹 prepare(10) + cross_expand → 20 图（两中心各 2 恶/8 良）
 # 数据根: ThyroidCascadeAgent/output/b7/
 version: 1
 cohort_id: nhc_prepared_sample
 raw_input_dir: /mnt/wangbd8/workspace/ThyroidAgent/my_Thyroid_Infer/datasets/甲状腺私有数据/新建文件夹
 
 paths:
-  prepared_dir: output/b7/nhc_prepared_smoke
-  cascade_dir: output/b7/nhc_cascade_sample
-  labels: output/b7/nhc_prepared_smoke/labels.json
-  center_stats: output/b7/nhc_prepared_smoke/center_stats.json
-  center_manifest: output/b7/nhc_prepared_smoke/center_manifest.json
+  prepared_dir: output/b7/nhc_prepared_crosscenter_30
+  prepared_dir_legacy_10: output/b7/nhc_prepared_smoke
+  cascade_dir: output/b7/nhc_cascade_crosscenter_30
+  cascade_dir_legacy_10: output/b7/nhc_cascade_sample
+  labels: output/b7/nhc_prepared_crosscenter_30/labels.json
+  center_stats: output/b7/nhc_prepared_from_raw/center_stats.json
+  center_manifest: output/b7/nhc_prepared_crosscenter_30/center_manifest.json
 
 configs:
   cascade_primary: config/revision/nhc_prepared_sample.yaml

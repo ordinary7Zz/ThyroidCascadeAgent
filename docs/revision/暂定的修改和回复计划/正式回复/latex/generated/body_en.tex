@@ -76,8 +76,8 @@ Several key values are inconsistent across the abstract, main text, figures, and
 \end{reviewercomment}
 \begin{authorresponse}
 We apologize and reconciled the submitted text against the tables at the end of this letter; the revised abstract and Results will align with \responsetableref{tab_seg_ext}, \responsetableref{tab_cls_ext}, \responsetableref{tab_malig_oof}, \responsetableref{tab_malig_ext}, and \responsetableref{tab_ftcptc_ext_dai} (\rpending{…}).\par
-\textbf{(1) Benign--malignant cross-cohort ``means.''} The abstract and Results~§2.2 report mean AUROC 0.9466 and mean AUPRC 0.8361 (main-text Fig.~2d--e). Under the R2.7 unweighted macro-average over five external cohorts (not weighted by test image count), the five ThyroidXAgent cohort rows in \responsetableref{tab_cls_ext} give macro AUROC \emph{0.9117} and AUPRC \emph{0.8983} (6807-image ZJH test; \responsetableref{tab_dhash}). \rpending{Update abstract/§2.2 to match the benign--malignant external-test table in this letter.}\par
-\textbf{(2) Segmentation cross-cohort ``means.''} The abstract and §2.2 report mean Dice 87.21\% and mean HD95 6.90~mm. Under the same R2.7 rule, the seven ThyroidXAgent cohort rows in \responsetableref{tab_seg_ext} give macro Dice \emph{87.01\%} and HD95 \emph{7.46~mm} (6807-image ZJH subset; \responsetableref{tab_dhash}). \rpending{Update abstract/§2.2 to match the segmentation external-test table in this letter.}\par
+\textbf{(1) Benign--malignant cross-cohort ``means.''} The abstract and Results~§2.2 report mean AUROC 0.9466 and mean AUPRC 0.8361 (main-text Fig.~2d--e). Under the R2.7 unweighted macro-average over five external cohorts (not weighted by test image count), the five ThyroidXAgent cohort rows in \responsetableref{tab_cls_ext} give macro AUROC \emph{0.9080} and AUPRC \emph{0.8944} (6807-image ZJH test; \responsetableref{tab_dhash}). \rpending{Update abstract/§2.2 to match the benign--malignant external-test table in this letter.}\par
+\textbf{(2) Segmentation cross-cohort ``means.''} The abstract and §2.2 report mean Dice 87.21\% and mean HD95 6.90~mm. Under the same R2.7 rule, the seven ThyroidXAgent cohort rows in \responsetableref{tab_seg_ext} give macro Dice \emph{86.27\%} and HD95 \emph{7.87~mm} (6807-image ZJH subset; \responsetableref{tab_dhash}). \rpending{Update abstract/§2.2 to match the segmentation external-test table in this letter.}\par
 \textbf{(3) Main-text Fig.~3 example panels.} On audit we found that in a submitted figure panel, a histologic PTC case was mislabeled as FTC. In the revision, all illustrative images in main-text Fig.~3 have been replaced with cases from the ZJH external-test hold-out (consistent with the current LNM/FTC narrative centred on ZJH), with PTC/FTC and LNM labels checked against the captions.\par
 \par
 \end{authorresponse}
@@ -145,7 +145,7 @@ Unweighted \emph{macro} and \emph{Overall pooled} estimates (Supp.\ S7--S12): gl
 The authors should clarify whether the reported "mean" performance represents an unweighted macro-average across cohorts, a sample-size-weighted average, or another calculation.
 \end{reviewercomment}
 \begin{authorresponse}
-We thank the reviewer. For benign--malignant classification and nodule segmentation alike, cross-cohort ``means'' are unweighted macro-averages: we compute the task metric on each external test cohort, then average cohort-level point estimates with equal weight (not weighted by test image count). Per-cohort metrics are in \responsetableref{tab_cls_ext} (classification) and \responsetableref{tab_seg_ext} (segmentation); macro AUROC 0.9117, AUPRC 0.8983, Dice 87.01\%, and HD95 7.46~mm follow from the ThyroidXAgent rows in those tables (6807-image ZJH subset; \responsetableref{tab_dhash}), reconciled with Reviewer 2, Comment 1 (R2.1).\par
+We thank the reviewer. For benign--malignant classification and nodule segmentation alike, cross-cohort ``means'' are unweighted macro-averages: we compute the task metric on each external test cohort, then average cohort-level point estimates with equal weight (not weighted by test image count). Per-cohort metrics are in \responsetableref{tab_cls_ext} (classification) and \responsetableref{tab_seg_ext} (segmentation); macro AUROC 0.9080, AUPRC 0.8944, Dice 86.27\%, and HD95 7.87~mm follow from the ThyroidXAgent rows in those tables (6807-image ZJH subset; \responsetableref{tab_dhash}), reconciled with Reviewer 2, Comment 1 (R2.1).\par
 \par
 \end{authorresponse}
 
@@ -373,7 +373,7 @@ PKTN train & ZJH-8K & 703 & 7958 & 1 & 0 & 1 & 0 \\
 \responsetablenote{64-bit dHash; Hamming $\leq$ 5. A = each foundational public cohort's official train split. B = ZJH-8K image pool (7958 images; full pool for screening). H=0 pairs = undirected train--ZJH image pairs with exact hash match; Unique ZJH (H=0) = distinct ZJH images with at least one H=0 match to A. Only the TN3K train row shows H=0 overlap with ZJH-8K (1151 unique ZJH images); main external-test metrics exclude those images (6807 images, 1068 patients; counts in \responsetableref{tab_cohort_patient_counts}). TN5K, ThyroidXL, and PKTN train show no H=0 matches to ZJH. Malignant-subtask development/hold-out: \responsetableref{tab_malig_oof}, \responsetableref{tab_malig_ext}.}
 \end{responsetable}
 \input{generated/cohort_patient_counts_tables_en.tex}
-% [SYNC] tab_cls_ext: AUROC/AUPRC layout ± half-width CI matches manuscript Supp Table S4; cell values vs b2_exports / pipeline recomputation.
+% [SYNC] tab_cls_ext: AUROC/AUPRC layout ± half-width CI matches manuscript Supp Table S4; ZJH column from docs/revision/b2/tables/*_zjh8k_*_b2_excl_train_dup.json + zjh8k_b2_excl_tn3k_h0.json (2026-11-04 refresh); VLM ZJH cells unchanged (no new zjh8k export).
 \begin{manuscriptresponsetable}
 \caption{\responsetabletitle{tab_cls_ext}{Cross-dataset generalization --- benign--malignant classification}}
 \begin{adjustbox}{max width=\textwidth,center}
@@ -383,29 +383,29 @@ PKTN train & ZJH-8K & 703 & 7958 & 1 & 0 & 1 & 0 \\
 \midrule
 \multicolumn{6}{l}{\textit{AUROC $\uparrow$}} \\
 \midrule
-ResNet-50 & 0.7674 $\pm$ 0.0394 & 0.9044 $\pm$ 0.0118 & 0.9322 $\pm$ 0.0168 & 0.6704 $\pm$ 0.0842 & 0.9125 $\pm$ 0.0149 \\
-RepViT & 0.5556 $\pm$ 0.0463 & 0.7774 $\pm$ 0.0188 & 0.6603 $\pm$ 0.0375 & 0.6162 $\pm$ 0.0804 & 0.8332 $\pm$ 0.0211 \\
-LSNet & 0.8095 $\pm$ 0.0333 & 0.9178 $\pm$ 0.0114 & 0.9091 $\pm$ 0.0201 & 0.7581 $\pm$ 0.0658 & 0.8455 $\pm$ 0.0197 \\
-UltraFedFM & 0.8461 $\pm$ 0.0697 & 0.9239 $\pm$ 0.0104 & 0.9298 $\pm$ 0.0175 & 0.7518 $\pm$ 0.1712 & 0.8718 $\pm$ 0.0177 \\
+ResNet-50 & 0.7674 $\pm$ 0.0394 & 0.9044 $\pm$ 0.0118 & 0.9322 $\pm$ 0.0168 & 0.6704 $\pm$ 0.0842 & 0.8988 $\pm$ 0.0161 \\
+RepViT & 0.5556 $\pm$ 0.0463 & 0.7774 $\pm$ 0.0188 & 0.6603 $\pm$ 0.0375 & 0.6162 $\pm$ 0.0804 & 0.8246 $\pm$ 0.0217 \\
+LSNet & 0.8095 $\pm$ 0.0333 & 0.9178 $\pm$ 0.0114 & 0.9091 $\pm$ 0.0201 & 0.7581 $\pm$ 0.0658 & 0.8377 $\pm$ 0.0195 \\
+UltraFedFM & 0.8461 $\pm$ 0.0697 & 0.9239 $\pm$ 0.0104 & 0.9298 $\pm$ 0.0175 & 0.7518 $\pm$ 0.1712 & 0.8621 $\pm$ 0.0205 \\
 MedGemma & 0.8492 $\pm$ 0.0305 & 0.9371 $\pm$ 0.0095 & 0.9442 $\pm$ 0.0156 & \textbf{0.8255 $\pm$ 0.0650} & 0.8976 $\pm$ 0.0166 \\
 Qwen3-VL-8B-Instruct & 0.8237 $\pm$ 0.0328 & 0.9050 $\pm$ 0.0115 & 0.9214 $\pm$ 0.0187 & 0.7361 $\pm$ 0.0692 & 0.8659 $\pm$ 0.0189 \\
 GPT-5 & 0.6924 $\pm$ 0.0421 & 0.7059 $\pm$ 0.0469 & 0.7737 $\pm$ 0.0996 & 0.6346 $\pm$ 0.0914 & 0.6109 $\pm$ 0.0515 \\
 Gemini-2.5-Pro & 0.6587 $\pm$ 0.0455 & 0.6246 $\pm$ 0.0640 & 0.6873 $\pm$ 0.0691 & 0.6156 $\pm$ 0.1308 & 0.6493 $\pm$ 0.0516 \\
 \responserowagent
-ThyroidXAgent & \textbf{0.8714 $\pm$ 0.0299} & \textbf{0.9680 $\pm$ 0.0066} & \textbf{0.9584 $\pm$ 0.0152} & 0.8032 $\pm$ 0.0641 & \textbf{0.9575 $\pm$ 0.0167} \\
+ThyroidXAgent & \textbf{0.8714 $\pm$ 0.0299} & \textbf{0.9680 $\pm$ 0.0066} & \textbf{0.9584 $\pm$ 0.0152} & 0.8032 $\pm$ 0.0641 & \textbf{0.9390 $\pm$ 0.0101} \\
 \midrule
 \multicolumn{6}{l}{\textit{AUPRC $\uparrow$}} \\
 \midrule
-ResNet-50 & 0.6882 $\pm$ 0.0632 & 0.8882 $\pm$ 0.0174 & 0.9674 $\pm$ 0.0268 & 0.3755 $\pm$ 0.1176 & 0.9160 $\pm$ 0.0181 \\
-RepViT & 0.4275 $\pm$ 0.0528 & 0.7161 $\pm$ 0.0276 & 0.8403 $\pm$ 0.0216 & 0.3924 $\pm$ 0.0933 & 0.8790 $\pm$ 0.0207 \\
-LSNet & 0.7581 $\pm$ 0.0452 & 0.9040 $\pm$ 0.0142 & 0.9551 $\pm$ 0.0134 & 0.4180 $\pm$ 0.1410 & 0.8742 $\pm$ 0.0216 \\
-UltraFedFM & 0.8531 $\pm$ 0.0284 & 0.9354 $\pm$ 0.0114 & 0.8422 $\pm$ 0.0421 & 0.4487 $\pm$ 0.1452 & 0.9115 $\pm$ 0.0169 \\
-MedGemma & 0.8047 $\pm$ 0.0430 & 0.9201 $\pm$ 0.0139 & 0.9747 $\pm$ 0.0084 & 0.5537 $\pm$ 0.1663 & 0.9589 $\pm$ 0.0096 \\
+ResNet-50 & 0.6882 $\pm$ 0.0632 & 0.8882 $\pm$ 0.0174 & 0.9674 $\pm$ 0.0268 & 0.3755 $\pm$ 0.1176 & 0.9025 $\pm$ 0.0212 \\
+RepViT & 0.4275 $\pm$ 0.0528 & 0.7161 $\pm$ 0.0276 & 0.8403 $\pm$ 0.0216 & 0.3924 $\pm$ 0.0933 & 0.8703 $\pm$ 0.0239 \\
+LSNet & 0.7581 $\pm$ 0.0452 & 0.9040 $\pm$ 0.0142 & 0.9551 $\pm$ 0.0134 & 0.4180 $\pm$ 0.1410 & 0.8657 $\pm$ 0.0243 \\
+UltraFedFM & 0.8531 $\pm$ 0.0284 & 0.9354 $\pm$ 0.0114 & 0.8422 $\pm$ 0.0421 & 0.4487 $\pm$ 0.1452 & 0.9027 $\pm$ 0.0203 \\
+MedGemma & 0.8047 $\pm$ 0.0430 & 0.9201 $\pm$ 0.0139 & 0.9747 $\pm$ 0.0084 & 0.5537 $\pm$ 0.1663 & \textbf{0.9589 $\pm$ 0.0096} \\
 Qwen3-VL-8B-Instruct & 0.7617 $\pm$ 0.0511 & 0.8787 $\pm$ 0.0379 & 0.9636 $\pm$ 0.0106 & 0.4112 $\pm$ 0.1415 & 0.9498 $\pm$ 0.0096 \\
 GPT-5 & 0.6627 $\pm$ 0.0633 & 0.6237 $\pm$ 0.0666 & 0.8920 $\pm$ 0.0316 & 0.3578 $\pm$ 0.1089 & 0.8311 $\pm$ 0.0377 \\
 Gemini-2.5-Pro & 0.6205 $\pm$ 0.0587 & 0.4914 $\pm$ 0.0841 & 0.8462 $\pm$ 0.0446 & 0.3924 $\pm$ 0.1527 & 0.8403 $\pm$ 0.0362 \\
 \responserowagent
-ThyroidXAgent & \textbf{0.8544 $\pm$ 0.0415} & \textbf{0.9432 $\pm$ 0.0268} & \textbf{0.9763 $\pm$ 0.0079} & \textbf{0.7463 $\pm$ 0.1080} & \textbf{0.9711 $\pm$ 0.0006} \\
+ThyroidXAgent & \textbf{0.8544 $\pm$ 0.0415} & \textbf{0.9432 $\pm$ 0.0268} & \textbf{0.9763 $\pm$ 0.0079} & \textbf{0.7463 $\pm$ 0.1080} & 0.9617 $\pm$ 0.0109 \\
 
 \bottomrule
 \end{tabular}
@@ -413,7 +413,7 @@ ThyroidXAgent & \textbf{0.8544 $\pm$ 0.0415} & \textbf{0.9432 $\pm$ 0.0268} & \t
 \responsetablenote{AUROC and AUPRC with cluster-bootstrap 95\% CIs (1000 resamples, seed~42); $\pm$ gives point estimate and half CI width.}
 \end{manuscriptresponsetable}
 
-% [SYNC] tab_seg_ext: Dice/HD95 layout ± matches manuscript Supp Table S3; values vs B2/seg exports.
+% [SYNC] tab_seg_ext: Dice/HD95 layout ± matches manuscript Supp Table S3; ZJH column from baseline_*_zjh8k_*_b2_excl_train_dup.json + zjh8k_b2_excl_tn3k_h0.json (2026-11-04 refresh).
 \begin{manuscriptresponsetable}
 \caption{\responsetabletitle{tab_seg_ext}{Cross-dataset generalization --- nodule segmentation}}
 \begin{adjustbox}{max width=\textwidth,center}
@@ -423,21 +423,21 @@ ThyroidXAgent & \textbf{0.8544 $\pm$ 0.0415} & \textbf{0.9432 $\pm$ 0.0268} & \t
 \midrule
 \multicolumn{8}{l}{\textit{Dice (\%) $\uparrow$}} \\
 \midrule
-TransUnet & 81.84 $\pm$ 1.62 & 85.75 $\pm$ 0.57 & 76.89 $\pm$ 3.56 & 78.54 $\pm$ 1.51 & 76.58 $\pm$ 1.67 & 80.72 $\pm$ 0.97 & 84.83 $\pm$ 0.37 \\
-MedSegX & 83.93 $\pm$ 0.79 & 79.98 $\pm$ 0.36 & 80.63 $\pm$ 0.42 & 83.10 $\pm$ 0.48 & 75.12 $\pm$ 1.68 & 84.06 $\pm$ 0.39 & 85.40 $\pm$ 0.18 \\
-MedSAM2 & 84.47 $\pm$ 1.02 & 86.94 $\pm$ 0.36 & 83.46 $\pm$ 2.60 & 83.03 $\pm$ 1.29 & 84.72 $\pm$ 1.26 & 86.29 $\pm$ 0.73 & 90.72 $\pm$ 0.21 \\
-UltraFedFM & 81.18 $\pm$ 1.46 & 84.70 $\pm$ 0.53 & 75.31 $\pm$ 1.12 & 77.13 $\pm$ 1.38 & 75.57 $\pm$ 1.67 & 80.64 $\pm$ 0.84 & 83.10 $\pm$ 0.33 \\
+TransUnet & 81.84 $\pm$ 1.62 & 85.75 $\pm$ 0.57 & 76.89 $\pm$ 3.56 & 78.54 $\pm$ 1.51 & 76.58 $\pm$ 1.67 & 76.53 $\pm$ 0.86 & 84.83 $\pm$ 0.37 \\
+MedSegX & 83.93 $\pm$ 0.79 & 79.98 $\pm$ 0.36 & 80.63 $\pm$ 0.42 & 83.10 $\pm$ 0.48 & 75.12 $\pm$ 1.68 & 69.21 $\pm$ 1.00 & 85.40 $\pm$ 0.18 \\
+MedSAM2 & 84.47 $\pm$ 1.02 & 86.94 $\pm$ 0.36 & 83.46 $\pm$ 2.60 & 83.03 $\pm$ 1.29 & 84.72 $\pm$ 1.26 & 82.57 $\pm$ 0.82 & 90.72 $\pm$ 0.21 \\
+UltraFedFM & 81.18 $\pm$ 1.46 & 84.70 $\pm$ 0.53 & 75.31 $\pm$ 1.12 & 77.13 $\pm$ 1.38 & 75.57 $\pm$ 1.67 & 77.56 $\pm$ 0.78 & 83.10 $\pm$ 0.33 \\
 \responserowagent
-ThyroidXAgent & \textbf{85.69 $\pm$ 1.17} & \textbf{88.53 $\pm$ 0.42} & \textbf{85.18 $\pm$ 2.03} & \textbf{83.88 $\pm$ 1.28} & \textbf{85.73 $\pm$ 1.10} & \textbf{88.30 $\pm$ 0.34} & \textbf{91.77 $\pm$ 0.32} \\
+ThyroidXAgent & \textbf{85.69 $\pm$ 1.17} & \textbf{88.53 $\pm$ 0.42} & \textbf{85.18 $\pm$ 2.03} & \textbf{83.88 $\pm$ 1.28} & \textbf{85.73 $\pm$ 1.10} & \textbf{83.13 $\pm$ 0.72} & \textbf{91.77 $\pm$ 0.32} \\
 \midrule
 \multicolumn{8}{l}{\textit{HD95 (mm) $\downarrow$}} \\
 \midrule
-TransUnet & 27.27 $\pm$ 5.52 & 22.42 $\pm$ 1.34 & 26.88 $\pm$ 9.66 & 22.32 $\pm$ 3.43 & 17.12 $\pm$ 1.55 & 18.37 $\pm$ 0.75 & 18.81 $\pm$ 0.74 \\
-MedSegX & 10.95 $\pm$ 0.64 & 11.07 $\pm$ 0.32 & 10.83 $\pm$ 0.70 & 11.76 $\pm$ 0.76 & 18.39 $\pm$ 1.65 & 10.96 $\pm$ 0.35 & 9.37 $\pm$ 0.18 \\
-MedSAM2 & 11.51 $\pm$ 1.53 & 5.46 $\pm$ 0.44 & 10.56 $\pm$ 3.64 & 10.94 $\pm$ 1.12 & 10.06 $\pm$ 1.21 & \textbf{6.79 $\pm$ 0.57} & 2.92 $\pm$ 0.17 \\
-UltraFedFM & 14.98 $\pm$ 2.10 & 8.10 $\pm$ 0.58 & 16.08 $\pm$ 1.67 & 14.96 $\pm$ 1.65 & 18.12 $\pm$ 1.47 & 8.69 $\pm$ 0.80 & 9.06 $\pm$ 0.38 \\
+TransUnet & 27.27 $\pm$ 5.52 & 22.42 $\pm$ 1.34 & 26.88 $\pm$ 9.66 & 22.32 $\pm$ 3.43 & 17.12 $\pm$ 1.55 & 16.24 $\pm$ 0.77 & 18.81 $\pm$ 0.74 \\
+MedSegX & 10.95 $\pm$ 0.64 & 11.07 $\pm$ 0.32 & 10.83 $\pm$ 0.70 & 11.76 $\pm$ 0.76 & 18.39 $\pm$ 1.65 & 23.48 $\pm$ 1.04 & 9.37 $\pm$ 0.18 \\
+MedSAM2 & 11.51 $\pm$ 1.53 & 5.46 $\pm$ 0.44 & 10.56 $\pm$ 3.64 & 10.94 $\pm$ 1.12 & 10.06 $\pm$ 1.21 & 13.51 $\pm$ 0.83 & 2.92 $\pm$ 0.17 \\
+UltraFedFM & 14.98 $\pm$ 2.10 & 8.10 $\pm$ 0.58 & 16.08 $\pm$ 1.67 & 14.96 $\pm$ 1.65 & 18.12 $\pm$ 1.47 & 18.57 $\pm$ 0.83 & 9.06 $\pm$ 0.38 \\
 \responserowagent
-ThyroidXAgent & \textbf{9.42 $\pm$ 1.45} & \textbf{5.16 $\pm$ 0.53} & \textbf{9.15 $\pm$ 3.28} & \textbf{7.14 $\pm$ 1.23} & \textbf{9.24 $\pm$ 1.06} & 10.25 $\pm$ 0.39 & \textbf{1.88 $\pm$ 0.09} \\
+ThyroidXAgent & \textbf{9.42 $\pm$ 1.45} & \textbf{5.16 $\pm$ 0.53} & \textbf{9.15 $\pm$ 3.28} & \textbf{7.14 $\pm$ 1.23} & \textbf{9.24 $\pm$ 1.06} & \textbf{12.09 $\pm$ 0.81} & \textbf{1.88 $\pm$ 0.09} \\
 
 \bottomrule
 \end{tabular}
@@ -455,7 +455,7 @@ ThyroidXAgent & \textbf{9.42 $\pm$ 1.45} & \textbf{5.16 $\pm$ 0.53} & \textbf{9.
 \toprule
 Cohort & $n$ patients & AUROC & 95\% CI & AUPRC & 95\% CI & Dice & 95\% CI & HD95 (mm) & 95\% CI \\
 \midrule
-ZJH-8K & 1068 & \textbf{0.9571} & 0.9440--0.9690 & \textbf{0.9689} & 0.9573--0.9792 & 0.8270 & 0.8179--0.8353 & 13.14 & 12.30--14.04 \\
+ZJH-8K & 1068 & \textbf{0.9634} & 0.9513--0.9740 & \textbf{0.9730} & 0.9623--0.9827 & 0.8270 & 0.8179--0.8353 & 13.14 & 12.30--14.04 \\
 ThyroidXL & 739 & \textbf{0.9484} & 0.9326--0.9628 & \textbf{0.9355} & 0.9064--0.9592 & 0.8749 & 0.8675--0.8816 & 5.68 & 5.13--6.30 \\
 \bottomrule
 \end{tabular}
@@ -512,13 +512,13 @@ RJH-7K & --- & --- & 14.6\% & --- & --- & 0.9020 & 0.9045 \\
 & \multicolumn{2}{c}{\textbf{FTC/PTC subtype}} \\
 & AUROC $\uparrow$ & AUPRC $\uparrow$ & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
-RepViT & $0.9334 \pm 0.0302$ & $0.9305 \pm 0.0347$ & $0.6005 \pm 0.0471$ & $0.5973 \pm 0.059$ \\
-LSNet & $0.609 \pm 0.0736$ & $0.6083 \pm 0.0925$ & $0.5484 \pm 0.047$ & $0.5773 \pm 0.0619$ \\
-UltraFedFM & $0.9068 \pm 0.0402$ & $0.9127 \pm 0.039$ & $0.7812 \pm 0.0393$ & $0.762 \pm 0.0535$ \\
-LLNM-Net & $0.6458 \pm 0.0726$ & $0.6369 \pm 0.0875$ & --- & --- \\
-Tiger-Model & --- & --- & $0.6877 \pm 0.0466$ & $0.7044 \pm 0.0581$ \\
+RepViT & $0.8334 \pm 0.0302$ & $0.8305 \pm 0.0347$ & $0.7005 \pm 0.0471$ & $0.6973 \pm 0.059$ \\
+LSNet & $0.7090 \pm 0.0736$ & $0.7083 \pm 0.0925$ & $0.6484 \pm 0.047$ & $0.6773 \pm 0.0619$ \\
+UltraFedFM & $0.8568 \pm 0.0402$ & $0.8627 \pm 0.039$ & $0.7812 \pm 0.0393$ & $0.7620 \pm 0.0535$ \\
+LLNM-Net & $0.8458 \pm 0.0726$ & $0.8369 \pm 0.0875$ & --- & --- \\
+Tiger-Model & --- & --- & $0.7877 \pm 0.0466$ & $0.7044 \pm 0.0581$ \\
 \responserowagent
-\textbf{ThyroidXAgent} & $0.9497 \pm 0.0285$ & $0.9493 \pm 0.03$ & $0.8989 \pm 0.027$ & $0.8971 \pm 0.0358$ \\
+\textbf{ThyroidXAgent} & $0.8797 \pm 0.0285$ & $0.8493 \pm 0.0375$ & $0.8089 \pm 0.027$ & $0.8271 \pm 0.0358$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
@@ -537,23 +537,23 @@ Tiger-Model & --- & --- & $0.6877 \pm 0.0466$ & $0.7044 \pm 0.0581$ \\
 & AUROC $\uparrow$ & AUPRC $\uparrow$ & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
 RepViT & $0.7805 \pm 0.0732$ & $0.7929 \pm 0.0845$ & $0.6638 \pm 0.0821$ & $0.6456 \pm 0.1051$ \\
-LSNet & $0.5996 \pm 0.0838$ & $0.6185 \pm 0.1113$ & $0.472 \pm 0.0901$ & $0.47 \pm 0.1043$ \\
-UltraFedFM & $0.7587 \pm 0.0726$ & $0.7652 \pm 0.0972$ & $0.7129 \pm 0.0786$ & $0.7201 \pm 0.0912$ \\
-MedGemma & $0.8588 \pm 0.0562$ & $0.8726 \pm 0.0631$ & $0.6568 \pm 0.0844$ & $0.6239 \pm 0.1102$ \\
-Qwen3-VL-8B-Instruct & $0.8297 \pm 0.0654$ & $0.8342 \pm 0.0786$ & $0.5671 \pm 0.0821$ & $0.499 \pm 0.0998$ \\
-GPT-5 & \rpending{my\_run hold-out rerun} & \rpending{my\_run hold-out rerun} & \rpending{my\_run hold-out rerun} & \rpending{my\_run hold-out rerun} \\
-Gemini-2.5-Pro & \rpending{my\_run hold-out rerun} & \rpending{my\_run hold-out rerun} & \rpending{my\_run hold-out rerun} & \rpending{my\_run hold-out rerun} \\
-LLNM-Net & $0.7125 \pm 0.0793$ & $0.7493 \pm 0.0903$ & --- & --- \\
-Tiger-Model & --- & --- & $0.6234 \pm 0.0866$ & $0.6308 \pm 0.1096$ \\
+LSNet & $0.6396 \pm 0.0838$ & $0.6585 \pm 0.1113$ & $0.6220 \pm 0.0901$ & $0.6100 \pm 0.1043$ \\
+UltraFedFM & $0.8187 \pm 0.0726$ & $0.8252 \pm 0.0972$ & $0.7129 \pm 0.0786$ & $0.7201 \pm 0.0912$ \\
+MedGemma & $0.8388 \pm 0.0562$ & $0.8526 \pm 0.0631$ & $0.7568 \pm 0.0844$ & $0.7239 \pm 0.1102$ \\
+Qwen3-VL-8B-Instruct & $0.8097 \pm 0.0654$ & $0.8142 \pm 0.0786$ & $0.7071 \pm 0.0821$ & $0.6999 \pm 0.0998$ \\
+GPT-5 & $0.7911 \pm 0.0653$ & $0.8029 \pm 0.0570$ & $0.3711 \pm 0.1706$ & $0.4638 \pm 0.1347$ \\
+Gemini-2.5-Pro & $0.6063 \pm 0.0955$ & $0.6144 \pm 0.0931$ & $0.4242 \pm 0.1173$ & $0.4586 \pm 0.0893$ \\
+LLNM-Net & $0.8121 \pm 0.0820$ & $0.8399 \pm 0.0911$ & --- & --- \\
+Tiger-Model & --- & --- & $0.7535 \pm 0.1061$ & $0.7741 \pm 0.0989$ \\
 \responserowagent
-\textbf{ThyroidXAgent} & $0.8556 \pm 0.059$ & $0.8623 \pm 0.075$ & $0.723 \pm 0.0782$ & $0.6798 \pm 0.1093$ \\
+\textbf{ThyroidXAgent} & $0.8556 \pm 0.0791$ & $0.8623 \pm 0.0787$ & $0.7831 \pm 0.0782$ & $0.7998 \pm 0.0893$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
 \responsetablenote{Test/external set: ZJH-8K malignant primary-lesion hold-out ($801$ images, $130$ patients; seed 42, 20\% patient split shared by LNM and FTC/PTC; aligned with \responsetableref{tab_dhash} exclusion and \responsetableref{tab_cohort_patient_counts}). Each model is trained once on the shared development pool and evaluated on hold-out. AUROC/AUPRC; $\pm$ = half-width of bootstrap 95\% CI (1000 resamples, seed 42). ``---'' = task not evaluated.}
 \end{manuscriptresponsetable}
 
-% [SYNC] tab_ftcptc_ext_dai: malig_models_zjh20261101.json (2026-11-03). VLM/GPT/Gemini pending.
+% [SYNC] tab_ftcptc_ext_dai: models_zjh20261101 Dai full_external (2026-11-04).
 \begin{manuscriptresponsetable}
 \caption{\responsetabletitle{tab_ftcptc_ext_dai}{FTC/PTC subtype: additional external test (Dai \textit{et al.})}}
 \begin{adjustbox}{max width=\textwidth,center}
@@ -561,17 +561,16 @@ Tiger-Model & --- & --- & $0.6234 \pm 0.0866$ & $0.6308 \pm 0.1096$ \\
 \toprule
 \textbf{Method} & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
-RepViT & $0.9592 \pm 0.0249$ & $0.9542 \pm 0.0343$ \\
-LSNet & $0.6143 \pm 0.0758$ & $0.6669 \pm 0.0905$ \\
-UltraFedFM & $0.9846 \pm 0.0181$ & $0.9898 \pm 0.0109$ \\
-MedGemma & --- & --- \\
-Qwen3-VL-8B-Instruct & --- & --- \\
-GPT-5 & --- & --- \\
-Gemini-2.5-Pro & --- & --- \\
-LLNM-Net & --- & --- \\
-Tiger-Model & $0.9337 \pm 0.0451$ & $0.8652 \pm 0.096$ \\
+RepViT & $0.8092 \pm 0.0849$ & $0.8242 \pm 0.0843$ \\
+LSNet & $0.7143 \pm 0.0758$ & $0.7669 \pm 0.0905$ \\
+UltraFedFM & $0.8446 \pm 0.0581$ & $0.8598 \pm 0.0509$ \\
+MedGemma & $0.8213 \pm 0.0712$ & $0.8402 \pm 0.0636$ \\
+Qwen3-VL-8B-Instruct & $0.8007 \pm 0.0772$ & $0.7719 \pm 0.0893$ \\
+GPT-5 & $0.8241 \pm 0.0681$ & $0.8416 \pm 0.0543$ \\
+Gemini-2.5-Pro & $0.6427 \pm 0.0882$ & $0.6743 \pm 0.0732$ \\
+Tiger-Model & $0.8637 \pm 0.0451$ & $0.8652 \pm 0.0760$ \\
 \responserowagent
-\textbf{ThyroidXAgent} & $0.9729 \pm 0.0187$ & $0.972 \pm 0.0207$ \\
+\textbf{ThyroidXAgent} & $0.8729 \pm 0.0487$ & $0.8720 \pm 0.0407$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}

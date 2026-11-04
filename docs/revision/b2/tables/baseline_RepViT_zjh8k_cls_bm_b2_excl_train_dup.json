@@ -5,44 +5,44 @@
   "cohort_id": "zjh8k_cls_bm",
   "manifest": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/RepViT/zjh8k_cls_bm/manifest.json",
   "predictions": "/mnt/wangbd8/workspace/ThyroidAgent/b2_exports/RepViT/zjh8k_cls_bm/predictions.jsonl",
-  "n_records": 6966,
+  "n_records": 6807,
   "cluster_map": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b2/cluster_maps/zjh8k.json",
   "bootstrap": {
     "n": 1000,
     "seed": 42
   },
   "exclusion": {
-    "exclude_images": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b1/tables/zjh_excl_train_dhash0_manifest.json",
-    "n_listed": 992,
+    "exclude_images": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b1/tables/zjh_excl_tn3k_train_dhash0_manifest.json",
+    "n_listed": 1151,
     "criterion": "image_name in exclude list (sensitivity analysis)"
   },
   "classification": {
     "task": "classification",
-    "n_images": 6966,
-    "n_clusters": 1078,
+    "n_images": 6807,
+    "n_clusters": 1068,
     "image_level_cluster_bootstrap": {
       "auroc": {
-        "mean": 0.825004598816014,
-        "ci_lower": 0.8028782984299685,
-        "ci_upper": 0.8453699079252077
+        "mean": 0.8246480287501702,
+        "ci_lower": 0.8033800309025115,
+        "ci_upper": 0.8467092199501587
       },
       "auprc": {
-        "mean": 0.8706789636002985,
-        "ci_lower": 0.8460450795631996,
-        "ci_upper": 0.890925987588973
+        "mean": 0.8702674598240628,
+        "ci_lower": 0.8452915158493284,
+        "ci_upper": 0.8930283492571317
       }
     },
     "patient_level": {
-      "n_patients": 1078,
+      "n_patients": 1068,
       "auroc": {
-        "mean": 0.8903784205902451,
-        "ci_lower": 0.8706718943015198,
-        "ci_upper": 0.9077003900341667
+        "mean": 0.8900791888012276,
+        "ci_lower": 0.8711612847314787,
+        "ci_upper": 0.908184086038234
       },
       "auprc": {
-        "mean": 0.928006508241795,
-        "ci_lower": 0.9097677941051642,
-        "ci_upper": 0.9423540001511187
+        "mean": 0.9266514152938798,
+        "ci_lower": 0.9088217421931313,
+        "ci_upper": 0.9423486151730651
       }
     }
   }
