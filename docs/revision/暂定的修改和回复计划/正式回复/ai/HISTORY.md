@@ -689,6 +689,16 @@
 
 ---
 
+## 2026-11-10 — ZJH 机构口径入信；移除 Dai PTC-vs-FTC 外测
+
+**文件：** `body_en.tex`、`body_zh.tex`；`docs/chenfei-回信口径-ZJH.md`（内部对账）
+
+**做了什么：** 按采纳默认撰写 R2.4（2016--2023、dHash 去重、无 ID 对账）、R2.5（ZJH 病理/mask/黑边）、R2.10（经典型 vs 滤泡变异型 PTC；非组织学 FTC）、R2.12（CN0/CN1 中央区、原发灶输入）；删除 `tab_ftcptc_ext_dai` 及全文 Dai 引用；恶性表列题改为 classic vs follicular-variant PTC。
+
+**教训 / 避免重犯：** ZJH `FTCPTC`/亚型 1--2 与公共 PTC-vs-FTC 外测不可混报；陈飞项未再留 `\rpending` 时须在 Methods 统稿同步。
+
+---
+
 ## 2026-11-02 — R2.11 (b)：删除无内容 `\rpending{(R2.11)}`
 
 **文件：** `body_en.tex`、`body_zh.tex`
@@ -696,3 +706,33 @@
 **做了什么：** (b) 数据增强段已完整陈述协议并指 `tab_baseline_protocol`；去掉仅含 `(R2.11)` 的红色 pending（PDF 只显示「待补充」却无具体项）。
 
 **教训 / 避免重犯：** 勿用 `\rpending{(R*编号)}` 占位；稿面待改须 `\rpending{Manuscript: …}` 或删 pending，Methods 同步在统稿计划里跟踪即可。
+
+---
+
+## 2026-11-10 — 蓝色回复去 `\textbf`；`\rpending` 盘点
+
+**文件：** `body_en.tex`、`body_zh.tex`
+
+**做了什么：** 仅在 `\begin{authorresponse}...\end{authorresponse}` 内剥除 `\textbf{...}`（表内冠军加粗、附录表头等未动）。`body_*` 中 `\rpending` 共 8 处/语种：NHC 元数据 1；稿面同步 6；回信待补层级流程图 1。
+
+**教训 / 避免重犯：** 蓝色正文勿用假小标题 `\textbf`；层级流程图 pending 是「入信」而非 `Manuscript:`，与主稿统稿类 pending 分开跟踪。
+
+---
+
+## 2026-11-10 — 主稿修订 pending 迁入 `MANUSCRIPT_REVISION_CHECKLIST.md`
+
+**文件：** `ai/MANUSCRIPT_REVISION_CHECKLIST.md`（新）；`body_en.tex`、`body_zh.tex`；`ai/README.md`
+
+**做了什么：** R2.1（摘要/均值）、R2.3+R3.3（28,458 表述）、R2.20（Methods 连通域）共 6 处/语种 `\rpending` 从回信删除；清单中附对应审稿意见原文摘要与可勾选主稿任务。回信 `body_*` 仅留 R1.3（NHC）、R3.3（层级流程图入信）pending。
+
+**教训 / 避免重犯：** 主稿待改写进 `MANUSCRIPT_REVISION_CHECKLIST.md`，勿在 `\authorresponse` 再用 `Manuscript:` 红色 pending；Fig.~3 等已在蓝字承诺的项也列入清单便于统稿勾选。
+
+---
+
+## 2026-11-10 — 回信 PDF：剔除 `my_run` / 库表字段名
+
+**文件：** `body_en.tex`、`body_zh.tex`
+
+**做了什么：** R2.11 删 `my_run pred-mask`；R2.10/R2.12 与 `tab_malig_oof` 表注去掉 `\texttt{FTCPTC}`、`\texttt{LNM\_CN01}`；manifest→cohort（R2.11）。全 `generated/*.tex` 扫描：其余内部路径/脚本名仅在 `%` 注释。
+
+**教训 / 避免重犯：** 见 `latex/README.md`「审稿人可读性」；训练配置/日志名、磁盘路径只进 `% [SYNC]`，不出现在蓝字/表注/附录叙述。

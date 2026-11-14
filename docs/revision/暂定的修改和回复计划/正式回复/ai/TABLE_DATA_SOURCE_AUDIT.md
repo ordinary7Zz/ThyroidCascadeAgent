@@ -11,7 +11,7 @@ LaTeX 源码中每张表 `\begin{...table}` 前均有 `% [数据来源]` / `% [D
 | `tab_seg_ext` | **真实** | 同上 B2 |
 | `tab_calib_referral` | **fake_display（2026-10-30）** | 八队列 `cohorts_test_fit/*/abstention_eval_fake.json` + `results_flagged_fake.json`；Dice 见 `compute_r4_dice.py --flagged-json results_flagged_fake.json`（DDTI 行 Dice 用 `ddti_seg`） |
 | `tab_malig_oof` | **真实（部分）** | `docs/revision/b9/runs/models_zjh20261101/*/oof/**/cv_summary.json` + `docs/revision/b9/tables/malig_models_zjh20261101.json`（2026-11-03）；ThyroidXAgent/LLNM `\rpending` |
-| `tab_malig_ext` | **真实（部分）** | 同上 `.../full_external/external_summary.json` + 预测 JSON 逐图 bootstrap；MedGemma/Qwen3/RepViT–UltraFedFM/ThyroidXAgent 已填；LLNM/GPT/Gemini `\rpending` |
+| `tab_malig_ext` | **真实（部分）** | 同上 `.../full_external/external_summary.json` + 预测 JSON 逐图 bootstrap；MedGemma/Qwen3/RepViT–UltraFedFM/ThyroidXAgent 已填；LLNM/GPT/Gemini `\rpending`；**无** Dai 外测表（2026-11-10 移除 `tab_ftcptc_ext_dai`） |
 | `tab_patient_cls` | **真实** | B2 `zjh8k_b2.json`、`baseline_*_cls_bm_b2.json` → `patient_level` |
 | `tab_patient_seg` | **真实** | B2 JSON `segmentation.patient_level`（Dice + HD95） |
 | `tab_routing_stability` | **真实** | B6 `output/b6/`、`config/revision/b6/` |
