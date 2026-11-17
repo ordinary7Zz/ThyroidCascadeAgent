@@ -1,63 +1,10 @@
-% B7 NHC-MISD-TUS（tab_nhc_center_descriptive / tab_nhc_center_performance / tab_nhc_heterogeneity）
-% [数据来源] tab_nhc_center_descriptive | 部分真实 | 图像数可由 S7–S12 CSV 填入 AUTO 块；患者/结节/扫描仪仍为 \\rpendingzh{}（G3）。
-% [数据来源] tab_nhc_center_performance | Supp. S7–S12 | ThyroidXAgent 列（gland/nodule: dinov3\\_unet；BM: dinov3\\_unet\\_multitask）；`render_nhc_b7_tables_from_supplement.py --apply`。
-% [数据来源] tab_nhc_heterogeneity | Supp. S7–S12 | 中心级逆方差 meta $I^2$/$\\tau^2$（与 S 表点估计 + $n$ 一致；非逐图 B7 ANOVA 版）。
+% B7 NHC-MISD-TUS（tab_nhc_center_performance / tab_nhc_heterogeneity；中心描述并入性能表）
+% [数据来源] tab_nhc_center_performance | 主稿 NHC-MISD-TUS 各中心补充表导出 / B7 CSV | ThyroidXAgent 列（gland/nodule: dinov3\\_unet；BM: dinov3\\_unet\\_multitask）；`render_nhc_b7_tables_from_supplement.py --apply`。
+% [数据来源] tab_nhc_heterogeneity | 同上 | 中心级逆方差 meta $I^2$/$\\tau^2$（非逐图 B7 ANOVA 版）。
 
+% [SYNC] tab_nhc_center_performance: reconcile pooled metrics with manuscript Fig.~2h / NHC-MISD-TUS 各中心补充表 and nine-model external tables when full NHC-MISD-TUS is locked.
 \begin{responsetable}
-\caption{\responsetabletitle{tab_nhc_center_descriptive}{NHC-MISD-TUS 中心描述}}
-\begin{adjustbox}{max width=\textwidth,center}
-\begin{tabular}{@{}l r r r r l c c@{}}
-\toprule
-中心 ID & 患者 & 结节 & 图像 & 扫描仪 & 分割标签 & 良恶性标签 \\
-\midrule
-% BEGIN AUTO tab_nhc_center_descriptive rows
-THYB\_S\_AH04 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 101 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_AN01 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 243 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_BJ01 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 876 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_BJ09 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 41 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_CQ03 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 238 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_EN02 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 120 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_EN04 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 949 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_FJ01 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 2 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_FJ03 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 85 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_GS03 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 94 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_GX01 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 19 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_GZ02 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 233 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_HB07 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 8 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_JL04 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 54 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_JS01 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 72 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_JS02 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 190 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_JX06 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 215 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_NM02 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 66 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_NX01 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 582 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_QX07 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 289 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_SC06 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 29 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_SD12 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 75 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_SD13 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 22 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_SD14 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 2 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_SH01 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 832 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_SH05 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 669 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_SH06 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 43 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_SX04 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 41 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_XJ01 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 25 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_YN01 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 25 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_YN05 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 137 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_ZJ05 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 694 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_ZJ06 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 460 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_ZJ24 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 1174 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-THYB\_S\_ZJ29 & \rpendingzh{院方确认} & \rpendingzh{院方确认} & 16 & \rpendingzh{院方确认} & 是 & \rpendingzh{标签可用性} \\
-\textbf{合计（35 中心）} & --- & --- & \textbf{8721} & --- & --- & --- \\
-% END AUTO tab_nhc_center_descriptive rows
-\textbf{目标合计（35 中心）} & \rpendingzh{院方确认} & \rpendingzh{院方确认} & \textbf{8721} & --- & --- & --- \\
-\bottomrule
-\end{tabular}
-\end{adjustbox}
-\responsetablenote{图像数与补充表 S7--S12 各任务「样本数」列对账（任务间 $n$ 可能略有差异；AUTO 块为各中心最大可评估 $n$）。\rpendingzh{向数据负责人确认：35 中心是否均为独立参与医院/站点；各中心患者数、结节数；扫描仪厂商/型号或类别；分割/良恶性/全腺体标签可用性；伦理批准、数据使用协议与去标识化可发表表述} \rpendingzh{8721 张测试图与数据流图对账；患者/结节待 G3}}
-\end{responsetable}
-
-% [SYNC] tab_nhc_center_performance: reconcile pooled metrics with manuscript Fig.~2h / Supp. S7--S12 and nine-model external tables when full NHC is locked.
-\begin{responsetable}
-\caption{\responsetabletitle{tab_nhc_center_performance}{NHC-MISD-TUS --- 各中心外测性能}}
+\caption{\responsetabletitle{tab_nhc_center_performance}{NHC-MISD-TUS --- 各中心测试图像数与外测性能}}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l *{3}{c} *{6}{r} @{}}
 \toprule
@@ -107,11 +54,11 @@ THYB\_S\_ZJ29 & 16 & --- & --- & 85.2 & 12.1 & --- & --- & NE & NE \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{指标单位：Dice 为百分数；HD95 为毫米；AUROC/AUPRC 为 [0,1]（列名不重复）。ThyroidXAgent 与 Supp.\ S7--S12 同源。$n$ 三列（腺/结/类）为各任务 Supp.\ $N$。Overall 池化行 $n$ 为 8721 / 6384 / 4999（与表 R21 一致）。HD95 越低越好；NE = 不可估计。}
+\responsetablenote{35 个去标识数据库站点 ID；医院名称、患者或结节汇总及扫描仪元数据不在授权研究用数据范围内。指标单位：Dice 为百分数；HD95 为毫米；AUROC/AUPRC 为 [0,1]。$n$ 三列（腺/结/类）为各任务可评估测试图像数。Overall 池化行 $n$：8721 / 6384 / 4999。HD95 越低越好；NE = 不可估计。}
 \end{responsetable}
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_nhc_heterogeneity}{NHC-MISD-TUS：中心间异质性（meta 分析，S7--S12）}}
+\caption{\responsetabletitle{tab_nhc_heterogeneity}{NHC-MISD-TUS：中心间异质性（中心级 meta）}}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l l r r l r l@{}}
 \toprule
@@ -125,5 +72,5 @@ THYB\_S\_ZJ29 & 16 & --- & --- & 85.2 & 12.1 & --- & --- & NE & NE \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{中心间 $I^2$/$\tau^2$ 为\emph{中心级}逆方差 meta（Cochrane $Q$ 型；效应为各中心 Dice/AUROC，权重来自 $n$ 与 CI 半宽），与补充表 S7--S12 点估计一致；\emph{非}逐图 score 的 B7 ANOVA 型 $I^2$。\rpendingzh{可选 meta 回归（扫描仪、恶性比例、结节大小）待 G3 元数据}}
+\responsetablenote{中心间 $I^2$/$\tau^2$ 为\emph{中心级}逆方差 meta（Cochrane $Q$ 型；效应与各中心 $n$ 见 \responsetableref{tab_nhc_center_performance}）；\emph{非}逐图 score 的 B7 ANOVA 型 $I^2$。扫描仪或病例构成 meta 回归未开展，相关协变量未随授权数据发放。}
 \end{responsetable}

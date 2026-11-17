@@ -482,8 +482,7 @@ def main() -> None:
     )
 
     if args.apply:
-        patch_auto_block(TEX_ZH, "tab_nhc_center_descriptive rows", render_descriptive_image_rows(summary))
-        patch_auto_block(TEX_EN, "tab_nhc_center_descriptive rows", render_descriptive_image_rows_en(summary))
+        # tab_nhc_center_descriptive removed (merged into tab_nhc_center_performance)
         patch_auto_block(TEX_ZH, "tab_nhc_center_performance rows", render_performance_rows(summary, lang="zh"))
         patch_auto_block(TEX_EN, "tab_nhc_center_performance rows", render_performance_rows(summary, lang="en"))
         patch_auto_block(TEX_ZH, "tab_nhc_heterogeneity rows", render_heterogeneity_rows(summary, lang="zh"))

@@ -39,7 +39,7 @@
 
 - `\rpending{…}` 中若需内部跟踪，投稿前仍应改成审稿人可读表述或删除。
 
-NHC 表 `tab_nhc_center_descriptive` / `tab_nhc_center_performance` / `tab_nhc_heterogeneity` 另遵守下文「待定与修订稿承诺」中的 NHC 条款（与本节一致，不重复写路径/脚本）。
+NHC-MISD-TUS 表 `tab_nhc_center_descriptive` / `tab_nhc_center_performance` / `tab_nhc_heterogeneity` 另遵守下文「待定与修订稿承诺」中的 NHC-MISD-TUS 条款（与本节一致，不重复写路径/脚本）。
 
 ## 版式要点
 
@@ -83,7 +83,7 @@ NHC 表 `tab_nhc_center_descriptive` / `tab_nhc_center_performance` / `tab_nhc_h
 - `\rpendingzh{…}` / `\rpending{…}`：红色 `[待补充：…]` / `[PENDING: …]`。**两类用途**：（1）实验/表数字尚未定稿；（2）**必须在投稿正文中改写的句子**——前缀建议 `Manuscript:` / `正文：`，便于你后续全文扫描 pending。
 - **回复信蓝色正文默认不写「修订稿」「将在 Methods 中…」**；直接写协议与结果，用 `\responsetableref` / `\responsefigureref` 锚定证据，勿加「(本回复)」「(this letter)」类括号说明。对**送审稿**的事实性对照（如 layout 与投稿补充表一致）可保留，但不要承诺「修订稿将…」。
 - 确需改正文时：**本回复已给出的实质内容 + 一句 `\rpending{Manuscript: …}`**，勿在蓝色段落展开未来稿面全文。
-- **NHC（`tab_nhc_*`）**：遵守上文「审稿人可读性」；暂行子集（10 图）数字定稿后替换为全量 8721 图。院方元数据用 `\rpending` 标出。NHC **无** 策略 7 / LLM 全系统层 / 元数据热图（托管政策，正文写 N/A）。
+- **NHC-MISD-TUS（`tab_nhc_*`）**：遵守上文「审稿人可读性」；暂行子集（10 图）数字定稿后替换为全量 8721 图。院方元数据用 `\rpending` 标出。NHC-MISD-TUS **无** 策略 7 / LLM 全系统层 / 元数据热图（托管政策，正文写 N/A）。
 
 ## 性能表加粗规则
 

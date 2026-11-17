@@ -20,7 +20,7 @@ LaTeX 源码中每张表 `\begin{...table}` 前均有 `% [数据来源]` / `% [D
 | `tab_routing_ablation_seg` / `tab_routing_ablation_cls` | **真实** | `output/ablation/b3/`、`docs/revision/b3/` |
 | `tab_component_ablation_seg` / `tab_component_ablation_cls` | **摘录** | 与 `tab_routing_ablation_*` 同行；末行未加权均值手算 |
 | `tab_metadata_ablation_seg` / `tab_metadata_ablation_cls` | **真实** | B5 `output/ablation/b5/tn5k/` |
-| `tab_nhc_center_descriptive` / `tab_nhc_center_performance` / `tab_nhc_heterogeneity` | **待 CSV** | S7–S12 同源；`render_nhc_b7_tables_from_supplement.py --apply`；G3 患者/结节/扫描仪仍 pending |
+| `tab_nhc_center_performance` / `tab_nhc_heterogeneity` | **主稿 NHC-MISD-TUS 各中心补充表导出**（`per_center_tables.tex` / B7 CSV；**勿**在回信 tex 写死 Supp. 表号） | 中心描述并入 `tab_nhc_center_performance`（$n$ 列）；`render_nhc_b7_tables_from_supplement.py --apply`；患者/结节/扫描仪不披露 |
 | `tab_A1_decode` | **配置快照** | `router_spec.md`、agent 配置 |
 | `tab_A1_log_fields` | **Schema** | `routing_log` / `export_router_spec.py` |
 | `sec_A1_routing_exemplars` (Rec-01--Rec-10) | **真实（去标识）** | TN3K 路由记录样例（十条完整字段摘录） |

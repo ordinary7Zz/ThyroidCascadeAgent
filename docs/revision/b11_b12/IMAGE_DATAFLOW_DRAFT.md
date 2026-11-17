@@ -56,7 +56,7 @@ flowchart TB
 | Learned router | — | **Validation** fit |
 | Abstention / review flags | — | **Validation** only (B8) |
 
-主文 ThyroidXAgent（S4）为 **LLM 路由 + 全信号**；`config/revision/nhc_no_llm_primary.yaml` 为 **无 LLM** 的 NHC/B7/B8 冻结配置，图中应分开展示。
+主文 ThyroidXAgent（S4）为 **LLM 路由 + 全信号**；`config/revision/nhc_no_llm_primary.yaml` 为 **无 LLM** 的 NHC-MISD-TUS/B7/B8 冻结配置，图中应分开展示。
 
 ## 指标聚合（B12 / R2.7）
 

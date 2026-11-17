@@ -14,7 +14,7 @@
 |------|-------------------|------------|
 | **R3.3** | 澄清数据层级；训练/验证/测试在适用处**患者互斥**；**简单流程图**：患者 → 检查 → 图像/视频 → 病灶 → **任务** | **(A) Data hierarchy & tasks** |
 | **R1.4** | 因 **ZJH-8K** 双重用途，提供**完整数据流图**：**每个组件**用了哪些数据做 **训练、验证、阈值选择、测试** | **(B) Component-wise train · val · test**（图像臂主体） |
-| **R2.3**（常一并写进 caption） | 「28,458 cases」混用 **19,737 测试图 + 8,721 NHC**；**不含**报告生成与恶性子任务外测的计数方式 | 多在 **(A) 角注 + caption**，不必单独第三 panel |
+| **R2.3**（常一并写进 caption） | 「28,458 cases」混用 **19,737 测试图 + 8,721 NHC-MISD-TUS**；**不含**报告生成与恶性子任务外测的计数方式 | 多在 **(A) 角注 + caption**，不必单独第三 panel |
 
 **R1.4 原文要点（中文回信）**：ZJH-8K 为分割与良恶性外测，恶性图又用于 LNM/FTC 开发；需完整数据流图说明各组件的 train/val/阈值/test。
 
@@ -28,7 +28,7 @@
 
 - **应覆盖**：分割、良恶性分类、恶性子任务（LNM、FTC/PTC）、**报告生成**等在「任务」层的存在；检查层可区分 **image / video**（稿中 video 主要关联报告臂，如 TNVideo、读者研究）。
 - **不必在同一张简单图里**：报告各队列的 train/val/test 细节（SMU-HMC、KMVE、模板库等）→ **Fig. 5 + Shiyu S9**。
-- **28,458 澄清**：计数框按 **图像臂 + NHC** 写；**不要**把报告测试数塞进该合计。
+- **28,458 澄清**：计数框按 **图像臂 + NHC-MISD-TUS** 写；**不要**把报告测试数塞进该合计。
 
 ### R1.4
 
@@ -74,7 +74,7 @@
 - 中：编号链 ① Patient → ② Examination → ③ Image/video → ④ Lesion (ROI)。
 - 右：任务列（Seg、BM、LNM、FTC/PTC、**Report †**）。
 - 脚注：患者互斥 / 一图一簇（与 R1.1、R2.2 一致）。
-- 角注：**19,737（7 队列）+ 8,721 NHC**；不含报告/子任务外测计数。
+- 角注：**19,737（7 队列）+ 8,721 NHC-MISD-TUS**；不含报告/子任务外测计数。
 - **Report †** → 图注指向 **Fig. 5 / Supp.（S9）**。
 
 ### Panel (B) — R1.4（图像臂）
@@ -181,7 +181,7 @@ Top strip: “Seg → Cls → Route → Consensus” (AutoGluon is inside Expert
 3) Consensus / evidence fusion — one line: “Agreement shortcut or synthesize expert outputs (LLM in primary system)”. Do not diagram AutoGluon-specific routing here.
 
 RIGHT COLUMN (unchanged intent — test metadata):
-• External evaluation — three stacked rows: Public benchmarks (optional one 8pt line: TN3K · TN5K · ThyroidXL · DDTI · RJH-7K · PKTN test splits) · Institutional hold-out ZJH-8K 7,958 · Multicentre private NHC 8,721. Label row: “Evaluate only · frozen pipeline”.
+• External evaluation — three stacked rows: Public benchmarks (optional one 8pt line: TN3K · TN5K · ThyroidXL · DDTI · RJH-7K · PKTN test splits) · Institutional hold-out ZJH-8K 7,958 · Multicentre private NHC-MISD-TUS 8,721. Label row: “Evaluate only · frozen pipeline”.
 • Dual-role inset: ZJH malignant subset → LNM dev → LymphUs C2 test 158; FTC/PTC dev → FangDai test ~200; purple link to Institutional with “same images · different tasks”.
 
 Flow: left cards → Experts; green arrow through Router & Consensus → External zone.

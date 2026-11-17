@@ -729,6 +729,64 @@
 
 ---
 
+## 2026-11-15 — R2.15：伦理/NHC 治理（牵头 2026-KY-081-01 覆盖库外测）
+
+**文件：** `body_en.tex`、`body_zh.tex`；`MANUSCRIPT_REVISION_CHECKLIST.md`
+
+**做了什么：** 删除 R2.15「从略」；按 OMTA 思路回复：回顾性、批号、豁免、去标识；NHC 仅外测且纳入同一批件（假设伦理办确认范围）；公开集许可一句；主稿同步任务进清单 R2.15。
+
+**教训 / 避免重犯：** 未获伦理办书面确认前勿投稿；若批件不含标准库，须修正案并改回信第三段表述。
+
+---
+
+## 2026-11-15 — R2.6：NHC 腺/结/类计数不引数据流图
+
+**文件：** `body_en.tex`、`body_zh.tex`；`MANUSCRIPT_REVISION_CHECKLIST.md`
+
+**做了什么：** 删除 R2.6「层级见 `fig_image_dataflow`」；8721/6384/4999 改指 `\responsetableref{tab_nhc_center_performance}`（主稿 Fig.~3 数据流图无三任务分层）。
+
+---
+
+## 2026-11-15 — NHC 表：回信不再硬编码 Supp. S7--S12
+
+**文件：** `body_{en,zh}.tex`；`nhc_b7_tables_{en,zh}.tex`；`TABLE_DATA_SOURCE_AUDIT.md`；`MANUSCRIPT_REVISION_CHECKLIST.md`
+
+**做了什么：** 主稿与回信为两套 TeX，无法 `\ref` 跨工程；R2.6 与 NHC 表注/表题去掉 `Supp.\ S7--S12`，证据锚定为 `\responsetableref{tab_nhc_*}`；异质性表注改引同信 `tab_nhc_center_performance`。S 表号仅留在统稿清单与渲染脚本作者注释。
+
+**教训 / 避免重犯：** 回信审稿人可读层不写投稿补充表序号；对账写在 `TABLE_DATA_SOURCE_AUDIT` / `[SYNC]` 注释。
+
+---
+
+## 2026-11-15 — R3.3：层级图 pending 迁入清单；回信零 `\rpending`
+
+**文件：** `body_en.tex`、`body_zh.tex`；`ai/MANUSCRIPT_REVISION_CHECKLIST.md`（新增 R3.3 入信制图节）；`ai/PENDING.md`
+
+**做了什么：** 删除 R3.3 末句红色 pending；清单标题扩展为「主稿与回信」；层级流程图三步勾选留在清单，`body_*` 无任何 `\rpending`。
+
+**教训 / 避免重犯：** 制图/入信待办与主稿待改同轨进 `MANUSCRIPT_REVISION_CHECKLIST.md`，勿再在蓝色回复里标红。
+
+---
+
+## 2026-11-15 — R2.6：主稿任务迁入清单；回信不写修订稿承诺句
+
+**文件：** `body_en.tex`、`body_zh.tex`；`ai/MANUSCRIPT_REVISION_CHECKLIST.md`（新增 R2.6 节）
+
+**做了什么：** R2.6 开篇改为仅「本回复」；删除末句「已改正文 8721 cases」；NHC 稿面同步项写入主稿清单，不在回信留 Manuscript 型 `\rpending`。
+
+**教训 / 避免重犯：** 主稿待改只进 `MANUSCRIPT_REVISION_CHECKLIST.md`；回信 `\rpending` 仅用于入信制图等非稿面项（如 R3.3 层级图）。
+
+---
+
+## 2026-11-15 — R2.6：标准库披露边界；删除 `tab_nhc_center_descriptive`
+
+**文件：** `body_en.tex`、`body_zh.tex`；`nhc_b7_tables_{en,zh}.tex`；`ai/TABLE_DATA_SOURCE_AUDIT.md`、`ai/PENDING.md`
+
+**做了什么：** R2.6/R1.3 扩写：NHC-MISD-TUS 来源、35 匿名站点、8721=测试图像、平台入库与标注、未披露字段及不做 scanner/case-mix meta 回归。删除中心描述表，描述并入 `tab_nhc_center_performance`；表注去 G3 pending。
+
+**教训 / 避免重犯：** 无法再拿的元数据勿留 `\rpending{data steward}`；R2.6 证据用 performance + heterogeneity 两表即可。
+
+---
+
 ## 2026-11-10 — 回信 PDF：剔除 `my_run` / 库表字段名
 
 **文件：** `body_en.tex`、`body_zh.tex`
@@ -736,3 +794,13 @@
 **做了什么：** R2.11 删 `my_run pred-mask`；R2.10/R2.12 与 `tab_malig_oof` 表注去掉 `\texttt{FTCPTC}`、`\texttt{LNM\_CN01}`；manifest→cohort（R2.11）。全 `generated/*.tex` 扫描：其余内部路径/脚本名仅在 `%` 注释。
 
 **教训 / 避免重犯：** 见 `latex/README.md`「审稿人可读性」；训练配置/日志名、磁盘路径只进 `% [SYNC]`，不出现在蓝字/表注/附录叙述。
+
+---
+
+## 2026-11-15 — 队列命名：回信与内部文档统一 NHC-MISD-TUS
+
+**文件：** `body_{en,zh}.tex`、`nhc_b7_tables_{en,zh}.tex`、`R26_R215_SHIJIE_BRIEF.tex`；`ai/MANUSCRIPT_REVISION_CHECKLIST.md`、`ai/WRITING_STYLE.md`、`ai/TABLE_DATA_SOURCE_AUDIT.md`、`ai/PENDING.md`；`latex/README.md`；`docs/revision/NHC数据集工作.md`（R2.6 核对段）；`docs/revision/b11_b12/*` 数据流备忘
+
+**做了什么：** 凡指私有多中心外测队列处统一 **NHC-MISD-TUS**（首次出现仍可写全名「国家卫生健康委医学影像标准数据库」）；保留 `tab_nhc_*`、`nhc_routing_ablation`、`run_nhc_ablation.sh` 等实现标识不变。
+
+**教训 / 避免重犯：** 稿面/回信/主稿清单勿单独写裸 **NHC** 指队列；`NHC数据集工作.md` 运维段「NHC 机」「跑 NHC」仍指离线环境与脚本简称即可。

@@ -28,8 +28,8 @@
 外测表现的中心异质性。尽管在私有多中心队列上的总体性能令人鼓舞，但中心层面差异很大。例如，某些中心的结节分割性能低得多。作者应研究其与扫描仪类型、图像质量、病例构成与标注协议的关联，并为低置信病例定义校准、拒答或强制人工复核策略。
 \end{reviewercomment}
 \begin{authorresponse}
-我们同意私有多中心队列存在显著的中心间差异。NHC-MISD-TUS 的队列描述、按中心分割/分类表现及 $I^2$ 见 审稿人 2，意见 6（R2.6） 及 \responsetablerefrange{tab_nhc_center_descriptive}{tab_nhc_heterogeneity}。\par
-扫描仪、病例构成与标注协议（NHC）。\responsetableref{tab_nhc_center_descriptive} 汇总 35 中心、8721 张腺体测试图像（结节分割 6384、良恶性分类 4999）；与 Supp.\ S7--S12 一致的按中心 ThyroidXAgent 性能见 \responsetableref{tab_nhc_center_performance}，中心间 meta 异质性见 \responsetableref{tab_nhc_heterogeneity}（例如结节 Dice 池化 82.3\%、宏平均 81.6\%，$I^2{\approx}99.0\%$；良恶性 AUROC 池化 0.819、宏平均 0.754，$I^2{\approx}99.0\%$）。扫描仪厂商/型号、患者与结节计数等描述字段仍 \rpendingzh{待数据管理员元数据定稿后补入 R19，并做扫描仪/病例构成/标注协议的 formal meta-regression}。\par
+我们同意私有多中心队列存在显著的中心间差异。NHC-MISD-TUS 的按中心可评估图像数、ThyroidXAgent 表现及中心间 $I^2$ 见 审稿人 2，意见 6（R2.6） 及 \responsetablerefrange{tab_nhc_center_performance}{tab_nhc_heterogeneity}。\par
+国家卫生健康委医学影像标准数据库授权子集未向本研究团队发放扫描仪、病例构成或各中心标注者等协变量，故未开展相应的中心级 meta 回归；该队列的平台统一入库与任务标注说明见 R2.6。\par
 对低置信病例的校准与强制人工复核，我们在 TN3K、TN5K、ThyroidXL、ZJH-8K、DDTI 五个具备病理标签的外测队列上定义并量化（\responsetableref{tab_calib_referral}、\responsefigurerefrange{fig_reliability}{fig_risk_coverage}）。以投票熵、前两名恶性概率之差（margin）、各分割候选 mask 间最小 IoU 定义不确定度；送复核阈值仅在 OpenThyroid 合并验证集（$n{=}875$）上拟合（熵与 margin/IoU 分别取分位），任一超阈即送复核（OR 组合），阈值在各队列官方 test 划分上冻结（test 不再调参）。验证集送复核比例基本落在约 5\%--15\%；TN3K 等所列外测队列上的实际送复核比例见 \responsetableref{tab_calib_referral}（一位小数）。\par
 \responsetableref{tab_calib_referral} 中 ECE/Brier 为各外测全集上、已应用送复核标记后的校准指标。\responsefigurerefrange{fig_reliability}{fig_risk_coverage} 与 \responsetableref{tab_calib_referral} 使用同一套验证集拟定的冻结阈值；风险–覆盖率曲线上工作点与 \responsetableref{tab_calib_referral} 送复核\%一致。\par
 我们将其表述为回顾性工作流自动化：低不确定度病例可自动采纳模型输出，高不确定度病例送人工复核。阈值拟合与评估划分见 \responsetableref{tab_calib_referral} 及 \responsefigurerefrange{fig_reliability}{fig_risk_coverage}。\par
@@ -99,7 +99,7 @@ Cluster-bootstrap 95\% CI（1000 次、seed~42；\responsetableref{tab_cls_ext}�
 请澄清为什么把 28,458 个观测描述为「non-overlapping test cases」，因为这个数字似乎把 19,737 张测试图像与 8,721 个 NHC-MISD-TUS 病例合并在一起。
 \end{reviewercomment}
 \begin{authorresponse}
-我们同意并澄清：28,458 = 七个分割/分类队列 19,737 张测试图 + NHC 8,721 例之和；「non-overlapping test cases」混用图像与病例，且未含报告生成与恶性子任务外测。本回复改为分层计数（\responsefigureref{fig_image_dataflow}）。\par
+我们同意并澄清：28,458 = 七个分割/分类队列 19,737 张测试图 + NHC-MISD-TUS 8,721 例之和；「non-overlapping test cases」混用图像与病例，且未含报告生成与恶性子任务外测。本回复改为分层计数（\responsefigureref{fig_image_dataflow}）。\par
 \par
 \end{authorresponse}
 
@@ -109,9 +109,8 @@ ZJH-8K 与 TN3K 都采集自南方医科大学珠江医院。除非能证明它�
 \end{reviewercomment}
 \begin{authorresponse}
 我们同意。ZJH-8K 与 TN3K 同属南方医科大学珠江医院采集，不宜表述为独立 \emph{外部中心} 队列；修订稿将 ZJH-8K 表述为\emph{同院机构留出 / 机构外测}队列。\par
-ZJH-8K 为 2016--2023 年回顾性入库、与术后病理关联的机构超声队列；TN3K 为已公开发布的 OpenThyroid benchmark，划分与纳入范围不同。我们\emph{未}对 TN3K 与 ZJH-8K 做住院号/患者 ID 级系统对账；报告中的 ZJH 外测指标以 \emph{图像级} dHash 近重复筛查为跨库去重依据（\responsetableref{tab_dhash}）。\par
-我们在 \responsetableref{tab_dhash} 报告各公开队列 train 相对 ZJH-8K 全库（7958 张）的 dHash 筛查（Hamming $\leq$ 5，与 R1.1 同口径）。与「在 TN3K train 上训练、在 ZJH 上测试」相关的重叠主要来自 TN3K train vs ZJH-8K（1154 对 H=0，1151 张唯一 ZJH 图）。TN5K、ThyroidXL、PKTN 的 train 与 ZJH-8K 均为 0 对 H=0。\par
-本回复信中的 ZJH-8K 分割/分类及 ZJH 恶性子任务开发指标均在剔除上述 1151 张图后报告（外测 6807 张；LNM/PTC 亚型 ZJH 原发灶开发 4028 张），见 \responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext} 与 \responsetableref{tab_malig_oof}。\par
+我们\emph{未}对 TN3K 与 ZJH-8K 做住院号/患者 ID 级系统对账，无法按审稿人所述维度（患者人群、采集时段、流程等）逐项证明两库独立：TN3K 公开发布未提供可对 ZJH 做同等审计的采集年份或患者关联字段（ZJH-8K 在 Methods 中记为 2016--2023 回顾性机构队列、术后病理关联）。因此，报告中的 ZJH 外测指标以 \emph{图像级} dHash 近重复筛查为跨库泄漏控制依据（\responsetableref{tab_dhash}，与 R1.1 同口径）。\par
+各基础公开 \emph{train} 相对 ZJH-8K 全库（7958 张）在 Hamming $\leq$ 5 下筛查（\responsetableref{tab_dhash}）：与「TN3K train 训练、ZJH 外测」相关的重叠集中于 TN3K train 与 ZJH-8K（1154 对 H=0，1151 张唯一 ZJH 图）；TN5K、ThyroidXL、PKTN 的 train 与 ZJH-8K 均为 0 对 H=0。本回复信中 ZJH 分割/分类及恶性子任务指标均在剔除上述 1151 张后报告（外测 6807 张；LNM/PTC 亚型原发灶开发 4028 张），见 \responsetableref{tab_cls_ext}、\responsetableref{tab_seg_ext} 与 \responsetableref{tab_malig_oof}。\par
 \par
 \end{authorresponse}
 
@@ -120,14 +119,9 @@ ZJH-8K 为 2016--2023 年回顾性入库、与术后病理关联的机构超声�
 方法部分应说明结节分割与良恶性分类的参考标准、标注流程、标注者资质与分歧裁决、患者层面去重以及缺失数据的处理。
 \end{reviewercomment}
 \begin{authorresponse}
-我们同意 Methods 须写清各结节分割与良恶性分类队列的参考标准、标注流程、标注者资质与分歧裁决、患者层面去重及缺失数据处理。\par
-（1）参考标准、标注流程、标注者资质与分歧裁决。 公开 OpenThyroid 队列（TN3K、TN5K、ThyroidXL、PKTN、DDTI、RJH-7K 等）的分割 mask 与良恶性标签及官方划分，Methods 中按各数据集发表文献与官方 release 引用，不在本回复重复原始标注室协议。就 \emph{ZJH-8K}（本研究唯一用作机构分割/分类外测的自建队列）：良恶性标签以术后病理为准（部分病例辅以 FNA 细胞学及病理复核），对应\emph{每张图上的目标结节}；分割参考 mask 为甲状腺超声上该目标结节 ROI，由医院超声科/影像科医师勾画，分歧由上级医师复核定稿。修订稿 Methods 将单列 ZJH-8K 机构段落写明上述流程。\par
-（2）患者层面去重（各分割/分类队列）。 数据流与各划分角色见 \responsefigureref{fig_image_dataflow}；ZJH-8K 与 ThyroidXL 图像/患者规模见 \responsetableref{tab_cohort_patient_counts}。\par
-\textit{划分内互斥：} 凡队列提供可复现 patient ID（ZJH-8K、ThyroidXL），同一 patient ID 下全部图像/视图只保留在同一官方或预定义划分内，\emph{不会}将同一患者同时分入堆叠训练与外测（R1.1）。TN3K dHash 剔除后，ZJH 恶性子任务另设按 patient ID 分层的 hold-out（130 例、801 图；seed 42；LNM 与 PTC 亚型共用）；开发五折 OOF 仅在 train 患者上进行（\responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}）。\par
-\textit{跨来源去重：} 堆叠专家训练仅使用公开队列 \emph{train} 划分；外测队列（含 ZJH-8K、DDTI、RJH-7K、NHC-MISD-TUS 等）未参与该训练栈。各公开 \emph{train} 与 ZJH-8K 全库（7958 图）做 dHash 近重复筛查（Hamming $\leq$ 5；\responsetableref{tab_dhash}）；本回复信主外测指标在剔除与 TN3K train 精确匹配（H=0）的 \emph{1151} 张唯一 ZJH 图后报告（6807 图、1068 患者；R1.1、R2.4）。\par
-\textit{无 patient ID 的队列：} TN3K、TN5K、DDTI 等外测遵循官方 \emph{图像级} test 列表；bootstrap 簇定义按 R2.2 为 \emph{一图一簇}。患者级再分析与 cluster-bootstrap 汇总见 R1.1、R2.2 与 \responsetableref{tab_patient_cls}。\par
-（3）缺失数据（各分割/分类队列）。 对 mask 与标签\emph{不做插补}。构建各任务评估集时：结节分割仅纳入具有有效参考 mask 的图像；良恶性分类仅纳入具有有效二分类标签的图像；否则\emph{排除}，不赋予缺省标签或合成 mask。任务—队列不匹配按任务省略：例如 DDTI 外测共 637 图，其中 \emph{349} 张具良恶性标签，分类指标仅在该子集上计算；RJH-7K 仅参与分割外测、无本研究良恶性标签。损坏图像、mask--图像无法配对或标签字段缺失者在入池前剔除；本回复未另设各队列排除计数补充表，可评估样本量见各外测表与 \responsetableref{tab_cohort_patient_counts}。\par
-（4）图像预处理（超声黑边）。 推理与 mask 对齐前基于帧缘灰度阈值检测并裁剪均匀 letterbox 黑边，全队列采用同一规则，避免黑边进入专家输入；参数固定于预处理流水线，Methods 中简述。\par
+我们同意 Methods 须写清各结节分割与良恶性分类队列的参考标准、标注流程、标注者资质与分歧裁决、患者层面去重及缺失数据处理。公开 OpenThyroid 队列（TN3K、TN5K、ThyroidXL、PKTN、DDTI、RJH-7K 等）的分割 mask、良恶性标签及官方划分，将在 Methods 中按各数据集发表文献与官方 release 引用，本回复不重复原始标注室协议。\emph{ZJH-8K} 为本研究唯一用作机构分割/分类外测的自建队列：良恶性标签以术后病理为准（部分病例辅以 FNA 细胞学及病理复核），对应\emph{每张图上的目标结节}；分割参考 mask 为该目标结节在甲状腺超声上的 ROI，由医院超声科/影像科医师勾画，分歧由上级医师复核定稿。修订稿 Methods 将单列 ZJH-8K 机构段落写明上述流程。\par
+各划分角色见 \responsefigureref{fig_image_dataflow}。凡队列提供可复现 patient ID（ZJH-8K、ThyroidXL），同一患者下全部图像/视图只保留在同一官方或预定义划分内，\emph{不会}将同一患者同时分入 OpenThyroid 堆叠专家训练划分与外测（R1.1）。无公开 patient ID 的队列（如 TN3K、TN5K、DDTI）遵循各数据集官方发布的 \emph{图像级} train/val/test 划分，Methods 中按 release 引用说明。对 mask 与标签\emph{不做插补}：结节分割评估仅纳入具有有效参考 mask 的图像，良恶性分类仅纳入具有有效二分类标签的图像，否则\emph{排除}，不赋予缺省标签或合成 mask。任务—队列不匹配按任务省略，例如 DDTI 外测共 637 图，其中 \emph{349} 张具良恶性标签，分类指标仅在该子集上计算；RJH-7K 仅参与分割外测、无本研究良恶性标签。损坏图像、mask--图像无法配对或标签字段缺失者在入池前剔除。本回复未另设各队列排除计数表，可评估样本量见各外测表与 \responsetableref{tab_cohort_patient_counts}。\par
+推理与 mask 对齐前，我们基于帧缘灰度阈值检测并裁剪均匀 letterbox 黑边，全队列采用同一规则，避免黑边进入专家输入；参数固定于预处理流水线，Methods 中简述。\par
 \par
 \end{authorresponse}
 
@@ -136,8 +130,9 @@ ZJH-8K 为 2016--2023 年回顾性入库、与术后病理关联的机构超声�
 稿件报告在来自 35 个中心的 8,721 个病例上做了验证，但 NHC-MISD-TUS 队列的描述不足。作者应澄清这是否代表 35 家独立医院，并报告各中心的患者数、结节数与图像数，以及中心级宏平均性能与中心间异质性。
 \end{reviewercomment}
 \begin{authorresponse}
-我们同意须将 NHC-MISD-TUS 描述清楚：私有多中心\emph{仅测试}队列（\emph{35} 个参与中心、\emph{8721} 张腺体分割测试图像；结节分割 \emph{6384} 张、良恶性分类 \emph{4999} 张；层级见 \responsefigureref{fig_image_dataflow}）。按中心图像数、与补充表 S7--S12 一致的 ThyroidXAgent 性能及中心间 meta 异质性见 \responsetablerefrange{tab_nhc_center_descriptive}{tab_nhc_heterogeneity}。\par
-中心级\emph{等权宏平均}与 \emph{Overall 池化}（与 Supp.\ S7--S12 一致）：全腺体 Dice 宏平均 \emph{55.94\%}、池化 \emph{59.28\%}（35 中心，$I^2{\approx}99.9\%$）；结节 Dice 宏平均 \emph{81.64\%}、池化 \emph{82.31\%}（33 中心，$I^2{\approx}99.0\%$）；良恶性 AUROC 宏平均 \emph{0.754}、池化 \emph{0.819}（32 中心，$I^2{\approx}99.0\%$）。AUROC 不可估计的中心在 \responsetableref{tab_nhc_center_performance} 中标 NE，且不纳入 AUROC 宏平均。\par
+我们同意须在本回复中将 NHC-MISD-TUS 描述清楚。NHC-MISD-TUS 为国家卫生健康委医学影像标准数据库授权提供的甲状腺超声\emph{仅外测}多中心子集，未参与分割与分类专家堆叠训练；含 \emph{35} 个去标识参与站点 ID 及图像级外测计数：全腺体分割 \emph{8721} 张测试图，结节分割与良恶性分类在标签可用时分别为 \emph{6384} 与 \emph{4999} 张（各中心腺/结/类三任务可评估图像数见 \responsetableref{tab_nhc_center_performance}）。在多中心去标识与数据使用条件下，医院名称、患者级与结节级汇总及扫描仪台账未向本研究团队披露。\par
+参与单位经数据库平台按统一结构化规范提交脱敏病例（病史、约定超声视图与报告、病理等可用信息），平台质控后形成本研究使用的任务参考标注。因未发放各站点机构身份与设备元数据，我们未报告各中心患者数或结节数，亦未开展扫描仪或病例构成的 formal meta 回归。\par
+按中心可评估图像数、ThyroidXAgent 外测表现及中心间 meta 异质性见 \responsetablerefrange{tab_nhc_center_performance}{tab_nhc_heterogeneity}。中心级\emph{等权宏平均}与逆方差\emph{Overall 池化}汇总见上表（例如：全腺体 Dice 宏平均 \emph{55.94\%}、池化 \emph{59.28\%}，35 站点，$I^2{\approx}99.9\%$；结节 Dice 宏平均 \emph{81.64\%}、池化 \emph{82.31\%}，33 站点，$I^2{\approx}99.0\%$；良恶性 AUROC 宏平均 \emph{0.754}、池化 \emph{0.819}，32 站点，$I^2{\approx}99.0\%$）。AUROC 不可估计的站点在 \responsetableref{tab_nhc_center_performance} 中标 NE，且不纳入 AUROC 宏平均。\par
 \par
 \end{authorresponse}
 
@@ -164,7 +159,7 @@ ZJH-8K 为 2016--2023 年回顾性入库、与术后病理关联的机构超声�
 稿件称 LLM 路由器通过「推理」选择最佳专家输出，但未报告 prompt 设计、LLM 版本、解码参数、可复现性，以及当候选输出质量相近时的决策稳定性。路由器因此仍是黑箱选择器。作者应提供至少 10 个代表性病例的结构化路由记录，包括输入质量指标、候选输出、最终选择、不确定度指标、简要决策理由以及重复运行的一致性。
 \end{reviewercomment}
 \begin{authorresponse}
-附录 A1 列出 LLM 路由的模型与解码参数、与外测一致的精简 JSON prompt、输出字段及结构化路由记录项；记录候选质量、所选专家与置信度等可审计字段，不向 LLM 索取自然语言理由。在五 BM 外测队列（启用 LLM 路由者）的测试评估中，每一次调用 LLM 的分割/分类路由均写入可审计的结构化记录（记录项说明见附录 A1）；NHC 等无 LLM 部署队列不纳入本条。\par
+附录 A1 列出 LLM 路由的模型与解码参数、与外测一致的精简 JSON prompt、输出字段及结构化路由记录项；记录候选质量、所选专家与置信度等可审计字段，不向 LLM 索取自然语言理由。在五 BM 外测队列（启用 LLM 路由者）的测试评估中，每一次调用 LLM 的分割/分类路由均写入可审计的结构化记录（记录项说明见附录 A1）；NHC-MISD-TUS 等无 LLM 部署队列不纳入本条。\par
 相近候选分层：按各候选 mask 间一致度，最优与次优候选的质量分差 $\leq 0.10$ 记为「相近」、$>0.10$ 记为「易区分」。\responsetableref{tab_routing_stability} 在「相近」层上报告 LLM 一致性（本批 10 例抽样均为相近层）。记录中所选专家、候选相近度分层等项的含义见附录 A1。\par
 LLM 决策稳定性（多队列、相近候选）：在固定上游专家输出前提下，每个启用分割 LLM 路由的外测队列从其官方测试集中按固定随机种子（42）抽取 10 例；优先在「相近」层内抽样，对每例重复 5 次分割 LLM 路由，队列级报告 10 例的单例一致率算术平均（表内亦给出单例一致率范围）。汇总见 \responsetableref{tab_routing_stability}（每队列 $n{=}10$，每例 5 次重复；协议见表注）。当所有独立分类模型 top 类已一致时，分类走确定性共识（不调用 LLM），故不纳入上述重复实验。\par
 附录 A1 末附 Rec-01--Rec-10 去标识化路由记录样例（字段见表 A1-2），不以磁盘文件名作为病例标识。\par
@@ -177,7 +172,7 @@ LLM 决策稳定性（多队列、相近候选）：在固定上游专家输出�
 \end{reviewercomment}
 \begin{authorresponse}
 我们同意审稿人意见：原稿隐含的训练—外测标签不一致（ZJH 上经典型 PTC \emph{vs.} 滤泡变异型，却在公共外测上按组织学 PTC \emph{vs.} FTC 汇报）会使 FTC/PTC 性能解读无效。\par
-我们澄清：\emph{仅}在 ZJH-8K 上开展 PTC \emph{亚型}子任务。病理「亚型」编码含四类，本研究仅纳入 1（经典型甲状腺乳头状癌）与 2（滤泡型，即滤泡变异型 PTC），排除嗜酸细胞型与透明细胞型。二分类标签表示该索引灶术后病理上的经典型 \emph{vs.} 滤泡变异型 PTC，\emph{不是}组织学滤泡癌 \emph{vs.} 乳头状癌。开发五折 OOF 与 TN3K 剔除后的共享患者 hold-out（130 例、801 张原发灶图；seed 42）使用\emph{同一}标签定义（\responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}）。原与 ZJH 标签体系不符的跨数据集 PTC\emph{ vs.} FTC 外测比较已从本回复中移除。\par
+我们澄清：\emph{仅}在 ZJH-8K 上开展 PTC \emph{亚型}子任务。病理「亚型」虽编码为四类，本研究将子任务定义为\emph{二分类}：仅比较 1（经典型甲状腺乳头状癌）与 2（滤泡型，即滤泡变异型 PTC），不做四分类。编码 3（嗜酸细胞型）与 4（透明细胞型）在 ZJH 恶性原发灶队列中\emph{各自}仅有个位数\emph{病例}，故不纳入标签空间。二分类标签表示该索引灶术后病理上的经典型 \emph{vs.} 滤泡变异型 PTC，\emph{不是}组织学滤泡癌 \emph{vs.} 乳头状癌。开发五折 OOF 与 TN3K 剔除后的共享患者 hold-out（130 例、801 张原发灶图；seed 42）使用\emph{同一}标签定义（\responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}）。本回复不包含组织学 PTC \emph{vs.} FTC 的跨数据集外测，仅在 ZJH 上按上述定义汇报。\par
 \par
 \end{authorresponse}
 
@@ -200,7 +195,7 @@ LNM 任务只使用了 4,753 张恶性图像，而 Table S5 显示验证只有 2
 \begin{authorresponse}
 我们同意 LNM 术语与任务定义须写清。ZJH-8K 恶性\emph{甲状腺原发灶超声}上，二分类标签（CN0/CN1）为病例级术后病理记录的\emph{中央区}淋巴结转移状态（CN0=无，CN1=有），不单独表示侧颈转移。输入仅为原发灶图像，非颈部淋巴结专科超声。\par
 患者层面聚合（LNM / PTC 亚型，ZJH 原发灶）。 每张图先得到图像级类概率 $p_i$（LNM 或 PTC 亚型子任务专用分类器输出）。\emph{患者簇}由可复现 \emph{patient ID} 定义（同一患者名下多张原发灶图属同一簇；TN3K dHash 剔除与 train/test 划分见 \responsetableref{tab_dhash}、\responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}）。\emph{患者分数}为簇内图像概率的\emph{算术平均} $\bar p=\mathrm{mean}(\{p_i\})$；\emph{患者金标准}为病例级病理标签（LNM 的 CN0/CN1 或 PTC 亚型类别），同一患者簇内一致。开发集五折 OOF 与共享 ZJH 患者 hold-out 上的 AUROC/AUPRC 均在\emph{患者级} $(\bar p,\ \mathrm{label})$ 上计算；95\% CI 在\emph{患者簇}上有放回 bootstrap（1000 次，seed 42），与 审稿人 2，意见 2（R2.2）一致。五折分层与 hold-out 均在\emph{患者 ID} 层面互斥，避免同一患者跨折或同时进入开发与 hold-out。\par
-LNM 与 PTC 亚型均仅在 ZJH-8K 恶性\emph{甲状腺原发灶}超声上评估，开发五折 OOF 与患者 hold-out 共用同一划分（\responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}）。原稿中与 CN0/CN1 未共定义的「侧颈 LNM」混用表述已删除。\par
+LNM 与 PTC 亚型均仅在 ZJH-8K 恶性\emph{甲状腺原发灶}超声上评估，开发五折 OOF 与患者 hold-out 共用同一划分（\responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}）。\par
 开发集五折 OOF 与外测训练协议见 \responsetableref{tab_malig_oof}、\responsetableref{tab_malig_ext}。\par
 \par
 \end{authorresponse}
@@ -218,7 +213,7 @@ LNM 与 PTC 亚型均仅在 ZJH-8K 恶性\emph{甲状腺原发灶}超声上评�
 不清楚所有专家基线是在同一批开发数据上重训、使用原始权重评估，还是零样本测试。若 ThyroidXAgent 受益于多队列训练与任务特异模型而基线直接 off-the-shelf 使用，比较可能不公平。
 \end{reviewercomment}
 \begin{authorresponse}
-\responsetableref{tab_cls_ext} 与 R3 中监督基线均在同一分割/分类开发集上微调（协议见 \responsetableref{tab_baseline_protocol}），自公开上游预训练权重出发，非甲状腺零样本或仅用原始权重外测。完整 ThyroidXAgent 外测结果使用相同开发数据；R2.8 对路由策略 (1)(2)(7) 的解读见 审稿人 2，意见 8 及 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。闭源 VLM（GPT-5、Gemini）为 API + 固定 prompt；MedGemma、Qwen3-VL 在堆叠数据集（分类）上微调（见 \responsetableref{tab_baseline_protocol}）。\par
+我们同意：须明确各基线的训练与外测协议，比较才公平。\responsetableref{tab_cls_ext} 与 \responsetableref{tab_seg_ext} 中的监督专家基线，以及外测结果所依赖的 ThyroidXAgent 图像专家，均\emph{不是}甲状腺零样本测试，也\emph{不是}仅冻结上游权重外测：自公开上游权重出发，在同一 OpenThyroid 堆叠开发划分上全量微调（\responsetableref{tab_baseline_protocol}）。指定外测队列（如 DDTI、ZJH-8K）均不参与该开发微调（基线与 ThyroidXAgent 专家一致）。MedGemma、Qwen3-VL 与其余监督分类基线采用同一微调协议；GPT-5 与 Gemini 为厂商 API、固定 prompt，未在本研究甲状腺开发数据上微调。ThyroidXAgent 可部署外测臂（R2.8 策略 (7)）与基线共用上述专家开发协议；路由与 radiomics 在冻结专家输出上评估，八策略消融见审稿人 2 意见 8 及 \responsetablerefrange{tab_routing_ablation_seg}{tab_routing_ablation_cls}。\par
 \par
 \end{authorresponse}
 
@@ -227,7 +222,9 @@ LNM 与 PTC 亚型均仅在 ZJH-8K 恶性\emph{甲状腺原发灶}超声上评�
 稿件提供了伦理批号，但没有说明是否获得知情同意或予以豁免。对所有机构数据集，作者应报告研究设计与时段、同意或豁免安排、去标识化程序与数据治理措施。共同作者授权使用 NHC-MISD-TUS 不能替代伦理审批与合规监管的书面记录。
 \end{reviewercomment}
 \begin{authorresponse}
-\noindent\textit{本条与结节分割及良恶性分类无关；本回复信不作逐点回复。}
+我们同意须对研究中使用的各非公开数据来源记载伦理审批、知情同意或豁免、去标识化及数据治理安排。\par
+就南方医科大学珠江医院的机构甲状腺超声及相关资源（含本回复涉及分割、分类与恶性子任务中使用的 ZJH-8K 等队列），本研究为回顾性设计，经珠江医院医学伦理委员会批准（批号 2026-KY-081-01）。伦理委员会在已批方案条件下豁免本回顾性、去标识临床影像及关联标签使用中的书面知情同意要求。图像与报告在研究使用前完成去标识，访问限于经批准的课题组成员并受机构数据治理规则约束。\par
+NHC-MISD-TUS 为国家卫生健康委医学影像标准数据库授权的甲状腺超声子集；本研究中\emph{仅用于}分割与分类外测，未用于堆叠 OpenThyroid 专家训练。我们在同一已批方案（2026-KY-081-01）下使用经授权发放的多中心子集，并遵守其去标识与数据使用条件（队列定义与披露边界见 审稿人 2，意见 6，R2.6）。\par
 \end{authorresponse}
 
 \reviewersection{审稿人 2，意见 16（R2.16）}
@@ -328,10 +325,10 @@ LLM 路由器未以医院/中心 ID 监督微调。TN3K、TN5K、ThyroidXL、ZJH
 「28,458 non-overlapping test cases」的定义不清楚。请清楚描述数据层级，并确认所有训练/验证/测试划分均为患者互斥。此外，一张展示患者、检查、图像/视频、病灶与任务之间关系的简单流程图会大有帮助。
 \end{reviewercomment}
 \begin{authorresponse}
-我们同意须明确 患者/检查/图像/任务 层级，并在适用处说明 train/validation/test 是否患者互斥。``28,458 non-overlapping test cases'' 的分层计数与 审稿人 2，意见 3（R2.3）一致，见 \responsefigureref{fig_image_dataflow}。\par
-\responsefigureref{fig_image_dataflow} 概括图像分析臂：堆叠公开队列训练分割/分类专家（约 1.8 万图）、850 张合并验证集（专家选择、学习型路由与拒答阈值拟合；阈值外测冻结）、各独立外测队列，以及 ZJH 恶性子集仅用于 LNM/FTC 开发（通用外测与 LNM/FTC 外测分边与 审稿人 1，意见 4（R1.4）一致）；各来源队列及其任务角色亦列于该图。\par
-在此划分下，TN3K、TN5K、ThyroidXL、PKTN 等公开队列沿用其发布的 train/val/test；标为外测的队列（如 DDTI、RJH-7K、ZJH-8K、NHC）未参与分割/分类专家堆叠训练。ZJH-8K 与 ThyroidXL 在具备可复现 patient ID 时，bootstrap 与患者级分析采用患者簇（R1.1、R2.2）；无公开 ID 的外测队列按 R1.1 一图一簇处理（\responsetableref{tab_cls_ext}）。各来源 train 相对 ZJH-8K 的 dHash 筛查见 \responsetableref{tab_dhash}（R1.1、R2.4）。\par
-该图对应分割/分类组件的队列—划分—用途；审稿人所要求的 患者—检查—图像/视频—病灶—任务 层级流程图 \rpendingzh{待补：层级流程图入信（与图像分析数据流图分工）}。\par
+我们同意须明确 患者/检查/图像/任务 层级，并在适用处说明 train/validation/test 是否患者互斥。该汇总表述的分层计数与 审稿人 2，意见 3（R2.3）一致，见 \responsefigureref{fig_image_dataflow}。\par
+\responsefigureref{fig_image_dataflow} 概括图像分析臂：堆叠公开队列上训练分割/分类专家、合并验证集（专家选择、学习型路由与拒答阈值拟合；阈值外测冻结）、各独立外测队列，以及 ZJH 恶性子集仅用于 LNM/PTC 亚型开发（通用外测与恶性子任务外测分边与 审稿人 1，意见 4（R1.4）一致）；各来源队列、划分规模及任务角色见该图与图注。\par
+在此划分下，TN3K、TN5K、ThyroidXL、PKTN 等公开队列沿用其发布的 train/val/test；标为外测的队列（如 DDTI、RJH-7K、ZJH-8K、NHC-MISD-TUS）未参与分割/分类专家堆叠训练。ZJH-8K 与 ThyroidXL 在具备可复现 patient ID 时，bootstrap 与患者级分析采用患者簇（R1.1、R2.2）；无公开 ID 的外测队列按 R1.1 一图一簇处理（\responsetableref{tab_cls_ext}）。各来源 train 相对 ZJH-8K 的 dHash 筛查见 \responsetableref{tab_dhash}（R1.1、R2.4）。\par
+该图对应分割/分类组件的队列—划分—用途；上文已概括 患者—检查—图像/视频—病灶—任务 层级，与 \responsefigureref{fig_image_dataflow} 的队列划分示意相区分。\par
 \par
 \end{authorresponse}
 

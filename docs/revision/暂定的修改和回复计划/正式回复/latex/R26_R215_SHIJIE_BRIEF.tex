@@ -1,0 +1,32 @@
+% !TEX program = xelatex
+% !TEX encoding = UTF-8 Unicode
+% Internal brief for shijie: R2.6 + R2.15 (EN/ZH) and English NHC-MISD-TUS tables only.
+% Build: cd .../latex && xelatex R26_R215_SHIJIE_BRIEF.tex && xelatex R26_R215_SHIJIE_BRIEF.tex
+\documentclass[11pt,a4paper]{ctexart}
+\usepackage{reviewer_response}
+
+\setCJKmainfont{WenQuanYi Micro Hei}
+\setCJKsansfont{WenQuanYi Micro Hei}
+\setCJKmonofont{WenQuanYi Micro Hei}[Script=CJK]
+\setmainfont{TeX Gyre Termes}
+
+\renewcommand{\ReviewerCommentLabel}{Reviewer comment:}
+\renewcommand{\ResponseLabel}{Response:}
+\renewcommand{\SupportingLabel}{Supporting tables (English)}
+\renewcommand{\ManuscriptTitle}{ThyroidXAgent}
+\renewcommand{\ManuscriptJournal}{NHC-MISD-TUS brief for shijie --- R2.6 \& R2.15}
+
+\input{generated/response_asset_registry.tex}
+
+\begin{document}
+\noindent{\Large\textbf{NHC-MISD-TUS / ethics reviewer responses (internal)}}\\
+\noindent\textit{R2.6 cohort description and R2.15 ethics; copied from \texttt{body\_\{en,zh\}.tex}. Tables: \texttt{nhc\_b7\_tables\_en.tex}. Not for journal submission.}\par
+\vspace{1em}
+
+\input{generated/r26_r215_shijie_content.tex}
+
+\clearpage
+\section*{\SupportingLabel}
+\input{generated/nhc_b7_tables_en.tex}
+
+\end{document}

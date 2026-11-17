@@ -1,0 +1,49 @@
+% Excerpt for shijie: R2.6 / R2.15 only (sync from body_{en,zh}.tex when those sections change).
+\subsection*{Reviewer 2, Comment 6 (R2.6) --- English}
+\reviewersection{Reviewer 2, Comment 6 (R2.6)}
+\begin{reviewercomment}
+The manuscript reports validation on 8,721 cases from 35 centres, but the NHC-MISD-TUS cohort is insufficiently described. The authors should clarify whether these represent 35 independent hospitals and report the numbers of patients, nodules, and images per centre, together with centre-level macro-averaged performance and between-centre heterogeneity.
+\end{reviewercomment}
+\begin{authorresponse}
+We agree that NHC-MISD-TUS must be described clearly in this letter. NHC-MISD-TUS is a private, multi-centre, test-only thyroid ultrasound subset authorized from the National Health Commission Medical Imaging Standard Database; it was not used to train the stacked segmentation or classification experts. The release comprises 35 anonymized contributing site identifiers (Centre ID) and image-level external-test counts: \emph{8{,}721} gland-segmentation test images, with \emph{6{,}384} nodule-segmentation and \emph{4{,}999} benign--malignant classification images where labels were available (per-centre evaluable counts by gland, nodule, and classification task in \responsetableref{tab_nhc_center_performance}). Hospital names, patient-level totals, nodule-level totals, and scanner inventories are not disclosed to the research team under the governing de-identification and data-use conditions of this multicentre resource.\par
+Participating units submit de-identified cases through a standardized structured workflow on the database platform (clinical history, protocol ultrasound views, reports, and pathology where available); the platform performs quality control and produces task-specific reference labels used in this study. Centre-specific hospital identities or device metadata were not released, so we do not report per-centre patient or nodule counts or perform formal meta-regression on scanner type or case mix.\par
+Per-centre evaluable image counts, ThyroidXAgent external-test performance, and centre-level meta heterogeneity are in \responsetablerefrange{tab_nhc_center_performance}{tab_nhc_heterogeneity}. Unweighted \emph{macro} and inverse-variance \emph{Overall pooled} summaries are on the same tables (e.g., gland Dice macro \emph{55.94\%}, pooled \emph{59.28\%}, 35 sites, $I^2{\approx}99.9\%$; nodule Dice macro \emph{81.64\%}, pooled \emph{82.31\%}, 33 sites, $I^2{\approx}99.0\%$; benign--malignant AUROC macro \emph{0.754}, pooled \emph{0.819}, 32 sites, $I^2{\approx}99.0\%$). Centres with non-estimable AUROC are marked NE in \responsetableref{tab_nhc_center_performance} and excluded from the AUROC macro average.\par
+\par
+\end{authorresponse}
+
+\subsection*{Reviewer 2, Comment 15 (R2.15) --- English}
+\reviewersection{Reviewer 2, Comment 15 (R2.15)}
+\begin{reviewercomment}
+The manuscript provides an ethics approval number but does not state whether informed consent was obtained or waived. For all institutional datasets, the authors should report the study design and period, consent or waiver arrangements, de-identification procedures, and data-governance measures. Authorization by a co-author to use NHC-MISD-TUS does not replace documentation of ethical approval and regulatory compliance.
+\end{reviewercomment}
+\begin{authorresponse}
+We agree that ethical approval, consent or waiver arrangements, de-identification, and data governance must be documented for all non-public data sources used in this study.\par
+For institutional thyroid ultrasound and report resources at Zhujiang Hospital, Southern Medical University (including ZJH-8K and related cohorts used in segmentation, classification, and malignant-subtyping analyses in this letter), the study is retrospective. The protocol was approved by the Medical Ethics Committee of Zhujiang Hospital, Southern Medical University (approval no.\ 2026-KY-081-01). The ethics committee waived the requirement for written informed consent for this retrospective use of de-identified clinical imaging and linked labels, under the conditions stated in the approved protocol. Images and reports were de-identified before research use, and access was limited to approved investigators under institutional data-governance rules.\par
+NHC-MISD-TUS is an authorized thyroid ultrasound subset from the National Health Commission Medical Imaging Standard Database. In this study it was used \emph{only} for external testing of segmentation and classification; it was not used to train the stacked OpenThyroid experts. We used this multicentre release under the same approved protocol (2026-KY-081-01), with de-identification and data-use conditions as summarized in Reviewer~2, Comment~6 (R2.6).\par
+\end{authorresponse}
+
+\clearpage
+\subsection*{审稿人 2，意见 6（R2.6）--- 中文}
+\renewcommand{\ReviewerCommentLabel}{审稿意见：}
+\renewcommand{\ResponseLabel}{回复：}
+\reviewersection{审稿人 2，意见 6（R2.6）}
+\begin{reviewercomment}
+稿件报告在来自 35 个中心的 8,721 个病例上做了验证，但 NHC-MISD-TUS 队列的描述不足。作者应澄清这是否代表 35 家独立医院，并报告各中心的患者数、结节数与图像数，以及中心级宏平均性能与中心间异质性。
+\end{reviewercomment}
+\begin{authorresponse}
+我们同意须在本回复中将 NHC-MISD-TUS 描述清楚。NHC-MISD-TUS 为国家卫生健康委医学影像标准数据库授权提供的甲状腺超声\emph{仅外测}多中心子集，未参与分割与分类专家堆叠训练；含 \emph{35} 个去标识参与站点 ID 及图像级外测计数：全腺体分割 \emph{8721} 张测试图，结节分割与良恶性分类在标签可用时分别为 \emph{6384} 与 \emph{4999} 张（各中心腺/结/类三任务可评估图像数见 \responsetableref{tab_nhc_center_performance}）。在多中心去标识与数据使用条件下，医院名称、患者级与结节级汇总及扫描仪台账未向本研究团队披露。\par
+参与单位经数据库平台按统一结构化规范提交脱敏病例（病史、约定超声视图与报告、病理等可用信息），平台质控后形成本研究使用的任务参考标注。因未发放各站点机构身份与设备元数据，我们未报告各中心患者数或结节数，亦未开展扫描仪或病例构成的 formal meta 回归。\par
+按中心可评估图像数、ThyroidXAgent 外测表现及中心间 meta 异质性见 \responsetablerefrange{tab_nhc_center_performance}{tab_nhc_heterogeneity}。中心级\emph{等权宏平均}与逆方差\emph{Overall 池化}汇总见上表（例如：全腺体 Dice 宏平均 \emph{55.94\%}、池化 \emph{59.28\%}，35 站点，$I^2{\approx}99.9\%$；结节 Dice 宏平均 \emph{81.64\%}、池化 \emph{82.31\%}，33 站点，$I^2{\approx}99.0\%$；良恶性 AUROC 宏平均 \emph{0.754}、池化 \emph{0.819}，32 站点，$I^2{\approx}99.0\%$）。AUROC 不可估计的站点在 \responsetableref{tab_nhc_center_performance} 中标 NE，且不纳入 AUROC 宏平均。\par
+\par
+\end{authorresponse}
+
+\subsection*{审稿人 2，意见 15（R2.15）--- 中文}
+\reviewersection{审稿人 2，意见 15（R2.15）}
+\begin{reviewercomment}
+稿件提供了伦理批号，但没有说明是否获得知情同意或予以豁免。对所有机构数据集，作者应报告研究设计与时段、同意或豁免安排、去标识化程序与数据治理措施。共同作者授权使用 NHC-MISD-TUS 不能替代伦理审批与合规监管的书面记录。
+\end{reviewercomment}
+\begin{authorresponse}
+我们同意须对研究中使用的各非公开数据来源记载伦理审批、知情同意或豁免、去标识化及数据治理安排。\par
+就南方医科大学珠江医院的机构甲状腺超声及相关资源（含本回复涉及分割、分类与恶性子任务中使用的 ZJH-8K 等队列），本研究为回顾性设计，经珠江医院医学伦理委员会批准（批号 2026-KY-081-01）。伦理委员会在已批方案条件下豁免本回顾性、去标识临床影像及关联标签使用中的书面知情同意要求。图像与报告在研究使用前完成去标识，访问限于经批准的课题组成员并受机构数据治理规则约束。\par
+NHC-MISD-TUS 为国家卫生健康委医学影像标准数据库授权的甲状腺超声子集；本研究中\emph{仅用于}分割与分类外测，未用于堆叠 OpenThyroid 专家训练。我们在同一已批方案（2026-KY-081-01）下使用经授权发放的多中心子集，并遵守其去标识与数据使用条件（队列定义与披露边界见 审稿人 2，意见 6，R2.6）。\par
+\end{authorresponse}

@@ -98,9 +98,9 @@ dataset_3 GT masks (17,774 img) ──► PyRadiomics features ──► AutoGlu
 | best_single seg/cls | 选最优单专家（Dice / AUROC） |
 | Learned router | 拟合 `learned_router_*.joblib` |
 | B8 | `abstention_thresholds.json`、可选温度缩放 |
-| LLM 路由（主文 S4） | **建议**：与投稿一致时在 **独立 val 协议** 上标出；NHC 无 LLM 配置单独虚线 |
+| LLM 路由（主文 S4） | **建议**：与投稿一致时在 **独立 val 协议** 上标出；NHC-MISD-TUS 无 LLM 配置单独虚线 |
 
-### 测试阶段（箭头到泳道 A 各 Test 框 + NHC）
+### 测试阶段（箭头到泳道 A 各 Test 框 + NHC-MISD-TUS）
 
 **推理链**（与 `pipeline/cascade.py` 一致，画在 B 泳道右侧竖条）：
 
@@ -155,11 +155,11 @@ FTC/PTC 训练标签定义旁注 **[F7 / 病理确认]**。
 
 ---
 
-## 7. 泳道 E — NHC
+## 7. 泳道 E — NHC-MISD-TUS
 
 - 输入：仅 **test** 箭头接图像推理链（**无 LLM** 或单独子图，与 `nhc_no_llm_primary.yaml` 一致）。  
 - 输出：中心级 Dice/AUROC（S11–S12）、B7 异质性。  
-- G3：中心元数据表 → 挂在 NHC 框下方。
+- G3：中心元数据表 → 挂在 NHC-MISD-TUS 框下方。
 
 ---
 
@@ -182,7 +182,7 @@ FTC/PTC 训练标签定义旁注 **[F7 / 病理确认]**。
 
 - 患者级互斥的最终措辞（B1）  
 - 模板库与测试集 MinHash 结论（S3）在图上的脚注  
-- NHC 35 中心是否等于 35 家医院（G3）  
+- NHC-MISD-TUS 35 中心是否等于 35 家医院（G3）  
 - 主文 LLM 路由 val 协议与 850 张是否同一集合的 **最终 Methods 表述**
 
 以上在 `DATAFLOW_FIGURE.mmd` 中以 `%% TODO` 或 `[B1]` 保留。

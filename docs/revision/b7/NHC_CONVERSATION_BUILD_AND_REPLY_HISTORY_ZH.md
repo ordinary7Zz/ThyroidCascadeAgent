@@ -1,23 +1,23 @@
 # NHC-MISD-TUS：对话梳理 — 代码构建、回复稿件与修改历史
 
 **整理日期**：2026-10-28  
-**范围**：本对话线程中与 **NHC 私有队列**相关的政策、示例流水线、正式回复 LaTeX 及规划文档变更。  
+**范围**：本对话线程中与 **NHC-MISD-TUS 私有队列**相关的政策、示例流水线、正式回复 LaTeX 及规划文档变更。  
 **全量数据**：本机仅有 **10 图 / 2 中心** 示例子集；目标 **35 中心、8721 张测试图** 待数据与 **G3** 元数据就绪后整表替换。
 
 ---
 
-## 1. 审稿条目与分工（NHC 相关）
+## 1. 审稿条目与分工（NHC-MISD-TUS 相关）
 
 | 审稿意见 | 内容要点 | 负责包 | 回信位置 |
 |----------|----------|--------|----------|
 | **R2.6** | 35 中心定义、描述表、中心级性能、$I^2$/τ² | **B7** | R2.6；表 **R18–R20** |
 | **R1.3**（异质性） | 承认中心差异、个案中心；与 R2.6 交叉引用 | **B7** + **B8** | R1.3 异质性段 → R2.6；**校准/送复核/ECE** → B8、`tab_calib_referral` |
-| **R2.3 / R3.3** | 「28,458 test cases」混用图像与 NHC 计数 | **B12 / G2** | 数据流图；NHC **8721** 与 OpenThyroid **19,737** 图分层叙述 |
-| **R3.1 / R3.2** | 八策略主表、元数据消融 | **B3 / B5** | NHC：**策略 7 N/A**；**无 B5**（无 LLM） |
-| **R2.9** | LLM 5× 稳定性 | **B6** | **NHC 不列入**表 R9 |
-| **R2.8** | 组件消融 L1–L3 | **B4** | NHC：**L1/L2 可报**；**L3 N/A** |
+| **R2.3 / R3.3** | 「28,458 test cases」混用图像与 NHC-MISD-TUS 计数 | **B12 / G2** | 数据流图；NHC-MISD-TUS **8721** 与 OpenThyroid **19,737** 图分层叙述 |
+| **R3.1 / R3.2** | 八策略主表、元数据消融 | **B3 / B5** | NHC-MISD-TUS：**策略 7 N/A**；**无 B5**（无 LLM） |
+| **R2.9** | LLM 5× 稳定性 | **B6** | **NHC-MISD-TUS 不列入**表 R9 |
+| **R2.8** | 组件消融 L1–L3 | **B4** | NHC-MISD-TUS：**L1/L2 可报**；**L3 N/A** |
 
-**B7 不负责**：在 NHC 上 **fit** B8 拒答阈值（阈值仅 OpenThyroid validation，`output/b8/fit/abstention_thresholds.json`）。
+**B7 不负责**：在 NHC-MISD-TUS 上 **fit** B8 拒答阈值（阈值仅 OpenThyroid validation，`output/b8/fit/abstention_thresholds.json`）。
 
 ---
 
@@ -28,9 +28,9 @@
 | 禁止 | 允许 |
 |------|------|
 | 任何 **LLM API**（闭源 + Qwen/DashScope 等开源在线路由） | **本地 DINO 专家** + **非 LLM** 级联（`enable_agent: false`） |
-| **B3 策略 7**、**B4 L3**、B5 元数据消融 / 中心×专家热图 | **B3 策略 1–5、8** + **策略 6 仅推理**（joblib 来自开发队列，**不在 NHC fit**） |
-| **B8 在 NHC 上定阈** | **B8 在 NHC 上 eval**（应用冻结阈值） |
-| **B6** 在 NHC 上重复 LLM 路由 | **九模型** `my_Thyroid_Infer` 本地 infer（稿面 S7–S12 对比列） |
+| **B3 策略 7**、**B4 L3**、B5 元数据消融 / 中心×专家热图 | **B3 策略 1–5、8** + **策略 6 仅推理**（joblib 来自开发队列，**不在 NHC-MISD-TUS fit**） |
+| **B8 在 NHC-MISD-TUS 上定阈** | **B8 在 NHC-MISD-TUS 上 eval**（应用冻结阈值） |
+| **B6** 在 NHC-MISD-TUS 上重复 LLM 路由 | **九模型** `my_Thyroid_Infer` 本地 infer（稿面 S7–S12 对比列） |
 
 回复用语：**「不适用（N/A）」**，**不是**「待补实验」留空。
 
@@ -92,7 +92,7 @@ bash scripts/revision/b7/run_b7_sample_canonical.sh
 | 九模型 | `config/revision/infer/nhc_prepared_sample.yaml` |
 | 全量拟用（无 LLM） | `config/revision/nhc_no_llm_primary.yaml` |
 
-**learned 路由**：`nhc_prepared_sample` 的 b3 yaml 中 `learned_router` 指向 **TN5K 等开发队列** 已拟合 `*.joblib`（`allow_missing_artifact` 等），**禁止**在 NHC 上 `fit_learned_router`。
+**learned 路由**：`nhc_prepared_sample` 的 b3 yaml 中 `learned_router` 指向 **TN5K 等开发队列** 已拟合 `*.joblib`（`allow_missing_artifact` 等），**禁止**在 NHC-MISD-TUS 上 `fit_learned_router`。
 
 **B8 注意**：eval 使用 `abstention_thresholds.json`（非 `thresholds.json`）；`--rule-subset nhc`。
 
@@ -134,24 +134,24 @@ bash scripts/revision/b7/run_b7_sample_canonical.sh
 
 ### 5.2 正文修改要点（`generated/body_zh.tex` / `body_en.tex`）
 
-1. **R1.2 / 策略总述**：NHC **不**进八策略 LLM 子表；报告非 LLM 级联 + 静态 + **策略 6 推理**。
-2. **R1.3**：NHC 校准用 **同一冻结 validation 阈值**；示例 0/10 送复核、ECE/Brier；异质性交叉 R2.6。
-3. **R2.6**：队列 35 中心 / 8721 图叙述；暂行 10 图 2 中心表；**策略 7 / L3 / B5 on NHC = N/A**。
-4. **R2.9 / R3.2**：NHC **排除** LLM 稳定性（R9）与 TN5K 元数据表范围说明。
+1. **R1.2 / 策略总述**：NHC-MISD-TUS **不**进八策略 LLM 子表；报告非 LLM 级联 + 静态 + **策略 6 推理**。
+2. **R1.3**：NHC-MISD-TUS 校准用 **同一冻结 validation 阈值**；示例 0/10 送复核、ECE/Brier；异质性交叉 R2.6。
+3. **R2.6**：队列 35 中心 / 8721 图叙述；暂行 10 图 2 中心表；**策略 7 / L3 / B5 on NHC-MISD-TUS = N/A**。
+4. **R2.9 / R3.2**：NHC-MISD-TUS **排除** LLM 稳定性（R9）与 TN5K 元数据表范围说明。
 5. **R3.2**：性能消融改为 **TN5K 测试集**（去掉内部子集名、仓库路径）。
-6. **审稿人可见措辞**：`latex/README.md` — 回信**不得**出现仓库路径、脚本名、`enable_agent`、`abstention_thresholds.json` 文件名、内部 subset 名等（部分 NHC 表注仍用 `\rpendingzh{…}` 占位院方字段）。
+6. **审稿人可见措辞**：`latex/README.md` — 回信**不得**出现仓库路径、脚本名、`enable_agent`、`abstention_thresholds.json` 文件名、内部 subset 名等（部分 NHC-MISD-TUS 表注仍用 `\rpendingzh{…}` 占位院方字段）。
 
 ### 5.3 编译与已知问题
 
 - 编译：`xelatex REVIEWER_RESPONSE_ZH.tex`（两遍）。
 - `nhc_b7_tables_zh.tex` 曾出现 `\textbf{\rpendingzh{…}}` 嵌套导致 **`Extra }`**；应改为表格外层 `\rpendingzh` 或纯文本表注。
-- NHC 表内数字为 **暂行子集真值**；全量替换前保留红色 `\rpending` 标记。
+- NHC-MISD-TUS 表内数字为 **暂行子集真值**；全量替换前保留红色 `\rpending` 标记。
 
 ---
 
 ## 6. 规划文档同步（非 LaTeX）
 
-| 文档 | NHC 相关更新 |
+| 文档 | NHC-MISD-TUS 相关更新 |
 |------|----------------|
 | `docs/revision/暂定的修改和回复计划/MANUSCRIPT_REVISION_PLAN_ZH.md` | **§17 B7** — 政策、示例数字、B3/B4/B5/B8 交叉、checklist |
 | `docs/revision/暂定的修改和回复计划/正式回复/latex/` | 回信 LaTeX（R2.6 表 `tab_nhc_*` 等） |
@@ -162,16 +162,16 @@ bash scripts/revision/b7/run_b7_sample_canonical.sh
 
 ## 7. 本对话中的工程决策（便于后续接手）
 
-1. **示例 vs 全量**：先在 `nhc_prepared_sample` 跑通 **结构 + 回复表**，不在信里写 250/8721 假数；全量 NHC 路径就绪后 **同脚本换目录**，刷新 R18–R20。
-2. **B6 与 NHC**：稳定性实验 **不含 NHC**（无 LLM）；勿用 B6 yaml 跑 NHC。
-3. **B8**：NHC 只做 **eval**；阈值文件 `output/b8/fit/abstention_thresholds.json`。
+1. **示例 vs 全量**：先在 `nhc_prepared_sample` 跑通 **结构 + 回复表**，不在信里写 250/8721 假数；全量 NHC-MISD-TUS 路径就绪后 **同脚本换目录**，刷新 R18–R20。
+2. **B6 与 NHC-MISD-TUS**：稳定性实验 **不含 NHC-MISD-TUS**（无 LLM）；勿用 B6 yaml 跑 NHC-MISD-TUS。
+3. **B8**：NHC-MISD-TUS 只做 **eval**；阈值文件 `output/b8/fit/abstention_thresholds.json`。
 4. **腺体指标**：示例 GT 占位 **不得**进稿；B7 canonical 脚本中 `gland_pred_for_b7` 仅为列结构验证。
 5. **G3**：扫描仪、医院、患者数、结节数等 — `build_nhc_center_table.py --g3-csv`；表 R18 表注 `\rpending`。
-6. **与 B6 对话的边界**：OpenThyroid 队列 B6 改为 10 例 + `stop_after_phase2` **不适用于 NHC**；二者勿混配置。
+6. **与 B6 对话的边界**：OpenThyroid 队列 B6 改为 10 例 + `stop_after_phase2` **不适用于 NHC-MISD-TUS**；二者勿混配置。
 
 ---
 
-## 8. 全量 NHC 定稿前 checklist
+## 8. 全量 NHC-MISD-TUS 定稿前 checklist
 
 - [ ] 全量 `labels.json` + `center_manifest` / G3 CSV
 - [ ] `nhc_no_llm_primary.yaml`（或等价）全队列 `pipeline_run` + `results.json`
@@ -201,7 +201,7 @@ bash scripts/revision/b7/run_b7_sample_canonical.sh
 | 日期 | 事项 |
 |------|------|
 | 2026-10（对话） | 跑通 `nhc_prepared_sample`：B7 canonical、B3 static+learned、B4 L1/tables、B8 formal eval、B2、九模型 infer |
-| 2026-10 | 修正 B8 eval 阈值文件名；NHC b3/b8 yaml 对齐 sample |
+| 2026-10 | 修正 B8 eval 阈值文件名；NHC-MISD-TUS b3/b8 yaml 对齐 sample |
 | 2026-10 | 规划 §17 + nhc_sample README + manifest |
-| 2026-10 | LaTeX：R18–R20 表、`body_*` R1.3/R2.6/R3.x NHC 与 TN5K 措辞； scrub 内部路径/术语 |
-| 2026-10-28 | 本文档：汇总 NHC 代码构建与回复修改历史（与 B6 多队列稳定性分流说明） |
+| 2026-10 | LaTeX：R18–R20 表、`body_*` R1.3/R2.6/R3.x NHC-MISD-TUS 与 TN5K 措辞； scrub 内部路径/术语 |
+| 2026-10-28 | 本文档：汇总 NHC-MISD-TUS 代码构建与回复修改历史（与 B6 多队列稳定性分流说明） |

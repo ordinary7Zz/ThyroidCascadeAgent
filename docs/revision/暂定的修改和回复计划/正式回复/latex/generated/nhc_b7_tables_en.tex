@@ -1,63 +1,10 @@
-% B7 NHC-MISD-TUS (tab_nhc_center_descriptive / tab_nhc_center_performance / tab_nhc_heterogeneity)
-% [DATA-SOURCE] tab_nhc_center_descriptive | Partial | Image counts from S7--S12 CSV AUTO block; patients/nodules/scanners \\rpending{} (G3).
-% [DATA-SOURCE] tab_nhc_center_performance | Supp. S7--S12 | ThyroidXAgent cols (gland/nodule: dinov3_unet; BM: dinov3_unet_multitask); render_nhc_b7_tables_from_supplement.py --apply.
-% [DATA-SOURCE] tab_nhc_heterogeneity | Supp. S7--S12 | Centre-level inverse-variance meta I2/tau2 (not image-level B7 ANOVA I2).
+% B7 NHC-MISD-TUS (tab_nhc_center_performance / tab_nhc_heterogeneity; centre descriptors merged into performance table)
+% [DATA-SOURCE] tab_nhc_center_performance | manuscript NHC-MISD-TUS per-centre supp export / B7 CSV | ThyroidXAgent cols (gland/nodule: dinov3_unet; BM: dinov3_unet_multitask); render_nhc_b7_tables_from_supplement.py --apply.
+% [DATA-SOURCE] tab_nhc_heterogeneity | same export | Centre-level inverse-variance meta I2/tau2 (not image-level B7 ANOVA I2).
 
+% [SYNC] tab_nhc_center_performance: reconcile pooled metrics with manuscript Fig.~2h / NHC-MISD-TUS supp per-centre tables and nine-model external tables when full NHC-MISD-TUS is locked.
 \begin{responsetable}
-\caption{\responsetabletitle{tab_nhc_center_descriptive}{NHC-MISD-TUS center descriptors}}
-\begin{adjustbox}{max width=\textwidth,center}
-\begin{tabular}{@{}l r r r l c c@{}}
-\toprule
-Center ID & Patients & Nodules & Images & Scanner & Seg.\ labels & BM labels \\
-\midrule
-% BEGIN AUTO tab_nhc_center_descriptive rows
-THYB\_S\_AH04 & \rpending{data steward} & \rpending{data steward} & 101 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_AN01 & \rpending{data steward} & \rpending{data steward} & 243 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_BJ01 & \rpending{data steward} & \rpending{data steward} & 876 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_BJ09 & \rpending{data steward} & \rpending{data steward} & 41 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_CQ03 & \rpending{data steward} & \rpending{data steward} & 238 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_EN02 & \rpending{data steward} & \rpending{data steward} & 120 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_EN04 & \rpending{data steward} & \rpending{data steward} & 949 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_FJ01 & \rpending{data steward} & \rpending{data steward} & 2 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_FJ03 & \rpending{data steward} & \rpending{data steward} & 85 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_GS03 & \rpending{data steward} & \rpending{data steward} & 94 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_GX01 & \rpending{data steward} & \rpending{data steward} & 19 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_GZ02 & \rpending{data steward} & \rpending{data steward} & 233 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_HB07 & \rpending{data steward} & \rpending{data steward} & 8 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_JL04 & \rpending{data steward} & \rpending{data steward} & 54 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_JS01 & \rpending{data steward} & \rpending{data steward} & 72 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_JS02 & \rpending{data steward} & \rpending{data steward} & 190 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_JX06 & \rpending{data steward} & \rpending{data steward} & 215 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_NM02 & \rpending{data steward} & \rpending{data steward} & 66 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_NX01 & \rpending{data steward} & \rpending{data steward} & 582 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_QX07 & \rpending{data steward} & \rpending{data steward} & 289 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_SC06 & \rpending{data steward} & \rpending{data steward} & 29 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_SD12 & \rpending{data steward} & \rpending{data steward} & 75 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_SD13 & \rpending{data steward} & \rpending{data steward} & 22 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_SD14 & \rpending{data steward} & \rpending{data steward} & 2 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_SH01 & \rpending{data steward} & \rpending{data steward} & 832 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_SH05 & \rpending{data steward} & \rpending{data steward} & 669 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_SH06 & \rpending{data steward} & \rpending{data steward} & 43 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_SX04 & \rpending{data steward} & \rpending{data steward} & 41 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_XJ01 & \rpending{data steward} & \rpending{data steward} & 25 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_YN01 & \rpending{data steward} & \rpending{data steward} & 25 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_YN05 & \rpending{data steward} & \rpending{data steward} & 137 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_ZJ05 & \rpending{data steward} & \rpending{data steward} & 694 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_ZJ06 & \rpending{data steward} & \rpending{data steward} & 460 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_ZJ24 & \rpending{data steward} & \rpending{data steward} & 1174 & \rpending{data steward} & Yes & \rpending{label availability} \\
-THYB\_S\_ZJ29 & \rpending{data steward} & \rpending{data steward} & 16 & \rpending{data steward} & Yes & \rpending{label availability} \\
-\textbf{Total (35 centers)} & --- & --- & \textbf{8721} & --- & --- & --- \\
-% END AUTO tab_nhc_center_descriptive rows
-\textbf{Target total (35 centers)} & \rpending{data steward} & \rpending{data steward} & \textbf{8721} & --- & --- & --- \\
-\bottomrule
-\end{tabular}
-\end{adjustbox}
-\responsetablenote{Image counts reconcile with Supp.\ S7--S12 per-center sample-size columns (task-specific $n$ may differ slightly; AUTO block uses max evaluable $n$ per center). \rpending{Data-steward confirmation: independent hospitals/sites; patient and nodule counts; scanner vendor/model; label availability; ethics and de-identification language} \rpending{Reconcile 8721 test images with the data-flow figure; patients/nodules pending G3}}
-\end{responsetable}
-
-% [SYNC] tab_nhc_center_performance: reconcile pooled metrics with manuscript Fig.~2h / Supp. S7--S12 and nine-model external tables when full NHC is locked.
-\begin{responsetable}
-\caption{\responsetabletitle{tab_nhc_center_performance}{NHC-MISD-TUS --- centre-level external-test performance}}
+\caption{\responsetabletitle{tab_nhc_center_performance}{NHC-MISD-TUS --- per-centre test images and external-test performance}}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l *{3}{c} *{6}{r} @{}}
 \toprule
@@ -107,11 +54,11 @@ THYB\_S\_ZJ29 & 16 & --- & --- & 85.2 & 12.1 & --- & --- & NE & NE \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Units: Dice in percent; HD95 in mm; AUROC/AUPRC on [0,1] (not repeated in headers). ThyroidXAgent matches Supp.\ S7--S12. $n$ columns G/N/C are task-specific Supp.\ $N$. Overall pooled row: 8721 / 6384 / 4999 (Table R21). Lower HD95 is better; NE = not estimable.}
+\responsetablenote{35 anonymized database site IDs; hospital names, patient or nodule totals, and scanner metadata are not in the authorized research release. Units: Dice in percent; HD95 in mm; AUROC/AUPRC on [0,1]. $n$ columns G/N/C: evaluable test images per task. Overall pooled row $n$: 8721 / 6384 / 4999. Lower HD95 is better; NE = not estimable.}
 \end{responsetable}
 
 \begin{responsetable}
-\caption{\responsetabletitle{tab_nhc_heterogeneity}{NHC-MISD-TUS: between-center heterogeneity (meta analysis, S7--S12)}}
+\caption{\responsetabletitle{tab_nhc_heterogeneity}{NHC-MISD-TUS: between-center heterogeneity (centre-level meta)}}
 \begin{adjustbox}{max width=\textwidth,center}
 \begin{tabular}{@{}l l r r l r l@{}}
 \toprule
@@ -125,5 +72,5 @@ Gland segmentation & Dice $\uparrow$ & 35 & 8721 & 0.593 / 0.559 & 99.9 & 0.134 
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Between-centre $I^2$/$\tau^2$ from \emph{centre-level} inverse-variance meta (Cochrane $Q$-type; centre Dice/AUROC effects, weights from $n$ and CI half-widths), aligned with Supp.\ S7--S12 point estimates---not image-level B7 ANOVA $I^2$ on malignancy scores. \rpending{Optional meta-regression (scanner, malignancy fraction, nodule size) when G3 metadata are available}}
+\responsetablenote{Between-centre $I^2$/$\tau^2$ from \emph{centre-level} inverse-variance meta (Cochrane $Q$-type; centre Dice/AUROC effects and $n$ as in \responsetableref{tab_nhc_center_performance})---not image-level B7 ANOVA $I^2$ on malignancy scores. Meta-regression on scanner or case mix was not performed because those covariates were not released.}
 \end{responsetable}
