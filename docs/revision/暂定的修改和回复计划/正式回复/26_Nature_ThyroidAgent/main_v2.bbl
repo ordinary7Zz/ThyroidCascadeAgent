@@ -1,0 +1,762 @@
+\begin{thebibliography}{10}
+\urlstyle{rm}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname doiprefix\endcsname\relax\def\doiprefix{DOI: }\fi
+\providecommand{\bibinfo}[2]{#2}
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem{Alexander2022Lancet}
+\bibinfo{author}{Alexander, E.~K.} \& \bibinfo{author}{Cibas, E.~S.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Diagnosis of thyroid nodules}}.
+\newblock {\emph{\JournalTitle{The Lancet Diabetes \& Endocrinology}}}
+  \textbf{\bibinfo{volume}{10}}, \bibinfo{pages}{533--539},
+  \doiprefix\url{10.1016/S2213-8587(22)00101-2} (\bibinfo{year}{2022}).
+
+\bibitem{Grani2024NatRevEndocrinol}
+\bibinfo{author}{Grani, G.}, \bibinfo{author}{Sponziello, M.},
+  \bibinfo{author}{Filetti, S.} \& \bibinfo{author}{Durante, C.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Thyroid nodules: diagnosis and
+  management}}.
+\newblock {\emph{\JournalTitle{Nature Reviews Endocrinology}}}
+  \doiprefix\url{10.1038/s41574-024-01025-4} (\bibinfo{year}{2024}).
+
+\bibitem{Tessler2017ACRTIRADS}
+\bibinfo{author}{Tessler, F.~N.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Acr thyroid imaging, reporting and
+  data system (ti-rads): White paper of the acr ti-rads committee}}.
+\newblock {\emph{\JournalTitle{Journal of the American College of Radiology}}}
+  \textbf{\bibinfo{volume}{14}}, \bibinfo{pages}{587--595},
+  \doiprefix\url{10.1016/j.jacr.2017.01.046} (\bibinfo{year}{2017}).
+
+\bibitem{Hoang2018AJRInterobserver}
+\bibinfo{author}{Hoang, J.~K.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Interobserver variability of
+  sonographic features used in the american college of radiology thyroid
+  imaging reporting and data system}}.
+\newblock {\emph{\JournalTitle{American Journal of Roentgenology}}}
+  \textbf{\bibinfo{volume}{211}}, \bibinfo{pages}{162--167},
+  \doiprefix\url{10.2214/AJR.17.19192} (\bibinfo{year}{2018}).
+
+\bibitem{Cibas2017Bethesda}
+\bibinfo{author}{Cibas, E.~S.} \& \bibinfo{author}{Ali, S.~Z.}
+\newblock \bibinfo{journal}{\bibinfo{title}{The 2017 bethesda system for
+  reporting thyroid cytopathology}}.
+\newblock {\emph{\JournalTitle{Thyroid}}} \textbf{\bibinfo{volume}{27}},
+  \bibinfo{pages}{1341--1346}, \doiprefix\url{10.1089/thy.2017.0500}
+  (\bibinfo{year}{2017}).
+
+\bibitem{Topol2019NatMedHighPerformance}
+\bibinfo{author}{Topol, E.~J.}
+\newblock \bibinfo{journal}{\bibinfo{title}{High-performance medicine: the
+  convergence of human and artificial intelligence}}.
+\newblock {\emph{\JournalTitle{Nature Medicine}}}
+  \textbf{\bibinfo{volume}{25}}, \bibinfo{pages}{44--56},
+  \doiprefix\url{10.1038/s41591-018-0300-7} (\bibinfo{year}{2019}).
+
+\bibitem{Rajpurkar2022NatMedAIHealth}
+\bibinfo{author}{Rajpurkar, P.}, \bibinfo{author}{Chen, E.},
+  \bibinfo{author}{Banerjee, O.} \& \bibinfo{author}{Topol, E.~J.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Ai in health and medicine}}.
+\newblock {\emph{\JournalTitle{Nature Medicine}}}
+  \textbf{\bibinfo{volume}{28}}, \bibinfo{pages}{31--38},
+  \doiprefix\url{10.1038/s41591-021-01614-0} (\bibinfo{year}{2022}).
+
+\bibitem{Chen2022HumanCenteredXAI}
+\bibinfo{author}{Chen, H.}, \bibinfo{author}{Gomez, C.},
+  \bibinfo{author}{Huang, C.-M.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Explainable medical imaging {AI}
+  needs human-centered design: Guidelines and evidence from a systematic
+  review}}.
+\newblock {\emph{\JournalTitle{npj Digital Medicine}}}
+  \textbf{\bibinfo{volume}{5}}, \bibinfo{pages}{156},
+  \doiprefix\url{10.1038/s41746-022-00699-2} (\bibinfo{year}{2022}).
+
+\bibitem{Wekenborg2025RealWorldHAI}
+\bibinfo{author}{Wekenborg, M.~K.}, \bibinfo{author}{Gilbert, S.} \&
+  \bibinfo{author}{Kather, J.~N.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Examining human--{AI} interaction
+  in real-world healthcare beyond the laboratory}}.
+\newblock {\emph{\JournalTitle{npj Digital Medicine}}}
+  \textbf{\bibinfo{volume}{8}}, \bibinfo{pages}{169},
+  \doiprefix\url{10.1038/s41746-025-01559-5} (\bibinfo{year}{2025}).
+
+\bibitem{Giddings2024ClinicianPatientInteraction}
+\bibinfo{author}{Giddings, R.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Factors influencing clinician and
+  patient interaction with machine learning-based risk prediction models: A
+  systematic review}}.
+\newblock {\emph{\JournalTitle{The Lancet Digital Health}}}
+  \textbf{\bibinfo{volume}{6}}, \bibinfo{pages}{e131--e144},
+  \doiprefix\url{10.1016/S2589-7500(23)00241-8} (\bibinfo{year}{2024}).
+
+\bibitem{gong2021multi}
+\bibinfo{author}{Gong, H.} \emph{et~al.}
+\newblock \bibinfo{title}{Multi-task learning for thyroid nodule segmentation
+  with thyroid region prior}.
+\newblock In \emph{\bibinfo{booktitle}{2021 IEEE 18th international symposium
+  on biomedical imaging (ISBI)}}, \bibinfo{pages}{257--261}
+  (\bibinfo{year}{2021}).
+
+\bibitem{gong2023thyroid}
+\bibinfo{author}{Gong, H.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Thyroid region prior guided
+  attention for ultrasound segmentation of thyroid nodules}}.
+\newblock {\emph{\JournalTitle{Computers in biology and medicine}}}
+  \textbf{\bibinfo{volume}{155}}, \bibinfo{pages}{106389}
+  (\bibinfo{year}{2023}).
+
+\bibitem{sun2025clip}
+\bibinfo{author}{Sun, X.}, \bibinfo{author}{Wei, B.}, \bibinfo{author}{Jiang,
+  Y.}, \bibinfo{author}{Mao, L.} \& \bibinfo{author}{Zhao, Q.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Clip-tnseg: A multi-modal hybrid
+  framework for thyroid nodule segmentation in ultrasound images}}.
+\newblock {\emph{\JournalTitle{arXiv preprint arXiv:2412.05530}}}
+  (\bibinfo{year}{2024}).
+
+\bibitem{gong2022less}
+\bibinfo{author}{Gong, H.} \emph{et~al.}
+\newblock \bibinfo{title}{Less is more: adaptive curriculum learning for
+  thyroid nodule diagnosis}.
+\newblock In \emph{\bibinfo{booktitle}{International Conference on Medical
+  Image Computing and Computer-Assisted Intervention}},
+  \bibinfo{pages}{248--257} (\bibinfo{year}{2022}).
+
+\bibitem{Peng2021LancetDigitalHealthThyNet}
+\bibinfo{author}{Peng, S.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Deep learning-based artificial
+  intelligence model to assist thyroid nodule diagnosis and management: a
+  multicentre diagnostic study}}.
+\newblock {\emph{\JournalTitle{The Lancet Digital Health}}}
+  \textbf{\bibinfo{volume}{3}}, \bibinfo{pages}{e250--e259},
+  \doiprefix\url{10.1016/S2589-7500(21)00041-8} (\bibinfo{year}{2021}).
+
+\bibitem{Chen2022RadiologyTIRADS}
+\bibinfo{author}{Chen, Y.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{An artificial intelligence model
+  based on acr ti-rads characteristics for us diagnosis of thyroid nodules}}.
+\newblock {\emph{\JournalTitle{Radiology}}} \textbf{\bibinfo{volume}{303}},
+  \bibinfo{pages}{613--619}, \doiprefix\url{10.1148/radiol.211455}
+  (\bibinfo{year}{2022}).
+
+\bibitem{Yao2025NPJDigitMedThyGPT}
+\bibinfo{author}{Yao, J.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Multimodal gpt model for assisting
+  thyroid nodule diagnosis and management}}.
+\newblock {\emph{\JournalTitle{npj Digital Medicine}}}
+  \textbf{\bibinfo{volume}{8}}, \bibinfo{pages}{245},
+  \doiprefix\url{10.1038/s41746-025-01652-9} (\bibinfo{year}{2025}).
+
+\bibitem{li_ultrasound_2024}
+\bibinfo{author}{Li, J.}, \bibinfo{author}{Su, T.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Ultrasound report generation with
+  cross-modality feature alignment via unsupervised guidance}}.
+\newblock {\emph{\JournalTitle{IEEE Transactions on Medical Imaging}}}
+  \textbf{\bibinfo{volume}{44}}, \bibinfo{pages}{19--30}
+  (\bibinfo{year}{2024}).
+
+\bibitem{Tanno2025ClinicianVLM}
+\bibinfo{author}{Tanno, R.}, \bibinfo{author}{Barrett, D. G.~T.},
+  \bibinfo{author}{Sellergren, A.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Collaboration between clinicians
+  and vision--language models in radiology report generation}}.
+\newblock {\emph{\JournalTitle{Nature Medicine}}}
+  \textbf{\bibinfo{volume}{31}}, \bibinfo{pages}{599--608},
+  \doiprefix\url{10.1038/s41591-024-03302-1} (\bibinfo{year}{2025}).
+
+\bibitem{li_towards_2025}
+\bibinfo{author}{Li, C.-Y.}, \bibinfo{author}{Chang, K.-J.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Towards a holistic framework for
+  multimodal llm in 3d brain ct radiology report generation}}.
+\newblock {\emph{\JournalTitle{Nature Communications}}}
+  \textbf{\bibinfo{volume}{16}}, \bibinfo{pages}{2258} (\bibinfo{year}{2025}).
+
+\bibitem{Wang2024LancetDigitalHealthFNAB}
+\bibinfo{author}{Wang, J.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Deep learning models for thyroid
+  nodules diagnosis of fine-needle aspiration biopsy: a retrospective,
+  prospective, multicentre study in china}}.
+\newblock {\emph{\JournalTitle{The Lancet Digital Health}}}
+  \textbf{\bibinfo{volume}{6}}, \bibinfo{pages}{e458--e469},
+  \doiprefix\url{10.1016/S2589-7500(24)00085-2} (\bibinfo{year}{2024}).
+
+\bibitem{Shen2025NatCommunLLNM}
+\bibinfo{author}{Shen, P.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Explainable multimodal deep
+  learning for predicting thyroid cancer lateral lymph node metastasis using
+  ultrasound imaging}}.
+\newblock {\emph{\JournalTitle{Nature Communications}}}
+  \textbf{\bibinfo{volume}{16}}, \bibinfo{pages}{7052},
+  \doiprefix\url{10.1038/s41467-025-62042-z} (\bibinfo{year}{2025}).
+
+\bibitem{Dai2025NatCommunThyroidSubtype}
+\bibinfo{author}{Dai, F.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Improving ai models for rare
+  thyroid cancer subtype by text guided diffusion models}}.
+\newblock {\emph{\JournalTitle{Nature Communications}}}
+  \textbf{\bibinfo{volume}{16}}, \bibinfo{pages}{4449},
+  \doiprefix\url{10.1038/s41467-025-59478-8} (\bibinfo{year}{2025}).
+
+\bibitem{Tikhomirov2024LostCognitive}
+\bibinfo{author}{Tikhomirov, L.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Medical artificial intelligence for
+  clinicians: The lost cognitive perspective}}.
+\newblock {\emph{\JournalTitle{The Lancet Digital Health}}}
+  \textbf{\bibinfo{volume}{6}}, \bibinfo{pages}{e589--e594},
+  \doiprefix\url{10.1016/S2589-7500(24)00095-5} (\bibinfo{year}{2024}).
+
+\bibitem{you2026learning}
+\bibinfo{author}{You, G.}, \bibinfo{author}{Li, H.}, \bibinfo{author}{Zhang,
+  Y.} \& \bibinfo{author}{Fan, Y.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Learning anatomy-grounded {CT}
+  vision-language representations with organ-hierarchical report knowledge}}.
+\newblock {\emph{\JournalTitle{arXiv preprint arXiv:2607.10953}}}
+  \doiprefix\url{10.48550/arXiv.2607.10953} (\bibinfo{year}{2026}).
+
+\bibitem{Vasey2022NatMedDECIDEAI}
+\bibinfo{author}{Vasey, B.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Reporting guideline for the
+  early-stage clinical evaluation of decision support systems driven by
+  artificial intelligence: Decide-ai}}.
+\newblock {\emph{\JournalTitle{Nature Medicine}}}
+  \textbf{\bibinfo{volume}{28}}, \bibinfo{pages}{924--933},
+  \doiprefix\url{10.1038/s41591-022-01772-9} (\bibinfo{year}{2022}).
+
+\bibitem{dreyer2025mechanistic}
+\bibinfo{author}{Dreyer, M.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Mechanistic understanding and
+  validation of large ai models with semanticlens}}.
+\newblock {\emph{\JournalTitle{Nature Machine Intelligence}}}
+  \textbf{\bibinfo{volume}{7}}, \bibinfo{pages}{1572--1585}
+  (\bibinfo{year}{2025}).
+
+\bibitem{Patel2019HumanMachinePartnership}
+\bibinfo{author}{Patel, B.~N.}, \bibinfo{author}{Rosenberg, L.},
+  \bibinfo{author}{Willcox, G.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Human--machine partnership with
+  artificial intelligence for chest radiograph diagnosis}}.
+\newblock {\emph{\JournalTitle{npj Digital Medicine}}}
+  \textbf{\bibinfo{volume}{2}}, \bibinfo{pages}{111},
+  \doiprefix\url{10.1038/s41746-019-0189-7} (\bibinfo{year}{2019}).
+
+\bibitem{Leibig2022RadiologistsAI}
+\bibinfo{author}{Leibig, C.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Combining the strengths of
+  radiologists and {AI} for breast cancer screening: A retrospective
+  analysis}}.
+\newblock {\emph{\JournalTitle{The Lancet Digital Health}}}
+  \textbf{\bibinfo{volume}{4}}, \bibinfo{pages}{e507--e519},
+  \doiprefix\url{10.1016/S2589-7500(22)00070-X} (\bibinfo{year}{2022}).
+
+\bibitem{Yu2024AIAssistanceRadiologists}
+\bibinfo{author}{Yu, F.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Heterogeneity and predictors of the
+  effects of {AI} assistance on radiologists}}.
+\newblock {\emph{\JournalTitle{Nature Medicine}}}
+  \textbf{\bibinfo{volume}{30}}, \bibinfo{pages}{837--849},
+  \doiprefix\url{10.1038/s41591-024-02850-w} (\bibinfo{year}{2024}).
+
+\bibitem{Chen2024WorkloadCollaboration}
+\bibinfo{author}{Chen, M.}, \bibinfo{author}{Wang, Y.}, \bibinfo{author}{Wang,
+  Q.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Impact of human and artificial
+  intelligence collaboration on workload reduction in medical image
+  interpretation}}.
+\newblock {\emph{\JournalTitle{npj Digital Medicine}}}
+  \textbf{\bibinfo{volume}{7}}, \bibinfo{pages}{349},
+  \doiprefix\url{10.1038/s41746-024-01328-w} (\bibinfo{year}{2024}).
+
+\bibitem{Everett2026ToolTeammate}
+\bibinfo{author}{Everett, S.~S.}, \bibinfo{author}{Bunning, B.~J.},
+  \bibinfo{author}{Jain, P.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{From tool to teammate in a
+  randomized controlled trial of clinician--{AI} collaborative workflows for
+  diagnosis}}.
+\newblock {\emph{\JournalTitle{npj Digital Medicine}}}
+  \textbf{\bibinfo{volume}{9}}, \bibinfo{pages}{409},
+  \doiprefix\url{10.1038/s41746-026-02545-1} (\bibinfo{year}{2026}).
+
+\bibitem{Strong2026HumanAICollaboration}
+\bibinfo{author}{Strong, J.}, \bibinfo{author}{Rogers, H.},
+  \bibinfo{author}{Sun, E.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Human--{AI} collaboration in
+  healthcare: A scoping review}}.
+\newblock {\emph{\JournalTitle{npj Digital Medicine}}}
+  \doiprefix\url{10.1038/s41746-026-02918-6} (\bibinfo{year}{2026}).
+
+\bibitem{Wiens2019NatMedDoNoHarm}
+\bibinfo{author}{Wiens, J.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Do no harm: a roadmap for
+  responsible machine learning for health care}}.
+\newblock {\emph{\JournalTitle{Nature Medicine}}}
+  \textbf{\bibinfo{volume}{25}}, \bibinfo{pages}{1337--1340},
+  \doiprefix\url{10.1038/s41591-019-0548-6} (\bibinfo{year}{2019}).
+
+\bibitem{Zou2025LancetAgenticTeammates}
+\bibinfo{author}{Zou, J.} \& \bibinfo{author}{Topol, E.~J.}
+\newblock \bibinfo{journal}{\bibinfo{title}{The rise of agentic ai teammates in
+  medicine}}.
+\newblock {\emph{\JournalTitle{The Lancet}}} \textbf{\bibinfo{volume}{405}},
+  \bibinfo{pages}{457}, \doiprefix\url{10.1016/S0140-6736(25)00202-8}
+  (\bibinfo{year}{2025}).
+
+\bibitem{Moor2023NatureGMAI}
+\bibinfo{author}{Moor, M.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Foundation models for generalist
+  medical artificial intelligence}}.
+\newblock {\emph{\JournalTitle{Nature}}} \textbf{\bibinfo{volume}{616}},
+  \bibinfo{pages}{259--265}, \doiprefix\url{10.1038/s41586-023-05881-4}
+  (\bibinfo{year}{2023}).
+
+\bibitem{Kohane2024InjectingAI}
+\bibinfo{author}{Kohane, I.~S.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Injecting artificial intelligence
+  into medicine}}.
+\newblock {\emph{\JournalTitle{NEJM AI}}} \textbf{\bibinfo{volume}{1}},
+  \bibinfo{pages}{1--3}, \doiprefix\url{10.1056/AIe2300197}
+  (\bibinfo{year}{2024}).
+
+\bibitem{Katz2024GPTResidents}
+\bibinfo{author}{Katz, U.}, \bibinfo{author}{Cohen, E.},
+  \bibinfo{author}{Shachar, E.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{GPT} versus resident
+  physicians---a benchmark based on official board scores}}.
+\newblock {\emph{\JournalTitle{NEJM AI}}} \textbf{\bibinfo{volume}{1}},
+  \doiprefix\url{10.1056/AIdbp2300192} (\bibinfo{year}{2024}).
+
+\bibitem{Zhou2026NEJMAIMedVersa}
+\bibinfo{author}{Zhou, H.-Y.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Medversa: A generalist foundation
+  model for diverse medical imaging tasks}}.
+\newblock {\emph{\JournalTitle{NEJM AI}}} \textbf{\bibinfo{volume}{3}},
+  \doiprefix\url{10.1056/AIoa2500595} (\bibinfo{year}{2026}).
+
+\bibitem{Tu2025ConversationalAI}
+\bibinfo{author}{Tu, T.}, \bibinfo{author}{Schaekermann, M.},
+  \bibinfo{author}{Palepu, A.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Towards conversational diagnostic
+  artificial intelligence}}.
+\newblock {\emph{\JournalTitle{Nature}}} \textbf{\bibinfo{volume}{642}},
+  \bibinfo{pages}{442--450}, \doiprefix\url{10.1038/s41586-025-08866-7}
+  (\bibinfo{year}{2025}).
+
+\bibitem{McDuff2025DifferentialDiagnosis}
+\bibinfo{author}{McDuff, D.}, \bibinfo{author}{Schaekermann, M.},
+  \bibinfo{author}{Tu, T.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Towards accurate differential
+  diagnosis with large language models}}.
+\newblock {\emph{\JournalTitle{Nature}}} \textbf{\bibinfo{volume}{642}},
+  \bibinfo{pages}{451--457}, \doiprefix\url{10.1038/s41586-025-08869-4}
+  (\bibinfo{year}{2025}).
+
+\bibitem{deltadahl2025deep}
+\bibinfo{author}{Deltadahl, S.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Deep generative classification of
+  blood cell morphology}}.
+\newblock {\emph{\JournalTitle{Nature Machine Intelligence}}}
+  \textbf{\bibinfo{volume}{7}}, \bibinfo{pages}{1791--1803}
+  (\bibinfo{year}{2025}).
+
+\bibitem{pontikos2025next}
+\bibinfo{author}{Pontikos, N.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Next-generation phenotyping of
+  inherited retinal diseases from multimodal imaging with eye2gene}}.
+\newblock {\emph{\JournalTitle{Nature Machine Intelligence}}}
+  \textbf{\bibinfo{volume}{7}}, \bibinfo{pages}{967--978}
+  (\bibinfo{year}{2025}).
+
+\bibitem{Qiu2024NatMachIntellAgenticSystems}
+\bibinfo{author}{Qiu, J.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Llm-based agentic systems in
+  medicine and healthcare}}.
+\newblock {\emph{\JournalTitle{Nature Machine Intelligence}}}
+  \textbf{\bibinfo{volume}{6}}, \bibinfo{pages}{1418--1420},
+  \doiprefix\url{10.1038/s42256-024-00944-1} (\bibinfo{year}{2024}).
+
+\bibitem{Moritz2025NatBMECoordinatedAgents}
+\bibinfo{author}{Moritz, M.}, \bibinfo{author}{Topol, E.} \&
+  \bibinfo{author}{Rajpurkar, P.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Coordinated ai agents for advancing
+  healthcare}}.
+\newblock {\emph{\JournalTitle{Nature Biomedical Engineering}}}
+  \textbf{\bibinfo{volume}{9}}, \bibinfo{pages}{432--438},
+  \doiprefix\url{10.1038/s41551-025-01363-2} (\bibinfo{year}{2025}).
+
+\bibitem{Ferber2026AutonomousAgents}
+\bibinfo{author}{Ferber, D.}, \bibinfo{author}{Hilgers, L.},
+  \bibinfo{author}{H{"o}per, C.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Towards autonomous medical
+  artificial intelligence agents}}.
+\newblock {\emph{\JournalTitle{Nature}}}
+  \doiprefix\url{10.1038/s41586-026-10675-5} (\bibinfo{year}{2026}).
+
+\bibitem{Collaco2026AgenticAIReview}
+\bibinfo{author}{Collaco, B.~G.}, \bibinfo{author}{Haider, S.~A.},
+  \bibinfo{author}{Prabha, S.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{The role of agentic artificial
+  intelligence in healthcare: A scoping review}}.
+\newblock {\emph{\JournalTitle{npj Digital Medicine}}}
+  \textbf{\bibinfo{volume}{9}}, \bibinfo{pages}{345},
+  \doiprefix\url{10.1038/s41746-026-02517-5} (\bibinfo{year}{2026}).
+
+\bibitem{kong2025ai}
+\bibinfo{author}{Kong, Q.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Ai agent-based discovery of
+  d-enantiomeric antimicrobial peptides against multidrug-resistant bacterial
+  infection}}.
+\newblock {\emph{\JournalTitle{Biomaterials}}} \bibinfo{pages}{123927}
+  (\bibinfo{year}{2025}).
+
+\bibitem{wang_plan-and-solve_2023}
+\bibinfo{author}{Wang, L.}, \bibinfo{author}{Xu, W.} \emph{et~al.}
+\newblock \bibinfo{title}{Plan-and-solve prompting: Improving zero-shot
+  chain-of-thought reasoning by large language models}.
+\newblock In \emph{\bibinfo{booktitle}{Proceedings of the 61st annual meeting
+  of the association for computational linguistics (volume 1: long papers)}},
+  \bibinfo{pages}{2609--2634} (\bibinfo{year}{2023}).
+
+\bibitem{Schmidgall2026AgentClinic}
+\bibinfo{author}{Schmidgall, S.}, \bibinfo{author}{Ziaei, R.},
+  \bibinfo{author}{Harris, C.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{AgentClinic}: A multimodal
+  benchmark for tool-using clinical {AI} agents}}.
+\newblock {\emph{\JournalTitle{npj Digital Medicine}}}
+  \textbf{\bibinfo{volume}{9}}, \bibinfo{pages}{499},
+  \doiprefix\url{10.1038/s41746-026-02674-7} (\bibinfo{year}{2026}).
+
+\bibitem{Liu2026AgentBenchmark}
+\bibinfo{author}{Liu, Y.}, \bibinfo{author}{Carrero, Z.~I.},
+  \bibinfo{author}{Jiang, X.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Benchmarking large language
+  model-based agent systems for clinical decision tasks}}.
+\newblock {\emph{\JournalTitle{npj Digital Medicine}}}
+  \textbf{\bibinfo{volume}{9}}, \bibinfo{pages}{259},
+  \doiprefix\url{10.1038/s41746-026-02443-6} (\bibinfo{year}{2026}).
+
+\bibitem{yao_react:_2022}
+\bibinfo{author}{Yao, S.}, \bibinfo{author}{Zhao, J.} \emph{et~al.}
+\newblock \bibinfo{title}{React: Synergizing reasoning and acting in language
+  models}.
+\newblock In \emph{\bibinfo{booktitle}{The eleventh international conference on
+  learning representations}} (\bibinfo{year}{2022}).
+
+\bibitem{Tian2026AutonomousWorkflow}
+\bibinfo{author}{Tian, J.}, \bibinfo{author}{Fard, P.}, \bibinfo{author}{Cagan,
+  C.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{An autonomous agentic workflow for
+  clinical detection of cognitive concerns using large language models}}.
+\newblock {\emph{\JournalTitle{npj Digital Medicine}}}
+  \textbf{\bibinfo{volume}{9}}, \bibinfo{pages}{51},
+  \doiprefix\url{10.1038/s41746-025-02324-4} (\bibinfo{year}{2026}).
+
+\bibitem{Jiang2025NEJMAIMedAgentBench}
+\bibinfo{author}{Jiang, Y.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Medagentbench: A virtual ehr
+  environment to benchmark medical llm agents}}.
+\newblock {\emph{\JournalTitle{NEJM AI}}} \bibinfo{pages}{AIdbp2500144},
+  \doiprefix\url{10.1056/AIdbp2500144} (\bibinfo{year}{2025}).
+
+\bibitem{zhang2025tn5000}
+\bibinfo{author}{Zhang, H.}, \bibinfo{author}{Liu, Q.}, \bibinfo{author}{Han,
+  X.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Tn5000: An ultrasound image dataset
+  for thyroid nodule detection and classification}}.
+\newblock {\emph{\JournalTitle{Scientific Data}}}
+  \textbf{\bibinfo{volume}{12}}, \bibinfo{pages}{1437},
+  \doiprefix\url{10.1038/s41597-025-05757-4} (\bibinfo{year}{2025}).
+
+\bibitem{van2017computational}
+\bibinfo{author}{Van~Griethuysen, J.~J.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Computational radiomics system to
+  decode the radiographic phenotype}}.
+\newblock {\emph{\JournalTitle{Cancer research}}}
+  \textbf{\bibinfo{volume}{77}}, \bibinfo{pages}{e104--e107}
+  (\bibinfo{year}{2017}).
+
+\bibitem{rebuff_data2text_2020}
+\bibinfo{author}{Rebuffel, C.}, \bibinfo{author}{Soulier, L.} \emph{et~al.}
+\newblock \bibinfo{title}{A hierarchical model for data-to-text generation}.
+\newblock In \emph{\bibinfo{booktitle}{European Conference on Information
+  Retrieval}}, \bibinfo{pages}{65--80} (\bibinfo{organization}{Springer},
+  \bibinfo{year}{2020}).
+
+\bibitem{farquhar2024detecting}
+\bibinfo{author}{Farquhar, S.}, \bibinfo{author}{Kossen, J.},
+  \bibinfo{author}{Kuhn, L.} \& \bibinfo{author}{Gal, Y.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Detecting hallucinations in large
+  language models using semantic entropy}}.
+\newblock {\emph{\JournalTitle{Nature}}} \textbf{\bibinfo{volume}{630}},
+  \bibinfo{pages}{625--630} (\bibinfo{year}{2024}).
+
+\bibitem{duong2025thyroidxl}
+\bibinfo{author}{Duong, V.~H.} \emph{et~al.}
+\newblock \bibinfo{title}{Thyroidxl: Advancing thyroid nodule diagnosis with an
+  expert-labeled, pathology-validated dataset}.
+\newblock In \emph{\bibinfo{booktitle}{Medical Image Computing and Computer
+  Assisted Intervention -- MICCAI 2025}}, vol. \bibinfo{volume}{15974},
+  \bibinfo{pages}{616--626}, \doiprefix\url{10.1007/978-3-032-05182-0_60}
+  (\bibinfo{publisher}{Springer Nature Switzerland}, \bibinfo{year}{2025}).
+
+\bibitem{pedraza2015open}
+\bibinfo{author}{Pedraza, L.} \emph{et~al.}
+\newblock \bibinfo{title}{An open access thyroid ultrasound image database}.
+\newblock In \emph{\bibinfo{booktitle}{10th International Symposium on Medical
+  Information Processing and Analysis}}, vol. \bibinfo{volume}{9287},
+  \bibinfo{pages}{188--193} (\bibinfo{year}{2015}).
+
+\bibitem{shusharina2021segmentation}
+\bibinfo{author}{Shusharina, N.}, \bibinfo{author}{Heinrich, M.~P.} \&
+  \bibinfo{author}{Huang, R.}
+\newblock \emph{\bibinfo{title}{Segmentation, Classification, and Registration
+  of Multi-modality Medical Imaging Data: MICCAI 2020 Challenges, ABCs 2020,
+  L2R 2020, TN-SCUI 2020, Held in Conjunction with MICCAI 2020, Lima, Peru,
+  October 4--8, 2020, Proceedings}} (\bibinfo{publisher}{Springer Nature},
+  \bibinfo{year}{2021}).
+
+\bibitem{liu2024decade}
+\bibinfo{author}{Liu, Z.} \& \bibinfo{author}{He, K.}
+\newblock \bibinfo{title}{A decade's battle on dataset bias: Are we there yet?}
+\newblock In \emph{\bibinfo{booktitle}{International Conference on Learning
+  Representations}} (\bibinfo{year}{2025}).
+
+\bibitem{ma2025medsam2}
+\bibinfo{author}{Ma, J.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Medsam2: Segment anything in 3d
+  medical images and videos}}.
+\newblock {\emph{\JournalTitle{arXiv preprint arXiv:2504.03600}}}
+  (\bibinfo{year}{2025}).
+
+\bibitem{jiang2025pretraining}
+\bibinfo{author}{Jiang, Y.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{From pretraining to privacy:
+  Federated ultrasound foundation model with self-supervised learning}}.
+\newblock {\emph{\JournalTitle{npj Digital Medicine}}}
+  \textbf{\bibinfo{volume}{8}}, \bibinfo{pages}{714},
+  \doiprefix\url{10.1038/s41746-025-02085-0} (\bibinfo{year}{2025}).
+
+\bibitem{wang2023repvit}
+\bibinfo{author}{Wang, A.}, \bibinfo{author}{Chen, H.}, \bibinfo{author}{Lin,
+  Z.}, \bibinfo{author}{Han, J.} \& \bibinfo{author}{Ding, G.}
+\newblock \bibinfo{title}{Repvit: Revisiting mobile cnn from vit perspective}.
+\newblock In \emph{\bibinfo{booktitle}{Proceedings of the IEEE/CVF Conference
+  on Computer Vision and Pattern Recognition}}, \bibinfo{pages}{15909--15920}
+  (\bibinfo{year}{2024}).
+
+\bibitem{dong2022survey}
+\bibinfo{author}{Dong, C.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A survey of natural language
+  generation}}.
+\newblock {\emph{\JournalTitle{ACM Computing Surveys}}}
+  \textbf{\bibinfo{volume}{55}}, \bibinfo{pages}{1--38} (\bibinfo{year}{2022}).
+
+\bibitem{openai2025gpt5systemcard}
+\bibinfo{author}{{OpenAI}}.
+\newblock \bibinfo{title}{Gpt-5 system card}.
+\newblock
+  \bibinfo{howpublished}{\url{https://openai.com/index/gpt-5-system-card/}}
+  (\bibinfo{year}{2025}).
+\newblock \bibinfo{note}{Published August 7, 2025}.
+
+\bibitem{comanici_gemini_2025}
+\bibinfo{author}{Comanici, G.}, \bibinfo{author}{Bieber, E.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Gemini 2.5: Pushing the frontier
+  with advanced reasoning, multimodality, long context, and next generation
+  agentic capabilities}}.
+\newblock {\emph{\JournalTitle{arXiv preprint arXiv:2507.06261}}}
+  (\bibinfo{year}{2025}).
+
+\bibitem{zhang2024biomedclip}
+\bibinfo{author}{Zhang, S.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A multimodal biomedical foundation
+  model trained from fifteen million image–text pairs}}.
+\newblock {\emph{\JournalTitle{NEJM AI}}} \textbf{\bibinfo{volume}{2}},
+  \doiprefix\url{10.1056/AIoa2400640} (\bibinfo{year}{2024}).
+
+\bibitem{sellergren2025medgemma}
+\bibinfo{author}{Sellergren, A.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Medgemma technical report}}.
+\newblock {\emph{\JournalTitle{arXiv preprint arXiv:2507.05201}}}
+  (\bibinfo{year}{2025}).
+
+\bibitem{lundberg2017unified}
+\bibinfo{author}{Lundberg, S.~M.} \& \bibinfo{author}{Lee, S.-I.}
+\newblock \bibinfo{title}{A unified approach to interpreting model
+  predictions}.
+\newblock In \emph{\bibinfo{booktitle}{Advances in Neural Information
+  Processing Systems}}, vol.~\bibinfo{volume}{30} (\bibinfo{year}{2017}).
+
+\bibitem{papineni_bleu:_2001}
+\bibinfo{author}{Papineni, K.}, \bibinfo{author}{Roukos, S.} \emph{et~al.}
+\newblock \bibinfo{title}{Bleu: a method for automatic evaluation of machine
+  translation}.
+\newblock In \emph{\bibinfo{booktitle}{Proceedings of the 40th Annual Meeting
+  of the Association for Computational Linguistics}}, \bibinfo{pages}{311--318}
+  (\bibinfo{year}{2002}).
+
+\bibitem{lin_rouge_2004}
+\bibinfo{author}{Lin, C.-Y.}
+\newblock \bibinfo{title}{Rouge: A package for automatic evaluation of
+  summaries}.
+\newblock In \emph{\bibinfo{booktitle}{Text Summarization Branches Out}},
+  \bibinfo{pages}{74--81} (\bibinfo{year}{2004}).
+
+\bibitem{lavie_meteor:_2007}
+\bibinfo{author}{Banerjee, S.} \& \bibinfo{author}{Lavie, A.}
+\newblock \bibinfo{title}{Meteor: An automatic metric for mt evaluation with
+  improved correlation with human judgments}.
+\newblock In \emph{\bibinfo{booktitle}{Proceedings of the ACL Workshop on
+  Intrinsic and Extrinsic Evaluation Measures for Machine Translation and/or
+  Summarization}}, \bibinfo{pages}{65--72} (\bibinfo{year}{2005}).
+
+\bibitem{Obermeyer2019ScienceBias}
+\bibinfo{author}{Obermeyer, Z.}, \bibinfo{author}{Powers, B.},
+  \bibinfo{author}{Vogeli, C.} \& \bibinfo{author}{Mullainathan, S.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Dissecting racial bias in an
+  algorithm used to manage the health of populations}}.
+\newblock {\emph{\JournalTitle{Science}}} \textbf{\bibinfo{volume}{366}},
+  \bibinfo{pages}{447--453}, \doiprefix\url{10.1126/science.aax2342}
+  (\bibinfo{year}{2019}).
+
+\bibitem{gong2025domain}
+\bibinfo{author}{Gong, H.}, \bibinfo{author}{Lu, Y.}, \bibinfo{author}{Wan, X.}
+  \& \bibinfo{author}{Li, H.}
+\newblock \bibinfo{title}{Domain generalized medical landmark detection via
+  robust boundary-aware pre-training}.
+\newblock In \emph{\bibinfo{booktitle}{Proceedings of the AAAI Conference on
+  Artificial Intelligence}}, vol.~\bibinfo{volume}{39},
+  \bibinfo{pages}{3140--3148} (\bibinfo{year}{2025}).
+
+\bibitem{gong2026intermediate}
+\bibinfo{author}{Gong, H.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Intermediate domain alignment and
+  morphology analogy for patent-product image retrieval}}.
+\newblock {\emph{\JournalTitle{Advances in Neural Information Processing
+  Systems}}} \textbf{\bibinfo{volume}{38}}, \bibinfo{pages}{14501--14523}
+  (\bibinfo{year}{2026}).
+
+\bibitem{torralba2011unbiased}
+\bibinfo{author}{Torralba, A.} \& \bibinfo{author}{Efros, A.~A.}
+\newblock \bibinfo{title}{Unbiased look at dataset bias}.
+\newblock In \emph{\bibinfo{booktitle}{Proceedings of the IEEE Conference on
+  Computer Vision and Pattern Recognition}}, \bibinfo{pages}{1521--1528}
+  (\bibinfo{year}{2011}).
+
+\bibitem{simeoni2025dinov3}
+\bibinfo{author}{Sim{\'e}oni, O.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Dinov3}}.
+\newblock {\emph{\JournalTitle{arXiv preprint arXiv:2508.10104}}}
+  (\bibinfo{year}{2025}).
+
+\bibitem{menon2020long}
+\bibinfo{author}{Menon, A.~K.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Long-tail learning via logit
+  adjustment}}.
+\newblock {\emph{\JournalTitle{arXiv preprint arXiv:2007.07314}}}
+  (\bibinfo{year}{2020}).
+
+\bibitem{erickson2020autogluon}
+\bibinfo{author}{Erickson, N.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Autogluon-tabular: Robust and
+  accurate automl for structured data}}.
+\newblock {\emph{\JournalTitle{arXiv preprint arXiv:2003.06505}}}
+  (\bibinfo{year}{2020}).
+
+\bibitem{selvaraju2017gradcam}
+\bibinfo{author}{Selvaraju, R.~R.} \emph{et~al.}
+\newblock \bibinfo{title}{Grad-cam: Visual explanations from deep networks via
+  gradient-based localization}.
+\newblock In \emph{\bibinfo{booktitle}{Proceedings of the IEEE International
+  Conference on Computer Vision}}, \bibinfo{pages}{618--626}
+  (\bibinfo{year}{2017}).
+
+\bibitem{openai_gpt4_2024}
+\bibinfo{author}{{OpenAI}}.
+\newblock \bibinfo{journal}{\bibinfo{title}{Gpt-4o system card}}.
+\newblock {\emph{\JournalTitle{arXiv preprint arXiv:2410.21276}}}
+  (\bibinfo{year}{2024}).
+
+\bibitem{yang_qwen3_2025}
+\bibinfo{author}{Yang, A.}, \bibinfo{author}{Li, A.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Qwen3 technical report}}.
+\newblock {\emph{\JournalTitle{arXiv preprint arXiv:2505.09388}}}
+  (\bibinfo{year}{2025}).
+
+\bibitem{li_llavamed_2023}
+\bibinfo{author}{Li, C.}, \bibinfo{author}{Wong, C.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Llava-med: Training a large
+  language-and-vision assistant for biomedicine in one day}}.
+\newblock {\emph{\JournalTitle{Advances in Neural Information Processing
+  Systems}}} \textbf{\bibinfo{volume}{36}}, \bibinfo{pages}{28541--28564}
+  (\bibinfo{year}{2023}).
+
+\bibitem{wunderling2017comparison}
+\bibinfo{author}{Wunderling, T.} \emph{et~al.}
+\newblock \bibinfo{title}{Comparison of thyroid segmentation techniques for 3d
+  ultrasound}.
+\newblock In \emph{\bibinfo{booktitle}{Medical Imaging 2017: Image
+  Processing}}, vol. \bibinfo{volume}{10133}, \bibinfo{pages}{346--352}
+  (\bibinfo{year}{2017}).
+
+\bibitem{hou2024ultrasonography}
+\bibinfo{author}{Hou, X.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{An ultrasonography of thyroid
+  nodules dataset with pathological diagnosis annotation for deep learning}}.
+\newblock {\emph{\JournalTitle{Scientific Data}}}
+  \textbf{\bibinfo{volume}{11}}, \bibinfo{pages}{1272},
+  \doiprefix\url{10.1038/s41597-024-04156-5} (\bibinfo{year}{2024}).
+
+\bibitem{stanford2024thyroid}
+\bibinfo{author}{{Stanford AIMI}}.
+\newblock \bibinfo{title}{Thyroid ultrasound cine-clip dataset},
+  \doiprefix\url{10.71718/7m5n-rh16} (\bibinfo{year}{2024}).
+
+\bibitem{yang2025annotated}
+\bibinfo{author}{Yang, Y.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{An annotated heterogeneous
+  ultrasound database}}.
+\newblock {\emph{\JournalTitle{Scientific Data}}}
+  \textbf{\bibinfo{volume}{12}}, \bibinfo{pages}{148} (\bibinfo{year}{2025}).
+
+\bibitem{chen2024transunet}
+\bibinfo{author}{Chen, J.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Transunet: Rethinking the u-net
+  architecture design for medical image segmentation through the lens of
+  transformers}}.
+\newblock {\emph{\JournalTitle{Medical Image Analysis}}}
+  \textbf{\bibinfo{volume}{97}}, \bibinfo{pages}{103280},
+  \doiprefix\url{10.1016/j.media.2024.103280} (\bibinfo{year}{2024}).
+
+\bibitem{zhang2025generalist}
+\bibinfo{author}{Zhang, S.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A generalist foundation model and
+  database for open-world medical image segmentation}}.
+\newblock {\emph{\JournalTitle{Nature Biomedical Engineering}}}
+  \textbf{\bibinfo{volume}{10}}, \bibinfo{pages}{1026--1041},
+  \doiprefix\url{10.1038/s41551-025-01497-3} (\bibinfo{year}{2026}).
+\newblock \bibinfo{note}{Published online 5 September 2025}.
+
+\bibitem{he2016deep}
+\bibinfo{author}{He, K.}, \bibinfo{author}{Zhang, X.}, \bibinfo{author}{Ren,
+  S.} \& \bibinfo{author}{Sun, J.}
+\newblock \bibinfo{title}{Deep residual learning for image recognition}.
+\newblock In \emph{\bibinfo{booktitle}{Proceedings of the IEEE Conference on
+  Computer Vision and Pattern Recognition (CVPR)}}, \bibinfo{pages}{770--778}
+  (\bibinfo{year}{2016}).
+
+\bibitem{wang2025lsnet}
+\bibinfo{author}{Wang, A.}, \bibinfo{author}{Chen, H.}, \bibinfo{author}{Lin,
+  Z.}, \bibinfo{author}{Han, J.} \& \bibinfo{author}{Ding, G.}
+\newblock \bibinfo{title}{Lsnet: See large, focus small}.
+\newblock In \emph{\bibinfo{booktitle}{Proceedings of the IEEE/CVF Conference
+  on Computer Vision and Pattern Recognition}}, \bibinfo{pages}{9718--9729}
+  (\bibinfo{year}{2025}).
+
+\bibitem{bai2025qwen3}
+\bibinfo{author}{Bai, S.}, \bibinfo{author}{Cai, Y.}, \bibinfo{author}{Chen,
+  R.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Qwen3-vl technical report}}.
+\newblock {\emph{\JournalTitle{arXiv preprint arXiv:2511.21631}}}
+  (\bibinfo{year}{2025}).
+
+\end{thebibliography}

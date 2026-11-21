@@ -1,15 +1,19 @@
 (() => {
   const DEFAULT_FILES = {
-    en: "generated/body_en.tex",
-    zh: "generated/body_zh.tex",
+    response: {
+      en: "generated/body_en.tex",
+      zh: "generated/body_zh.tex",
+    },
+    manuscript: "main_v2.tex",
   };
 
+  let currentWorkspace = "response";
   let currentLang = "en";
   let currentPath = null;
   let editorDirty = false;
   let savedContent = "";
   let splitPdf = false;
-  let lastPdfMtime = { en: null, zh: null };
+  let lastPdfMtime = { en: null, zh: null, manuscript: null };
   let pendingLogText = null;
   let findActiveIndex = -1;
 
@@ -34,7 +38,11 @@
   const btnSave = document.getElementById("btnSave");
   const pdfEn = document.getElementById("pdfEn");
   const pdfZh = document.getElementById("pdfZh");
+  const pdfMs = document.getElementById("pdfMs");
   const previewBody = document.getElementById("previewBody");
+  const sidebarHead = document.getElementById("sidebarHead");
+  const groupResponseLang = document.getElementById("groupResponseLang");
+  const groupPdfTabs = document.getElementById("groupPdfTabs");
 
   function pdfUrl(lang) {
     const q = `/pdf/${lang}?t=${Date.now()}`;
@@ -43,8 +51,26 @@
 
   const pdfEnCell = document.getElementById("pdfEnCell");
   const pdfZhCell = document.getElementById("pdfZhCell");
+  const pdfMsCell = document.getElementById("pdfMsCell");
 
   function refreshPdf() {
+    if (currentWorkspace === "manuscript") {
+      if (!pdfMs || !pdfMsCell) {
+        statusText.textContent = "请硬刷新页面 (Ctrl+F5) 以加载主稿 PDF 预览";
+        return;
+      }
+      pdfMs.src = pdfUrl("manuscript");
+      pdfMsCell.hidden = false;
+      pdfMsCell.style.display = "flex";
+      if (pdfEnCell) pdfEnCell.style.display = "none";
+      if (pdfZhCell) pdfZhCell.style.display = "none";
+      previewBody.classList.remove("split");
+      return;
+    }
+    if (pdfMsCell) {
+      pdfMsCell.hidden = true;
+      pdfMsCell.style.display = "none";
+    }
     pdfEn.src = pdfUrl("en");
     pdfZh.src = pdfUrl("zh");
     if (splitPdf) {
@@ -57,6 +83,7 @@
   }
 
   function setProjectLang(lang) {
+    if (currentWorkspace !== "response") return;
     currentLang = lang;
     document.querySelectorAll("[data-project-lang]").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.projectLang === lang);
@@ -65,27 +92,80 @@
       btn.classList.toggle("active", btn.dataset.pdfLang === lang);
     });
     refreshPdf();
-    openFile(DEFAULT_FILES[lang], false);
+    openFile(DEFAULT_FILES.response[lang], false);
+  }
+
+  async function setWorkspace(ws) {
+    if (ws === currentWorkspace) return;
+    if (editorDirty && !confirm("当前文件未保存，切换工作区将放弃修改？")) return;
+    const prev = currentWorkspace;
+    try {
+      currentWorkspace = ws;
+      currentPath = null;
+      editor.value = "";
+      pathLabel.textContent = "—";
+      editorDirty = false;
+      btnSave.disabled = true;
+      splitPdf = false;
+      document.getElementById("btnSplitPdf").classList.remove("active");
+      document.querySelectorAll("[data-workspace]").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.workspace === ws);
+      });
+      const showResponseUi = ws === "response";
+      if (groupResponseLang) groupResponseLang.hidden = !showResponseUi;
+      if (groupPdfTabs) groupPdfTabs.hidden = !showResponseUi;
+      await loadFileList();
+      refreshPdf();
+      if (ws === "manuscript") {
+        await openFile(DEFAULT_FILES.manuscript, false);
+      } else {
+        setProjectLang(currentLang);
+      }
+    } catch (err) {
+      currentWorkspace = prev;
+      alert(
+        `切换工作区失败：${err.message || err}\n\n请确认已重启 python app.py，并 Ctrl+F5 强刷页面。`
+      );
+    }
+  }
+
+  function filesApiUrl() {
+    return `/api/projects/${encodeURIComponent(currentWorkspace)}/files`;
+  }
+
+  function fileApiUrl(rel) {
+    return `/api/projects/${encodeURIComponent(currentWorkspace)}/file?path=${encodeURIComponent(rel)}`;
   }
 
   async function loadFileList() {
-    const r = await fetch("/api/files");
+    const r = await fetch(filesApiUrl());
     const data = await r.json();
+    if (!r.ok) {
+      throw new Error(data.error || `列表 HTTP ${r.status}`);
+    }
+    if (sidebarHead && data.root) sidebarHead.textContent = `${data.root}/ 文件`;
     renderTree(data.files || []);
   }
 
   function renderTree(files) {
-    const sections = {
-      en: { title: "English", items: [] },
-      zh: { title: "中文", items: [] },
-      shared: { title: "共用样式", items: [] },
-    };
-    for (const f of files) {
-      const key = sections[f.lang] ? f.lang : "shared";
-      sections[key].items.push(f);
+    const sections =
+      currentWorkspace === "manuscript"
+        ? { manuscript: { title: "TeX / Bib / Cls", items: files } }
+        : {
+            en: { title: "English", items: [] },
+            zh: { title: "中文", items: [] },
+            shared: { title: "共用样式", items: [] },
+          };
+    if (currentWorkspace === "response") {
+      for (const f of files) {
+        const key = sections[f.lang] ? f.lang : "shared";
+        sections[key].items.push(f);
+      }
     }
+    const sectionOrder =
+      currentWorkspace === "manuscript" ? ["manuscript"] : ["en", "zh", "shared"];
     fileTree.innerHTML = "";
-    for (const key of ["en", "zh", "shared"]) {
+    for (const key of sectionOrder) {
       const sec = sections[key];
       if (!sec.items.length) continue;
       const wrap = document.createElement("div");
@@ -410,9 +490,11 @@
     if (confirmDiscard && editorDirty) {
       if (!confirm("当前文件未保存，是否放弃修改？")) return;
     }
-    const r = await fetch(`/api/file?path=${encodeURIComponent(path)}`);
+    const r = await fetch(fileApiUrl(path));
     if (!r.ok) {
-      alert("无法打开文件");
+      const err = await r.json().catch(() => ({}));
+      const detail = [err.error || "HTTP " + r.status, err.project, err.resolved].filter(Boolean).join("\n");
+      alert(`无法打开文件：${path}\n${detail}\n\n请重启 python app.py 并 Ctrl+F5 强刷页面。`);
       return;
     }
     const data = await r.json();
@@ -464,10 +546,13 @@
   async function saveFile() {
     if (!currentPath || !editorDirty) return;
     btnSave.disabled = true;
-    const r = await fetch("/api/file", {
+    const r = await fetch(`/api/projects/${encodeURIComponent(currentWorkspace)}/file`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path: currentPath, content: editor.value }),
+      body: JSON.stringify({
+        path: currentPath,
+        content: editor.value,
+      }),
     });
     if (!r.ok) {
       alert("保存失败");
@@ -537,8 +622,8 @@
       const s = await fetchStatus();
       setStatus(s);
       if (!s.building) {
-        for (const lang of ["en", "zh"]) {
-          const mt = s.pdf_mtime[lang];
+        for (const lang of ["en", "zh", "manuscript"]) {
+          const mt = s.pdf_mtime && s.pdf_mtime[lang];
           if (mt && mt !== lastPdfMtime[lang]) {
             lastPdfMtime[lang] = mt;
             refreshPdf();
@@ -559,6 +644,10 @@
   });
 
   btnSave.addEventListener("click", saveFile);
+
+  document.querySelectorAll("[data-workspace]").forEach((btn) => {
+    btn.addEventListener("click", () => setWorkspace(btn.dataset.workspace));
+  });
 
   document.querySelectorAll("[data-project-lang]").forEach((btn) => {
     btn.addEventListener("click", () => setProjectLang(btn.dataset.projectLang));

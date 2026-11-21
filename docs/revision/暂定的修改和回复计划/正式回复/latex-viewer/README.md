@@ -39,11 +39,26 @@ python3 app.py --port 8888 --no-watch
 
 ## 手动编译（不用网页）
 
+**审稿回复**（`../latex/`）：
+
 ```bash
-cd ../latex
-xelatex -interaction=nonstopmode REVIEWER_RESPONSE_EN.tex
-xelatex -interaction=nonstopmode REVIEWER_RESPONSE_ZH.tex
-# 需要更新目录时再各跑一遍
+cd ../latex && bash compile.sh
 ```
 
-正文与表图请在 `../latex/generated/` 内直接编辑 TeX；本预览器只编译现有源文件。
+**Nature 主稿**（`../26_Nature_ThyroidAgent/`，Overleaf zip 解压目录放这里即可，**不必**再挪位置）：
+
+```bash
+cd latex-viewer && bash compile_manuscript.sh
+# 产出：../26_Nature_ThyroidAgent/main_v2.pdf
+```
+
+## 主稿与 viewer 的关系
+
+`app.py` 在 **启动 / 点「编译」** 时会走 `full_build()`：
+
+1. 回信：`xelatex` ×2（EN + ZH），工作目录 `latex/`，`TEXINPUTS` 含 `../figures`
+2. 主稿：若存在 `../26_Nature_ThyroidAgent/`，则 `xelatex` → `bibtex` → `xelatex` ×2，主文件 **`main_v2.tex`**
+
+顶栏 **工作区** 可在「审稿回复」与 **Nature 主稿** 间切换；主稿侧栏列出 `26_Nature_ThyroidAgent/` 下 `.tex` / `.bib` / `.cls`，右侧预览 `main_v2.pdf`。主稿 `.log` 里若有 `!` 行，页眉可能显示编译失败，但 `nonstopmode` 仍可能写出 PDF（以文件大小为准）。
+
+正文与表图请在 `../latex/generated/` 内直接编辑 TeX。
