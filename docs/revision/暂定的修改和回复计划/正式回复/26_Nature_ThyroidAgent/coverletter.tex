@@ -1,0 +1,52 @@
+\documentclass[10pt]{article}
+
+\usepackage[letterpaper,margin=0.78in]{geometry}
+\usepackage{newtxtext}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{ragged2e}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\renewcommand{\baselinestretch}{1.02}
+
+\begin{document}
+
+\begin{flushright}
+\textbf{Guanbin Li}\\
+School of Computer Science and Engineering\\
+Sun Yat-sen University\\
+Guangdong, China\\
+\href{mailto:liguanbin@mail.sysu.edu.cn}{liguanbin@mail.sysu.edu.cn}\\[4pt]
+\today
+\end{flushright}
+
+\vspace{-2pt}
+
+\vspace{8pt}
+
+Dear Editors,
+
+We are pleased to submit our Article, ``Auditable agentic AI for evidence-grounded thyroid ultrasound diagnosis and reporting,'' for consideration in \textit{Nature Communications}.
+
+Most medical AI systems are designed as isolated predictors that return a mask, probability, label or generated report, while providing limited access to the evidence supporting those outputs. We present ThyroidXAgent, a clinician-interactive agentic AI system that instead organizes thyroid ultrasound diagnosis as an auditable case-level evidence workflow. Rather than relying on a general-purpose multimodal model for direct image interpretation, ThyroidXAgent plans case-specific analyses, coordinates specialized diagnostic tools and stores their outputs in a shared evidence record. Lesion masks, measurements, risk estimates, radiomic attributions, uncertainty signals and report statements remain available for clinician inspection, correction and reuse in subsequent diagnostic steps.
+
+The system was developed using OpenThyroidDB, a multicentre, multitask resource integrating approximately 0.3 million thyroid ultrasound images and 24,000 paired reports. It was evaluated on 28,458 non-overlapping test cases, including 8,721 cases from 35 centres in the private NHC-MISD-TUS cohort. Across heterogeneous public and institutional datasets, ThyroidXAgent achieved a mean Dice score of 87.21\% for thyroid nodule segmentation and a mean AUROC of 0.9466 for benign--malignant classification. On NHC-MISD-TUS, it achieved a nodule Dice score of 82.31\% and an AUROC of 0.819, outperforming the evaluated segmentation and classification baselines. The same evidence workflow was further adapted to lymph-node metastasis prediction and follicular versus papillary thyroid carcinoma classification, achieving AUROCs of 0.864 and 0.805, respectively.
+
+For report generation, ThyroidXAgent assembles report statements from structured clinical evidence rather than producing unconstrained free text. We also introduce ThyClinScore, a lesion-level clinical semantic metric that evaluates lesion matching, measurements, morphology, vascularity and report completeness. ThyClinScore correlated more strongly with a location-aware language-model judge than conventional overlap metrics. Across three reporting cohorts, ThyroidXAgent outperformed multimodal language-model baselines on both lexical and clinical semantic measures. In reader studies, AI assistance improved physician classification accuracy by 5.4--10.8 percentage points, increased report diagnostic consistency from 70.3\% to 86.2\%, and reduced segmentation and reporting time by 35.9\% and 27.4\%, respectively, while retaining editable intermediate evidence.
+
+We believe this work is well suited to \textit{Nature Communications} because its contribution extends beyond thyroid ultrasound. It establishes and evaluates a general design principle for agentic AI in high-stakes domains: agents can coordinate validated specialist tools, maintain an explicit and auditable evidence state, and support meaningful human correction without replacing domain-specific perception with unconstrained autonomy. The study connects agentic planning, heterogeneous tool orchestration, interpretable evidence management and human--AI collaboration in a large multicentre clinical evaluation.
+
+This manuscript is original, has not been published previously and is not under consideration elsewhere. All authors have reviewed and approved the manuscript and declare no competing interests. Thank you for considering our work. The manuscript was previously submitted to Nature Machine Intelligence. Following editorial assessment, Dr William Henson, Senior Editor at Nature Machine Intelligence, recommended transfer to Nature Communications and indicated that the manuscript would be sent for external peer review following transfer.
+
+\vspace{4pt}
+Sincerely,\\[6pt]
+\textbf{Guanbin Li, Fei Chen, Wei Lou and Qinghua Liu}\\
+Corresponding authors, on behalf of all authors\\
+\href{mailto:liguanbin@mail.sysu.edu.cn}{liguanbin@mail.sysu.edu.cn};
+\href{mailto:gzchenfei@126.com}{gzchenfei@126.com};
+\href{mailto:louwei@zjnu.edu.cn}{louwei@zjnu.edu.cn};
+\href{mailto:13760633321@163.com}{13760633321@163.com}
+
+\end{document}
