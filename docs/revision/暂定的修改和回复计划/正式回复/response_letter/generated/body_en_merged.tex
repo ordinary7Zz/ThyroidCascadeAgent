@@ -200,12 +200,12 @@ RJH-7K & --- & --- & 14.6\% & --- & --- & 0.9020 & 0.9045 \\
 \responsetablenote{Referral thresholds fit on the pooled validation set ($n{=}875$), frozen for external test (OR rules: vote entropy, top-2 margin, minimum pairwise segmentation IoU). ECE/Brier and classification Acc on pathology-labelled cohorts only; segmentation Dice on cohorts with nodule masks. ``Non-referred'' = cases not flagged for human review under frozen thresholds.}
 \end{responsetable}
 \begin{responsefigure}
-\includegraphics[width=0.92\textwidth]{reliability_panels.png}
+\includegraphics[width=0.92\textwidth]{reliability_panels.pdf}
 \caption{\responsefiguretitle{fig_reliability}{External-test malignancy reliability diagrams for the official test splits of five pathology-labelled cohorts (TN3K, TN5K, ThyroidXL, ZJH-8K, DDTI), shown side by side; models were developed on each cohort's train/validation partitions and evaluated on test. ZJH-8K sample size: \responsetableref{tab_dhash}. Referral uses vote entropy, top-2 margin, and minimum pairwise segmentation IoU with OR combination; thresholds were fit on the pooled validation set, frozen, and applied on test without retuning.}}
 \label{fig_reliability}
 \end{responsefigure}
 \begin{responsefigure}
-\includegraphics[width=0.92\textwidth]{risk_coverage_panels.png}
+\includegraphics[width=0.92\textwidth]{risk_coverage_panels.pdf}
 \caption{\responsefiguretitle{fig_risk_coverage}{Risk--coverage curves for the official test splits of five pathology-labelled cohorts (TN3K, TN5K, ThyroidXL, ZJH-8K, DDTI), shown side by side; ThyroidXAgent was developed on each cohort's train/validation partitions and evaluated on test. Horizontal axis: classification uncertainty from vote entropy, top-2 malignancy-probability margin, and minimum pairwise segmentation IoU (OR combination; same definitions as \responsetableref{tab_calib_referral}). Vertical axis: coverage (non-referred fraction). Referral thresholds were fit on the pooled OpenThyroid validation set ($n{=}875$), frozen for all cohorts, and applied on test without retuning; curve operating points match referral rates in \responsetableref{tab_calib_referral}. ZJH-8K sample size: \responsetableref{tab_dhash}.}}
 \label{fig_risk_coverage}
 \end{responsefigure}

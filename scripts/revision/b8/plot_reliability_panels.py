@@ -40,49 +40,15 @@ COHORT_LABELS = {
     "ddti_cls": "DDTI",
 }
 
+NOTEXT_FIGSIZE = (4.2, 3.6)
 
-def plot_combined(
-    cohorts_root: Path,
-    cohorts: list[str],
-    out_path: Path,
-    *,
-    calibration_json_name: str = "calibration_test.json",
-) -> Path | None:
-    try:
-        import matplotlib.pyplot as plt
-        import numpy as np
-    except ImportError:
+
+def _load_bins(cohorts_root: Path, cohort: str, calibration_json_name: str) -> list | None:
+    cal_path = cohorts_root / cohort / calibration_json_name
+    if not cal_path.is_file():
         return None
-
-    n = len(cohorts)
-    ncols = 3
-    nrows = int(np.ceil(n / ncols))
-    fig, axes = plt.subplots(nrows, ncols, figsize=(4.2 * ncols, 3.6 * nrows))
-    if nrows == 1 and ncols == 1:
-        axes = np.array([[axes]])
-    elif nrows == 1:
-        axes = np.array([axes])
-    elif ncols == 1:
-        axes = np.array([[a] for a in axes])
-
-    for idx, cohort in enumerate(cohorts):
-        cal_path = cohorts_root / cohort / calibration_json_name
-        if not cal_path.is_file():
-            continue
-        cal = json.loads(cal_path.read_text(encoding="utf-8"))
-        bins = cal.get("bins") or []
-        ax = axes[idx // ncols][idx % ncols]
-        label = COHORT_LABELS.get(cohort, cohort)
-        _draw_bins_on_ax(ax, bins, title=label)
-
-    for j in range(len(cohorts), nrows * ncols):
-        axes[j // ncols][j % ncols].set_visible(False)
-
-    fig.tight_layout()
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(out_path, dpi=150)
-    plt.close(fig)
-    return out_path
+    cal = json.loads(cal_path.read_text(encoding="utf-8"))
+    return list(cal.get("bins") or [])
 
 
 def _scatter_sizes(counts: list[int], *, min_pt: float = 48.0, max_pt: float = 220.0) -> list[float]:
@@ -96,7 +62,14 @@ def _scatter_sizes(counts: list[int], *, min_pt: float = 48.0, max_pt: float = 2
     return out
 
 
-def _draw_bins_on_ax(ax, bins: list, *, title: str) -> None:
+def _draw_bins_on_ax(
+    ax,
+    bins: list,
+    *,
+    with_text: bool = True,
+    cohort_label: str = "",
+    legend_glyphs_only: bool = False,
+) -> None:
     """与 pipeline.revision.b8.plot_calibration.plot_reliability_diagram 同口径。"""
     confs: list[float] = []
     accs: list[float] = []
@@ -112,7 +85,14 @@ def _draw_bins_on_ax(ax, bins: list, *, title: str) -> None:
         accs.append(float(aa))
         counts.append(int(b["count"]))
 
-    ax.plot([0, 1], [0, 1], "k--", label="Perfect calibration", linewidth=1)
+    need_legend_label = with_text or legend_glyphs_only
+    ax.plot(
+        [0, 1],
+        [0, 1],
+        "k--",
+        linewidth=1,
+        label="Perfect calibration" if need_legend_label else None,
+    )
     if confs:
         sizes = _scatter_sizes(counts)
         ax.scatter(
@@ -126,84 +106,184 @@ def _draw_bins_on_ax(ax, bins: list, *, title: str) -> None:
         )
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
-    ax.set_xlabel("Mean predicted P(malignant)", fontsize=8)
-    ax.set_ylabel("Fraction malignant", fontsize=8)
-    ax.set_title(title, fontsize=9)
-    ax.legend(loc="lower right", fontsize=6)
+    if with_text:
+        ax.set_xlabel("Mean predicted P(malignant)", fontsize=8)
+        ax.set_ylabel("Fraction malignant", fontsize=8)
+        if cohort_label:
+            ax.set_title(cohort_label, fontsize=9)
+        ax.legend(loc="lower right", fontsize=6)
+    elif legend_glyphs_only:
+        ax.legend(loc="lower right", fontsize=6, frameon=True, handlelength=2.2)
     ax.grid(True, alpha=0.25)
 
 
-def _save_reliability_notext_svg(bins: list, out_svg: Path) -> Path | None:
+def save_reliability_notext_svg(
+    bins: list,
+    out_svg: Path,
+    *,
+    figsize: tuple[float, float] = NOTEXT_FIGSIZE,
+) -> Path | None:
     try:
         import matplotlib.pyplot as plt
     except ImportError:
         return None
 
-    fig, ax = plt.subplots(figsize=(4.2, 3.6))
-    _draw_bins_on_ax(ax, bins, title="_")
-    save_figure_notext_svg(fig, out_svg)
+    if not bins:
+        return None
+
+    fig, ax = plt.subplots(figsize=figsize)
+    _draw_bins_on_ax(ax, bins, with_text=False, legend_glyphs_only=True)
+    fig.tight_layout()
+    save_figure_notext_svg(fig, out_svg, keep_legend=True)
     plt.close(fig)
     return out_svg
 
 
-def export_reliability_cohort_notext_svgs(
-    cohorts_root: Path,
-    cohorts: list[str],
-    out_dir: Path,
+def export_cohort_reliability(
+    cohort: str,
+    bins: list,
     *,
-    calibration_json_name: str = "calibration_test.json",
-) -> list[Path]:
-    """Per-cohort reliability panels without text (for custom figure layout)."""
+    out_dir: Path,
+    svg_dir: Path | None,
+) -> tuple[Path | None, Path | None]:
+    """带标注 PNG + 无文字 SVG（与合图子格同口径）。"""
+    try:
+        import matplotlib.pyplot as plt
+    except ImportError:
+        return None, None
+
+    label = COHORT_LABELS.get(cohort, cohort)
+    png_path = out_dir / f"reliability_{cohort}.png"
+
+    fig, ax = plt.subplots(figsize=(5.0, 4.5))
+    _draw_bins_on_ax(ax, bins, with_text=True, cohort_label=f"{label}: reliability")
+    fig.tight_layout()
     out_dir.mkdir(parents=True, exist_ok=True)
-    written: list[Path] = []
-    for cohort in cohorts:
-        cal_path = cohorts_root / cohort / calibration_json_name
-        if not cal_path.is_file():
-            continue
-        cal = json.loads(cal_path.read_text(encoding="utf-8"))
-        bins = cal.get("bins") or []
-        p = _save_reliability_notext_svg(bins, out_dir / f"reliability_{cohort}_notext.svg")
-        if p:
-            written.append(p)
-    return written
+    fig.savefig(png_path, dpi=150)
+    plt.close(fig)
+
+    svg_path: Path | None = None
+    if svg_dir is not None:
+        svg_path = save_reliability_notext_svg(bins, svg_dir / f"reliability_{cohort}_notext.svg")
+    return png_path, svg_path
+
+
+def plot_combined(
+    cohort_bins: dict[str, list],
+    out_path: Path,
+) -> Path | None:
+    try:
+        import matplotlib.pyplot as plt
+        import numpy as np
+    except ImportError:
+        return None
+
+    if not cohort_bins:
+        return None
+
+    cohorts = list(cohort_bins.keys())
+    n = len(cohorts)
+    ncols = 3
+    nrows = int(np.ceil(n / ncols))
+    fig, axes = plt.subplots(nrows, ncols, figsize=(4.2 * ncols, 3.6 * nrows))
+    if nrows == 1 and ncols == 1:
+        axes = np.array([[axes]])
+    elif nrows == 1:
+        axes = np.array([axes])
+    elif ncols == 1:
+        axes = np.array([[a] for a in axes])
+
+    for idx, cohort in enumerate(cohorts):
+        ax = axes[idx // ncols][idx % ncols]
+        label = COHORT_LABELS.get(cohort, cohort)
+        _draw_bins_on_ax(ax, cohort_bins[cohort], with_text=True, cohort_label=label)
+
+    for j in range(n, nrows * ncols):
+        axes[j // ncols][j % ncols].set_visible(False)
+
+    fig.tight_layout()
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(out_path, dpi=150)
+    plt.close(fig)
+    return out_path
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--cohorts-root", type=Path, default=Path("output/b8/cohorts_test_fit"))
-    parser.add_argument("--calibration-json", default="calibration_test.json")
-    parser.add_argument("--out", type=Path, default=Path("output/b8/figures/reliability_panels.png"))
+    parser = argparse.ArgumentParser(
+        description="B8 可靠性：每队列输出带文字 PNG，并默认额外输出无文字 SVG。",
+    )
+    parser.add_argument(
+        "--cohorts-root",
+        type=Path,
+        default=Path("output/b8/cohorts_test_fit"),
+        help="含 <cohort>/calibration_test*.json 的目录",
+    )
+    parser.add_argument(
+        "--calibration-json",
+        default="calibration_test.json",
+        help="各 cohort 目录下的校准 JSON",
+    )
+    parser.add_argument(
+        "--out-dir",
+        type=Path,
+        default=Path("output/b8/figures"),
+        help="带文字单队列 PNG 输出目录",
+    )
+    parser.add_argument(
+        "--out",
+        type=Path,
+        default=None,
+        help="多队列合图 PNG（默认 <out-dir>/reliability_panels.png）",
+    )
     parser.add_argument("--cohorts", default=",".join(DEFAULT_COHORTS))
     parser.add_argument(
         "--no-notext-svg",
         action="store_true",
-        help="不输出各队列无文字 SVG（默认写入 --out 同目录下 svg_notext/）",
+        help="不输出无文字 SVG（默认写入 <out-dir>/svg_notext/）",
     )
     parser.add_argument(
         "--notext-svg-dir",
         type=Path,
         default=None,
-        help="无文字 SVG 目录（默认 <out 父目录>/svg_notext）",
+        help="无文字 SVG 目录（默认 <out-dir>/svg_notext）",
     )
     args = parser.parse_args()
+
     cohorts = [c.strip() for c in args.cohorts.split(",") if c.strip()]
-    svg_dir: Path | None | bool = False if args.no_notext_svg else (args.notext_svg_dir or args.out.parent / "svg_notext")
-    p = plot_combined(
-        args.cohorts_root,
-        cohorts,
-        args.out,
-        calibration_json_name=args.calibration_json,
-    )
-    if p:
-        print(f"✓ {p}")
-    if svg_dir is not False:
-        for sp in export_reliability_cohort_notext_svgs(
-            args.cohorts_root,
-            cohorts,
-            Path(svg_dir),
-            calibration_json_name=args.calibration_json,
-        ):
-            print(f"✓ {sp}")
+    args.out_dir.mkdir(parents=True, exist_ok=True)
+    panel_out = args.out or (args.out_dir / "reliability_panels.png")
+
+    svg_dir: Path | None = None
+    if not args.no_notext_svg:
+        svg_dir = args.notext_svg_dir or (args.out_dir / "svg_notext")
+        svg_dir.mkdir(parents=True, exist_ok=True)
+
+    cohort_bins: dict[str, list] = {}
+    for cohort in cohorts:
+        bins = _load_bins(args.cohorts_root, cohort, args.calibration_json)
+        if bins is None:
+            print(f"跳过 {cohort}: 无 {args.cohorts_root / cohort / args.calibration_json}")
+            continue
+        if not bins:
+            print(f"跳过 {cohort}: bins 为空")
+            continue
+        cohort_bins[cohort] = bins
+
+        png_path, svg_path = export_cohort_reliability(
+            cohort,
+            bins,
+            out_dir=args.out_dir,
+            svg_dir=svg_dir,
+        )
+        if png_path:
+            print(f"✓ PNG {png_path}")
+        if svg_path:
+            print(f"✓ SVG {svg_path}")
+
+    if cohort_bins:
+        p = plot_combined(cohort_bins, panel_out)
+        if p:
+            print(f"✓ 合图 {p}")
 
 
 if __name__ == "__main__":

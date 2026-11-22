@@ -52,6 +52,9 @@ COHORT_LABELS = {
     "sample": "sample",
 }
 
+# 与合图子格一致，便于在排版软件里拼 panel
+NOTEXT_FIGSIZE = (4.0, 3.5)
+
 
 def _load_curve(eval_path: Path) -> list[dict]:
     with open(eval_path, encoding="utf-8") as f:
@@ -68,6 +71,33 @@ def _operating_point(eval_path: Path) -> tuple[int, int, float]:
     return n_flagged, n_total, rate
 
 
+def _ylim_for_accuracies(accs: list[float]) -> tuple[float, float]:
+    if not accs:
+        return 0.0, 1.0
+    ymin = max(0.0, min(accs) - 0.05)
+    ymax = min(1.0, max(accs) + 0.02)
+    if ymax - ymin < 0.1:
+        ymin, ymax = max(0.0, ymin - 0.05), min(1.0, ymax + 0.05)
+    return ymin, ymax
+
+
+def _series_from_curve(curve: list[dict], x_axis: str) -> tuple[list[float], list[float]]:
+    xs: list[float] = []
+    ys: list[float] = []
+    for pt in curve:
+        acc = pt.get("retained_accuracy")
+        if acc is None:
+            continue
+        if x_axis == "abstention":
+            if "abstention_rate" not in pt:
+                continue
+            xs.append(float(pt["abstention_rate"]))
+        else:
+            xs.append(float(pt["coverage"]))
+        ys.append(float(acc))
+    return xs, ys
+
+
 def _draw_risk_coverage_on_ax(
     ax,
     curve: list[dict],
@@ -78,41 +108,34 @@ def _draw_risk_coverage_on_ax(
     with_text: bool = True,
     cohort_label: str = "",
 ) -> None:
-    if x_axis == "abstention":
-        xs, ys = [], []
-        for pt in curve:
-            acc = pt.get("retained_accuracy")
-            if acc is None or "abstention_rate" not in pt:
-                continue
-            xs.append(float(pt["abstention_rate"]))
-            ys.append(float(acc))
-        ax.plot(xs, ys, "-", linewidth=1.2)
-        if mark_operating and operating_rate is not None and xs:
+    xs, ys = _series_from_curve(curve, x_axis)
+    if not xs:
+        return
+
+    ax.plot(xs, ys, "-", linewidth=1.2)
+    if mark_operating and operating_rate is not None:
+        if x_axis == "abstention":
             j = min(range(len(xs)), key=lambda i: abs(xs[i] - operating_rate))
-            ax.scatter([xs[j]], [ys[j]], s=40, zorder=5, color="C1")
+        else:
+            cov = 1.0 - operating_rate
+            j = min(range(len(xs)), key=lambda i: abs(xs[i] - cov))
+        ax.scatter([xs[j]], [ys[j]], s=40, zorder=5, color="C1")
+
+    ymin, ymax = _ylim_for_accuracies(ys)
+    ax.set_ylim(ymin, ymax)
+    if x_axis == "abstention":
+        ax.set_xlim(-0.02, 1.02)
         if with_text:
             ax.set_xlabel("Abstention rate", fontsize=9)
             ax.set_ylabel("Retained accuracy", fontsize=9)
     else:
-        xs, ys = [], []
-        for pt in curve:
-            acc = pt.get("retained_accuracy")
-            if acc is None:
-                continue
-            xs.append(float(pt["coverage"]))
-            ys.append(float(acc))
-        ax.plot(xs, ys, "-", linewidth=1.2)
-        if mark_operating and operating_rate is not None and xs:
-            cov = 1.0 - operating_rate
-            j = min(range(len(xs)), key=lambda i: abs(xs[i] - cov))
-            ax.scatter([xs[j]], [ys[j]], s=40, zorder=5, color="C1")
+        ax.set_xlim(0, 1.02)
         if with_text:
             ax.set_xlabel("Coverage", fontsize=9)
             ax.set_ylabel("Retained accuracy", fontsize=9)
 
     if with_text and cohort_label:
         ax.set_title(cohort_label, fontsize=10)
-    ax.set_xlim(0, 1.02)
     ax.grid(True, alpha=0.3)
 
 
@@ -123,6 +146,7 @@ def save_risk_coverage_notext_svg(
     x_axis: str = "coverage",
     mark_operating: bool = False,
     operating_rate: float | None = None,
+    figsize: tuple[float, float] = NOTEXT_FIGSIZE,
 ) -> Path | None:
     try:
         import matplotlib.pyplot as plt
@@ -132,7 +156,7 @@ def save_risk_coverage_notext_svg(
     if not curve:
         return None
 
-    fig, ax = plt.subplots(figsize=(4.0, 3.5))
+    fig, ax = plt.subplots(figsize=figsize)
     _draw_risk_coverage_on_ax(
         ax,
         curve,
@@ -141,9 +165,53 @@ def save_risk_coverage_notext_svg(
         operating_rate=operating_rate,
         with_text=False,
     )
+    fig.tight_layout()
     save_figure_notext_svg(fig, out_svg)
     plt.close(fig)
     return out_svg
+
+
+def export_cohort_risk_coverage(
+    cohort: str,
+    curve: list[dict],
+    *,
+    out_dir: Path,
+    svg_dir: Path | None,
+    x_axis: str,
+    mark_operating: bool,
+    operating_rate: float,
+) -> tuple[Path | None, Path | None]:
+    """带标注 PNG + 无文字 SVG（曲线/网格/工作点与合图子格一致）。"""
+    label = COHORT_LABELS.get(cohort, cohort)
+    stem = f"risk_coverage_{cohort}"
+    png_path: Path | None = None
+    if x_axis == "abstention":
+        png_path = plot_risk_coverage_vs_abstention(
+            curve,
+            out_dir / f"{stem}_vs_abstention.png",
+            title=f"{label}: risk–coverage",
+            label=label,
+            mark_abstention_rate=operating_rate if mark_operating else None,
+        )
+    else:
+        png_path = plot_risk_coverage_curve(
+            curve,
+            out_dir / f"{stem}.png",
+            title=f"{label}: risk–coverage",
+            label=label,
+            mark_coverage=(1.0 - operating_rate) if mark_operating else None,
+        )
+
+    svg_path: Path | None = None
+    if svg_dir is not None:
+        svg_path = save_risk_coverage_notext_svg(
+            curve,
+            svg_dir / f"{stem}_notext.svg",
+            x_axis=x_axis,
+            mark_operating=mark_operating,
+            operating_rate=operating_rate,
+        )
+    return png_path, svg_path
 
 
 def plot_multi_panel(
@@ -169,6 +237,7 @@ def plot_multi_panel(
 
     for idx, (cohort, curve) in enumerate(sorted(cohort_curves.items())):
         ax = axes[idx // ncols][idx % ncols]
+        label = COHORT_LABELS.get(cohort, cohort)
         _draw_risk_coverage_on_ax(
             ax,
             curve,
@@ -176,7 +245,7 @@ def plot_multi_panel(
             mark_operating=mark_operating,
             operating_rate=operating.get(cohort),
             with_text=True,
-            cohort_label="",
+            cohort_label=label,
         )
 
     for j in range(n, nrows * ncols):
@@ -190,7 +259,9 @@ def plot_multi_panel(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="B8 risk–coverage 图")
+    parser = argparse.ArgumentParser(
+        description="B8 risk–coverage：每队列输出带文字 PNG，并默认额外输出无文字 SVG。",
+    )
     parser.add_argument(
         "--cohorts-root",
         type=Path,
@@ -201,13 +272,13 @@ def main() -> None:
         "--out-dir",
         type=Path,
         default=Path("output/b8/figures"),
-        help="输出 PNG 目录",
+        help="带文字 PNG 与合图输出目录",
     )
     parser.add_argument(
         "--cohorts",
         type=str,
         default=",".join(DEFAULT_COHORTS),
-        help="逗号分隔队列名；默认主 BM 外测队列",
+        help="逗号分隔队列名；默认主 BM 外测五队列",
     )
     parser.add_argument(
         "--x-axis",
@@ -233,7 +304,7 @@ def main() -> None:
     parser.add_argument(
         "--no-notext-svg",
         action="store_true",
-        help="不输出各队列无文字 SVG（默认写入 --out-dir/svg_notext/）",
+        help="不输出无文字 SVG（默认写入 <out-dir>/svg_notext/）",
     )
     parser.add_argument(
         "--notext-svg-dir",
@@ -248,6 +319,7 @@ def main() -> None:
     svg_dir: Path | None = None
     if not args.no_notext_svg:
         svg_dir = args.notext_svg_dir or (args.out_dir / "svg_notext")
+        svg_dir.mkdir(parents=True, exist_ok=True)
 
     cohort_curves: dict[str, list[dict]] = {}
     operating: dict[str, float] = {}
@@ -265,40 +337,21 @@ def main() -> None:
         _, _, rate = _operating_point(eval_path)
         operating[cohort] = rate
 
-        label = COHORT_LABELS.get(cohort, cohort)
-        stem = f"risk_coverage_{cohort}"
-        if args.x_axis == "abstention":
-            out = args.out_dir / f"{stem}_vs_abstention.png"
-            fig = plot_risk_coverage_vs_abstention(
-                curve,
-                out,
-                title=f"{label}: risk–coverage",
-                label=label,
-                mark_abstention_rate=rate if args.mark_operating_point else None,
-            )
+        png_path, svg_path = export_cohort_risk_coverage(
+            cohort,
+            curve,
+            out_dir=args.out_dir,
+            svg_dir=svg_dir,
+            x_axis=args.x_axis,
+            mark_operating=args.mark_operating_point,
+            operating_rate=rate,
+        )
+        if png_path:
+            print(f"✓ PNG {png_path}")
         else:
-            out = args.out_dir / f"{stem}.png"
-            fig = plot_risk_coverage_curve(
-                curve,
-                out,
-                title=f"{label}: risk–coverage",
-                label=label,
-                mark_coverage=(1.0 - rate) if args.mark_operating_point else None,
-            )
-        if fig:
-            print(f"✓ {fig}")
-        else:
-            print(f"未生成 {cohort}（需要 matplotlib）")
-        if svg_dir is not None:
-            sp = save_risk_coverage_notext_svg(
-                curve,
-                svg_dir / f"risk_coverage_{cohort}_notext.svg",
-                x_axis=args.x_axis,
-                mark_operating=args.mark_operating_point,
-                operating_rate=rate,
-            )
-            if sp:
-                print(f"✓ {sp}")
+            print(f"未生成 {cohort} PNG（需要 matplotlib）")
+        if svg_path:
+            print(f"✓ SVG {svg_path}")
 
     if args.combined and cohort_curves:
         panel_out = args.out_dir / "risk_coverage_panels.png"
@@ -310,7 +363,7 @@ def main() -> None:
             operating=operating,
         )
         if fig:
-            print(f"✓ {fig}")
+            print(f"✓ 合图 {fig}")
 
 
 if __name__ == "__main__":
