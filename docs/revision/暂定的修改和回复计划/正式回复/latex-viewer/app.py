@@ -19,6 +19,9 @@ STATIC = Path(__file__).resolve().parent / "static"
 # --- 工程根目录（相对 正式回复/）---
 RESPONSE_DIR = BASE / "response_letter"
 MANUSCRIPT_DIR = BASE / "26_Nature_ThyroidAgent"
+MANUSCRIPT_SOURCE = "main_v2.tex"
+MANUSCRIPT_WRAP = "main_v2._local_build.tex"
+MANUSCRIPT_OVERLAY = Path(__file__).resolve().parent / "manuscript-overlay"
 
 PROJECTS: dict[str, dict] = {
     "response": {
@@ -120,7 +123,10 @@ def _texinputs_env(project_id: str) -> dict[str, str]:
     env = os.environ.copy()
     cfg = PROJECTS[project_id]
     root = cfg["root"]
-    parts = [".", str(root)]
+    parts: list[str] = []
+    if project_id == "manuscript" and MANUSCRIPT_OVERLAY.is_dir():
+        parts.append(str(MANUSCRIPT_OVERLAY))
+    parts.extend([".", str(root)])
     fig = cfg.get("figures_texinputs")
     if fig and fig.is_dir():
         parts.append(str(fig))
@@ -158,6 +164,22 @@ def compile_response(runs: int = 3) -> tuple[bool, str]:
     return ok, "\n".join(logs)
 
 
+def _manuscript_wrap_tex(root: Path) -> Path:
+    """Overleaf 稿不改源文件：wrap 去掉重复 \\usepackage{xcolor}（与 overlay 类里的 xcolor[table] 配合）。"""
+    src = root / MANUSCRIPT_SOURCE
+    wrap = root / MANUSCRIPT_WRAP
+    if not src.exists():
+        raise FileNotFoundError(src)
+    skip = {r"\usepackage{xcolor}", r"\usepackage[table]{xcolor}"}
+    lines = [
+        line
+        for line in src.read_text(encoding="utf-8").splitlines(keepends=True)
+        if line.strip() not in skip
+    ]
+    wrap.write_text("".join(lines), encoding="utf-8")
+    return wrap
+
+
 def compile_manuscript() -> tuple[bool, str]:
     cfg = PROJECTS["manuscript"]
     root: Path = cfg["root"]
@@ -165,20 +187,29 @@ def compile_manuscript() -> tuple[bool, str]:
     pdf: Path = cfg["pdf"]
     if not main_tex.exists():
         return False, f"Missing {main_tex}"
+    try:
+        wrap_tex = _manuscript_wrap_tex(root)
+    except OSError as e:
+        return False, str(e)
     engine = cfg.get("engine", "xelatex")
     env = _texinputs_env("manuscript")
-    stem = main_tex.stem
-    logs: list[str] = []
+    jobname = main_tex.stem
+    logs: list[str] = [
+        f"=== local build wrap: {MANUSCRIPT_WRAP} (-jobname={jobname}) ===\n",
+    ]
     last_code = 0
     last_log_errors: list[str] = []
+    latex_cmd = [
+        engine,
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        f"-jobname={jobname}",
+        wrap_tex.name,
+    ]
 
     def run_pass(label: str) -> None:
         nonlocal last_code, last_log_errors
-        code, log = _run(
-            [engine, "-interaction=nonstopmode", "-file-line-error", main_tex.name],
-            root,
-            env=env,
-        )
+        code, log = _run(latex_cmd, root, env=env)
         last_code = code
         logs.append(f"=== {label} exit={code} ===\n{log[-12000:]}")
         last_log_errors = _latex_log_errors(main_tex)
@@ -186,7 +217,7 @@ def compile_manuscript() -> tuple[bool, str]:
     run_pass(f"{engine} pass 1")
     aux = main_tex.with_suffix(".aux")
     if cfg.get("bibtex") and aux.exists():
-        code, log = _run(["bibtex", stem], root, env=env)
+        code, log = _run(["bibtex", jobname], root, env=env)
         logs.append(f"=== bibtex exit={code} ===\n{log[-4000:]}")
     run_pass(f"{engine} pass 2")
     run_pass(f"{engine} pass 3")

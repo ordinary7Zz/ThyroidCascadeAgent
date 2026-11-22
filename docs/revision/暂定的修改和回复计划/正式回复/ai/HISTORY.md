@@ -814,3 +814,25 @@
 **做了什么：** 完整回信以 `response_letter/`（`main.tex` + `body_en_merged.tex`）为唯一编译与编辑真源；`latex-viewer` 只编译 `response_letter` 与 `26_Nature_ThyroidAgent`；移除 EN/ZH 双稿同步与中文 PDF 预览。
 
 **教训 / 避免重犯：** AI 新对话默认改 `response_letter/generated/`，勿再假定 `latex/REVIEWER_RESPONSE_ZH` 或「改 EN 必同步 ZH」。若仍在 `latex/generated/body_en.tex` 分段改稿，须合并进 `body_en_merged.tex` 后再当定稿。
+
+---
+
+## 2026-11-22 — R2.15：NHC 伦理与库协议分开；不挂靠 2026-KY-081
+
+**文件：** `response_letter/generated/body_en_merged.tex`；`ai/MANUSCRIPT_REVISION_CHECKLIST.md`
+
+**做了什么：** R2.15 第三段删除「NHC 在同一珠江伦理批件 2026-KY-081-01 下」；改为数据库授权子集 + **已签署合作/数据合规协议**（作者与库方留存、回信不附全文）+ 仅外测；技术条件仍指 R2.6。主稿清单前提与 NHC 条目与上述分工对齐。
+
+**对意图的理解：** 审稿人反对「共同作者口头授权」；需正面说明库方合规协议，但协议保密不宜入信 PDF。
+
+**教训 / 避免重犯：** NHC-MISD-TUS 伦理/合规句与 ZJH IRB 分两段写；可写 agreement on file、not reproduced，勿再写 same approved protocol (2026-KY-081-01) 覆盖 NHC。
+
+---
+
+## 2026-11-22 — R2.15 NHC 段：删「不附协议」括号；加非共同作者授权
+
+**文件：** `response_letter/generated/body_en_merged.tex`
+
+**做了什么：** NHC 段改为短版：`executed cooperation and data-compliance agreement` + `not through individual co-author authorization`；去掉 retained/not reproduced 括号（避免 meta）。
+
+**教训 / 避免重犯：** 库合规一句陈述即可；勿向审稿人解释为何不附保密协议 PDF。

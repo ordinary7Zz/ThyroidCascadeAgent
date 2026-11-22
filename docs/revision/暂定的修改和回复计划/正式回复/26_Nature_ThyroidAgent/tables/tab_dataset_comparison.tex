@@ -1,0 +1,261 @@
+% Supplementary table \label{tab:dataset_comparison}
+\begin{table}[p]
+\centering
+\caption{Characteristics of public and institutional thyroid ultrasound datasets. Dataset size, data split, file format, task, geographical source and ultrasound scanner information are summarized for the included resources.}
+\label{tab:dataset_comparison}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}llllllll@{}}
+\toprule
+\textbf{Dataset} &
+\textbf{Dataset Size} &
+\textbf{Development/Validation} &
+\textbf{Evaluation} &
+\textbf{File Format} &
+\textbf{Task} &
+\textbf{Location} &
+\textbf{Ultrasonic Imaging Device} \\
+\midrule
+
+TGVideo~\cite{wunderling2017comparison} &
+15,186 (16 cases) &
+15,186 &
+N/A &
+\begin{tabular}[c]{@{}l@{}}
+Image: DICOM\\
+Mask: DICOM
+\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}
+Segmentation\\
+Component Development
+\end{tabular} &
+Germany &
+GE Logiq E9 \\
+
+\midrule
+DDTI~\cite{pedraza2015open} &
+637 &
+N/A &
+637 &
+\begin{tabular}[c]{@{}l@{}}
+Image: PNG\\
+Mask: PNG\\
+Label: CSV
+\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}
+Segmentation\\
+Classification
+\end{tabular} &
+Colombia &
+\begin{tabular}[c]{@{}l@{}}
+TOSHIBA Nemio 30\\
+TOSHIBA Nemio MX
+\end{tabular} \\
+
+\midrule
+TN3K~\cite{gong2021multi,gong2022less,gong2023thyroid} &
+5,347 &
+4,733 &
+614 &
+\begin{tabular}[c]{@{}l@{}}
+Image: JPG\\
+Mask: JPG\\
+Label: CSV
+\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}
+Segmentation\\
+Classification\\
+Component Development
+\end{tabular} &
+Guangzhou, China &
+\begin{tabular}[c]{@{}l@{}}
+GE Logiq E9\\
+ARIETTA 850\\
+RESONA 70B
+\end{tabular} \\
+
+\midrule
+TN5K~\cite{zhang2025tn5000} &
+5,000 &
+4,000 &
+1,000 &
+\begin{tabular}[c]{@{}l@{}}
+Image: JPG\\
+Label: XML
+\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}
+Detection\\
+Classification
+\end{tabular} &
+Beijing, China &
+\begin{tabular}[c]{@{}l@{}}
+GE Logiq E9\\
+GE S7
+\end{tabular} \\
+
+\midrule
+ThyUS2Path~\cite{hou2024ultrasonography} &
+8,508 &
+5,457 &
+3,051 &
+\begin{tabular}[c]{@{}l@{}}
+Image: JPG\\
+Label: CSV
+\end{tabular} &
+Classification &
+Zhejiang, China &
+Esaote MyLab (Portable) \\
+
+\midrule
+Cine-clip~\cite{stanford2024thyroid} &
+\begin{tabular}[c]{@{}l@{}}
+17,412 frames\\
+192 cases\\
+avg. 90 frames/case
+\end{tabular} &
+N/A &
+N/A &
+\begin{tabular}[c]{@{}l@{}}
+Image: HDF5\\
+Label: CSV
+\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}
+Segmentation\\
+Classification
+\end{tabular} &
+California, USA &
+N/A \\
+
+\midrule
+AHU~\cite{yang2025annotated} &
+\begin{tabular}[c]{@{}l@{}}
+1,833 cases\\
+125,896 images
+\end{tabular} &
+N/A &
+N/A &
+\begin{tabular}[c]{@{}l@{}}
+Image: JPG\\
+Label: Folder-level
+\end{tabular} &
+Classification &
+China (web scraping) &
+Heterogeneous \\
+
+\midrule
+ThyroidXL~\cite{duong2025thyroidxl} &
+11,631 &
+9,541 &
+2,090 &
+\begin{tabular}[c]{@{}l@{}}
+Image: PNG\\
+Mask: PNG\\
+Label: TXT
+\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}
+Segmentation\\
+Classification\\
+Detection
+\end{tabular} &
+Vietnam &
+Hitachi Aloka Arietta V70 \\
+
+\midrule
+PKTN~\cite{sun2025clip} &
+1,003 &
+N/A &
+N/A &
+\begin{tabular}[c]{@{}l@{}}
+Image: JPG\\
+Mask: JPG
+\end{tabular} &
+Segmentation &
+Beijing, China &
+N/A \\
+
+\midrule
+KMVE~\cite{li_ultrasound_2024} &
+\begin{tabular}[c]{@{}l@{}}
+2,457 cases\\
+4,914 image assignments
+\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}
+1,719 training cases\\
+246 validation cases
+\end{tabular} &
+492 test cases &
+\begin{tabular}[c]{@{}l@{}}
+Image: JPEG\\
+Report: JSON
+\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}
+Report Generation\\
+Component Development
+\end{tabular} &
+Beijing, China &
+N/A \\
+
+\midrule
+SMU-HMC &
+\begin{tabular}[c]{@{}l@{}}
+23,955 reports\\
+248,194 images
+\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}
+23,555 reports\\
+242,210 images
+\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}
+400 reports\\
+5,984 images
+\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}
+Image: PNG\\
+Report: JSON
+\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}
+Report Generation\\
+Component Development
+\end{tabular} &
+Guangzhou, China &
+Heterogeneous \\
+
+\midrule
+ZJH-TS &
+\begin{tabular}[c]{@{}l@{}}
+353 reports\\
+4,471 images
+\end{tabular} &
+N/A &
+\begin{tabular}[c]{@{}l@{}}
+150 reports\\
+2,034 images
+\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}
+Image: PNG\\
+Report: JSON
+\end{tabular} &
+\begin{tabular}[c]{@{}l@{}}
+Report Generation\\
+External Validation
+\end{tabular} &
+Guangzhou, China &
+Heterogeneous \\
+
+\midrule
+TNVideo &
+151 cases &
+N/A &
+145 labelled cases &
+Video: AVI &
+\begin{tabular}[c]{@{}l@{}}
+Segmentation\\
+Reader Study
+\end{tabular} &
+Guangzhou, China &
+N/A \\
+
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+\clearpage

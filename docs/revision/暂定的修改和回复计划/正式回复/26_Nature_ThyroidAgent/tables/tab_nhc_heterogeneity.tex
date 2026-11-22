@@ -1,0 +1,24 @@
+% Supplementary table \label{tab:nhc_heterogeneity}
+\begin{table*}[p]
+\centering
+\begin{threeparttable}
+
+\caption{Between-centre heterogeneity in NHC-MISD-TUS. Pooled values are inverse-variance weighted estimates across centres, and macro values are unweighted means of the centre-level estimates. $I^2$ and $\tau^2$ were derived from centre-level estimates (Cochran's $Q$). Centres in which a metric could not be estimated were excluded for that metric. Meta-regression on scanner type or case mix was not performed because these covariates were not released.}
+\label{tab:nhc_heterogeneity}
+
+\footnotesize
+\setlength{\tabcolsep}{5.5pt}
+\renewcommand{\arraystretch}{1.08}
+
+\begin{tabular}{llcccccc}
+\toprule
+\textbf{Task} & \textbf{Metric} & \textbf{Centres} & \textbf{Images} & \textbf{Pooled} & \textbf{Macro} & \textbf{$I^2$ (\%)} & \textbf{$\tau^2$} \\
+\midrule
+Nodule segmentation & Dice & 33 & 6,384 & 0.823 & 0.816 & 99.0 & 0.010 \\
+Benign-malignant classification & AUROC & 32 & 4,999 & 0.819 & 0.754 & 99.0 & 0.000 \\
+Gland segmentation & Dice & 35 & 8,721 & 0.593 & 0.559 & 99.9 & 0.134 \\
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{table*}
+\clearpage

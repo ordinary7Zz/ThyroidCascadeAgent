@@ -1,0 +1,150 @@
+% Supplementary table \label{tab:stacked_performance}
+\begin{table*}[p]
+\centering
+
+\caption{Effects of cumulative training-data integration on segmentation and classification. Models were trained on progressively expanded configurations and evaluated on independent test sets. Segmentation performance is reported as Dice coefficient (\%, $\uparrow$ higher is better) and HD95 (mm, $\downarrow$ lower is better); classification performance as AUROC and AUPRC ($\uparrow$ higher is better). Values are means $\pm$ 95\% confidence intervals across five independent runs. Dashes indicate that the test set was not applicable for the given task. Segmentation training configurations: dataset1 (TN3K), dataset2 (TN3K + ThyroidXL), dataset3 (TN3K + ThyroidXL + PKTN), dataset4 (TN3K + ThyroidXL + PKTN + TN5K). Classification training configurations: dataset1 (TN3K), dataset2 (TN3K + ThyroidXL), dataset3 (TN3K + ThyroidXL + TN5K).}
+\label{tab:stacked_performance}
+
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.08}
+
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccc}
+\toprule
+\diagbox{\textbf{Train}}{\textbf{Test}}
+& \textbf{TN3K}
+& \textbf{ThyroidXL}
+& \textbf{PKTN}
+& \textbf{TN5K}
+& \textbf{DDTI}
+& \textbf{ZJH-8K}
+& \textbf{RJH-7K} \\
+\midrule
+\multicolumn{8}{l}{\textit{Segmentation -- Dice (\%) $\uparrow$}} \\
+\midrule
+dataset1
+& \textbf{82.76 $\pm$ 3.54}
+& 81.97 $\pm$ 2.63
+& 79.21 $\pm$ 2.71
+& 72.18 $\pm$ 5.08
+& 78.08 $\pm$ 3.09
+& 94.57 $\pm$ 0.43
+& 80.77 $\pm$ 0.44 \\
+dataset2
+& 81.63 $\pm$ 3.81
+& 86.84 $\pm$ 1.90
+& 81.73 $\pm$ 2.26
+& 71.07 $\pm$ 5.35
+& 76.72 $\pm$ 3.39
+& \textbf{94.85 $\pm$ 0.40}
+& 82.38 $\pm$ 0.42 \\
+dataset3
+& 80.81 $\pm$ 3.82
+& 86.00 $\pm$ 2.31
+& 81.91 $\pm$ 2.26
+& 72.82 $\pm$ 4.91
+& 84.81 $\pm$ 2.43
+& 94.82 $\pm$ 0.39
+& 91.44 $\pm$ 0.15 \\
+dataset4
+& 81.86 $\pm$ 3.70
+& \textbf{86.97 $\pm$ 2.19}
+& \textbf{83.28 $\pm$ 2.19}
+& \textbf{82.57 $\pm$ 3.46}
+& \textbf{84.86 $\pm$ 2.38}
+& 94.77 $\pm$ 0.39
+& \textbf{91.46 $\pm$ 0.15} \\
+\midrule
+\multicolumn{8}{l}{\textit{Segmentation -- HD95 (mm) $\downarrow$}} \\
+\midrule
+dataset1
+& \textbf{13.49 $\pm$ 3.83}
+& 8.34 $\pm$ 2.34
+& 11.73 $\pm$ 3.07
+& 11.37 $\pm$ 3.49
+& 16.93 $\pm$ 3.12
+& 2.30 $\pm$ 0.47
+& 11.46 $\pm$ 0.50 \\
+dataset2
+& 15.92 $\pm$ 4.58
+& 4.99 $\pm$ 1.58
+& 9.72 $\pm$ 2.71
+& 13.64 $\pm$ 4.28
+& 18.54 $\pm$ 3.17
+& 1.98 $\pm$ 0.41
+& 9.65 $\pm$ 0.44 \\
+dataset3
+& 15.94 $\pm$ 4.34
+& 5.46 $\pm$ 1.62
+& 10.92 $\pm$ 3.52
+& 11.07 $\pm$ 3.28
+& 11.97 $\pm$ 3.98
+& \textbf{1.93 $\pm$ 0.38}
+& \textbf{1.87 $\pm$ 0.07} \\
+dataset4
+& 17.00 $\pm$ 5.34
+& \textbf{4.74 $\pm$ 1.42}
+& \textbf{8.89 $\pm$ 2.93}
+& \textbf{4.64 $\pm$ 1.43}
+& \textbf{9.91 $\pm$ 2.18}
+& 2.07 $\pm$ 0.40
+& 1.88 $\pm$ 0.07 \\
+\midrule
+\multicolumn{8}{l}{\textit{Classification -- AUROC $\uparrow$}} \\
+\midrule
+dataset1
+& 0.7666 $\pm$ 0.03
+& 0.8713 $\pm$ 0.01
+& --
+& 0.8272 $\pm$ 0.02
+& 0.7244 $\pm$ 0.07
+& 0.9924 $\pm$ 0.01
+& -- \\
+dataset2
+& 0.7724 $\pm$ 0.04
+& 0.9254 $\pm$ 0.01
+& --
+& 0.8151 $\pm$ 0.02
+& 0.5762 $\pm$ 0.10
+& 0.9932 $\pm$ 0.01
+& -- \\
+dataset3
+& \textbf{0.7906 $\pm$ 0.03}
+& \textbf{0.9288 $\pm$ 0.01}
+& --
+& \textbf{0.9515 $\pm$ 0.01}
+& \textbf{0.7623 $\pm$ 0.07}
+& \textbf{0.9937 $\pm$ 0.01}
+& -- \\
+\midrule
+\multicolumn{8}{l}{\textit{Classification -- AUPRC $\uparrow$}} \\
+\midrule
+dataset1
+& 0.6806 $\pm$ 0.06
+& 0.8147 $\pm$ 0.03
+& --
+& 0.9151 $\pm$ 0.02
+& 0.3578 $\pm$ 0.13
+& 0.9951 $\pm$ 0.01
+& -- \\
+dataset2
+& \textbf{0.7237 $\pm$ 0.05}
+& 0.9140 $\pm$ 0.01
+& --
+& 0.9074 $\pm$ 0.01
+& 0.3190 $\pm$ 0.14
+& \textbf{0.9968 $\pm$ 0.01}
+& -- \\
+dataset3
+& 0.7188 $\pm$ 0.05
+& \textbf{0.9144 $\pm$ 0.01}
+& --
+& \textbf{0.9803 $\pm$ 0.01}
+& \textbf{0.4029 $\pm$ 0.14}
+& 0.9967 $\pm$ 0.01
+& -- \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

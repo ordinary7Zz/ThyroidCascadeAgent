@@ -1,0 +1,1 @@
+本地主稿编译用：此目录的 `wlscirep.cls` 在 `TEXINPUTS` 中优先于 `26_Nature_ThyroidAgent/wlscirep.cls`，仅将 `xcolor` 改为 `[table]` 以启用 `\rowcolor`。**不上传 Overleaf**；Overleaf 仍用工程内的原版 `wlscirep.cls`。

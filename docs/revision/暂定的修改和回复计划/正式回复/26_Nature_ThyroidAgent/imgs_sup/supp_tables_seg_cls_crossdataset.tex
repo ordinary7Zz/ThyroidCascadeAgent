@@ -1,0 +1,261 @@
+% Nodule segmentation and benign--malignant classification supplementary tables (extracted from main_v2.tex).
+% Segmentation and classification
+\begin{table*}[p]
+\centering
+\begin{threeparttable}
+
+\caption{Cross-dataset generalization for thyroid nodule segmentation. Dice coefficient and 95th-percentile Hausdorff distance (HD95) are reported as point estimates $\pm$ half-widths of 95\% confidence intervals from a cluster bootstrap over patients (1{,}000 resamples; each image formed its own cluster in cohorts without patient identifiers). ZJH-8K: 6{,}807 images (1{,}068 patients).}
+\label{tab:seg_performance}
+
+\footnotesize
+\setlength{\tabcolsep}{5.5pt}
+\renewcommand{\arraystretch}{1.08}
+
+\begin{tabular}{lccccccc}
+\toprule
+\textbf{Model}
+& \textbf{TN3K}
+& \textbf{ThyroidXL}
+& \textbf{PKTN}
+& \textbf{TN5K}
+& \textbf{DDTI}
+& \textbf{ZJH-8K}
+& \textbf{RJH-7K} \\
+\midrule
+\multicolumn{8}{l}{\textit{Dice (\%) $\uparrow$}} \\
+\midrule
+TransUnet~\cite{chen2024transunet}
+& $81.84 \pm 1.62$
+& $85.75 \pm 0.57$
+& $76.89 \pm 3.56$
+& $78.54 \pm 1.51$
+& $76.58 \pm 1.67$
+& $76.53 \pm 0.86$
+& $84.83 \pm 0.37$ \\
+MedSegX~\cite{zhang2025generalist}
+& $83.93 \pm 0.79$
+& $79.98 \pm 0.36$
+& $80.63 \pm 0.42$
+& $83.10 \pm 0.48$
+& $75.12 \pm 1.68$
+& $69.21 \pm 1.00$
+& $85.40 \pm 0.18$ \\
+MedSAM2~\cite{ma2025medsam2}
+& $84.47 \pm 1.02$
+& $86.94 \pm 0.36$
+& $83.46 \pm 2.60$
+& $83.03 \pm 1.29$
+& $84.72 \pm 1.26$
+& $82.57 \pm 0.82$
+& $90.72 \pm 0.21$ \\
+UltraFedFM~\cite{jiang2025pretraining}
+& $81.18 \pm 1.46$
+& $84.70 \pm 0.53$
+& $75.31 \pm 1.12$
+& $77.13 \pm 1.38$
+& $75.57 \pm 1.67$
+& $77.56 \pm 0.78$
+& $83.10 \pm 0.33$ \\
+\rowcolor{lightgray}
+\textbf{ThyroidXAgent}
+& \textbf{85.69 $\pm$ 1.17}
+& \textbf{88.53 $\pm$ 0.42}
+& \textbf{85.18 $\pm$ 2.03}
+& \textbf{83.88 $\pm$ 1.28}
+& \textbf{85.73 $\pm$ 1.10}
+& \textbf{83.13 $\pm$ 0.72}
+& \textbf{91.77 $\pm$ 0.32} \\
+
+\midrule
+\multicolumn{8}{l}{\textit{HD95 (mm) $\downarrow$}} \\
+\midrule
+TransUnet~\cite{chen2024transunet}
+& $27.27 \pm 5.52$
+& $22.42 \pm 1.34$
+& $26.88 \pm 9.66$
+& $22.32 \pm 3.43$
+& $17.12 \pm 1.55$
+& $16.24 \pm 0.77$
+& $18.81 \pm 0.74$ \\
+MedSegX~\cite{zhang2025generalist}
+& $10.95 \pm 0.64$
+& $11.07 \pm 0.32$
+& $10.83 \pm 0.70$
+& $11.76 \pm 0.76$
+& $18.39 \pm 1.65$
+& $23.48 \pm 1.04$
+& $9.37 \pm 0.18$ \\
+MedSAM2~\cite{ma2025medsam2}
+& $11.51 \pm 1.53$
+& $5.46 \pm 0.44$
+& $10.56 \pm 3.64$
+& $10.94 \pm 1.12$
+& $10.06 \pm 1.21$
+& $13.51 \pm 0.83$
+& $2.92 \pm 0.17$ \\
+UltraFedFM~\cite{jiang2025pretraining}
+& $14.98 \pm 2.10$
+& $8.10 \pm 0.58$
+& $16.08 \pm 1.67$
+& $14.96 \pm 1.65$
+& $18.12 \pm 1.47$
+& $18.57 \pm 0.83$
+& $9.06 \pm 0.38$ \\
+\rowcolor{lightgray}
+\textbf{ThyroidXAgent}
+& \textbf{9.42 $\pm$ 1.45}
+& \textbf{5.16 $\pm$ 0.53}
+& \textbf{9.15 $\pm$ 3.28}
+& \textbf{7.14 $\pm$ 1.23}
+& \textbf{9.24 $\pm$ 1.06}
+& \textbf{12.09 $\pm$ 0.81}
+& \textbf{1.88 $\pm$ 0.09} \\
+
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{table*}
+
+\clearpage
+
+\begin{table*}[p]
+\centering
+\begin{threeparttable}
+
+\caption{Cross-dataset generalization for benign-malignant thyroid nodule classification. Area under the receiver operating characteristic curve (AUROC) and area under the precision-recall curve (AUPRC) are reported as point estimates $\pm$ half-widths of 95\% confidence intervals from a cluster bootstrap over patients (1{,}000 resamples; each image formed its own cluster in cohorts without patient identifiers). ZJH-8K: 6{,}807 images (1{,}068 patients).}
+\label{tab:cls_performance}
+
+\footnotesize
+\setlength{\tabcolsep}{5.5pt}
+\renewcommand{\arraystretch}{1.08}
+
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Method}
+& \textbf{TN3K}
+& \textbf{ThyroidXL}
+& \textbf{TN5K}
+& \textbf{DDTI}
+& \textbf{ZJH-8K} \\
+\midrule
+\multicolumn{6}{l}{\textit{AUROC $\uparrow$}} \\
+\midrule
+ResNet-50~\cite{he2016deep}
+& $0.7674 \pm 0.0394$
+& $0.9044 \pm 0.0118$
+& $0.9322 \pm 0.0168$
+& $0.6704 \pm 0.0842$
+& $0.8988 \pm 0.0161$ \\
+RepViT~\cite{wang2023repvit}
+& $0.5556 \pm 0.0463$
+& $0.7774 \pm 0.0188$
+& $0.6603 \pm 0.0375$
+& $0.6162 \pm 0.0804$
+& $0.8246 \pm 0.0217$ \\
+LSNet~\cite{wang2025lsnet}
+& $0.8095 \pm 0.0333$
+& $0.9178 \pm 0.0114$
+& $0.9091 \pm 0.0201$
+& $0.7581 \pm 0.0658$
+& $0.8377 \pm 0.0195$ \\
+UltraFedFM~\cite{jiang2025pretraining}
+& $0.8461 \pm 0.0697$
+& $0.9239 \pm 0.0104$
+& $0.9298 \pm 0.0175$
+& $0.7518 \pm 0.1712$
+& $0.8621 \pm 0.0205$ \\
+MedGemma~\cite{sellergren2025medgemma}
+& $0.8492 \pm 0.0305$
+& $0.9371 \pm 0.0095$
+& $0.9442 \pm 0.0156$
+& \textbf{0.8255 $\pm$ 0.0650}
+& $0.9011 \pm 0.0365$ \\
+Qwen3-VL-8B-Instruct~\cite{bai2025qwen3}
+& $0.8237 \pm 0.0328$
+& $0.9050 \pm 0.0115$
+& $0.9214 \pm 0.0187$
+& $0.7361 \pm 0.0692$
+& $0.8397 \pm 0.0338$ \\
+GPT-5~\cite{openai2025gpt5systemcard}
+& $0.6924 \pm 0.0421$
+& $0.7059 \pm 0.0469$
+& $0.7737 \pm 0.0996$
+& $0.6346 \pm 0.0914$
+& $0.6317 \pm 0.0732$ \\
+Gemini-2.5-Pro~\cite{comanici_gemini_2025}
+& $0.6587 \pm 0.0455$
+& $0.6246 \pm 0.0640$
+& $0.6873 \pm 0.0691$
+& $0.6156 \pm 0.1308$
+& $0.6602 \pm 0.0626$ \\
+\rowcolor{lightgray}
+\textbf{ThyroidXAgent}
+& \textbf{0.8714 $\pm$ 0.0299}
+& \textbf{0.9680 $\pm$ 0.0066}
+& \textbf{0.9584 $\pm$ 0.0152}
+& $0.8032 \pm 0.0641$
+& \textbf{0.9390 $\pm$ 0.0101} \\
+\midrule
+\multicolumn{6}{l}{\textit{AUPRC $\uparrow$}} \\
+\midrule
+ResNet-50~\cite{he2016deep}
+& $0.6882 \pm 0.0632$
+& $0.8882 \pm 0.0174$
+& $0.9674 \pm 0.0268$
+& $0.3755 \pm 0.1176$
+& $0.9025 \pm 0.0212$ \\
+RepViT~\cite{wang2023repvit}
+& $0.4275 \pm 0.0528$
+& $0.7161 \pm 0.0276$
+& $0.8364 \pm 0.0411$
+& $0.3924 \pm 0.0933$
+& $0.8703 \pm 0.0239$ \\
+LSNet~\cite{wang2025lsnet}
+& $0.7581 \pm 0.0452$
+& $0.9040 \pm 0.0142$
+& $0.9551 \pm 0.0134$
+& $0.4180 \pm 0.1410$
+& $0.8657 \pm 0.0243$ \\
+UltraFedFM~\cite{jiang2025pretraining}
+& $0.8531 \pm 0.0284$
+& $0.9354 \pm 0.0114$
+& $0.8422 \pm 0.0421$
+& $0.4487 \pm 0.1452$
+& $0.9027 \pm 0.0203$ \\
+MedGemma~\cite{sellergren2025medgemma}
+& $0.8047 \pm 0.0430$
+& $0.9201 \pm 0.0139$
+& $0.9747 \pm 0.0084$
+& $0.5537 \pm 0.1663$
+& $0.9492 \pm 0.0114$ \\
+Qwen3-VL-8B-Instruct~\cite{bai2025qwen3}
+& $0.7617 \pm 0.0511$
+& $0.8787 \pm 0.0379$
+& $0.9636 \pm 0.0106$
+& $0.4112 \pm 0.1415$
+& $0.9211 \pm 0.0122$ \\
+GPT-5~\cite{openai2025gpt5systemcard}
+& $0.6627 \pm 0.0633$
+& $0.6237 \pm 0.0666$
+& $0.8920 \pm 0.0316$
+& $0.3578 \pm 0.1089$
+& $0.8120 \pm 0.0541$ \\
+Gemini-2.5-Pro~\cite{comanici_gemini_2025}
+& $0.6205 \pm 0.0587$
+& $0.4914 \pm 0.0841$
+& $0.8462 \pm 0.0446$
+& $0.3924 \pm 0.1527$
+& $0.8403 \pm 0.0362$ \\
+\rowcolor{lightgray}
+\textbf{ThyroidXAgent}
+& \textbf{0.8544 $\pm$ 0.0415}
+& \textbf{0.9432 $\pm$ 0.0268}
+& \textbf{0.9763 $\pm$ 0.0079}
+& \textbf{0.7463 $\pm$ 0.1080}
+& \textbf{0.9617 $\pm$ 0.0109} \\
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{table*}
+
+\clearpage

@@ -46,3 +46,14 @@ bash compile_manuscript.sh  # ../26_Nature_ThyroidAgent/main_v2.pdf
 ## `app.py` 行为
 
 `full_build()`：**回信** pdfLaTeX ×3（`response_letter/`）；**主稿** XeLaTeX → BibTeX → XeLaTeX ×2（若目录存在）。`TEXINPUTS` 含各工程根目录及 `response_letter/figures/`。
+
+### 主稿与 Overleaf 一致（不改 `main_v2.tex`）
+
+`wlscirep` 先加载无 `table` 的 `xcolor`，稿中再 `\usepackage[table]{xcolor}` 时，本地 XeLaTeX 易出现 **Option clash**，`\rowcolor` 失效（表头出现字面 `gray!20`）。Overleaf 环境往往仍能正常出表。
+
+本地编译只做两件事（均在 `latex-viewer/`，不改正稿）：
+
+1. **`manuscript-overlay/wlscirep.cls`** 通过 `TEXINPUTS` 优先于工程内同名类，将 `xcolor` 以 `[table]` 加载。
+2. **`main_v2._local_build.tex`** 自动生成：删去稿内两行重复 `\usepackage{xcolor}`，用 `-jobname=main_v2` 输出仍是 `main_v2.pdf`。
+
+`main_v2.tex` / 工程内 `wlscirep.cls` 与 Overleaf 保持一致即可；overlay 与 wrap 勿上传 Overleaf。

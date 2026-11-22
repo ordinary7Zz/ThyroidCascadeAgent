@@ -1,0 +1,22 @@
+% Supplementary table \label{tab:patient_level}
+\begin{table*}[p]
+\centering
+\begin{threeparttable}
+
+\caption{Patient-level performance of ThyroidXAgent on ZJH-8K and ThyroidXL. For classification, the patient score was the mean of the image-level malignancy probabilities and the patient label was malignant if any image of the patient was malignant. For segmentation, image-level Dice and HD95 were averaged within each patient. 95\% confidence intervals were estimated from 1{,}000 patient-level bootstrap resamples. ZJH-8K: 6{,}807 images (1{,}068 patients).}
+\label{tab:patient_level}
+
+\footnotesize
+\setlength{\tabcolsep}{5.5pt}
+\renewcommand{\arraystretch}{1.08}
+
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Cohort} & \textbf{Patients} & \textbf{AUROC (95\% CI)} & \textbf{AUPRC (95\% CI)} & \textbf{Dice, \% (95\% CI)} & \textbf{HD95, mm (95\% CI)} \\
+\midrule
+ZJH-8K & 1,068 & 0.9634 (0.9513--0.9740) & 0.9730 (0.9623--0.9827) & 82.70 (81.79--83.53) & 13.14 (12.30--14.04) \\
+ThyroidXL & 739 & 0.9484 (0.9326--0.9628) & 0.9355 (0.9064--0.9592) & 87.49 (86.75--88.16) & 5.68 (5.13--6.30) \\
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{table*}

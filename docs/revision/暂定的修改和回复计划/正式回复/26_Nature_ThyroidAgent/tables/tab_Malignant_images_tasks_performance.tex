@@ -1,0 +1,112 @@
+% Supplementary table \label{tab:Malignant_images_tasks_performance}
+\begin{table*}[p]
+\centering
+\begin{threeparttable}
+
+\caption{Performance on malignant thyroid lesion stratification. AUROC and AUPRC are reported for central lymph-node metastasis prediction and classification of classic versus follicular-variant papillary thyroid carcinoma (PTC subtype) on the malignant primary-lesion images of ZJH-8K, computed at the patient level. Values are point estimates $\pm$ half-widths of 95\% confidence intervals from 1{,}000 patient-level bootstrap resamples. Top, hold-out test set (801 images, 130 patients); bottom, five-fold cross-validation on the development set (3{,}227 images, 517 patients). Vision-language models were evaluated on the hold-out set only. Em dashes indicate tasks that were not evaluated.}
+\label{tab:Malignant_images_tasks_performance}
+
+\footnotesize
+\setlength{\tabcolsep}{5.5pt}
+\renewcommand{\arraystretch}{1.08}
+
+\begin{tabular}{lcccc}
+\toprule
+\multirow{2}{*}{\textbf{Method}}
+& \multicolumn{2}{c}{\textbf{Lymph Node Metastasis}}
+& \multicolumn{2}{c}{\textbf{PTC subtype}} \\
+& AUROC $\uparrow$ & AUPRC $\uparrow$ & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
+\midrule
+\multicolumn{5}{l}{\textit{Hold-out test set (801 images, 130 patients)}} \\
+\midrule
+RepViT~\cite{wang2023repvit}
+& $0.7805 \pm 0.0732$
+& $0.7929 \pm 0.0845$
+& $0.6638 \pm 0.0821$
+& $0.6456 \pm 0.1051$\\
+LSNet~\cite{wang2025lsnet}
+& $0.6396 \pm 0.0838$
+& $0.6585 \pm 0.1113$
+& $0.6220 \pm 0.0901$
+& $0.6100 \pm 0.1043$\\
+UltraFedFM~\cite{jiang2025pretraining}
+& $0.8187 \pm 0.0726$
+& $0.8252 \pm 0.0972$
+& $0.7129 \pm 0.0786$
+& $0.7201 \pm 0.0912$\\
+MedGemma~\cite{sellergren2025medgemma}
+& $0.8388 \pm 0.0562$
+& $0.8526 \pm 0.0631$
+& $0.7568 \pm 0.0844$
+& $0.7239 \pm 0.1102$\\
+Qwen3-VL-8B-Instruct~\cite{bai2025qwen3}
+& $0.8097 \pm 0.0654$
+& $0.8142 \pm 0.0786$
+& $0.7071 \pm 0.0821$
+& $0.6999 \pm 0.0998$\\
+GPT-5~\cite{openai2025gpt5systemcard}
+& $0.7911 \pm 0.0653$
+& $0.8029 \pm 0.0570$
+& $0.3711 \pm 0.1706$
+& $0.4638 \pm 0.1347$\\
+Gemini-2.5-Pro~\cite{comanici_gemini_2025}
+& $0.6063 \pm 0.0955$
+& $0.6144 \pm 0.0931$
+& $0.4242 \pm 0.1173$
+& $0.4586 \pm 0.0893$\\
+LLNM-Net~\cite{Shen2025NatCommunLLNM}
+& $0.8121 \pm 0.0820$
+& $0.8399 \pm 0.0911$
+& --
+& --\\
+Tiger-Model~\cite{Dai2025NatCommunThyroidSubtype}
+& --
+& --
+& $0.7535 \pm 0.1061$
+& $0.7741 \pm 0.0989$\\
+\rowcolor{lightgray}
+\textbf{ThyroidXAgent}
+& \textbf{0.8556 $\pm$ 0.0791}
+& \textbf{0.8623 $\pm$ 0.0787}
+& \textbf{0.7831 $\pm$ 0.0782}
+& \textbf{0.7998 $\pm$ 0.0893}\\
+\midrule
+\multicolumn{5}{l}{\textit{Development set, five-fold cross-validation (3{,}227 images, 517 patients)}} \\
+\midrule
+RepViT~\cite{wang2023repvit}
+& $0.8334 \pm 0.0302$
+& $0.8305 \pm 0.0347$
+& $0.7005 \pm 0.0471$
+& $0.6973 \pm 0.0590$\\
+LSNet~\cite{wang2025lsnet}
+& $0.7090 \pm 0.0736$
+& $0.7083 \pm 0.0925$
+& $0.6484 \pm 0.0470$
+& $0.6773 \pm 0.0619$\\
+UltraFedFM~\cite{jiang2025pretraining}
+& $0.8568 \pm 0.0402$
+& \textbf{0.8627 $\pm$ 0.0390}
+& $0.7812 \pm 0.0393$
+& $0.7620 \pm 0.0535$\\
+LLNM-Net~\cite{Shen2025NatCommunLLNM}
+& $0.8458 \pm 0.0726$
+& $0.8369 \pm 0.0875$
+& --
+& --\\
+Tiger-Model~\cite{Dai2025NatCommunThyroidSubtype}
+& --
+& --
+& $0.7877 \pm 0.0466$
+& $0.7044 \pm 0.0581$\\
+\rowcolor{lightgray}
+\textbf{ThyroidXAgent}
+& \textbf{0.8797 $\pm$ 0.0285}
+& $0.8493 \pm 0.0375$
+& \textbf{0.8089 $\pm$ 0.0270}
+& \textbf{0.8271 $\pm$ 0.0358}\\
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{table*}
+
+\clearpage

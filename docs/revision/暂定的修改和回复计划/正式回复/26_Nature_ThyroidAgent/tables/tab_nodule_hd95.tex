@@ -1,0 +1,52 @@
+% NHC-MISD-TUS per-centre table \label{tab:nodule_hd95}
+\begin{table}[p]
+\centering
+\caption{Per-centre 95\% Hausdorff distance (HD95, mm) for thyroid nodule segmentation on the NHC-MISD-TUS external test set. Values are reported as point estimates with 95\% confidence intervals. Bold indicates the best result in each row.}
+\label{tab:nodule_hd95}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrrrr}
+\toprule
+\multirow{2}{*}{Center} & \multirow{2}{*}{$N$} & \multicolumn{1}{c}{ThyroidXAgent} & \multicolumn{1}{c}{MedSAM2} & \multicolumn{1}{c}{MedSegX} & \multicolumn{1}{c}{TransUNet} & \multicolumn{1}{c}{UltraFedFM} \\
+\cmidrule(lr){3-3} \cmidrule(lr){4-4} \cmidrule(lr){5-5} \cmidrule(lr){6-6} \cmidrule(lr){7-7}
+ & & HD95 (mm) $\downarrow$ & HD95 (mm) $\downarrow$ & HD95 (mm) $\downarrow$ & HD95 (mm) $\downarrow$ & HD95 (mm) $\downarrow$ \\
+\midrule
+\textit{Overall} & 6,384 & 9.41\textsubscript{(8.89, 9.93)} & 101.2\textsubscript{(100.2, 102.0)} & 86.96\textsubscript{(86.08, 87.84)} & 10.62\textsubscript{(10.14, 11.12)} & 27.04\textsubscript{(26.28, 27.75)} \\
+\midrule
+THYB\_S\_EN04 & 946 & \textbf{6.95}\textsubscript{(6.05, 7.91)} & 113.0\textsubscript{(111.0, 114.9)} & 91.23\textsubscript{(89.41, 92.99)} & 9.27\textsubscript{(8.31, 10.37)} & 33.50\textsubscript{(31.47, 35.76)} \\
+THYB\_S\_SH01 & 834 & \textbf{6.41}\textsubscript{(5.50, 7.36)} & 79.94\textsubscript{(77.11, 82.81)} & 65.42\textsubscript{(63.21, 67.68)} & 8.32\textsubscript{(7.35, 9.27)} & 21.31\textsubscript{(19.64, 22.92)} \\
+THYB\_S\_ZJ05 & 690 & \textbf{5.00}\textsubscript{(4.31, 5.76)} & 108.5\textsubscript{(106.1, 110.6)} & 106.8\textsubscript{(104.6, 109.0)} & 7.73\textsubscript{(6.88, 8.61)} & 21.22\textsubscript{(19.59, 23.13)} \\
+THYB\_S\_SH05 & 665 & \textbf{7.60}\textsubscript{(6.34, 8.89)} & 101.8\textsubscript{(99.4, 104.1)} & 81.02\textsubscript{(78.74, 83.33)} & 10.17\textsubscript{(8.84, 11.51)} & 28.23\textsubscript{(25.93, 30.37)} \\
+THYB\_S\_NX01 & 557 & \textbf{12.95}\textsubscript{(10.96, 14.86)} & 112.7\textsubscript{(110.1, 115.1)} & 92.51\textsubscript{(89.99, 94.97)} & 13.02\textsubscript{(11.18, 14.80)} & 30.17\textsubscript{(27.56, 32.82)} \\
+THYB\_S\_ZJ06 & 460 & \textbf{7.62}\textsubscript{(6.22, 9.24)} & 92.99\textsubscript{(90.07, 95.87)} & 88.02\textsubscript{(85.09, 91.28)} & 10.88\textsubscript{(9.34, 12.66)} & 26.09\textsubscript{(23.54, 28.75)} \\
+THYB\_S\_ZJ24 & 321 & 45.03\textsubscript{(39.74, 50.67)} & 142.9\textsubscript{(139.7, 145.9)} & 140.9\textsubscript{(137.7, 143.8)} & \textbf{30.45}\textsubscript{(26.09, 34.77)} & 45.71\textsubscript{(40.11, 51.74)} \\
+THYB\_S\_QX07 & 280 & \textbf{6.69}\textsubscript{(5.08, 8.55)} & 110.2\textsubscript{(106.4, 113.9)} & 85.79\textsubscript{(82.50, 89.13)} & 8.11\textsubscript{(6.54, 10.16)} & 22.53\textsubscript{(19.71, 25.68)} \\
+THYB\_S\_AN01 & 243 & \textbf{4.70}\textsubscript{(3.51, 6.11)} & 60.30\textsubscript{(55.67, 64.85)} & 49.32\textsubscript{(45.45, 53.68)} & 7.19\textsubscript{(5.65, 9.00)} & 16.62\textsubscript{(14.15, 19.21)} \\
+THYB\_S\_CQ03 & 186 & \textbf{8.81}\textsubscript{(5.97, 12.38)} & 105.0\textsubscript{(100.0, 109.4)} & 81.35\textsubscript{(77.26, 85.23)} & 12.51\textsubscript{(9.28, 16.26)} & 33.57\textsubscript{(28.12, 38.94)} \\
+THYB\_S\_JS02 & 184 & \textbf{6.68}\textsubscript{(4.75, 8.90)} & 80.55\textsubscript{(75.49, 85.50)} & 84.81\textsubscript{(78.76, 90.71)} & 8.78\textsubscript{(6.74, 10.90)} & 24.40\textsubscript{(20.23, 28.77)} \\
+THYB\_S\_JX06 & 167 & \textbf{7.25}\textsubscript{(5.01, 9.88)} & 82.29\textsubscript{(76.67, 87.66)} & 63.70\textsubscript{(58.48, 68.68)} & 9.18\textsubscript{(6.44, 12.50)} & 20.12\textsubscript{(16.76, 23.56)} \\
+THYB\_S\_BJ01 & 142 & 20.72\textsubscript{(15.43, 26.10)} & 101.8\textsubscript{(96.3, 107.7)} & 92.30\textsubscript{(87.28, 97.40)} & \textbf{20.10}\textsubscript{(15.47, 25.01)} & 34.87\textsubscript{(29.55, 40.13)} \\
+THYB\_S\_EN02 & 107 & \textbf{4.49}\textsubscript{(3.07, 6.59)} & 128.9\textsubscript{(123.9, 133.4)} & 92.21\textsubscript{(87.64, 96.59)} & 8.45\textsubscript{(6.20, 11.49)} & 29.38\textsubscript{(24.47, 34.60)} \\
+THYB\_S\_GZ02 & 92 & \textbf{4.51}\textsubscript{(3.43, 5.77)} & 84.00\textsubscript{(78.53, 89.58)} & 81.50\textsubscript{(74.63, 88.26)} & 7.53\textsubscript{(5.65, 9.73)} & 17.57\textsubscript{(13.41, 22.16)} \\
+THYB\_S\_GS03 & 91 & \textbf{7.80}\textsubscript{(4.49, 11.81)} & 89.69\textsubscript{(81.70, 97.29)} & 75.21\textsubscript{(68.30, 82.38)} & 8.70\textsubscript{(5.54, 12.57)} & 24.98\textsubscript{(19.70, 31.13)} \\
+THYB\_S\_JS01 & 66 & \textbf{5.69}\textsubscript{(3.49, 8.71)} & 111.8\textsubscript{(106.2, 117.2)} & 94.67\textsubscript{(89.47, 99.84)} & 9.84\textsubscript{(6.27, 14.06)} & 27.35\textsubscript{(19.68, 35.58)} \\
+THYB\_S\_FJ03 & 64 & \textbf{6.99}\textsubscript{(3.86, 10.72)} & 115.9\textsubscript{(109.6, 122.4)} & 107.7\textsubscript{(100.0, 115.2)} & 8.87\textsubscript{(5.71, 12.92)} & 22.36\textsubscript{(16.53, 28.70)} \\
+THYB\_S\_NM02 & 50 & 6.75\textsubscript{(3.95, 10.41)} & 95.61\textsubscript{(85.83, 104.48)} & 82.78\textsubscript{(75.37, 90.43)} & \textbf{6.49}\textsubscript{(4.04, 9.79)} & 21.73\textsubscript{(16.43, 27.52)} \\
+THYB\_S\_SH06 & 31 & 16.01\textsubscript{(6.79, 25.90)} & 115.0\textsubscript{(110.3, 120.7)} & 94.85\textsubscript{(88.68, 100.91)} & \textbf{7.08}\textsubscript{(3.20, 12.90)} & 28.90\textsubscript{(17.04, 42.21)} \\
+THYB\_S\_AH04 & 30 & \textbf{3.09}\textsubscript{(2.14, 4.32)} & 81.37\textsubscript{(70.67, 92.67)} & 66.34\textsubscript{(54.18, 78.80)} & 9.13\textsubscript{(4.11, 16.74)} & 18.64\textsubscript{(11.53, 27.65)} \\
+THYB\_S\_SC06 & 29 & \textbf{4.72}\textsubscript{(2.94, 6.80)} & 71.23\textsubscript{(58.43, 85.23)} & 61.37\textsubscript{(51.00, 72.75)} & 5.60\textsubscript{(3.63, 7.90)} & 20.14\textsubscript{(10.14, 31.55)} \\
+THYB\_S\_SX04 & 27 & \textbf{3.54}\textsubscript{(2.39, 4.80)} & 106.5\textsubscript{(98.0, 114.6)} & 108.8\textsubscript{(98.9, 118.0)} & 4.05\textsubscript{(3.12, 5.09)} & 25.37\textsubscript{(14.31, 39.60)} \\
+THYB\_S\_BJ09 & 22 & \textbf{5.56}\textsubscript{(3.29, 8.33)} & 85.51\textsubscript{(71.97, 98.12)} & 77.91\textsubscript{(63.39, 92.08)} & 7.06\textsubscript{(3.88, 11.19)} & 18.84\textsubscript{(11.45, 26.82)} \\
+THYB\_S\_YN01 & 22 & \textbf{4.61}\textsubscript{(2.12, 8.49)} & 96.72\textsubscript{(83.10, 109.97)} & 73.60\textsubscript{(64.25, 81.65)} & 4.98\textsubscript{(3.42, 6.90)} & 40.06\textsubscript{(27.32, 54.75)} \\
+THYB\_S\_SD13 & 18 & \textbf{3.32}\textsubscript{(2.22, 4.57)} & 61.73\textsubscript{(47.66, 76.68)} & 45.00\textsubscript{(32.04, 58.04)} & 4.51\textsubscript{(2.74, 6.60)} & 21.77\textsubscript{(15.46, 28.42)} \\
+THYB\_S\_JL04 & 16 & 14.24\textsubscript{(2.17, 31.43)} & 88.05\textsubscript{(70.97, 104.04)} & 58.06\textsubscript{(41.17, 75.76)} & \textbf{12.51}\textsubscript{(3.43, 23.13)} & 16.36\textsubscript{(6.05, 28.72)} \\
+THYB\_S\_SD12 & 16 & 9.76\textsubscript{(3.28, 17.71)} & 57.71\textsubscript{(38.35, 78.90)} & 50.35\textsubscript{(31.21, 71.00)} & \textbf{8.08}\textsubscript{(2.22, 15.94)} & 18.16\textsubscript{(7.70, 30.26)} \\
+THYB\_S\_YN05 & 12 & \textbf{3.22}\textsubscript{(2.05, 4.34)} & 61.17\textsubscript{(44.75, 80.17)} & 38.97\textsubscript{(24.66, 57.04)} & 4.86\textsubscript{(2.25, 9.08)} & 13.71\textsubscript{(6.45, 21.71)} \\
+THYB\_S\_XJ01 & 8 & \textbf{6.99}\textsubscript{(1.71, 16.39)} & 111.3\textsubscript{(92.8, 131.6)} & 99.22\textsubscript{(85.22, 115.90)} & 20.73\textsubscript{(4.35, 42.34)} & 24.55\textsubscript{(5.64, 47.07)} \\
+THYB\_S\_GX01 & 4 & 5.57\textsubscript{(3.00, 8.47)} & 101.0\textsubscript{(81.2, 123.7)} & 78.07\textsubscript{(56.31, 92.33)} & \textbf{5.12}\textsubscript{(2.62, 8.46)} & 15.24\textsubscript{(6.58, 25.12)} \\
+THYB\_S\_FJ01 & 2 & 8.32\textsubscript{(4.00, 12.65)} & 112.3\textsubscript{(104.0, 120.7)} & 86.49\textsubscript{(73.93, 99.04)} & \textbf{4.41}\textsubscript{(2.83, 6.00)} & 56.71\textsubscript{(26.29, 87.13)} \\
+THYB\_S\_HB07 & 2 & 30.80\textsubscript{(18.03, 43.57)} & 109.0\textsubscript{(98.6, 119.4)} & 104.4\textsubscript{(95.2, 113.5)} & \textbf{4.70}\textsubscript{(0.00, 9.39)} & 19.30\textsubscript{(8.60, 30.00)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+\clearpage

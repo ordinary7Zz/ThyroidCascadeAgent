@@ -1,0 +1,36 @@
+% Supplementary table \label{tab:dataset_summary}
+\begin{table}[p]
+\centering
+\caption{Composition and data splits of the multicentre thyroid ultrasound benchmark. Numbers and percentages show the images contributed by each dataset to the full benchmark (n=37{,}713) and to the training (n=18{,}277), validation (n=850) and test (n=18{,}586) cohorts. DDTI and RJH-7K are independent external test cohorts, and ZJH-8K is a same-centre institutional hold-out test cohort of 6{,}807 images (1{,}068 patients) collected at the hospital that contributed TN3K. DDTI comprises 637 images, of which 349 carry benign-malignant classification labels. ZJH-8K serves as a test set for segmentation and classification; its malignant primary-lesion images additionally provide the development and hold-out sets for malignant-lesion stratification (4{,}028 images, 647 patients; Supplementary Table~\ref{tab:Malignant_images_tasks_performance}).}
+
+%改前原文：
+%\caption{Composition and data splits of the multicentre thyroid ultrasound benchmark. Numbers and percentages show the images contributed by each dataset to the full benchmark (n=38{,}864) and to the training (n=18{,}277), validation (n=850) and test (n=19{,}737) cohorts. DDTI, RJH-7K and ZJH-8K are independent external test cohorts. DDTI comprises 637 images, of which 349 carry benign-malignant classification labels. ZJH-8K serves as an external test set for segmentation and classification; its 4{,}756 malignant images additionally serve as the primary training set for malignant-lesion stratification (Supplementary Table~\ref{tab:Malignant_images_tasks_performance}).}
+\label{tab:dataset_summary}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllcccc}
+\toprule
+\textbf{Dataset} &
+\textbf{Task} &
+\textbf{Center} &
+\textbf{Ultrasound device} &
+\textbf{Total} &
+\makecell[c]{\textbf{Train}} &
+\makecell[c]{\textbf{Valid}} &
+\makecell[c]{\textbf{Test}} \\
+\midrule
+TN3K~\cite{gong2021multi} & \makecell[c]{Segmentation,\\Classification} & \makecell[l]{Zhujiang Hospital,\\Southern Medical\\University, Guangzhou,\\China} & \makecell[l]{GE Logiq E9,\\ARIETTA 850,\\RESONA 70B} & 5{,}347 (14.18\%) & 4{,}633 (25.35\%) & 100 (11.76\%) & 614 (3.30\%) \\
+TN5K~\cite{zhang2025tn5000} & \makecell[c]{Segmentation,\\Classification} & \makecell[l]{Cancer Hospital,\\Chinese Academy of\\Medical Sciences,\\Beijing, China} & \makecell[l]{GE Logiq E9,\\GE S7 (5-12 MHz\\or 8-15 MHz)} & 5{,}000 (13.26\%) & 3{,}500 (19.15\%) & 500 (58.82\%) & 1{,}000 (5.38\%) \\
+ThyroidXL~\cite{duong2025thyroidxl} & \makecell[c]{Segmentation,\\Classification} & \makecell[l]{Vietnam National\\Hospital of\\Endocrinology,\\Hanoi, Vietnam} & Hitachi Aloka Arietta V70 & 11{,}631 (30.87\%) & 9{,}441 (51.66\%) & 100 (11.76\%) & 2{,}090 (11.25\%) \\
+PKTN~\cite{sun2025clip} & Segmentation & \makecell[l]{Peking University\\First Hospital,\\Beijing, China} & -- & 1{,}003 (2.66\%) & 703 (3.85\%) & 150 (17.65\%) & 150 (0.81\%) \\
+\midrule
+DDTI~\cite{pedraza2015open} & \makecell[c]{Segmentation,\\Classification} & \makecell[l]{IDIME,\\Bogot\'{a}, Colombia} & \makecell[l]{TOSHIBA Nemio 30,\\TOSHIBA Nemio MX\\(12 MHz probe)} & 637 (1.69\%) & -- & -- & \makecell[c]{637 (3.43\%) seg\\349 cls} \\
+RJH-7K~\cite{shusharina2021segmentation} & Segmentation & \makecell[l]{Ruijin Hospital,\\Shanghai Jiao Tong\\University School of\\Medicine, Shanghai,\\China} & \makecell[l]{Different machines,\\not specified} & 7{,}288 (19.33\%) & -- & -- & 7{,}288 (39.21\%) \\
+ZJH-8K & \makecell[c]{Segmentation,\\Classification} & \makecell[l]{Zhujiang Hospital,\\Southern Medical\\University, Guangzhou,\\China} & -- & 6{,}807 (18.05\%) & -- & -- & 6{,}807 (36.62\%) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+\clearpage

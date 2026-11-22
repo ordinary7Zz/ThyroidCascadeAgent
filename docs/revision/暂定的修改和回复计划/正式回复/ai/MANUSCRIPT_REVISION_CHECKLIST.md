@@ -59,14 +59,15 @@
 
 > Ethics approval number without consent/waiver; institutional datasets need design, period, de-identification, governance; co-author authorization for NHC-MISD-TUS does not replace ethical approval and regulatory compliance.
 
-**前提（与回信 R2.15 一致，统稿前须伦理办确认）**
+**前提（与回信 R2.15 一致）**
 
-- 假设 **2026-KY-081-01** 批准范围已包含 **国家卫健委医学影像标准数据库授权子集（NHC-MISD-TUS 外测）**（对齐 Clinical-OMTA：牵头伦理覆盖库数据，**不写**库专用伦理号）。
+- **ZJH 机构数据**：珠江医院伦理 **2026-KY-081-01**（回顾性、知情同意豁免等）。
+- **NHC-MISD-TUS**：**不**挂靠 2026-KY-081；主稿写「国家卫生健康委医学影像标准数据库授权子集 + 已签署数据库合作/数据合规协议（回信不附协议全文）」；外测 only。
 
 **主稿待改**（`ThyroidXAgent.md` Ethics / Methods / Data availability）
 
 - [ ] **Ethics 段（新建或扩写）**：回顾性设计；**2026-KY-081-01**；书面知情同意 **豁免**（附伦理办对外原句）；去标识程序（一句）；机构数据治理。
-- [ ] **点名 NHC-MISD-TUS**：国家卫生健康委医学影像标准数据库授权甲状腺外测子集；**仅外测**、未参与堆叠训练；去标识/数据使用条件与 R2.6 一致。
+- [ ] **点名 NHC-MISD-TUS**：国家卫生健康委医学影像标准数据库授权甲状腺外测子集；**数据库合作/数据合规协议**（不附全文）；**仅外测**、未参与堆叠训练；去标识/数据使用条件与 R2.6 一致（**勿**写纳入 2026-KY-081-01）。
 - [ ] **Data availability**：改写原「仅 Prof. Kong authorized access」句——共同作者协助准入 **supplementary**，不替代伦理批件与库方数据使用治理；与 Ethics 段不矛盾。
 - [ ] **ZJH 机构集**：研究时段、ZJH-8K（及稿面涉及的 ZJH 恶性/报告资源若适用）与伦理批件对应。
 - [ ] **公开集**：主稿 Data availability 保留「按各数据集发表文献与许可」一句即可；**R2.15 回信不必逐列**（见 R2.5 / Methods）。

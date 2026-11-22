@@ -1,0 +1,54 @@
+% NHC-MISD-TUS per-centre table \label{tab:binary_auprc}
+\begin{table}[p]
+\centering
+\caption{Per-centre AUPRC for benign versus malignant thyroid nodule classification on the NHC-MISD-TUS external test set. Values are reported as point estimates with 95\% confidence intervals. Bold indicates the best result in each row.}
+\label{tab:binary_auprc}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrrr}
+\toprule
+\multirow{2}{*}{Center} & \multirow{2}{*}{$N$} & \multicolumn{1}{c}{ThyroidXAgent} & \multicolumn{1}{c}{BiomedCLIP} & \multicolumn{1}{c}{MedSigLIP} & \multicolumn{1}{c}{UltraFedFM} \\
+\cmidrule(lr){3-3} \cmidrule(lr){4-4} \cmidrule(lr){5-5} \cmidrule(lr){6-6}
+ & & AUPRC $\uparrow$ & AUPRC $\uparrow$ & AUPRC $\uparrow$ & AUPRC $\uparrow$ \\
+\midrule
+\textit{Overall} & 4,999 & 0.823\textsubscript{(0.807, 0.838)} & 0.450\textsubscript{(0.433, 0.467)} & 0.519\textsubscript{(0.499, 0.539)} & 0.465\textsubscript{(0.447, 0.483)} \\
+\midrule
+THYB\_S\_SH01 & 792 & \textbf{0.859}\textsubscript{(0.817, 0.893)} & 0.323\textsubscript{(0.290, 0.356)} & 0.450\textsubscript{(0.404, 0.504)} & 0.340\textsubscript{(0.304, 0.380)} \\
+THYB\_S\_ZJ05 & 647 & \textbf{0.746}\textsubscript{(0.690, 0.798)} & 0.460\textsubscript{(0.412, 0.518)} & 0.519\textsubscript{(0.469, 0.580)} & 0.445\textsubscript{(0.393, 0.504)} \\
+THYB\_S\_EN04 & 626 & \textbf{0.969}\textsubscript{(0.957, 0.978)} & 0.796\textsubscript{(0.758, 0.840)} & 0.851\textsubscript{(0.812, 0.888)} & 0.871\textsubscript{(0.837, 0.904)} \\
+THYB\_S\_SH05 & 539 & \textbf{0.832}\textsubscript{(0.787, 0.865)} & 0.539\textsubscript{(0.496, 0.589)} & 0.680\textsubscript{(0.630, 0.734)} & 0.555\textsubscript{(0.509, 0.610)} \\
+THYB\_S\_ZJ06 & 452 & \textbf{0.811}\textsubscript{(0.752, 0.864)} & 0.502\textsubscript{(0.442, 0.573)} & 0.597\textsubscript{(0.526, 0.670)} & 0.554\textsubscript{(0.490, 0.626)} \\
+THYB\_S\_QX07 & 279 & \textbf{0.575}\textsubscript{(0.432, 0.706)} & 0.163\textsubscript{(0.107, 0.235)} & 0.270\textsubscript{(0.173, 0.385)} & 0.158\textsubscript{(0.107, 0.245)} \\
+THYB\_S\_ZJ24 & 269 & \textbf{0.164}\textsubscript{(0.026, 0.423)} & 0.032\textsubscript{(0.014, 0.054)} & 0.068\textsubscript{(0.027, 0.137)} & 0.051\textsubscript{(0.017, 0.137)} \\
+THYB\_S\_AN01 & 236 & \textbf{0.588}\textsubscript{(0.430, 0.756)} & 0.110\textsubscript{(0.082, 0.147)} & 0.195\textsubscript{(0.141, 0.261)} & 0.121\textsubscript{(0.087, 0.172)} \\
+THYB\_S\_CQ03 & 172 & \textbf{0.876}\textsubscript{(0.819, 0.922)} & 0.603\textsubscript{(0.510, 0.706)} & 0.637\textsubscript{(0.544, 0.735)} & 0.559\textsubscript{(0.474, 0.651)} \\
+THYB\_S\_JS02 & 171 & \textbf{0.734}\textsubscript{(0.629, 0.822)} & 0.502\textsubscript{(0.414, 0.621)} & 0.649\textsubscript{(0.544, 0.750)} & 0.459\textsubscript{(0.369, 0.561)} \\
+THYB\_S\_JX06 & 153 & \textbf{0.897}\textsubscript{(0.839, 0.946)} & 0.351\textsubscript{(0.276, 0.438)} & 0.545\textsubscript{(0.422, 0.671)} & 0.409\textsubscript{(0.314, 0.522)} \\
+THYB\_S\_EN02 & 99 & \textbf{0.969}\textsubscript{(0.937, 0.992)} & 0.812\textsubscript{(0.710, 0.908)} & 0.939\textsubscript{(0.888, 0.983)} & 0.775\textsubscript{(0.669, 0.899)} \\
+THYB\_S\_BJ01 & 93 & \textbf{0.930}\textsubscript{(0.880, 0.970)} & 0.692\textsubscript{(0.583, 0.825)} & 0.743\textsubscript{(0.634, 0.858)} & 0.764\textsubscript{(0.661, 0.884)} \\
+THYB\_S\_GZ02 & 90 & \textbf{0.850}\textsubscript{(0.760, 0.921)} & 0.558\textsubscript{(0.460, 0.695)} & 0.702\textsubscript{(0.581, 0.825)} & 0.569\textsubscript{(0.457, 0.697)} \\
+THYB\_S\_GS03 & 84 & \textbf{0.921}\textsubscript{(0.847, 0.970)} & 0.578\textsubscript{(0.459, 0.706)} & 0.692\textsubscript{(0.559, 0.816)} & 0.674\textsubscript{(0.553, 0.808)} \\
+THYB\_S\_JS01 & 59 & \textbf{0.990}\textsubscript{(0.966, 1.000)} & 0.964\textsubscript{(0.885, 1.000)} & 0.950\textsubscript{(0.862, 1.000)} & 0.921\textsubscript{(0.808, 1.000)} \\
+THYB\_S\_NM02 & 49 & \textbf{0.810}\textsubscript{(0.662, 0.920)} & 0.594\textsubscript{(0.441, 0.781)} & 0.777\textsubscript{(0.611, 0.941)} & 0.562\textsubscript{(0.420, 0.729)} \\
+THYB\_S\_SX04 & 27 & \textbf{0.988}\textsubscript{(0.959, 1.000)} & 0.960\textsubscript{(0.873, 1.000)} & 0.931\textsubscript{(0.792, 1.000)} & 0.965\textsubscript{(0.895, 1.000)} \\
+THYB\_S\_AH04 & 24 & \textbf{0.746}\textsubscript{(0.430, 0.967)} & 0.463\textsubscript{(0.222, 0.800)} & 0.547\textsubscript{(0.203, 0.819)} & 0.258\textsubscript{(0.130, 0.450)} \\
+THYB\_S\_SC06 & 22 & \textbf{0.873}\textsubscript{(0.653, 1.000)} & 0.390\textsubscript{(0.229, 0.609)} & 0.704\textsubscript{(0.409, 0.898)} & 0.356\textsubscript{(0.209, 0.573)} \\
+THYB\_S\_YN01 & 21 & \textbf{0.968}\textsubscript{(0.901, 1.000)} & 0.748\textsubscript{(0.537, 0.990)} & 0.832\textsubscript{(0.615, 0.993)} & 0.737\textsubscript{(0.498, 0.947)} \\
+THYB\_S\_BJ09 & 20 & 0.683\textsubscript{(0.415, 0.910)} & 0.687\textsubscript{(0.406, 0.895)} & \textbf{0.699}\textsubscript{(0.431, 0.925)} & 0.559\textsubscript{(0.292, 0.806)} \\
+THYB\_S\_SD13 & 18 & \textbf{0.567}\textsubscript{(0.200, 1.000)} & 0.446\textsubscript{(0.059, 1.000)} & 0.415\textsubscript{(0.111, 0.900)} & 0.196\textsubscript{(0.056, 0.415)} \\
+THYB\_S\_SD12 & 15 & \textbf{0.500}\textsubscript{(0.000, 1.000)} & 0.077\textsubscript{(0.000, 0.177)} & 0.143\textsubscript{(0.000, 0.365)} & 0.071\textsubscript{(0.000, 0.150)} \\
+THYB\_S\_JL04 & 12 & \textbf{0.491}\textsubscript{(0.083, 1.000)} & 0.187\textsubscript{(0.083, 0.379)} & 0.199\textsubscript{(0.083, 0.404)} & 0.241\textsubscript{(0.083, 0.610)} \\
+THYB\_S\_YN05 & 12 & \textbf{0.000}\textsubscript{(0.000, 0.000)} & 0.000\textsubscript{(0.000, 0.000)} & 0.000\textsubscript{(0.000, 0.000)} & 0.000\textsubscript{(0.000, 0.000)} \\
+THYB\_S\_XJ01 & 5 & \textbf{1.000}\textsubscript{(1.000, 1.000)} & 0.806\textsubscript{(0.333, 1.000)} & 0.589\textsubscript{(0.200, 1.000)} & 0.917\textsubscript{(0.417, 1.000)} \\
+THYB\_S\_GX01 & 4 & \textbf{1.000}\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} \\
+THYB\_S\_SH06 & 4 & \textbf{1.000}\textsubscript{(0.000, 1.000)} & 0.417\textsubscript{(0.000, 1.000)} & 0.417\textsubscript{(0.000, 1.000)} & 0.583\textsubscript{(0.000, 1.000)} \\
+THYB\_S\_FJ01 & 2 & \textbf{1.000}\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} \\
+THYB\_S\_FJ03 & 2 & \textbf{1.000}\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} \\
+THYB\_S\_NX01 & 1 & \textbf{1.000}\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} & 1.000\textsubscript{(1.000, 1.000)} \\
+THYB\_S\_HB07 & 0 & -- & -- & -- & -- \\
+THYB\_S\_SD14 & 0 & -- & -- & -- & -- \\
+THYB\_S\_ZJ29 & 0 & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+\clearpage
