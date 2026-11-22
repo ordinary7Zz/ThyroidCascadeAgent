@@ -1,4 +1,3 @@
-\PassOptionsToPackage{table}{xcolor}
 \documentclass[fleqn,10pt]{wlscirep}
 \usepackage{ctex}
 \usepackage{graphicx}
@@ -10,6 +9,7 @@
 \usepackage{xr}
 \usepackage{float}
 \usepackage{nameref}
+\usepackage{xcolor}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{array}
@@ -17,6 +17,7 @@
 \usepackage{hyperref}
 \usepackage[nameinlink,noabbrev]{cleveref}
 \usepackage{makecell}
+\usepackage[table]{xcolor}
 \usepackage{threeparttable}
 \usepackage{diagbox}
 
@@ -91,15 +92,18 @@ Agent-based workflows \cite{Qiu2024NatMachIntellAgenticSystems,Zou2025LancetAgen
 
 Here we present ThyroidXAgent, a clinician-interactive agentic system that reframes thyroid ultrasound AI around an auditable case-level evidence record rather than a collection of isolated prediction endpoints. Instead of directly interpreting ultrasound images with a general-purpose multimodal model, ThyroidXAgent acts as a workflow controller that plans case-specific analyses, routes inputs to specialized tools and maintains structured intermediate evidence, including lesion masks, measurements, class probabilities, radiomic descriptors, uncertainty signals and report clauses. These evidence objects remain inspectable and editable by clinicians, and corrections can be propagated to subsequent analysis and reporting steps. We evaluate this formulation across nodule segmentation, benign-malignant classification, malignant-lesion stratification and case-level report generation using 40 heterogeneous multicentre datasets and clinician reader studies. We further introduce ThyClinScore, a lesion-level semantic metric that evaluates whether generated reports preserve clinically relevant evidence rather than surface-level wording alone. ThyroidXAgent produced more clinically consistent reports and reduced clinician workload while retaining an editable evidence trace. Together, these results establish evidence-centred orchestration as an alternative to both standalone predictive models and unconstrained end-to-end medical agents.
 
+
 \begin{figure}[p]
     \centering
     \includegraphics[width=0.9\textwidth]{imgs/Introduction3.pdf}
     \caption{Multicenter thyroid ultrasound data and the ThyroidXAgent evidence workflow. \textbf{a}, OpenThyroidDB integrates curated public thyroid ultrasound resources and institutionally governed clinical cohorts into a full-spectrum resource for segmentation, benign-malignant classification, report generation and malignant-lesion stratification across diverse scanners and acquisition settings. \textbf{b}, The clinician-feedback workflow stores AI-generated masks, predictions, report clauses and clinician corrections as case-level evidence, allowing intermediate outputs to be reviewed, revised and reused in later steps. \textbf{c}, ThyroidXAgent acts as a workflow controller for four evidence-producing workflows: expert-refined nodule segmentation, clinician-verified malignancy classification, evidence-grounded structured reporting, and advanced diagnosis for central lymph-node metastasis assessment and PTC subtype analysis. \textbf{d}, Multicenter validation design, with model development/internal validation followed by independent external validation.}
 
+
 %改前原文：
 %\caption{Multicenter thyroid ultrasound data and the ThyroidXAgent evidence workflow. \textbf{a}, OpenThyroidDB integrates curated public thyroid ultrasound resources and institutionally governed clinical cohorts into a full-spectrum resource for segmentation, benign-malignant classification, report generation and malignant-lesion stratification across diverse scanners and acquisition settings. \textbf{b}, The clinician-feedback workflow stores AI-generated masks, predictions, report clauses and clinician corrections as case-level evidence, allowing intermediate outputs to be reviewed, revised and reused in later steps. \textbf{c}, ThyroidXAgent acts as a workflow controller for four evidence-producing workflows: expert-refined nodule segmentation, clinician-verified malignancy classification, evidence-grounded structured reporting, and advanced diagnosis for lymph-node metastasis assessment and PTC/FTC subtype analysis. \textbf{d}, Multicenter validation design, with model development/internal validation followed by independent external validation.}
     \label{fig:introduction_overview}
 \end{figure}
+
 
 \begin{figure}[htbp]
     \centering
@@ -114,6 +118,7 @@ Here we present ThyroidXAgent, a clinician-interactive agentic system that refra
 We developed ThyroidXAgent to organize thyroid ultrasound diagnosis as a case-level evidence workflow (Fig.~\ref{fig:introduction_overview}). For each examination, the agent routes the case through tool-callable steps, including nodule segmentation, measurement, benign-malignant classification, radiomics extraction, malignant-lesion stratification and report generation. The workflow stores tool outputs in a shared evidence record that can be inspected, corrected and reused across downstream tasks.
 
 OpenThyroidDB provides the multicenter data resource underlying this workflow-level formulation. The segmentation and classification analyses included seven cohorts from six clinical centres across China, Vietnam and Colombia, acquired on at least eight ultrasound platforms (Supplementary Table~\ref{tab:dataset_summary}). Four cohorts served as internal training data. TN3K~\cite{gong2021multi}, collected at Zhujiang Hospital, Southern Medical University, Guangzhou, comprised 4,633 training, 100 validation and 614 test images acquired on GE Logiq E9, ARIETTA 850 and RESONA 70B scanners. TN5K~\cite{zhang2025tn5000}, from the Cancer Hospital, Chinese Academy of Medical Sciences, Beijing, comprised 3,500 training, 500 validation and 1,000 test images acquired on GE Logiq E9 and GE S7 scanners with 5-12 or 8-15~MHz probes. ThyroidXL~\cite{duong2025thyroidxl}, from the Vietnam National Hospital of Endocrinology, Hanoi, comprised 9,441 training, 100 validation and 2,090 test images acquired on a Hitachi Aloka Arietta V70 scanner. PKTN~\cite{sun2025clip}, from Peking University First Hospital, Beijing, comprised 703 training, 150 validation and 150 test images; the acquisition device was not disclosed. Three cohorts served as test sets: DDTI and RJH-7K as independent external cohorts, and ZJH-8K as a same-centre institutional hold-out cohort from the hospital that contributed TN3K. DDTI~\cite{pedraza2015open}, from IDIME, Bogot\'{a}, Colombia, contributed 637 images (637 for segmentation, 349 of which also carry benign-malignant classification labels) acquired on TOSHIBA Nemio 30 and Nemio MX scanners with a 12~MHz probe. RJH-7K~\cite{shusharina2021segmentation}, from Ruijin Hospital, Shanghai Jiao Tong University School of Medicine, Shanghai, contributed 7,288 segmentation-only images acquired on multiple scanners whose models were not specified. ZJH-8K, collected at Zhujiang Hospital, Southern Medical University, Guangzhou, contributed 6,807 test images (1,068 patients) used for both segmentation and classification; the acquisition device was not disclosed. Overall, the segmentation and classification benchmark comprised 37{,}713 images (18{,}277 training, 850 validation, 18{,}586 test) from seven cohorts spanning six centres.
+
 
 %改前原文：
 %OpenThyroidDB provides the multicenter data resource underlying this workflow-level formulation. The segmentation and classification analyses included seven cohorts from six clinical centres across China, Vietnam and Colombia, acquired on at least eight ultrasound platforms (Supplementary Table~\ref{tab:dataset_summary}). Four cohorts served as internal training data. TN3K~\cite{gong2021multi}, collected at Zhujiang Hospital, Southern Medical University, Guangzhou, comprised 4,633 training, 100 validation and 614 test images acquired on GE Logiq E9, ARIETTA 850 and RESONA 70B scanners. TN5K~\cite{zhang2025tn5000}, from the Cancer Hospital, Chinese Academy of Medical Sciences, Beijing, comprised 3,500 training, 500 validation and 1,000 test images acquired on GE Logiq E9 and GE S7 scanners with 5-12 or 8-15~MHz probes. ThyroidXL~\cite{duong2025thyroidxl}, from the Vietnam National Hospital of Endocrinology, Hanoi, comprised 9,441 training, 100 validation and 2,090 test images acquired on a Hitachi Aloka Arietta V70 scanner. PKTN~\cite{sun2025clip}, from Peking University First Hospital, Beijing, comprised 703 training, 150 validation and 150 test images; the acquisition device was not disclosed. Three cohorts provided independent external test sets. DDTI~\cite{pedraza2015open}, from IDIME, Bogot\'{a}, Colombia, contributed 637 images (637 for segmentation, 349 of which also carry benign-malignant classification labels) acquired on TOSHIBA Nemio 30 and Nemio MX scanners with a 12~MHz probe. RJH-7K~\cite{shusharina2021segmentation}, from Ruijin Hospital, Shanghai Jiao Tong University School of Medicine, Shanghai, contributed 7,288 segmentation-only images acquired on multiple scanners whose models were not specified. ZJH-8K, collected at Zhujiang Hospital, Southern Medical University, Guangzhou, contributed 7,958 images (426 benign cases with 3,202 images and 723 malignant cases with 4,756 images) used for both segmentation and classification; the acquisition device was not disclosed. Overall, the segmentation and classification benchmark comprised 38{,}864 images (18{,}277 training, 850 validation, 19{,}737 test) from seven cohorts spanning six centres.
@@ -143,6 +148,7 @@ On seven segmentation test sets, including the independent DDTI and RJH-7K cohor
 
 For benign-malignant classification, ThyroidXAgent achieved a mean AUROC of 0.9080 and a mean AUPRC of 0.8964 across five test sets, including the independent DDTI cohort and the same-centre ZJH-8K hold-out cohort (unweighted means; Fig.~\ref{fig:ThyroidXAgent_SegCls_performance}d,e and Supplementary Table~\ref{tab:cls_performance}). At the patient level, AUROC was 0.963 on ZJH-8K (1,068 patients) and 0.948 on ThyroidXL (739 patients) (Supplementary Table~\ref{tab:patient_level}). Specialized image models showed weaker cross-dataset consistency; for example, RepViT~\cite{wang2023repvit} reached AUROC of 0.777 on ThyroidXL but 0.556 on TN3K. General-purpose vision-language models~\cite{dong2022survey} also underperformed; GPT-5~\cite{openai2025gpt5systemcard} reached AUROC of 0.632-0.774 across test sets, and Gemini-2.5-Pro~\cite{comanici_gemini_2025} reached 0.616-0.687 (Supplementary Table~\ref{tab:cls_performance}). These results support a division of labour in which domain-specific image and radiomics tools generate the evidence, while the agent routes and consolidates tool outputs. We further validated on NHC-MISD-TUS, an independent private multicentre test set (Fig.~\ref{fig:ThyroidXAgent_SegCls_performance}h and Supplementary Tables~\ref{tab:nodule_dice}-\ref{tab:binary_auprc}). ThyroidXAgent led on both nodule segmentation (Dice 82.31\%, HD95 9.41~mm) and binary classification (AUROC 0.819, AUPRC 0.823). These pooled estimates were higher than the centre-level macro averages (nodule Dice 81.64\% over 33 centres and AUROC 0.754 over 32 centres), and between-centre heterogeneity was high ($I^2$ = 99.0\% for both; Supplementary Table~\ref{tab:nhc_heterogeneity}). By contrast, MedSAM2 and MedSegX failed on segmentation (Dice <0.3), and zero-shot vision-language baselines (BiomedCLIP~\cite{zhang2024biomedclip}, MedSigLIP~\cite{sellergren2025medgemma}) performed at or below chance on classification. GPT-5 and Gemini-2.5-Pro could not be evaluated on this private intranet dataset.
 
+
 %改前原文：
 %For benign-malignant classification, ThyroidXAgent achieved a mean AUROC of 0.9466 and a mean AUPRC of 0.8361 across five test sets, including the independent DDTI and ZJH-8K cohorts (Fig.~\ref{fig:ThyroidXAgent_SegCls_performance}d,e and Supplementary Table~\ref{tab:cls_performance}). Specialized image models showed weaker cross-dataset consistency; for example, RepViT~\cite{wang2023repvit} reached AUROC of 0.777 on ThyroidXL but 0.556 on TN3K. General-purpose vision-language models~\cite{dong2022survey} also underperformed; GPT-5~\cite{openai2025gpt5systemcard} reached AUROC of 0.611-0.774 across test sets, and Gemini-2.5-Pro~\cite{comanici_gemini_2025} reached 0.616-0.687 (Supplementary Table~\ref{tab:cls_performance}). These results support a division of labour in which domain-specific image and radiomics tools generate the evidence, while the agent routes and consolidates tool outputs. We further validated on NHC-MISD-TUS, an independent private multicentre test set (Fig.~\ref{fig:ThyroidXAgent_SegCls_performance}h and Supplementary Tables~\ref{tab:nodule_dice}-\ref{tab:binary_auprc}). ThyroidXAgent led on both nodule segmentation (Dice 82.31\%, HD95 9.41~mm) and binary classification (AUROC 0.819, AUPRC 0.823). By contrast, MedSAM2 and MedSegX failed on segmentation (Dice <0.3), and zero-shot vision-language baselines (BiomedCLIP~\cite{zhang2024biomedclip}, MedSigLIP~\cite{sellergren2025medgemma}) performed at or below chance on classification. GPT-5 and Gemini-2.5-Pro could not be evaluated on this private intranet dataset.
 
@@ -155,6 +161,7 @@ To assess whether this evidence supports clinician decision-making, we conducted
 The same evidence representation supported clinician-interactive segmentation review. Clinicians inspected predicted masks, corrected segmentation errors when needed and returned the refined masks to the case-level evidence store. SHAP-based feature attributions were then recomputed using the corrected mask, allowing downstream classification evidence to reflect clinician refinement (Fig.~\ref{fig:ThyroidXAgent_SegCls_performance}a).
 
 AI assistance reduced mean segmentation time from 14.21~s to 9.11~s per image, a 1.6-fold speedup, while preserving segmentation quality (Fig.~\ref{fig:ThyroidXAgent_SegCls_performance}i-k). AI-assisted Dice (0.903) matched or exceeded manual Dice (0.879) in approximately two-thirds of paired cases. These results indicate that the intermediate evidence layer can reduce repetitive annotation work while keeping the segmentation boundary available for clinician correction.
+
 
 \begin{figure}[htbp]
     \centering
@@ -173,6 +180,12 @@ We next tested whether the shared ThyroidXAgent tools could be redirected to cli
 This reuse enabled rapid adaptation to new clinical questions while preserving the same evidence structure. On the patient-level hold-out test set (130 patients), ThyroidXAgent achieved AUROC of 0.856 for LNM prediction and 0.783 for PTC subtype classification (Fig.~\ref{fig:ThyroidXAgent_Malignant_Image_tasks}b and Supplementary Table~\ref{tab:Malignant_images_tasks_performance}), outperforming the specialist baselines LLNM-Net~\cite{Shen2025NatCommunLLNM} (0.812) for LNM and Tiger-Model~\cite{Dai2025NatCommunThyroidSubtype} (0.754) for PTC subtype. Five-fold cross-validation on the development set gave AUROCs of 0.880 and 0.809, respectively.
 
 The attribution profiles changed with the clinical task (Fig.~\ref{fig:ThyroidXAgent_Malignant_Image_tasks}a,c-f). LNM prediction relied more on lesion position and size features, including distance to the thyroid capsule and lesion area. PTC subtype classification relied more on texture heterogeneity and shape descriptors. These task-dependent attribution patterns indicate that ThyroidXAgent generated radiomic evidence according to the requested clinical question, rather than simply reusing the benign-malignant decision rule.
+% [待Bodong确认] §2.4 三段按新设计改了四处，请核对：
+%   1) 第一段：lateral LNM 改为 central LNM，FTC 与 PTC 改为经典型与滤泡亚型 PTC（R2.10、R2.12）。
+%   2) 第二段：结果改为两任务共用的按患者留出集（130 人）上的值（回复信 Table R12）：LNM 0.856、亚型 0.783；基线 LLNM-Net 0.812、Tiger-Model 0.754；删去 LymphUs、Dai 外测。
+%   3) 第二段末加一句开发集五折结果（R2.11；Table R15）：LNM 0.880、亚型 0.809。
+%   4) 第三段：“lymph-node position and size features”改为“lesion position and size features”。R2.12 回复说输入只有原发灶图像，不含淋巴结。
+% Fig. 3c–f 的 SHAP 是不是按新设计重算过？若重算，第三段的特征描述可能也要改？这里我不清楚具体情况
 
 %改前原文：
 %We next tested whether the shared ThyroidXAgent tools could be redirected to clinically distinct malignant-lesion stratification tasks after the primary thyroid nodule assessment. Lateral lymph-node metastasis (LNM) prediction informs surgical planning, whereas follicular (FTC) versus papillary (PTC) thyroid carcinoma subtype discrimination informs treatment strategy and follow-up. In a conventional development pipeline, each task would require a separate workflow for preprocessing, feature extraction, prediction, interpretation and reporting. In ThyroidXAgent, the segmentation, radiomics extraction, tabular classification and routing logic were reused, with task-specific classifier fine-tuning and task instructions changed.
@@ -180,6 +193,7 @@ The attribution profiles changed with the clinical task (Fig.~\ref{fig:ThyroidXA
 %This reuse enabled rapid adaptation to new clinical questions while preserving the same evidence structure. ThyroidXAgent achieved AUROC of 0.864 for LNM prediction on the 158-image LymphUs Center~2 test set and 0.805 for FTC/PTC subtype classification on the 200-image Dai \textit{et al.} test set~\cite{dai2025improving} (Fig.~\ref{fig:ThyroidXAgent_Malignant_Image_tasks}b and Supplementary Table~\ref{tab:Malignant_images_tasks_performance}), outperforming the specialist baselines LLNM-Net~\cite{Shen2025NatCommunLLNM} (0.767) for LNM and Tiger-Model~\cite{Dai2025NatCommunThyroidSubtype} (0.714) for FTC/PTC.
 %
 %The attribution profiles changed with the clinical task (Fig.~\ref{fig:ThyroidXAgent_Malignant_Image_tasks}a,c-f). LNM prediction relied more on lymph-node position and size features, including distance to the thyroid capsule and lesion area. FTC/PTC subtype classification relied more on texture heterogeneity and shape descriptors. These task-dependent attribution patterns indicate that ThyroidXAgent generated radiomic evidence according to the requested clinical question, rather than simply reusing the benign-malignant decision rule.
+
 
 \begin{figure}[htbp]
     \centering
@@ -205,6 +219,7 @@ ThyClinScore captured report-quality dimensions that were complementary to wordi
 
 We further validated ThyClinScore against blinded clinician ratings. Two clinicians independently rated 270 reports of 90 cases (30 cases per test set; the ThyroidXAgent report and two baseline reports per case) against the reference report on clinical accuracy, factual consistency, completeness, readability and clinical usability, blinded to the system. ThyClinScore correlated with the clinical-accuracy rating on all three test sets (Spearman's \(\rho=0.437\), 0.560 and 0.464 on SMU-HMC, KMVE and ZJH-TS, respectively; all 95\% CIs excluded zero). Inter-rater agreement (ICC(2,1)) was between 0.54 and 0.79 for clinical accuracy, factual consistency and clinical usability, and lower for completeness (0.33 to 0.57) and readability (0.08 to 0.25; Supplementary Table~\ref{tab:thyclinscore_clinician}). Across 120 configurations of the weights and thresholds of ThyClinScore, ThyroidXAgent had the highest mean ThyClinScore in all 120 configurations on SMU-HMC, in 110 on KMVE and in 117 on ZJH-TS.
 
+
 \subsection{Evidence-grounded report assembly improves reporting consistency and efficiency}
 
 For report generation, ThyroidXAgent converted the case-level evidence record into structured report text. The agent first used multi-view and multimodal thyroid ultrasound inputs to construct image priors, invoked diagnostic tools through planning and execution, and then assembled report clauses from structured facts using BM25 template retrieval, slot filling and clause combination (Fig.~\ref{fig:thyroidxagent_report_generation}a-g). This design links report statements to intermediate evidence, including gland measurements, nodule location, lesion size, sonographic descriptors, vascularity, lymph-node findings and diagnostic impressions, rather than generating unconstrained free text. The report-generation workflow was packaged as a reusable skill and exposed to external agents through a Workflow MCP server. This interface provided high-level case operations, including input preparation, case initiation, plan review, approval, report retrieval and evidence retrieval, while low-level model calls remained internal to the workflow. Auxiliary tool performance is summarized in Supplementary Table~\ref{tab:auxiliary_tools}. Clinicians can review the structured evidence, edit generated statements and return corrected report content to the case-level evidence store. We also audited the failure modes of the planner-executor workflow in 450 runs (150 cases from the three test sets, each run three times; 2,347 tool calls). Four tool calls (0.17\%) were invalid, three planned tasks (0.13\%) lacked support in the case images, no tool was called repeatedly apart from one retry after a malformed tool name, and all runs were completed. The main failure modes were ordering errors and omitted steps: in 40 of 320 fusion calls, nodule fusion preceded pixel-spacing estimation, which left five nodule descriptions without a size in four SMU-HMC and ZJH-TS runs, and in one run a segmented nodule was not reported because fusion was missing from the plan.
@@ -219,12 +234,16 @@ We next assessed human-AI cooperation in a cross-over reader study. Two physicia
 
 Finally, we conducted an additional reader study with safety rules that mark the sentences of an AI draft requiring physician review (Supplementary Table~\ref{tab:safety_rules}), in which two other physicians each reviewed and completed the drafts of 35 of these videos. Against the physician-confirmed findings, 106 of the 108 errors in the drafts, including 16 missed nodules and 63 regions with overstated risk, were in sentences that the rules had marked for mandatory review or a focused check. Every draft contained a sentence requiring mandatory review and was reviewed by a physician, with a median review time of 149 s per case. Annotation consistency was 42.9\% (30 of 70) for the drafts and 74.3\% (52 of 70) for the final reports (difference 31.4 percentage points; 95\% CI 15.7 to 47.1). The physicians corrected most overstatements of malignancy but may also have introduced understatements, indicating that AI drafts should support, rather than replace, physician review.
 
+
+
 \begin{figure}[p]
     \centering
     \includegraphics[width=\textwidth]{imgs/ReaderStudy2.pdf}
     \caption{Reader study of AI-assisted thyroid ultrasound reporting. \textbf{a}, Cross-over reader-study design. Each ultrasound video was interpreted under both manual and AI-assisted conditions by different physicians, reducing recall bias while enabling paired case-level comparisons. \textbf{b}, Representative malignant thyroid nodule case comparing reports generated by Qwen 3.5, GPT-5 and ThyroidXAgent with the reference report. Text spans are annotated as correct, partially correct or incorrect according to medical-semantic concordance; ThyroidXAgent shows closer agreement with the reference in this example. \textbf{c}, Annotation consistency of manual and AI-assisted reports, shown overall and stratified by benign and malignant cases. \textbf{d}, Case-level reporting-time reduction, defined as manual minus AI-assisted reporting time and ranked across paired cases. \textbf{e}, Physician-level reporting time under the manual and AI-assisted conditions.}
     \label{fig:reader_study}
 \end{figure}
+
+
 
 \section{Discussion}
 
@@ -237,6 +256,7 @@ The shared evidence record further distinguishes ThyroidXAgent from a convention
 The reader studies indicate that this evidence-centred formulation can support human-AI cooperation without requiring clinicians to accept an opaque recommendation. AI assistance reduced segmentation and reporting time while preserving meaningful points of clinical control, including lesion-boundary correction, evidence inspection and report editing. These findings should not be interpreted as evidence for replacing clinical judgement. Instead, they suggest that agentic systems can reduce repetitive work while keeping consequential intermediate outputs available for verification and correction. The effectiveness of such systems will ultimately depend not only on predictive accuracy, but also on whether clinicians can identify errors, understand their downstream consequences and efficiently intervene.
 
 Several limitations remain. The evaluations were retrospective, and prospective multicentre studies are needed under real acquisition conditions, changing scanner settings and institution-specific reporting practices. The reader studies included a limited number of physicians and primarily assessed workflow feasibility and efficiency rather than patient-level clinical benefit; in the report-writing study, the AI-assisted cases were read before the manual cases, so the difference between the conditions may include a period effect. ThyroidXAgent also remains dependent on the validity and calibration of its component tools: routing cannot compensate for systematically biased segmentation, incomplete metadata or poorly generalized classifiers, although visible intermediate evidence may make these failures easier to detect~\cite{Wiens2019NatMedDoNoHarm,Obermeyer2019ScienceBias}. More generalizable tool design may further improve cross-domain robustness~\cite{gong2025domain,gong2026intermediate}. Finally, the template-based reporting strategy may require local adaptation, and learning from clinician corrections will require governance for data quality, privacy, provenance, model versioning and distribution shift. Future work should therefore determine whether evidence-level corrections improve downstream clinical decisions prospectively and whether the shared evidence architecture can support additional imaging tasks without sacrificing reliability or interpretability.
+
 
 \section{Methods}
 
@@ -322,6 +342,7 @@ For clinician validation, two clinicians independently rated 270 reports of 90 c
 
 %For evaluation, ThyClinScore was computed together with conventional natural-language generation metrics. We reported the final score and interpretable submetrics, including lesion F1, false discovery rate, feature accuracy, completeness and consistency. We compared all metrics with a location-aware LLM judge using two-sided Pearson correlation analysis.
 
+
 \subsection{Report generation}
 For the reporting branch, thyroid ultrasound reporting was formulated as a case-level evidence-to-report task rather than as single-image captioning. Given an image set \(\mathcal{I}=\{I_j\}_{j=1}^{N}\), which could include video frames, static images, multiple anatomical views, greyscale ultrasound and colour Doppler images, the workflow generated a structured report \(R\) and an accompanying evidence trace. The report covered thyroid gland morphology, nodule-level findings, lymph-node findings when present and the diagnostic impression. The trace recorded the intermediate observations supporting each report component.
 
@@ -341,15 +362,18 @@ For comparison, five general-purpose multimodal models (GPT-4o~\cite{openai_gpt4
 
 The final artefact consisted of the report text and its supporting evidence trace. Clinicians or external agents could inspect the diagnostic plan, verify the evidence used for each statement, review warnings and edit the generated report. Corrected reports could then be returned to the case-level evidence store for subsequent review and model updating. This design kept report generation constrained by structured clinical evidence while preserving a reviewable path from image inputs to final report statements.
 
+
 \subsection{Reader studies and statistical analysis}
 For segmentation review, clinicians corrected AI-generated masks, and correction time and paired Dice scores were compared with manual segmentation. For report writing, two physicians evaluated 145 thyroid ultrasound videos with annotation-derived case labels in a cross-over design. Each case was interpreted under both manual and AI-assisted conditions, but by different physicians, to reduce memory and recall bias. The allocation of each case to the two conditions and the reading order were randomized, and each physician read the AI-assisted cases in one block and the manual cases in a second block 8 to 12 days later. In the manual condition, physicians reviewed the ultrasound video and completed a blank structured-report template. In the AI-assisted condition, they reviewed an AI-generated draft together with the supporting tool-derived evidence and revised the report as required. We recorded reporting time, video-review time and the final submitted report for each assessment. Reporting efficiency was assessed at both the case and physician levels, with case-level time saving defined as the manual minus AI-assisted reporting time.
 
 For the analysis of annotation consistency, frame-level benign and malignant bounding-box annotations were aggregated into case-level labels. Cases containing any malignant annotation were classified as malignant or suspicious, whereas cases containing only benign annotations were classified as benign. This yielded 145 labelled cases, comprising 72 benign and 73 malignant or suspicious cases. A prespecified rule-based procedure assigned each submitted report to a benign or low-risk, malignant or suspicious, or ambiguous direction using TI-RADS categories and diagnostic terms. Annotation consistency was defined as agreement between the diagnostic direction of the report and the annotation-derived case label, with ambiguous reports counted as disagreements, and was summarized overall and within the benign and malignant or suspicious strata. The difference between conditions was estimated over the 145 cases paired by case, with a case-bootstrap 95\% CI (10,000 resamples) and an exact McNemar test, and in a linear probability model with the condition and the physician as covariates. For statistical analysis, performance was summarized using the primary metric for each task: Dice and HD95 for segmentation, AUROC and AUPRC for classification, conventional natural-language generation metrics for report wording, and ThyClinScore and its submetrics for report semantics. Confidence intervals in the supplementary tables were estimated by nonparametric bootstrap resampling of the test set; for image segmentation and classification, resampling was clustered by patient where patient identifiers were available, with 1{,}000 resamples. Cross-cohort means were unweighted averages of the cohort-level estimates. Correlations between report metrics and the location-aware LLM judge were evaluated using two-sided Pearson correlation tests.
+% [待Bodong确认] 统计方法一句补了图像端的做法（R1.1、R2.2、R2.7）：按患者聚类 bootstrap（1,000 次）；跨队列均值为不加权平均。
 
 %改前原文：
 %For the analysis of annotation consistency, frame-level benign and malignant bounding-box annotations were aggregated into case-level labels. Cases containing any malignant annotation were classified as malignant or suspicious, whereas cases containing only benign annotations were classified as benign. This yielded 145 labelled cases, comprising 72 benign and 73 malignant or suspicious cases. A prespecified rule-based procedure assigned each submitted report to a benign or low-risk, malignant or suspicious, or ambiguous direction using TI-RADS categories and diagnostic terms. Annotation consistency was defined as agreement between the diagnostic direction of the report and the annotation-derived case label, with ambiguous reports counted as disagreements, and was summarized overall and within the benign and malignant or suspicious strata. The difference between conditions was estimated over the 145 cases paired by case, with a case-bootstrap 95\% CI (10,000 resamples) and an exact McNemar test, and in a linear probability model with the condition and the physician as covariates. For statistical analysis, performance was summarized using the primary metric for each task: Dice and HD95 for segmentation, AUROC and AUPRC for classification, conventional natural-language generation metrics for report wording, and ThyClinScore and its submetrics for report semantics. Confidence intervals in the supplementary tables were estimated by nonparametric bootstrap resampling of the test set. Correlations between report metrics and the location-aware LLM judge were evaluated using two-sided Pearson correlation tests.
 
 The reports compared with the baselines were drafts generated directly by ThyroidXAgent without physician review. We consider that an AI-generated report must be reviewed and finalized by a physician, and we therefore developed safety rules that facilitate this review (Supplementary Table~\ref{tab:safety_rules} and Supplementary Fig.~\ref{fig:report_generation_planning_execution_review}c). The rules have two layers: the first withholds statements that the tool evidence does not support and states them as not assessed, and the second marks each sentence of the draft for the reviewing physician as red for mandatory review, yellow for a focused check, grey for items to be completed by the physician or green when no safety rule is triggered. We evaluated the rules in an additional study in which two physicians each reviewed and completed the drafts of 35 videos drawn at random from the 145, and recorded the number of nodules and the benign or malignant tendency of each nodule in each lobe and the isthmus, which served as the reference for the errors of the drafts.
+
 
 \section{Data availability}
 %The public datasets used in this study are available from their original sources, as cited in the Methods and Supplementary Table~\ref{tab:dataset_summary}. Institutional ultrasound images and reports contain clinical data and are not publicly released in raw form because of privacy and institutional governance restrictions. De-identified derived data, dataset splits and evaluation outputs can be made available from the corresponding authors upon reasonable request and subject to institutional approval. 
@@ -361,12 +385,14 @@ The study was approved by the Medical Ethics Committee of Zhujiang Hospital, Sou
 
 The NHCMISD dataset was collected from real-world clinical ultrasound cases provided by the National Health Commission Medical Imaging Standard Database, for which the co-author, Prof. Dexing Kong, has authorized access. All data usage complied with relevant institutional and regulatory requirements.
 
+
 \section{Code availability}
 %The source code, trained model checkpoints and report-generation templates will be released after institutional review. Until public release, code required to reproduce the reported analyses is available from the corresponding authors upon reasonable request.
 The source code for ThyroidXAgent is publicly available on GitHub at \url{https://github.com/MedXAgent/ThyroidXAgent}. The website will be made available after acceptance. The trained model weights are available on Hugging Face at \url{https://huggingface.co/MedXAgent/ThyroidXAgent}. The repositories contain the resources required to reproduce the reported computational analyses.
 
 \section{Acknowledgements}
 This work was supported in part by the National Natural Science Foundation of China (Grant No. 62322608), the Zhejiang Provincial Natural Science Foundation of China (Grant No. LQN26F020029), and the Natural Science Foundation of Guangdong Province (Grant No. 2024A1515010255).
+
 
 \section{Author contributions}
 
@@ -515,13 +541,14 @@ The authors have no conflicts of interest.
 % Supplementary Tables: one table per page
 % ================================================================
 % Framework and data structure
+%改前原文：
+%\caption{Composition and data splits of the multicentre thyroid ultrasound benchmark. Numbers and percentages show the images contributed by each dataset to the full benchmark (n=38{,}864) and to the training (n=18{,}277), validation (n=850) and test (n=19{,}737) cohorts. DDTI, RJH-7K and ZJH-8K are independent external test cohorts. DDTI comprises 637 images, of which 349 carry benign-malignant classification labels. ZJH-8K serves as an external test set for segmentation and classification; its 4{,}756 malignant images additionally serve as the primary training set for malignant-lesion stratification (Supplementary Table~\ref{tab:Malignant_images_tasks_performance}).}
 \input{tables/tab_dataset_summary.tex}
 \clearpage
 
-
-
 \input{tables/tab_dataset_comparison.tex}
 \clearpage
+
 
 
 % Segmentation and classification
@@ -1764,8 +1791,6 @@ Review level of a case & Full review if any sentence is red; focused check if an
 
 \input{tables/tab_nhc_heterogeneity.tex}
 \clearpage
-
-
 
 \end{appendices}
 
