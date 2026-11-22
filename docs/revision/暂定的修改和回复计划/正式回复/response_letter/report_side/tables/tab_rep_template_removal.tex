@@ -1,0 +1,22 @@
+% Converted from S1_ThyClinScore_sensitivity/reviewer_response_package_20261120_claude_v24/tables/Table_template_removal.md (2026-11-17)
+\begin{responsetable}
+\caption{\responsetabletitle{tab_rep_template_removal}{Effect of removing templates similar to test reports from the SMU-HMC library}}
+\begin{adjustbox}{max width=\textwidth,center}
+{\scriptsize\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+\textbf{Templates} & \textbf{BLEU-1} & \textbf{BLEU-2} & \textbf{BLEU-3} & \textbf{BLEU-4} & \textbf{METEOR} & \textbf{ROUGE-L} & \textbf{ThyClinScore} \\
+\midrule
+\rowcolor{ResponseTableGray}\multicolumn{8}{c}{\textbf{SMU-HMC (n = 400)}} \\
+Original & 0.5924$\pm$0.0150 & 0.4806$\pm$0.0142 & 0.4006$\pm$0.0136 & 0.3381$\pm$0.0133 & 0.3627$\pm$0.0079 & 0.5422$\pm$0.0122 & 0.5189$\pm$0.0212 \\
+Templates removed & 0.5907$\pm$0.0150 & 0.4781$\pm$0.0142 & 0.3968$\pm$0.0135 & 0.3330$\pm$0.0129 & 0.3611$\pm$0.0079 & 0.5406$\pm$0.0120 & 0.5154$\pm$0.0211 \\
+Change & $-$0.0017$\pm$0.0012 & $-$0.0025$\pm$0.0015 & $-$0.0038$\pm$0.0018 & $-$0.0051$\pm$0.0021 & $-$0.0016$\pm$0.0008 & $-$0.0016$\pm$0.0014 & $-$0.0034$\pm$0.0031 \\
+\rowcolor{ResponseTableGray}\multicolumn{8}{c}{\textbf{ZJH-TS (n = 150)}} \\
+Original & 0.5233$\pm$0.0291 & 0.4296$\pm$0.0246 & 0.3579$\pm$0.0214 & 0.3018$\pm$0.0191 & 0.3191$\pm$0.0126 & 0.5480$\pm$0.0158 & 0.4676$\pm$0.0268 \\
+Templates removed & 0.5226$\pm$0.0292 & 0.4289$\pm$0.0247 & 0.3571$\pm$0.0214 & 0.3010$\pm$0.0192 & 0.3192$\pm$0.0127 & 0.5483$\pm$0.0159 & 0.4719$\pm$0.0279 \\
+Change & $-$0.0007$\pm$0.0019 & $-$0.0007$\pm$0.0020 & $-$0.0008$\pm$0.0021 & $-$0.0009$\pm$0.0022 & +0.0001$\pm$0.0014 & +0.0003$\pm$0.0018 & +0.0043$\pm$0.0055 \\
+\bottomrule
+\end{tabular}}
+\end{adjustbox}
+\responsetablenote{From the SMU-HMC library, the 166 templates with a similarity of at least 0.90 to any sentence of at least 20 characters in any test report were removed, and the reports were regenerated from the same tool outputs. Original: values of Supplementary Tables~\SuppTabNLG{} and \SuppTabClinical{}. Values are scores $\pm$ the half-width of the bootstrap 95\% CI; changes are paired differences from the original reports (10,000 resamples).}
+\end{responsetable}

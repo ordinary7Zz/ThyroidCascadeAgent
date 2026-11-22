@@ -804,3 +804,13 @@
 **做了什么：** 凡指私有多中心外测队列处统一 **NHC-MISD-TUS**（首次出现仍可写全名「国家卫生健康委医学影像标准数据库」）；保留 `tab_nhc_*`、`nhc_routing_ablation`、`run_nhc_ablation.sh` 等实现标识不变。
 
 **教训 / 避免重犯：** 稿面/回信/主稿清单勿单独写裸 **NHC** 指队列；`NHC数据集工作.md` 运维段「NHC 机」「跑 NHC」仍指离线环境与脚本简称即可。
+
+---
+
+## 2026-11-22 — 真源迁至 `response_letter/`；viewer 双工程；停维护中文回信
+
+**文件：** `ai/INSTRUCTIONS.md`、`ai/README.md`、`ai/WRITING_STYLE.md`、`ai/PENDING.md`、`ai/TABLE_DATA_SOURCE_AUDIT.md`、`ai/MANUSCRIPT_REVISION_CHECKLIST.md`；`latex-viewer/app.py`、`static/*`、`compile_response.sh`、`README.md`
+
+**做了什么：** 完整回信以 `response_letter/`（`main.tex` + `body_en_merged.tex`）为唯一编译与编辑真源；`latex-viewer` 只编译 `response_letter` 与 `26_Nature_ThyroidAgent`；移除 EN/ZH 双稿同步与中文 PDF 预览。
+
+**教训 / 避免重犯：** AI 新对话默认改 `response_letter/generated/`，勿再假定 `latex/REVIEWER_RESPONSE_ZH` 或「改 EN 必同步 ZH」。若仍在 `latex/generated/body_en.tex` 分段改稿，须合并进 `body_en_merged.tex` 后再当定稿。

@@ -1,0 +1,25 @@
+% Report-side additions to the merged response letter (2026-11-17).
+% Chinese text (original templates and report excerpts) is wrapped in \zh{...}:
+% pdfLaTeX (Overleaf default) uses CJKutf8; XeLaTeX uses xeCJK with \ReportCJKFont.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{report_side}[2026/11/17]
+\RequirePackage{iftex}
+\ifXeTeX
+  \RequirePackage{xeCJK}
+  \providecommand{\ReportCJKFont}{Noto Serif CJK SC}
+  \setCJKmainfont{\ReportCJKFont}
+  % keep Western punctuation and symbols in the main font (xeCJK would otherwise set them in the CJK font)
+  \xeCJKDeclareCharClass{Default}{"2013,"2014,"2018,"2019,"201C,"201D,"00A7,"00B1,"00B7,"2192,"2212,"00D7,"2265,"2264}
+  \newcommand{\zh}[1]{#1}
+\else
+  \RequirePackage{CJKutf8}
+  \newcommand{\zh}[1]{\begin{CJK}{UTF8}{gbsn}#1\end{CJK}}
+\fi
+% 11-20 (v10): clickable cross-references are shown with red boxes (screen only, not printed), as the author requested.
+% 11-20 (v11): boxes only in the reply text (authorresponse); links in tables, figure captions and the appendices have no box.
+\hypersetup{colorlinks=false,pdfborder={0 0 0},linkbordercolor={1 0 0},urlbordercolor={1 0 0},citebordercolor={1 0 0}}
+\RequirePackage{etoolbox}
+\AtBeginEnvironment{authorresponse}{\hypersetup{pdfborder={0 0 1}}}
+% Appendices heading for the inline layout (tables and figures sit with their responses; only A1/A2 remain at the end)
+\newcommand{\responseappendixheading}{\clearpage\FloatBarrier\section*{Appendices}}
+\endinput

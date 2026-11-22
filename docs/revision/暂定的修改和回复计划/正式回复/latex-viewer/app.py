@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Intranet viewer: compile LaTeX with XeLaTeX and preview EN/ZH PDFs."""
+"""Intranet viewer: compile response_letter (pdflatex) + manuscript (xelatex)."""
 
 from __future__ import annotations
 
@@ -17,26 +17,19 @@ BASE = Path(__file__).resolve().parents[1]
 STATIC = Path(__file__).resolve().parent / "static"
 
 # --- 工程根目录（相对 正式回复/）---
-RESPONSE_DIR = BASE / "latex"
+RESPONSE_DIR = BASE / "response_letter"
 MANUSCRIPT_DIR = BASE / "26_Nature_ThyroidAgent"
-FIGURES_DIR = BASE / "figures"
 
 PROJECTS: dict[str, dict] = {
     "response": {
         "root": RESPONSE_DIR,
         "label": "审稿回复",
-        "figures_texinputs": FIGURES_DIR,
+        "figures_texinputs": RESPONSE_DIR / "figures",
         "editable": {".tex", ".sty"},
-        "langs": {
-            "en": {
-                "main_tex": RESPONSE_DIR / "REVIEWER_RESPONSE_EN.tex",
-                "pdf": RESPONSE_DIR / "REVIEWER_RESPONSE_EN.pdf",
-            },
-            "zh": {
-                "main_tex": RESPONSE_DIR / "REVIEWER_RESPONSE_ZH.tex",
-                "pdf": RESPONSE_DIR / "REVIEWER_RESPONSE_ZH.pdf",
-            },
-        },
+        "main_tex": RESPONSE_DIR / "main.tex",
+        "pdf": RESPONSE_DIR / "main.pdf",
+        "engine": "pdflatex",
+        "bibtex": False,
     },
     "manuscript": {
         "root": MANUSCRIPT_DIR,
@@ -51,8 +44,6 @@ PROJECTS: dict[str, dict] = {
 }
 
 DEFAULT_PROJECT = "response"
-LATEX_DIR = RESPONSE_DIR  # legacy name for response-only paths in messages
-LANG_CFG = PROJECTS["response"]["langs"]  # API: en/zh reviewer-response PDFs only
 
 _compile_lock = threading.Lock()
 _state = {
@@ -95,6 +86,8 @@ def _run(cmd: list[str], cwd: Path, env: dict | None = None) -> tuple[int, str]:
         env=env,
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         timeout=600,
     )
     out = (proc.stdout or "") + (proc.stderr or "")
@@ -136,18 +129,18 @@ def _texinputs_env(project_id: str) -> dict[str, str]:
     return env
 
 
-def compile_response_lang(lang: str, runs: int = 2) -> tuple[bool, str]:
-    proj = PROJECTS["response"]
-    cfg = proj["langs"][lang]
+def compile_response(runs: int = 3) -> tuple[bool, str]:
+    cfg = PROJECTS["response"]
     main_tex: Path = cfg["main_tex"]
-    cwd = proj["root"]
+    pdf: Path = cfg["pdf"]
+    cwd = cfg["root"]
     if not main_tex.exists():
         return False, f"Missing {main_tex}"
     env = _texinputs_env("response")
     logs: list[str] = []
     last_code = 0
     last_log_errors: list[str] = []
-    engine = "xelatex"
+    engine = cfg.get("engine", "pdflatex")
     for pass_no in range(1, runs + 1):
         code, log = _run(
             [engine, "-interaction=nonstopmode", "-file-line-error", main_tex.name],
@@ -155,15 +148,13 @@ def compile_response_lang(lang: str, runs: int = 2) -> tuple[bool, str]:
             env=env,
         )
         last_code = code
-        logs.append(f"=== {engine} pass {pass_no}/{runs} (response/{lang}) exit={code} ===\n{log[-8000:]}")
+        logs.append(f"=== {engine} pass {pass_no}/{runs} (response) exit={code} ===\n{log[-8000:]}")
         last_log_errors = _latex_log_errors(main_tex)
         if last_log_errors:
             logs.append("=== LaTeX errors (.log) ===\n" + "\n".join(last_log_errors))
-    pdf_ok = cfg["pdf"].exists() and cfg["pdf"].stat().st_size > 10_000
+    pdf_ok = pdf.exists() and pdf.stat().st_size > 10_000
     ok = last_code == 0 and not last_log_errors and pdf_ok
-    logs.append(
-        f"=== {'OK' if ok else 'FAILED'} (response/{lang}): pdf_ok={pdf_ok} ===\n"
-    )
+    logs.append(f"=== {'OK' if ok else 'FAILED'} (response): pdf_ok={pdf_ok} ===\n")
     return ok, "\n".join(logs)
 
 
@@ -214,11 +205,10 @@ def full_build(reason: str = "manual", *, include_manuscript: bool = True) -> di
         _state["log"] = f"Build started ({reason})…\n"
         try:
             all_ok = True
-            for lang in ("en", "zh"):
-                ok, log = compile_response_lang(lang)
-                _state["log"] += "\n" + log
-                all_ok = all_ok and ok
-            _state["ok_project"]["response"] = all_ok
+            ok, log = compile_response()
+            _state["log"] += "\n" + log
+            all_ok = all_ok and ok
+            _state["ok_project"]["response"] = ok
             _state["hash"]["response"] = _sources_hash("response")
 
             if include_manuscript and MANUSCRIPT_DIR.is_dir():
@@ -288,17 +278,11 @@ def _list_latex_files(project_id: str) -> list[dict]:
         if not path.is_file() or path.suffix not in suffixes:
             continue
         rel = path.relative_to(root).as_posix()
-        lang = "shared"
-        if project_id == "response":
-            if "body_en" in rel or rel.endswith("REVIEWER_RESPONSE_EN.tex"):
-                lang = "en"
-            elif "body_zh" in rel or rel.endswith("REVIEWER_RESPONSE_ZH.tex"):
-                lang = "zh"
         items.append(
             {
                 "path": rel,
                 "name": path.name,
-                "lang": lang,
+                "lang": "shared",
                 "size": path.stat().st_size,
                 "mtime": path.stat().st_mtime,
             }
@@ -307,17 +291,14 @@ def _list_latex_files(project_id: str) -> list[dict]:
 
 
 def _tex_mtime_summary() -> dict[str, float | None]:
-    out: dict[str, float | None] = {"en": None, "zh": None, "manuscript": None}
+    out: dict[str, float | None] = {"en": None, "manuscript": None}
     rroot = PROJECTS["response"]["root"]
     if rroot.is_dir():
         mtimes: list[float] = []
-        sty = rroot / "reviewer_response.sty"
-        if sty.exists():
-            mtimes.append(sty.stat().st_mtime)
-        for path in rroot.rglob("*.tex"):
-            mtimes.append(path.stat().st_mtime)
-        latest = max(mtimes) if mtimes else None
-        out["en"] = out["zh"] = latest
+        for path in rroot.rglob("*"):
+            if path.is_file() and path.suffix in {".tex", ".sty"}:
+                mtimes.append(path.stat().st_mtime)
+        out["en"] = max(mtimes) if mtimes else None
     mroot = PROJECTS["manuscript"]["root"]
     if mroot.is_dir():
         mtimes = [p.stat().st_mtime for p in mroot.rglob("*") if p.is_file() and p.suffix in {".tex", ".bib"}]
@@ -337,13 +318,13 @@ def create_app() -> Flask:
         tex_mtime = _tex_mtime_summary()
         ms = PROJECTS["manuscript"]
         ms_pdf = ms.get("pdf")
+        resp_pdf = PROJECTS["response"].get("pdf")
         pdf_mtime = {
-            lang: cfg["pdf"].stat().st_mtime if cfg["pdf"].exists() else None
-            for lang, cfg in LANG_CFG.items()
+            "en": resp_pdf.stat().st_mtime if resp_pdf and resp_pdf.exists() else None,
+            "manuscript": (
+                ms_pdf.stat().st_mtime if ms_pdf and ms_pdf.exists() else None
+            ),
         }
-        pdf_mtime["manuscript"] = (
-            ms_pdf.stat().st_mtime if ms_pdf and ms_pdf.exists() else None
-        )
         return jsonify(
             {
                 "building": _state["building"],
@@ -466,15 +447,17 @@ def create_app() -> Flask:
                 as_attachment=False,
                 download_name=pdf_path.name,
             )
-        cfg = LANG_CFG.get(lang)
-        if not cfg or not cfg["pdf"].exists():
-            return jsonify({"error": "pdf not found"}), 404
-        return send_file(
-            cfg["pdf"],
-            mimetype="application/pdf",
-            as_attachment=False,
-            download_name=cfg["pdf"].name,
-        )
+        if lang in ("en", "response"):
+            pdf_path = PROJECTS["response"].get("pdf")
+            if not pdf_path or not pdf_path.exists():
+                return jsonify({"error": "pdf not found"}), 404
+            return send_file(
+                pdf_path,
+                mimetype="application/pdf",
+                as_attachment=False,
+                download_name=pdf_path.name,
+            )
+        return jsonify({"error": "pdf not found"}), 404
 
     @app.after_request
     def _no_cache_static(response):  # noqa: ANN001 — Flask hook signature
@@ -514,8 +497,12 @@ def main() -> None:
 
     app = create_app()
     ms = MANUSCRIPT_DIR / "main_v2.tex"
-    print(f"Reviewer response viewer (TeX-only): http://{args.host}:{args.port}")
-    print(f"  manuscript root: {MANUSCRIPT_DIR} ({'OK' if ms.is_file() else 'MISSING main_v2.tex'})")
+    resp_main = RESPONSE_DIR / "main.tex"
+    print(f"LaTeX viewer (TeX-only): http://{args.host}:{args.port}")
+    print(
+        f"  response_letter: {RESPONSE_DIR} ({'OK' if resp_main.is_file() else 'MISSING main.tex'})"
+    )
+    print(f"  manuscript: {MANUSCRIPT_DIR} ({'OK' if ms.is_file() else 'MISSING main_v2.tex'})")
     app.run(host=args.host, port=args.port, threaded=True)
 
 

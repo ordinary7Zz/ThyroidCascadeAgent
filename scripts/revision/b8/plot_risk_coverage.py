@@ -169,7 +169,6 @@ def plot_multi_panel(
 
     for idx, (cohort, curve) in enumerate(sorted(cohort_curves.items())):
         ax = axes[idx // ncols][idx % ncols]
-        label = COHORT_LABELS.get(cohort, cohort)
         _draw_risk_coverage_on_ax(
             ax,
             curve,
@@ -177,13 +176,12 @@ def plot_multi_panel(
             mark_operating=mark_operating,
             operating_rate=operating.get(cohort),
             with_text=True,
-            cohort_label=label,
+            cohort_label="",
         )
 
     for j in range(n, nrows * ncols):
         axes[j // ncols][j % ncols].set_visible(False)
 
-    fig.suptitle("Risk–coverage (classification, retained subset)", fontsize=11)
     fig.tight_layout()
     out_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_path, dpi=150)

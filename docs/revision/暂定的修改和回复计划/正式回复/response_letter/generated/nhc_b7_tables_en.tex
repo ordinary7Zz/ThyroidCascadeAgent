@@ -1,0 +1,76 @@
+% B7 NHC-MISD-TUS (tab_nhc_center_performance / tab_nhc_heterogeneity; centre descriptors merged into performance table)
+% [DATA-SOURCE] tab_nhc_center_performance | manuscript NHC-MISD-TUS per-centre supp export / B7 CSV | ThyroidXAgent cols (gland/nodule: dinov3_unet; BM: dinov3_unet_multitask); render_nhc_b7_tables_from_supplement.py --apply.
+% [DATA-SOURCE] tab_nhc_heterogeneity | same export | Centre-level inverse-variance meta I2/tau2 (not image-level B7 ANOVA I2).
+
+% [SYNC] tab_nhc_center_performance: reconcile pooled metrics with manuscript Fig.~2h / NHC-MISD-TUS supp per-centre tables and nine-model external tables when full NHC-MISD-TUS is locked.
+\begin{responsetable}
+\caption{\responsetabletitle{tab_nhc_center_performance}{NHC-MISD-TUS --- per-centre test images and external-test performance}}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{@{}l *{3}{c} *{6}{r} @{}}
+\toprule
+ & \multicolumn{3}{c}{$n$ (evaluable images)} & \multicolumn{2}{c}{Gland} & \multicolumn{2}{c}{Nodule} & \multicolumn{2}{c}{BM cls.} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-6}\cmidrule(lr){7-8}\cmidrule(lr){9-10}
+{Centre ID} & G & N & C & Dice & HD95 & Dice & HD95 & AUROC & AUPRC \\
+\midrule
+% BEGIN AUTO tab_nhc_center_performance rows
+THYB\_S\_AH04 & 101 & 30 & 24 & 65.8 & 25.8 & 91.7 & 3.1 & 0.844 & 0.746 \\
+THYB\_S\_AN01 & 243 & 243 & 236 & 36.9 & 59.9 & 91.6 & 4.7 & 0.862 & 0.588 \\
+THYB\_S\_BJ01 & 876 & 142 & 93 & 61.0 & 36.7 & 69.7 & 20.7 & 0.749 & 0.930 \\
+THYB\_S\_BJ09 & 41 & 22 & 20 & 54.8 & 36.6 & 86.2 & 5.6 & 0.586 & 0.683 \\
+THYB\_S\_CQ03 & 238 & 186 & 172 & 63.7 & 36.8 & 82.7 & 8.8 & 0.784 & 0.876 \\
+THYB\_S\_EN02 & 120 & 107 & 99 & 55.8 & 37.6 & 84.4 & 4.5 & 0.851 & 0.969 \\
+THYB\_S\_EN04 & 949 & 946 & 626 & 65.3 & 30.0 & 82.9 & 7.0 & 0.846 & 0.969 \\
+THYB\_S\_FJ01 & 2 & 2 & 2 & 67.1 & 58.9 & 79.7 & 8.3 & 0.500 & 1.000 \\
+THYB\_S\_FJ03 & 85 & 64 & 2 & 66.6 & 27.0 & 79.7 & 7.0 & 0.500 & 1.000 \\
+THYB\_S\_GS03 & 94 & 91 & 84 & 51.0 & 44.9 & 85.7 & 7.8 & 0.838 & 0.921 \\
+THYB\_S\_GX01 & 19 & 4 & 4 & 64.8 & 33.2 & 85.8 & 5.6 & 0.500 & 1.000 \\
+THYB\_S\_GZ02 & 233 & 92 & 90 & 59.9 & 37.0 & 89.2 & 4.5 & 0.693 & 0.850 \\
+THYB\_S\_HB07 & 8 & 2 & --- & 31.7 & 30.5 & 21.3 & 30.8 & NE & NE \\
+THYB\_S\_JL04 & 54 & 16 & 12 & 43.9 & 54.0 & 81.3 & 14.2 & 0.407 & 0.491 \\
+THYB\_S\_JS01 & 72 & 66 & 59 & 56.3 & 40.0 & 85.6 & 5.7 & 0.781 & 0.990 \\
+THYB\_S\_JS02 & 190 & 184 & 171 & 36.4 & 49.4 & 87.7 & 6.7 & 0.746 & 0.734 \\
+THYB\_S\_JX06 & 215 & 167 & 153 & 54.2 & 42.4 & 87.5 & 7.2 & 0.903 & 0.897 \\
+THYB\_S\_NM02 & 66 & 50 & 49 & 57.7 & 45.9 & 83.3 & 6.8 & 0.653 & 0.810 \\
+THYB\_S\_NX01 & 582 & 557 & 1 & 52.7 & 39.7 & 77.4 & 12.9 & 0.500 & 1.000 \\
+THYB\_S\_QX07 & 289 & 280 & 279 & 66.0 & 30.4 & 85.5 & 6.7 & 0.870 & 0.575 \\
+THYB\_S\_SC06 & 29 & 29 & 22 & 38.6 & 52.0 & 90.2 & 4.7 & 0.876 & 0.873 \\
+THYB\_S\_SD12 & 75 & 16 & 15 & 69.6 & 23.8 & 83.7 & 9.8 & 0.929 & 0.500 \\
+THYB\_S\_SD13 & 22 & 18 & 18 & 69.2 & 23.8 & 92.7 & 3.3 & 0.875 & 0.567 \\
+THYB\_S\_SD14 & 2 & --- & --- & 3.1 & 78.5 & --- & --- & NE & NE \\
+THYB\_S\_SH01 & 832 & 834 & 792 & 43.3 & 50.9 & 88.8 & 6.4 & 0.896 & 0.859 \\
+THYB\_S\_SH05 & 669 & 665 & 539 & 61.6 & 36.5 & 85.5 & 7.6 & 0.719 & 0.832 \\
+THYB\_S\_SH06 & 43 & 31 & 4 & 49.8 & 45.8 & 70.8 & 16.0 & 1.000 & 1.000 \\
+THYB\_S\_SX04 & 41 & 27 & 27 & 61.4 & 38.8 & 89.2 & 3.5 & 0.860 & 0.988 \\
+THYB\_S\_XJ01 & 25 & 8 & 5 & 68.6 & 29.1 & 82.7 & 7.0 & 1.000 & 1.000 \\
+THYB\_S\_YN01 & 25 & 22 & 21 & 55.8 & 35.6 & 87.2 & 4.6 & 0.853 & 0.968 \\
+THYB\_S\_YN05 & 137 & 12 & 12 & 55.4 & 37.6 & 91.8 & 3.2 & 0.500 & 0.000 \\
+THYB\_S\_ZJ05 & 694 & 690 & 647 & 55.2 & 37.2 & 82.5 & 5.0 & 0.811 & 0.746 \\
+THYB\_S\_ZJ06 & 460 & 460 & 452 & 48.6 & 43.9 & 84.5 & 7.6 & 0.811 & 0.811 \\
+THYB\_S\_ZJ24 & 1174 & 321 & 269 & 80.6 & 14.7 & 45.5 & 45.0 & 0.590 & 0.164 \\
+THYB\_S\_ZJ29 & 16 & --- & --- & 85.2 & 12.1 & --- & --- & NE & NE \\
+\textbf{Overall pooled} & \textbf{8721} & \textbf{6384} & \textbf{4999} & \textbf{59.3} & \textbf{35.8} & \textbf{82.3} & \textbf{9.4} & \textbf{0.819} & \textbf{0.823} \\
+\textbf{Unweighted macro} & --- & --- & --- & \textbf{55.9} & \textbf{38.8} & \textbf{81.6} & \textbf{9.2} & \textbf{0.754} & \textbf{0.792} \\
+% END AUTO tab_nhc_center_performance rows
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{35 anonymized database site IDs; hospital names, patient or nodule totals, and scanner metadata are not in the authorized research release. Units: Dice in percent; HD95 in mm; AUROC/AUPRC on [0,1]. $n$ columns G/N/C: evaluable test images per task. Overall pooled row $n$: 8721 / 6384 / 4999. Lower HD95 is better; NE = not estimable.}
+\end{responsetable}
+
+\begin{responsetable}
+\caption{\responsetabletitle{tab_nhc_heterogeneity}{NHC-MISD-TUS: between-center heterogeneity (centre-level meta)}}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{@{}l l r r l r l@{}}
+\toprule
+Task & Metric & Center groups & Images & Pooled / macro & $I^2$ (\%) & $\tau^2$ \\
+\midrule
+% BEGIN AUTO tab_nhc_heterogeneity rows
+Nodule segmentation & Dice $\uparrow$ & 33 & 6384 & 0.823 / 0.816 & 99.0 & 0.010 \\
+Benign--malignant & AUROC $\uparrow$ & 32 & 4999 & 0.819 / 0.754 & 99.0 & 0.000 \\
+Gland segmentation & Dice $\uparrow$ & 35 & 8721 & 0.593 / 0.559 & 99.9 & 0.134 \\
+% END AUTO tab_nhc_heterogeneity rows
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{Between-centre $I^2$/$\tau^2$ from \emph{centre-level} inverse-variance meta (Cochrane $Q$-type; centre Dice/AUROC effects and $n$ as in \responsetableref{tab_nhc_center_performance})---not image-level B7 ANOVA $I^2$ on malignancy scores. Meta-regression on scanner or case mix was not performed because those covariates were not released.}
+\end{responsetable}

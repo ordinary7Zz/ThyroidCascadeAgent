@@ -1,6 +1,6 @@
 # 回信写作风格（Nature 子刊口径）
 
-与 [`INSTRUCTIONS.md`](./INSTRUCTIONS.md) 流程规则、`../latex/README.md` 版式与「审稿人可读性」并列。**改 `body_*.tex` 正文语气时必读本节。**
+与 [`INSTRUCTIONS.md`](./INSTRUCTIONS.md) 流程规则并列。**改 `response_letter/generated/body_en_merged.tex`（及拆开的 `generated/*.tex`）正文语气时必读本节。**
 
 ## 1. 总体目标
 
@@ -28,7 +28,7 @@
 
 - **一句一引用**：`…见 \responsetableref{tab_…}` / `…are in \responsetablerefrange{…}{…}`，勿再附「（见表 R*）」或「at the end of this letter」。
 - **不在正文复述表内点估计与 CI**（除非审稿人点名要一句主结论且表尚未定稿——此时用 `\rpending` 而非写可能过期的数字）。
-- **不单独指「表注」**（见 `latex/README.md`）；需要细节时只引用表号。
+- **不单独指「表注」**；需要细节时只引用表号。
 
 ### 3.2 段落与衔接
 
@@ -43,9 +43,9 @@
 
 ### 3.4 与 INSTRUCTIONS 其它条的关系
 
-- **仍遵守**：勿写 Path A/B、Phase、脚本名、日志文件名（`latex/README.md` 专节）。
+- **仍遵守**：勿写 Path A/B、Phase、脚本名、日志文件名（路径可留在 `% [SYNC]` 注释）。
 - **仍遵守**：R2.2 外不写满 bootstrap 参数；`\rpending` 只用于真正未定稿处。
-- **中英文**：先改 `body_en.tex`，再 **语义对齐** 更新 `body_zh.tex`（中文不必更「解释性」 than 英文）。
+- **仅英文回信**：在 `response_letter/` 内改稿，无中文平行稿。
 
 ## 4. 自检（改完 R* 段落后）
 

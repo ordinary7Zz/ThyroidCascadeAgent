@@ -3,32 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>审稿回复 · LaTeX 工作区</title>
+  <title>正式回复 · LaTeX 工作区</title>
   <link rel="stylesheet" href="/static/workspace.css" />
 </head>
 <body>
   <header class="toolbar">
-    <h1>ThyroidXAgent 审稿回复</h1>
+    <h1>ThyroidXAgent 正式回复</h1>
     <div class="group">
       <span class="group-label">工作区</span>
       <div class="seg">
-        <button type="button" data-workspace="response" class="active">审稿回复</button>
-        <button type="button" data-workspace="manuscript">Nature 主稿</button>
-      </div>
-    </div>
-    <div class="group" id="groupResponseLang">
-      <span class="group-label">项目</span>
-      <div class="seg">
-        <button type="button" data-project-lang="en" class="active">English</button>
-        <button type="button" data-project-lang="zh">中文</button>
-      </div>
-    </div>
-    <div class="group" id="groupPdfTabs">
-      <span class="group-label">PDF</span>
-      <div class="seg tabs">
-        <button type="button" data-pdf-lang="en" class="active">EN</button>
-        <button type="button" data-pdf-lang="zh">ZH</button>
-        <button type="button" id="btnSplitPdf" title="左右对照中英文 PDF">对照</button>
+        <button type="button" data-workspace="response" class="active">回信</button>
+        <button type="button" data-workspace="manuscript">主稿</button>
       </div>
     </div>
     <div id="status" class="status busy"><span class="dot"></span><span id="statusText">启动中…</span></div>
@@ -39,7 +24,7 @@
   <div class="workspace-main">
   <div class="workspace" id="workspace">
     <aside class="sidebar" id="sidebar">
-      <div class="sidebar-head" id="sidebarHead">latex/ 文件</div>
+      <div class="sidebar-head" id="sidebarHead">response_letter/ 文件</div>
       <div id="fileTree" class="file-tree"></div>
     </aside>
     <div class="resize-handle vertical" id="resizeSidebar" title="拖动调整文件树宽度"></div>
@@ -75,12 +60,8 @@
       <div class="preview-toolbar">PDF 预览</div>
       <div id="previewBody" class="preview-body">
         <div class="pdf-cell" id="pdfEnCell">
-          <span class="preview-label">English</span>
-          <iframe id="pdfEn" title="English PDF"></iframe>
-        </div>
-        <div class="pdf-cell" id="pdfZhCell">
-          <span class="preview-label">中文</span>
-          <iframe id="pdfZh" title="Chinese PDF"></iframe>
+          <span class="preview-label" id="pdfLabel">main.pdf</span>
+          <iframe id="pdfEn" title="PDF preview"></iframe>
         </div>
         <div class="pdf-cell" id="pdfMsCell" hidden>
           <span class="preview-label">main_v2.pdf</span>
@@ -97,6 +78,6 @@
   </div>
   </div>
 
-  <script src="/static/workspace.js?v=4"></script>
+  <script src="/static/workspace.js?v=5"></script>
 </body>
 </html>

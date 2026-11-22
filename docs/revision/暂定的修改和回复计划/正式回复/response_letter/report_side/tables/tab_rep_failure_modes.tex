@@ -1,0 +1,27 @@
+% Converted from S5_Tool_call_audit/reviewer_response_package_20261119_claude_v13/tables/Table_R2_16_1_failure_modes.md (2026-11-17)
+\begin{responsetable}
+\caption{\responsetabletitle{tab_rep_failure_modes}{Failure events in the audit (150 cases $\times$ 3 runs = 450 runs; 2,347 tool calls)}}
+{\footnotesize\setlength{\tabcolsep}{6pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.43\textwidth}ccc@{}}
+\toprule
+\textbf{Event} & \textbf{Count} & \textbf{\% (95\% CI)} & \textbf{Cases (in 1 / 2 / 3 runs)} \\
+\midrule
+\rowcolor{ResponseTableGray}\multicolumn{4}{c}{\textbf{Failure categories}} \\
+Invalid call & 4/2,347 calls & 0.17 (0.04--0.35) & 4 (4 / 0 / 0) \\
+Lymph-node screening request with non-neck images & 18/2,347 calls & 0.77 (0.27--1.37) & 8 (2 / 2 / 4) \\
+Gland-measurement request with neck images & 66/2,347 calls & 2.81 (1.96--3.70) & 32 (9 / 12 / 11) \\
+Hallucinated task (planned without image support) & 3/2,348 planned tasks & 0.13 (0.00--0.29) & 3 (3 / 0 / 0) \\
+Repeated call & 0/2,347 calls & 0 & 0 \\
+Execution failure (malformed tool name, retried) & 1/2,347 calls & --- & 1 (1 / 0 / 0) \\
+Recovery by a plan-guided supplementary call & 2/450 runs & --- & 2 (2 / 0 / 0) \\
+Rollback & not implemented & --- & --- \\
+\rowcolor{ResponseTableGray}\multicolumn{4}{c}{\textbf{Ordering and omission events not shown by the run-level success flags}} \\
+Fusion before pixel spacing & 40/320 fusion calls & --- & 24 (11 / 10 / 3) \\
+Fusion before feature classification & 1/320 fusion calls & --- & 1 (1 / 0 / 0) \\
+Gland measurement without any pixel-spacing estimate & 129/450 runs & 28.7 (22.0--35.3) & 43 (0 / 0 / 43) \\
+Segmented nodule never fused & 1/450 runs & --- & 1 (1 / 0 / 0) \\
+Preprocessing-flagged image not confirmed by segmentation & 6/450 runs & --- & 2 (0 / 0 / 2) \\
+\bottomrule
+\end{tabular}}
+\responsetablenote{Cases: cases affected among the 150, and the number in which the event occurred in one, two or all three runs (each run with a different seed). 95\% CIs: percentile bootstrap resampling cases within each dataset (10,000 resamples). Fusion with either ordering error: 41/320 calls, 12.8\% (8.8--17.1\%).}
+\end{responsetable}

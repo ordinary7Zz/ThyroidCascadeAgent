@@ -1,0 +1,327 @@
+% Shared style for ThyroidXAgent reviewer response (EN / ZH)
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{reviewer_response}[2026/10/25 reviewer response letter]
+
+\RequirePackage[a4paper,margin=2.2cm]{geometry}
+% Overleaf default is pdfLaTeX — do not require fontspec there (EN-only bundle).
+\RequirePackage{iftex}
+\ifPDFTeX
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage[utf8]{inputenc}
+  \RequirePackage{lmodern}
+\else
+  \RequirePackage{fontspec}
+\fi
+\RequirePackage{microtype}
+\RequirePackage{graphicx}
+\graphicspath{{figures/}}
+\RequirePackage{booktabs}
+\RequirePackage{colortbl}
+\definecolor{ResponseTableGray}{gray}{0.92}
+\RequirePackage{tabularx}
+\RequirePackage{longtable}
+\RequirePackage{array}
+\RequirePackage{multirow}
+\RequirePackage{threeparttable}
+\RequirePackage{caption}
+\RequirePackage{subcaption}
+\RequirePackage{etoolbox}
+\RequirePackage{xcolor}
+\RequirePackage{enumitem}
+\RequirePackage{fancyvrb}
+\RequirePackage{fvextra}
+\RequirePackage{adjustbox}
+\RequirePackage{float}
+\RequirePackage{placeins}
+% hyperref last (Overleaf / latexmk are sensitive to load order)
+\RequirePackage{hyperref}
+
+\definecolor{ResponseBlue}{RGB}{0,63,136}
+\definecolor{ResponsePendingRed}{RGB}{180,0,0}
+
+% Internal draft placeholders (remove or replace before journal submission)
+\newcommand{\rpending}[1]{%
+  {\color{ResponsePendingRed}\normalfont[PENDING: #1]}%
+}
+\newcommand{\rpendingzh}[1]{%
+  {\color{ResponsePendingRed}\normalfont[待补充：#1]}%
+}
+
+\hypersetup{colorlinks=true,linkcolor=ResponseBlue!80!black,urlcolor=ResponseBlue!80!black,citecolor=ResponseBlue!80!black}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+\setlist[itemize]{leftmargin=1.4em,topsep=0.25em,itemsep=0.15em}
+\setlist[enumerate]{leftmargin=1.6em,topsep=0.25em,itemsep=0.15em}
+
+\newcommand{\ReviewerCommentLabel}{Reviewer comment:}
+\newcommand{\ResponseLabel}{Response:}
+\newcommand{\SupportingLabel}{Supporting tables and figures}
+\newcommand{\ResponseTableNoteLabel}{}
+
+% Response-letter table/figure IDs: auto-numbered in order of first \responsetabletitle / \responsefiguretitle.
+% Optional: \responsetablesetcontinued{key} for “(continued)” on \responsetableref.
+\newcommand{\ResponseTableName}{Table}
+\newcommand{\ResponseTablesName}{Tables}
+\newcommand{\ResponseFigureName}{Figure}
+\newcommand{\ResponseFiguresName}{Figures}
+\newcommand{\responsecontinuedsuffix}{(continued)}
+
+\makeatletter
+\newcounter{responsetableno}
+\renewcommand{\theresponsetableno}{R\arabic{responsetableno}}
+\newcounter{responsefigureno}
+\renewcommand{\theresponsefigureno}{R\arabic{responsefigureno}}
+
+% Legacy registry lines are no-ops (numbering is automatic).
+\newcommand{\responsetableregister}[2]{}
+\newcommand{\responsefigureregister}[2]{}
+\newcommand{\responsetablesetcontinued}[1]{%
+  \expandafter\gdef\csname rtab@cont@#1\endcsname{1}%
+}
+
+\newcommand{\responsetableref}[1]{%
+  \ResponseTableName~\ref{#1}%
+  \@ifundefined{rtab@cont@#1}{}{\responsecontinuedsuffix}%
+}
+\newcommand{\responsetablerefrange}[2]{%
+  \ResponseTablesName~\ref{#1}--\ref{#2}%
+}
+\makeatletter
+\newcommand{\responsetabletitle}[2]{%
+  \refstepcounter{responsetableno}%
+  \ResponseTableName~\theresponsetableno.\nobreakspace #2%
+  \label{#1}%
+}
+\makeatother
+% Longtable page header only (plain text; avoid hyperref/link boxes in \multicolumn width calc)
+\newcommand{\responsetablecontinuedrow}[1]{%
+  \multicolumn{4}{@{}r@{}}{\footnotesize\emph{\ResponseTableName~\ref{#1}\responsecontinuedsuffix}} \\%
+}
+\newcommand{\responsefigureref}[1]{%
+  \ResponseFigureName~\ref{#1}%
+}
+\newcommand{\responsefigurerefrange}[2]{%
+  \ResponseFiguresName~\ref{#1}--\ref{#2}%
+}
+\newcommand{\responsefiguretitle}[2]{%
+  \ResponseFigureName~\theresponsefigureno.\nobreakspace #2%
+}
+% Legacy: prefer a single \responsefiguretitle{key}{full caption} inside \caption{...}
+\newcommand{\responsefigurelegend}[1]{%
+  \par\vspace{0.45em}%
+  {\footnotesize\normalfont #1\par}%
+}
+% Routing ablation (tab_routing_ablation_seg / tab_routing_ablation_cls): rank highlighting (print-safe)
+\newcommand{\routingbest}[1]{\textbf{#1}}
+\newcommand{\routingsecond}[1]{\underline{#1}}
+\makeatother
+
+\newcommand{\ManuscriptTitle}{ThyroidXAgent}
+\newcommand{\ManuscriptJournal}{Nature Communications major revision}
+
+% Letter head (TURG-style)
+\newcommand{\responselettertitle}[2]{%
+  \begin{center}
+  {\LARGE\bfseries #1}\par\vspace{0.5em}
+  {\large #2}\par
+  \end{center}
+  \vspace{0.35em}
+}
+
+\newcommand{\responseletteropening}{%
+  \noindent Dear Editor and Reviewers,\par\vspace{0.35em}
+  \noindent We thank you for your careful evaluation of our manuscript,
+  \textit{\ManuscriptTitle}, and for your constructive comments.
+  We respond to each comment below.
+  The reviewers' comments are shown in \textit{black italics} and our responses in \textcolor{ResponseBlue}{blue}.
+  Tables and figures cited in the responses are reproduced at the end of this letter.\par
+  \vspace{0.75em}
+}
+
+\newcommand{\responseletteropeningzh}{%
+  \noindent 尊敬的编辑与审稿人：\par\vspace{0.35em}
+  \noindent 感谢您对稿件 \textit{\ManuscriptTitle}（\ManuscriptJournal）的认真审阅与建设性意见。
+  下文逐条回复。
+  审稿意见以\textbf{黑色斜体}呈现，作者回复以\textcolor{ResponseBlue}{蓝色}呈现；
+  回复中引用的表、图均复现于信末。\par
+  \vspace{0.75em}
+}
+
+\newcommand{\responsetoreviewer}[1]{%
+  \par\vspace{0.85em}%
+  \noindent{\large\bfseries #1}\par\vspace{0.25em}%
+}
+
+\newcommand{\reviewersection}[1]{%
+  \par\vspace{0.55em}%
+  \noindent\textbf{#1}\par\vspace{0.15em}%
+}
+
+\newcommand{\reviewersubtitle}[1]{\paragraph*{#1}\vspace{-0.2em}}
+
+\newenvironment{reviewercomment}{%
+  \itshape\color{black}%
+}{%
+  \par\normalfont\color{black}\vspace{0.35em}%
+}
+
+\newenvironment{authorresponse}{%
+  \color{ResponseBlue}%
+}{%
+  \par\color{black}\vspace{0.45em}%
+}
+
+\newenvironment{supportingblock}{%
+  \noindent\textbf{\SupportingLabel}\par\vspace{0.25em}
+}{}
+
+% Float captions: full text in \caption{Table R1. ...} (no extra "Table 1:" prefix).
+% Nature-style: left-aligned caption block at \textwidth (not centered short lines).
+\captionsetup{
+  justification=raggedright,
+  singlelinecheck=false,
+  font=small,
+  labelfont=normal,
+  labelformat=empty,
+  labelsep=none,
+}
+\captionsetup[table]{position=above,skip=6pt}
+\captionsetup[figure]{position=below,skip=6pt}
+\captionsetup[sub]{font=footnotesize,labelfont=normal}
+
+\newcommand{\responseappendix}{%
+  \clearpage
+  \section*{Supporting Tables and Figures}%
+  \noindent\footnotesize New supplementary-style tables and figures cited in the point-by-point responses above are numbered \textbf{R1, R2, \ldots{}} in order of appearance below (tables and figures each have their own R sequence). They do not reuse manuscript Supplementary Table numbers.\par\vspace{0.5em}%
+}
+
+\newcommand{\responseappendixzh}{%
+  \clearpage
+  \section*{支撑表图（Supporting Tables and Figures）}%
+  \noindent\footnotesize 下文复现回复中引用的表、图按信内出现顺序编号为 \textbf{R1、R2、\ldots{}}（表与图各有一套 R 序号），不复用稿件补充表序号。\par\vspace{0.5em}%
+}
+
+% Flush pending floats before prose appendices (A1/A2 prompts)
+\newcommand{\responseproseappendixstart}{%
+  \clearpage
+  \FloatBarrier
+}
+
+% Uniform body size for appendix A1/A2 (subsection title stays \large outside)
+\newenvironment{responseappendixprose}{%
+  \begingroup
+  \footnotesize
+  \setlength{\parskip}{0.4em}%
+}{%
+  \endgroup
+}
+
+% Match supplementary tables in the manuscript (ThyroidXAgent.md / tab:seg_performance, tab:cls_performance)
+\newcommand{\responsetablemanuscriptsetup}{%
+  \setlength{\tabcolsep}{5.5pt}%
+  \renewcommand{\arraystretch}{1.08}%
+}
+\newcommand{\responserowagent}{\rowcolor{ResponseTableGray}}
+
+\makeatletter
+\newenvironment{responsetable}{%
+  \begin{table}[H]
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.15}
+  \let\responsetable@savedcaption\caption
+  \def\caption##1{%
+    \responsetable@savedcaption*{##1}%
+    \centering
+  }%
+}{%
+  \let\caption\responsetable@savedcaption
+  \end{table}
+}
+\newenvironment{manuscriptresponsetable}{%
+  \begin{table}[H]
+  \footnotesize
+  \responsetablemanuscriptsetup
+  \let\responsetable@savedcaption\caption
+  \def\caption##1{%
+    \responsetable@savedcaption*{##1}%
+    \centering
+  }%
+}{%
+  \let\caption\responsetable@savedcaption
+  \end{table}
+}
+\makeatother
+
+% Multi-page ablation tables (longtable + repeated header; not a float)
+\newenvironment{responsepaginatedtable}{%
+  \par\medskip
+  \footnotesize
+  \setlength{\tabcolsep}{3.5pt}
+  \renewcommand{\arraystretch}{1.12}
+  \setlength{\LTpre}{0.4em}
+  \setlength{\LTpost}{0.6em}
+  \setlength{\LTcapwidth}{\textwidth}
+  \setlength{\LTleft}{0pt plus 1fill}
+  \setlength{\LTright}{0pt plus 1fill}
+  \captionsetup{position=above,skip=6pt,justification=raggedright,singlelinecheck=false}%
+}{%
+  \par\medskip
+}
+
+\newenvironment{responsefigure}{%
+  \refstepcounter{responsefigureno}%
+  \begin{figure}[H]
+  \centering
+  % [merged copy, 2026-11-17] \label after \caption now refers to the R number: the figure counter is
+  % displayed as R# inside this environment (previously the text said "Figure 1" while the caption said "Figure R1").
+  \renewcommand{\thefigure}{\theresponsefigureno}%
+}{%
+  \end{figure}
+}
+
+% Non-floating table inside prose appendices (avoids interruption by deferred floats)
+\newenvironment{responseinlinetable}{%
+  \par\vspace{0.35em}%
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.15}
+}{%
+  \par\vspace{0.5em}%
+}
+
+\newcommand{\responseinlinetablecaption}[1]{%
+  \par\vspace{0.15em}%
+  {\small\raggedright #1\par}%
+  \vspace{0.35em}%
+}
+
+\newcommand{\responsetablenote}[1]{%
+  \par\vspace{0.4em}%
+  {\footnotesize\raggedright #1\par}%
+}
+
+% Legacy: use one \caption{\responsefiguretitle{key}{full caption text}} instead
+\newcommand{\responsefigurenote}[1]{%
+  \par\vspace{0.45em}%
+  {\footnotesize\normalfont #1\par}%
+  \vspace{0.5em}%
+}
+
+\newcommand{\responsetablenotes}[1]{%
+  \par\vspace{0.4em}%
+  {\footnotesize #1\par}%
+}
+
+\DefineVerbatimEnvironment{promptverbatim}{Verbatim}{%
+  fontsize=\small,%
+  frame=single,%
+  rulecolor=\color{black!25},%
+  framesep=6pt,%
+  breaklines=true,%
+  tabsize=2,%
+  commandchars=\\\{\}%
+}
+
+\endinput

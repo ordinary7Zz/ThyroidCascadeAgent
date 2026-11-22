@@ -1,19 +1,14 @@
 (() => {
   const DEFAULT_FILES = {
-    response: {
-      en: "generated/body_en.tex",
-      zh: "generated/body_zh.tex",
-    },
+    response: "generated/body_en_merged.tex",
     manuscript: "main_v2.tex",
   };
 
   let currentWorkspace = "response";
-  let currentLang = "en";
   let currentPath = null;
   let editorDirty = false;
   let savedContent = "";
-  let splitPdf = false;
-  let lastPdfMtime = { en: null, zh: null, manuscript: null };
+  let lastPdfMtime = { en: null, manuscript: null };
   let pendingLogText = null;
   let findActiveIndex = -1;
 
@@ -37,12 +32,10 @@
   const btnBuild = document.getElementById("btnBuild");
   const btnSave = document.getElementById("btnSave");
   const pdfEn = document.getElementById("pdfEn");
-  const pdfZh = document.getElementById("pdfZh");
   const pdfMs = document.getElementById("pdfMs");
   const previewBody = document.getElementById("previewBody");
   const sidebarHead = document.getElementById("sidebarHead");
-  const groupResponseLang = document.getElementById("groupResponseLang");
-  const groupPdfTabs = document.getElementById("groupPdfTabs");
+  const pdfLabel = document.getElementById("pdfLabel");
 
   function pdfUrl(lang) {
     const q = `/pdf/${lang}?t=${Date.now()}`;
@@ -50,7 +43,6 @@
   }
 
   const pdfEnCell = document.getElementById("pdfEnCell");
-  const pdfZhCell = document.getElementById("pdfZhCell");
   const pdfMsCell = document.getElementById("pdfMsCell");
 
   function refreshPdf() {
@@ -63,7 +55,6 @@
       pdfMsCell.hidden = false;
       pdfMsCell.style.display = "flex";
       if (pdfEnCell) pdfEnCell.style.display = "none";
-      if (pdfZhCell) pdfZhCell.style.display = "none";
       previewBody.classList.remove("split");
       return;
     }
@@ -71,28 +62,9 @@
       pdfMsCell.hidden = true;
       pdfMsCell.style.display = "none";
     }
+    if (pdfEnCell) pdfEnCell.style.display = "flex";
+    if (pdfLabel) pdfLabel.textContent = "main.pdf";
     pdfEn.src = pdfUrl("en");
-    pdfZh.src = pdfUrl("zh");
-    if (splitPdf) {
-      pdfEnCell.style.display = "flex";
-      pdfZhCell.style.display = "flex";
-    } else {
-      pdfEnCell.style.display = currentLang === "en" ? "flex" : "none";
-      pdfZhCell.style.display = currentLang === "zh" ? "flex" : "none";
-    }
-  }
-
-  function setProjectLang(lang) {
-    if (currentWorkspace !== "response") return;
-    currentLang = lang;
-    document.querySelectorAll("[data-project-lang]").forEach((btn) => {
-      btn.classList.toggle("active", btn.dataset.projectLang === lang);
-    });
-    document.querySelectorAll("[data-pdf-lang]").forEach((btn) => {
-      btn.classList.toggle("active", btn.dataset.pdfLang === lang);
-    });
-    refreshPdf();
-    openFile(DEFAULT_FILES.response[lang], false);
   }
 
   async function setWorkspace(ws) {
@@ -106,21 +78,14 @@
       pathLabel.textContent = "—";
       editorDirty = false;
       btnSave.disabled = true;
-      splitPdf = false;
-      document.getElementById("btnSplitPdf").classList.remove("active");
       document.querySelectorAll("[data-workspace]").forEach((btn) => {
         btn.classList.toggle("active", btn.dataset.workspace === ws);
       });
-      const showResponseUi = ws === "response";
-      if (groupResponseLang) groupResponseLang.hidden = !showResponseUi;
-      if (groupPdfTabs) groupPdfTabs.hidden = !showResponseUi;
       await loadFileList();
       refreshPdf();
-      if (ws === "manuscript") {
-        await openFile(DEFAULT_FILES.manuscript, false);
-      } else {
-        setProjectLang(currentLang);
-      }
+      const defaultFile =
+        ws === "manuscript" ? DEFAULT_FILES.manuscript : DEFAULT_FILES.response;
+      await openFile(defaultFile, false);
     } catch (err) {
       currentWorkspace = prev;
       alert(
@@ -151,19 +116,9 @@
     const sections =
       currentWorkspace === "manuscript"
         ? { manuscript: { title: "TeX / Bib / Cls", items: files } }
-        : {
-            en: { title: "English", items: [] },
-            zh: { title: "中文", items: [] },
-            shared: { title: "共用样式", items: [] },
-          };
-    if (currentWorkspace === "response") {
-      for (const f of files) {
-        const key = sections[f.lang] ? f.lang : "shared";
-        sections[key].items.push(f);
-      }
-    }
+        : { response: { title: "TeX / Sty", items: files } };
     const sectionOrder =
-      currentWorkspace === "manuscript" ? ["manuscript"] : ["en", "zh", "shared"];
+      currentWorkspace === "manuscript" ? ["manuscript"] : ["response"];
     fileTree.innerHTML = "";
     for (const key of sectionOrder) {
       const sec = sections[key];
@@ -622,7 +577,7 @@
       const s = await fetchStatus();
       setStatus(s);
       if (!s.building) {
-        for (const lang of ["en", "zh", "manuscript"]) {
+        for (const lang of ["en", "manuscript"]) {
           const mt = s.pdf_mtime && s.pdf_mtime[lang];
           if (mt && mt !== lastPdfMtime[lang]) {
             lastPdfMtime[lang] = mt;
@@ -647,27 +602,6 @@
 
   document.querySelectorAll("[data-workspace]").forEach((btn) => {
     btn.addEventListener("click", () => setWorkspace(btn.dataset.workspace));
-  });
-
-  document.querySelectorAll("[data-project-lang]").forEach((btn) => {
-    btn.addEventListener("click", () => setProjectLang(btn.dataset.projectLang));
-  });
-
-  document.querySelectorAll("[data-pdf-lang]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      currentLang = btn.dataset.pdfLang;
-      document.querySelectorAll("[data-pdf-lang]").forEach((b) => {
-        b.classList.toggle("active", b.dataset.pdfLang === currentLang);
-      });
-      refreshPdf();
-    });
-  });
-
-  document.getElementById("btnSplitPdf").addEventListener("click", () => {
-    splitPdf = !splitPdf;
-    previewBody.classList.toggle("split", splitPdf);
-    document.getElementById("btnSplitPdf").classList.toggle("active", splitPdf);
-    refreshPdf();
   });
 
   document.getElementById("logToggle").addEventListener("click", () => {
@@ -835,7 +769,7 @@
   refreshEditorSurface();
 
   loadLayout();
-  loadFileList().then(() => setProjectLang("en"));
+  loadFileList().then(() => openFile(DEFAULT_FILES.response, false));
   refreshPdf();
   document.addEventListener("selectionchange", flushPendingLog);
 

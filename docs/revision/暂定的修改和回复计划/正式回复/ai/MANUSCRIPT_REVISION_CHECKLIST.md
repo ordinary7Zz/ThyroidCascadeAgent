@@ -1,6 +1,6 @@
 # 主稿与回信修订清单（由回信 `\rpending` 迁出）
 
-**用途：** 统稿时改 `docs/ThyroidXAgent.md`（及摘要/图注/补充材料），以及回信须补的制图等；**一律**在本文件跟踪，**不再**在 `latex/generated/body_{en,zh}.tex` 里用红色 `\rpending` / `\rpendingzh`。  
+**用途：** 统稿时改 `docs/ThyroidXAgent.md`（及摘要/图注/补充材料），以及回信须补的制图等；**一律**在本文件跟踪，**不再**在 `response_letter/generated/body_en_merged.tex` 里用红色 `\rpending`（除必须保留的 Manuscript pending）。  
 **真源数字/表：** 以正式回信信末表为准（`\responsetableref{...}` 所指）。
 
 状态：`[ ]` 未做 · `[x]` 已完成（统稿后自行勾选）
@@ -16,8 +16,8 @@
 **主稿待改**
 
 - [ ] **摘要 + Results §2.2 总表对齐**：与回信表 `\responsetableref{tab_seg_ext}`、`\responsetableref{tab_cls_ext}`、`\responsetableref{tab_malig_oof}`、`\responsetableref{tab_malig_ext}` 一致；删改仍引用旧稿数值的句子/图注。
-- [ ] **跨队列良恶性「均值」**：原稿 mean AUROC **0.9466**、mean AUPRC **0.8361**（主文 Fig.~2d–e）→ 按 R2.7 **五外测队列等权宏平均**（不按测试图数加权），改为 AUROC **0.9080**、AUPRC **0.8944**（ZJH 外测 **6807** 张；`\responsetableref{tab_dhash}`、`\responsetableref{tab_cls_ext}`）。
-- [ ] **跨队列分割「均值」**：原稿 mean Dice **87.21%**、mean HD95 **6.90 mm** → 七队列宏平均 Dice **86.27%**、HD95 **7.87 mm**（6807 张 ZJH 子集；`\responsetableref{tab_seg_ext}`）。
+- [ ] **跨队列良恶性「均值」**：原稿 mean AUROC **0.9466**、mean AUPRC **0.8361**（主文 Fig.~2d–e）→ 按 R2.7 **五外测队列等权宏平均**（不按测试图数加权），改为 AUROC **0.9080**、AUPRC **0.8964**（ZJH 外测 **6807** 张；`\responsetableref{tab_dhash}`、`\responsetableref{tab_cls_ext}`）。
+- [ ] **跨队列分割「均值」**：原稿 mean Dice **87.21%**、mean HD95 **6.90 mm** → 七队列宏平均 Dice **86.27%**、HD95 **7.73 mm**（6807 张 ZJH 子集；`\responsetableref{tab_seg_ext}`）。
 - [ ] **主文 Fig.~3 示例图**：核对/替换为 ZJH 外测 hold-out 病例；PTC 亚型与 LNM 标签与图注一致（回信 R2.1 第 (3) 条已声明将替换误标 PTC/FTC 面板）。
 
 ---
@@ -99,7 +99,7 @@
 **回信待补**（R3.3 正文已用文字 + `\responsefigureref{fig_image_dataflow}` 回应划分与互斥；**单独层级图**在此跟踪，非 `ThyroidXAgent.md` 主稿换图）
 
 - [ ] 绘制 **患者—检查—图像/视频—病灶—任务** 层级流程图（与 `fig_image_dataflow` 的队列—划分—用途数据流图**分工**，勿混为一图）
-- [ ] 图入正式回信（`latex/figures/` 或现有图目录）、注册 `\responsefigureref{fig_*}`，中英文图题与 `body_{en,zh}.tex` 同步
+- [ ] 图入正式回信（`response_letter/figures/`）、注册 `\responsefigureref{fig_*}`，图题与 `body_en_merged.tex` 一致
 - [ ] R3.3 末段（或合适句）补一句引用该层级图（与现「上文概括 + 数据流图相区分」衔接）
 
 ---

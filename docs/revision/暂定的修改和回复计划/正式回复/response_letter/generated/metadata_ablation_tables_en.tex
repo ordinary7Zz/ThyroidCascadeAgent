@@ -1,0 +1,40 @@
+% LLM metadata ablation (tab_metadata_ablation_seg / tab_metadata_ablation_cls); TN5K
+% [SYNC] Full metadata row = tab_routing_ablation_* TN5K strategy (7).
+% [DATA-SOURCE] tab_metadata_ablation_seg / tab_metadata_ablation_cls | Real | B5 output/ablation/b5/tn5k/ (other four tiers)
+
+\begin{responsetable}
+\caption{\responsetabletitle{tab_metadata_ablation_seg}{LLM router metadata ablation --- nodule segmentation}}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{@{}l l l@{}}
+\toprule
+Metadata condition & Dice $\uparrow$ & HD95 $\downarrow$ \\
+\midrule
+Device withheld & 0.8242 (0.8020--0.8446) & 7.8131 (5.9222--9.8453) \\
+Data source withheld & 0.8179 (0.7950--0.8365) & 7.8435 (6.0382--9.7338) \\
+Both withheld & 0.8179 (0.7945--0.8380) & 7.4440 (5.7012--9.2961) \\
+Quality/disagreement only & 0.8228 (0.8010--0.8419) & 7.6001 (5.7902--9.5043) \\
+Full metadata & \textbf{0.8388 (0.8260--0.8516)} & \textbf{7.1430 (5.9130--8.3730)} \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{Fixed expert pool with TN5K external-test shared upstream expert outputs; segmentation uses LLM routing with only prompt-visible metadata changed (Appendix A1). Full-metadata row matches TN5K strategy (7) in \responsetableref{tab_routing_ablation_seg}. Device/source/both-withheld and quality/disagreement-only conditions use cluster-bootstrap 95\% CIs (1000 resamples, seed 42). Dice and HD95 use four decimal places (point estimates and CI bounds).}
+\end{responsetable}
+
+% [SYNC] tab_metadata_ablation_cls: TN5K split, expert pool, and metadata tiers match tab_metadata_ablation_seg.
+\begin{responsetable}
+\caption{\responsetabletitle{tab_metadata_ablation_cls}{LLM router metadata ablation --- malignancy classification}}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{@{}l l l@{}}
+\toprule
+Metadata condition & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
+\midrule
+Device withheld & 0.9403 (0.9048--0.9699) & 0.9733 (0.9549--0.9877) \\
+Data source withheld & 0.9400 (0.9040--0.9690) & 0.9741 (0.9555--0.9878) \\
+Both withheld & 0.9392 (0.9038--0.9679) & 0.9737 (0.9563--0.9873) \\
+Quality/disagreement only & 0.9404 (0.9038--0.9700) & 0.9740 (0.9556--0.9878) \\
+Full metadata & \textbf{0.9584 (0.9432--0.9736)} & \textbf{0.9763 (0.9674--0.9832)} \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{Fixed expert pool with TN5K external-test shared upstream expert outputs; classification uses LLM routing with only prompt-visible metadata changed (Appendix A1). When all independent classification experts agree we use deterministic consensus without invoking the LLM; when they disagree, classification routing uses the LLM. Classification routing inputs when the LLM is invoked were not separately metadata-ablated (only prompt-visible fields varied).}
+\end{responsetable}

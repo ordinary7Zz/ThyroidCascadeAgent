@@ -2,7 +2,7 @@
 
 LaTeX 源码中每张表 `\begin{...table}` 前均有 `% [数据来源]` / `% [DATA-SOURCE]` 注释（不进入 PDF）。本文件为总览。
 
-**信内 Table/Figure 的 R1, R2, … 由 `\responsetabletitle{<label>}{…}` / `\responsefiguretitle{<label>}{…}` 在 PDF 中首次出现的顺序自动编号**（见 `generated/response_asset_registry.tex`、`latex/README.md`）。维护与对账请用 **`\label` 键**，勿在注释或 pending 里硬编码 R*。
+**信内 Table/Figure 的 R1, R2, … 由 `\responsetabletitle{<label>}{…}` / `\responsefiguretitle{<label>}{…}` 在 PDF 中首次出现的顺序自动编号**（见 `response_letter/generated/response_asset_registry.tex`）。维护与对账请用 **`\label` 键**，勿在注释或 pending 里硬编码 R*。
 
 | `\label` | 状态 | 主要证据路径 |
 |-----------|------|----------------|

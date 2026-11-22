@@ -1,0 +1,27 @@
+% !TEX program = pdflatex
+% Main document = this file. Overleaf default pdfLaTeX is OK.
+\documentclass[11pt,a4paper]{article}
+\usepackage{reviewer_response}
+\usepackage{report_side}
+\input{manuscript_refs.tex}
+\ifXeTeX
+  \setmainfont{TeX Gyre Termes}
+\fi
+\ifLuaTeX
+  \setmainfont{TeX Gyre Termes}
+\fi
+
+\renewcommand{\ManuscriptTitle}{ThyroidXAgent}
+\renewcommand{\ManuscriptJournal}{Nature Communications major revision}
+
+\input{generated/response_asset_registry.tex}
+
+\begin{document}
+\responselettertitle{Response to Reviewers}{%
+  Auditable agentic AI for evidence-grounded thyroid ultrasound diagnosis and reporting\\
+  \textit{Nature Communications} major revision}
+\responseletteropening
+
+\input{generated/body_en_merged.tex}
+
+\end{document}

@@ -4,35 +4,41 @@
 
 ## 1. 改哪些文件
 
+**真源：两个 Overleaf 工程**（`latex-viewer` 只编译这两棵目录，见 `../latex-viewer/README.md`）
+
+| 工程 | 路径 | 说明 |
+|------|------|------|
+| **回信（完整）** | `response_letter/` | 编译 `main.tex` → `main.pdf`；正文 `\input{generated/body_en_merged.tex}` + `report_side` 合并稿 |
+| **主稿** | `26_Nature_ThyroidAgent/` | 编译 `main_v2.tex` → `main_v2.pdf` |
+
 | 优先级 | 路径 | 说明 |
 |--------|------|------|
-| 主 | `latex/generated/body_en.tex` | 英文回复正文（**打磨细节的主战场**） |
-| 同步 | `latex/generated/body_zh.tex` | 中文：与英文**语义对齐**的意译，不单独抠字字面 |
-| 按需 | `latex/generated/*.tex` 表图片段 | 仅当 `PENDING.md` 或用户明确要求；**手改 tex 为真源** |
-| 少动 | `latex/REVIEWER_RESPONSE_*.tex`、`reviewer_response.sty` | 除非用户点名 |
-| 审稿原文 | `latex/scripts/patch_reviewer_comments.py` | **唯一**用于固定嵌入的 `\reviewercomment` 原文；非用户要求勿改其中审稿句 |
+| 主 | `response_letter/generated/body_en_merged.tex` | 合并后的英文回复正文 |
+| 按需 | `response_letter/generated/*.tex` | 表图、附录片段；**手改 tex 为真源** |
+| 导言/样式 | `response_letter/main.tex`、`reviewer_response.sty`、`report_side.sty` | 除非用户点名 |
+| 可选草稿 | `latex/generated/body_en.tex` | **非 viewer 编译源**；若仍在此分段改稿，须自行合并进 `body_en_merged.tex` |
 
-编译入口：`latex/REVIEWER_RESPONSE_EN.tex` / `_ZH.tex`（viewer 或 `xelatex`）。
+- **不再维护中文回信**（无 `body_zh`、不同步 ZH）。
+- 编译：回信 `pdflatex`（`main.tex`）；主稿 `xelatex` + `bibtex`。
 
 ## 2b. LaTeX 真源 vs 脚本（必守）
 
-- **直接改 TeX**：`body_*.tex`、`*_tables_*.tex`、附录片段；表数字、表题、表注、`\rpending` 均在 tex 维护。
-- **勿依赖 py 改 generated**：表数字与表注在 `latex/generated/*_tables_*.tex` 手改维护。
-- **唯一「固定输入」py**：`patch_reviewer_comments.py` — 审稿意见英文原文字典 + 保留 `\authorresponse` 块；仅用户要求重建 comment 区时使用。
+- **直接改 TeX**：`response_letter/generated/*.tex`；表数字、表题、表注、`\rpending` 均在 tex 维护。
+- **勿依赖 py 改 generated**：表数字与表注在 `generated/*_tables_*.tex` 手改维护。
 
 ## 2. 固定写作与分工（必须遵守）
 
 - **Nature 子刊语气（必守）**：详见 **[WRITING_STYLE.md](./WRITING_STYLE.md)**——直接陈述 + 表图引用；禁止「以表为准/不对齐/占位/定稿后替换」等 meta；避免 `\textbf{小标题。}` 清单体；正文不堆表内数字、不向审稿人解释编辑策略。
 - **逐条明确回应（必守）**：对照 `\begin{reviewercomment}` 的**每一要求**写清：We agree / We report / We performed… + **表/图/附录**入口。禁止 METHOD-only 段落（只讲定义、不指 `\responsetableref`、不说是否已做）。审稿人列 (a)(b)(c) 时须**逐条覆盖**，优先用**连贯段落**（因果、先协议后证据、先定义后表）串联，避免去掉 `itemize` 后仍像互无关的并列块；做不到处 `\rpending` 并说明限制。改稿后自检：「删掉表号后这条还能否证明我们回应了？」——若不能，补一句「已…见…」。
-- **只根据英文需求改稿**：用户不在中文稿上单独提修改意见；你改完 EN 后**同步更新 ZH** 对应段落。
+- **仅英文回信**：用户不要求生成或维护中文稿。
 - **回复信语气**：上面已有 `\begin{reviewercomment}` 时，作者回复用 **We clarify / We report / We agree** 等直接陈述，**避免** “The reviewer asks… / The reviewer notes…” 式元叙述。
 - **数字与表**：正文避免堆过多与表耦合的数字例；细节放在 `\responsetableref{...}` 的表里。`PENDING.md` 若要求概括性 Main findings，遵守之。
-- **待定内容**：用 `\rpending{...}`（英文）、`\rpendingzh{...}`（中文），与 `reviewer_response.sty` 一致。
-- **少提修订稿（必守）**：勿写「将在修订稿 Methods…」；直接陈述已做分析与表图入口，**不要**在条目标题后加 `(this letter)` / `（本回复）` 等括号。必须在投稿正文改写的处，用 `\rpending{Manuscript: …}` / `\rpendingzh{正文：…}`（见 `latex/README.md` →「待定与正文修订」）。
-- **同一条意见内**：避免 `below` / `as detailed below` /「如下」「见下条」等**段内跳转**（用 `\par` 分段 + `\responsetableref` / `\responsefigureref` 或直接写内容即可）。**勿**在蓝色正文写「表注/图注/table note」——只引用表/图号（见 `latex/README.md`）。跨意见交叉引用（如 R2.2）可以保留。
+- **待定内容**：用 `\rpending{...}`，与 `reviewer_response.sty` 一致。
+- **少提修订稿（必守）**：勿写「将在修订稿 Methods…」；直接陈述已做分析与表图入口，**不要**在条目标题后加 `(this letter)`。必须在投稿正文改写的处，用 `\rpending{Manuscript: …}`。
+- **同一条意见内**：避免 `below` / `as detailed below` 等**段内跳转**（用 `\par` 分段 + `\responsetableref` / `\responsefigureref`）。**勿**在蓝色正文写「表注/图注/table note」——只引用表/图号。跨意见交叉引用（如 R2.2）可以保留。
 - **Cluster-bootstrap CI**：**仅 R2.2** 写全 resampling 协议（含 1000、seed~42）。其它意见正文只写 **follow R2.2** + `\responsetableref{…}` / `\responsetablerefrange{…}{…}` 即可，**不要**再写 table captions/notes 或重复参数；各表 `\responsetablenote` 仍可保留 1000/seed 供单独读表。
 - **路由消融策略 (1)--(8)**：向审稿人写**可执行规则**（如何算分歧、如何选 mask/分类器），勿以「不含 radiomics 级联 / agreement-only」等内部实现细节作主句；完整系统与消融的差异放在 Methods/附录，不在 R1.2 用级联名词当对比重点。
-- **审稿人可读性（必守）**：全文 PDF 叙述遵守 `latex/README.md` 专节「审稿人可读性：禁止内部/机器命名」——不写 Path A/B、Phase、路径/脚本/函数名、日志文件名等；附录 A1 小标题用自然语言（如「分类路由」）。
+- **审稿人可读性（必守）**：不写 Path A/B、Phase、路径/脚本/函数名、日志文件名等；附录小标题用自然语言（如「分类路由」）。`% [SYNC]` 注释可保留路径供对账。
 - **不要**恢复已删除的 latex-viewer「注释 / current.json / history.jsonl」流程。
 
 ## 3. 每次改稿前
@@ -54,7 +60,7 @@
 
 ## 5. 用户在新对话里怎么说（示例）
 
-> 请先读 @正式回复/ai/INSTRUCTIONS.md、@正式回复/ai/WRITING_STYLE.md 和 @正式回复/ai/PENDING.md，按 PENDING 改英文并同步中文，改完后更新 @正式回复/ai/HISTORY.md。
+> 请先读 @正式回复/ai/INSTRUCTIONS.md、@正式回复/ai/WRITING_STYLE.md 和 @正式回复/ai/PENDING.md，按 PENDING 改 `response_letter/`，改完后更新 @正式回复/ai/HISTORY.md。
 
 ## 6. 用户维护 `PENDING.md`
 

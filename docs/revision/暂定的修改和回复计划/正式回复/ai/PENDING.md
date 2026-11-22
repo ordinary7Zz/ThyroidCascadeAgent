@@ -11,5 +11,5 @@
 - [x] **R1.3 / R2.6**：NHC-MISD-TUS 回信已写（标准库披露边界；`tab_nhc_center_descriptive` 并入 `tab_nhc_center_performance`；无 scanner meta-regression）
 - [x] **R2.10 / R2.12 / R2.4 / R2.5（陈飞口径）**：回信已写 PTC 亚型（1 vs 2）、CN0/CN1、dHash、ZJH Methods；**已移除 Dai 外测表**
 - [ ] **`tab_malig_ext`**：按需与 b9 重跑结果对账（无 Dai 表）
-- [ ] **R3.2 专家占比**：手改 `latex/generated/expert_selection_tables_{zh,en}.tex`
+- [ ] **R3.2 专家占比**：手改 `response_letter/generated/expert_selection_tables_en.tex`
 - [ ] **R3.3**：层级流程图入信 — 任务勾选见 `MANUSCRIPT_REVISION_CHECKLIST.md` → **R3.3** 节（正文已无红色 pending）
