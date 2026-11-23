@@ -170,7 +170,7 @@
 | `B9_回复素材_仅基于两篇实验结论.md` | **仅** LLNM / Tiger 回复句，非 ThyroidXAgent |
 | `需要确认.md` | R2.10 / R2.12 临床表述 |
 | `../暂定的修改和回复计划/MANUSCRIPT_REVISION_PLAN_ZH.md` §2.4 | 总计划索引 → **以本文件 §3 为准** |
-| `../暂定的修改和回复计划/正式回复/latex/` | 总回复正文 → **`generated/body_*.tex`** |
+| `../暂定的修改和回复计划/正式回复/response_letter/` | 总回复正文 → **`generated/body_en_merged.tex`** |
 
 ---
 

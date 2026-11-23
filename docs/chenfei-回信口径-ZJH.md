@@ -1,6 +1,6 @@
 # ZJH-8K 机构队列 — 回信已采纳口径（2026-11-10）
 
-供内部对账；**不**替代 `需要确认.md`。正式文本以 `正式回复/latex/generated/body_{en,zh}.tex` 为准。
+供内部对账；**不**替代 `需要确认.md`。正式文本以 `正式回复/response_letter/generated/body_en_merged.tex` 为准。
 
 ## R2.4（TN3K vs ZJH-8K）
 

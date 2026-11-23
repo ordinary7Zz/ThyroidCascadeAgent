@@ -138,7 +138,7 @@
 | `scripts/revision/b7/build_nhc_center_table.py` | 中心描述表 |
 | `scripts/revision/b7/run_b7_analysis.py` | 按中心聚合 + I² |
 | `docs/revision/暂定的修改和回复计划/B_DELIVERABLES_CHECKLIST_ZH.md` § B7 | 清单状态 |
-| `docs/revision/暂定的修改和回复计划/正式回复/latex/generated/nhc_b7_tables_*.tex` | 回信 **表 R19--R21**（假设性占位，实验后替换） |
+| `…/response_letter/seg_cls_side/tables/tab_nhc_*.tex` | 回信 NHC 表（`tab_nhc_center_performance` / `tab_nhc_heterogeneity`） |
 
 **版式说明**：NHC 可不进正文 Table S3/S4；B3/B7/B8 等 NHC 结果可放 **Supp. 专节 + 回复信**，与 OpenThyroid 主表并列叙述。
 

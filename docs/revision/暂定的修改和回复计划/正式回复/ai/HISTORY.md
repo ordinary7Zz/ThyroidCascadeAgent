@@ -836,3 +836,23 @@
 **做了什么：** NHC 段改为短版：`executed cooperation and data-compliance agreement` + `not through individual co-author authorization`；去掉 retained/not reproduced 括号（避免 meta）。
 
 **教训 / 避免重犯：** 库合规一句陈述即可；勿向审稿人解释为何不附保密协议 PDF。
+
+---
+
+## 2026-11-23 — 归档旧 Overleaf/latex 表工程；回信表真源 `seg_cls_side/tables/`
+
+**文件：** `_archive/overleaf_en_bundle/`、`_archive/latex_generated/`（自 `overleaf_en_bundle/`、`latex/generated/` 迁入）；`ai/INSTRUCTIONS.md`、`OVERLEAF_UPLOAD.md`、`latex-viewer/README.md`、`latex/README.md`；`scripts/revision/b7/render_nhc_b7_tables_from_supplement.py`；`b3`/`b5`/`b7` 若干 README
+
+**做了什么：** 确认不再维护中文回信；B7 `--apply` 仅 patch `response_letter/seg_cls_side/tables/tab_nhc_*.tex`；文档与 Overleaf 说明统一指向 `response_letter/`。
+
+**教训 / 避免重犯：** 勿在 `_archive/` 或已废弃 `latex/REVIEWER_RESPONSE_*.tex` 改表；性能表文件名与 `\responsetabletitle{tab_…}` 一致。
+
+---
+
+## 2026-11-23 — `latex/` 壳工程迁入 `_archive/latex_legacy/`
+
+**文件：** `_archive/latex_legacy/`（原 `latex/` 除 `README.md`）；`latex/README.md`；`docs/revision/README.md`、`暂定的修改和回复计划/README.md`；`b7`/`b9` 索引片段
+
+**做了什么：** 旧 EN/ZH 分轨、`compile.sh`、`R26_*.tex`、`scripts/` 等整体归档；`near_duplicates.json` 真源仍在 `docs/revision/b1/tables/`。
+
+**教训 / 避免重犯：** 仅 `response_letter/` 可编辑回信；`latex/` 目录只剩跳转 README。

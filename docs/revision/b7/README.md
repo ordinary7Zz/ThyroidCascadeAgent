@@ -6,7 +6,7 @@
 | [B7_NHC_SCOPE_SUMMARY_ZH.md](./B7_NHC_SCOPE_SUMMARY_ZH.md) | 审稿对应、实验/元数据清单 |
 | [NHC_GPU_AND_WEIGHTS_ZH.md](./NHC_GPU_AND_WEIGHTS_ZH.md) | Conda/GPU、`my_Thyroid_Infer/config.yaml` 与 Cascade 权重 |
 | [nhc_sample 示例全流程配置](../nhc_sample/README.md) | B3/B4/B8/B2/infer 示例 yaml 与运行顺序 |
-| 回信表 R18–R20 | `docs/revision/暂定的修改和回复计划/正式回复/latex/generated/nhc_b7_tables_*.tex`（registry：`tab_nhc_*` → R18/R19/R20） |
+| 回信表 NHC | `docs/revision/…/response_letter/seg_cls_side/tables/tab_nhc_center_performance.tex`、`tab_nhc_heterogeneity.tex` |
 
 ## 代码布局（B7 专有）
 

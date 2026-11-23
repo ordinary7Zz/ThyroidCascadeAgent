@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # 在最新 ZJH-8K 数据上重跑外测推理，并生成 6807 图（剔除 TN3K train dHash H=0）的 B2 cluster-bootstrap CI。
-# 对应回信 tab_cls_ext / tab_seg_ext / tab_patient_cls 的 ZJH-8K 列。
+# 对应回信 tab_cls_performance / tab_seg_performance / tab_patient_level（label tab_cls_ext 等）的 ZJH-8K 列。
 #
 # ThyroidXAgent 行：仅 dinov3_unet + dinov3_unet_multitask（all_datasets），见 config/revision/b2/zjh8k_dino_primary.yaml
 # 监督基线：my_Thyroid_Infer/baseline_export/run_infer_batch.py → ../b2_exports → B2（带 exclude manifest）
@@ -177,4 +177,4 @@ echo ""
 echo "======== 完成 ========"
 echo "ThyroidXAgent B2: ${ROOT}/${B2_TABLE}"
 echo "基线 B2:          ${ROOT}/docs/revision/b2/tables/baseline_*_zjh8k_*_b2*.json"
-echo "下一步：手工将 ZJH 列数值/sync 进 generated/body_*.tex（tab_cls_ext / tab_seg_ext / tab_patient_cls）。"
+echo "下一步：手工将 ZJH 列数值 sync 进 seg_cls_side/tables/tab_{cls,seg}_performance.tex 与 tab_patient_level.tex。"

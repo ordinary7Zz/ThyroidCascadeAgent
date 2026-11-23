@@ -120,7 +120,7 @@ bash scripts/revision/b7/run_b7_sample_canonical.sh
 
 ## 5. 正式回复 LaTeX 修改历史（本对话相关）
 
-**根目录**：`docs/revision/暂定的修改和回复计划/正式回复/latex/`
+**根目录**：`docs/revision/暂定的修改和回复计划/正式回复/response_letter/`
 
 ### 5.1 表编号（以 registry 为准）
 
@@ -154,7 +154,7 @@ bash scripts/revision/b7/run_b7_sample_canonical.sh
 | 文档 | NHC-MISD-TUS 相关更新 |
 |------|----------------|
 | `docs/revision/暂定的修改和回复计划/MANUSCRIPT_REVISION_PLAN_ZH.md` | **§17 B7** — 政策、示例数字、B3/B4/B5/B8 交叉、checklist |
-| `docs/revision/暂定的修改和回复计划/正式回复/latex/` | 回信 LaTeX（R2.6 表 `tab_nhc_*` 等） |
+| `…/正式回复/response_letter/seg_cls_side/tables/tab_nhc_*.tex` | 回信 NHC 表（R2.6） |
 | `docs/revision/暂定的修改和回复计划/README.md` | 归档表 B7 状态 |
 | `docs/revision/nhc_sample/README.md` | B3/B4/B8/B2/infer 示例命令 |
 
@@ -192,7 +192,7 @@ bash scripts/revision/b7/run_b7_sample_canonical.sh
 | [README.md](./README.md) | B7 入口与命令 |
 | [../nhc_sample/README.md](../nhc_sample/README.md) | 示例 10 图多任务跑法 |
 | [../暂定的修改和回复计划/MANUSCRIPT_REVISION_PLAN_ZH.md](../暂定的修改和回复计划/MANUSCRIPT_REVISION_PLAN_ZH.md) §17 | 拟改稿数字与位置 |
-| [../暂定的修改和回复计划/正式回复/latex/README.md](../暂定的修改和回复计划/正式回复/latex/README.md) | 回信 LaTeX 规范 |
+| [../正式回复/response_letter/](../暂定的修改和回复计划/正式回复/response_letter/) | 回信 LaTeX 真源 |
 
 ---
 

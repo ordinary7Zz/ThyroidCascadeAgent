@@ -14,7 +14,9 @@
 | 文件 | 作用 |
 |------|------|
 | `../response_letter/generated/body_en_merged.tex` | 合并后的英文回复正文 |
-| `../response_letter/generated/*.tex` | 表图、附录片段 |
+| `../response_letter/seg_cls_side/tables/` | 分割·分类·NHC·路由等表（真源） |
+| `../response_letter/report_side/` | 报告侧回复片段 |
+| `../response_letter/generated/response_asset_registry.tex` | 长表续页宏注册 |
 | `../response_letter/main.tex` | 导言区、`\input` |
 | `../response_letter/reviewer_response.sty` | 版式、表格环境 |
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 从 my_Thyroid_Infer `analyze_center_performance.py` 导出的 CSV（与 Supp. S7–S12 同真源）
-计算 R2.6 表：中心性能 macro/pooled、meta I²/τ²，并可选 patch `nhc_b7_tables_{zh,en}.tex`。
+计算 R2.6 表：中心性能 macro/pooled、meta I²/τ²，并可选 patch 回信
+`response_letter/seg_cls_side/tables/tab_nhc_center_performance.tex` 与 `tab_nhc_heterogeneity.tex`。
 
 用法:
   # 1) 在含「私有数据集结果」的机器上导出 CSV（与稿面 S 表一致）:
@@ -52,8 +53,14 @@ from pipeline.revision.b7.supplement_center_meta import (  # noqa: E402
 DEFAULT_CSV = REPO / "docs/revision/b7/data/per_by_center_manuscript.csv"
 DEFAULT_TEX = REPO / "docs/per_center_tables.tex"
 ARTIFACT_JSON = REPO / "docs/revision/b7/artifacts/nhc_supplement_b7_summary.json"
-TEX_ZH = REPO / "docs/revision/暂定的修改和回复计划/正式回复/latex/generated/nhc_b7_tables_zh.tex"
-TEX_EN = REPO / "docs/revision/暂定的修改和回复计划/正式回复/latex/generated/nhc_b7_tables_en.tex"
+TEX_RESPONSE_CENTER = (
+    REPO
+    / "docs/revision/暂定的修改和回复计划/正式回复/response_letter/seg_cls_side/tables/tab_nhc_center_performance.tex"
+)
+TEX_RESPONSE_HET = (
+    REPO
+    / "docs/revision/暂定的修改和回复计划/正式回复/response_letter/seg_cls_side/tables/tab_nhc_heterogeneity.tex"
+)
 
 # 与稿面 S7–S12 / Fig.2h ThyroidXAgent 列一致（见 my_plot_images/饼图/plot_global.py）
 MODELS = {
@@ -453,7 +460,11 @@ def main() -> None:
         help="Supp. per-center 表 TeX（默认 docs/per_center_tables.tex）；存在则优先于 CSV",
     )
     parser.add_argument("--results-dir", type=Path, default=None, help="若提供则先跑 analyze_center_performance")
-    parser.add_argument("--apply", action="store_true", help="写 nhc_b7_tables_zh/en.tex 的 AUTO 块")
+    parser.add_argument(
+        "--apply",
+        action="store_true",
+        help="写 response_letter/seg_cls_side/tables/tab_nhc_*.tex 的 AUTO 块",
+    )
     parser.add_argument("--json-out", type=Path, default=ARTIFACT_JSON)
     args = parser.parse_args()
 
@@ -482,12 +493,11 @@ def main() -> None:
     )
 
     if args.apply:
-        # tab_nhc_center_descriptive removed (merged into tab_nhc_center_performance)
-        patch_auto_block(TEX_ZH, "tab_nhc_center_performance rows", render_performance_rows(summary, lang="zh"))
-        patch_auto_block(TEX_EN, "tab_nhc_center_performance rows", render_performance_rows(summary, lang="en"))
-        patch_auto_block(TEX_ZH, "tab_nhc_heterogeneity rows", render_heterogeneity_rows(summary, lang="zh"))
-        patch_auto_block(TEX_EN, "tab_nhc_heterogeneity rows", render_heterogeneity_rows(summary, lang="en"))
-        print(f"✓ patched {TEX_ZH.name} / {TEX_EN.name}")
+        perf_en = render_performance_rows(summary, lang="en")
+        het_en = render_heterogeneity_rows(summary, lang="en")
+        patch_auto_block(TEX_RESPONSE_CENTER, "tab_nhc_center_performance rows", perf_en)
+        patch_auto_block(TEX_RESPONSE_HET, "tab_nhc_heterogeneity rows", het_en)
+        print(f"✓ patched {TEX_RESPONSE_CENTER.name} / {TEX_RESPONSE_HET.name}")
 
 
 if __name__ == "__main__":

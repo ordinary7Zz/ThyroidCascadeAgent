@@ -8,23 +8,26 @@
 
 | 工程 | 路径 | 说明 |
 |------|------|------|
-| **回信（完整）** | `response_letter/` | 编译 `main.tex` → `main.pdf`；正文 `\input{generated/body_en_merged.tex}` + `report_side` 合并稿 |
+| **回信（完整）** | `response_letter/` | 编译 `main.tex` → `main.pdf`；正文 `\input{generated/body_en_merged.tex}` |
 | **主稿** | `26_Nature_ThyroidAgent/` | 编译 `main_v2.tex` → `main_v2.pdf` |
 
 | 优先级 | 路径 | 说明 |
 |--------|------|------|
 | 主 | `response_letter/generated/body_en_merged.tex` | 合并后的英文回复正文 |
-| 按需 | `response_letter/generated/*.tex` | 表图、附录片段；**手改 tex 为真源** |
+| 表（分割/分类侧） | `response_letter/seg_cls_side/tables/tab_*.tex` 等 | 与主稿共表时 **`.tex` 文件名与 `26_Nature_ThyroidAgent/tables/` 同名**（如 `tab_cls_performance.tex`）；信内 `\responsetableref` 仍用 `\responsetabletitle{tab_cls_ext}` 等 label，见 `TABLE_DATA_SOURCE_AUDIT.md` |
+| 表（报告侧） | `response_letter/report_side/tables/` | 报告生成相关回复表 |
+| 附录片段 | `response_letter/seg_cls_side/tables/routing_audit_appendix.tex` 等 | 非 `tab_*` 的独立片段 |
 | 导言/样式 | `response_letter/main.tex`、`reviewer_response.sty`、`report_side.sty` | 除非用户点名 |
-| 可选草稿 | `latex/generated/body_en.tex` | **非 viewer 编译源**；若仍在此分段改稿，须自行合并进 `body_en_merged.tex` |
+| 宏注册 | `response_letter/generated/response_asset_registry.tex` | 长表续页等 |
 
-- **不再维护中文回信**（无 `body_zh`、不同步 ZH）。
+- **不再维护中文回信**；旧工程在 `../_archive/latex_generated/`。
 - 编译：回信 `pdflatex`（`main.tex`）；主稿 `xelatex` + `bibtex`。
 
 ## 2b. LaTeX 真源 vs 脚本（必守）
 
-- **直接改 TeX**：`response_letter/generated/*.tex`；表数字、表题、表注、`\rpending` 均在 tex 维护。
-- **勿依赖 py 改 generated**：表数字与表注在 `generated/*_tables_*.tex` 手改维护。
+- **直接改 TeX**：正文 `body_en_merged.tex`；**表数字、表题、表注**在 `seg_cls_side/tables/`、`report_side/tables/` 手改维护。
+- **NHC 表 AUTO 块**：`python scripts/revision/b7/render_nhc_b7_tables_from_supplement.py --apply` 仅写 `seg_cls_side/tables/tab_nhc_*.tex`。
+- **勿**在已归档的 `_archive/latex_generated/` 或 `overleaf_en_bundle/` 中改稿。
 
 ## 2. 固定写作与分工（必须遵守）
 
@@ -45,7 +48,7 @@
 
 1. 读 **[WRITING_STYLE.md](./WRITING_STYLE.md)**（改正文语气）与 **`HISTORY.md` 末尾「教训 / 避免重犯」**（若有），避免重复错误。
 2. 读 **`PENDING.md`**：逐条处理；处理完在 `PENDING.md` 里勾选或删除已完条目（与用户确认策略：通常 AI 改稿后清空已完成的 pending 项并移到 HISTORY）。
-3. 定位：优先 `PENDING` 里的文件与说明；必要时在 `body_en.tex` 内搜索关键词或章节号（R1.1、R1.2…）。
+3. 定位：优先 `PENDING` 里的文件与说明；必要时在 `body_en_merged.tex` 内搜索关键词或章节号（R1.1、R1.2…）。
 
 ## 4. 每次改稿后（必须做）
 

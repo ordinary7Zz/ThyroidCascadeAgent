@@ -39,4 +39,4 @@ output/ablation/b5/<cohort>/<metadata_mode>/
 
 ## R3.2 专家选择占比表（队列 × 专家）
 
-**真源**：手改 `docs/revision/…/正式回复/latex/generated/expert_selection_tables_{zh,en}.tex`（`\label{tab_expert_selection_seg}` / `_cls`）。
+**真源**：手改 `…/response_letter/seg_cls_side/tables/tab_expert_selection_{seg,cls}.tex`。

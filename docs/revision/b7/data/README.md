@@ -41,7 +41,7 @@ python scripts/revision/b7/render_nhc_b7_tables_from_supplement.py \
 产出：
 
 - `docs/revision/b7/artifacts/nhc_supplement_b7_summary.json`
-- 更新 `latex/generated/nhc_b7_tables_{zh,en}.tex` 的三个 AUTO 块（**不**动表注里的 G3 `\rpending`、不动 `body_*.tex`）
+- 更新 `response_letter/seg_cls_side/tables/tab_nhc_center_performance.tex` 与 `tab_nhc_heterogeneity.tex` 的 AUTO 块（`render_nhc_b7_tables_from_supplement.py --apply`；**不**动表注、不动 `body_*.tex`）
 
 ## 3. 统计口径
 

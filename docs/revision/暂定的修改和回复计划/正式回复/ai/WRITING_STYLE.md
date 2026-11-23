@@ -1,6 +1,6 @@
 # 回信写作风格（Nature 子刊口径）
 
-与 [`INSTRUCTIONS.md`](./INSTRUCTIONS.md) 流程规则并列。**改 `response_letter/generated/body_en_merged.tex`（及拆开的 `generated/*.tex`）正文语气时必读本节。**
+与 [`INSTRUCTIONS.md`](./INSTRUCTIONS.md) 流程规则并列。**改 `response_letter/generated/body_en_merged.tex` 及 `seg_cls_side/tables/`、`report_side/` 下片段时，正文语气必读本节。**
 
 ## 1. 总体目标
 
@@ -36,7 +36,7 @@
 - 段首可用简短主题句（英文 *We also note that…*；中文「LLM 路由器未以…」），**不用**加粗标题行。
 - 用连接词衔接（「因此」「在此协议下」「For NHC-MISD-TUS, …」），避免五段互无关的清单感。
 
-### 3.3 表题与表注（`generated/*_tables_*.tex`）
+### 3.3 表题与表注（`seg_cls_side/tables/tab_*.tex`、`report_side/tables/`）
 
 - 表题：**短、自洽**（说明对象 + 指标即可），不必在题里堆「策略 (7)」「LLM 路由」若正文已定义协议。
 - 表注：方法定义、队列、CI 协议；**不写**「待补」「与某实验目录一致」等仓库/流水线说明（`%` 注释可保留 `[DATA-SOURCE]` 给维护者）。
