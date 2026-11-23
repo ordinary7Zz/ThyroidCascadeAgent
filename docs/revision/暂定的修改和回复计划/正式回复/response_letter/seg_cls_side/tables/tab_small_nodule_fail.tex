@@ -1,0 +1,19 @@
+\begin{responsetable}
+\caption{\responsetabletitle{tab_small_nodule_fail}{Nodules <5 mm --- Pipeline failure statistics}}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{lccccc}
+\toprule
+Cohort & $n$ matched & <5.0 mm ($N$) & Failures ($M$) & Mean Dice (small-nodule subset) & GT equiv.\ diameter <50 px \\
+\midrule
+DDTI & 637 & 54 & 1 & 0.734 & 54 \\
+PKTN & 150 & 15 & 1 & 0.741 & 15 \\
+RJH-7K & 7288 & 366 & 1 & 0.766 & 366 \\
+ThyroidXL & 2090 & 0 & 0 & --- & 0 \\
+TN3K & 614 & 68 & 2 & 0.771 & 68 \\
+TN5K & 1000 & 103 & 12 & 0.696 & 103 \\
+ZJH-8K & 6807 & 831 & 40 & 0.808 & 831 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{Primary subset: GT equivalent diameter $<$50 px (same scale as the expert $\geq$50 px minimum-component rule); the ``$<$5.0 mm'' column is an illustrative mapping at 0.1 mm/px to relate to the reviewer's wording (public external cohorts lack reliable per-image spacing). Failures ($M$): empty router-final mask or Dice $<$0.1 vs.\ GT (full segmentation-and-routing pipeline, not radiomics-only connected-component removal). ZJH-8K matches \responsetableref{tab_dhash}: $n{=}6807$ after excluding 1151 ZJH images with dHash H=0 to TN3K train.}
+\end{responsetable}

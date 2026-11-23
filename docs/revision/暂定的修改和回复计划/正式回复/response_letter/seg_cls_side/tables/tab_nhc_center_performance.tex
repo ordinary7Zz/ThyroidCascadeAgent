@@ -1,8 +1,7 @@
-% B7 NHC-MISD-TUS (tab_nhc_center_performance / tab_nhc_heterogeneity; centre descriptors merged into performance table)
-% [DATA-SOURCE] tab_nhc_center_performance | manuscript NHC-MISD-TUS per-centre supp export / B7 CSV | ThyroidXAgent cols (gland/nodule: dinov3_unet; BM: dinov3_unet_multitask); render_nhc_b7_tables_from_supplement.py --apply.
-% [DATA-SOURCE] tab_nhc_heterogeneity | same export | Centre-level inverse-variance meta I2/tau2 (not image-level B7 ANOVA I2).
+% B7 NHC-MISD-TUS per-centre performance (label tab_nhc_center_performance)
+% [DATA-SOURCE] tab_nhc_center_performance | NHC-MISD-TUS per-centre supp export / B7 CSV | render_nhc_b7_tables_from_supplement.py --apply
+% [SYNC] tab_nhc_center_performance: reconcile pooled metrics with manuscript Fig.~2h when NHC-MISD-TUS is locked.
 
-% [SYNC] tab_nhc_center_performance: reconcile pooled metrics with manuscript Fig.~2h / NHC-MISD-TUS supp per-centre tables and nine-model external tables when full NHC-MISD-TUS is locked.
 \begin{responsetable}
 \caption{\responsetabletitle{tab_nhc_center_performance}{NHC-MISD-TUS --- per-centre test images and external-test performance}}
 \begin{adjustbox}{max width=\textwidth,center}
@@ -55,22 +54,4 @@ THYB\_S\_ZJ29 & 16 & --- & --- & 85.2 & 12.1 & --- & --- & NE & NE \\
 \end{tabular}
 \end{adjustbox}
 \responsetablenote{35 anonymized database site IDs; hospital names, patient or nodule totals, and scanner metadata are not in the authorized research release. Units: Dice in percent; HD95 in mm; AUROC/AUPRC on [0,1]. $n$ columns G/N/C: evaluable test images per task. Overall pooled row $n$: 8721 / 6384 / 4999. Lower HD95 is better; NE = not estimable.}
-\end{responsetable}
-
-\begin{responsetable}
-\caption{\responsetabletitle{tab_nhc_heterogeneity}{NHC-MISD-TUS: between-center heterogeneity (centre-level meta)}}
-\begin{adjustbox}{max width=\textwidth,center}
-\begin{tabular}{@{}l l r r l r l@{}}
-\toprule
-Task & Metric & Center groups & Images & Pooled / macro & $I^2$ (\%) & $\tau^2$ \\
-\midrule
-% BEGIN AUTO tab_nhc_heterogeneity rows
-Nodule segmentation & Dice $\uparrow$ & 33 & 6384 & 0.823 / 0.816 & 99.0 & 0.010 \\
-Benign--malignant & AUROC $\uparrow$ & 32 & 4999 & 0.819 / 0.754 & 99.0 & 0.000 \\
-Gland segmentation & Dice $\uparrow$ & 35 & 8721 & 0.593 / 0.559 & 99.9 & 0.134 \\
-% END AUTO tab_nhc_heterogeneity rows
-\bottomrule
-\end{tabular}
-\end{adjustbox}
-\responsetablenote{Between-centre $I^2$/$\tau^2$ from \emph{centre-level} inverse-variance meta (Cochrane $Q$-type; centre Dice/AUROC effects and $n$ as in \responsetableref{tab_nhc_center_performance})---not image-level B7 ANOVA $I^2$ on malignancy scores. Meta-regression on scanner or case mix was not performed because those covariates were not released.}
 \end{responsetable}

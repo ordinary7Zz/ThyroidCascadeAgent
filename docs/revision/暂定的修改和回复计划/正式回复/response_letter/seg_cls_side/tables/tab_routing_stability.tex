@@ -1,0 +1,18 @@
+% [SYNC] tab_routing_stability: seg_selection_agreement from output/b6/{tn3k,tn5k,thyroidxl,zjh8k,ddti_seg}/pipeline_run/stability_summary.json (n=10, seed 42, 5 repeats).
+\begin{responsetable}
+\caption{\responsetabletitle{tab_routing_stability}{Segmentation LLM routing stability}}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{lccc}
+\toprule
+External cohort & Sampled $n$ & Mean five-run agreement & Per-case range \\
+\midrule
+TN3K & 10 & 100\% & 100\%--100\% \\
+TN5K & 10 & 100\% & 100\%--100\% \\
+ThyroidXL & 10 & 94\% & 60\%--100\% \\
+ZJH-8K & 10 & 98\% & 80\%--100\% \\
+DDTI & 10 & 100\% & 100\%--100\% \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{Per cohort: 10 cases drawn from the official test set (seed 42), preferring the similar tier (top-two mask quality gap $\leq 0.10$); frozen upstream segmentation and classification expert outputs; five independent segmentation LLM routing calls per case. Per-case agreement is the fraction of five runs that select the same segmentation expert; cohort mean agreement is the arithmetic mean over the 10 cases, and the per-case range is the minimum--maximum over those 10 cases.}
+\end{responsetable}

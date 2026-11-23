@@ -1,0 +1,28 @@
+% [SYNC] tab_baseline_protocol: OpenThyroid stacked dev sets (cls vs seg composition); roster aligned with tab_cls_performance.tex / tab_seg_performance.tex, external-test inputs.
+\begin{responsetable}
+\caption{\responsetabletitle{tab_baseline_protocol}{Baseline training and inference protocol}}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{lcccc}
+\toprule
+Model & Task & Thyroid development set & Upstream pretraining & External inference input \\
+\midrule
+BiomedCLIP & Classification & Stacked dataset (cls) & OpenCLIP BiomedCLIP; classification head fine-tuned on stacked dataset & Image only \\
+LSNet & Classification & Stacked dataset (cls) & ImageNet-pretrained LSNet; full fine-tune on stacked dataset & Image only \\
+MedSAM2 & Segmentation & Stacked dataset (seg) & SAM 2.1 Hiera; full fine-tune on stacked dataset & Image + full-image box prompt \\
+MedSegX & Segmentation & Stacked dataset (seg) & SAM ViT-B + MedSegX thyroid adapter; full fine-tune on stacked dataset & Image + full-image box prompt \\
+MedSigLIP & Classification & Stacked dataset (cls) & Google MedSigLIP; partial fine-tune on stacked dataset & Image only \\
+RepViT & Classification & Stacked dataset (cls) & ImageNet-pretrained RepViT; full fine-tune on stacked dataset & Image only \\
+ResNet-50 & Classification & Stacked dataset (cls) & ImageNet ResNet-50; full fine-tune on stacked dataset & Image only \\
+TransUNet & Segmentation & Stacked dataset (seg) & ImageNet-21k ViT-B/16 (TransUNet default); full fine-tune on stacked dataset & Image only \\
+UltraFedFM & Classification & Stacked dataset (cls) & ViT backbone + fine-tune on stacked dataset & Image only \\
+UltraFedFM & Segmentation & Stacked dataset (seg) & MAE / federated FM + full fine-tune on stacked dataset & Image only \\
+ThyroidXAgent (seg. router) & Segmentation & Stacked dataset (seg) & DINOv3 backbone (ImageNet-scale pretrain); full fine-tune on stacked dataset & Image $\rightarrow$ LLM-routed expert mask \\
+ThyroidXAgent (cls. router) & Classification & Stacked dataset (cls) & DINOv3 backbone (ImageNet-scale pretrain); full fine-tune on stacked dataset & Ultrasound image + routed mask and associated features \\
+MedGemma & Classification & Stacked dataset (cls) & Public MedGemma; fine-tuned on stacked dataset & Image only \\
+Qwen3-VL & Classification & Stacked dataset (cls) & Public Qwen3-VL; fine-tuned on stacked dataset & Image only \\
+GPT-5 / Gemini & Classification & --- & Vendor API; not trained on thyroid stacked development data & Image + fixed prompt (API) \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{Supervised baselines: full fine-tuning on OpenThyroid stacked development data from public upstream weights; best validation checkpoint for external test---not zero-shot or frozen-upstream evaluation only. Stacked dataset (classification) = merged official train splits of TN3K, TN5K, and ThyroidXL. Stacked dataset (segmentation) = merged official train splits of TN3K, TN5K, ThyroidXL, and PKTN (OpenThyroid segmentation development set). Segmentation external test: TransUNet and UltraFedFM use image-only inference; MedSAM2 and MedSegX use a full-image box prompt (same as fine-tuning, not GT box/mask). Reference masks are used only to compute Dice/HD95. Classification external test: ultrasound image only. MedGemma and Qwen3-VL are fine-tuned on the classification stack; GPT-5 and Gemini use API inference. External cohorts (e.g.\ DDTI, ZJH-8K) are not used for development fine-tuning.}
+\end{responsetable}

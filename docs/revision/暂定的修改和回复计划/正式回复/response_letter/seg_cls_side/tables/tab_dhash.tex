@@ -1,0 +1,16 @@
+\begin{responsetable}
+\caption{\responsetabletitle{tab_dhash}{dHash cross-cohort near-duplicate screening}}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{lccccccc}
+\toprule
+Training partition (A) & Comparator (B) & n (A) & n (B) & Pairs (H$\leq$5) & H=0 pairs & Near only (1--5) & Unique ZJH (H=0) \\
+\midrule
+TN3K train & ZJH-8K & 4633 & 7958 & 1290 & 1154 & 136 & 1151 \\
+TN5K train & ZJH-8K & 3400 & 7958 & 2 & 0 & 2 & 0 \\
+ThyroidXL train & ZJH-8K & 9441 & 7958 & 1 & 0 & 1 & 0 \\
+PKTN train & ZJH-8K & 703 & 7958 & 1 & 0 & 1 & 0 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{64-bit dHash; Hamming $\leq$ 5. A = each foundational public cohort's official train split. B = ZJH-8K image pool (7958 images; full pool for screening). H=0 pairs = undirected train--ZJH image pairs with exact hash match; Unique ZJH (H=0) = distinct ZJH images with at least one H=0 match to A. Only the TN3K train row shows H=0 overlap with ZJH-8K (1151 unique ZJH images); main external-test metrics exclude those images (6807 images, 1068 patients; counts in \responsetableref{tab_cohort_patient_counts}). TN5K, ThyroidXL, and PKTN train show no H=0 matches to ZJH. Malignant-subtask development/hold-out: \responsetableref{tab_malig_oof}, \responsetableref{tab_malig_ext}.}
+\end{responsetable}

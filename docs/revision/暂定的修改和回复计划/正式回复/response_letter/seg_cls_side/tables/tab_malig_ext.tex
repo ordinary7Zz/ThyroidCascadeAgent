@@ -1,0 +1,26 @@
+\begin{manuscriptresponsetable}
+\caption{\responsetabletitle{tab_malig_ext}{Malignant lesion stratification: independent external test}}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{lcccc}
+\toprule
+\multirow{2}{*}{\textbf{Method}}
+& \multicolumn{2}{c}{\textbf{Lymph Node Metastasis}}
+& \multicolumn{2}{c}{\textbf{Classic PTC \emph{vs.} follicular-variant PTC}} \\
+& AUROC $\uparrow$ & AUPRC $\uparrow$ & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
+\midrule
+RepViT & $0.7805 \pm 0.0732$ & $0.7929 \pm 0.0845$ & $0.6638 \pm 0.0821$ & $0.6456 \pm 0.1051$ \\
+LSNet & $0.6396 \pm 0.0838$ & $0.6585 \pm 0.1113$ & $0.6220 \pm 0.0901$ & $0.6100 \pm 0.1043$ \\
+UltraFedFM & $0.8187 \pm 0.0726$ & $0.8252 \pm 0.0972$ & $0.7129 \pm 0.0786$ & $0.7201 \pm 0.0912$ \\
+MedGemma & $0.8388 \pm 0.0562$ & $0.8526 \pm 0.0631$ & $0.7568 \pm 0.0844$ & $0.7239 \pm 0.1102$ \\
+Qwen3-VL-8B-Instruct & $0.8097 \pm 0.0654$ & $0.8142 \pm 0.0786$ & $0.7071 \pm 0.0821$ & $0.6999 \pm 0.0998$ \\
+GPT-5 & $0.7911 \pm 0.0653$ & $0.8029 \pm 0.0570$ & $0.3711 \pm 0.1706$ & $0.4638 \pm 0.1347$ \\
+Gemini-2.5-Pro & $0.6063 \pm 0.0955$ & $0.6144 \pm 0.0931$ & $0.4242 \pm 0.1173$ & $0.4586 \pm 0.0893$ \\
+LLNM-Net & $0.8121 \pm 0.0820$ & $0.8399 \pm 0.0911$ & --- & --- \\
+Tiger-Model & --- & --- & $0.7535 \pm 0.1061$ & $0.7741 \pm 0.0989$ \\
+\responserowagent
+\textbf{ThyroidXAgent} & $0.8556 \pm 0.0791$ & $0.8623 \pm 0.0787$ & $0.7831 \pm 0.0782$ & $0.7998 \pm 0.0893$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{Test/external set: ZJH-8K malignant primary-lesion hold-out ($801$ images, $130$ patients; seed 42, 20\% patient split shared by LNM and PTC subtype; aligned with \responsetableref{tab_dhash} exclusion and \responsetableref{tab_cohort_patient_counts}). PTC-subtype labels as in \responsetableref{tab_malig_oof}. Each model is trained once on the shared development pool and evaluated on hold-out. AUROC/AUPRC; $\pm$ = half-width of bootstrap 95\% CI (1000 resamples, seed 42). ``---'' = task not evaluated.}
+\end{manuscriptresponsetable}

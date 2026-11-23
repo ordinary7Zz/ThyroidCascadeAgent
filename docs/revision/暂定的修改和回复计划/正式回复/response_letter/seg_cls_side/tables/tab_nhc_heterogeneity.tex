@@ -1,0 +1,18 @@
+% [SYNC] tab_nhc_heterogeneity.tex (manuscript: 26_Nature_ThyroidAgent/tables/); letter \label tab_nhc_heterogeneity via \responsetabletitle.
+\begin{responsetable}
+\caption{\responsetabletitle{tab_nhc_heterogeneity}{NHC-MISD-TUS: between-center heterogeneity (centre-level meta)}}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{@{}l l r r l r l@{}}
+\toprule
+Task & Metric & Center groups & Images & Pooled / macro & $I^2$ (\%) & $\tau^2$ \\
+\midrule
+% BEGIN AUTO tab_nhc_heterogeneity rows
+Nodule segmentation & Dice $\uparrow$ & 33 & 6384 & 0.823 / 0.816 & 99.0 & 0.010 \\
+Benign--malignant & AUROC $\uparrow$ & 32 & 4999 & 0.819 / 0.754 & 99.0 & 0.000 \\
+Gland segmentation & Dice $\uparrow$ & 35 & 8721 & 0.593 / 0.559 & 99.9 & 0.134 \\
+% END AUTO tab_nhc_heterogeneity rows
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{Between-centre $I^2$/$\tau^2$ from \emph{centre-level} inverse-variance meta (Cochrane $Q$-type; centre Dice/AUROC effects and $n$ as in \responsetableref{tab_nhc_center_performance})---not image-level B7 ANOVA $I^2$ on malignancy scores. Meta-regression on scanner or case mix was not performed because those covariates were not released.}
+\end{responsetable}

@@ -1,0 +1,17 @@
+% [SYNC] tab_patient_level.tex (manuscript: 26_Nature_ThyroidAgent/tables/); letter \label tab_patient_cls via \responsetabletitle.
+% ZJH: docs/revision/b2/tables/zjh8k_b2_excl_tn3k_h0.json patient_level; ThyroidXL: thyroidxl_b2.json.
+\begin{responsetable}
+\caption{\responsetabletitle{tab_patient_cls}{ThyroidXAgent patient-level classification and segmentation (ZJH-8K, ThyroidXL)}}
+\begin{adjustbox}{max width=\textwidth,center}
+\small
+\begin{tabular}{lcccccccccc}
+\toprule
+Cohort & $n$ patients & AUROC & 95\% CI & AUPRC & 95\% CI & Dice & 95\% CI & HD95 (mm) & 95\% CI \\
+\midrule
+ZJH-8K & 1068 & \textbf{0.9634} & 0.9513--0.9740 & \textbf{0.9730} & 0.9623--0.9827 & 0.8270 & 0.8179--0.8353 & 13.14 & 12.30--14.04 \\
+ThyroidXL & 739 & \textbf{0.9484} & 0.9326--0.9628 & \textbf{0.9355} & 0.9064--0.9592 & 0.8749 & 0.8675--0.8816 & 5.68 & 5.13--6.30 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{ZJH-8K and ThyroidXL official test splits. Classification: arithmetic mean of malignancy probability within cluster; patient label = within-cluster max. Segmentation: within-patient arithmetic mean of image-level Dice and HD95. ZJH-8K: 6807 images, 1068 patients (\responsetableref{tab_cohort_patient_counts}); patient-level metrics on the same TN3K dHash H=0 exclusion subset as \responsetableref{tab_cls_ext} and \responsetableref{tab_seg_ext} (cluster-bootstrap 1000 resamples, seed=42). ThyroidXL: 2090 images, 739 patients.}
+\end{responsetable}

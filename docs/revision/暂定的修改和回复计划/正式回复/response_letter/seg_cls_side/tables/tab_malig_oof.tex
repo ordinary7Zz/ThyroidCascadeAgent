@@ -1,0 +1,23 @@
+% [SYNC] tab_malig_oof: malig_models_zjh20261101.json (2026-11-03 PM); LLNM/Tiger/ThyroidXAgent (DINO interim) my_run image-level OOF filled.
+\begin{manuscriptresponsetable}
+\caption{\responsetabletitle{tab_malig_oof}{Malignant lesion stratification: development five-fold OOF}}
+\begin{adjustbox}{max width=\textwidth,center}
+\begin{tabular}{lcccc}
+\toprule
+\multirow{2}{*}{\textbf{Method}}
+& \multicolumn{2}{c}{\textbf{Lymph Node Metastasis}}
+& \multicolumn{2}{c}{\textbf{Classic PTC \emph{vs.} follicular-variant PTC}} \\
+& AUROC $\uparrow$ & AUPRC $\uparrow$ & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
+\midrule
+RepViT & $0.8334 \pm 0.0302$ & $0.8305 \pm 0.0347$ & $0.7005 \pm 0.0471$ & $0.6973 \pm 0.059$ \\
+LSNet & $0.7090 \pm 0.0736$ & $0.7083 \pm 0.0925$ & $0.6484 \pm 0.047$ & $0.6773 \pm 0.0619$ \\
+UltraFedFM & $0.8568 \pm 0.0402$ & $0.8627 \pm 0.039$ & $0.7812 \pm 0.0393$ & $0.7620 \pm 0.0535$ \\
+LLNM-Net & $0.8458 \pm 0.0726$ & $0.8369 \pm 0.0875$ & --- & --- \\
+Tiger-Model & --- & --- & $0.7877 \pm 0.0466$ & $0.7044 \pm 0.0581$ \\
+\responserowagent
+\textbf{ThyroidXAgent} & $0.8797 \pm 0.0285$ & $0.8493 \pm 0.0375$ & $0.8089 \pm 0.027$ & $0.8271 \pm 0.0358$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{Training/development set: shared ZJH-8K malignant primary-lesion pool ($3227$ images, $517$ patients; TN3K train--ZJH-8K dHash H=0 exclusion and full-pool screening in \responsetableref{tab_dhash}; counts and split definition in \responsetableref{tab_cohort_patient_counts}). PTC-subtype labels: pathology categories 1 (classic) \emph{vs.} 2 (follicular-variant PTC) only. Five-fold OOF on the development pool (seed 42). AUROC/AUPRC; $\pm$ = half-width of bootstrap 95\% CI (1000 resamples, seed 42). ``---'' = task not evaluated.}
+\end{manuscriptresponsetable}

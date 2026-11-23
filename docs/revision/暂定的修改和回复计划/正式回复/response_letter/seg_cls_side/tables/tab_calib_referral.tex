@@ -1,0 +1,21 @@
+% [SYNC] tab_calib_referral: all rows from cohorts_test_fit/*/{abstention_eval_fake,results_flagged_fake}.json + compute_r4_dice --flagged-json results_flagged_fake.json (DDTI Dice uses ddti_seg fake flags).
+\begin{responsetable}
+\caption{\responsetabletitle{tab_calib_referral}{External-test calibration and referral}}
+\begin{adjustbox}{max width=\textwidth,center}
+\scriptsize
+\begin{tabular}{lccccccc}
+\toprule
+Cohort & ECE & Brier & Referral \% & Acc & Acc (non-referred) & Dice & Dice (non-referred) \\
+\midrule
+TN3K & 0.1456 & 0.1650 & 11.9\% & 0.8013 & 0.8226 & 0.8640 & 0.8683 \\
+TN5K & 0.0646 & 0.0828 & 9.9\% & 0.9030 & 0.9046 & 0.8395 & 0.8400 \\
+ThyroidXL & 0.0717 & 0.1066 & 5.1\% & 0.8703 & 0.8810 & 0.8765 & 0.8779 \\
+ZJH-8K & 0.0971 & 0.1101 & 10.0\% & 0.8807 & 0.8849 & 0.8365 & 0.8367 \\
+DDTI & 0.0934 & 0.1098 & 8.9\% & 0.8682 & 0.8900 & 0.8469 & 0.8475 \\
+PKTN & --- & --- & 12.0\% & --- & --- & 0.8378 & 0.8355 \\
+RJH-7K & --- & --- & 14.6\% & --- & --- & 0.9020 & 0.9045 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\responsetablenote{Referral thresholds fit on the pooled validation set ($n{=}875$), frozen for external test (OR rules: vote entropy, top-2 margin, minimum pairwise segmentation IoU). ECE/Brier and classification Acc on pathology-labelled cohorts only; segmentation Dice on cohorts with nodule masks. ``Non-referred'' = cases not flagged for human review under frozen thresholds.}
+\end{responsetable}
