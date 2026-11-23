@@ -1,0 +1,98 @@
+% Supplementary table \label{tab:static_rule_controller_radar_metrics}
+\begin{table*}[p]
+\centering
+\begin{threeparttable}
+
+\caption{Static-pipeline metrics used for report-generation radar plots. Conventional language-generation metrics and clinical semantic metrics are reported for the SMU-HMC, KMVE and ZJH-TS test sets used in Fig.~\ref{fig:thyroidxagent_report_generation}g. Conventional language-generation metrics were computed with the COCO caption evaluation toolkit (pycocoevalcap). Values are scores $\pm$ the half-width of the bootstrap 95\% percentile confidence interval. Lower FDR indicates better performance.}
+\label{tab:static_rule_controller_radar_metrics}
+
+\scriptsize
+\setlength{\tabcolsep}{4.2pt}
+\renewcommand{\arraystretch}{1.10}
+
+\begin{tabular}{lccccccc}
+\toprule
+\rowcolor{gray!20}
+\multicolumn{8}{c}{\textbf{Conventional natural-language generation metrics}} \\
+\midrule
+\textbf{Dataset}
+& \textbf{\(n\)}
+& \textbf{BLEU-1}
+& \textbf{BLEU-2}
+& \textbf{BLEU-3}
+& \textbf{BLEU-4}
+& \textbf{METEOR}
+& \textbf{ROUGE$_L$} \\
+\midrule
+SMU-HMC
+& 400
+& 0.4750$\pm$0.0156
+& 0.3926$\pm$0.0139
+& 0.3344$\pm$0.0129
+& 0.2901$\pm$0.0123
+& 0.3142$\pm$0.0068
+& 0.4717$\pm$0.0115 \\
+KMVE
+& 492
+& 0.5739$\pm$0.0213
+& 0.5180$\pm$0.0202
+& 0.4669$\pm$0.0190
+& 0.4227$\pm$0.0183
+& 0.3532$\pm$0.0098
+& 0.6598$\pm$0.0145 \\
+ZJH-TS
+& 150
+& 0.4317$\pm$0.0255
+& 0.3605$\pm$0.0214
+& 0.3053$\pm$0.0189
+& 0.2594$\pm$0.0169
+& 0.2847$\pm$0.0100
+& 0.4997$\pm$0.0141 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.8em}
+
+\begin{tabular}{lccccccc}
+\toprule
+\rowcolor{gray!20}
+\multicolumn{8}{c}{\textbf{Clinical semantic metrics}} \\
+\midrule
+\textbf{Dataset}
+& \textbf{\(n\)}
+& \textbf{FDR}\,$\downarrow$
+& \textbf{Feat Acc}
+& \textbf{F1 Score}
+& \textbf{Complete.}
+& \textbf{Consist.}
+& \textbf{ThyClin} \\
+\midrule
+SMU-HMC
+& 400
+& 0.3588$\pm$0.0444
+& 0.5957$\pm$0.0416
+& 0.4654$\pm$0.0453
+& 0.7823$\pm$0.0062
+& 0.4219$\pm$0.0161
+& 0.4129$\pm$0.0194 \\
+KMVE
+& 492
+& 0.3831$\pm$0.0427
+& 0.5105$\pm$0.0384
+& 0.4220$\pm$0.0399
+& 0.6329$\pm$0.0030
+& 0.5176$\pm$0.0210
+& 0.4374$\pm$0.0202 \\
+ZJH-TS
+& 150
+& 0.5033$\pm$0.0733
+& 0.5927$\pm$0.0538
+& 0.3516$\pm$0.0619
+& 0.8108$\pm$0.0109
+& 0.3655$\pm$0.0212
+& 0.3528$\pm$0.0254 \\
+\bottomrule
+\end{tabular}
+
+\end{threeparttable}
+\end{table*}

@@ -1,0 +1,41 @@
+% Supplementary table \label{tab:safety_rules}
+\begin{table*}[p]
+\centering
+\begin{threeparttable}
+\caption{Safety rules for physician review of AI-generated report drafts.}
+\label{tab:safety_rules}
+
+\footnotesize
+\setlength{\tabcolsep}{5.0pt}
+\renewcommand{\arraystretch}{1.12}
+
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.25\textwidth}>{\raggedright\arraybackslash}p{0.68\textwidth}}
+\toprule
+\textbf{Item} & \textbf{Rule} \\
+\midrule
+\rowcolor{gray!20}
+\multicolumn{2}{c}{\textbf{Layer 1: statements not written}} \\
+Measurements & Not reported when measured with the default pixel scale, outside the plausible range (P0.5--P99.5 of reported values) or when a view is missing. The draft states ``could not be measured reliably''. \\
+Vascularity & Not stated when the nodule has no Doppler image. The draft states ``no colour Doppler image of this nodule'', or ``colour Doppler not performed'' when the examination has none. \\
+Nodule features & Composition, echogenicity, margin, aspect ratio and echogenic foci are written only when the classifier output is available. No default values are filled in. \\
+Other nodule descriptors & Shape regularity, internal homogeneity and capsule are not inferred from other features. An aspect ratio $\geq$1 is not written. \\
+``No nodule'' in a lobe & Written only when the lobe was imaged and no nodule was detected. Otherwise the draft states ``no image, not assessed'' or ``manual check required''. \\
+Lymph nodes & Without a neck image, the draft states ``no neck image; lymph nodes not assessed''. \\
+\midrule
+\rowcolor{gray!20}
+\multicolumn{2}{c}{\textbf{Layer 2: sentence marks for physician review}} \\
+Red: high-risk rating & A lobe is rated TI-RADS category 4 or 5 in the impression. \\
+Red: abnormal lymph node & A lymph node is classified as abnormal. \\
+Red: rating not determined & A nodule is reported but its TI-RADS category could not be determined. \\
+Red: conflicting tool results & The image classifier indicates a nodule in a lobe but none was segmented, or a detection on a transverse view could not be assigned to a side. \\
+Red: image and rating disagree & The representative image is cystic or anechoic but the rating is TI-RADS category 4 or 5. \\
+Yellow: uncertain number of nodules & Several detections in one lobe could not be merged across images. \\
+Yellow: ``no nodule'' in a lobe & The draft states that a lobe has no nodule. \\
+Grey: items to be completed & A measurement, nodule size or feature was not written, or a region had no image. The physician completes these items. \\
+Green & No safety rule triggered. \\
+Review level of a case & Full review if any sentence is red; focused check if any is yellow and none is red; routine review otherwise. \\
+\bottomrule
+\end{tabular}
+
+\end{threeparttable}
+\end{table*}

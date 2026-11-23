@@ -1,0 +1,111 @@
+% Supplementary table \label{tab:template_exchange}
+\begin{table*}[p]
+\centering
+\begin{threeparttable}
+\caption{Effect of exchanging clause templates between report libraries on report-generation performance. SMU-HMC and ZJH-TS reports were generated with KMVE templates and KMVE reports with SMU-HMC templates, using the same tool outputs. Original values are those in Supplementary Tables~\ref{tab:report_generation_nlg_ci} and \ref{tab:report_generation_clinical_ci}. Values are scores $\pm$ the half-width of the bootstrap 95\% percentile confidence interval; changes are paired differences from the original reports.}
+\label{tab:template_exchange}
+
+\scriptsize
+\setlength{\tabcolsep}{2.0pt}
+\renewcommand{\arraystretch}{1.08}
+
+\begin{tabular}{lccccccc}
+\toprule
+\textbf{Templates}
+& \textbf{BLEU-1}
+& \textbf{BLEU-2}
+& \textbf{BLEU-3}
+& \textbf{BLEU-4}
+& \textbf{METEOR}
+& \textbf{ROUGE$_L$}
+& \textbf{ThyClinScore} \\
+\midrule
+
+\rowcolor{gray!20}
+\multicolumn{8}{c}{\textbf{SMU-HMC Testset} ($n=400$)} \\
+Original templates
+& 0.5924$\pm$0.0150
+& 0.4806$\pm$0.0142
+& 0.4006$\pm$0.0136
+& 0.3381$\pm$0.0133
+& 0.3627$\pm$0.0079
+& 0.5422$\pm$0.0122
+& \textbf{0.5189$\pm$0.0212} \\
+KMVE templates
+& 0.4528$\pm$0.0121
+& 0.3157$\pm$0.0091
+& 0.2243$\pm$0.0074
+& 0.1589$\pm$0.0063
+& 0.2858$\pm$0.0054
+& 0.4175$\pm$0.0078
+& \textbf{0.4705$\pm$0.0190} \\
+\quad Change
+& $-$0.1396$\pm$0.0073
+& $-$0.1649$\pm$0.0081
+& $-$0.1763$\pm$0.0088
+& $-$0.1793$\pm$0.0092
+& $-$0.0769$\pm$0.0044
+& $-$0.1247$\pm$0.0071
+& \textbf{$-$0.0484$\pm$0.0075} \\
+
+\midrule
+\rowcolor{gray!20}
+\multicolumn{8}{c}{\textbf{KMVE Testset} ($n=492$)} \\
+Original templates
+& 0.5675$\pm$0.0216
+& 0.5124$\pm$0.0205
+& 0.4619$\pm$0.0194
+& 0.4183$\pm$0.0186
+& 0.3505$\pm$0.0100
+& 0.6573$\pm$0.0145
+& \textbf{0.4374$\pm$0.0201} \\
+SMU-HMC templates
+& 0.4503$\pm$0.0086
+& 0.3078$\pm$0.0066
+& 0.2121$\pm$0.0055
+& 0.1424$\pm$0.0047
+& 0.2710$\pm$0.0060
+& 0.3678$\pm$0.0060
+& \textbf{0.3903$\pm$0.0174} \\
+\quad Change
+& $-$0.1172$\pm$0.0235
+& $-$0.2046$\pm$0.0210
+& $-$0.2498$\pm$0.0193
+& $-$0.2759$\pm$0.0185
+& $-$0.0795$\pm$0.0064
+& $-$0.2895$\pm$0.0121
+& \textbf{$-$0.0471$\pm$0.0178} \\
+
+\midrule
+\rowcolor{gray!20}
+\multicolumn{8}{c}{\textbf{ZJH-TS Testset} ($n=150$)} \\
+Original templates
+& 0.5233$\pm$0.0291
+& 0.4296$\pm$0.0246
+& 0.3579$\pm$0.0214
+& 0.3018$\pm$0.0191
+& 0.3191$\pm$0.0126
+& 0.5480$\pm$0.0158
+& \textbf{0.4676$\pm$0.0268} \\
+KMVE templates
+& 0.3767$\pm$0.0245
+& 0.2819$\pm$0.0184
+& 0.2125$\pm$0.0142
+& 0.1650$\pm$0.0115
+& 0.2517$\pm$0.0091
+& 0.4435$\pm$0.0107
+& \textbf{0.4594$\pm$0.0271} \\
+\quad Change
+& $-$0.1466$\pm$0.0128
+& $-$0.1477$\pm$0.0122
+& $-$0.1454$\pm$0.0119
+& $-$0.1369$\pm$0.0116
+& $-$0.0674$\pm$0.0066
+& $-$0.1045$\pm$0.0110
+& \textbf{$-$0.0082$\pm$0.0136} \\
+
+\bottomrule
+\end{tabular}
+
+\end{threeparttable}
+\end{table*}

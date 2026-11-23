@@ -1,0 +1,252 @@
+% Supplementary table \label{tab:report_generation_nlg_ci}
+\begin{table*}[p]
+\centering
+\begin{threeparttable}
+
+\caption{Lexical performance of thyroid ultrasound report generation across datasets. BLEU-1 to BLEU-4, METEOR and ROUGE$_L$ are reported on the SMU-HMC, KMVE and ZJH-TS test sets using the COCO caption evaluation toolkit (pycocoevalcap). Values are scores $\pm$ the half-width of the bootstrap 95\% percentile confidence interval.}
+\label{tab:report_generation_nlg_ci}
+
+\footnotesize
+\setlength{\tabcolsep}{5.2pt}
+\renewcommand{\arraystretch}{1.04}
+
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Model}
+& \textbf{BLEU-1}
+& \textbf{BLEU-2}
+& \textbf{BLEU-3}
+& \textbf{BLEU-4}
+& \textbf{METEOR}
+& \textbf{ROUGE$_L$} \\
+\midrule
+
+\rowcolor{gray!20}
+\multicolumn{7}{c}{\textbf{SMU-HMC Testset} ($n=400$)} \\
+
+GPT-4o~\cite{openai_gpt4_2024}
+& 0.3500$\pm$0.0098
+& 0.2535$\pm$0.0076
+& 0.1842$\pm$0.0061
+& 0.1330$\pm$0.0052
+& 0.3247$\pm$0.0046
+& 0.3577$\pm$0.0078 \\
+
+GPT-5~\cite{openai2025gpt5systemcard}
+& 0.3836$\pm$0.0095
+& 0.2749$\pm$0.0076
+& 0.1965$\pm$0.0062
+& 0.1374$\pm$0.0052
+& 0.3254$\pm$0.0037
+& 0.3732$\pm$0.0069 \\
+
+Gemini 2.5 Pro~\cite{comanici_gemini_2025}
+& 0.3702$\pm$0.0096
+& 0.2660$\pm$0.0080
+& 0.1907$\pm$0.0070
+& 0.1373$\pm$0.0061
+& 0.3308$\pm$0.0038
+& 0.3584$\pm$0.0071 \\
+
+Qwen3.5 Plus~\cite{yang_qwen3_2025}
+& 0.3970$\pm$0.0117
+& 0.3103$\pm$0.0099
+& 0.2456$\pm$0.0084
+& 0.1941$\pm$0.0072
+& 0.3575$\pm$0.0039
+& 0.4216$\pm$0.0082 \\
+
+Claude Sonnet 4.6
+& 0.3326$\pm$0.0092
+& 0.2543$\pm$0.0075
+& 0.1968$\pm$0.0062
+& 0.1528$\pm$0.0052
+& 0.3417$\pm$0.0035
+& 0.3782$\pm$0.0073 \\
+
+MedGemma~\cite{sellergren2025medgemma}
+& 0.0525$\pm$0.0019
+& 0.0390$\pm$0.0016
+& 0.0300$\pm$0.0013
+& 0.0235$\pm$0.0011
+& 0.1871$\pm$0.0046
+& 0.0841$\pm$0.0077 \\
+
+LLaVA-Med~\cite{li_llavamed_2023}
+& 0.2091$\pm$0.0092
+& 0.0830$\pm$0.0088
+& 0.0425$\pm$0.0066
+& 0.0250$\pm$0.0046
+& 0.1547$\pm$0.0054
+& 0.1353$\pm$0.0085 \\
+
+KMVE~\cite{li_ultrasound_2024}
+& 0.1321$\pm$0.0148
+& 0.0830$\pm$0.0092
+& 0.0507$\pm$0.0055
+& 0.0294$\pm$0.0032
+& 0.1546$\pm$0.0058
+& 0.1558$\pm$0.0040 \\
+
+\rowcolor{lightgray}
+\textbf{ThyroidXAgent}
+& \textbf{0.5924$\pm$0.0150}
+& \textbf{0.4806$\pm$0.0142}
+& \textbf{0.4006$\pm$0.0136}
+& \textbf{0.3381$\pm$0.0133}
+& \textbf{0.3627$\pm$0.0079}
+& \textbf{0.5422$\pm$0.0122} \\
+
+\midrule
+
+\rowcolor{gray!20}
+\multicolumn{7}{c}{\textbf{KMVE Testset} ($n=492$)} \\
+
+GPT-4o~\cite{openai_gpt4_2024}
+& 0.4467$\pm$0.0126
+& 0.3423$\pm$0.0110
+& 0.2683$\pm$0.0096
+& 0.2136$\pm$0.0085
+& 0.2799$\pm$0.0105
+& 0.3850$\pm$0.0148 \\
+
+GPT-5~\cite{openai2025gpt5systemcard}
+& 0.4149$\pm$0.0071
+& 0.2992$\pm$0.0060
+& 0.2190$\pm$0.0053
+& 0.1668$\pm$0.0048
+& 0.3042$\pm$0.0064
+& 0.4128$\pm$0.0090 \\
+
+Gemini 2.5 Pro~\cite{comanici_gemini_2025}
+& 0.5065$\pm$0.0156
+& 0.3851$\pm$0.0130
+& 0.2981$\pm$0.0113
+& 0.2394$\pm$0.0101
+& 0.2863$\pm$0.0072
+& 0.4742$\pm$0.0111 \\
+
+Qwen3.5 Plus~\cite{yang_qwen3_2025}
+& 0.5425$\pm$0.0155
+& 0.4243$\pm$0.0137
+& 0.3415$\pm$0.0122
+& 0.2783$\pm$0.0112
+& 0.2952$\pm$0.0073
+& 0.5066$\pm$0.0117 \\
+
+Claude Sonnet 4.6
+& 0.4331$\pm$0.0131
+& 0.3380$\pm$0.0112
+& 0.2638$\pm$0.0097
+& 0.2089$\pm$0.0086
+& 0.3284$\pm$0.0063
+& 0.4639$\pm$0.0114 \\
+
+MedGemma~\cite{sellergren2025medgemma}
+& 0.0374$\pm$0.0021
+& 0.0299$\pm$0.0018
+& 0.0252$\pm$0.0016
+& 0.0219$\pm$0.0014
+& 0.1075$\pm$0.0046
+& 0.1862$\pm$0.0206 \\
+
+LLaVA-Med~\cite{li_llavamed_2023}
+& 0.2842$\pm$0.0162
+& 0.2135$\pm$0.0129
+& 0.1595$\pm$0.0101
+& 0.1244$\pm$0.0083
+& 0.2138$\pm$0.0073
+& 0.3939$\pm$0.0125 \\
+
+\rowcolor{lightgray}
+\textbf{ThyroidXAgent}
+& \textbf{0.5675$\pm$0.0216}
+& \textbf{0.5124$\pm$0.0205}
+& \textbf{0.4619$\pm$0.0194}
+& \textbf{0.4183$\pm$0.0186}
+& \textbf{0.3505$\pm$0.0100}
+& \textbf{0.6573$\pm$0.0145} \\
+
+\midrule
+
+\rowcolor{gray!20}
+\multicolumn{7}{c}{\textbf{ZJH-TS Testset} ($n=150$)} \\
+
+GPT-4o~\cite{openai_gpt4_2024}
+& 0.4098$\pm$0.0340
+& 0.2965$\pm$0.0258
+& 0.2173$\pm$0.0196
+& 0.1623$\pm$0.0150
+& 0.2494$\pm$0.0153
+& 0.3679$\pm$0.0219 \\
+
+GPT-5~\cite{openai2025gpt5systemcard}
+& 0.4987$\pm$0.0181
+& 0.3687$\pm$0.0143
+& 0.2683$\pm$0.0116
+& 0.1909$\pm$0.0099
+& 0.3287$\pm$0.0070
+& 0.4790$\pm$0.0097 \\
+
+Gemini 2.5 Pro~\cite{comanici_gemini_2025}
+& 0.1821$\pm$0.0108
+& 0.1240$\pm$0.0076
+& 0.0850$\pm$0.0056
+& 0.0584$\pm$0.0042
+& 0.2777$\pm$0.0050
+& 0.2536$\pm$0.0088 \\
+
+Qwen3.5 Plus~\cite{yang_qwen3_2025}
+& \textbf{0.5379$\pm$0.0225}
+& \textbf{0.4297$\pm$0.0197}
+& 0.3464$\pm$0.0171
+& 0.2800$\pm$0.0151
+& \textbf{0.3456$\pm$0.0086}
+& 0.5314$\pm$0.0127 \\
+
+Claude Sonnet 4.6
+& 0.4645$\pm$0.0205
+& 0.3661$\pm$0.0171
+& 0.2912$\pm$0.0145
+& 0.2330$\pm$0.0126
+& 0.3438$\pm$0.0079
+& 0.4864$\pm$0.0130 \\
+
+MedGemma~\cite{sellergren2025medgemma}
+& 0.0795$\pm$0.0061
+& 0.0614$\pm$0.0050
+& 0.0480$\pm$0.0042
+& 0.0379$\pm$0.0036
+& 0.2191$\pm$0.0084
+& 0.1592$\pm$0.0210 \\
+
+LLaVA-Med~\cite{li_llavamed_2023}
+& 0.2397$\pm$0.0222
+& 0.1372$\pm$0.0156
+& 0.0927$\pm$0.0111
+& 0.0635$\pm$0.0081
+& 0.1617$\pm$0.0106
+& 0.2479$\pm$0.0200 \\
+
+KMVE~\cite{li_ultrasound_2024}
+& 0.1525$\pm$0.0188
+& 0.0956$\pm$0.0116
+& 0.0561$\pm$0.0068
+& 0.0318$\pm$0.0039
+& 0.1612$\pm$0.0071
+& 0.2244$\pm$0.0039 \\
+
+\rowcolor{lightgray}
+\textbf{ThyroidXAgent}
+& 0.5233$\pm$0.0291
+& 0.4296$\pm$0.0246
+& \textbf{0.3579$\pm$0.0214}
+& \textbf{0.3018$\pm$0.0191}
+& 0.3191$\pm$0.0126
+& \textbf{0.5480$\pm$0.0158} \\
+
+\bottomrule
+\end{tabular}
+
+\end{threeparttable}
+\end{table*}

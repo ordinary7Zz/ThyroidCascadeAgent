@@ -1,0 +1,259 @@
+% Supplementary table \label{tab:report_generation_clinical_ci}
+\begin{table*}[p]
+\centering
+\begin{threeparttable}
+
+\caption{Clinical semantic performance of thyroid ultrasound report generation across datasets. False discovery rate (FDR), feature accuracy, lesion-level F1 score, completeness, consistency and ThyClinScore are reported on the SMU-HMC, KMVE and ZJH-TS test sets. Values are means $\pm$ the half-width of the bootstrap 95\% percentile confidence interval. Lower FDR indicates better performance.}
+\label{tab:report_generation_clinical_ci}
+
+\footnotesize
+\setlength{\tabcolsep}{5.2pt}
+\renewcommand{\arraystretch}{1.04}
+
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Model}
+& \textbf{FDR}\,$\downarrow$
+& \textbf{Feat Acc}
+& \textbf{F1 Score}
+& \textbf{Complete.}
+& \textbf{Consist.}
+& \textbf{ThyClin} \\
+\midrule
+
+\rowcolor{gray!20}
+\multicolumn{7}{c}{\textbf{SMU-HMC Testset} ($n=400$)} \\
+
+GPT-4o~\cite{openai_gpt4_2024}
+& 0.7189$\pm$0.0362
+& 0.5555$\pm$0.0351
+& 0.2526$\pm$0.0332
+& 0.8208$\pm$0.0132
+& 0.4023$\pm$0.0182
+& 0.4105$\pm$0.0172 \\
+
+GPT-5~\cite{openai2025gpt5systemcard}
+& 0.4170$\pm$0.0417
+& 0.5644$\pm$0.0351
+& 0.4390$\pm$0.0402
+& 0.8585$\pm$0.0077
+& 0.4980$\pm$0.0166
+& 0.4882$\pm$0.0182 \\
+
+Gemini 2.5 Pro~\cite{comanici_gemini_2025}
+& 0.6797$\pm$0.0388
+& 0.5586$\pm$0.0385
+& 0.2965$\pm$0.0366
+& 0.8789$\pm$0.0107
+& 0.4040$\pm$0.0187
+& 0.4280$\pm$0.0176 \\
+
+Qwen3.5 Plus~\cite{yang_qwen3_2025}
+& 0.7426$\pm$0.0295
+& 0.5804$\pm$0.0373
+& 0.2656$\pm$0.0290
+& 0.9620$\pm$0.0063
+& 0.4809$\pm$0.0142
+& 0.4883$\pm$0.0137 \\
+
+Claude Sonnet 4.6
+& 0.8040$\pm$0.0305
+& 0.5580$\pm$0.0464
+& 0.2049$\pm$0.0298
+& 0.8786$\pm$0.0108
+& 0.3886$\pm$0.0147
+& 0.4015$\pm$0.0144 \\
+
+MedGemma~\cite{sellergren2025medgemma}
+& 0.8943$\pm$0.0229
+& 0.5784$\pm$0.0434
+& 0.1027$\pm$0.0202
+& 0.9657$\pm$0.0055
+& 0.3353$\pm$0.0119
+& 0.3697$\pm$0.0131 \\
+
+LLaVA-Med~\cite{li_llavamed_2023}
+& \textbf{0.1625$\pm$0.0363}
+& 0.4100$\pm$0.2125
+& 0.2582$\pm$0.0426
+& 0.4576$\pm$0.0227
+& 0.1387$\pm$0.0166
+& 0.1752$\pm$0.0150 \\
+
+KMVE~\cite{li_ultrasound_2024}
+& 0.4813$\pm$0.0488
+& 0.5944$\pm$0.1233
+& 0.2103$\pm$0.0390
+& 0.5995$\pm$0.0085
+& 0.2013$\pm$0.0144
+& 0.2265$\pm$0.0145 \\
+
+\rowcolor{lightgray}
+\textbf{ThyroidXAgent}
+& 0.2238$\pm$0.0377
+& \textbf{0.6238$\pm$0.0358}
+& \textbf{0.5467$\pm$0.0436}
+& \textbf{0.9691$\pm$0.0060}
+& \textbf{0.5016$\pm$0.0166}
+& \textbf{0.5189$\pm$0.0212} \\
+
+\midrule
+
+\rowcolor{gray!20}
+\multicolumn{7}{c}{\textbf{KMVE Testset} ($n=492$)} \\
+
+GPT-4o~\cite{openai_gpt4_2024}
+& 0.5843$\pm$0.0427
+& 0.6608$\pm$0.0691
+& 0.2137$\pm$0.0350
+& 0.6180$\pm$0.0113
+& 0.4275$\pm$0.0231
+& 0.3344$\pm$0.0188 \\
+
+GPT-5~\cite{openai2025gpt5systemcard}
+& 0.4133$\pm$0.0423
+& \textbf{0.6967$\pm$0.0492}
+& 0.3749$\pm$0.0402
+& 0.6506$\pm$0.0038
+& 0.4504$\pm$0.0189
+& 0.3853$\pm$0.0189 \\
+
+Gemini 2.5 Pro~\cite{comanici_gemini_2025}
+& 0.3211$\pm$0.0407
+& 0.5093$\pm$0.0418
+& \textbf{0.4648$\pm$0.0401}
+& 0.6270$\pm$0.0045
+& 0.4135$\pm$0.0213
+& 0.3810$\pm$0.0187 \\
+
+Qwen3.5 Plus~\cite{yang_qwen3_2025}
+& 0.4553$\pm$0.0422
+& 0.6154$\pm$0.0448
+& 0.3823$\pm$0.0397
+& 0.6525$\pm$0.0050
+& 0.4035$\pm$0.0230
+& 0.3674$\pm$0.0193 \\
+
+Claude Sonnet 4.6
+& 0.5803$\pm$0.0432
+& 0.6605$\pm$0.0578
+& 0.2721$\pm$0.0375
+& \textbf{0.6707$\pm$0.0043}
+& 0.3779$\pm$0.0211
+& 0.3362$\pm$0.0182 \\
+
+MedGemma~\cite{sellergren2025medgemma}
+& 0.1877$\pm$0.0327
+& 0.6820$\pm$0.0463
+& 0.2868$\pm$0.0381
+& 0.6622$\pm$0.0033
+& 0.5172$\pm$0.0240
+& 0.3932$\pm$0.0203 \\
+
+LLaVA-Med~\cite{li_llavamed_2023}
+& \textbf{0.0000$\pm$0.0000}\tnote{*}
+& N/A\tnote{*}
+& 0.2541$\pm$0.0386
+& 0.6508$\pm$0.0007
+& \textbf{0.5669$\pm$0.0225}
+& 0.3928$\pm$0.0208 \\
+
+\rowcolor{lightgray}
+\textbf{ThyroidXAgent}
+& 0.3709$\pm$0.0422
+& 0.5087$\pm$0.0370
+& 0.4223$\pm$0.0397
+& 0.6329$\pm$0.0030
+& 0.5190$\pm$0.0210
+& \textbf{0.4374$\pm$0.0201} \\
+
+\midrule
+
+\rowcolor{gray!20}
+\multicolumn{7}{c}{\textbf{ZJH-TS Testset} ($n=150$)} \\
+
+GPT-4o~\cite{openai_gpt4_2024}
+& 0.4583$\pm$0.0706
+& 0.5510$\pm$0.0468
+& 0.2706$\pm$0.0523
+& 0.7290$\pm$0.0305
+& 0.3415$\pm$0.0294
+& 0.3139$\pm$0.0260 \\
+
+GPT-5~\cite{openai2025gpt5systemcard}
+& 0.5101$\pm$0.0672
+& 0.5326$\pm$0.0503
+& 0.3798$\pm$0.0531
+& 0.9534$\pm$0.0112
+& \textbf{0.4797$\pm$0.0243}
+& 0.4514$\pm$0.0247 \\
+
+Gemini 2.5 Pro~\cite{comanici_gemini_2025}
+& 0.5450$\pm$0.0689
+& 0.5507$\pm$0.0547
+& 0.3157$\pm$0.0523
+& 0.7859$\pm$0.0183
+& 0.3910$\pm$0.0292
+& 0.3557$\pm$0.0244 \\
+
+Qwen3.5 Plus~\cite{yang_qwen3_2025}
+& 0.5781$\pm$0.0558
+& 0.5464$\pm$0.0465
+& 0.3902$\pm$0.0485
+& 0.9575$\pm$0.0086
+& 0.4767$\pm$0.0219
+& 0.4520$\pm$0.0220 \\
+
+Claude Sonnet 4.6
+& 0.6186$\pm$0.0571
+& 0.5748$\pm$0.0455
+& 0.3405$\pm$0.0496
+& 0.8226$\pm$0.0176
+& 0.4298$\pm$0.0233
+& 0.3861$\pm$0.0219 \\
+
+MedGemma~\cite{sellergren2025medgemma}
+& 0.6537$\pm$0.0644
+& 0.5463$\pm$0.0498
+& 0.2959$\pm$0.0520
+& 0.9437$\pm$0.0106
+& 0.3868$\pm$0.0225
+& 0.3807$\pm$0.0238 \\
+
+LLaVA-Med~\cite{li_llavamed_2023}
+& \textbf{0.2733$\pm$0.0733}
+& \textbf{0.6595$\pm$0.1077}
+& 0.1241$\pm$0.0454
+& 0.6136$\pm$0.0494
+& 0.1505$\pm$0.0308
+& 0.1812$\pm$0.0275 \\
+
+KMVE~\cite{li_ultrasound_2024}
+& 0.7911$\pm$0.0617
+& 0.6288$\pm$0.1490
+& 0.0445$\pm$0.0253
+& 0.6252$\pm$0.0085
+& 0.1581$\pm$0.0162
+& 0.1650$\pm$0.0124 \\
+
+\rowcolor{lightgray}
+\textbf{ThyroidXAgent}
+& 0.2833$\pm$0.0600
+& 0.5820$\pm$0.0408
+& \textbf{0.4889$\pm$0.0570}
+& \textbf{0.9641$\pm$0.0090}
+& 0.4564$\pm$0.0228
+& \textbf{0.4676$\pm$0.0268} \\
+
+\bottomrule
+\end{tabular}
+
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item[*] On the KMVE dataset, LLaVA-Med collapsed and predicted
+``no abnormality'' for all test samples. Therefore, Feat Acc is N/A
+and FDR is 0 because no positive predictions were made.
+\end{tablenotes}
+
+\end{threeparttable}
+\end{table*}
