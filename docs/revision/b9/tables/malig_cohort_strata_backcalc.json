@@ -1,0 +1,125 @@
+{
+  "source": {
+    "registry": "/mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/b9/zjh_malignant_patient_split.json",
+    "split_script": "scripts/revision/b9/split_zjh_malignant_train_test.py",
+    "pool_after_exclusion_note": {
+      "images": 4028,
+      "patients": 647,
+      "excluded_images": 728
+    }
+  },
+  "label_legend": {
+    "LNM_CN01_0": "CN0 (no central LNM per registry label key)",
+    "LNM_CN01_1": "CN1",
+    "FTCPTC_0": "classic PTC",
+    "FTCPTC_1": "follicular-variant PTC",
+    "joint": "(LNM_CN01, FTCPTC) at patient level"
+  },
+  "strata": [
+    {
+      "subset": "pool_after_tn3k_h0_exclusion",
+      "images": 4028,
+      "patients": 647,
+      "image_level": {
+        "LNM_CN01": {
+          "0": 2861,
+          "1": 1167
+        },
+        "FTCPTC_classic0_fv1": {
+          "0": 3652,
+          "1": 376
+        }
+      },
+      "patient_level": {
+        "LNM_CN01": {
+          "0": 472,
+          "1": 175
+        },
+        "FTCPTC_classic0_fv1": {
+          "0": 583,
+          "1": 64
+        },
+        "joint_LNM_FTC": {
+          "0_0": 425,
+          "0_1": 47,
+          "1_0": 158,
+          "1_1": 17
+        }
+      }
+    },
+    {
+      "subset": "train_development",
+      "images": 3227,
+      "patients": 517,
+      "image_level": {
+        "LNM_CN01": {
+          "0": 2300,
+          "1": 927
+        },
+        "FTCPTC_classic0_fv1": {
+          "0": 2919,
+          "1": 308
+        }
+      },
+      "patient_level": {
+        "LNM_CN01": {
+          "0": 377,
+          "1": 140
+        },
+        "FTCPTC_classic0_fv1": {
+          "0": 466,
+          "1": 51
+        },
+        "joint_LNM_FTC": {
+          "0_0": 340,
+          "0_1": 37,
+          "1_0": 126,
+          "1_1": 14
+        }
+      }
+    },
+    {
+      "subset": "test_holdout",
+      "images": 801,
+      "patients": 130,
+      "image_level": {
+        "LNM_CN01": {
+          "0": 561,
+          "1": 240
+        },
+        "FTCPTC_classic0_fv1": {
+          "0": 733,
+          "1": 68
+        }
+      },
+      "patient_level": {
+        "LNM_CN01": {
+          "0": 95,
+          "1": 35
+        },
+        "FTCPTC_classic0_fv1": {
+          "0": 117,
+          "1": 13
+        },
+        "joint_LNM_FTC": {
+          "0_0": 85,
+          "0_1": 10,
+          "1_0": 32,
+          "1_1": 3
+        }
+      }
+    }
+  ],
+  "verify_image_counts_match_registry": {
+    "train": {
+      "images_patients_ok": true,
+      "LNM_image_ok": true,
+      "FTC_image_ok": true
+    },
+    "test": {
+      "images_patients_ok": true,
+      "LNM_image_ok": true,
+      "FTC_image_ok": true
+    }
+  }
+}
