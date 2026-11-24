@@ -5,7 +5,7 @@
 \begin{tabular}{lcccc}
 \toprule
 \multirow{2}{*}{\textbf{Method}}
-& \multicolumn{2}{c}{\textbf{Lymph Node Metastasis}}
+& \multicolumn{2}{c}{\textbf{Central lymph-node metastasis (CN0/CN1)}}
 & \multicolumn{2}{c}{\textbf{Classic PTC \emph{vs.} follicular-variant PTC}} \\
 & AUROC $\uparrow$ & AUPRC $\uparrow$ & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
@@ -19,5 +19,5 @@ Tiger-Model & --- & --- & $0.7877 \pm 0.0466$ & $0.7044 \pm 0.0581$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Training/development set: shared ZJH-8K malignant primary-lesion pool ($3227$ images, $517$ patients; TN3K train--ZJH-8K dHash H=0 exclusion and full-pool screening in \responsetableref{tab_dhash}; counts and split definition in \responsetableref{tab_cohort_patient_counts}). PTC-subtype labels: pathology categories 1 (classic) \emph{vs.} 2 (follicular-variant PTC) only. Five-fold OOF on the development pool (seed 42). AUROC/AUPRC; $\pm$ = half-width of bootstrap 95\% CI (1000 resamples, seed 42). ``---'' = task not evaluated.}
+\responsetablenote{Training/development set: shared ZJH-8K malignant primary-lesion pool ($3227$ images, $517$ patients; TN3K train--ZJH-8K dHash H=0 exclusion and full-pool screening in \responsetableref{tab_dhash}; counts and split definition in \responsetableref{tab_cohort_patient_counts}). LNM: case-level central-compartment status (CN0/CN1) from postoperative pathology; primary-lesion ultrasound inputs only (\hyperref[rev:R2.12]{R2.12}). PTC-subtype labels: pathology categories 1 (classic) \emph{vs.} 2 (follicular-variant PTC) only. Five-fold OOF on the development pool (seed 42). AUROC/AUPRC; $\pm$ = half-width of bootstrap 95\% CI (1000 resamples, seed 42). ``---'' = task not evaluated.}
 \end{manuscriptresponsetable}

@@ -14,5 +14,5 @@ Full metadata & \textbf{0.9584 (0.9432--0.9736)} & \textbf{0.9763 (0.9674--0.983
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Fixed expert pool with TN5K external-test shared upstream expert outputs; classification uses LLM routing with only prompt-visible metadata changed (Appendix A1). When all independent classification experts agree we use deterministic consensus without invoking the LLM; when they disagree, classification routing uses the LLM. Classification routing inputs when the LLM is invoked were not separately metadata-ablated (only prompt-visible fields varied).}
+\responsetablenote{Fixed expert pool with TN5K external-test shared upstream expert outputs; classification uses LLM routing with only prompt-visible metadata changed (Appendix A1). Full-metadata row matches TN5K strategy (7) in \responsetableref{tab_routing_ablation_cls}. When all independent classification experts agree we use deterministic consensus without invoking the LLM; when they disagree, classification routing uses the LLM. Classification routing inputs when the LLM is invoked were not separately metadata-ablated (only prompt-visible fields varied).}
 \end{responsetable}

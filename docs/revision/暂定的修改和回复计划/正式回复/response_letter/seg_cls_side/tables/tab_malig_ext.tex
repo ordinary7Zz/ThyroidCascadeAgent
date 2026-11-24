@@ -4,7 +4,7 @@
 \begin{tabular}{lcccc}
 \toprule
 \multirow{2}{*}{\textbf{Method}}
-& \multicolumn{2}{c}{\textbf{Lymph Node Metastasis}}
+& \multicolumn{2}{c}{\textbf{Central lymph-node metastasis (CN0/CN1)}}
 & \multicolumn{2}{c}{\textbf{Classic PTC \emph{vs.} follicular-variant PTC}} \\
 & AUROC $\uparrow$ & AUPRC $\uparrow$ & AUROC $\uparrow$ & AUPRC $\uparrow$ \\
 \midrule
@@ -22,5 +22,5 @@ Tiger-Model & --- & --- & $0.7535 \pm 0.1061$ & $0.7741 \pm 0.0989$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Test/external set: ZJH-8K malignant primary-lesion hold-out ($801$ images, $130$ patients; seed 42, 20\% patient split shared by LNM and PTC subtype; aligned with \responsetableref{tab_dhash} exclusion and \responsetableref{tab_cohort_patient_counts}). PTC-subtype labels as in \responsetableref{tab_malig_oof}. Each model is trained once on the shared development pool and evaluated on hold-out. AUROC/AUPRC; $\pm$ = half-width of bootstrap 95\% CI (1000 resamples, seed 42). ``---'' = task not evaluated.}
+\responsetablenote{Test/external set: ZJH-8K malignant primary-lesion hold-out ($801$ images, $130$ patients; seed 42, 20\% patient split shared by central LNM and PTC subtype; aligned with \responsetableref{tab_dhash} exclusion and \responsetableref{tab_cohort_patient_counts}). LNM and PTC-subtype label definitions as in \responsetableref{tab_malig_oof}. Each model is trained once on the shared development pool and evaluated on hold-out. AUROC/AUPRC; $\pm$ = half-width of bootstrap 95\% CI (1000 resamples, seed 42). ``---'' = task not evaluated.}
 \end{manuscriptresponsetable}

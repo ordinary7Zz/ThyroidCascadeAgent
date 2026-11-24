@@ -8,11 +8,11 @@
 \toprule
 Cohort & Split / subset & Images & Patients & Role in this letter \\
 \midrule
-ZJH-8K & Full pool (dHash screening) & 7958 & 1146 & \responsetableref{tab_dhash} \\
+ZJH-8K & Full pool (dHash screening) & 7958 & 1149 & \responsetableref{tab_dhash} \\
 ZJH-8K & External test (exclude TN3K train H=0) & 6807 & 1068 & \responsetableref{tab_cls_ext}, \responsetableref{tab_seg_ext}, \responsetableref{tab_patient_cls} \\
 ZJH-8K & External subset, patient label benign & 2774 & 421 & \responsetableref{tab_patient_cls} \\
 ZJH-8K & External subset, patient label malignant & 4033 & 647 & \responsetableref{tab_patient_cls} \\
-ZJH-8K & Malignant primary-lesion development (LNM/FTC shared) & 3227 & 517 & \responsetableref{tab_malig_oof} five-fold OOF \\
+ZJH-8K & Malignant primary-lesion development (LNM / PTC subtype, shared) & 3227 & 517 & \responsetableref{tab_malig_oof} five-fold OOF \\
 ZJH-8K & Malignant primary-lesion hold-out & 801 & 130 & \responsetableref{tab_malig_ext} \\
 \midrule
 ThyroidXL & train (OpenThyroid development) & 9441 & 3353 & Stacked expert fine-tuning; not R4 external test \\
@@ -20,5 +20,5 @@ ThyroidXL & test (official external) & 2090 & 739 & \responsetableref{tab_patien
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\responsetablenote{Benign/malignant rows on the ZJH external subset use patient label = within-cluster max of image-level malignancy labels; all images from that patient are counted in the matching row (same as \responsetableref{tab_patient_cls}). ZJH-8K: 7958 images and 1146 patients in the full institutional pool used for dHash screening; 6807 images and 1068 patients after excluding TN3K-train H=0 duplicates for segmentation/classification external test (Methods). External test 6807 images = full pool minus the 1151 unique ZJH images in the TN3K train row of \responsetableref{tab_dhash}. Malignant hold-out: patient-level 20\% split (seed 42), shared by LNM and PTC subtype.}
+\responsetablenote{Benign/malignant rows on the ZJH external subset use patient label = within-cluster max of image-level malignancy labels; all images from that patient are counted in the matching row (same as \responsetableref{tab_patient_cls}). ZJH-8K: 7958 images and 1149 patients in the full institutional pool used for dHash screening; 6807 images and 1068 patients after excluding TN3K-train H=0 duplicates for segmentation/classification external test. External test 6807 images = full pool minus the 1151 unique ZJH images in the TN3K train row of \responsetableref{tab_dhash}. Malignant hold-out: patient-level 20\% split (seed 42), shared by LNM and PTC subtype.}
 \end{responsetable}

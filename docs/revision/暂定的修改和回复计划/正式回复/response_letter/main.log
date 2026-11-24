@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2026.10.25)  24 NOV 2026 12:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2026.10.25)  24 NOV 2026 16:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -946,31 +946,27 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <7> on input line 7.
 )
 (./seg_cls_side/tables/tab_dhash.tex) [2]
-
-pdfTeX warning: pdflatex (file /mnt/wangbd8/workspace/ThyroidAgent/ThyroidCasca
-deAgent/docs/revision/暂定的修改和回复计划/正式回复/response_lett
-er/figures/image_analysis_dataflow.pdf): PDF inclusion: found PDF version <1.7>
-, but at most version <1.5> allowed
-<image_analysis_dataflow.pdf, id=62, 1313.38678pt x 717.00876pt>
+<image_analysis_dataflow.pdf, id=62, 472.31575pt x 578.82172pt>
 File: image_analysis_dataflow.pdf Graphic file (type pdf)
 <use image_analysis_dataflow.pdf>
 Package pdftex.def Info: image_analysis_dataflow.pdf  used on input line 20.
-(pdftex.def)             Requested size: 472.31595pt x 257.84944pt.
-(./seg_cls_side/tables/tab_cohort_patient_counts.tex) [3 </mnt/wangbd8/workspac
-e/ThyroidAgent/ThyroidCascadeAgent/docs/revision/暂定的修改和回复计划
-/正式回复/response_letter/figures/image_analysis_dataflow.pdf>] [4]
-(./seg_cls_side/tables/tab_routing_ablation_seg.tex [5])
-(./seg_cls_side/tables/tab_routing_ablation_cls.tex [6])
-(./seg_cls_side/tables/tab_baseline_protocol.tex) [7]
+(pdftex.def)             Requested size: 472.31595pt x 578.8203pt.
+
+(./seg_cls_side/tables/tab_cohort_patient_counts.tex [3]) [4 </mnt/wangbd8/work
+space/ThyroidAgent/ThyroidCascadeAgent/docs/revision/暂定的修改和回复�
+�划/正式回复/response_letter/figures/image_analysis_dataflow.pdf>]
+[5] (./seg_cls_side/tables/tab_routing_ablation_seg.tex [6])
+(./seg_cls_side/tables/tab_routing_ablation_cls.tex [7])
+(./seg_cls_side/tables/tab_baseline_protocol.tex) [8]
 (./seg_cls_side/tables/tab_nhc_center_performance.tex)
-(./seg_cls_side/tables/tab_nhc_heterogeneity.tex [8])
-(./seg_cls_side/tables/tab_calib_referral.tex) [9]
+(./seg_cls_side/tables/tab_nhc_heterogeneity.tex [9])
+(./seg_cls_side/tables/tab_calib_referral.tex) [10]
 
 pdfTeX warning: pdflatex (file /mnt/wangbd8/workspace/ThyroidAgent/ThyroidCasca
 deAgent/docs/revision/暂定的修改和回复计划/正式回复/response_lett
 er/figures/reliability_panels.pdf): PDF inclusion: found PDF version <1.7>, but
  at most version <1.5> allowed
-<reliability_panels.pdf, id=211, 956.63397pt x 576.27295pt>
+<reliability_panels.pdf, id=190, 956.63397pt x 576.27295pt>
 File: reliability_panels.pdf Graphic file (type pdf)
 <use reliability_panels.pdf>
 Package pdftex.def Info: reliability_panels.pdf  used on input line 59.
@@ -981,12 +977,12 @@ pdfTeX warning: pdflatex (file /mnt/wangbd8/workspace/ThyroidAgent/ThyroidCasca
 deAgent/docs/revision/暂定的修改和回复计划/正式回复/response_lett
 er/figures/risk_coverage_panels.pdf): PDF inclusion: found PDF version <1.7>, b
 ut at most version <1.5> allowed
-<risk_coverage_panels.pdf, id=213, 962.9275pt x 596.53867pt>
+<risk_coverage_panels.pdf, id=192, 962.9275pt x 596.53867pt>
 File: risk_coverage_panels.pdf Graphic file (type pdf)
 <use risk_coverage_panels.pdf>
 Package pdftex.def Info: risk_coverage_panels.pdf  used on input line 64.
 (pdftex.def)             Requested size: 434.5298pt x 269.19542pt.
-[10 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/暂�
+[11 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/暂�
 ��的修改和回复计划/正式回复/response_letter/figures/reliability_pan
 els.pdf>]
 Overfull \hbox (3.39383pt too wide) in paragraph at lines 75--75
@@ -1010,19 +1006,19 @@ Package xcolor Warning: Incompatible color definition on input line 21.
 
 Package xcolor Warning: Incompatible color definition on input line 22.
 
-) [11 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/�
+) [12 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/�
 �定的修改和回复计划/正式回复/response_letter/figures/risk_coverage
-_panels.pdf>] (./report_side/responses/R1_5.tex [12] [13])
+_panels.pdf>] (./report_side/responses/R1_5.tex [13] [14])
 (./report_side/figures/fig_rep_sensitivity_curves.tex
-<report_rep_sensitivity_curves.pdf, id=300, 520.34402pt x 751.60799pt>
+<report_rep_sensitivity_curves.pdf, id=279, 520.34402pt x 751.60799pt>
 File: report_rep_sensitivity_curves.pdf Graphic file (type pdf)
 <use report_rep_sensitivity_curves.pdf>
 Package pdftex.def Info: report_rep_sensitivity_curves.pdf  used on input line 
 3.
 (pdftex.def)             Requested size: 388.74055pt x 561.5141pt.
 )
-(./report_side/figures/fig_rep_sensitivity_ranks.tex [14]
-<report_rep_sensitivity_ranks.pdf, id=306, 520.34402pt x 751.60799pt>
+(./report_side/figures/fig_rep_sensitivity_ranks.tex [15]
+<report_rep_sensitivity_ranks.pdf, id=285, 520.34402pt x 751.60799pt>
 File: report_rep_sensitivity_ranks.pdf Graphic file (type pdf)
 <use report_rep_sensitivity_ranks.pdf>
 Package pdftex.def Info: report_rep_sensitivity_ranks.pdf  used on input line 3
@@ -1036,7 +1032,7 @@ Package xcolor Warning: Incompatible color definition on input line 10.
 
 Package xcolor Warning: Incompatible color definition on input line 17.
 
-[15 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/暂�
+[16 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/暂�
 ��的修改和回复计划/正式回复/response_letter/figures/report_rep_sens
 itivity_curves.pdf>]) (./report_side/tables/tab_rep_template_removal.tex
 
@@ -1045,21 +1041,21 @@ Package xcolor Warning: Incompatible color definition on input line 10.
 
 Package xcolor Warning: Incompatible color definition on input line 14.
 
-[16 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/暂�
+[17 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/暂�
 ��的修改和回复计划/正式回复/response_letter/figures/report_rep_sens
 itivity_ranks.pdf>]) (./report_side/figures/fig_rep_template_exchange.tex
-<report_rep_template_exchange.pdf, id=550, 520.34402pt x 209.58301pt>
+<report_rep_template_exchange.pdf, id=529, 520.34402pt x 209.58301pt>
 File: report_rep_template_exchange.pdf Graphic file (type pdf)
 <use report_rep_template_exchange.pdf>
 Package pdftex.def Info: report_rep_template_exchange.pdf  used on input line 3
 .
 (pdftex.def)             Requested size: 472.3387pt x 190.24753pt.
 )
-[17 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/暂�
+[18 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/暂�
 ��的修改和回复计划/正式回复/response_letter/figures/report_rep_temp
-late_exchange.pdf>] (./report_side/responses/R1_6.tex [18])
+late_exchange.pdf>] (./report_side/responses/R1_6.tex [19])
 (./report_side/figures/fig_rep_reader_by_physician.tex
-<report_rep_reader_by_physician.pdf, id=651, 555.20123pt x 171.26787pt>
+<report_rep_reader_by_physician.pdf, id=631, 555.20123pt x 171.26787pt>
 File: report_rep_reader_by_physician.pdf Graphic file (type pdf)
 <use report_rep_reader_by_physician.pdf>
 Package pdftex.def Info: report_rep_reader_by_physician.pdf  used on input line
@@ -1067,7 +1063,7 @@ Package pdftex.def Info: report_rep_reader_by_physician.pdf  used on input line
 (pdftex.def)             Requested size: 472.32144pt x 145.70119pt.
 )
 (./report_side/figures/fig_rep_safety_study.tex
-<report_rep_safety_study.pdf, id=652, 562.1351pt x 207.23624pt>
+<report_rep_safety_study.pdf, id=632, 562.1351pt x 207.23624pt>
 File: report_rep_safety_study.pdf Graphic file (type pdf)
 <use report_rep_safety_study.pdf>
 Package pdftex.def Info: report_rep_safety_study.pdf  used on input line 3.
@@ -1077,10 +1073,10 @@ LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 4
 
 (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)) [19 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/�
+)) [20 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/�
 ��定的修改和回复计划/正式回复/response_letter/figures/report_rep_r
 eader_by_physician.pdf>]
-(./report_side/responses/deployability.tex) [20 </mnt/wangbd8/workspace/Thyroid
+(./report_side/responses/deployability.tex) [21 </mnt/wangbd8/workspace/Thyroid
 Agent/ThyroidCascadeAgent/docs/revision/暂定的修改和回复计划/正式�
 �复/response_letter/figures/report_rep_safety_study.pdf>]
 (./report_side/responses/R2_1.tex) (./seg_cls_side/tables/tab_malig_oof.tex
@@ -1099,9 +1095,9 @@ Package xcolor Warning: Incompatible color definition on input line 18.
 
 Package xcolor Warning: Incompatible color definition on input line 19.
 
-) [21] [22] [23] (./seg_cls_side/tables/tab_routing_stability.tex) [24]
-[25] [26] (./report_side/responses/R2_13.tex) [27]
-(./report_side/responses/R2_16.tex [28] [29])
+) [22] [23] [24] (./seg_cls_side/tables/tab_routing_stability.tex) [25]
+[26] [27] (./report_side/responses/R2_13.tex) [28]
+(./report_side/responses/R2_16.tex [29] [30])
 (./report_side/tables/tab_rep_failure_modes.tex
 
 Package xcolor Warning: Incompatible color definition on input line 9.
@@ -1115,25 +1111,25 @@ Overfull \hbox (34.9809pt too wide) in paragraph at lines 5--26
  []
 
 ) (./report_side/figures/fig_rep_execution_traces.tex
-<report_rep_execution_traces.pdf, id=1279, 417.7206pt x 559.80339pt>
+<report_rep_execution_traces.pdf, id=1260, 417.7206pt x 559.80339pt>
 File: report_rep_execution_traces.pdf Graphic file (type pdf)
 <use report_rep_execution_traces.pdf>
 Package pdftex.def Info: report_rep_execution_traces.pdf  used on input line 3.
 
 (pdftex.def)             Requested size: 343.78238pt x 460.71596pt.
-) [30] [31 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revisi
+) [31] [32 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revisi
 on/暂定的修改和回复计划/正式回复/response_letter/figures/report_r
 ep_execution_traces.pdf>]
-(./report_side/responses/R2_17.tex) (./report_side/responses/R2_18.tex [32])
-(./report_side/responses/R2_19.tex [33] [34])
-(./seg_cls_side/tables/tab_small_nodule_fail.tex) [35]
+(./report_side/responses/R2_17.tex) (./report_side/responses/R2_18.tex [33])
+(./report_side/responses/R2_19.tex [34] [35])
+(./seg_cls_side/tables/tab_small_nodule_fail.tex) [36]
 (./report_side/responses/R2_22.tex) (./report_side/responses/R2_23.tex)
-[36] (./seg_cls_side/tables/tab_metadata_ablation_seg.tex)
+[37] (./seg_cls_side/tables/tab_metadata_ablation_seg.tex)
 (./seg_cls_side/tables/tab_metadata_ablation_cls.tex)
-(./seg_cls_side/tables/tab_expert_selection_seg.tex [37])
-(./seg_cls_side/tables/tab_expert_selection_cls.tex) [38]
-(./report_side/responses/R3_4.tex) (./report_side/responses/R3_5.tex [39])
-(./report_side/responses/R3_M1.tex [40]) [41]
+(./seg_cls_side/tables/tab_expert_selection_seg.tex [38])
+(./seg_cls_side/tables/tab_expert_selection_cls.tex) [39]
+(./report_side/responses/R3_4.tex) (./report_side/responses/R3_5.tex [40])
+(./report_side/responses/R3_M1.tex [41]) [42]
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 4
 33.
 
@@ -1144,10 +1140,10 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
- [42
+ [43
 
 ]
-(./seg_cls_side/tables/routing_audit_appendix.tex [43] [44]) [45] [46
+(./seg_cls_side/tables/routing_audit_appendix.tex [44] [45]) [46] [47
 
 ]
 (./report_side/tables/tab_rep_excluded_templates.tex
@@ -1619,23 +1615,23 @@ File: UTF8.enc 2015/04/18 4.8.4
 )
 (/usr/share/texmf/tex/latex/CJK/UTF8/UTF8.chr
 File: UTF8.chr 2015/04/18 4.8.4
-) [47
+) [48
 
-] [48]) [49]
+] [49]) [50]
 (./report_side/figures/fig_rep_flow_image.tex
-<report_rep_flow_image.pdf, id=1579, 472.31575pt x 578.82172pt>
+<report_rep_flow_image.pdf, id=1561, 472.31575pt x 578.82172pt>
 File: report_rep_flow_image.pdf Graphic file (type pdf)
 <use report_rep_flow_image.pdf>
 Package pdftex.def Info: report_rep_flow_image.pdf  used on input line 3.
 (pdftex.def)             Requested size: 458.17455pt x 561.49171pt.
 )
 (./report_side/figures/fig_rep_flow_report.tex
-<report_rep_flow_report.pdf, id=1580, 472.31575pt x 564.74011pt>
+<report_rep_flow_report.pdf, id=1562, 472.31575pt x 564.74011pt>
 File: report_rep_flow_report.pdf Graphic file (type pdf)
 <use report_rep_flow_report.pdf>
 Package pdftex.def Info: report_rep_flow_report.pdf  used on input line 3.
 (pdftex.def)             Requested size: 469.63359pt x 561.53311pt.
-)) [50
+)) [51
 
  </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/暂定�
 ��修改和回复计划/正式回复/response_letter/figures/report_rep_flow_im
@@ -1645,7 +1641,7 @@ Package caption Warning: Unused \captionsetup[sub] on input line 191.
 See the caption package documentation for explanation.
 
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 27.
-[51 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/暂�
+[52 </mnt/wangbd8/workspace/ThyroidAgent/ThyroidCascadeAgent/docs/revision/暂�
 ��的修改和回复计划/正式回复/response_letter/figures/report_rep_flow
 _report.pdf>]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 27.
@@ -1656,11 +1652,11 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 15241 strings out of 482663
- 249003 string characters out of 5955138
- 614014 words of memory out of 5000000
+ 15240 strings out of 482663
+ 248986 string characters out of 5955138
+ 614019 words of memory out of 5000000
  29113 multiletter control sequences out of 15000+600000
- 650375 words of font info for 259 fonts, out of 8000000 for 9000
+ 650198 words of font info for 258 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
  49i,12n,68p,3077b,1002s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/share/texmf/fonts/enc/d
@@ -1715,10 +1711,10 @@ fb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/t
 ype1/public/lm/lmsy6.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></us
 r/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/pub
 lic/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb>
-Output written on main.pdf (51 pages, 3177515 bytes).
+Output written on main.pdf (52 pages, 2180200 bytes).
 PDF statistics:
- 1891 PDF objects out of 2073 (max. 8388607)
- 1143 compressed objects within 12 object streams
- 164 named destinations out of 1000 (max. 500000)
+ 1873 PDF objects out of 2073 (max. 8388607)
+ 1146 compressed objects within 12 object streams
+ 165 named destinations out of 1000 (max. 500000)
  31996 words of extra memory for PDF output out of 35830 (max. 10000000)
 
