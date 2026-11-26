@@ -60,7 +60,7 @@ ZJH-8K & Best single (1) & 0.9272 (0.9229--0.9313) & 0.9371 (0.9328--0.9412) \\
  & Static rule (4) & 0.9244 (0.9202--0.9287) & 0.9356 (0.9314--0.9397) \\
  & Max-confidence (5) & 0.9244 (0.9202--0.9287) & 0.9356 (0.9314--0.9397) \\
  & Learned router (6) & 0.9272 (0.9196--0.9346) & 0.9371 (0.9290--0.9446) \\
- & Full ThyroidXAgent (7) & \routingsecond{0.9275 (0.9108--0.9442)} & \routingsecond{0.9411 (0.9405--0.9417)} \\
+ & Full ThyroidXAgent (7) & \routingsecond{0.9275 (0.9108--0.9442)} & \routingsecond{0.9411 (0.9305--0.9517)} \\
  & Oracle (8) & \routingbest{0.9563 (0.9539--0.9585)} & \routingbest{0.9596 (0.9574--0.9616)} \\
 \end{longtable}
 \responsetablenote{Fixed expert pool; AUROC / AUPRC point estimates and 95\% CIs; cluster bootstrap (1000 resamples, seed=42). Per cohort and metric: bold = best, underline = runner-up. Static rule (4) and max-confidence (5) are case-wise equivalent in every cohort listed, so the entries match. Static rule (4), classification: highest malignancy confidence among independent classifiers; tie-break lower prediction entropy. Strategies (1)--(5): operational definitions in Reviewer 1, Comment 2. Oracle (8): non-deployable per-case upper bound (Reviewer 1, Comment 2).}
